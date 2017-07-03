@@ -16,6 +16,9 @@
 *.sh
 *.swp
 
+# sass
+src/**/*.css
+
 # misc
 .DS_Store
 .env.local
