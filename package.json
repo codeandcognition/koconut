@@ -30,6 +30,10 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
+    "start-docs": "npm-run-all -p doc-serve storybook",
+    "start-all": "npm-run-all -p start start-docs",
+    "build-docs": "npm-run-all -p doc-build build-storybook",
+    "build-all": "npm-run-all -p build build-docs",
     "flow": "flow"
   }
 }
