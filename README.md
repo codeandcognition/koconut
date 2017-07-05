@@ -7,7 +7,7 @@ Currently, *koconut* is built using [React](https://facebook.github.io/react/). 
 use Node.js, Express, and an undetermined database system.
 
 ### Tools
-Development of *kokonut* is assisted by the usage of:
+Development of *koconut* is assisted by the usage of:
 * [Node.js](https://nodejs.org/en/): a JavaScript runtime
 * [Flow](https://flow.org/): a type-checking system for JavaScript
 * [Sass](http://sass-lang.com/): a CSS pre-processor
