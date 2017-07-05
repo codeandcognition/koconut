@@ -8,8 +8,8 @@
 
 # production
 /build
-/storybook-static
-/docs
+/dev/storybook
+/dev/docs
 
 # ide
 /.idea

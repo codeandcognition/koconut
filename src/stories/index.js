@@ -15,7 +15,7 @@ import {linkTo} from '@storybook/addon-links';
 
 import {Button, Welcome} from '@storybook/react/demo';
 
-import App from '../App';
+import App from '../ui/containers/App';
 
 storiesOf('Welcome', module).
     add('to Storybook', () => <Welcome showApp={linkTo('Button')}/>);

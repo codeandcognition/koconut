@@ -20,7 +20,7 @@
   },
   "scripts": {
     "doc-serve": "documentation serve --watch src/**",
-    "doc-build": "documentation build src/** -f html -o docs",
+    "doc-build": "documentation build src/** -f html -o dev/docs",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
@@ -29,7 +29,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public",
+    "build-storybook": "build-storybook -s public -o dev/storybook",
     "start-docs": "npm-run-all -p doc-serve storybook",
     "start-all": "npm-run-all -p start start-docs",
     "build-docs": "npm-run-all -p doc-build build-storybook",
