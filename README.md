@@ -16,8 +16,11 @@ Development of *kokonut* is assisted by the usage of:
 
 ### Style Guide
 #### JavaScript
-JavaScript is written in ES6 with Flow style static typing. Code should be
-formatted similarly to [Google JavaScript Style](https://google.github.io/styleguide/jsguide.html).
+##### Style
+JavaScript is written in [ES6](https://babeljs.io/learn-es2015/) with Flow style static typing.
+
+##### Format
+Code should be formatted similarly to [Google JavaScript Style](https://google.github.io/styleguide/jsguide.html).
 
 For formatting this means:
 * Block indents are +2 spaces
@@ -28,6 +31,7 @@ For formatting this means:
 Other formatting should also be consistent. It is worth noting that many IDEs
 (including WebStorm) can automatically reformat code.
 
+##### Documentation
 JavaScript classes and functions should be commented with [JSDoc](http://usejsdoc.org/) style comments to help with documentation.
 
 Not every tag needs to be used. The most important tags to use are:
