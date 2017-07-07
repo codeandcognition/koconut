@@ -5,6 +5,7 @@ import Information from '../components/Information';
 
 type Props = {type: string}
 
+// Mo money mo Problems
 /**
  * The Problem container contains all components of an assessment problem.
  * @class
