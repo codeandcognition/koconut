@@ -21,6 +21,9 @@
 # sass
 src/**/*.css
 
+# floo
+.floo*
+
 # misc
 .DS_Store
 .env.local
