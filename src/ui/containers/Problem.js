@@ -3,18 +3,15 @@ import React, {Component} from 'react';
 import Question from '../components/Question';
 import Information from './Information';
 
-type Props = { type: string }
+type Props = { type: { content: string, type: string, answers: string[] } }
 
 /**
  * The Problem container contains all components of an assessment problem.
  * @class
  */
 class Problem extends Component {
-  props: {
-    question: Json
-  }
   state: {
-  scontent: string,
+    content: string,
     type: string,
     answers: string[]
   };
@@ -34,7 +31,7 @@ class Problem extends Component {
     this.state = {
       content: props.question.content,
       type: props.question.type,
-      answers: props.question.answers
+      answers: props.question.answers,
     };
   }
 

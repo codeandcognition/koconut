@@ -39,7 +39,7 @@ Not every tag needs to be used. The most important tags to use are:
 * `@param`
 * `@returns`
 
-As well as
+Comments should also have a brief description.
 
 #### CSS
 Sass is written using SCSS syntax.
@@ -67,7 +67,7 @@ To use the React Storybook:
 
 To serve the documentation:
 
-`npm run doc-serve`
+`npm run start-docs`
 
 To start the development environment and the documentation tools:
 
@@ -82,17 +82,25 @@ To build the application, simply run:
 
 `npm run build`
 
+It is worth noting that the project will not build if it does not correctly type check. Type checking can be ignore will the following:
+
+`npm run build-ignore`
+
 To build the React Storybook:
 
 `npm run build-storybook`
 
 To build the documentation:
 
-`npm run doc-build`
+`npm run build-docs`
 
 To build everything:
 
 `npm run build-all`
+
+Similar to before, type checking can be ignored:
+
+`npm run build-all-ignore`
 
 ## Resources
 ### WebStorm
@@ -123,4 +131,3 @@ It is recommended that you use token authentication: [Personal API Tokens](https
 ## Todo
 * Provide examples for Flow, Sass, Storybook
 * Consider testing (Jest)
-* Determine file structure to some degree

@@ -1,11 +1,17 @@
+// @flow
 import React, {Component} from 'react';
 import './App.css';
 import Problem from './Problem';
 
 /**
  * This is a component.
+ * @class
  */
 class App extends Component {
+  test(a: number, b: number): number {
+    let x: number = a + b;
+    return x;
+  }
 
   /*
    TODO: Questions need types.
