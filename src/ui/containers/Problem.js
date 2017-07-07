@@ -1,8 +1,7 @@
 // @flow
 import React, {Component} from 'react';
 import Question from '../components/Question';
-import Code from '../components/Code';
-import Response from '../components/Response';
+import Information from '../components/Information';
 
 type Props = {type: string}
 
@@ -25,12 +24,8 @@ class Problem extends Component {
   render() {
     return (
         <div className="problem">
-          <Question />
-          <div className="">
-            <Code type={this.state.type}/>
-            <Response type={this.state.type}/>
-          </div>
-
+          <Question type={this.state.type}/>
+          <Information type={this.state.type}/>
         </div>
     );
   }
