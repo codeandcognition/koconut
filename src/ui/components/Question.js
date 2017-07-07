@@ -6,6 +6,9 @@ import React, {Component} from 'react';
  * @class
  */
 class Question extends Component {
+  props: {
+    type:string;
+  };
 
   render() {
     return (

@@ -7,7 +7,7 @@ import React, {Component} from 'react';
  */
 class Code extends Component {
   props: {
-    type:string;
+    type: string;
   };
 
   render() {
