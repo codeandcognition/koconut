@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react';
+import Information from '../containers/Information';
 
 /**
  * The Code component contains the code view in the assessment problem
@@ -11,8 +12,9 @@ class Code extends Component {
   };
 
   render() {
+    var isInlineResponseType = Information.isInlineResponseType(this.props.type);
     return (
-        <div className="code">
+        <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
         </div>
     );
   }

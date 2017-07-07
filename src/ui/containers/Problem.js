@@ -1,9 +1,9 @@
 // @flow
 import React, {Component} from 'react';
 import Question from '../components/Question';
-import Information from '../components/Information';
+import Information from './Information';
 
-type Props = {type: string}
+type Props = { type: string }
 
 // Mo money mo Problems
 /**
@@ -15,10 +15,20 @@ class Problem extends Component {
     type: string
   };
 
+  /*
+   TODO: Questions need types.
+   This type property assumes we have these question types:
+   WriteCode
+   FillBlank
+   MultipleChoice
+   ShortResponse
+   HighlightCode
+   */
+
   constructor(props: Props) {
     super(props);
     this.state = {
-      type: props.type
+      type: props.type,
     };
   }
 
