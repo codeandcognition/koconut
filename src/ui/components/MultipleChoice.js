@@ -8,7 +8,7 @@ import Choice from './Choice';
  */
 class MultipleChoice extends Component {
   props: {
-    answers: string[] // or array<string>
+    answers: string[] // can also be written as array<string>
   };
 
   render() {

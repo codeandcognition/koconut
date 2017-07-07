@@ -8,13 +8,15 @@ import Information from '../containers/Information';
  */
 class Code extends Component {
   props: {
-    type: string;
+    type: string,
+    code: string
   };
 
   render() {
     var isInlineResponseType = Information.isInlineResponseType(this.props.type);
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
+          {this.props.code}
         </div>
     );
   }

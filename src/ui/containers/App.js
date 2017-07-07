@@ -13,21 +13,14 @@ class App extends Component {
     return x;
   }
 
-  /*
-   TODO: Questions need types.
-   Assume we'll have these question types as property of some question object:
-   WriteCode
-   FillBlank
-   MultipleChoice
-   ShortResponse
-   HighlightCode
-   */
-
   render() {
-    var testQuestion = {
+    // Sorry excuse for a backend
+    let questionTypes = ['WriteCode', 'FillBlank', 'HighlightCode', 'MultipleChoice', 'ShortResponse'];
+    let testQuestion = {
       content: 'What is the value of x after code execution?',
-      type: 'MultipleChoice',
-      answers: ['0', '5', '10', '100']
+      code: 'int x = 1;',
+      type: questionTypes[3],
+      answers: ['1', '5', '10', '100']
     };
     return (
         <div className="App">
