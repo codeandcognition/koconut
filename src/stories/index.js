@@ -16,6 +16,13 @@ import {linkTo} from '@storybook/addon-links';
 import {Button, Welcome} from '@storybook/react/demo';
 
 import App from '../ui/containers/App';
+import Information from '../ui/containers/Information';
+import Problem from '../ui/containers/Information';
+import Question from '../ui/components/Question';
+import Response from '../ui/components/Response';
+import Choice from '../ui/components/Choice';
+import Code from '../ui/components/Code';
+import MultipleChoice from '../ui/components/MultipleChoice';
 
 storiesOf('Welcome', module).
     add('to Storybook', () => <Welcome showApp={linkTo('Button')}/>);
@@ -33,4 +40,13 @@ storiesOf('App', module)
         () => (
             <App prop="property" />
         ),
+    );
+
+storiesOf('Choice', module)
+    .addWithInfo(
+        'Choice Component',
+        'Example choice with content.',
+        () =>(
+            <Choice content="Example" />
+        )
     );

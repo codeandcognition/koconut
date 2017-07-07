@@ -5,14 +5,18 @@ import Information from './Information';
 
 type Props = { type: string }
 
-// Mo money mo Problems
 /**
  * The Problem container contains all components of an assessment problem.
  * @class
  */
 class Problem extends Component {
+  props: {
+    question: Json
+  }
   state: {
-    type: string
+  scontent: string,
+    type: string,
+    answers: string[]
   };
 
   /*
@@ -28,7 +32,9 @@ class Problem extends Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      type: props.type,
+      content: props.question.content,
+      type: props.question.type,
+      answers: props.question.answers
     };
   }
 

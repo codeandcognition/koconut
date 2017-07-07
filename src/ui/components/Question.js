@@ -13,6 +13,7 @@ class Question extends Component {
   render() {
     return (
         <div className="question">
+          <h2>{/*Question goes here*/}</h2>
         </div>
     );
   }
