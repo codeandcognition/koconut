@@ -7,29 +7,18 @@
 
 .problem {
   margin: 3em auto;
-  width: 80vw;
-<<<<<<< HEAD
-=======
-  height: 80vh;
->>>>>>> 9e89362f388c1001456f878bc0f2c3f4a4d63712
+  width: 75vw;
   border: 1px dotted black;
 }
 
 .question {
-<<<<<<< HEAD
-  height: 15%;
+  height: 15vh;
   padding: 0 2.5%;
-=======
-  width: 100%;
-  height: 15%;
->>>>>>> 9e89362f388c1001456f878bc0f2c3f4a4d63712
   border-bottom: 1px dotted black;
 }
 
 .information {
   width: 100%;
-<<<<<<< HEAD
-  height: 90%;
   display: flex;
 }
 
@@ -44,34 +33,26 @@
 
 .code.full {
   width: 95%;
-=======
-  height: 85%;
   display: flex;
 }
 
 .code {
   width: 45%;
-  //height: 95%;
+  max-height: 60vh;
   background-color: #ddd;
   padding: 2.5%;
+  overflow-y: scroll;
 }
 
 .code.full {
   width: 95%;
-  //height: 95%;
->>>>>>> 9e89362f388c1001456f878bc0f2c3f4a4d63712
   background-color: #ccf;
 }
 
 .response {
   width: 50%;
-<<<<<<< HEAD
 }
 
 .choice {
-
-=======
-  //height: 100%;
   padding: 2.5%;
->>>>>>> 9e89362f388c1001456f878bc0f2c3f4a4d63712
 }
