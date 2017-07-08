@@ -61,17 +61,17 @@ This command does the following:
 * Starts a Sass watcher which automatically generates CSS from SCSS files as
 they are updated
 
-To use the React Storybook:
+To use the React Storybook and the documentation tools:
 
-`npm run storybook`
+`npm run start-dev`
 
-To serve the documentation:
-
-`npm run start-docs`
+Storybook is hosted on port `:9009` and the docs are on `:4001`.
 
 To start the development environment and the documentation tools:
 
 `npm run start-all`
+
+It is worth noting that for some reason this script doesn't like how start and start-dev play together, so it is generally better to run them separately.
 
 To type check your code:
 
@@ -130,30 +130,18 @@ You can register your GitHub account in WebStorm for easy version control:
 
 It is recommended that you use token authentication: [Personal API Tokens](https://github.com/blog/1509-personal-api-tokens)
 
-#### Using Floobits in WebStorm
-[Floobits](https://floobits.com) is a plugin for WebStorm (and other editors, like Atom) that enables Google Docs-like editing. This allows for live pair programming and ability to work remotely in a live environment.
+#### ~~Using Floobits in WebStorm~~
+Floobits is buggy and no longer maintained :sob:
 
-To begin, you will want to create a Floobits account by either signing up or signing in using your GitHub account.
+~~[Floobits](https://floobits.com) is a plugin for WebStorm (and other editors, like Atom) that enables Google Docs-like editing. This allows for live pair programming and ability to work remotely in a live environment.~~
 
-Next, install the Floobits plugin in WebStorm (or your preferred editor). To do this in WebStorm, you can simply navigate to `Preferences -> Plugins -> Browse repositories...` and search for "Floobits".
+~~To begin, you will want to create a Floobits account by either signing up or signing in using your GitHub account.~~
 
-To join the Floobits project, go to `Tools -> Floobits -> Join Workspace by URL` and enter the following URL: `https://floobits.com/leannehwa/koconut/`. This will create a *new* WebStorm project that is separate from your normal local copy. You may either open a new project window or replace your current one with the new Floobits window.
+~~Next, install the Floobits plugin in WebStorm (or your preferred editor). To do this in WebStorm, you can simply navigate to `Preferences -> Plugins -> Browse repositories...` and search for "Floobits".~~
 
-To minimize the number of files that need to communicate between developers, you will need to `npm install` all the project dependencies.
+~~To join the Floobits project, go to `Tools -> Floobits -> Join Workspace by URL` and enter the following URL: `https://floobits.com/leannehwa/koconut/`. This will create a *new* WebStorm project that is separate from your normal local copy. You may either open a new project window or replace your current one with the new Floobits window.~~
 
-To setup git in the workspace, you can use the following commmands at the project root:
-```
-git init
-git remote add origin https://github.com/RESPRiT/koconut.git
-git fetch
-git reset origin/master
-git checkout peer
-```
-
-Because of how git works, there are some rules you should follow when using git with Floobits:
-* Make sure you're on the `peer` branch before you connect to the workspace: `git checkout peer`
-* Do not `git pull` while you are working in the workspace - it's a redundant action since Floobits is already "pulling" live and has the potential to rollback changes to a previous commit
-* Ideally, only one person should ever be actively using git at at time, to avoid synchronization issues with things such as merging
+~~To minimize the number of files that need to communicate between developers, you will need to `npm install` all the project dependencies.~~
 
 ## Todo
 * Provide examples for Flow, Sass, Storybook
