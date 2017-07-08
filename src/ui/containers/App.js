@@ -1,7 +1,7 @@
 // @flow
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Problem from './Problem';
 
 /**
  * This is a component.
@@ -13,20 +13,19 @@ class App extends Component {
     return x;
   }
 
-  /**
-   * Greetings globe!
-   */
   render() {
+    // Sorry excuse for a backend
+    let questionTypes = ['WriteCode', 'FillBlank', 'HighlightCode', 'MultipleChoice', 'ShortResponse'];
+    let testQuestion = {
+      content: 'What is the value of x after code execution?',
+      code: 'int x = 1;',
+      type: questionTypes[3],
+      answers: ['1', '5', '10', '100']
+    };
     return (
         <div className="App">
-          <div className="App-header">
-            <img src={logo} className="App-logo" alt="logo"/>
-            <h2>Welcome to React</h2>
-          </div>
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-            This is a test {this.test(1, 2)}
-          </p>
+          { /* TODO: not hard-code type value */ }
+          <Problem question={testQuestion}/>
         </div>
     );
   }
