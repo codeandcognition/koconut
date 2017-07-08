@@ -19,21 +19,23 @@
     "react-dom": "^15.6.1"
   },
   "scripts": {
-    "doc-serve": "documentation serve --watch src/**",
-    "doc-build": "documentation build src/** -f html -o dev/docs",
-    "build-css": "node-sass-chokidar src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
-    "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && react-scripts build && npm run doc-build",
+    "start": "npm-run-all -p start-css start-js",
+    "build": "npm run flow && npm run build-css && react-scripts build",
+    "build-ignore": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "flow": "flow",
+    "start-js": "react-scripts start",
+    "start-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "start-docs": "documentation serve --watch src/**",
+    "build-docs": "documentation build src/** -f html -o dev/docs",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public -o dev/storybook",
-    "start-docs": "npm-run-all -p doc-serve storybook",
-    "start-all": "npm-run-all -p start start-docs",
-    "build-docs": "npm-run-all -p doc-build build-storybook",
-    "build-all": "npm-run-all -p build build-docs",
-    "flow": "flow"
+    "start-dev": "npm-run-all -p start-docs storybook",
+    "build-dev": "npm-run-all -p build-docs build-storybook",
+    "start-all": "npm-run-all -p start start-dev",
+    "build-all": "npm-run-all -p build build-dev",
+    "build-all-ignore": "npm-run-all -p build-ignore build-dev"
   }
 }
