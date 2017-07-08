@@ -61,17 +61,17 @@ This command does the following:
 * Starts a Sass watcher which automatically generates CSS from SCSS files as
 they are updated
 
-To use the React Storybook:
+To use the React Storybook and the documentation tools:
 
-`npm run storybook`
+`npm run start-dev`
 
-To serve the documentation:
-
-`npm run start-docs`
+Storybook is hosted on port `:9009` and the docs are on `:4001`.
 
 To start the development environment and the documentation tools:
 
 `npm run start-all`
+
+It is worth noting that for some reason this script doesn't like how start and start-dev play together, so it is generally better to run them separately.
 
 To type check your code:
 
@@ -122,11 +122,26 @@ You can use the follow instructions to add Flow support to WebStorm (you will
 probably already have Flow installed and will not need to add or change the
 project's `.flowconfig`): [Using Flow in WebStorm](https://blog.jetbrains.com/webstorm/2016/11/using-flow-in-webstorm/)
 
+**Note:** The default Flow directory that WebStorm will fill in will not work. It should look something like this: `[parent directories]/koconut/node_modules/.bin/flow`. Instead, use the following Flow executable: `[parent directories]/koconut/node_modules/flow-bin/vendor/flow`.
+
 #### Using GitHub Version Control with WebStorm
 You can register your GitHub account in WebStorm for easy version control:
 [Registering GitHub Account in WebStorm](https://www.jetbrains.com/help/webstorm/registering-github-account-in-webstorm.html)
 
 It is recommended that you use token authentication: [Personal API Tokens](https://github.com/blog/1509-personal-api-tokens)
+
+#### ~~Using Floobits in WebStorm~~
+Floobits is buggy and no longer maintained :sob:
+
+~~[Floobits](https://floobits.com) is a plugin for WebStorm (and other editors, like Atom) that enables Google Docs-like editing. This allows for live pair programming and ability to work remotely in a live environment.~~
+
+~~To begin, you will want to create a Floobits account by either signing up or signing in using your GitHub account.~~
+
+~~Next, install the Floobits plugin in WebStorm (or your preferred editor). To do this in WebStorm, you can simply navigate to `Preferences -> Plugins -> Browse repositories...` and search for "Floobits".~~
+
+~~To join the Floobits project, go to `Tools -> Floobits -> Join Workspace by URL` and enter the following URL: `https://floobits.com/leannehwa/koconut/`. This will create a *new* WebStorm project that is separate from your normal local copy. You may either open a new project window or replace your current one with the new Floobits window.~~
+
+~~To minimize the number of files that need to communicate between developers, you will need to `npm install` all the project dependencies.~~
 
 ## Todo
 * Provide examples for Flow, Sass, Storybook
