@@ -19,12 +19,12 @@ class Response extends Component {
     return (
         <div className='response'>
           {
-            this.props.type === 'MultipleChoice' ?
+            (this.props.type === 'MultipleChoice' ?
                 <MultipleChoice answers={this.props.answers}/>
                 :
                 (this.props.type === 'ShortResponse' ?
                         <ShortResponse /> : ''
-                )
+                ))
           }
         </div>
     );
