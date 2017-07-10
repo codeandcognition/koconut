@@ -1,6 +1,5 @@
 // @flow
 import React, {Component} from 'react';
-import Choice from './Choice';
 
 /**
  * The ShortResponse component renders short response question type
@@ -28,6 +27,7 @@ class ShortResponse extends Component {
                 this.setState({value: event.target.value});
               }}>
               </textarea>
+              <p>{this.state.value}</p>
             </div>
           }
         </div>
