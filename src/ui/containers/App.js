@@ -19,7 +19,7 @@ class App extends Component {
     let testQuestion = {
       content: 'What is the value of x after code execution?',
       code: 'int x = 1;',
-      type: questionTypes[3],
+      type: questionTypes[4],
       answers: ['1', '5', '10', '100']
     };
     return (
