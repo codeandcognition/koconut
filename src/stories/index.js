@@ -34,10 +34,24 @@ storiesOf('Button', module).
         () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
 
 storiesOf('App', module).addWithInfo(
-    'Default App Component',
+    'App Component',
     'Simple usage of the App component. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad, beatae distinctio et fugiat molestiae natus nihil quasi tenetur voluptatibus. A aperiam dolorum et facilis id ipsam nulla repellat saepe?',
     () => (
-        <App className="App" prop="property"/>
+      <App className="App" prop="property"/>
+    ),
+    {inline: true}
+);
+
+storiesOf('Problem', module).addWithInfo(
+    'MultipleChoice Problem',
+    '',
+    () => (
+      <Problem
+        content=""
+        code=
+        type=
+        answers=
+      />
     ),
     {inline: true}
 );
