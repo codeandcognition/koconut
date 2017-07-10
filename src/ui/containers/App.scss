@@ -54,5 +54,28 @@
 }
 
 .choice {
+  user-select: none;
+  cursor: pointer;
   padding: 2.5%;
+  width: 33%;
+  margin: 10px;
+  border-radius: 5px;
+  background-color: #cccccc;
+  transition-duration: 50ms;
+}
+
+.choice:active {
+  opacity: .95;
+}
+
+.choice:hover {
+  background-color: #bbbccc;
+}
+
+.choice.selected {
+  background-color: #aaaaaa;
+}
+
+.choice.selected:hover {
+  background-color: #999999;
 }

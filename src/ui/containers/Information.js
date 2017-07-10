@@ -37,8 +37,9 @@ class Information extends Component {
   }
 
   render() {
-    let displayResponse = Information.isInlineResponseType(this.props.type) ? '' :
-        <Response type={this.props.type} answers={this.props.answers}/>;
+    let displayResponse = Information.isInlineResponseType(this.props.type)
+        ? ''
+        : <Response type={this.props.type} answers={this.props.answers}/>;
     return (
         <div className="information">
           <Code type={this.props.type} code={this.props.code}/>

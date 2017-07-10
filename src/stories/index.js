@@ -37,7 +37,7 @@ storiesOf('App', module).addWithInfo(
     'Default App Component',
     'Simple usage of the App component. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad, beatae distinctio et fugiat molestiae natus nihil quasi tenetur voluptatibus. A aperiam dolorum et facilis id ipsam nulla repellat saepe?',
     () => (
-        <App prop="property"/>
+        <App className="App" prop="property"/>
     ),
 );
 
@@ -45,7 +45,7 @@ storiesOf('Choice', module).addWithInfo(
     'Choice Component',
     'Example choice with content.',
     () => (
-        <Choice content="Example"/>
+        <Choice className="choice" content="Example"/>
     ),
 );
 
@@ -53,6 +53,6 @@ storiesOf('MultipleChoice', module).addWithInfo(
     'MultipleChoice Component',
     'Example choices',
     () => (
-        <MultipleChoice answers={["A", "B", "C"]}/>
+        <MultipleChoice answers={['A', 'B', 'C']}/>
     ),
 );

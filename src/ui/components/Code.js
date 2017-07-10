@@ -13,7 +13,8 @@ class Code extends Component {
   };
 
   render() {
-    var isInlineResponseType = Information.isInlineResponseType(this.props.type);
+    let isInlineResponseType = Information.isInlineResponseType(
+        this.props.type);
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
           {this.props.code}

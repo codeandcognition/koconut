@@ -23,7 +23,7 @@ class Problem extends Component {
       content: props.question.content,
       code: props.question.code,
       type: props.question.type,
-      answers: props.question.answers
+      answers: props.question.answers,
     };
   }
 
@@ -31,7 +31,8 @@ class Problem extends Component {
     return (
         <div className="problem">
           <Question content={this.state.content}/>
-          <Information code={this.state.code} type={this.state.type} answers={this.state.answers}/>
+          <Information code={this.state.code} type={this.state.type}
+                       answers={this.state.answers}/>
         </div>
     );
   }

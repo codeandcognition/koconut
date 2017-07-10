@@ -7,12 +7,17 @@ import React, {Component} from 'react';
  */
 class Choice extends Component {
   props: {
-    content: string
+    content: string,
+    selected: boolean,
+    handleClick: Function
   };
 
   render() {
     return (
-        <div className='choice'>
+        <div
+            className={'choice ' + (this.props.selected ? 'selected' : '')}
+            onClick={() => this.props.handleClick(this.props.content)}
+        >
           {this.props.content}
         </div>
     );
