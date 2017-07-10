@@ -10,7 +10,9 @@ import MultipleChoice from './MultipleChoice';
 class Response extends Component {
   props: {
     type: string,
-    answers: string[]
+    answers?: string[],
+    selected: ?string,
+    updateHandler: Function
   };
 
   render() {
@@ -18,7 +20,11 @@ class Response extends Component {
         <div className='response '>
           {
             this.props.type === 'MultipleChoice' ?
-                <MultipleChoice answers={this.props.answers}/> : ''
+                <MultipleChoice
+                    answers={this.props.answers}
+                    selected={this.props.selected}
+                    handleClick={this.props.updateHandler}
+                /> : ''
             //TODO: <ShortResponse />
           }
         </div>

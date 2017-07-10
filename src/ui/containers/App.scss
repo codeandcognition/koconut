@@ -53,6 +53,8 @@
   width: 50%;
 }
 
+$choice-color: #cccccc;
+
 .choice {
   user-select: none;
   cursor: pointer;
@@ -60,7 +62,7 @@
   width: 33%;
   margin: 10px;
   border-radius: 5px;
-  background-color: #cccccc;
+  background-color: $choice-color;
   transition-duration: 50ms;
 }
 
@@ -69,13 +71,13 @@
 }
 
 .choice:hover {
-  background-color: #bbbccc;
+  background-color: darken($choice-color, 10%);
 }
 
 .choice.selected {
-  background-color: #aaaaaa;
+  background-color: darken($choice-color, 15%);
 }
 
 .choice.selected:hover {
-  background-color: #999999;
+  background-color: darken($choice-color, 20%);
 }

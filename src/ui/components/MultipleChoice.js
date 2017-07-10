@@ -1,26 +1,16 @@
 // @flow
 import React, {Component} from 'react';
 import Choice from './Choice';
-
-type Props = {
-  answers: string[]
-};
-
 /**
  * The MultipleChoice component represents multiple choice answer selection
  * @class
  */
 class MultipleChoice extends Component {
-  state: {
-    selected: string
+  props: {
+    answers: string[],
+    selected: ?string,
+    handleClick: Function
   };
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      selected: ""
-    };
-  }
 
   render() {
     return (
@@ -33,8 +23,8 @@ class MultipleChoice extends Component {
               <Choice
                   key={choice}
                   content={choice}
-                  selected={choice === this.state.selected}
-                  handleClick={(choice) => this.setState( {selected: choice} )}
+                  selected={choice === this.props.selected}
+                  handleClick={this.props.handleClick}
               />
           ))}
         </div>
