@@ -37,6 +37,12 @@ class Problem extends Component {
     };
   }
 
+  /**
+   * Returns a callback function for the Response component's child to call to
+   * update the Problem state
+   * @param type - the question type
+   * @returns a callback function that updates Problem state
+   */
   getHandler(type: string): Function {
     switch(type) {
       case "MultipleChoice":

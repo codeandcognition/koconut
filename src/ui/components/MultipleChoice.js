@@ -7,6 +7,7 @@ import Choice from './Choice';
  */
 class MultipleChoice extends Component {
   props: {
+    /* the possible choices */
     answers: string[],
     selected: ?string,
     handleClick: Function

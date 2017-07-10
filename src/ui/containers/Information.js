@@ -30,7 +30,7 @@ class Information extends Component {
    * Determines whether the question type is an inline question type.
    * An inline question type requires displaying only the code component,
    * rather than the code and response component.
-   * @param type - the type question type
+   * @param type - the question type
    * @returns whether or not the question type requires inline responding
    */
   static isInlineResponseType(type: string): boolean {   //TODO: Place this in future utility class

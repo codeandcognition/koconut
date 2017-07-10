@@ -39,6 +39,7 @@ storiesOf('App', module).addWithInfo(
     () => (
         <App className="App" prop="property"/>
     ),
+    {inline: true}
 );
 
 storiesOf('Choice', module).addWithInfo(
