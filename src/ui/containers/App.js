@@ -17,7 +17,7 @@ class App extends Component {
     // Sorry excuse for a backend
     let questionTypes = ['WriteCode', 'FillBlank', 'HighlightCode', 'MultipleChoice', 'ShortResponse'];
     let testQuestion = {
-      content: 'What is the value of x after code execution?',
+      prompt: 'What is the value of x after code execution?',
       code: 'int x = 1;',
       type: questionTypes[4],
       answers: ['1', '5', '10', '100']
