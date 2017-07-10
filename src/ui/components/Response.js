@@ -1,7 +1,7 @@
 // @flow
 import React, {Component} from 'react';
 import MultipleChoice from './MultipleChoice';
-//TODO: import ShortResponse from './ShortResponse';
+import ShortResponse from './ShortResponse';
 
 /**
  * The Response component contains the response section in the assessment problem
@@ -15,14 +15,18 @@ class Response extends Component {
 
   render() {
     return (
-        <div className='response '>
+        <div className='response'>
           {
             this.props.type === 'MultipleChoice' ?
-                <MultipleChoice answers={this.props.answers}/> : ''
-            //TODO: <ShortResponse />
+                <MultipleChoice answers={this.props.answers}/>
+                :
+                (this.props.type === 'ShortResponse' ?
+                        <ShortResponse /> : ''
+                )
           }
         </div>
     );
+    // TODO: Other question types!
   }
 }
 
