@@ -20,7 +20,9 @@ class Response extends Component {
         <div className='response'>
           {
             (this.props.type === 'MultipleChoice' ?
-                <MultipleChoice answers={this.props.answers}/>
+                <MultipleChoice answers={this.props.answers}
+                                selected={this.props.selected}
+                                handleClick={this.props.updateHandler}/>
                 :
                 (this.props.type === 'ShortResponse' ?
                         <ShortResponse /> : ''
