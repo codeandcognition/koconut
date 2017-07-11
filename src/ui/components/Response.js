@@ -25,8 +25,6 @@ class Response extends Component {
               />;
       case('ShortResponse'):
         return <ShortResponse />;
-      case('FillBlank'):
-        return <div />;
       default:
         return <div className="BAD">Not a valid question type :(</div>;
     }
