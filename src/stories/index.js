@@ -64,6 +64,21 @@ storiesOf('Problem', module).addWithInfo(
     {inline: true},
 );
 
+storiesOf('Problem', module).addWithInfo(
+    'FillBlank Problem',
+    '',
+    () => (
+        <Problem
+            question={{
+              prompt: 'What is x after the following code executes?',
+              code: 'int x = 1;\nint y = (*);\nint z = 5;',
+              type: 'FillBlank',
+            }}
+        />
+    ),
+    {inline: true},
+);
+
 storiesOf('MultipleChoice', module).addWithInfo(
     'MultipleChoice Component',
     'Example choices',

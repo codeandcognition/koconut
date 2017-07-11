@@ -1,6 +1,5 @@
 // @flow
 import React, {Component} from 'react';
-import Choice from './Choice';
 
 /**
  * The ShortResponse component renders short response question type

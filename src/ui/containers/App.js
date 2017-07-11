@@ -18,8 +18,8 @@ class App extends Component {
     let questionTypes = ['WriteCode', 'FillBlank', 'HighlightCode', 'MultipleChoice', 'ShortResponse'];
     let testQuestion = {
       prompt: 'What is the value of x after code execution?',
-      code: 'int x = 1;',
-      type: questionTypes[4],
+      code: 'int x = 1;\nint y = (*);\nint z = 5;',
+      type: questionTypes[1],
       answers: ['1', '5', '10', '100']
     };
     return (
