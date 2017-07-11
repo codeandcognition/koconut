@@ -8,6 +8,7 @@ use Node.js, Express, and an undetermined database system.
 
 ### Tools
 Development of *koconut* is assisted by the usage of:
+
 * [Node.js](https://nodejs.org/en/): a JavaScript runtime
 * [Flow](https://flow.org/): a type-checking system for JavaScript
 * [Sass](http://sass-lang.com/): a CSS pre-processor
@@ -51,6 +52,10 @@ using the following command within the project directory:
 
 `npm install`
 
+Alternatively (and better-ly), you can use [Yarn :cat:](https://yarnpkg.com/en/) :
+
+`yarn install`
+
 ### Using the Development Scripts
 To have a live preview of the application, simply run the following command:
 
@@ -76,6 +81,10 @@ It is worth noting that for some reason this script doesn't like how start and s
 To type check your code:
 
 `npm run flow`
+
+**If Flow is being mean to you** :cry::
+
+`npm run make-flow-nicer`
 
 ### Using the Build Scripts
 To build the application, simply run:
@@ -131,7 +140,7 @@ You can register your GitHub account in WebStorm for easy version control:
 It is recommended that you use token authentication: [Personal API Tokens](https://github.com/blog/1509-personal-api-tokens)
 
 #### ~~Using Floobits in WebStorm~~
-Floobits is buggy and no longer maintained :sob:
+**Floobits is buggy and no longer maintained** :sob:
 
 ~~[Floobits](https://floobits.com) is a plugin for WebStorm (and other editors, like Atom) that enables Google Docs-like editing. This allows for live pair programming and ability to work remotely in a live environment.~~
 
