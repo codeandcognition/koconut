@@ -16,16 +16,6 @@ class Information extends Component {
     updateHandler: Function
   };
 
-  /*
-   TODO: Questions need types.
-   This type property assumes we have these question types:
-   WriteCode
-   FillBlank
-   MultipleChoice
-   ShortResponse
-   HighlightCode
-   */
-
   /**
    * Determines whether the question type is an inline question type.
    * An inline question type requires displaying only the code component,
@@ -38,8 +28,6 @@ class Information extends Component {
         type === 'HighlightCode';
   }
 
-  // TODO:
-  // answers prop should only be passed if the question type is MultipleChoice
   render() {
     let displayResponse = Information.isInlineResponseType(this.props.type)
         ? ''

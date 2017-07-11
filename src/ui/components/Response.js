@@ -36,7 +36,6 @@ class Response extends Component {
           {this.renderResponse()}
         </div>
     );
-    // TODO: Other question types!
   }
 }
 
