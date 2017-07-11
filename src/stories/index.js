@@ -17,29 +17,74 @@ import {Button, Welcome} from '@storybook/react/demo';
 
 import App from '../ui/containers/App';
 import Information from '../ui/containers/Information';
-import Problem from '../ui/containers/Information';
+import Problem from '../ui/containers/Problem';
 import Question from '../ui/components/Question';
 import Response from '../ui/components/Response';
 import Choice from '../ui/components/Choice';
 import Code from '../ui/components/Code';
 import MultipleChoice from '../ui/components/MultipleChoice';
 
-storiesOf('Welcome', module).
-    add('to Storybook', () => <Welcome showApp={linkTo('Button')}/>);
-
-storiesOf('Button', module).
-    add('with text',
-        () => <Button onClick={action('clicked')}>Hello Button</Button>).
-    add('with some emoji',
-        () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
-
 storiesOf('App', module).addWithInfo(
-    'Default App Component',
+    'App Component',
     'Simple usage of the App component. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad, beatae distinctio et fugiat molestiae natus nihil quasi tenetur voluptatibus. A aperiam dolorum et facilis id ipsam nulla repellat saepe?',
     () => (
         <App className="App" prop="property"/>
     ),
-    {inline: true}
+    {inline: true},
+);
+
+storiesOf('Problem', module).addWithInfo(
+    'MultipleChoice Problem',
+    '',
+    () => (
+        <Problem
+            question={{
+              prompt: 'What is x after the following code executes?',
+              code: 'int x = 1;',
+              type: 'MultipleChoice',
+              answers: ['0', '1', '2', '3']
+            }}
+        />
+    ),
+    {inline: true},
+);
+
+storiesOf('Problem', module).addWithInfo(
+    'ShortResponse Problem',
+    '',
+    () => (
+        <Problem
+            question={{
+              prompt: 'What is x after the following code executes?',
+              code: 'int x = 1;',
+              type: 'ShortResponse',
+            }}
+        />
+    ),
+    {inline: true},
+);
+
+storiesOf('Problem', module).addWithInfo(
+    'FillBlank Problem',
+    '',
+    () => (
+        <Problem
+            question={{
+              prompt: 'What is x after the following code executes?',
+              code: 'int x = 1;\nint y = (*);\nint z = 5;',
+              type: 'FillBlank',
+            }}
+        />
+    ),
+    {inline: true},
+);
+
+storiesOf('MultipleChoice', module).addWithInfo(
+    'MultipleChoice Component',
+    'Example choices',
+    () => (
+        <MultipleChoice answers={['A', 'B', 'C']}/>
+    ),
 );
 
 storiesOf('Choice', module).addWithInfo(
@@ -50,10 +95,3 @@ storiesOf('Choice', module).addWithInfo(
     ),
 );
 
-storiesOf('MultipleChoice', module).addWithInfo(
-    'MultipleChoice Component',
-    'Example choices',
-    () => (
-        <MultipleChoice answers={['A', 'B', 'C']}/>
-    ),
-);

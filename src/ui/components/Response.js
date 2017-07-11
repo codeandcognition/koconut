@@ -15,19 +15,27 @@ class Response extends Component {
     updateHandler: Function
   };
 
+  renderResponse() {
+    switch(this.props.type) {
+      case('MultipleChoice'):
+        return <MultipleChoice
+                answers={this.props.answers}
+                selected={this.props.selected}
+                handleClick={this.props.updateHandler}
+              />;
+      case('ShortResponse'):
+        return <ShortResponse />;
+      case('FillBlank'):
+        return <div />;
+      default:
+        return <div className="BAD">Not a valid question type :(</div>;
+    }
+  }
+
   render() {
     return (
         <div className='response'>
-          {
-            (this.props.type === 'MultipleChoice' ?
-                <MultipleChoice answers={this.props.answers}
-                                selected={this.props.selected}
-                                handleClick={this.props.updateHandler}/>
-                :
-                (this.props.type === 'ShortResponse' ?
-                        <ShortResponse /> : ''
-                ))
-          }
+          {this.renderResponse()}
         </div>
     );
     // TODO: Other question types!

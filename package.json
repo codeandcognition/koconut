@@ -13,6 +13,7 @@
     "documentation": "^4.0.0-rc.1",
     "flow-bin": "^0.49.1",
     "jsdoc": "^3.4.3",
+    "lodash": "^4.17.4",
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.0.2",
     "react": "^15.6.1",

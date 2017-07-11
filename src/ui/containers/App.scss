@@ -22,18 +22,10 @@
   display: flex;
 }
 
+$code-font: courier;
+
 .code, .response {
   padding: 2.5%;
-}
-
-.code {
-  width: 45%;
-  background-color: #ddd;
-}
-
-.code.full {
-  width: 95%;
-  display: flex;
 }
 
 .code {
@@ -46,7 +38,20 @@
 
 .code.full {
   width: 95%;
-  background-color: #ccf;
+}
+
+.code-part, .code-fill {
+  display: inline-block;
+  font-family: $code-font;
+}
+
+.code-fill {
+  background-color: #dddddd;
+  border: solid 1px #bbbbbb;
+  width: 3em;
+  resize: none;
+  height: 1em;
+  overflow: hidden;
 }
 
 .response {

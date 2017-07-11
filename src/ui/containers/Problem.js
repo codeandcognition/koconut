@@ -6,7 +6,7 @@ import Submit from '../components/Submit';
 
 type Props = {
   question: {
-    content: string,
+    prompt: string,
     code: string,
     type: string,
     answers: string[]
@@ -19,7 +19,7 @@ type Props = {
  */
 class Problem extends Component {
   state: {
-    content: string,
+    prompt: string,
     code: string,
     type: string,
     answers?: string[],
@@ -29,7 +29,7 @@ class Problem extends Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      content: props.question.content,
+      prompt: props.question.prompt,
       code: props.question.code,
       type: props.question.type,
       answers: props.question.answers,
@@ -55,7 +55,7 @@ class Problem extends Component {
   render() {
     return (
         <div className="problem">
-          <Question content={this.state.content}/>
+          <Question content={this.state.prompt}/>
           <Information
             code={this.state.code}
             type={this.state.type}
