@@ -10,13 +10,8 @@ import {Questions} from '../../backend/ExampleQuestions.js'
  * @class
  */
 class App extends Component {
-  test(a: number, b: number): number {
-    let x: number = a + b;
-    return x;
-  }
 
   render() {
-    // Sorry excuse for a backend
     return (
         <div className="App">
           <Problem question={Questions.exampleQuestions[0]}/>
