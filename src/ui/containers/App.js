@@ -25,7 +25,7 @@ class App extends Component {
     return (
         <div className="App">
           { /* TODO: not hard-code type value */ }
-          <Problem question={testQuestion}/>
+          <Problem prompt="" question={testQuestion}/>
         </div>
     );
   }
