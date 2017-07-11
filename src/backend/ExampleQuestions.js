@@ -20,9 +20,9 @@ class Questions {
   };
 
   static exampleQuestions:
-    [{
-      content: string, code: string, type: string, answers: string[],
-    }] = [{
+    {
+      content: string, code: string, type: string, answers?: string[],
+    }[] = [{
         content: 'Write the code necessary to increment the value of x.',
         code: 'int x = 1;',
         type: Questions.questionTypes.writeCode,
