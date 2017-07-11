@@ -13,17 +13,24 @@ class Code extends Component {
     code: string
   };
 
+  //TODO: Make indentation work
+  /**
+   * Returns JSX for the Code view
+   * @returns JSX for the Code view
+   */
   renderCode() {
     switch(this.props.type) {
       case('FillBlank'):
         let retJSX = [];
 
+        // Iterate by line
         for(let line of this.props.code.split(/\r\n|\n\r|\n|\r/g)) {
           let splitLine = line.split(placeholder);
           let lineJSX = [];
           lineJSX.push(<div className="code-part">{splitLine.shift()}</div>);
+          // Insert blanks between splits
           while(splitLine.length > 0) {
-            lineJSX.push(<textarea className="code-fill" rows={1}></textarea>);
+            lineJSX.push(<textarea className="code-fill"></textarea>);
             lineJSX.push(<div className="code-part">{splitLine.shift()}</div>);
           }
           retJSX.push(<div className="code-line">{lineJSX}</div>);
