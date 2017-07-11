@@ -4,8 +4,6 @@ type Question = { content: string, code: string, type: string, answers?: string[
 
 class Questions {
 
-  constructor(){}
-
   static questionTypes: {
     writeCode: string,
     fillBlank: string,
