@@ -1,9 +1,10 @@
 // @flow
+
+type Question = { content: string, code: string, type: string, answers?: string[]};
+
 class Questions {
 
-  constructor() {
-
-  }
+  constructor(){}
 
   static questionTypes: {
     writeCode: string,
@@ -20,9 +21,7 @@ class Questions {
   };
 
   static exampleQuestions:
-    [{
-      content: string, code: string, type: string, answers: string[],
-    }] = [{
+    Array<Question> = [{
         content: 'Write the code necessary to increment the value of x.',
         code: 'int x = 1;',
         type: Questions.questionTypes.writeCode,
