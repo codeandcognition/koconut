@@ -29,7 +29,7 @@ class Questions {
       },
       {
         content: 'Fill in the blank so that x is assigned a value.',
-        code: 'int x :textarea: 2;',
+        code: 'int x [text area] 2;',
         type: Questions.questionTypes.fillBlank,
       },
       {
