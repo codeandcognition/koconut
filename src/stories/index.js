@@ -79,6 +79,36 @@ storiesOf('Problem', module).addWithInfo(
     {inline: true},
 );
 
+storiesOf('Problem', module).addWithInfo(
+    'HighlightCode Problem',
+    '',
+    () => (
+        <Problem
+            question={{
+              prompt: 'Highlight the expression that evaluates to false.',
+              code: 'int x = 2;\nif(x > 5) {\n\tx -= 5;\n}',
+              type: 'HighlightCode',
+            }}
+        />
+    ),
+    {inline: true},
+);
+
+storiesOf('Problem', module).addWithInfo(
+    'WriteCode Problem',
+    '',
+    () => (
+        <Problem
+            question={{
+              prompt: 'Write an expression that evaluates the sum of x, y, and z.',
+              code: 'int x = 1;\nint y = 2;\nint z = 3;',
+              type: 'WriteCode',
+            }}
+        />
+    ),
+    {inline: true},
+);
+
 storiesOf('MultipleChoice', module).addWithInfo(
     'MultipleChoice Component',
     'Example choices',

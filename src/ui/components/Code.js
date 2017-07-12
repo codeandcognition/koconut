@@ -1,17 +1,35 @@
 // @flow
 import React, {Component} from 'react';
+import CodeMirror from 'react-codemirror';
+import '../../../node_modules/codemirror/mode/javascript/javascript';
+import '../../../node_modules/codemirror/mode/clike/clike';
+import '../../../node_modules/codemirror/mode/python/python';
+
 import Information from '../containers/Information';
+import '../../../node_modules/codemirror/lib/codemirror.css';
+import '../../../node_modules/codemirror/theme/eclipse.css'
+import '../../../node_modules/codemirror/theme/material.css';
 
 const placeholder = '(*)';
+
+type Props = { type: string, code: string };
 /**
  * The Code component contains the code view in the assessment problem
  * @class
  */
 class Code extends Component {
-  props: {
-    type: string,
-    code: string
-  };
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      code: this.props.code,
+      lineNumbers: true,
+      mode: 'clike',
+      theme: 'eclipse'
+    };
+
+    this.changeTheme = this.changeTheme.bind(this);
+  }
 
   //TODO: Make indentation work
   /**
@@ -41,12 +59,35 @@ class Code extends Component {
     }
   }
 
+  changeTheme(event) {
+    this.setState({
+      theme: event.target.value
+    });
+  }
+  // EXPERIMENTAL!!
+  renderCodeMirror() {
+    let options = {
+      lineNumbers: this.state.lineNumbers,
+      readOnly: this.props.type !== 'WriteCode',
+      mode: this.state.mode,
+      theme: this.state.theme
+    };
+
+    return <CodeMirror ref="editor" value={this.state.code} options={options}/>
+  }
+
   render() {
     let isInlineResponseType = Information.isInlineResponseType(
         this.props.type);
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
-          {this.renderCode()}
+          {this.renderCodeMirror()}
+          <p>Select a theme:
+            <select onChange={this.changeTheme} id="select">
+              <option selected>eclipse</option>
+              <option>material</option>
+            </select>
+          </p>
         </div>
     );
   }
