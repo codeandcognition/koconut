@@ -97,7 +97,8 @@ $choice-color: #cccccc;
   padding: 0.5em;
   margin: 0.5em;
   cursor: pointer;
-  transition: all 200ms;
+  user-select: none;
+  transition-duration: 50ms;
 }
 
 .btn:hover {
