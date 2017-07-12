@@ -28,7 +28,7 @@ class Code extends Component {
       theme: 'eclipse'
     };
 
-    this.changeTheme = this.changeTheme.bind(this);
+    this.handleThemeChange = this.handleThemeChange.bind(this);
   }
 
   //TODO: Make indentation work
@@ -59,11 +59,12 @@ class Code extends Component {
     }
   }
 
-  changeTheme(event) {
-    this.setState({
-      theme: event.target.value
-    });
+  handleThemeChange(event) {
+    event.target.checked ? this.setState( {theme: 'material' }) :
+      this.setState( {theme: 'eclipse'} )
   }
+
+
   // EXPERIMENTAL!!
   renderCodeMirror() {
     let options = {
@@ -82,11 +83,9 @@ class Code extends Component {
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
           {this.renderCodeMirror()}
-          <p>Select a theme:
-            <select onChange={this.changeTheme} id="select">
-              <option selected>eclipse</option>
-              <option>material</option>
-            </select>
+          <p>
+            Toggle dark theme:
+            <input type="checkbox" onChange={this.handleThemeChange}/>
           </p>
         </div>
     );
