@@ -6,7 +6,10 @@
 [include]
 
 [libs]
+./flow-typed/.*
 
 [options]
+module.file_ext=.scss
+module.file_ext=.css
 
 [lints]

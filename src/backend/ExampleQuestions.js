@@ -1,10 +1,6 @@
 // @flow
 class Questions {
 
-  constructor() {
-
-  }
-
   static questionTypes: {
     writeCode: string,
     fillBlank: string,

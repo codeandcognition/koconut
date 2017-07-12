@@ -8,8 +8,10 @@ import React, {Component} from 'react';
 class Submit extends Component {
   render() {
     return (
-        <div>
-           Hi
+        <div className="submit-container">
+          <div className="btn btn-submit">
+           Submit
+          </div>
         </div>
     );
   }
