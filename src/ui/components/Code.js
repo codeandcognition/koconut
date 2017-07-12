@@ -24,7 +24,7 @@ class Code extends Component {
     this.state = {
       code: this.props.code,
       lineNumbers: true,
-      mode: 'clike',
+      mode: "text/x-java",
       theme: 'eclipse'
     };
 
