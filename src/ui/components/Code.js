@@ -7,8 +7,8 @@ import '../../../node_modules/codemirror/mode/python/python';
 
 import Information from '../containers/Information';
 import '../../../node_modules/codemirror/lib/codemirror.css';
-import '../../../node_modules/codemirror/theme/solarized.css';
-import '../../../node_modules/codemirror/theme/cobalt.css';
+import '../../../node_modules/codemirror/theme/eclipse.css'
+import '../../../node_modules/codemirror/theme/material.css';
 
 const placeholder = '(*)';
 
@@ -25,7 +25,7 @@ class Code extends Component {
       code: this.props.code,
       lineNumbers: true,
       mode: 'clike',
-      theme: 'solarized'
+      theme: 'eclipse'
     };
 
     this.changeTheme = this.changeTheme.bind(this);
@@ -84,8 +84,8 @@ class Code extends Component {
           {this.renderCodeMirror()}
           <p>Select a theme:
             <select onChange={this.changeTheme} id="select">
-              <option selected>solaris</option>
-              <option>cobalt</option>
+              <option selected>eclipse</option>
+              <option>material</option>
             </select>
           </p>
         </div>
