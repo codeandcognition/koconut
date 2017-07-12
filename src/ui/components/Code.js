@@ -18,6 +18,7 @@ type Props = { type: string, code: string };
  * @class
  */
 class Code extends Component {
+  handleThemeChange: Function;
 
   constructor(props: Props) {
     super(props);
@@ -59,7 +60,7 @@ class Code extends Component {
     }
   }
 
-  handleThemeChange(event) {
+  handleThemeChange(event: SyntheticInputEvent) {
     event.target.checked ? this.setState( {theme: 'material' }) :
       this.setState( {theme: 'eclipse'} )
   }
