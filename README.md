@@ -52,7 +52,7 @@ using the following command within the project directory:
 
 `npm install`
 
-Alternatively (and better-ly), you can use [Yarn :cat:](https://yarnpkg.com/en/) :
+Alternatively (and better-ly), you can use [Yarn :cat:](https://yarnpkg.com/en/):
 
 `yarn install`
 
