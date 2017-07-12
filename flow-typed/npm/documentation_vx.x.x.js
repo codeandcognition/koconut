@@ -1,4 +1,4 @@
-// flow-typed signature: ed160127988e3e04261ec867c5feba5d
+// flow-typed signature: 0a65e70bda84fcde38d3c97680f4c57b
 // flow-typed version: <<STUB>>/documentation_v^4.0.0-rc.1/flow_v0.49.1
 
 /**
@@ -190,11 +190,11 @@ declare module 'documentation/lib/output/json' {
   declare module.exports: any;
 }
 
-declare module 'documentation/lib/output/markdown_ast' {
+declare module 'documentation/lib/output/markdown' {
   declare module.exports: any;
 }
 
-declare module 'documentation/lib/output/markdown' {
+declare module 'documentation/lib/output/markdown_ast' {
   declare module.exports: any;
 }
 
@@ -214,11 +214,11 @@ declare module 'documentation/lib/output/util/reroute_links' {
   declare module.exports: any;
 }
 
-declare module 'documentation/lib/parse_markdown' {
+declare module 'documentation/lib/parse' {
   declare module.exports: any;
 }
 
-declare module 'documentation/lib/parse' {
+declare module 'documentation/lib/parse_markdown' {
   declare module.exports: any;
 }
 
@@ -381,11 +381,11 @@ declare module 'documentation/lib/output/html.js' {
 declare module 'documentation/lib/output/json.js' {
   declare module.exports: $Exports<'documentation/lib/output/json'>;
 }
-declare module 'documentation/lib/output/markdown_ast.js' {
-  declare module.exports: $Exports<'documentation/lib/output/markdown_ast'>;
-}
 declare module 'documentation/lib/output/markdown.js' {
   declare module.exports: $Exports<'documentation/lib/output/markdown'>;
+}
+declare module 'documentation/lib/output/markdown_ast.js' {
+  declare module.exports: $Exports<'documentation/lib/output/markdown_ast'>;
 }
 declare module 'documentation/lib/output/util/format_type.js' {
   declare module.exports: $Exports<'documentation/lib/output/util/format_type'>;
@@ -399,11 +399,11 @@ declare module 'documentation/lib/output/util/linker_stack.js' {
 declare module 'documentation/lib/output/util/reroute_links.js' {
   declare module.exports: $Exports<'documentation/lib/output/util/reroute_links'>;
 }
-declare module 'documentation/lib/parse_markdown.js' {
-  declare module.exports: $Exports<'documentation/lib/parse_markdown'>;
-}
 declare module 'documentation/lib/parse.js' {
   declare module.exports: $Exports<'documentation/lib/parse'>;
+}
+declare module 'documentation/lib/parse_markdown.js' {
+  declare module.exports: $Exports<'documentation/lib/parse_markdown'>;
 }
 declare module 'documentation/lib/parsers/javascript.js' {
   declare module.exports: $Exports<'documentation/lib/parsers/javascript'>;
