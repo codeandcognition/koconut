@@ -12,7 +12,7 @@
 }
 
 .question {
-  height: 15vh;
+  //height: 15vh;
   padding: 0 2.5%;
   border-bottom: 1px dotted black;
 }
@@ -20,37 +20,40 @@
 .information {
   width: 100%;
   display: flex;
+  border-bottom: 1px dotted black;
 }
 
-.code, .response {
-  padding: 2.5%;
-}
-
-.code {
-  width: 45%;
-  background-color: #ddd;
-}
-
-.code.full {
-  width: 95%;
-  display: flex;
-}
+$code-font: courier;
 
 .code {
-  width: 45%;
+  padding: 0;
+  width: 50%;
   max-height: 60vh;
   background-color: #ddd;
-  padding: 2.5%;
   overflow-y: scroll;
 }
 
 .code.full {
-  width: 95%;
-  background-color: #ccf;
+  width: 100%;
+}
+
+.code-part, .code-fill {
+  display: inline-block;
+  font-family: $code-font;
+}
+
+.code-fill {
+  background-color: #dddddd;
+  border: solid 1px #bbbbbb;
+  width: 3em;
+  resize: none;
+  height: 1em;
+  overflow: hidden;
 }
 
 .response {
-  width: 50%;
+  padding: 2.5%;
+  width: 45%;
 }
 
 $choice-color: #cccccc;
@@ -80,4 +83,24 @@ $choice-color: #cccccc;
 
 .choice.selected:hover {
   background-color: darken($choice-color, 20%);
+}
+
+.submit-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  display: inline-block;
+  border: 1px solid #555;
+  border-radius: 0.5em;
+  padding: 0.5em;
+  margin: 0.5em;
+  cursor: pointer;
+  user-select: none;
+  transition-duration: 50ms;
+}
+
+.btn:hover {
+  background-color: #eee;
 }

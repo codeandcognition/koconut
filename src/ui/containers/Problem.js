@@ -9,7 +9,7 @@ type Props = {
     prompt: string,
     code: string,
     type: string,
-    answers: string[]
+    answers?: string[]
   }
 }
 
