@@ -1,14 +1,14 @@
 // @flow
 import React, {Component} from 'react';
 import CodeMirror from 'react-codemirror';
-import '../../../node_modules/codemirror/mode/javascript/javascript';
-import '../../../node_modules/codemirror/mode/clike/clike';
-import '../../../node_modules/codemirror/mode/python/python';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/clike/clike';
 
 import Information from '../containers/Information';
-import '../../../node_modules/codemirror/lib/codemirror.css';
-import '../../../node_modules/codemirror/theme/eclipse.css'
-import '../../../node_modules/codemirror/theme/material.css';
+// Flow does not like it if you import css from node_modules!
+import './codemirror/codemirror.css';
+import './codemirror/eclipse.css';
+import './codemirror/material.css';
 
 const placeholder = '(*)';
 
@@ -18,6 +18,7 @@ type Props = { type: string, code: string };
  * @class
  */
 class Code extends Component {
+  // Binding: https://github.com/facebook/flow/issues/1397
   handleThemeChange: Function;
 
   constructor(props: Props) {
