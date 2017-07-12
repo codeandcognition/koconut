@@ -1,4 +1,4 @@
-// flow-typed signature: bb5cc9f7ee6a377141c489c5f9487e0b
+// flow-typed signature: ad2462f876ad58d3685b9d41cf1b8d06
 // flow-typed version: <<STUB>>/jsdoc_v^3.4.3/flow_v0.49.1
 
 /**
@@ -186,7 +186,7 @@ declare module 'jsdoc/lib/jsdoc/util/markdown' {
   declare module.exports: any;
 }
 
-declare module 'jsdoc/lib/jsdoc/util/runtime' {
+declare module 'jsdoc/lib/jsdoc/util/stripbom' {
   declare module.exports: any;
 }
 
@@ -438,8 +438,8 @@ declare module 'jsdoc/lib/jsdoc/util/logger.js' {
 declare module 'jsdoc/lib/jsdoc/util/markdown.js' {
   declare module.exports: $Exports<'jsdoc/lib/jsdoc/util/markdown'>;
 }
-declare module 'jsdoc/lib/jsdoc/util/runtime.js' {
-  declare module.exports: $Exports<'jsdoc/lib/jsdoc/util/runtime'>;
+declare module 'jsdoc/lib/jsdoc/util/stripbom.js' {
+  declare module.exports: $Exports<'jsdoc/lib/jsdoc/util/stripbom'>;
 }
 declare module 'jsdoc/lib/jsdoc/util/templateHelper.js' {
   declare module.exports: $Exports<'jsdoc/lib/jsdoc/util/templateHelper'>;

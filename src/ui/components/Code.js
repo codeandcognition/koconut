@@ -8,6 +8,7 @@ import '../../../node_modules/codemirror/mode/python/python';
 import Information from '../containers/Information';
 import '../../../node_modules/codemirror/lib/codemirror.css';
 import '../../../node_modules/codemirror/theme/solarized.css';
+import '../../../node_modules/codemirror/theme/cobalt.css';
 
 const placeholder = '(*)';
 
@@ -26,8 +27,9 @@ class Code extends Component {
       mode: 'clike',
       theme: 'solarized'
     };
-  }
 
+    this.changeTheme = this.changeTheme.bind(this);
+  }
 
   //TODO: Make indentation work
   /**
@@ -57,6 +59,11 @@ class Code extends Component {
     }
   }
 
+  changeTheme(event) {
+    this.setState({
+      theme: event.target.value
+    });
+  }
   // EXPERIMENTAL!!
   renderCodeMirror() {
     let options = {
@@ -75,6 +82,12 @@ class Code extends Component {
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
           {this.renderCodeMirror()}
+          <p>Select a theme:
+            <select onChange={this.changeTheme} id="select">
+              <option selected>solaris</option>
+              <option>cobalt</option>
+            </select>
+          </p>
         </div>
     );
   }
