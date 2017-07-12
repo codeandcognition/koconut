@@ -7,8 +7,8 @@ import '../../../node_modules/codemirror/mode/python/python';
 
 import Information from '../containers/Information';
 import '../../../node_modules/codemirror/lib/codemirror.css';
-import '../../../node_modules/codemirror/theme/solarized.css';
-import '../../../node_modules/codemirror/theme/cobalt.css';
+import '../../../node_modules/codemirror/theme/eclipse.css';
+import '../../../node_modules/codemirror/theme/material.css';
 
 const placeholder = '(*)';
 
@@ -25,10 +25,10 @@ class Code extends Component {
       code: this.props.code,
       lineNumbers: true,
       mode: 'clike',
-      theme: 'solarized'
+      theme: 'eclipse'
     };
 
-    this.changeTheme = this.changeTheme.bind(this);
+    this.handleThemeChange = this.handleThemeChange.bind(this);
   }
 
   //TODO: Make indentation work
@@ -59,11 +59,12 @@ class Code extends Component {
     }
   }
 
-  changeTheme(event) {
-    this.setState({
-      theme: event.target.value
-    });
+  handleThemeChange(event) {
+    event.target.checked ? this.setState( {theme: 'material' }) :
+      this.setState( {theme: 'eclipse'} )
   }
+
+
   // EXPERIMENTAL!!
   renderCodeMirror() {
     let options = {
@@ -82,11 +83,9 @@ class Code extends Component {
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
           {this.renderCodeMirror()}
-          <p>Select a theme:
-            <select onChange={this.changeTheme} id="select">
-              <option selected>solaris</option>
-              <option>cobalt</option>
-            </select>
+          <p>
+            Toggle dark theme:
+            <input type="checkbox" onChange={this.handleThemeChange}/>
           </p>
         </div>
     );
