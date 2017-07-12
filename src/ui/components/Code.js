@@ -7,7 +7,7 @@ import '../../../node_modules/codemirror/mode/python/python';
 
 import Information from '../containers/Information';
 import '../../../node_modules/codemirror/lib/codemirror.css';
-import '../../../node_modules/codemirror/theme/eclipse.css';
+import '../../../node_modules/codemirror/theme/eclipse.css'
 import '../../../node_modules/codemirror/theme/material.css';
 
 const placeholder = '(*)';
