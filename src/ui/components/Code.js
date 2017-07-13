@@ -1,16 +1,14 @@
 // @flow
 import React, {Component} from 'react';
 import CodeMirror from 'react-codemirror';
-import '../../../node_modules/codemirror/mode/javascript/javascript';
-import '../../../node_modules/codemirror/mode/clike/clike';
-import '../../../node_modules/codemirror/mode/python/python';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/clike/clike';
 
 import Information from '../containers/Information';
-import '../../../node_modules/codemirror/lib/codemirror.css';
-import '../../../node_modules/codemirror/theme/eclipse.css'
-import '../../../node_modules/codemirror/theme/material.css';
-
-const placeholder = '(*)';
+// Flow does not like it if you import css from node_modules!
+import './codemirror/codemirror.css';
+import './codemirror/eclipse.css';
+import './codemirror/material.css';
 
 type Props = { type: string, code: string };
 /**
@@ -18,65 +16,52 @@ type Props = { type: string, code: string };
  * @class
  */
 class Code extends Component {
+  // Binding: https://github.com/facebook/flow/issues/1397
+  handleThemeChange: Function;
 
   constructor(props: Props) {
     super(props);
     this.state = {
       code: this.props.code,
       lineNumbers: true,
-      mode: "text/x-java",
-      theme: 'eclipse'
+      mode: 'text/x-java',
+      theme: 'eclipse',
     };
 
     this.handleThemeChange = this.handleThemeChange.bind(this);
   }
 
-  //TODO: Make indentation work
   /**
-   * Returns JSX for the Code view
-   * @returns JSX for the Code view
+   * Updates the theme state based on whether the input is checked or not
+   * @param event - React Event for the checkbox
    */
-  renderCode() {
-    switch(this.props.type) {
-      case('FillBlank'):
-        let retJSX = [];
-
-        // Iterate by line
-        for(let line of this.props.code.split(/\r\n|\n\r|\n|\r/g)) {
-          let splitLine = line.split(placeholder);
-          let lineJSX = [];
-          lineJSX.push(<div className="code-part">{splitLine.shift()}</div>);
-          // Insert blanks between splits
-          while(splitLine.length > 0) {
-            lineJSX.push(<textarea className="code-fill"></textarea>);
-            lineJSX.push(<div className="code-part">{splitLine.shift()}</div>);
-          }
-          retJSX.push(<div className="code-line">{lineJSX}</div>);
-        }
-        return retJSX;
-      default:
-        return this.props.code;
-    }
+  handleThemeChange(event: SyntheticInputEvent) {
+    event.target.checked ? this.setState({theme: 'material'})
+        : this.setState({theme: 'eclipse'});
   }
 
-  handleThemeChange(event) {
-    event.target.checked ? this.setState( {theme: 'material' }) :
-      this.setState( {theme: 'eclipse'} )
-  }
-
-
-  // EXPERIMENTAL!!
+  /**
+   * Returns JSX for the CodeMirror component with the current options stored
+   * in state
+   * @returns JSX for the CodeMirror component
+   */
   renderCodeMirror() {
     let options = {
       lineNumbers: this.state.lineNumbers,
       readOnly: this.props.type !== 'WriteCode',
       mode: this.state.mode,
-      theme: this.state.theme
+      theme: this.state.theme,
     };
 
-    return <CodeMirror ref="editor" value={this.state.code} options={options}/>
+    return <CodeMirror
+        ref="editor"
+        value={this.state.code}
+        options={options}
+        onChange={(e) => (this.setState({code: e}))}
+    />;
   }
 
+  // TODO: Figure out why setState won't update code content
   render() {
     let isInlineResponseType = Information.isInlineResponseType(
         this.props.type);
@@ -86,7 +71,13 @@ class Code extends Component {
           <p>
             Toggle dark theme:
             <input type="checkbox" onChange={this.handleThemeChange}/>
+            <input
+                type="button"
+                value="RESET!"
+                onClick={() => (this.setState({code: this.props.code}))}
+            />
           </p>
+
         </div>
     );
   }
