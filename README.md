@@ -1,14 +1,21 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/very%20cool-passing-green.svg" alt="very cool status">
+  <img src="https://img.shields.io/badge/flow-happy-yellow.svg" alt="flow status">
+  <img src="https://img.shields.io/badge/emojis-active-blue.svg" alt="emoji status">
+  <img src="https://img.shields.io/badge/productivity-infinity-red.svg" alt="productivity status">
+</p>
+
 # koconut
 > :sparkles: *a very cool assess pool* :sparkles:
 
 ## Index
-* [Project Information](https://github.com/RESPRiT/koconut#project-information)
-* [Style Guide](https://github.com/RESPRiT/koconut#style-guide)
-* [Setup and Usage](https://github.com/RESPRiT/koconut#setup-and-usage)
-* [Resources](https://github.com/RESPRiT/koconut#resources)
+* [Project Information](#project-information)
+* [Style Guide](#style-guide)
+* [Setup and Usage](#setup-and-usage)
+* [Resources](#resources)
 
 ## Other Docs
-* [Flow](https://github.com/RESPRiT/koconut/blob/master/docs/flow.md)
+* [Flow](docs/flow.md)
 
 ## Project Information
 ### Technology Stack
