@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/clike/clike';
+import 'codemirror/addon/selection/mark-selection';
+import 'codemirror/addon/selection/active-line';
 
 import Types from '../../backend/Types.js';
 // Flow does not like it if you import css from node_modules!
@@ -73,7 +75,9 @@ class Code extends Component {
       lineNumbers: this.state.lineNumbers,
       readOnly: this.props.type !== Types.writeCode,
       mode: this.state.mode,
-      theme: this.state.theme
+      theme: this.state.theme,
+      styleSelectedText: true,
+      styleActiveLine: true,
     };
 
     return <CodeMirror ref="editor" value={this.state.code} options={options}/>
