@@ -8,7 +8,7 @@
 * [Resources](https://github.com/RESPRiT/koconut#resources)
 
 ## Other Docs
-* Flow
+* [Flow](https://github.com/RESPRiT/koconut/blob/master/docs/flow.md)
 
 ## Project Information
 ### Technology Stack
