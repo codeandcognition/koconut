@@ -1,5 +1,14 @@
 # koconut
-:sparkles: *a very cool assess pool* :sparkles:
+> :sparkles: *a very cool assess pool* :sparkles:
+
+## Index
+* [Project Information](https://github.com/RESPRiT/koconut#project-information)
+* [Style Guide](https://github.com/RESPRiT/koconut#style-guide)
+* [Setup and Usage](https://github.com/RESPRiT/koconut#setup-and-usage)
+* [Resources](https://github.com/RESPRiT/koconut#resources)
+
+## Other Docs
+* Flow
 
 ## Project Information
 ### Technology Stack
@@ -15,12 +24,12 @@ Development of *koconut* is assisted by the usage of:
 * [Storybook](https://storybook.js.org/): a live development environment
 * [documentation.js](http://documentation.js.org/): a documentation generator
 
-### Style Guide
-#### JavaScript
-##### Style
+## Style Guide
+### JavaScript
+#### Style
 JavaScript is written in [ES6](https://babeljs.io/learn-es2015/) with Flow style static typing.
 
-##### Format
+#### Format
 Code should be formatted similarly to [Google JavaScript Style](https://google.github.io/styleguide/jsguide.html).
 
 For formatting this means:
@@ -32,7 +41,7 @@ For formatting this means:
 Other formatting should also be consistent. It is worth noting that many IDEs
 (including WebStorm) can automatically reformat code.
 
-##### Documentation
+#### Documentation
 JavaScript classes and functions should be commented with [JSDoc](http://usejsdoc.org/) style comments to help with documentation.
 
 Not every tag needs to be used. The most important tags to use are:
@@ -42,7 +51,7 @@ Not every tag needs to be used. The most important tags to use are:
 
 Comments should also have a brief description.
 
-#### CSS
+### CSS
 Sass is written using SCSS syntax.
 
 ## Setup and Usage
@@ -55,6 +64,8 @@ using the following command within the project directory:
 Alternatively (and better-ly), you can use [Yarn :cat:](https://yarnpkg.com/en/):
 
 `yarn install`
+
+*You should know that [all npm commands can be replaced with Yarn commands](https://yarnpkg.com/en/docs/migrating-from-npm)!*
 
 ### Using the Development Scripts
 To have a live preview of the application, simply run the following command:
@@ -140,7 +151,9 @@ You can register your GitHub account in WebStorm for easy version control:
 It is recommended that you use token authentication: [Personal API Tokens](https://github.com/blog/1509-personal-api-tokens)
 
 #### ~~Using Floobits in WebStorm~~
-**Floobits is buggy and no longer maintained** :sob:
+**Floobits is buggy and no longer maintained, do not use it for general development** :sob:
+
+*(We still use Floobits sometimes :ok_hand:)*
 
 ~~[Floobits](https://floobits.com) is a plugin for WebStorm (and other editors, like Atom) that enables Google Docs-like editing. This allows for live pair programming and ability to work remotely in a live environment.~~
 
