@@ -1,6 +1,8 @@
 // @flow
 import React, {Component} from 'react';
-import CodeMirror from 'react-codemirror';
+// CodeMirror bug isn't fixed on main branch yet, so we'll use this package...
+// for now: https://github.com/JedWatson/react-codemirror/pull/107
+import CodeMirror from '@skidding/react-codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/clike/clike';
 

@@ -10,6 +10,7 @@
     "react-scripts": "1.0.10"
   },
   "dependencies": {
+    "@skidding/react-codemirror": "^1.0.1",
     "documentation": "^4.0.0-rc.1",
     "flow-bin": "^0.49.1",
     "flow-scripts": "^0.3.0",
