@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import Code from '../components/Code';
 import Response from '../components/Response';
 
+import Questions from '../../backend/Questions.js';
+
 /**
  * The Information container contains Code or both Code and Response.
  * @class
@@ -16,20 +18,8 @@ class Information extends Component {
     updateHandler: Function
   };
 
-  /**
-   * Determines whether the question type is an inline question type.
-   * An inline question type requires displaying only the code component,
-   * rather than the code and response component.
-   * @param type - the question type
-   * @returns whether or not the question type requires inline responding
-   */
-  static isInlineResponseType(type: string): boolean {   //TODO: Place this in future utility class
-    return type === 'WriteCode' || type === 'FillBlank' ||
-        type === 'HighlightCode';
-  }
-
   render() {
-    let displayResponse = Information.isInlineResponseType(this.props.type)
+    let displayResponse = Questions.isInlineResponseType(this.props.type)
         ? ''
         : <Response
             type={this.props.type}
