@@ -71,7 +71,7 @@ class Code extends Component {
   renderCodeMirror() {
     let options = {
       lineNumbers: this.state.lineNumbers,
-      readOnly: this.props.type !== 'WriteCode',
+      readOnly: this.props.type !== Types.writeCode,
       mode: this.state.mode,
       theme: this.state.theme
     };
