@@ -15,8 +15,6 @@ It is worthwhile to note the [Flow + React](https://flow.org/en/docs/frameworks/
 * [Importing a new module from `node_modules`](#importing-a-new-module-from-node_modules)
 * [Importing CSS from from `node_modules`](#importing-css-from-node_modules)
 
-
-
 ## Binding this to a method in a constructor
 Flow will throw an error for declarations like the following:
 ```
