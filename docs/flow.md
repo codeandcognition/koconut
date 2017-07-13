@@ -9,7 +9,7 @@ Flow is [well documented](https://flow.org/en/docs/) online for most general thi
 It is worthwhile to note the [Flow + React](https://flow.org/en/docs/frameworks/react/) page in the documentation for information on annotating state and props (although you should also read the section below that discusses props).
 
 ## Content
-* [Binding this to a method in a constructor](https://github.com/RESPRiT/koconut/blob/master/docs/flow.md#binding-this-to-a-method-in-a-constructor)
+* [Binding `this` to a method in a constructor](https://github.com/RESPRiT/koconut/blob/master/docs/flow.md#binding-this-to-a-method-in-a-constructor)
 * [Missing props annotations in constructors](https://github.com/RESPRiT/koconut/blob/master/docs/flow.md#missing-props-annotations-in-constructors)
 * [Annotating React types](https://github.com/RESPRiT/koconut/blob/master/docs/flow.md#annotating-react-types)
 * [Importing a new module from `node_modules`](https://github.com/RESPRiT/koconut/blob/master/docs/flow.md#importing-a-new-module-from-node_modules)
@@ -17,7 +17,7 @@ It is worthwhile to note the [Flow + React](https://flow.org/en/docs/frameworks/
 
 
 
-## Binding this to a method in a constructor
+## Binding `this` to a method in a constructor
 Flow will throw an error for declarations like the following:
 ```
 constructor(props: Props) {
