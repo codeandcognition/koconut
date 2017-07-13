@@ -1,5 +1,8 @@
 <p align="center">
   <img src="https://img.shields.io/badge/very%20cool-passing-green.svg" alt="very cool status">
+  <img src="https://img.shields.io/badge/flow-happy-yellow.svg" alt="flow status">
+  <img src="https://img.shields.io/badge/emojis-active-blue.svg" alt="emoji status">
+  <img src="https://img.shields.io/badge/productivity-infinity-red.svg" alt="productivity status">
 </p>
 
 # koconut
