@@ -36,8 +36,9 @@ class Code extends Component {
    * @param event - React Event for the checkbox
    */
   handleThemeChange(event: SyntheticInputEvent) {
-    event.target.checked ? this.setState({theme: 'material'})
-        : this.setState({theme: 'eclipse'});
+    this.setState(
+        event.target.checked ? {theme: 'material'} : {theme: 'eclipse'}
+    )
   }
 
   /**
@@ -69,7 +70,7 @@ class Code extends Component {
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
           {this.renderCodeMirror()}
           <p>
-            Toggle dark theme:
+            Dark theme:
             <input type="checkbox" onChange={this.handleThemeChange}/>
             <input
                 type="button"
