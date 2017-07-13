@@ -9,7 +9,7 @@
 * [Project Information](#project-information)
 * [Style Guide](#style-guide)
 * [Setup and Usage](#setup-and-usage)
-* [Resources]()#resources)
+* [Resources](#resources)
 
 ## Other Docs
 * [Flow](docs/flow.md)
