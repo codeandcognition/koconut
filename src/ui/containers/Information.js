@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import Code from '../components/Code';
 import Response from '../components/Response';
 
-import Questions from '../../backend/Questions.js';
+import Types from '../../backend/Types.js';
 
 /**
  * The Information container contains Code or both Code and Response.
@@ -19,7 +19,7 @@ class Information extends Component {
   };
 
   render() {
-    let displayResponse = Questions.isInlineResponseType(this.props.type)
+    let displayResponse = Types.isInlineResponseType(this.props.type)
         ? ''
         : <Response
             type={this.props.type}

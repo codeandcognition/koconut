@@ -4,7 +4,7 @@ import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/clike/clike';
 
-import Questions from '../../backend/Questions.js';
+import Types from '../../backend/Types.js';
 // Flow does not like it if you import css from node_modules!
 import './codemirror/codemirror.css';
 import './codemirror/eclipse.css';
@@ -80,7 +80,7 @@ class Code extends Component {
   }
 
   render() {
-    let isInlineResponseType = Questions.isInlineResponseType(this.props.type);
+    let isInlineResponseType = Types.isInlineResponseType(this.props.type);
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
           {this.renderCodeMirror()}
