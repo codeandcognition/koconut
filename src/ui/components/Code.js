@@ -51,8 +51,8 @@ class Code extends Component {
    * @param event
    */
   handleThemeChange(event: SyntheticInputEvent) {
-    event.target.checked ? this.setState({theme: 'material'}) :
-        this.setState({theme: 'eclipse'});
+    this.setState(
+        event.target.checked ? ({theme: 'material'}: { theme: 'eclipse' }));
   }
 
   /**
