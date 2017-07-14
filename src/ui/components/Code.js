@@ -50,11 +50,12 @@ class Code extends Component {
   handleSelect() {
     if (this.editor) {
       let e = this.editor;
-      let select = e.codeMirror.doc.getSelection()
-      this.setState({highlighted: select})
+      let select = e.codeMirror.doc.getSelection();
+      this.setState({highlighted: select});
       console.log(this.state.highlighted);
     }
   }
+
   // EXPERIMENTAL!!
   renderCodeMirror() {
     let options = {
@@ -66,9 +67,9 @@ class Code extends Component {
       styleActiveLine: true,
     };
 
-    return <CodeMirror ref="editor" value={this.state.code} options={options} onCursorActivity={this.handleSelect}/>;
+    return <CodeMirror ref="editor" value={this.state.code} options={options}
+                       onCursorActivity={this.handleSelect}/>;
   }
-
 
   render() {
     let isInlineResponseType = Types.isInlineResponseType(this.props.type);
@@ -78,10 +79,8 @@ class Code extends Component {
           <p>
             Toggle dark theme:
             <input type="checkbox" onChange={this.handleThemeChange}/>
-            <input
-                type="button"
-                value="RESET!"
-                onClick={() => (this.setState({code: this.props.code}))}
+            <input type="button" value="RESET!"
+                   onClick={() => (this.setState({code: this.props.code}))}
             />
           </p>
           <button onClick={this.handleSelect}>highlight</button>
