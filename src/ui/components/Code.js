@@ -37,9 +37,7 @@ class Code extends Component {
     this.handleThemeChange = this.handleThemeChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
   }
-
-  // TODO: Document all these functions
-
+  
   /**
    * When component renders, store CodeMirror reference for later use.
    */
@@ -57,7 +55,7 @@ class Code extends Component {
   }
 
   /**
-   *
+   * Stores highlighted text from text area in component state: highlighted.
    */
   handleSelect() {
     if (this.editor) {
@@ -68,6 +66,11 @@ class Code extends Component {
     }
   }
 
+  /**
+   *  Renders CodeMirror with preferred options.
+   *  Handles editable/non-editable state for code view.
+   * @returns {JSX}
+   */
   renderCodeMirror() {
     let options = {
       lineNumbers: this.state.lineNumbers,
@@ -75,7 +78,7 @@ class Code extends Component {
       mode: this.state.mode,
       theme: this.state.theme,
       styleSelectedText: true,
-      styleActiveLine: true,
+      // styleActiveLine: true, TODO: Determine when to use active line
     };
 
     return <CodeMirror
