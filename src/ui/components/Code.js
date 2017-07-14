@@ -38,6 +38,8 @@ class Code extends Component {
     this.handleSelect = this.handleSelect.bind(this);
   }
 
+  // TODO: Document all these functions
+
   componentDidMount() {
     this.editor = this.refs.editor;
   }
@@ -55,7 +57,7 @@ class Code extends Component {
       console.log(this.state.highlighted);
     }
   }
-  // EXPERIMENTAL!!
+
   renderCodeMirror() {
     let options = {
       lineNumbers: this.state.lineNumbers,
@@ -66,9 +68,14 @@ class Code extends Component {
       styleActiveLine: true,
     };
 
-    return <CodeMirror ref="editor" value={this.state.code} options={options} onCursorActivity={this.handleSelect}/>;
+    return <CodeMirror
+        ref="editor"
+        value={this.state.code}
+        options={options}
+        onChange={(e) => this.setState({code: e})}
+        onCursorActivity={this.handleSelect}
+    />;
   }
-
 
   render() {
     let isInlineResponseType = Types.isInlineResponseType(this.props.type);
