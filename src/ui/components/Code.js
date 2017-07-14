@@ -37,7 +37,7 @@ class Code extends Component {
     this.handleThemeChange = this.handleThemeChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
   }
-  
+
   /**
    * When component renders, store CodeMirror reference for later use.
    */
@@ -69,7 +69,7 @@ class Code extends Component {
   /**
    *  Renders CodeMirror with preferred options.
    *  Handles editable/non-editable state for code view.
-   * @returns {JSX}
+   * @returns {JSX/HTML}
    */
   renderCodeMirror() {
     let options = {
