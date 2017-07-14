@@ -15,6 +15,7 @@ import './codemirror/eclipse.css';
 import './codemirror/material.css';
 
 type Props = { type: string, code: string };
+
 /**
  * The Code component contains the code view in the assessment problem
  * @class
