@@ -5,8 +5,10 @@ import React, {Component} from 'react';
 import CodeMirror from '@skidding/react-codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/clike/clike';
+import 'codemirror/addon/selection/mark-selection';
+import 'codemirror/addon/selection/active-line';
 
-import Information from '../containers/Information';
+import Types from '../../backend/Types.js';
 // Flow does not like it if you import css from node_modules!
 import './codemirror/codemirror.css';
 import './codemirror/eclipse.css';
@@ -20,6 +22,8 @@ type Props = { type: string, code: string };
 class Code extends Component {
   // Binding: https://github.com/facebook/flow/issues/1397
   handleThemeChange: Function;
+  handleSelect: Function;
+  editor: Object;
 
   constructor(props: Props) {
     super(props);
@@ -31,42 +35,43 @@ class Code extends Component {
     };
 
     this.handleThemeChange = this.handleThemeChange.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
-  /**
-   * Updates the theme state based on whether the input is checked or not
-   * @param event - React Event for the checkbox
-   */
+  componentDidMount() {
+    this.editor = this.refs.editor;
+  }
+
   handleThemeChange(event: SyntheticInputEvent) {
-    event.target.checked ? this.setState({theme: 'material'})
-        : this.setState({theme: 'eclipse'});
+    event.target.checked ? this.setState({theme: 'material'}) :
+        this.setState({theme: 'eclipse'});
   }
 
-  /**
-   * Returns JSX for the CodeMirror component with the current options stored
-   * in state
-   * @returns JSX for the CodeMirror component
-   */
+  handleSelect() {
+    if (this.editor) {
+      let e = this.editor;
+      let select = e.codeMirror.doc.getSelection()
+      this.setState({highlighted: select})
+      console.log(this.state.highlighted);
+    }
+  }
+  // EXPERIMENTAL!!
   renderCodeMirror() {
     let options = {
       lineNumbers: this.state.lineNumbers,
-      readOnly: this.props.type !== 'WriteCode',
+      readOnly: this.props.type !== Types.writeCode,
       mode: this.state.mode,
       theme: this.state.theme,
+      styleSelectedText: true,
+      styleActiveLine: true,
     };
 
-    return <CodeMirror
-        ref="editor"
-        value={this.state.code}
-        options={options}
-        onChange={(e) => (this.setState({code: e}))}
-    />;
+    return <CodeMirror ref="editor" value={this.state.code} options={options} onCursorActivity={this.handleSelect}/>;
   }
 
-  // TODO: Figure out why setState won't update code content
+
   render() {
-    let isInlineResponseType = Information.isInlineResponseType(
-        this.props.type);
+    let isInlineResponseType = Types.isInlineResponseType(this.props.type);
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
           {this.renderCodeMirror()}
@@ -79,7 +84,7 @@ class Code extends Component {
                 onClick={() => (this.setState({code: this.props.code}))}
             />
           </p>
-
+          <button onClick={this.handleSelect}>highlight</button>
         </div>
     );
   }
