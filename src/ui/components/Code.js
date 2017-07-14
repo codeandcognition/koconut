@@ -89,7 +89,6 @@ class Code extends Component {
                    onClick={() => (this.setState({code: this.props.code}))}
             />
           </p>
-          <button onClick={this.handleSelect}>highlight</button>
         </div>
     );
   }
