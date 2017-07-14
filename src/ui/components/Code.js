@@ -22,17 +22,20 @@ type Props = { type: string, code: string };
 class Code extends Component {
   // Binding: https://github.com/facebook/flow/issues/1397
   handleThemeChange: Function;
+  handleSelect: Function;
+  editor: Object;
 
   constructor(props: Props) {
     super(props);
     this.state = {
       code: this.props.code,
       lineNumbers: true,
-      mode: "text/x-java",
-      theme: 'eclipse'
+      mode: 'text/x-java',
+      theme: 'eclipse',
     };
 
     this.handleThemeChange = this.handleThemeChange.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
   //TODO: Make indentation work
@@ -41,17 +44,17 @@ class Code extends Component {
    * @returns JSX for the Code view
    */
   renderCode() {
-    switch(this.props.type) {
+    switch (this.props.type) {
       case('FillBlank'):
         let retJSX = [];
 
         // Iterate by line
-        for(let line of this.props.code.split(/\r\n|\n\r|\n|\r/g)) {
+        for (let line of this.props.code.split(/\r\n|\n\r|\n|\r/g)) {
           let splitLine = line.split(placeholder);
           let lineJSX = [];
           lineJSX.push(<div className="code-part">{splitLine.shift()}</div>);
           // Insert blanks between splits
-          while(splitLine.length > 0) {
+          while (splitLine.length > 0) {
             lineJSX.push(<textarea className="code-fill"></textarea>);
             lineJSX.push(<div className="code-part">{splitLine.shift()}</div>);
           }
@@ -63,12 +66,23 @@ class Code extends Component {
     }
   }
 
-  handleThemeChange(event: SyntheticInputEvent) {
-    event.target.checked ? this.setState( {theme: 'material' }) :
-      this.setState( {theme: 'eclipse'} )
+  componentDidMount() {
+    this.editor = this.refs.editor;
   }
 
+  handleThemeChange(event: SyntheticInputEvent) {
+    event.target.checked ? this.setState({theme: 'material'}) :
+        this.setState({theme: 'eclipse'});
+  }
 
+  handleSelect() {
+    if (this.editor) {
+      let e = this.editor;
+      let select = e.codeMirror.doc.getSelection()
+      this.setState({highlighted: select})
+      console.log(this.state.highlighted);
+    }
+  }
   // EXPERIMENTAL!!
   renderCodeMirror() {
     let options = {
@@ -80,8 +94,9 @@ class Code extends Component {
       styleActiveLine: true,
     };
 
-    return <CodeMirror ref="editor" value={this.state.code} options={options}/>
+    return <CodeMirror ref="editor" value={this.state.code} options={options} onCursorActivity={this.handleSelect}/>;
   }
+
 
   render() {
     let isInlineResponseType = Types.isInlineResponseType(this.props.type);
@@ -92,6 +107,7 @@ class Code extends Component {
             Toggle dark theme:
             <input type="checkbox" onChange={this.handleThemeChange}/>
           </p>
+          <button onClick={this.handleSelect}>highlight</button>
         </div>
     );
   }
