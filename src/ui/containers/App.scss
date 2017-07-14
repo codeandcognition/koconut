@@ -105,6 +105,6 @@ $choice-color: #cccccc;
   background-color: #eee;
 }
 
-span.CodeMirror-selected {
+.cm-s-eclipse .CodeMirror-line .CodeMirror-selectedtext {
   background-color: yellow;
 }
