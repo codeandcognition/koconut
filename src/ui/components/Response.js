@@ -15,6 +15,10 @@ class Response extends Component {
     updateHandler: Function
   };
 
+  /**
+   * Returns JSX based on the response type
+   * @returns JSX for a type of response (MultipleChoice, ShortResponse)
+   */
   renderResponse() {
     switch(this.props.type) {
       case('MultipleChoice'):
@@ -36,7 +40,6 @@ class Response extends Component {
           {this.renderResponse()}
         </div>
     );
-    // TODO: Other question types!
   }
 }
 
