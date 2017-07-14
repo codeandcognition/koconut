@@ -40,28 +40,38 @@ class Code extends Component {
 
   // TODO: Document all these functions
 
+  /**
+   * When component renders, store CodeMirror reference for later use.
+   */
   componentDidMount() {
     this.editor = this.refs.editor;
   }
 
+  /**
+   * Handles the dark/light checkbox toggle event.
+   * @param event
+   */
   handleThemeChange(event: SyntheticInputEvent) {
     event.target.checked ? this.setState({theme: 'material'}) :
         this.setState({theme: 'eclipse'});
   }
 
+  /**
+   *
+   */
   handleSelect() {
     if (this.editor) {
       let e = this.editor;
       let select = e.codeMirror.doc.getSelection();
       this.setState({highlighted: select});
-      console.log(this.state.highlighted);
+      console.log(select);
     }
   }
 
   renderCodeMirror() {
     let options = {
       lineNumbers: this.state.lineNumbers,
-      readOnly: this.props.type !== Types.writeCode,
+      readOnly: this.props.type === Types.highlightCode,
       mode: this.state.mode,
       theme: this.state.theme,
       styleSelectedText: true,
