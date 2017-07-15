@@ -95,13 +95,10 @@ class Code extends Component {
           <p>
             Toggle dark theme:
             <input type="checkbox" onChange={this.handleThemeChange}/>
-            <input
-                type="button"
-                value="RESET!"
-                onClick={() => (this.setState({code: this.props.code}))}
+            <input type="button" value="RESET!"
+                   onClick={() => (this.setState({code: this.props.code}))}
             />
           </p>
-          <button onClick={this.handleSelect}>highlight</button>
         </div>
     );
   }
