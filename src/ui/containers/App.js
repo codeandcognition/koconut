@@ -14,7 +14,7 @@ class App extends Component {
   render() {
     return (
         <div className="App">
-          <Problem question={exampleQuestions[0]}/>
+          <Problem question={exampleQuestions[3]}/>
         </div>
     );
   }
