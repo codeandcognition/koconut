@@ -29,6 +29,14 @@ class Code extends Component {
   handleSelect: Function;
   editor: Object;
 
+  state: {
+    code: string,
+    lineNumbers: boolean,
+    mode: string,
+    theme: string,
+    highlighted: string
+  };
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -36,6 +44,7 @@ class Code extends Component {
       lineNumbers: true,
       mode: 'text/x-java',
       theme: 'eclipse',
+      highlighted: '',
     };
 
     this.handleThemeChange = this.handleThemeChange.bind(this);
@@ -50,6 +59,14 @@ class Code extends Component {
       this.props.updateHandler(this.state.code);
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.code !== this.props.code) {
+      this.setState({
+        code: nextProps.code,
+      });
+    }
+  }
+
   handleThemeChange(event: SyntheticInputEvent) {
     event.target.checked ? this.setState({theme: 'material'}) : this.setState(
         {theme: 'eclipse'});
@@ -60,6 +77,9 @@ class Code extends Component {
       let e = this.editor;
       let select = e.codeMirror.doc.getSelection();
       this.setState({highlighted: select});
+      if (this.props.updateHandler !== undefined) {
+        this.props.updateHandler(this.state.highlighted);
+      }
       console.log(this.state.highlighted);
     }
   }
@@ -67,7 +87,8 @@ class Code extends Component {
   renderCodeMirror() {
     let options = {
       lineNumbers: this.state.lineNumbers,
-      readOnly: this.props.type !== Types.writeCode,
+      readOnly: this.props.type !== Types.writeCode &&
+      this.props.type !== Types.fillBlank,
       mode: this.state.mode,
       theme: this.state.theme,
       styleSelectedText: true,
@@ -80,18 +101,25 @@ class Code extends Component {
         options={options}
         onChange={(e) => {
           this.setState({code: e});
-          if (this.props.updateHandler !== undefined)
-            this.props.updateHandler(this.state.code);
+          if (this.props.updateHandler !== undefined) {
+            this.props.updateHandler(this.props.type !== Types.highlightCode
+                ? this.state.code
+                : this.state.highlighted);
+          }
         }}
-        onCursorActivity={this.handleSelect}
+        onCursorActivity={this.props.type === Types.highlightCode
+            ? this.handleSelect
+            : undefined}
     />;
   }
 
+  // TODO: make reset button update "selected" state in Problem component
   render() {
     let isInlineResponseType = Types.isInlineResponseType(this.props.type);
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
           {this.renderCodeMirror()}
+          <p>Mode: {this.props.type}</p>
           <p>
             Toggle dark theme:
             <input type="checkbox" onChange={this.handleThemeChange}/>

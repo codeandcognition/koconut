@@ -28,7 +28,7 @@ class Response extends Component {
                 handleClick={this.props.updateHandler}
               />;
       case('ShortResponse'):
-        return <ShortResponse />;
+        return <ShortResponse inputHandler={this.props.updateHandler}/>;
       default:
         return <div className="BAD">Not a valid question type :(</div>;
     }
