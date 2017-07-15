@@ -22,7 +22,7 @@ $component-background: #fff;
 }
 
 .problem {
-  margin: 3em auto;
+  margin: 2em auto;
   width: 75vw;
   border: 1px dotted black;
 }
@@ -150,4 +150,9 @@ $choice-color: #cccccc;
 
 .HighlightCode .cm-s-eclipse .CodeMirror-line .CodeMirror-selectedtext {
   background-color: yellow;
+}
+
+// temporary
+.debug {
+  margin-left: 0.5em;
 }

@@ -26,8 +26,8 @@ class App extends Component {
     return (
         <div className="App">
           <div className="main">
-            <Problem question={exampleQuestions[this.state.questionID]}/>
-            <div className="Debug">
+            <h1 className="title">Welcome to the koconut demo!
+              <span className="debug">
               <input
                 type="button"
                 onClick={() => this.setState(
@@ -35,9 +35,12 @@ class App extends Component {
                     questionID: ((this.state.questionID + 1) %
                     exampleQuestions.length),
                   })}
-                value="Debug: Toggle Question"
+                value="next question type"
               />
-            </div>
+            </span>
+            </h1>
+
+            <Problem question={exampleQuestions[this.state.questionID]}/>
           </div>
         </div>
     );
