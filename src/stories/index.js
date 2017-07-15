@@ -1,5 +1,6 @@
 import {configure, setAddon} from '@storybook/react';
 import infoAddon from '@storybook/addon-info';
+import {exampleQuestions} from '../backend/Questions';
 
 setAddon(infoAddon);
 
@@ -38,12 +39,7 @@ storiesOf('Problem', module).addWithInfo(
     '',
     () => (
         <Problem
-            question={{
-              prompt: 'What is x after the following code executes?',
-              code: 'int x = 1;',
-              type: 'MultipleChoice',
-              answers: ['0', '1', '2', '3']
-            }}
+            question={exampleQuestions[3]}
         />
     ),
     {inline: true},
@@ -54,11 +50,7 @@ storiesOf('Problem', module).addWithInfo(
     '',
     () => (
         <Problem
-            question={{
-              prompt: 'What is x after the following code executes?',
-              code: 'int x = 1;',
-              type: 'ShortResponse',
-            }}
+            question={exampleQuestions[4]}
         />
     ),
     {inline: true},
@@ -69,11 +61,7 @@ storiesOf('Problem', module).addWithInfo(
     '',
     () => (
         <Problem
-            question={{
-              prompt: 'What is x after the following code executes?',
-              code: 'int x = 1;\nint y = (*);\nint z = 5;',
-              type: 'FillBlank',
-            }}
+            question={exampleQuestion[1]}
         />
     ),
     {inline: true},
@@ -84,11 +72,7 @@ storiesOf('Problem', module).addWithInfo(
     '',
     () => (
         <Problem
-            question={{
-              prompt: 'Highlight the expression that evaluates to false.',
-              code: 'int x = 2;\nif(x > 5) {\n\tx -= 5;\n}',
-              type: 'HighlightCode',
-            }}
+            question={exampleQuestions[2]}
         />
     ),
     {inline: true},
@@ -99,11 +83,7 @@ storiesOf('Problem', module).addWithInfo(
     '',
     () => (
         <Problem
-            question={{
-              prompt: 'Write an expression that evaluates the sum of x, y, and z.',
-              code: 'int x = 1;\nint y = 2;\nint z = 3;',
-              type: 'WriteCode',
-            }}
+            question={exampleQuestions[0]}
         />
     ),
     {inline: true},

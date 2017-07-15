@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import './App.css';
 import Problem from './Problem';
 
-import Questions from '../../backend/Questions.js'
+import {exampleQuestions} from '../../backend/Questions.js';
 
 /**
  * This is a component.
@@ -14,7 +14,7 @@ class App extends Component {
   render() {
     return (
         <div className="App">
-          <Problem question={Questions.exampleQuestions[0]}/>
+          <Problem question={exampleQuestions[0]}/>
         </div>
     );
   }
