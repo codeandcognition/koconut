@@ -37,6 +37,7 @@ class Code extends Component {
       lineNumbers: true,
       mode: 'text/x-java',
       theme: 'eclipse',
+      toggle: true,
     };
 
     this.handleThemeChange = this.handleThemeChange.bind(this);
@@ -57,13 +58,10 @@ class Code extends Component {
    * @param event
    */
   handleThemeChange(event: SyntheticInputEvent) {
-<<<<<<< HEAD
-    this.setState(
-        event.target.checked ? {theme: 'material'} : {theme: 'eclipse'}
-    )
-=======
-    this.setState({theme: (event.target.checked ? 'material' : 'eclipse')});
->>>>>>> master
+    this.setState({
+      toggle: !this.state.toggle,
+      theme: (this.state.toggle ? 'material' : 'eclipse'),
+    });
   }
 
   /**
@@ -110,14 +108,17 @@ class Code extends Component {
     let isInlineResponseType = Types.isInlineResponseType(this.props.type);
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
-          {this.renderCodeMirror()}
-          <p>
-            Dark theme:
-            <input type="checkbox" onChange={this.handleThemeChange}/>
-            <input type="button" value="RESET!"
+          <div className="code-config">
+            {/*Dark theme:
+            <input type="checkbox" onChange={this.handleThemeChange}/>*/}
+            <button onClick={this.handleThemeChange}>
+              {this.state.toggle ? 'dark theme' : 'light theme'}
+            </button>
+            <input type="button" value="reset code"
                    onClick={() => (this.setState({code: this.props.code}))}
             />
-          </p>
+          </div>
+          {this.renderCodeMirror()}
         </div>
     );
   }

@@ -20,9 +20,9 @@ class ShortResponse extends Component {
   render() {
     return (
         <div className='short-response'>
-          <h3>Submit your response here:</h3>
+          <h3>Type your response here:</h3>
           {
-            <div>
+            <div className="short-response-value">
               <textarea onChange={(event) => {
                 this.setState({value: event.target.value});
               }}>

@@ -7,13 +7,16 @@ import React, {Component} from 'react';
  */
 class Question extends Component {
   props: {
-    content: string
+    content: string,
+    type: string
   };
 
   render() {
     return (
         <div className="question">
-          <h2>{this.props.content}</h2>
+          <h2>{this.props.content}
+            <span className="question-type">({this.props.type})</span>
+          </h2>
         </div>
     );
   }
