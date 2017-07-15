@@ -7,13 +7,6 @@
  * @class
  */
 class QuestionTypes {
-
-  static writeCode: 'WriteCode';
-  static fillBlank: 'FillBlank';
-  static highlightCode: 'HighlightCode';
-  static multipleChoice: 'MultipleChoice';
-  static shortResponse: 'ShortResponse';
-
   /**
    * Determines whether the question type is an inline question type.
    * An inline question type requires displaying only the code component,
@@ -22,10 +15,16 @@ class QuestionTypes {
    * @returns whether or not the question type requires inline responding
    */
   static isInlineResponseType = function(type: string):boolean {
-    return type === QuestionTypes.writeCode ||
-        type === QuestionTypes.fillBlank ||
-        type === QuestionTypes.highlightCode;
+    return type === this.writeCode||
+        type === this.fillBlank ||
+        type === this.highlightCode;
   }
 }
+
+QuestionTypes.writeCode = 'WriteCode';
+QuestionTypes.fillBlank = 'FillBlank';
+QuestionTypes.highlightCode = 'HighlightCode';
+QuestionTypes.multipleChoice = 'MultipleChoice';
+QuestionTypes.shortResponse = 'ShortResponse';
 
 export default QuestionTypes;

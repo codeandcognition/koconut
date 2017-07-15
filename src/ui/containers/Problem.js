@@ -18,6 +18,8 @@ type Props = {
  * @class
  */
 class Problem extends Component {
+  handleSubmit: Function;
+
   state: {
     prompt: string,
     code: string,
@@ -35,6 +37,8 @@ class Problem extends Component {
       answers: props.question.answers,
       selected: null
     };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   /**
@@ -42,7 +46,7 @@ class Problem extends Component {
    * update the Problem state
    * @param type - the question type
    * @returns a callback function that updates Problem state
-   */
+
   getHandler(type: string): Function {
     switch(type) {
       case "MultipleChoice":
@@ -50,6 +54,15 @@ class Problem extends Component {
       default:
         return () => console.log("Bleh!");
     }
+  }
+  */
+
+  /**
+   * TODO: actually make this do something
+   */
+  handleSubmit() {
+    //placeholder code
+    console.log(this.state.selected);
   }
 
   render() {
@@ -61,9 +74,9 @@ class Problem extends Component {
             type={this.state.type}
             answers={this.state.answers}
             selected={this.state.selected}
-            updateHandler={this.getHandler(this.state.type)}
+            updateHandler={(content) => this.setState( {selected: content} )}
           />
-          <Submit />
+          <Submit submitHandler={this.handleSubmit}/>
         </div>
     );
   }

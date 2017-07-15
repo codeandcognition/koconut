@@ -14,7 +14,11 @@ import './codemirror/codemirror.css';
 import './codemirror/eclipse.css';
 import './codemirror/material.css';
 
-type Props = { type: string, code: string };
+type Props = {
+  type: string,
+  code: string,
+  updateHandler?: Function //optional
+};
 
 /**
  * The Code component contains the code view in the assessment problem
@@ -44,6 +48,8 @@ class Code extends Component {
    */
   componentDidMount() {
     this.editor = this.refs.editor;
+    if (this.props.updateHandler !== undefined)
+      this.props.updateHandler(this.state.code);
   }
 
   /**
@@ -85,7 +91,11 @@ class Code extends Component {
         ref="editor"
         value={this.state.code}
         options={options}
-        onChange={(e) => this.setState({code: e})}
+        onChange={(e) => {
+          this.setState({code: e});
+          if (this.props.updateHandler !== undefined)
+            this.props.updateHandler(this.state.code);
+        }}
         onCursorActivity={this.handleSelect}
     />;
   }

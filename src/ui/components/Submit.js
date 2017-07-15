@@ -6,10 +6,14 @@ import React, {Component} from 'react';
  * @class
  */
 class Submit extends Component {
+  props: {
+    submitHandler: Function
+  };
+
   render() {
     return (
         <div className="submit-container">
-          <div className="btn btn-submit">
+          <div className="btn btn-submit" onClick={this.props.submitHandler}>
            Submit
           </div>
         </div>
