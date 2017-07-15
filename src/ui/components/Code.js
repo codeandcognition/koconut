@@ -14,7 +14,12 @@ import './codemirror/codemirror.css';
 import './codemirror/eclipse.css';
 import './codemirror/material.css';
 
-type Props = { type: string, code: string };
+type Props = {
+  type: string,
+  code: string,
+  updateHandler?: Function //optional
+};
+
 /**
  * The Code component contains the code view in the assessment problem
  * @class
@@ -38,42 +43,65 @@ class Code extends Component {
     this.handleSelect = this.handleSelect.bind(this);
   }
 
-  // TODO: Document all these functions
-
+  /**
+   * When component renders, store CodeMirror reference for later use.
+   */
   componentDidMount() {
     this.editor = this.refs.editor;
+    if (this.props.updateHandler !== undefined)
+      this.props.updateHandler(this.state.code);
   }
 
+  /**
+   * Handles the dark/light checkbox toggle event.
+   * @param event
+   */
   handleThemeChange(event: SyntheticInputEvent) {
+<<<<<<< HEAD
     this.setState(
         event.target.checked ? {theme: 'material'} : {theme: 'eclipse'}
     )
+=======
+    this.setState({theme: (event.target.checked ? 'material' : 'eclipse')});
+>>>>>>> master
   }
 
+  /**
+   * Stores highlighted text from text area in component state: highlighted.
+   */
   handleSelect() {
     if (this.editor) {
       let e = this.editor;
       let select = e.codeMirror.doc.getSelection();
       this.setState({highlighted: select});
-      console.log(this.state.highlighted);
+      console.log(select);
     }
   }
 
+  /**
+   *  Renders CodeMirror with preferred options.
+   *  Handles editable/non-editable state for code view.
+   * @returns {JSX/HTML}
+   */
   renderCodeMirror() {
     let options = {
       lineNumbers: this.state.lineNumbers,
-      readOnly: this.props.type !== Types.writeCode,
+      readOnly: this.props.type === Types.highlightCode,
       mode: this.state.mode,
       theme: this.state.theme,
       styleSelectedText: true,
-      styleActiveLine: true,
+      // styleActiveLine: true, TODO: Determine when to use active line
     };
 
     return <CodeMirror
         ref="editor"
         value={this.state.code}
         options={options}
-        onChange={(e) => this.setState({code: e})}
+        onChange={(e) => {
+          this.setState({code: e});
+          if (this.props.updateHandler !== undefined)
+            this.props.updateHandler(this.state.code);
+        }}
         onCursorActivity={this.handleSelect}
     />;
   }
