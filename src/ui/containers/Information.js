@@ -18,19 +18,22 @@ class Information extends Component {
     updateHandler: Function
   };
 
-  render() {
-    let displayResponse = Types.isInlineResponseType(this.props.type)
-        ? ''
+  renderResponseView() {
+    return Types.isInlineResponseType(this.props.type) ? <div/>
         : <Response
             type={this.props.type}
             answers={this.props.answers}
             selected={this.props.selected}
             updateHandler={this.props.updateHandler}
-          />;
+        />;
+  }
+
+  render() {
+
     return (
         <div className="information">
           <Code type={this.props.type} code={this.props.code}/>
-          {displayResponse}
+          {this.renderResponseView()}
         </div>
     );
   }
