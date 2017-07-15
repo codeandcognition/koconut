@@ -62,7 +62,7 @@ class Problem extends Component {
   render() {
     return (
         <div className="problem">
-          <Question content={this.state.prompt}/>
+          <Question content={this.state.prompt} type={this.state.type}/>
           <Information
             code={this.state.code}
             type={this.state.type}
