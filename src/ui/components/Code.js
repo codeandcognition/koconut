@@ -36,7 +36,8 @@ class Code extends Component {
     lineNumbers: boolean,
     mode: string,
     theme: string,
-    highlighted: string
+    highlighted: string,
+    toggle: boolean
   };
 
   constructor(props: Props) {
@@ -76,7 +77,7 @@ class Code extends Component {
    * Handles the dark/light checkbox toggle event.
    * @param event
    */
-  handleThemeChange(event: SyntheticInputEvent) {
+  handleThemeChange() {
     this.setState({
       toggle: !this.state.toggle,
       theme: (this.state.toggle ? 'material' : 'eclipse'),
@@ -142,19 +143,15 @@ class Code extends Component {
 
   render() {
     let isInlineResponseType = Types.isInlineResponseType(this.props.type);
-    let reset = isInlineResponseType ? <input type="button" value="RESET!"
+    let reset = isInlineResponseType ? <input type="button" value="reset code"
                                               onClick={this.handleReset}/> : '';
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
           <div className="code-config">
-            {/*Dark theme:
-            <input type="checkbox" onChange={this.handleThemeChange}/>*/}
             <button onClick={this.handleThemeChange}>
               {this.state.toggle ? 'dark theme' : 'light theme'}
             </button>
-            <input type="button" value="reset code"
-                   onClick={() => (this.setState({code: this.props.code}))}
-            />
+            {reset}
           </div>
           {this.renderCodeMirror()}
         </div>
