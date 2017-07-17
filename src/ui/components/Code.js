@@ -31,6 +31,14 @@ class Code extends Component {
   handleReset: Function;
   editor: Object;
 
+  state: {
+    code: string,
+    lineNumbers: boolean,
+    mode: string,
+    theme: string,
+    highlighted: string
+  };
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -38,6 +46,8 @@ class Code extends Component {
       lineNumbers: true,
       mode: 'text/x-java',
       theme: 'eclipse',
+      highlighted: '',
+      toggle: true,
     };
 
     this.handleThemeChange = this.handleThemeChange.bind(this);
@@ -54,12 +64,23 @@ class Code extends Component {
       this.props.updateHandler(this.state.code);
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.code !== this.props.code) {
+      this.setState({
+        code: nextProps.code,
+      });
+    }
+  }
+
   /**
    * Handles the dark/light checkbox toggle event.
    * @param event
    */
   handleThemeChange(event: SyntheticInputEvent) {
-    this.setState({theme: (event.target.checked ? 'material' : 'eclipse')});
+    this.setState({
+      toggle: !this.state.toggle,
+      theme: (this.state.toggle ? 'material' : 'eclipse'),
+    });
   }
 
   /**
@@ -70,7 +91,10 @@ class Code extends Component {
       let e = this.editor;
       let select = e.codeMirror.doc.getSelection();
       this.setState({highlighted: select});
-      console.log(select);
+      if (this.props.updateHandler !== undefined) {
+        this.props.updateHandler(this.state.highlighted);
+      }
+      console.log(this.state.highlighted);
     }
   }
 
@@ -96,10 +120,15 @@ class Code extends Component {
         options={options}
         onChange={(e) => {
           this.setState({code: e});
-          if (this.props.updateHandler !== undefined)
-            this.props.updateHandler(this.state.code);
+          if (this.props.updateHandler !== undefined) {
+            this.props.updateHandler(this.props.type !== Types.highlightCode
+                ? this.state.code
+                : this.state.highlighted);
+          }
         }}
-        onCursorActivity={this.handleSelect}
+        onCursorActivity={this.props.type === Types.highlightCode
+            ? this.handleSelect
+            : undefined}
     />;
   }
 
@@ -117,12 +146,17 @@ class Code extends Component {
                                               onClick={this.handleReset}/> : '';
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
+          <div className="code-config">
+            {/*Dark theme:
+            <input type="checkbox" onChange={this.handleThemeChange}/>*/}
+            <button onClick={this.handleThemeChange}>
+              {this.state.toggle ? 'dark theme' : 'light theme'}
+            </button>
+            <input type="button" value="reset code"
+                   onClick={() => (this.setState({code: this.props.code}))}
+            />
+          </div>
           {this.renderCodeMirror()}
-          <p>
-            Toggle dark theme:
-            <input type="checkbox" onChange={this.handleThemeChange}/>
-            {reset}
-          </p>
         </div>
     );
   }

@@ -41,21 +41,15 @@ class Problem extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  /**
-   * Returns a callback function for the Response component's child to call to
-   * update the Problem state
-   * @param type - the question type
-   * @returns a callback function that updates Problem state
-
-  getHandler(type: string): Function {
-    switch(type) {
-      case "MultipleChoice":
-        return (choice) => this.setState( {selected: choice} );
-      default:
-        return () => console.log("Bleh!");
-    }
+  componentWillReceiveProps(nextProps: Props) {
+    this.setState({
+      prompt: nextProps.question.prompt,
+      code: nextProps.question.code,
+      type: nextProps.question.type,
+      answers: nextProps.question.answers,
+      selected: null
+    });
   }
-  */
 
   /**
    * TODO: actually make this do something
@@ -68,7 +62,7 @@ class Problem extends Component {
   render() {
     return (
         <div className="problem">
-          <Question content={this.state.prompt}/>
+          <Question content={this.state.prompt} type={this.state.type}/>
           <Information
             code={this.state.code}
             type={this.state.type}
