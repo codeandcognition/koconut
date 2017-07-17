@@ -21,7 +21,6 @@ class ShortResponse extends Component {
     };
   }
 
-  // TODO: fix bug where
   render() {
     return (
         <div className='short-response'>
@@ -30,7 +29,7 @@ class ShortResponse extends Component {
             <div className="short-response-value">
               <textarea onChange={(event) => {
                 this.setState({value: event.target.value});
-                this.props.inputHandler(this.state.value);
+                this.props.inputHandler(event.target.value);
               }}>
               </textarea>
               <p>{this.state.value}</p>
