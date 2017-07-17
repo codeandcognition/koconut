@@ -9,7 +9,7 @@ export const exampleQuestions = [
   },
   {
     prompt: 'Fill in the blank so that x is assigned a value.',
-    code: 'int x [text area] 2;',
+    code: 'int x /* */ 2;',
     type: QuestionTypes.fillBlank,
   },
   {

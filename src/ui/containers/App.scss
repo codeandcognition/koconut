@@ -152,15 +152,15 @@ $choice-color: #cccccc;
   background-color: yellow;
 }
 
-// temporary
-.debug {
-  margin-left: 0.5em;
-}
-
 .FillBlank .cm-s-eclipse span.cm-comment {
   border: 1px black solid;
 }
 
 .FillBlank .cm-s-material span.cm-comment {
   border-width: 1px black solid;
+}
+
+// temporary
+.debug {
+  margin-left: 0.5em;
 }
