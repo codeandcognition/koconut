@@ -28,6 +28,7 @@ class Code extends Component {
   // Binding: https://github.com/facebook/flow/issues/1397
   handleThemeChange: Function;
   handleSelect: Function;
+  handleReset: Function;
   editor: Object;
 
   constructor(props: Props) {
@@ -41,6 +42,7 @@ class Code extends Component {
 
     this.handleThemeChange = this.handleThemeChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
 
   /**
@@ -80,7 +82,8 @@ class Code extends Component {
   renderCodeMirror() {
     let options = {
       lineNumbers: this.state.lineNumbers,
-      readOnly: this.props.type === Types.highlightCode,
+      readOnly: this.props.type !== Types.fillBlank &&
+                this.props.type !== Types.writeCode,
       mode: this.state.mode,
       theme: this.state.theme,
       styleSelectedText: true,
@@ -100,17 +103,25 @@ class Code extends Component {
     />;
   }
 
+  /**
+   *  Resets both the code state and selected state.
+   */
+  handleReset() {
+    this.setState({code: this.props.code});
+    this.props.updateHandler(this.props.code);
+  }
+
   render() {
     let isInlineResponseType = Types.isInlineResponseType(this.props.type);
+    let reset = isInlineResponseType ? <input type="button" value="RESET!"
+                                              onClick={this.handleReset}/> : '';
     return (
         <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
           {this.renderCodeMirror()}
           <p>
             Toggle dark theme:
             <input type="checkbox" onChange={this.handleThemeChange}/>
-            <input type="button" value="RESET!"
-                   onClick={() => (this.setState({code: this.props.code}))}
-            />
+            {reset}
           </p>
         </div>
     );
