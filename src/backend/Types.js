@@ -1,7 +1,4 @@
 /**
- * Created by alextan on 7/12/17.
- */
-/**
  * Defines all available question types.
  * Provides logic to determine whether the question is an inline response type.
  * @class

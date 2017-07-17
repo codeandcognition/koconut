@@ -1,14 +1,15 @@
 // @flow
 import React, {Component} from 'react';
+import './ShortResponse.css';
+
+type Props = {
+  inputHandler: Function
+}
 
 /**
  * The ShortResponse component renders short response question type
  * @class
  */
-type Props = {
-  inputHandler: Function
-}
-
 class ShortResponse extends Component {
   state: {
     value: string

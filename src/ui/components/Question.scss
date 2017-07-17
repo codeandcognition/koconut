@@ -1,0 +1,15 @@
+@import '../containers/App.scss';
+
+.question {
+  //height: 15vh;
+  padding: 0 2.5%;
+  border-bottom: 1px dotted black;
+  text-align: center;
+  background-color: $component-background;
+}
+
+.question-type {
+  font-size: 0.6em;
+  padding: 2%;
+  color: darkblue;
+}

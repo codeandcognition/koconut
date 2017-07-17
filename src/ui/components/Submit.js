@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react';
+import './Submit.css';
 
 /**
  * The Submit component represents a button to submit an answer

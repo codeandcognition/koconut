@@ -14,6 +14,8 @@ import './codemirror/codemirror.css';
 import './codemirror/eclipse.css';
 import './codemirror/material.css';
 
+import './Code.css';
+
 type Props = {
   type: string,
   code: string,
