@@ -108,7 +108,7 @@ class Code extends Component {
     let options = {
       lineNumbers: this.state.lineNumbers,
       readOnly: this.props.type !== Types.fillBlank &&
-                this.props.type !== Types.writeCode,
+      this.props.type !== Types.writeCode,
       mode: this.state.mode,
       theme: this.state.theme,
       styleSelectedText: true,
@@ -146,7 +146,8 @@ class Code extends Component {
     let reset = isInlineResponseType ? <input type="button" value="reset code"
                                               onClick={this.handleReset}/> : '';
     return (
-        <div className={'code ' + (isInlineResponseType ? 'full' : 'half')}>
+        <div className={'code ' + (isInlineResponseType ? 'full' : 'half') +
+        ' ' + this.props.type}>
           <div className="code-config">
             <button onClick={this.handleThemeChange}>
               {this.state.toggle ? 'dark theme' : 'light theme'}

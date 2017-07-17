@@ -144,15 +144,23 @@ $choice-color: #cccccc;
   background-color: #eee;
 }
 
-.cm-s-material .CodeMirror-line .CodeMirror-selectedtext {
+.HighlightCode .cm-s-material .CodeMirror-line .CodeMirror-selectedtext {
   background-color: darkblue;
 }
 
-.cm-s-eclipse .CodeMirror-line .CodeMirror-selectedtext {
+.HighlightCode .cm-s-eclipse .CodeMirror-line .CodeMirror-selectedtext {
   background-color: yellow;
 }
 
 // temporary
 .debug {
   margin-left: 0.5em;
+}
+
+.FillBlank .cm-s-eclipse span.cm-comment {
+  border: 1px black solid;
+}
+
+.FillBlank .cm-s-material span.cm-comment {
+  border-width: 1px black solid;
 }
