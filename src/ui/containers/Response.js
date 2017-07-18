@@ -21,13 +21,13 @@ class Response extends Component {
    * @returns JSX for a type of response (MultipleChoice, ShortResponse)
    */
   renderResponse() {
-    switch(this.props.type) {
+    switch (this.props.type) {
       case('MultipleChoice'):
         return <MultipleChoice
-                answers={this.props.answers}
-                selected={this.props.selected}
-                handleClick={this.props.updateHandler}
-              />;
+            answers={this.props.answers}
+            selected={this.props.selected}
+            handleClick={this.props.updateHandler}
+        />;
       case('ShortResponse'):
         return <ShortResponse inputHandler={this.props.updateHandler}/>;
       default:

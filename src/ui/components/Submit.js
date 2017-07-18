@@ -15,7 +15,7 @@ class Submit extends Component {
     return (
         <div className="submit-container">
           <div className="btn btn-submit" onClick={this.props.submitHandler}>
-           Submit
+            Submit
           </div>
         </div>
     );

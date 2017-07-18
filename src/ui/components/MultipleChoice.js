@@ -19,7 +19,7 @@ class MultipleChoice extends Component {
     return (
         <div className='multiple-choice'>
           <h3>Select the correct answer:</h3>
-          { /* Create a choice component for each item in answers */ }
+          {/* Create a choice component for each item in answers */}
           {this.props.answers.map((choice) => (
               <Choice
                   key={choice}

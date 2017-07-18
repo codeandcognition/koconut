@@ -110,6 +110,6 @@ storiesOf('ShortReponse', module).addWithInfo(
     'ShortResponse Component',
     'Example short response form',
     () => (
-        <ShortResponse />
+        <ShortResponse/>
     ),
 );

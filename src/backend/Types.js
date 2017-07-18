@@ -11,11 +11,11 @@ class QuestionTypes {
    * @param type - the question type
    * @returns whether or not the question type requires inline responding
    */
-  static isInlineResponseType = function(type: string):boolean {
-    return type === this.writeCode||
+  static isInlineResponseType = function(type: string): boolean {
+    return type === this.writeCode ||
         type === this.fillBlank ||
         type === this.highlightCode;
-  }
+  };
 }
 
 QuestionTypes.writeCode = 'WriteCode';

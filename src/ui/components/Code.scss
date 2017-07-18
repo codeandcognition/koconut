@@ -1,5 +1,3 @@
-$code-font: courier;
-
 .code {
   padding: 0;
   width: 50%;
@@ -10,20 +8,6 @@ $code-font: courier;
 
 .code.full {
   width: 100%;
-}
-
-.code-part, .code-fill {
-  display: inline-block;
-  font-family: $code-font;
-}
-
-.code-fill {
-  background-color: #dddddd;
-  border: solid 1px #bbbbbb;
-  width: 3em;
-  resize: none;
-  height: 1em;
-  overflow: hidden;
 }
 
 .code-config {
@@ -43,5 +27,5 @@ $code-font: courier;
 }
 
 .FillBlank .cm-s-material span.cm-comment {
-  border-width: 1px black solid;
+  border: 1px black solid;
 }
