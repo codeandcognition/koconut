@@ -1,7 +1,4 @@
 /**
- * Created by alextan on 7/12/17.
- */
-/**
  * Defines all available question types.
  * Provides logic to determine whether the question is an inline response type.
  * @class
@@ -14,11 +11,11 @@ class QuestionTypes {
    * @param type - the question type
    * @returns whether or not the question type requires inline responding
    */
-  static isInlineResponseType = function(type: string):boolean {
-    return type === this.writeCode||
+  static isInlineResponseType = function(type: string): boolean {
+    return type === this.writeCode ||
         type === this.fillBlank ||
         type === this.highlightCode;
-  }
+  };
 }
 
 QuestionTypes.writeCode = 'WriteCode';

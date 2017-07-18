@@ -14,6 +14,8 @@ import './codemirror/codemirror.css';
 import './codemirror/eclipse.css';
 import './codemirror/material.css';
 
+import './Code.css';
+
 type Props = {
   type: string,
   code: string,
@@ -65,6 +67,10 @@ class Code extends Component {
       this.props.updateHandler(this.state.code);
   }
 
+  /**
+   * Updates the code state when a new code prop is received
+   * @param nextProps - the new prop object being received
+   */
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.code !== this.props.code) {
       this.setState({
@@ -75,7 +81,6 @@ class Code extends Component {
 
   /**
    * Handles the dark/light checkbox toggle event.
-   * @param event
    */
   handleThemeChange() {
     this.setState({
@@ -102,7 +107,7 @@ class Code extends Component {
   /**
    *  Renders CodeMirror with preferred options.
    *  Handles editable/non-editable state for code view.
-   * @returns {JSX/HTML}
+   *  @returns JSX for the CodeMirror component
    */
   renderCodeMirror() {
     let options = {

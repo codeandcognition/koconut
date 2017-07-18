@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react';
+import './Question.css';
 
 /**
  * The Question component contains the assessment prompt.

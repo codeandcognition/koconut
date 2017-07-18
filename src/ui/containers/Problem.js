@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import Question from '../components/Question';
 import Information from './Information';
 import Submit from '../components/Submit';
+import './Problem.css';
 
 type Props = {
   question: {
@@ -35,19 +36,23 @@ class Problem extends Component {
       code: props.question.code,
       type: props.question.type,
       answers: props.question.answers,
-      selected: null
+      selected: null,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /**
+   * Updates the Problem state when receiving a new props object
+   * @param nextProps - the next props object being received
+   */
   componentWillReceiveProps(nextProps: Props) {
     this.setState({
       prompt: nextProps.question.prompt,
       code: nextProps.question.code,
       type: nextProps.question.type,
       answers: nextProps.question.answers,
-      selected: null
+      selected: null,
     });
   }
 
@@ -64,11 +69,11 @@ class Problem extends Component {
         <div className="problem">
           <Question content={this.state.prompt} type={this.state.type}/>
           <Information
-            code={this.state.code}
-            type={this.state.type}
-            answers={this.state.answers}
-            selected={this.state.selected}
-            updateHandler={(content) => this.setState( {selected: content} )}
+              code={this.state.code}
+              type={this.state.type}
+              answers={this.state.answers}
+              selected={this.state.selected}
+              updateHandler={(content) => this.setState({selected: content})}
           />
           <Submit submitHandler={this.handleSubmit}/>
         </div>

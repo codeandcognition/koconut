@@ -1,9 +1,10 @@
 // @flow
 import React, {Component} from 'react';
 import Code from '../components/Code';
-import Response from '../components/Response';
+import Response from './Response';
 
 import Types from '../../backend/Types.js';
+import './Information.css';
 
 /**
  * The Information container contains Code or both Code and Response.
@@ -18,6 +19,10 @@ class Information extends Component {
     updateHandler: Function
   };
 
+  /**
+   * Returns JSX for (or not for) the Response container given the current props
+   * @returns JSX for the Response container
+   */
   renderResponseView() {
     return Types.isInlineResponseType(this.props.type) ? <div/>
         : <Response
@@ -29,7 +34,6 @@ class Information extends Component {
   }
 
   render() {
-
     return (
         <div className="information">
           <Code

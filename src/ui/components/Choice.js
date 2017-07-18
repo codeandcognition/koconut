@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react';
+import './Choice.css';
 
 /**
  * The Choice component represents a choice in a multiple choice question

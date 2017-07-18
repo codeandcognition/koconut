@@ -29,13 +29,13 @@ class App extends Component {
             <h1 className="title">Welcome to the koconut demo!
               <span className="debug">
               <input
-                type="button"
-                onClick={() => this.setState(
-                  {
-                    questionID: ((this.state.questionID + 1) %
-                    exampleQuestions.length),
-                  })}
-                value="next question type"
+                  type="button"
+                  onClick={() => this.setState(
+                      {
+                        questionID: ((this.state.questionID + 1) %
+                            exampleQuestions.length),
+                      })}
+                  value="next question type"
               />
             </span>
             </h1>

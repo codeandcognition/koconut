@@ -1,7 +1,8 @@
 // @flow
 import React, {Component} from 'react';
-import MultipleChoice from './MultipleChoice';
-import ShortResponse from './ShortResponse';
+import MultipleChoice from '../components/MultipleChoice';
+import ShortResponse from '../components/ShortResponse';
+import './Response.css';
 
 /**
  * The Response component contains the response section in the assessment problem
@@ -20,13 +21,13 @@ class Response extends Component {
    * @returns JSX for a type of response (MultipleChoice, ShortResponse)
    */
   renderResponse() {
-    switch(this.props.type) {
+    switch (this.props.type) {
       case('MultipleChoice'):
         return <MultipleChoice
-                answers={this.props.answers}
-                selected={this.props.selected}
-                handleClick={this.props.updateHandler}
-              />;
+            answers={this.props.answers}
+            selected={this.props.selected}
+            handleClick={this.props.updateHandler}
+        />;
       case('ShortResponse'):
         return <ShortResponse inputHandler={this.props.updateHandler}/>;
       default:

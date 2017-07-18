@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react';
+import './Submit.css';
 
 /**
  * The Submit component represents a button to submit an answer
@@ -14,7 +15,7 @@ class Submit extends Component {
     return (
         <div className="submit-container">
           <div className="btn btn-submit" onClick={this.props.submitHandler}>
-           Submit
+            Submit
           </div>
         </div>
     );
