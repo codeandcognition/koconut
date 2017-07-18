@@ -24,6 +24,7 @@ import Response from '../ui/components/Response';
 import Choice from '../ui/components/Choice';
 import Code from '../ui/components/Code';
 import MultipleChoice from '../ui/components/MultipleChoice';
+import ShortResponse from '../ui/components/ShortResponse';
 
 storiesOf('App', module).addWithInfo(
     'App Component',
@@ -61,7 +62,7 @@ storiesOf('Problem', module).addWithInfo(
     '',
     () => (
         <Problem
-            question={exampleQuestion[1]}
+            question={exampleQuestions[1]}
         />
     ),
     {inline: true},
@@ -105,3 +106,10 @@ storiesOf('Choice', module).addWithInfo(
     ),
 );
 
+storiesOf('ShortReponse', module).addWithInfo(
+    'ShortResponse Component',
+    'Example short response form',
+    () => (
+        <ShortResponse />
+    ),
+);

@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import Question from '../components/Question';
 import Information from './Information';
 import Submit from '../components/Submit';
+import './Problem.css';
 
 type Props = {
   question: {

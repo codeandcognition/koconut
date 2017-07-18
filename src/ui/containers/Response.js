@@ -1,7 +1,8 @@
 // @flow
 import React, {Component} from 'react';
-import MultipleChoice from './MultipleChoice';
-import ShortResponse from './ShortResponse';
+import MultipleChoice from '../components/MultipleChoice';
+import ShortResponse from '../components/ShortResponse';
+import './Response.css';
 
 /**
  * The Response component contains the response section in the assessment problem

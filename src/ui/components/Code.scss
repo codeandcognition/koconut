@@ -1,0 +1,48 @@
+$code-font: courier;
+
+.code {
+  padding: 0;
+  width: 50%;
+  max-height: 60vh;
+  background-color: #f7f7f7;
+  overflow-y: scroll;
+}
+
+.code.full {
+  width: 100%;
+}
+
+.code-part, .code-fill {
+  display: inline-block;
+  font-family: $code-font;
+}
+
+.code-fill {
+  background-color: #dddddd;
+  border: solid 1px #bbbbbb;
+  width: 3em;
+  resize: none;
+  height: 1em;
+  overflow: hidden;
+}
+
+.code-config {
+  margin-left: 15px; // aligned with line numbers
+  padding: .5%;
+}
+
+.HighlightCode .cm-s-material .CodeMirror-line .CodeMirror-selectedtext {
+  background-color: darkblue;
+}
+
+.HighlightCode .cm-s-eclipse .CodeMirror-line .CodeMirror-selectedtext {
+  background-color: yellow;
+}
+
+.FillBlank .cm-s-eclipse span.cm-comment {
+  border: 1px black solid;
+}
+
+.FillBlank .cm-s-material span.cm-comment {
+  border-width: 1px black solid;
+}

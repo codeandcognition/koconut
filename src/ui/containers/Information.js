@@ -1,9 +1,10 @@
 // @flow
 import React, {Component} from 'react';
 import Code from '../components/Code';
-import Response from '../components/Response';
+import Response from './Response';
 
 import Types from '../../backend/Types.js';
+import './Information.css';
 
 /**
  * The Information container contains Code or both Code and Response.
