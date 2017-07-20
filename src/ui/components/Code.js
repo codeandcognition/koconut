@@ -33,7 +33,6 @@ class Code extends Component {
   handleSelect: Function;
   handleReset: Function;
   handleHintRequest: Function;
-  handleHintClose: Function;
   editor: Object;
   code: Object;
 
@@ -65,7 +64,6 @@ class Code extends Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleHintRequest = this.handleHintRequest.bind(this);
-    this.handleHintClose = this.handleHintClose.bind(this);
   }
 
   /**
@@ -170,25 +168,18 @@ class Code extends Component {
     }
   }
 
-  /**
-   * Disables hint window
-   */
-  handleHintClose() {
-    this.setState({hint: false});
-  }
-
   render() {
     let isInlineResponseType = Types.isInlineResponseType(this.props.type);
     let reset = isInlineResponseType ? <input type="button" value="reset code"
                                               onClick={this.handleReset}/> : '';
 
+    let hint = this.state.hint;
     let curLine = this.state.curLine;
 
     return (
         <div ref="code"
              className={'code ' + (isInlineResponseType ? 'full' : 'half') +
              ' ' + this.props.type}>
-
           {this.renderCodeMirror()}
           <div className="code-config">
             <button onClick={this.handleHintRequest}>?</button>
@@ -197,8 +188,11 @@ class Code extends Component {
             </button>
             {reset}
           </div>
-          <Hint active={this.state.hint} content="//TODO: Place hint here."
-                pos={curLine} close={this.handleHintClose}/>
+
+          { hint ? <Hint active={this.state.hint}
+                         content="//TODO: Place hint here."
+                         pos={curLine}
+                         close={() => this.setState({hint: false})}/> : '' }
         </div>
     );
   }
