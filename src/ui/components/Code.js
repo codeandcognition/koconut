@@ -1,20 +1,31 @@
 // @flow
+
 import React, {Component} from 'react';
+
 // CodeMirror bug isn't fixed on main branch yet, so we'll use this package...
 // for now: https://github.com/JedWatson/react-codemirror/pull/107
 import CodeMirror from '@skidding/react-codemirror';
+
+// CodeMirror language support
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/clike/clike';
-import 'codemirror/addon/selection/mark-selection';
-import 'codemirror/addon/selection/active-line';
 
-import Hint from './Hint.js';
-import Types from '../../backend/Types.js';
+// CodeMirror add-ons
+import 'codemirror/addon/selection/mark-selection';
+
 // Flow does not like it if you import css from node_modules!
+// CodeMirror localized themes
 import './codemirror/codemirror.css';
 import './codemirror/eclipse.css';
 import './codemirror/material.css';
 
+// Tool imports
+import Types from '../../backend/Types.js'
+
+// Component imports
+import Hint from './Hint.js';
+
+// CSS for Code component
 import './Code.css';
 
 type Props = {
@@ -102,13 +113,10 @@ class Code extends Component {
    */
   handleSelect() {
     if (this.editor) {
-      let e = this.editor;
-      let select = e.codeMirror.doc.getSelection();
-      this.setState({highlighted: select});
+      this.setState({highlighted: this.editor.codeMirror.doc.getSelection()});
       if (this.props.updateHandler !== undefined) {
         this.props.updateHandler(this.state.highlighted);
       }
-      console.log(this.state.highlighted);
     }
   }
 
