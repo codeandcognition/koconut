@@ -14,16 +14,18 @@ class Hint extends Component {
     let hintH = this.props.height ? this.props.height : 100; // Default height
     let pad = this.props.padding ? this.props.padding : 10; // Default padding
 
-    return <div className="hint" style={{
-      top: pos + 'px',
-      left: -1 * (hintW + 3 * pad) + 'px',
-      width: hintW + 'px',
-      height: hintH + 'px',
-      padding: pad + 'px',
-    }}>
-      {content}
-      <div className="close-hint" onClick={this.props.close}>x</div>
-    </div>
+    return (
+        <div className="hint" style={{
+          top: pos + 'px',
+          left: -1 * (hintW + 3 * pad) + 'px',
+          width: hintW + 'px',
+          height: hintH + 'px',
+          padding: pad + 'px',
+        }}>
+          {content}
+          <div className="close-hint" onClick={this.props.close}>x</div>
+        </div>
+    );
   }
 }
 
