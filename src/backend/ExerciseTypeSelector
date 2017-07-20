@@ -1,3 +1,0 @@
-// @flow
-import React, {Component} from 'react';
-import QuestionTypes from '../backend/Types.js';

@@ -5,7 +5,7 @@ export const exampleQuestions = [
   {
     prompt: 'What is the value of variable x?',
     code: 'boolean x = 1 != 2',
-    answer: 'true',
+    answers: ['true', 'false'],
     difficulty: 0,
     type: QuestionTypes.multipleChoice,
     problemID: 'a102b',
@@ -13,7 +13,7 @@ export const exampleQuestions = [
   {
     prompt: 'Write code that assigns the value false to x.',
     code: '',
-    answer: 'boolean x = false',
+    answers: 'boolean x = false',
     difficulty: 1,
     type: QuestionTypes.writeCode,
     problemID: 'a31415',

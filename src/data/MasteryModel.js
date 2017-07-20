@@ -1,3 +1,4 @@
 /**
- * Created by leannehwa on 7/20/17.
+ * Models student knowledge of each concept.
+ * @class
  */
