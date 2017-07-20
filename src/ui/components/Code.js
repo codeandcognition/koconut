@@ -8,6 +8,7 @@ import 'codemirror/mode/clike/clike';
 import 'codemirror/addon/selection/mark-selection';
 import 'codemirror/addon/selection/active-line';
 
+import Hint from './Hint.js';
 import Types from '../../backend/Types.js';
 // Flow does not like it if you import css from node_modules!
 import './codemirror/codemirror.css';
@@ -31,7 +32,10 @@ class Code extends Component {
   handleThemeChange: Function;
   handleSelect: Function;
   handleReset: Function;
+  handleHintRequest: Function;
+  handleHintClose: Function;
   editor: Object;
+  code: Object;
 
   state: {
     code: string,
@@ -39,7 +43,9 @@ class Code extends Component {
     mode: string,
     theme: string,
     highlighted: string,
-    toggle: boolean
+    toggle: boolean,
+    hint: boolean,
+    curLine: number
   };
 
   constructor(props: Props) {
@@ -51,11 +57,15 @@ class Code extends Component {
       theme: 'eclipse',
       highlighted: '',
       toggle: true,
+      hint: true,
+      curLine: 0,
     };
 
     this.handleThemeChange = this.handleThemeChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.handleHintRequest = this.handleHintRequest.bind(this);
+    this.handleHintClose = this.handleHintClose.bind(this);
   }
 
   /**
@@ -117,7 +127,6 @@ class Code extends Component {
       mode: this.state.mode,
       theme: this.state.theme,
       styleSelectedText: true,
-      // styleActiveLine: true, TODO: Determine when to use active line
     };
 
     return <CodeMirror
@@ -146,20 +155,50 @@ class Code extends Component {
     this.props.updateHandler(this.props.code);
   }
 
+  /**
+   * Sets hint position to the line of the last cursor position within CodeMirror.
+   */
+  handleHintRequest() {
+    let height = 0;
+    if (this.editor) {
+      let cm = this.editor.codeMirror;
+      let line = cm.doc.getCursor(); // Get line of cursor position
+      height = cm.heightAtLine(line.line, 'local'); // Find height at line
+
+      this.setState({hint: true});
+      this.setState({curLine: height});
+    }
+  }
+
+  /**
+   * Disables hint window
+   */
+  handleHintClose() {
+    this.setState({hint: false});
+  }
+
   render() {
     let isInlineResponseType = Types.isInlineResponseType(this.props.type);
     let reset = isInlineResponseType ? <input type="button" value="reset code"
                                               onClick={this.handleReset}/> : '';
+
+    let curLine = this.state.curLine;
+
     return (
-        <div className={'code ' + (isInlineResponseType ? 'full' : 'half') +
-        ' ' + this.props.type}>
+        <div ref="code"
+             className={'code ' + (isInlineResponseType ? 'full' : 'half') +
+             ' ' + this.props.type}>
+
+          {this.renderCodeMirror()}
           <div className="code-config">
+            <button onClick={this.handleHintRequest}>?</button>
             <button onClick={this.handleThemeChange}>
               {this.state.toggle ? 'dark theme' : 'light theme'}
             </button>
             {reset}
           </div>
-          {this.renderCodeMirror()}
+          <Hint active={this.state.hint} content="//TODO: Place hint here."
+                pos={curLine} close={this.handleHintClose}/>
         </div>
     );
   }
