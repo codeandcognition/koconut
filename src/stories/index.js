@@ -18,7 +18,7 @@ import {Button, Welcome} from '@storybook/react/demo';
 
 import App from '../ui/containers/App';
 import Information from '../ui/containers/Information';
-import Problem from '../ui/containers/Problem';
+import Problem from '../ui/containers/Exercise';
 import Question from '../ui/components/Question';
 import Response from '../ui/components/Response';
 import Choice from '../ui/components/Choice';
@@ -35,55 +35,55 @@ storiesOf('App', module).addWithInfo(
     {inline: true},
 );
 
-storiesOf('Problem', module).addWithInfo(
-    'MultipleChoice Problem',
+storiesOf('Exercise', module).addWithInfo(
+    'MultipleChoice Exercise',
     '',
     () => (
-        <Problem
+        <Exercise
             question={exampleQuestions[3]}
         />
     ),
     {inline: true},
 );
 
-storiesOf('Problem', module).addWithInfo(
-    'ShortResponse Problem',
+storiesOf('Exercise', module).addWithInfo(
+    'ShortResponse Exercise',
     '',
     () => (
-        <Problem
+        <Exercise
             question={exampleQuestions[4]}
         />
     ),
     {inline: true},
 );
 
-storiesOf('Problem', module).addWithInfo(
-    'FillBlank Problem',
+storiesOf('Exercise', module).addWithInfo(
+    'FillBlank Exercise',
     '',
     () => (
-        <Problem
+        <Exercise
             question={exampleQuestions[1]}
         />
     ),
     {inline: true},
 );
 
-storiesOf('Problem', module).addWithInfo(
-    'HighlightCode Problem',
+storiesOf('Exercise', module).addWithInfo(
+    'HighlightCode Exercise',
     '',
     () => (
-        <Problem
+        <Exercise
             question={exampleQuestions[2]}
         />
     ),
     {inline: true},
 );
 
-storiesOf('Problem', module).addWithInfo(
-    'WriteCode Problem',
+storiesOf('Exercise', module).addWithInfo(
+    'WriteCode Exercise',
     '',
     () => (
-        <Problem
+        <Exercise
             question={exampleQuestions[0]}
         />
     ),

@@ -1,7 +1,7 @@
 // @flow
 import React, {Component} from 'react';
 import './App.css';
-import Problem from './Problem';
+import Exercise from './Exercise';
 
 import {exampleQuestions} from '../../backend/Questions.js';
 
@@ -40,7 +40,7 @@ class App extends Component {
             </span>
             </h1>
 
-            <Problem question={exampleQuestions[this.state.questionID]}/>
+            <Exercise question={exampleQuestions[this.state.questionID]}/>
           </div>
         </div>
     );
