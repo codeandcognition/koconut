@@ -20,7 +20,7 @@ import './codemirror/eclipse.css';
 import './codemirror/material.css';
 
 // Tool imports
-import Types from '../../backend/Types.js'
+import Types from '../../data/ExerciseTypes.js'
 
 // Component imports
 import Hint from './Hint.js';
@@ -154,7 +154,7 @@ class Code extends Component {
   }
 
   /**
-   *  Resets both the code state and selected state.
+   *  Resets both the code state and answer state.
    */
   handleReset() {
     this.setState({code: this.props.code});

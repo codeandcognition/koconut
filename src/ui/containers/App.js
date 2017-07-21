@@ -1,20 +1,20 @@
 // @flow
 import React, {Component} from 'react';
 import './App.css';
-import Exercise from './Exercise';
+import ExerciseView from './ExerciseView';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ModelUpdater from '../../backend/ModelUpdater';
 import Concepts from '../../backend/Concepts';
 
-type Question = {
+type Exercise = {
   prompt: string,
   code: string,
-  answers?: string[],
+  choices?: string[],
   difficulty: number,
   type: string,
-  problemID: string
+  exerciseID: string
 }
 
 /**
@@ -26,13 +26,13 @@ class App extends Component {
   generator: ExerciseGenerator;
 
   state: {
-    question: ?Question
+    exercise: ?Exercise
   };
 
   constructor() {
     super();
     this.state = {
-      question: null
+      exercise: null
     };
 
     this.generator = new ExerciseGenerator();
@@ -43,14 +43,14 @@ class App extends Component {
    * Sets the initial exercise on load
    */
   componentWillMount() {
-    this.setState({question: this.getExercise()});
+    this.setState({exercise: this.getExercise()});
   }
 
   /**
    * Return a generated exercise
    * @returns a generated exercise
    */
-  getExercise(): Question {
+  getExercise(): Exercise {
     return this.generator.generateExercise();
   }
 
@@ -72,15 +72,15 @@ class App extends Component {
                   type="button"
                   onClick={() => this.setState(
                       {
-                        question: this.getExercise(),
+                        exercise: this.getExercise(),
                       })}
-                  value="next question type"
+                  value="next exercise type"
               />
             </span>
             </h1>
 
-            <Exercise
-                question={this.state.question}
+            <ExerciseView
+                exercise={this.state.exercise}
                 submitHandler = {this.submitResponse}
             />
           </div>

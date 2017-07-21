@@ -1,5 +1,5 @@
 // @flow
-import {exampleQuestions} from '../backend/Questions.js';
+import {exampleExercises} from '../data/Exercises.js';
 
 class ExerciseGenerator {
   counter: number;
@@ -10,12 +10,12 @@ class ExerciseGenerator {
 
   /**
    * Returns a generated Exercise
-   * @returns {Question} - a generated Exercise
+   * @returns {Prompt} - a generated Exercise
    */
   generateExercise() {
-    let question = exampleQuestions[this.counter % exampleQuestions.length];
+    let exercise = exampleExercises[this.counter % exampleExercises.length];
     this.counter += 1;
-    return question;
+    return exercise;
   }
 }
 

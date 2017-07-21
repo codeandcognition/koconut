@@ -1,27 +1,27 @@
 // @flow
 /**
- * Stores student performance data for a question.
+ * Stores student performance data for a exercise.
  * @class
  */
 
 class ResponseObject {
   id: string;
   concept: string;
-  questionType: string;
+  exerciseType: string;
   difficulty: number;
   correct: boolean;
   timestamp: number;
 
   constructor(
-      id: string, //Question ID for matching
+      id: string, //Prompt ID for matching
       concept: string, //Programming concept, maps to mastery model
-      questionType: string, //Type of question
+      exerciseType: string, //Type of exercise
       difficulty: number, //
       correct: boolean,
       timestamp: number) {
     this.id = id;
     this.concept = concept;
-    this.questionType = questionType;
+    this.exerciseType = exerciseType;
     this.difficulty = difficulty;
     this.correct = correct;
     this.timestamp = timestamp;
@@ -29,7 +29,7 @@ class ResponseObject {
 }
 
 /**
- * Stores student performance data for a question.
+ * Stores student performance data for a exercise.
  */
 class ResponseLog {
   log: ResponseObject[];
@@ -38,7 +38,7 @@ class ResponseLog {
     this.log = [];
   }
 
-  addResponse(id: string, concept: string, questionType: string,
+  addResponse(id: string, concept: string, exerciseType: string,
               difficulty: number, correct: boolean, timestamp: number) {
     /*
       Note: Here we use Object.freeze to make sure ResponseObjects can't be
@@ -48,7 +48,7 @@ class ResponseLog {
       https://mathiasbynens.be/notes/es6-const
      */
     const immutable = Object.freeze(
-        new ResponseObject(id, concept, questionType, difficulty, correct,
+        new ResponseObject(id, concept, exerciseType, difficulty, correct,
             timestamp));
     this.log.push(immutable);
   }

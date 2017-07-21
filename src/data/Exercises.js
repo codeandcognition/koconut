@@ -1,45 +1,45 @@
 // @flow
-import QuestionTypes from './Types.js';
+import ExerciseTypes from './ExerciseTypes.js';
 
-type Question = {
+type Exercise = {
   prompt: string,
   code: string,
-  answers?: string[],
+  choices?: string[],
   difficulty: number,
   type: string,
-  problemID: string
+  exerciseID: string
 }
 
-export const exampleQuestions: Question[] = [
+export const exampleExercises: Exercise[] = [
   {
     prompt: 'What is the value of variable x?',
     code: 'boolean x = 1 != 2',
-    answers: ['true', 'false'],
+    choices: ['true', 'false'],
     difficulty: 0,
-    type: QuestionTypes.multipleChoice,
-    problemID: 'a102b',
+    type: ExerciseTypes.multipleChoice,
+    exerciseID: 'a102b',
   },
   {
     prompt: 'Write code that assigns the value false to x.',
     code: '',
     difficulty: 1,
-    type: QuestionTypes.writeCode,
-    problemID: 'a31415',
+    type: ExerciseTypes.writeCode,
+    exerciseID: 'a31415',
   },
 /*{
     prompt: 'Write the code necessary to increment the value of x.',
     code: 'int x = 1;',
-    type: QuestionTypes.writeCode,
+    type: ExerciseTypes.writeCode,
   },
   {
     prompt: 'Fill in the blank so that x is assigned a value.',
     code: 'int x /!* *!/ 2;',
-    type: QuestionTypes.fillBlank,
+    type: ExerciseTypes.fillBlank,
   },
   {
     prompt: 'Highlight the variable type in this line of code.',
     code: 'int x = 3;',
-    type: QuestionTypes.highlightCode,
+    type: ExerciseTypes.highlightCode,
   },g
   {
     // https://practiceit.cs.washington.edu/problem/view/bjp4/chapter2/s12-valueOfX
@@ -48,8 +48,8 @@ export const exampleQuestions: Question[] = [
     'int x = 4; \n' +
     'x = x + 2; \n' +
     'x = x + x;',
-    type: QuestionTypes.multipleChoice,
-    answers: ['3', '7', '10', '12'],
+    type: ExerciseTypes.multipleChoice,
+    choices: ['3', '7', '10', '12'],
   },
   {
     // https://practiceit.cs.washington.edu/problem/view/bjp4/chapter2/s25-numberTotal
@@ -60,6 +60,6 @@ export const exampleQuestions: Question[] = [
     '\t total = total - number; \n' +
     '\t System.out.println(total + " " + number); \n' +
     '}',
-    type: QuestionTypes.shortResponse,
+    type: ExerciseTypes.shortResponse,
   }*/
 ];
