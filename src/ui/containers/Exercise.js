@@ -20,8 +20,6 @@ type Props = {
  * @class
  */
 class Exercise extends Component {
-  handleSubmit: Function;
-
   state: {
     prompt: string,
     code: string,
@@ -37,11 +35,8 @@ class Exercise extends Component {
       code: props.question.code,
       type: props.question.type,
       answers: props.question.answers,
-      submitHandler: props.submitHandler,
       selected: null,
     };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   /**
@@ -58,15 +53,6 @@ class Exercise extends Component {
     });
   }
 
-  /**
-   * TODO: actually make this do something
-   */
-  handleSubmit() {
-    //placeholder code
-    //console.log(this.state.selected);
-    this.props.submitHandler(this.state.selected);
-  }
-
   render() {
     return (
         <div className="problem">
@@ -78,7 +64,7 @@ class Exercise extends Component {
               selected={this.state.selected}
               updateHandler={(content) => this.setState({selected: content})}
           />
-          <Submit submitHandler={this.handleSubmit}/>
+          <Submit submitHandler={() => this.props.submitHandler(this.state.selected)}/>
         </div>
     );
   }

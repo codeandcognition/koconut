@@ -40,7 +40,6 @@
     "build-storybook": "build-storybook -s public -o dev/storybook",
     "start-dev": "npm-run-all -p start-docs storybook",
     "build-dev": "npm-run-all -p build-docs build-storybook",
-    "start-all": "npm-run-all -p start start-dev",
     "build-all": "npm-run-all -p build build-dev",
     "build-all-ignore": "npm-run-all -p build-ignore build-dev"
   }

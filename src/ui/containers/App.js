@@ -39,15 +39,25 @@ class App extends Component {
     this.submitResponse = this.submitResponse.bind(this);
   }
 
+  /**
+   * Sets the initial exercise on load
+   */
   componentWillMount() {
     this.setState({question: this.getExercise()});
   }
 
-  // Fake AJAX
-  getExercise() {
+  /**
+   * Return a generated exercise
+   * @returns a generated exercise
+   */
+  getExercise(): Question {
     return this.generator.generateExercise();
   }
 
+  /**
+   * Submits the give answer to current exercise
+   * @param answer - the answer being submitted
+   */
   submitResponse(answer: string) {
     console.log(answer);
   }

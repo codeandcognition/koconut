@@ -8,6 +8,10 @@ class ExerciseGenerator {
     this.counter = 0;
   }
 
+  /**
+   * Returns a generated Exercise
+   * @returns {Question} - a generated Exercise
+   */
   generateExercise() {
     let question = exampleQuestions[this.counter % exampleQuestions.length];
     this.counter += 1;
