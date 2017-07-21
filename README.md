@@ -83,7 +83,7 @@ If you don't already have Yarn, you can install it using npm (which diplomatical
 
 `npm install yarn`
 
-> Yarn is an alternative package manager that we use because it's both faster and cuter (*npm has no cats* :cat:). [All `npm` commands can be replaced with `yarn` commands](https://yarnpkg.com/en/docs/migrating-from-npm)!
+> Yarn is an alternative package manager that we use because it's both faster and cuter (_npm has no cats_ :cat:). [All `npm` commands can be replaced with `yarn` commands](https://yarnpkg.com/en/docs/migrating-from-npm)!
 
 ### Quick Start
 
@@ -98,23 +98,23 @@ To have a live preview of the application, simply run the following command:
 
 ### Development Scripts
 
-Command | Description
----|---
-`yarn run storybook` | Starts the Storybook server on `:9009`
-`yarn run start-docs` | Starts the documentation.js server on `:4001`
-`yarn run start-dev` | Starts both the Storybook and documentation.js servers
-`yarn run flow` | Starts a Flow server and type-checks your code
+Command                    | Description
+-------------------------- | -----------------------------------------------------------------------------------------------
+`yarn run storybook`       | Starts the Storybook server on `:9009`
+`yarn run start-docs`      | Starts the documentation.js server on `:4001`
+`yarn run start-dev`       | Starts both the Storybook and documentation.js servers
+`yarn run flow`            | Starts a Flow server and type-checks your code
 `yarn run make-flow-nicer` | (Usually) fixes [Flow being mean to you](docs/flow.md#importing-a-new-module-from-node_modules)
 
 ### Build Scripts
 
-Command | Description
----|---
-`yarn run build` | Builds the application and dumps it in `/build`. **The project will not build if it does not correctly type-check**
-`yarn run build-ignore` | Builds the application, ignoring type-checking
-`yarn run build-storybook` | Builds the Storybook and dumps it in `/dev/storybook`
-`yarn run build-docs` | Builds documentation.js and dumps it in `/dev/docs`
-`yarn run build-all` | Builds the application, Storybook, and documentation.js
+Command                     | Description
+--------------------------- | -------------------------------------------------------------------------------------------------------------------
+`yarn run build`            | Builds the application and dumps it in `/build`. **The project will not build if it does not correctly type-check**
+`yarn run build-ignore`     | Builds the application, ignoring type-checking
+`yarn run build-storybook`  | Builds the Storybook and dumps it in `/dev/storybook`
+`yarn run build-docs`       | Builds documentation.js and dumps it in `/dev/docs`
+`yarn run build-all`        | Builds the application, Storybook, and documentation.js
 `yarn run build-all-ignore` | Builds the application, Storybook, and documentation.js, ignoring type-checking
 
 ## Resources
