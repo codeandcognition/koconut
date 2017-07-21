@@ -1,7 +1,16 @@
 // @flow
 import QuestionTypes from './Types.js';
 
-export const exampleQuestions = [
+type Question = {
+  prompt: string,
+  code: string,
+  answers?: string[],
+  difficulty: number,
+  type: string,
+  problemID: string
+}
+
+export const exampleQuestions: Question[] = [
   {
     prompt: 'What is the value of variable x?',
     code: 'boolean x = 1 != 2',
@@ -13,7 +22,6 @@ export const exampleQuestions = [
   {
     prompt: 'Write code that assigns the value false to x.',
     code: '',
-    answers: 'boolean x = false',
     difficulty: 1,
     type: QuestionTypes.writeCode,
     problemID: 'a31415',
@@ -32,7 +40,7 @@ export const exampleQuestions = [
     prompt: 'Highlight the variable type in this line of code.',
     code: 'int x = 3;',
     type: QuestionTypes.highlightCode,
-  },
+  },g
   {
     // https://practiceit.cs.washington.edu/problem/view/bjp4/chapter2/s12-valueOfX
     prompt: 'What is the value of variable x after the following code executes?',
