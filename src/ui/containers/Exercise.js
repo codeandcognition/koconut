@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import Question from '../components/Question';
 import Information from './Information';
 import Submit from '../components/Submit';
-import './Problem.css';
+import './Exercise.css';
 
 type Props = {
   question: {
@@ -11,14 +11,15 @@ type Props = {
     code: string,
     type: string,
     answers?: string[]
-  }
+  },
+  submitHandler: Function
 }
 
 /**
- * The Problem container contains all components of an assessment problem.
+ * The Exercise container contains all components of an assessment problem.
  * @class
  */
-class Problem extends Component {
+class Exercise extends Component {
   handleSubmit: Function;
 
   state: {
@@ -36,6 +37,7 @@ class Problem extends Component {
       code: props.question.code,
       type: props.question.type,
       answers: props.question.answers,
+      submitHandler: props.submitHandler,
       selected: null,
     };
 
@@ -43,7 +45,7 @@ class Problem extends Component {
   }
 
   /**
-   * Updates the Problem state when receiving a new props object
+   * Updates the Exercise state when receiving a new props object
    * @param nextProps - the next props object being received
    */
   componentWillReceiveProps(nextProps: Props) {
@@ -61,7 +63,8 @@ class Problem extends Component {
    */
   handleSubmit() {
     //placeholder code
-    console.log(this.state.selected);
+    //console.log(this.state.selected);
+    this.props.submitHandler(this.state.selected);
   }
 
   render() {
@@ -81,4 +84,4 @@ class Problem extends Component {
   }
 }
 
-export default Problem;
+export default Exercise;
