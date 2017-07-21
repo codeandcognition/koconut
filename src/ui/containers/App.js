@@ -8,17 +8,25 @@ import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ModelUpdater from '../../backend/ModelUpdater';
 import Concepts from '../../backend/Concepts';
 
+type Question = {
+  prompt: string,
+  code: string,
+  answers?: string[],
+  difficulty: number,
+  type: string,
+  problemID: string
+}
+
 /**
  * Renders the koconut application view.
  * @class
  */
-
 class App extends Component {
   submitResponse: Function;
   generator: ExerciseGenerator;
 
   state: {
-    question: ?number
+    question: ?Question
   };
 
   constructor() {
