@@ -1,3 +1,4 @@
+// @flow
 /**
  * Models student knowledge of each concept.
  * @class
@@ -5,7 +6,16 @@
 
 import {conceptInventory} from '../backend/Concepts.js';
 
-export const masteryModel = [
+type conceptMastery = {
+  concept: string,
+  type:
+    {
+      read: boolean,
+      write: boolean
+    }
+}
+
+export const masteryModel: conceptMastery[] = [
   {
     concept: conceptInventory[0],
     type:
