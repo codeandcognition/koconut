@@ -23,7 +23,7 @@ class Hint extends Component {
           padding: pad + 'px',
         }}>
           {content}
-          <div className="close-hint" onClick={this.props.close}>x</div>
+          <div className="close-hint" onClick={(this.props.close)?(this.props.close):{}}>x</div>
         </div>
     );
   }

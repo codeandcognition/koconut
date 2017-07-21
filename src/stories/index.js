@@ -20,11 +20,12 @@ import App from '../ui/containers/App';
 import Information from '../ui/containers/Information';
 import Problem from '../ui/containers/Problem';
 import Question from '../ui/components/Question';
-import Response from '../ui/components/Response';
+import Response from '../ui/containers/Response';
 import Choice from '../ui/components/Choice';
 import Code from '../ui/components/Code';
 import MultipleChoice from '../ui/components/MultipleChoice';
 import ShortResponse from '../ui/components/ShortResponse';
+import Hint from '../ui/components/Hint';
 
 storiesOf('App', module).addWithInfo(
     'App Component',
@@ -106,10 +107,18 @@ storiesOf('Choice', module).addWithInfo(
     ),
 );
 
-storiesOf('ShortReponse', module).addWithInfo(
+storiesOf('ShortResponse', module).addWithInfo(
     'ShortResponse Component',
     'Example short response form',
     () => (
         <ShortResponse/>
     ),
 );
+
+// storiesOf('Hint', module).addWithInfo(
+//     'Hint Component',
+//     'Example hint',
+//     () => (
+//
+//     ),
+// );
