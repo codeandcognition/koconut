@@ -11,7 +11,8 @@ type Props = {
     code: string,
     type: string,
     answers?: string[]
-  }
+  },
+  submitHandler: Function
 }
 
 /**
@@ -36,6 +37,7 @@ class Exercise extends Component {
       code: props.question.code,
       type: props.question.type,
       answers: props.question.answers,
+      submitHandler: props.submitHandler,
       selected: null,
     };
 
@@ -61,7 +63,8 @@ class Exercise extends Component {
    */
   handleSubmit() {
     //placeholder code
-    console.log(this.state.selected);
+    //console.log(this.state.selected);
+    this.props.submitHandler(this.state.selected);
   }
 
   render() {

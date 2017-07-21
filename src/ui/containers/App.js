@@ -3,7 +3,10 @@ import React, {Component} from 'react';
 import './App.css';
 import Exercise from './Exercise';
 
-import {exampleQuestions} from '../../backend/Questions.js';
+// Fake AJAX
+import ExerciseGenerator from '../../backend/ExerciseGenerator';
+import ModelUpdater from '../../backend/ModelUpdater';
+import Concepts from '../../backend/Concepts';
 
 /**
  * Renders the koconut application view.
@@ -11,15 +14,34 @@ import {exampleQuestions} from '../../backend/Questions.js';
  */
 
 class App extends Component {
+  submitResponse: Function;
+  generator: ExerciseGenerator;
+
   state: {
-    questionID: number
+    question: ?number
   };
 
   constructor() {
     super();
     this.state = {
-      questionID: 0,
+      question: null
     };
+
+    this.generator = new ExerciseGenerator();
+    this.submitResponse = this.submitResponse.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({question: this.getExercise()});
+  }
+
+  // Fake AJAX
+  getExercise() {
+    return this.generator.generateExercise();
+  }
+
+  submitResponse(answer: string) {
+    console.log(answer);
   }
 
   render() {
@@ -32,15 +54,17 @@ class App extends Component {
                   type="button"
                   onClick={() => this.setState(
                       {
-                        questionID: ((this.state.questionID + 1) %
-                            exampleQuestions.length),
+                        question: this.getExercise(),
                       })}
                   value="next question type"
               />
             </span>
             </h1>
 
-            <Exercise question={exampleQuestions[this.state.questionID]}/>
+            <Exercise
+                question={this.state.question}
+                submitHandler = {this.submitResponse}
+            />
           </div>
         </div>
     );
