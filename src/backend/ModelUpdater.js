@@ -6,5 +6,6 @@
 import ResponseLog from '../data/ResponseLog';
 
 class ModelUpdater {
+  //stubby
 
 }
