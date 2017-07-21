@@ -8,11 +8,13 @@ import './Hint.css';
 class Hint extends Component {
 
   render() {
-    let content = this.props.content;
+    let content: string = this.props.content;
     let pos = this.props.pos;
     let hintW = this.props.width ? this.props.width : 100; // Default width
     let hintH = this.props.height ? this.props.height : 100; // Default height
     let pad = this.props.padding ? this.props.padding : 10; // Default padding
+
+    let resources = this.props.resources;
 
     return (
         <div className="hint" style={{
@@ -26,9 +28,12 @@ class Hint extends Component {
             {content}
           </div>
           <div className="list-resources">
-            {// Placeholder for additional information}
+            {resources.map(
+                (resources) => (<div className="resource-item">resource</div>))}
           </div>
-          <div className="close-hint" onClick={(this.props.close)?(this.props.close):{}}>x</div>
+          <div className="close-hint"
+               onClick={(this.props.close) ? (this.props.close) : {}}>x
+          </div>
         </div>
     );
   }
