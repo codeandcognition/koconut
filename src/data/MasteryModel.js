@@ -6,30 +6,34 @@
 
 import {conceptInventory} from '../backend/Concepts.js';
 
-type conceptMastery = {
-  concept: string,
-  type:
-    {
+class ConceptKnowledge {
+  concept: string;
+  type: {
+    read: boolean,
+    write: boolean
+  };
+
+  constructor(
+    concept: string,
+    type: {
       read: boolean,
       write: boolean
     }
+  ){
+    this.concept = concept;
+    this.type = this.type;
+  }
 }
 
-export const masteryModel: conceptMastery[] = [
-  {
-    concept: conceptInventory[0],
-    type:
-      {
-        read: true,
-        write: false
-      }
-  },
-  {
-    concept: conceptInventory[1],
-    type:
-      {
-        read: false,
-        write: false
-      }
+/**
+ * Contains student knowledge of each concept.
+ * @class
+ */
+
+class MasteryModel {
+  model: ConceptKnowledge[];
+
+  constructor() {
+    this.model = [conceptInventory.length];
   }
-]
+}
