@@ -22,7 +22,12 @@ class Hint extends Component {
           height: hintH + 'px',
           padding: pad + 'px',
         }}>
-          {content}
+          <div className="body-text">
+            {content}
+          </div>
+          <div className="list-resources">
+            {// Placeholder for additional information}
+          </div>
           <div className="close-hint" onClick={(this.props.close)?(this.props.close):{}}>x</div>
         </div>
     );
