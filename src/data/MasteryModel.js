@@ -37,3 +37,5 @@ class MasteryModel {
     this.model = [conceptInventory.length];
   }
 }
+
+export {MasteryModel}

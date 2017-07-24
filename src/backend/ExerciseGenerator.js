@@ -1,11 +1,17 @@
 // @flow
 import {exampleExercises} from '../data/Exercises.js';
+import {MasteryModel} from '../data/MasteryModel';
 
 class ExerciseGenerator {
   counter: number;
 
   constructor() {
     this.counter = 0;
+  }
+
+  getConcept():string {
+    let model = MasteryModel.model;
+    return model[Math.random()*model.length].concept;
   }
 
   /**
