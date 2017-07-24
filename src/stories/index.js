@@ -1,6 +1,6 @@
 import {configure, setAddon} from '@storybook/react';
 import infoAddon from '@storybook/addon-info';
-import {exampleQuestions} from '../backend/data/Exercises';
+import {exampleExercises} from '../backend/data/Exercises';
 
 setAddon(infoAddon);
 
@@ -40,7 +40,7 @@ storiesOf('Exercise', module).addWithInfo(
     '',
     () => (
         <Exercise
-            question={exampleQuestions[3]}
+            question={exampleExercises[3]}
         />
     ),
     {inline: true},
@@ -51,7 +51,7 @@ storiesOf('Exercise', module).addWithInfo(
     '',
     () => (
         <Exercise
-            question={exampleQuestions[4]}
+            question={exampleExercises[4]}
         />
     ),
     {inline: true},
@@ -62,7 +62,7 @@ storiesOf('Exercise', module).addWithInfo(
     '',
     () => (
         <Exercise
-            question={exampleQuestions[1]}
+            question={exampleExercises[1]}
         />
     ),
     {inline: true},
@@ -73,7 +73,7 @@ storiesOf('Exercise', module).addWithInfo(
     '',
     () => (
         <Exercise
-            question={exampleQuestions[2]}
+            question={exampleExercises[2]}
         />
     ),
     {inline: true},
@@ -84,7 +84,7 @@ storiesOf('Exercise', module).addWithInfo(
     '',
     () => (
         <Exercise
-            question={exampleQuestions[0]}
+            question={exampleExercises[0]}
         />
     ),
     {inline: true},
