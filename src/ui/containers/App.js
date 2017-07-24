@@ -26,7 +26,7 @@ type Exercise = {
 class App extends Component {
   submitResponse: Function;
   generator: ExerciseGenerator;
-  updater: ResponseEvaluator;
+  // updater: ResponseEvaluator;
 
   state: {
     exercise: Exercise
@@ -40,7 +40,8 @@ class App extends Component {
     this.state = {
       exercise: this.generator.generateExercise()
     };
-    this.updater = new ResponseEvaluator();
+
+    // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
   }
 
@@ -64,7 +65,7 @@ class App extends Component {
    * @param answer - the answer being submitted
    */
   submitResponse(answer: string) {
-    this.updater.evaluateAnswer(this.state.exercise, answer);
+    ResponseEvaluator.evaluateAnswer(this.state.exercise, answer);
   }
 
   render() {

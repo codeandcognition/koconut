@@ -34,11 +34,10 @@ class ResponseObject {
 const ResponseLog = function() {
   return {
     constructor: function() {
-      this.log = [];
     },
   };
 };
-
+ResponseLog.log = [];
 ResponseLog.addResponse = function(id: string, concept: string,
                                    exerciseType: string,
                                    difficulty: number, correct: boolean,
