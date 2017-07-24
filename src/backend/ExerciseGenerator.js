@@ -25,6 +25,7 @@ class ExerciseGenerator {
    */
   getType(): string {
     let types = Object.keys(ExerciseTypes);
+    console.log(types);
     return types[Math.random() * types.length];
   }
 

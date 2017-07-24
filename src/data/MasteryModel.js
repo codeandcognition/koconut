@@ -39,5 +39,4 @@ class MasteryModel {
   }
 }
 
-
 export {MasteryModel}
