@@ -39,4 +39,4 @@ class MasteryModel {
   }
 }
 
-export {MasteryModel}
+export default MasteryModel;
