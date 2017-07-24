@@ -62,7 +62,7 @@ class App extends Component {
    * @param answer - the answer being submitted
    */
   submitResponse(answer: string) {
-    this.updater.updateModel(string)
+    this.updater.evaluateAnswer(this.state.exercise, answer);
   }
 
   render() {

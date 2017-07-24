@@ -4,18 +4,27 @@
  */
 
 import ModelUpdater from './ModelUpdater';
-import LogUpdater from './LogUpdater';
+import ResponseLog from '../data/ResponseLog';
+
+type Exercise = {
+  prompt: string,
+  code: string,
+  choices?: string[],
+  difficulty: number,
+  type: string,
+  // exerciseID: string
+}
 
 class ResponseEvaluator {
   modelUpdater: ModelUpdater;
-  logUpdater: LogUpdater;
+  responseLog: ResponseLog;
 
   constructor() {
     this.modelUpdater = new ModelUpdater();
-    this.logUpdater = new LogUpdater();
+    this.responseLog= new ResponseLog();
   }
 
-  evaluateAnswer(answer: string) {
+  evaluateAnswer(exercise: Exercise, answer: string) {
 
   }
 }
