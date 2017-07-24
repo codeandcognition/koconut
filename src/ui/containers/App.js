@@ -24,6 +24,7 @@ type Exercise = {
 class App extends Component {
   submitResponse: Function;
   generator: ExerciseGenerator;
+  updater: ModelUpdater;
 
   state: {
     exercise: ?Exercise
@@ -36,6 +37,7 @@ class App extends Component {
     };
 
     this.generator = new ExerciseGenerator();
+    this.updater = new ModelUpdater();
     this.submitResponse = this.submitResponse.bind(this);
   }
 
@@ -51,6 +53,7 @@ class App extends Component {
    * @returns a generated exercise
    */
   getExercise(): Exercise {
+
     return this.generator.generateExercise();
   }
 
