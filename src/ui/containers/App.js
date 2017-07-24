@@ -6,7 +6,11 @@ import ExerciseView from './ExerciseView';
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
-import Concepts from '../../backend/Concepts';
+//import Concepts from '../../backend/Concepts';
+
+// Static classes
+import '../../data/ResponseLog';
+import '../../data/MasteryModel';
 
 type Exercise = {
   prompt: string,

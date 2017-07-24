@@ -4,7 +4,6 @@
  */
 
 import ModelUpdater from './ModelUpdater';
-import ResponseLog from '../data/ResponseLog';
 
 type Exercise = {
   prompt: string,
@@ -17,14 +16,13 @@ type Exercise = {
 
 class ResponseEvaluator {
   modelUpdater: ModelUpdater;
-  responseLog: ResponseLog;
 
   constructor() {
     this.modelUpdater = new ModelUpdater();
-    this.responseLog= new ResponseLog();
   }
 
   evaluateAnswer(exercise: Exercise, answer: string) {
+    // ResponseLog.addResponse...
 
   }
 }
