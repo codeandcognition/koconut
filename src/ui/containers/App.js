@@ -5,7 +5,7 @@ import ExerciseView from './ExerciseView';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
-import ModelUpdater from '../../backend/ModelUpdater';
+import ResponseEvaluator from '../../backend/ResponseEvaluator';
 import Concepts from '../../backend/Concepts';
 
 type Exercise = {
@@ -24,7 +24,7 @@ type Exercise = {
 class App extends Component {
   submitResponse: Function;
   generator: ExerciseGenerator;
-  updater: ModelUpdater;
+  updater: ResponseEvaluator;
 
   state: {
     exercise: ?Exercise
@@ -54,7 +54,6 @@ class App extends Component {
    * @returns a generated exercise
    */
   getExercise(): Exercise {
-
     return this.generator.generateExercise();
   }
 
@@ -63,7 +62,7 @@ class App extends Component {
    * @param answer - the answer being submitted
    */
   submitResponse(answer: string) {
-    console.log(answer);
+    this.updater.updateModel(string)
   }
 
   render() {

@@ -53,3 +53,5 @@ class ResponseLog {
     this.log.push(immutable);
   }
 }
+
+export default ResponseLog;
