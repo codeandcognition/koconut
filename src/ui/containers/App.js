@@ -40,7 +40,6 @@ class App extends Component {
     this.state = {
       exercise: this.generator.generateExercise()
     };
-    g
     this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
   }

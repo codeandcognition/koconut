@@ -38,7 +38,7 @@ class Exercise extends Component {
       type: props.exercise.type,
       choices: props.exercise.choices,
       answer: null,
-      concept: props.exercise.concept
+      concept: props.exercise.concept,
     };
   }
 
