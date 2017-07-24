@@ -38,7 +38,6 @@ class ExerciseGenerator {
   generateExercise() {
     let concept = this.getConcept();
     let type = this.getType();
-    console.log(concept, type);
     let exercisePool = exampleExercises.filter
       ((e) => {return e.concept === concept && e.type});
     let exercise = exercisePool[Math.floor(Math.random() * exercisePool.length)];
