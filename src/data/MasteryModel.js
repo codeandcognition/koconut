@@ -8,19 +8,14 @@ import conceptInventory from '../backend/Concepts.js';
 
 class ConceptKnowledge {
   concept: string;
-  type: {
-    read: boolean,
-    write: boolean
-  };
+  knowledge: boolean;
 
   constructor(
       concept: string,
-      type: {
-        read: boolean,
-        write: boolean
-      }) {
+      knowledge: boolean
+  ){
     this.concept = concept;
-    this.type = type;
+    this.knowledge = knowledge;
   }
 }
 
@@ -32,13 +27,13 @@ const MasteryModel = function() {
   return {
     constructor: function() {
       conceptInventory.forEach((c) => this.model.push(
-          new ConceptKnowledge(c, {read: false, write: false}))); // Pushes each concept
+          new ConceptKnowledge(c, false))); // Pushes each concept
     }
   }
 }
 MasteryModel.model = [];
 
-// var MasteryModel {
+// var MasteryModel {g
 //   model: ConceptKnowledge[];
 //   constructor = function() {
 //     this.model = [];

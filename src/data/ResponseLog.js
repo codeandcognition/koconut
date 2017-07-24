@@ -44,8 +44,8 @@ ResponseLog.addResponse = function(id: string, concept: string,
                                    difficulty: number, correct: boolean,
                                    timestamp: number) {
   const immutable = Object.freeze(
-      new ResponseObject(id, concept, exerciseType, difficulty, correct,
-          timestamp));
+    new ResponseObject(id, concept, exerciseType, difficulty, correct,
+      timestamp));
   this.log.push(immutable);
 };
 
