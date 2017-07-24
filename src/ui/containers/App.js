@@ -18,6 +18,7 @@ type Exercise = {
   choices?: string[],
   difficulty: number,
   type: string,
+  concept: string
   // exerciseID: string
 }
 
@@ -42,7 +43,7 @@ class App extends Component {
     };
 
     this.generator = new ExerciseGenerator();
-    this.updater = new ModelUpdater();
+    this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
   }
 

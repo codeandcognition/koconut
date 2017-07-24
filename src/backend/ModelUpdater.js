@@ -7,7 +7,6 @@ import ResponseLog from '../data/ResponseLog';
 import MasteryModel from '../data/MasteryModel';
 
 class ModelUpdater {
-  //stubby
 
   updateModel() {
     return MasteryModel;

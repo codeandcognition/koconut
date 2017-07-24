@@ -10,7 +10,8 @@ type Props = {
     prompt: string,
     code: string,
     type: string,
-    choices?: string[]
+    choices?: string[],
+    concept: string
   },
   submitHandler: Function
 }
@@ -25,7 +26,8 @@ class Exercise extends Component {
     code: string,
     type: string,
     choices?: string[],
-    answer: ?string
+    answer: ?string,
+    concept: string
   };
 
   constructor(props: Props) {
@@ -36,6 +38,7 @@ class Exercise extends Component {
       type: props.exercise.type,
       choices: props.exercise.choices,
       answer: null,
+      concept: props.exercise.concept
     };
   }
 
@@ -50,6 +53,7 @@ class Exercise extends Component {
       type: nextProps.exercise.type,
       choices: nextProps.exercise.choices,
       answer: null,
+      concept: nextProps.exercise.concept
     });
   }
 
@@ -62,6 +66,7 @@ class Exercise extends Component {
               type={this.state.type}
               choices={this.state.choices}
               answer={this.state.answer}
+              concept={this.state.concept}
               updateHandler={(content) => this.setState({answer: content})}
           />
           <Submit submitHandler={() => this.props.submitHandler(this.state.answer)}/>
