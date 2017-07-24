@@ -1,7 +1,7 @@
 // @flow
 import {exampleExercises} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
-import MasteryModel from '../data/MasteryModel';
+import {MasteryModel} from '../data/MasteryModel.js';
 
 class ExerciseGenerator {
   counter: number;
@@ -15,7 +15,7 @@ class ExerciseGenerator {
    * @returns an exercise concept
    */
   getConcept(): string {
-    let model = MasteryModel.model;
+    let model = new MasteryModel().model;
     return model[Math.random() * model.length].concept;
   }
 
@@ -27,12 +27,15 @@ class ExerciseGenerator {
     let types = Object.keys(ExerciseTypes);
     return types[Math.random() * types.length];
   }
+
   /**
    * Returns a generated Exercise
    * @returns {Prompt} - a generated Exercise
    */
   generateExercise() {
-    let exercise = exampleExercises[this.counter % exampleExercises.length];
+    let exercisePool = exampleExercises.filter
+      ((e) => e.concept === this.getConcept() && e.type === this.getType());
+    let exercise = exercisePool[Math.random() * exercisePool.length];
     this.counter += 1;
     return exercise;
   }

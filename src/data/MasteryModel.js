@@ -14,14 +14,13 @@ class ConceptKnowledge {
   };
 
   constructor(
-    concept: string,
-    type: {
-      read: boolean,
-      write: boolean
-    }
-  ){
+      concept: string,
+      type: {
+        read: boolean,
+        write: boolean
+      }) {
     this.concept = concept;
-    this.type = this.type;
+    this.type = type;
   }
 }
 
@@ -34,8 +33,11 @@ class MasteryModel {
   model: ConceptKnowledge[];
 
   constructor() {
-    this.model = [conceptInventory.length];
+    this.model = [];
+    conceptInventory.forEach((c) => this.model.push(
+        new ConceptKnowledge(c, {read: false, write: false}))); // Pushes each concept
   }
 }
 
-export MasteryModel
+
+export {MasteryModel}
