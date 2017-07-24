@@ -11,4 +11,17 @@ export const conceptInventory = [
   {
     name: 'swap',
     category: 'designPattern',
-  }];
+  },
+  {
+    name: 'operators',
+    category: 'langSemantics',
+  },
+  {
+    name: 'variables',
+    category: 'langSemantics',
+  },
+  {
+    name: 'loops',
+    category: 'langSemantics',
+  }
+];
