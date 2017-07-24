@@ -31,17 +31,22 @@ class ResponseObject {
 /**
  * Stores student performance data for a exercise.
  */
-var ResponseLog = function() {
+const ResponseLog = function() {
   return {
     constructor: function() {
       this.log = [];
     },
-    addResponse: function(id: string, concept: string, exerciseType: string,
-                          difficulty: number, correct: boolean, timestamp: number) {
-      const immutable = Object.freeze(
-          new ResponseObject(id, concept, exerciseType, difficulty, correct,
-              timestamp));
-      this.log.push(immutable);
-    }
-  }
-}
+  };
+};
+
+ResponseLog.addResponse = function(id: string, concept: string,
+                                   exerciseType: string,
+                                   difficulty: number, correct: boolean,
+                                   timestamp: number) {
+  const immutable = Object.freeze(
+      new ResponseObject(id, concept, exerciseType, difficulty, correct,
+          timestamp));
+  this.log.push(immutable);
+};
+
+export default ResponseLog;
