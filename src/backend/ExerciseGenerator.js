@@ -15,7 +15,8 @@ class ExerciseGenerator {
    * @returns an exercise concept
    */
   getConcept(): string {
-    return conceptInventory[Math.floor(Math.random() * conceptInventory.length)];
+    let ret = conceptInventory[Math.floor(Math.random() * conceptInventory.length)].name;
+    return ret;
   }
 
   /**
@@ -24,7 +25,10 @@ class ExerciseGenerator {
    */
   getType(): string {
     let types = Object.keys(ExerciseTypes);
-    return types[Math.floor(Math.random() * types.length)];
+    let ret = types[Math.floor(Math.random() * types.length)];
+    if(ret === Object.keys(ExerciseTypes)[0])// Don't use isInlineResponseType()
+      ret = this.getType();
+    return ret;
   }
 
   /**
@@ -32,10 +36,12 @@ class ExerciseGenerator {
    * @returns {Prompt} - a generated Exercise
    */
   generateExercise() {
+    let concept = this.getConcept();
+    let type = this.getType();
+    console.log(concept, type);
     let exercisePool = exampleExercises.filter
-      ((e) => e.concept === this.getConcept() && e.type === this.getType());
-    console.log(exercisePool);
-    let exercise = exampleExercises[Math.floor(Math.random() * exampleExercises.length)];
+      ((e) => {return e.concept === concept && e.type});
+    let exercise = exercisePool[Math.floor(Math.random() * exercisePool.length)];
     this.counter += 1;
     return exercise;
   }

@@ -9,10 +9,6 @@ const conceptInventory = [
     category: 'langSemantics',
   },
   {
-    name: 'swap',
-    category: 'designPattern',
-  },
-  {
     name: 'operators',
     category: 'langSemantics',
   },

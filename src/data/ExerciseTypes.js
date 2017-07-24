@@ -18,10 +18,10 @@ class ExerciseTypes {
   };
 }
 
-ExerciseTypes.writeCode = 'WriteCode';
-ExerciseTypes.fillBlank = 'FillBlank';
-ExerciseTypes.highlightCode = 'HighlightCode';
-ExerciseTypes.multipleChoice = 'MultipleChoice';
-ExerciseTypes.shortResponse = 'ShortResponse';
+ExerciseTypes.writeCode = 'writeCode';
+ExerciseTypes.fillBlank = 'fillBlank';
+ExerciseTypes.highlightCode = 'highlightCode';
+ExerciseTypes.multipleChoice = 'multipleChoice';
+ExerciseTypes.shortResponse = 'shortResponse';
 
 export default ExerciseTypes;
