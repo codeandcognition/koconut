@@ -25,15 +25,10 @@ class ResponseEvaluator {
   }
 
   evaluateAnswer(exercise: Exercise, answer: string) {
-<<<<<<< HEAD
-    let isCorrect = true; //stub for evaluating answer
+    let isCorrect = true;
     ResponseLog.addResponse(
       '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect, 123
     );
-=======
-    // ResponseLog.addResponse('123', 'loops', exercise.type, exercise.difficulty, true, Date.now());
-    // MasteryModel.model;
->>>>>>> 42f3c485914ab4d339c212788eeefe53dc26a6c4
   }
 }
 
