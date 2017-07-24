@@ -22,13 +22,13 @@ class Response extends Component {
    */
   renderResponse() {
     switch (this.props.type) {
-      case('MultipleChoice'):
+      case('multipleChoice'):
         return <MultipleChoice
             choices={this.props.choices}
             answer={this.props.answer}
             handleClick={this.props.updateHandler}
         />;
-      case('ShortResponse'):
+      case('shortResponse'):
         return <ShortResponse inputHandler={this.props.updateHandler}/>;
       default:
         return <div className="BAD">Not a valid EXERCISE type {this.props.type}</div>;
