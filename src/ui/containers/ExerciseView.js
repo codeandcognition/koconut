@@ -30,7 +30,6 @@ class Exercise extends Component {
 
   constructor(props: Props) {
     super(props);
-    console.log(props);
     this.state = {
       prompt: props.exercise.prompt,
       code: props.exercise.code,
