@@ -32,14 +32,13 @@ class App extends Component {
 
   constructor() {
     super();
+    
+    this.state = {
+      exercise: null,
+    };
 
     this.generator = new ExerciseGenerator();
     this.updater = new ModelUpdater();
-
-    this.state = {
-      exercise: this.generator.generateExercise(),
-    };
-
     this.submitResponse = this.submitResponse.bind(this);
   }
 
