@@ -7,11 +7,15 @@
 import conceptInventory from '../backend/Concepts.js';
 
 class ConceptKnowledge {
-  concept: string;
+  concept: {
+    name: string
+  }
   knowledge: boolean;
 
   constructor(
-      concept: string,
+      concept: {
+        name: string
+      },
       knowledge: boolean) {
     this.concept = concept;
     this.knowledge = knowledge;
@@ -34,9 +38,11 @@ MasteryModel.populate = function() {
       conceptInventory.forEach((c) => MasteryModel.model.push(
           new ConceptKnowledge(c, false)));
     }();
-    
+
+    console.log(MasteryModel.model);
+
 MasteryModel.updateModel = function(concept: string, knowledge: boolean) {
-  let conceptIndex = MasteryModel.model.findIndex((e) => e.concept === concept);
+  let conceptIndex = MasteryModel.model.findIndex((e) => e.concept.name === concept);
   MasteryModel.model[conceptIndex].knowledge = knowledge;
 };
 

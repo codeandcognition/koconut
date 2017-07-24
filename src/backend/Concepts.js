@@ -6,19 +6,19 @@
 const conceptInventory = [
   {
     name: 'boolean',
-    category: 'langSemantics',
+    type: 'langSemantics'
   },
   {
     name: 'operators',
-    category: 'langSemantics',
+    type: 'langSemantics'
   },
   {
     name: 'variables',
-    category: 'langSemantics',
+    type: 'langSemantics'
   },
   {
     name: 'loops',
-    category: 'langSemantics',
+    type: 'langSemantics'
   }
 ];
 

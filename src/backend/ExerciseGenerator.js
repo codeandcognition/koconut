@@ -16,6 +16,7 @@ class ExerciseGenerator {
    */
   getConcept(): string {
     let ret = conceptInventory[Math.floor(Math.random() * conceptInventory.length)].name;
+    console.log(ret);
     return ret;
   }
 
