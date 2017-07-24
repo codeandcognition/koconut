@@ -14,7 +14,7 @@ type Exercise = {
   choices?: string[],
   difficulty: number,
   type: string,
-  exerciseID: string
+  // exerciseID: string
 }
 
 /**
@@ -32,12 +32,14 @@ class App extends Component {
 
   constructor() {
     super();
-    this.state = {
-      exercise: null
-    };
 
     this.generator = new ExerciseGenerator();
     this.updater = new ModelUpdater();
+
+    this.state = {
+      exercise: this.generator.generateExercise(),
+    };
+
     this.submitResponse = this.submitResponse.bind(this);
   }
 
@@ -75,7 +77,7 @@ class App extends Component {
                   type="button"
                   onClick={() => this.setState(
                       {
-                        exercise: this.getExercise(),
+                        exercise: this.getExercise()
                       })}
                   value="next exercise type"
               />

@@ -4,7 +4,7 @@
  * @class
  */
 
-import {conceptInventory} from '../backend/Concepts.js';
+import conceptInventory from '../backend/Concepts.js';
 
 class ConceptKnowledge {
   concept: string;

@@ -3,7 +3,7 @@
  * @class
  */
 
-export const conceptInventory = [
+const conceptInventory = [
   {
     name: 'boolean',
     category: 'langSemantics',
@@ -25,3 +25,5 @@ export const conceptInventory = [
     category: 'langSemantics',
   }
 ];
+
+export default conceptInventory;
