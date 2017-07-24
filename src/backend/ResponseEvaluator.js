@@ -23,6 +23,10 @@ class ResponseEvaluator {
       '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect, Date.now()
     );
     console.log(ResponseLog.log);
+    MasteryModel.updateModel(
+      exercise.concept, true
+    );
+    console.log(MasteryModel.model);
   }
 }
 

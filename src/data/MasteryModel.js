@@ -32,6 +32,12 @@ const MasteryModel = function() {
   }
 }
 MasteryModel.model = [];
+console.log(MasteryModel.model);
+
+MasteryModel.updateModel = function(concept: string, knowledge: boolean) {
+  let conceptIndex = MasteryModel.model.findIndex((e) => e.concept === concept);
+  MasteryModel.model[conceptIndex].knowledge = knowledge;
+}
 
 // var MasteryModel {g
 //   model: ConceptKnowledge[];
