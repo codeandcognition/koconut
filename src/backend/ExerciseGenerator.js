@@ -1,6 +1,6 @@
 // @flow
 import {exampleExercises} from '../data/Exercises.js';
-import {MasteryModel} from '../data/MasteryModel';
+import MasteryModel from '../data/MasteryModel';
 
 class ExerciseGenerator {
   counter: number;
