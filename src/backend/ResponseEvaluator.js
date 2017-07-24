@@ -4,6 +4,8 @@
  */
 
 import ModelUpdater from './ModelUpdater';
+import ResponseLog from '../data/ResponseLog';
+import MasteryModel from '../data/MasteryModel';
 
 type Exercise = {
   prompt: string,
@@ -22,8 +24,8 @@ class ResponseEvaluator {
   }
 
   evaluateAnswer(exercise: Exercise, answer: string) {
-    // ResponseLog.addResponse...
-
+    // ResponseLog.addResponse('123', 'loops', exercise.type, exercise.difficulty, true, Date.now());
+    // MasteryModel.model;
   }
 }
 

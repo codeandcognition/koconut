@@ -28,12 +28,26 @@ class ConceptKnowledge {
  * Contains student knowledge of each concept.
  * @class
  */
-var MasteryModel = function() {
+const MasteryModel = function() {
   return {
     constructor: function() {
-      this.model = [];
       conceptInventory.forEach((c) => this.model.push(
           new ConceptKnowledge(c, {read: false, write: false}))); // Pushes each concept
     }
   }
 }
+MasteryModel.model = [];
+
+// var MasteryModel {
+//   model: ConceptKnowledge[];
+//   constructor = function() {
+//     this.model = [];
+//   }
+// }
+// MasteryModel.model = [];
+// MasteryModel.populate = function() {
+//   conceptInventory.forEach((c) => MasteryModel.model.push(
+//       new ConceptKnowledge(c, {read: false, write: false}))); // Pushes each concept
+// };
+
+export default MasteryModel;

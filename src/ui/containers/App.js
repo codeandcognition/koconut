@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react';
+
 import './App.css';
 import ExerciseView from './ExerciseView';
 
@@ -7,10 +8,6 @@ import ExerciseView from './ExerciseView';
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
 //import Concepts from '../../backend/Concepts';
-
-// Static classes
-import '../../data/ResponseLog';
-import '../../data/MasteryModel';
 
 type Exercise = {
   prompt: string,
@@ -31,18 +28,19 @@ class App extends Component {
   updater: ResponseEvaluator;
 
   state: {
-    exercise: ?Exercise
+    exercise: Exercise
   };
 
   constructor() {
     super();
 
+    this.generator = new ExerciseGenerator();
+
     this.state = {
-      exercise: null,
+      exercise: this.generator.generateExercise()
     };
 
-    this.generator = new ExerciseGenerator();
-    this.updater = new ModelUpdater();
+    this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
   }
 
