@@ -1,6 +1,6 @@
 import {configure, setAddon} from '@storybook/react';
 import infoAddon from '@storybook/addon-info';
-import {exampleQuestions} from '../backend/Questions';
+import {exampleQuestions} from '../backend/data/Exercises';
 
 setAddon(infoAddon);
 
@@ -106,7 +106,7 @@ storiesOf('Choice', module).addWithInfo(
     ),
 );
 
-storiesOf('ShortReponse', module).addWithInfo(
+storiesOf('ShortResponse', module).addWithInfo(
     'ShortResponse Component',
     'Example short response form',
     () => (
