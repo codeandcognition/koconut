@@ -19,6 +19,9 @@ class ExerciseGenerator {
   getConcept(): string {
     let conceptsThatNeedPractice = MasteryModel.model.filter(
         (con) => con.knowledge < 0.7);
+    if (conceptsThatNeedPractice.length === 0) {
+      conceptsThatNeedPractice = conceptInventory;
+    }
     return conceptsThatNeedPractice[Math.floor(
         Math.random() * conceptsThatNeedPractice.length)].concept.name;
   }
