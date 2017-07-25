@@ -1,7 +1,4 @@
 //@flow
-/**
- * Created by alextan on 7/24/17.
- */
 
 import ResponseLog from '../data/ResponseLog';
 import MasteryModel from '../data/MasteryModel';
@@ -17,16 +14,26 @@ type Exercise = {
 }
 
 class ResponseEvaluator {
+
+  /**
+   * TODO: Make this have logic.
+   * Takes in an exercise and student response to update log and mastery model.
+   * @param exercise
+   * @param answer
+   */
   static evaluateAnswer(exercise: Exercise, answer: string) {
+
+    // TODO: Check answer for correctness.
     let isCorrect = true;
     ResponseLog.addResponse(
       '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect, Date.now()
     );
-    console.log(ResponseLog.log);
+    console.log(ResponseLog.log); //Debug/demo
+
     MasteryModel.updateModel(
       exercise.concept, true
     );
-    console.log(MasteryModel.model);
+    console.log(MasteryModel.model); //Debug/demo
   }
 }
 

@@ -1,9 +1,9 @@
 // @flow
+
 /**
- * Stores student performance data for a exercise.
+ * Stores student performance data for an exercise.
  * @class
  */
-
 class ResponseObject {
   id: string;
   concept: string;
@@ -29,15 +29,25 @@ class ResponseObject {
 }
 
 /**
- * Stores student performance data for a exercise.
+ * Stores collection of student performance data for exercises.
  */
-const ResponseLog = function() {
-  return {
-    constructor: function() {
-    },
-  };
-};
+const ResponseLog = function(){};
+
+/**
+ * Static array that contains response log.
+ * @type {Array}
+ */
 ResponseLog.log = [];
+
+/**
+ * Static function stores submission results into response log.
+ * @param id
+ * @param concept
+ * @param exerciseType
+ * @param difficulty
+ * @param correct
+ * @param timestamp
+ */
 ResponseLog.addResponse = function(id: string, concept: string,
                                    exerciseType: string,
                                    difficulty: number, correct: boolean,
