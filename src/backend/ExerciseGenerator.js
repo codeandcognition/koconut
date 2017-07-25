@@ -3,6 +3,8 @@ import {exampleExercises} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
 import conceptInventory from '../backend/Concepts.js';
 
+import MasteryModel from '../data/MasteryModel';
+
 class ExerciseGenerator {
   counter: number;
 
@@ -15,10 +17,10 @@ class ExerciseGenerator {
    * @returns an exercise concept
    */
   getConcept(): string {
-    let ret = conceptInventory[Math.floor(
-        Math.random() * conceptInventory.length)].name;
-    // console.log(ret);
-    return ret;
+    let conceptsThatNeedPractice = MasteryModel.model.filter(
+        (con) => con.knowledge < 0.7);
+    return conceptsThatNeedPractice[Math.floor(
+        Math.random() * conceptsThatNeedPractice.length)].concept.name;
   }
 
   /**
