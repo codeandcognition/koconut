@@ -7,6 +7,19 @@ import type {Exercise} from '../data/Exercises';
 class ResponseEvaluator {
 
   /**
+   * Takes in a concept, analyzes user log, and performs analysis of user
+   * performance to reach conclusion about user knowing a concept.
+   * //TODO: Make this better than a tally.
+   * @param concept
+   * @returns {number}
+   */
+  static analyzeLog(concept: string):number {
+    let responsesWithConcept = ResponseLog.log.filter((res) => res.concept === concept && res.correct === true);
+    let val = responsesWithConcept.length/10;
+    return val > 1 ? 1 : val;
+  }
+
+  /**
    * TODO: Make this have logic.
    * Takes in an exercise and student response to update log and mastery model.
    * @param exercise
@@ -22,7 +35,7 @@ class ResponseEvaluator {
     console.log(ResponseLog.log); //Debug/demo
 
     MasteryModel.updateModel(
-      exercise.concept, true
+      exercise.concept, ResponseEvaluator.analyzeLog(exercise.concept)
     );
     console.log(MasteryModel.model); //Debug/demo
   }

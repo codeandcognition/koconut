@@ -4,6 +4,8 @@ import ExerciseTypes from '../data/ExerciseTypes.js';
 import conceptInventory from './Concepts';
 import ExercisePool from '../data/ExercisePool';
 
+import MasteryModel from '../data/MasteryModel';
+
 class ExerciseGenerator {
   counter: number;
 
@@ -16,9 +18,13 @@ class ExerciseGenerator {
    * @returns an exercise concept
    */
   getConcept(): string {
-    let ret = conceptInventory[Math.floor(Math.random() * conceptInventory.length)].name;
-    console.log(ret);
-    return ret;
+    let conceptsThatNeedPractice = MasteryModel.model.filter(
+        (con) => con.knowledge < 0.7);
+    if (conceptsThatNeedPractice.length === 0) {
+      conceptsThatNeedPractice = conceptInventory;
+    }
+    return conceptsThatNeedPractice[Math.floor(
+        Math.random() * conceptsThatNeedPractice.length)].concept.name;
   }
 
   /**
@@ -26,10 +32,9 @@ class ExerciseGenerator {
    * @returns an exercise type
    */
   getType(): string {
-    let types = Object.keys(ExerciseTypes);
+    let types = Object.keys(ExerciseTypes).
+        filter((obj) => typeof ExerciseTypes[obj] !== 'function');
     let ret = types[Math.floor(Math.random() * types.length)];
-    if (ret === Object.keys(ExerciseTypes)[0])// Don't use isInlineResponseType()
-      ret = this.getType();
     return ret;
   }
 
@@ -40,10 +45,12 @@ class ExerciseGenerator {
   generateExercise() {
     let concept = this.getConcept();
     // let type = this.getType();
-    let exercisePool = exampleExercises.filter(
-        (e) => {return e.concept === concept;},
-    );
-    let exercise = exercisePool[Math.floor(Math.random() * exercisePool.length)];
+    let exercisePool = exampleExercises.filter
+    ((e) => {
+      return e.concept === concept;
+    });
+    let exercise = exercisePool[Math.floor(
+        Math.random() * exercisePool.length)];
     this.counter += 1;
     // we need answers for all the exercises
     // ExercisePool.addExercise(exercise);
