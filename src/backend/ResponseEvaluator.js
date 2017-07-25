@@ -2,6 +2,7 @@
 
 import ResponseLog from '../data/ResponseLog';
 import MasteryModel from '../data/MasteryModel';
+import ExercisePool from '../data/ExercisePool';
 import type {Exercise} from '../data/Exercises';
 
 class ResponseEvaluator {
@@ -27,8 +28,8 @@ class ResponseEvaluator {
    */
   static evaluateAnswer(exercise: Exercise, answer: string) {
 
-    // TODO: Check answer for correctness.
-    let isCorrect = true;
+    // TODO: Check written answers for correctness (currently always false)
+    let isCorrect = answer === ExercisePool.getAnswer(exercise);
     ResponseLog.addResponse(
       '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect, Date.now()
     );

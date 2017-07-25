@@ -17,9 +17,9 @@ ExercisePool.pool = new Map();
 /**
  * Adds an exercise to the exercise pool
  * @param exercise - the Exercise to add
- * @param answer - the Exercise answer
+ * @param answer - the Exercise answer (undefined if the answer must be evaluated)
  */
-ExercisePool.addExercise = function(exercise: Exercise, answer: string) {
+ExercisePool.addExercise = function(exercise: Exercise, answer: ?string) {
   this.pool.set(exercise, answer);
 };
 

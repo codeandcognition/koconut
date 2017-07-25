@@ -32,8 +32,9 @@ class ExerciseGenerator {
    * @returns an exercise type
    */
   getType(): string {
-    let types = Object.keys(ExerciseTypes).
-        filter((obj) => typeof ExerciseTypes[obj] !== 'function');
+    let types = Object.keys(ExerciseTypes).filter(
+        (obj) => typeof ExerciseTypes[obj] !== 'function',
+    );
     let ret = types[Math.floor(Math.random() * types.length)];
     return ret;
   }
@@ -45,16 +46,14 @@ class ExerciseGenerator {
   generateExercise() {
     let concept = this.getConcept();
     // let type = this.getType();
-    let exercisePool = exampleExercises.filter
-    ((e) => {
-      return e.concept === concept;
-    });
+    let exercisePool = exampleExercises.filter(
+        (e) => {return e.exercise.concept === concept;},
+    );
     let exercise = exercisePool[Math.floor(
         Math.random() * exercisePool.length)];
     this.counter += 1;
-    // we need answers for all the exercises
-    // ExercisePool.addExercise(exercise);
-    return exercise;
+    ExercisePool.addExercise(exercise.exercise, exercise.answer);
+    return exercise.exercise;
   }
 }
 
