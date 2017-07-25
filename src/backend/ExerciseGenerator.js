@@ -39,7 +39,7 @@ class ExerciseGenerator {
    */
   generateExercise() {
     let concept = this.getConcept();
-    let type = this.getType();
+    // let type = this.getType();
     let exercisePool = exampleExercises.filter
     ((e) => {
       return e.concept === concept;
