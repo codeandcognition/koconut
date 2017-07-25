@@ -10,13 +10,13 @@ class ConceptKnowledge {
   concept: {
     name: string
   };
-  knowledge: boolean;
+  knowledge: number; //Between 0 and 1
 
   constructor(
       concept: {
         name: string
       },
-      knowledge: boolean) {
+      knowledge: number) {
     this.concept = concept;
     this.knowledge = knowledge;
   }
@@ -39,7 +39,7 @@ MasteryModel.model = [];
  */
 MasteryModel.populate = function() {
       conceptInventory.forEach((c) => MasteryModel.model.push(
-          new ConceptKnowledge(c, false)));
+          new ConceptKnowledge(c, 0.0)));
     }();
 
 /**
@@ -47,7 +47,7 @@ MasteryModel.populate = function() {
  * @param concept
  * @param knowledge
  */
-MasteryModel.updateModel = function(concept: string, knowledge: boolean) {
+MasteryModel.updateModel = function(concept: string, knowledge: number) {
   let conceptIndex = MasteryModel.model.findIndex((e) => e.concept.name === concept);
   MasteryModel.model[conceptIndex].knowledge = knowledge;
 };
