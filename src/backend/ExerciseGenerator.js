@@ -1,7 +1,8 @@
 // @flow
 import {exampleExercises} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
-import conceptInventory from '../backend/Concepts.js';
+import conceptInventory from './Concepts';
+import ExercisePool from '../data/ExercisePool';
 
 class ExerciseGenerator {
   counter: number;
@@ -27,22 +28,25 @@ class ExerciseGenerator {
   getType(): string {
     let types = Object.keys(ExerciseTypes);
     let ret = types[Math.floor(Math.random() * types.length)];
-    if(ret === Object.keys(ExerciseTypes)[0])// Don't use isInlineResponseType()
+    if (ret === Object.keys(ExerciseTypes)[0])// Don't use isInlineResponseType()
       ret = this.getType();
     return ret;
   }
 
   /**
    * Returns a generated Exercise
-   * @returns {Prompt} - a generated Exercise
+   * @returns a generated Exercise
    */
   generateExercise() {
     let concept = this.getConcept();
     // let type = this.getType();
-    let exercisePool = exampleExercises.filter
-      ((e) => {return e.concept === concept});
+    let exercisePool = exampleExercises.filter(
+        (e) => {return e.concept === concept;},
+    );
     let exercise = exercisePool[Math.floor(Math.random() * exercisePool.length)];
     this.counter += 1;
+    // we need answers for all the exercises
+    // ExercisePool.addExercise(exercise);
     return exercise;
   }
 }

@@ -2,16 +2,7 @@
 
 import ResponseLog from '../data/ResponseLog';
 import MasteryModel from '../data/MasteryModel';
-
-type Exercise = {
-  prompt: string,
-  code: string,
-  choices?: string[],
-  difficulty: number,
-  type: string,
-  concept: string
-  // exerciseID: string
-}
+import type {Exercise} from '../data/Exercises';
 
 class ResponseEvaluator {
 

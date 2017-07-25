@@ -1,7 +1,7 @@
 // @flow
 import ExerciseTypes from './ExerciseTypes.js';
 
-type Exercise = {
+export type Exercise = {
   prompt: string,
   code: string,
   choices?: string[],
