@@ -3,8 +3,7 @@ import {exampleExercises} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
 import ExercisePool from '../data/ExercisePool';
 
-import MasteryModel from '../data/MasteryModel';
-
+import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
 
 class ExerciseGenerator {
   counter: number;
@@ -15,12 +14,15 @@ class ExerciseGenerator {
 
   /**
    * Weights values closer to 0 more than values close to 1.
+   * As range of mastery narrows, topics' chances gain equality.
    * @returns {number} [0:1]
    */
-  weightByParabolic(): number {
+  weightByParabolic(max?: number, min?: number): number {
     let x = Math.random();
-    let val = x*x - 2*x + 1;
-    return val;
+    let k = (max && min && (max - min > 0)) ?
+        1 / (max - min) + (1 - (max - min)) :
+        1;
+    return (x * x - (1 + k) * x + 1) / k + (1 - 1 / k);
   }
 
   /**
@@ -31,8 +33,13 @@ class ExerciseGenerator {
    * @param method
    * @returns {number}
    */
-  getConceptIndex(length: number, method: Function): number {
-    return Math.floor(method()*length);
+  getConceptIndex(concepts: ConceptKnowledge[], method: Function): number {
+    if(concepts.length > 0) {
+      let min = concepts[0].knowledge;
+      let max = concepts[concepts.length - 1].knowledge;
+      return Math.floor(method(max, min) * concepts.length);
+    }
+    return 0;
   }
 
   /**
@@ -42,8 +49,7 @@ class ExerciseGenerator {
   getConcept(): string {
     let orderedConcepts = MasteryModel.model.sort(
         (a, b) => a.knowledge - b.knowledge);
-    let index = this.getConceptIndex(orderedConcepts.length,
-        this.weightByParabolic);
+    let index = this.getConceptIndex(orderedConcepts, this.weightByParabolic);
     console.log(index);
     return orderedConcepts[index].concept.name;
   }
@@ -68,7 +74,9 @@ class ExerciseGenerator {
     let concept = this.getConcept();
     // let type = this.getType();
     let exercisePool = exampleExercises.filter(
-        (e) => {return e.exercise.concept === concept;},
+        (e) => {
+          return e.exercise.concept === concept;
+        },
     );
     let exercise = exercisePool[Math.floor(
         Math.random() * exercisePool.length)];

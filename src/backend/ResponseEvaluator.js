@@ -1,7 +1,7 @@
 //@flow
 
 import {ResponseLog, ResponseObject} from '../data/ResponseLog';
-import MasteryModel from '../data/MasteryModel';
+import {MasteryModel} from '../data/MasteryModel';
 import ExercisePool from '../data/ExercisePool';
 import type {Exercise} from '../data/Exercises';
 
@@ -38,11 +38,10 @@ class ResponseEvaluator {
   /**
    * Takes in a concept, analyzes user log, and performs analysis of user
    * performance to reach conclusion about user knowing a concept.
-   * //TODO: Make this better than a tally.
    * @param concept
    * @returns {number}
    */
-  static analyzeLog(concept: string):number {
+  static analyzeLog(concept: string): number {
     let responsesWithConcept = ResponseLog.log.filter((res) => res.concept === concept);
     let val = this.calculateCertainty(responsesWithConcept, this.multiplicativeInverseMethod);
     return val > 1 ? 1 : val;
