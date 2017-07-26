@@ -1,6 +1,6 @@
 import {configure, setAddon} from '@storybook/react';
 import infoAddon from '@storybook/addon-info';
-import {exampleQuestions} from '../backend/Questions';
+import {exampleExercises} from '../backend/data/Exercises';
 
 setAddon(infoAddon);
 
@@ -18,7 +18,7 @@ import {Button, Welcome} from '@storybook/react/demo';
 
 import App from '../ui/containers/App';
 import Information from '../ui/containers/Information';
-import Problem from '../ui/containers/Problem';
+import Problem from '../ui/containers/Exercise';
 import Question from '../ui/components/Question';
 import Response from '../ui/containers/Response';
 import Choice from '../ui/components/Choice';
@@ -36,56 +36,56 @@ storiesOf('App', module).addWithInfo(
     {inline: true},
 );
 
-storiesOf('Problem', module).addWithInfo(
-    'MultipleChoice Problem',
+storiesOf('Exercise', module).addWithInfo(
+    'MultipleChoice Exercise',
     '',
     () => (
-        <Problem
-            question={exampleQuestions[3]}
+        <Exercise
+            question={exampleExercises[3]}
         />
     ),
     {inline: true},
 );
 
-storiesOf('Problem', module).addWithInfo(
-    'ShortResponse Problem',
+storiesOf('Exercise', module).addWithInfo(
+    'ShortResponse Exercise',
     '',
     () => (
-        <Problem
-            question={exampleQuestions[4]}
+        <Exercise
+            question={exampleExercises[4]}
         />
     ),
     {inline: true},
 );
 
-storiesOf('Problem', module).addWithInfo(
-    'FillBlank Problem',
+storiesOf('Exercise', module).addWithInfo(
+    'FillBlank Exercise',
     '',
     () => (
-        <Problem
-            question={exampleQuestions[1]}
+        <Exercise
+            question={exampleExercises[1]}
         />
     ),
     {inline: true},
 );
 
-storiesOf('Problem', module).addWithInfo(
-    'HighlightCode Problem',
+storiesOf('Exercise', module).addWithInfo(
+    'HighlightCode Exercise',
     '',
     () => (
-        <Problem
-            question={exampleQuestions[2]}
+        <Exercise
+            question={exampleExercises[2]}
         />
     ),
     {inline: true},
 );
 
-storiesOf('Problem', module).addWithInfo(
-    'WriteCode Problem',
+storiesOf('Exercise', module).addWithInfo(
+    'WriteCode Exercise',
     '',
     () => (
-        <Problem
-            question={exampleQuestions[0]}
+        <Exercise
+            question={exampleExercises[0]}
         />
     ),
     {inline: true},

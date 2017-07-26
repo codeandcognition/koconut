@@ -21,10 +21,10 @@ $choice-color: #cccccc;
   background-color: darken($choice-color, 10%);
 }
 
-.choice.selected {
+.choice.answer {
   background-color: darken($choice-color, 15%);
 }
 
-.choice.selected:hover {
+.choice.answer:hover {
   background-color: darken($choice-color, 20%);
 }

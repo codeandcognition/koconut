@@ -73,10 +73,10 @@ type Props = {
 }
 
 /**
- * The Problem container contains all components of an assessment problem.
+ * The Exercise container contains all components of an assessment problem.
  * @class
  */
-class Problem extends Component {
+class Exercise extends Component {
   // (State should also be annotated)
   state: {
     prompt: string,

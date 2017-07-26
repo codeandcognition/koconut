@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import Code from '../components/Code';
 import Response from './Response';
 
-import Types from '../../backend/Types.js';
+import Types from '../../data/ExerciseTypes.js';
 import './Information.css';
 
 /**
@@ -14,8 +14,8 @@ class Information extends Component {
   props: {
     code: string,
     type: string,
-    answers?: string[], // Optional type - can be omitted (use undefined)
-    selected: ?string,  // Maybe type - can be null/void
+    choices?: string[], // Optional type - can be omitted (use undefined)
+    answer: ?string,  // Maybe type - can be null/void
     updateHandler: Function
   };
 
@@ -27,8 +27,8 @@ class Information extends Component {
     return Types.isInlineResponseType(this.props.type) ? <div/>
         : <Response
             type={this.props.type}
-            answers={this.props.answers}
-            selected={this.props.selected}
+            choices={this.props.choices}
+            answer={this.props.answer}
             updateHandler={this.props.updateHandler}
         />;
   }

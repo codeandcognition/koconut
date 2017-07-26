@@ -7,7 +7,7 @@ type Props = {
 }
 
 /**
- * The ShortResponse component renders short response question type
+ * The ShortResponse component renders short response exercise type
  * @class
  */
 class ShortResponse extends Component {

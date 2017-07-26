@@ -10,8 +10,8 @@ import './MultipleChoice.css';
 class MultipleChoice extends Component {
   props: {
     /* the possible choices */
-    answers: string[],
-    selected: ?string,
+    choices: string[],
+    answer: ?string,
     handleClick: Function
   };
 
@@ -20,11 +20,11 @@ class MultipleChoice extends Component {
         <div className='multiple-choice'>
           <h3>Select the correct answer:</h3>
           {/* Create a choice component for each item in answers */}
-          {this.props.answers.map((choice) => (
+          {this.props.choices.map((choice) => (
               <Choice
                   key={choice}
                   content={choice}
-                  selected={choice === this.props.selected}
+                  answer={choice === this.props.answer}
                   handleClick={this.props.handleClick}
               />
           ))}

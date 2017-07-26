@@ -1,25 +1,71 @@
 // @flow
 import React, {Component} from 'react';
-import './App.css';
-import Problem from './Problem';
 
-import {exampleQuestions} from '../../backend/Questions.js';
+import './App.css';
+import ExerciseView from './ExerciseView';
+
+// Fake AJAX
+import ExerciseGenerator from '../../backend/ExerciseGenerator';
+import ResponseEvaluator from '../../backend/ResponseEvaluator';
+//import Concepts from '../../backend/Concepts';
+
+type Exercise = {
+  prompt: string,
+  code: string,
+  choices?: string[],
+  difficulty: number,
+  type: string,
+  concept: string
+  // exerciseID: string
+}
 
 /**
  * Renders the koconut application view.
  * @class
  */
-
 class App extends Component {
+  submitResponse: Function;
+  generator: ExerciseGenerator;
+  // updater: ResponseEvaluator;
+
   state: {
-    questionID: number
+    exercise: Exercise
   };
 
   constructor() {
     super();
+
+    this.generator = new ExerciseGenerator();
+
     this.state = {
-      questionID: 0,
+      exercise: this.generator.generateExercise()
     };
+
+    // this.updater = new ResponseEvaluator();
+    this.submitResponse = this.submitResponse.bind(this);
+  }
+
+  /**
+   * Sets the initial exercise on load
+   */
+  componentWillMount() {
+    this.setState({exercise: this.getExercise()});
+  }
+
+  /**
+   * Return a generated exercise
+   * @returns a generated exercise
+   */
+  getExercise(): Exercise {
+    return this.generator.generateExercise();
+  }
+
+  /**
+   * Submits the give answer to current exercise
+   * @param answer - the answer being submitted
+   */
+  submitResponse(answer: string) {
+    ResponseEvaluator.evaluateAnswer(this.state.exercise, answer);
   }
 
   render() {
@@ -32,15 +78,17 @@ class App extends Component {
                   type="button"
                   onClick={() => this.setState(
                       {
-                        questionID: ((this.state.questionID + 1) %
-                            exampleQuestions.length),
+                        exercise: this.getExercise()
                       })}
-                  value="next question type"
+                  value="next exercise type"
               />
             </span>
             </h1>
 
-            <Problem question={exampleQuestions[this.state.questionID]}/>
+            <ExerciseView
+                exercise={this.state.exercise}
+                submitHandler = {this.submitResponse}
+            />
           </div>
         </div>
     );

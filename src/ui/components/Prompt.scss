@@ -1,6 +1,6 @@
 @import '../containers/App.scss';
 
-.question {
+.prompt {
   //height: 15vh;
   padding: 0 2.5%;
   border-bottom: 1px dotted black;
@@ -8,7 +8,7 @@
   background-color: $component-background;
 }
 
-.question-type {
+.exercise-type {
   font-size: 0.6em;
   padding: 2%;
   color: darkblue;

@@ -10,7 +10,7 @@
     "react-scripts": "1.0.10"
   },
   "dependencies": {
-    "@skidding/react-codemirror": "^1.0.1",
+    "brace": "^0.10.0",
     "documentation": "^4.0.0-rc.1",
     "flow-bin": "^0.49.1",
     "flow-scripts": "^0.3.0",
@@ -20,7 +20,7 @@
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.0.2",
     "react": "^15.6.1",
-    "react-codemirror": "^1.0.0",
+    "react-ace": "^5.1.1",
     "react-dom": "^15.6.1"
   },
   "scripts": {
@@ -40,7 +40,6 @@
     "build-storybook": "build-storybook -s public -o dev/storybook",
     "start-dev": "npm-run-all -p start-docs storybook",
     "build-dev": "npm-run-all -p build-docs build-storybook",
-    "start-all": "npm-run-all -p start start-dev",
     "build-all": "npm-run-all -p build build-dev",
     "build-all-ignore": "npm-run-all -p build-ignore build-dev"
   }

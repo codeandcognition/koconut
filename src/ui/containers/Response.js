@@ -11,8 +11,8 @@ import './Response.css';
 class Response extends Component {
   props: {
     type: string,
-    answers?: string[],
-    selected: ?string,
+    choices?: string[],
+    answer: ?string,
     updateHandler: Function
   };
 
@@ -22,16 +22,16 @@ class Response extends Component {
    */
   renderResponse() {
     switch (this.props.type) {
-      case('MultipleChoice'):
+      case('multipleChoice'):
         return <MultipleChoice
-            answers={this.props.answers}
-            selected={this.props.selected}
+            choices={this.props.choices}
+            answer={this.props.answer}
             handleClick={this.props.updateHandler}
         />;
-      case('ShortResponse'):
+      case('shortResponse'):
         return <ShortResponse inputHandler={this.props.updateHandler}/>;
       default:
-        return <div className="BAD">Not a valid question type :(</div>;
+        return <div className="BAD">Not a valid EXERCISE type {this.props.type}</div>;
     }
   }
 
