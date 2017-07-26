@@ -1,26 +1,12 @@
 // @flow
 
 import React, {Component} from 'react';
-
-// CodeMirror bug isn't fixed on main branch yet, so we'll use this package...
-// for now: https://github.com/JedWatson/react-codemirror/pull/107
-//import CodeMirror from '@skidding/react-codemirror';
-import brace from 'brace';
 import AceEditor from 'react-ace';
 
-// CodeMirror language support
-//import 'codemirror/mode/javascript/javascript';
-//import 'codemirror/mode/clike/clike';
+// Ace language support
 import 'brace/mode/java';
 
-// CodeMirror add-ons
-//import 'codemirror/addon/selection/mark-selection';
-
-// Flow does not like it if you import css from node_modules!
-// CodeMirror localized themes
-//import './codemirror/codemirror.css';
-//import './codemirror/eclipse.css';
-//import './codemirror/material.css';
+// Ace themes
 import 'brace/theme/eclipse';
 import 'brace/theme/monokai';
 
@@ -49,7 +35,6 @@ class Code extends Component {
   handleSelect: Function;
   handleReset: Function;
   handleHintRequest: Function;
-  editor: Object;
   code: Object;
 
   state: {
@@ -83,10 +68,11 @@ class Code extends Component {
   }
 
   /**
-   * When component renders, store CodeMirror reference for later use.
+   * When component renders, set cursor to (0, 0)
    */
   componentDidMount() {
-    this.editor = this.refs.editor;
+    this.resetCursor();
+    
     if (this.props.updateHandler !== undefined)
       this.props.updateHandler(this.state.code);
   }
@@ -100,8 +86,18 @@ class Code extends Component {
       this.setState({
         code: nextProps.code,
       });
+      this.resetCursor();
     }
   }
+
+  /**
+   * Resets the cursor position to (0, 0)
+   */
+  resetCursor() {
+    this.refs.aceEditor.editor.moveCursorTo(0, 0);
+    this.refs.aceEditor.editor.clearSelection();
+  }
+
 
   /**
    * Handles the dark/light checkbox toggle event.
@@ -116,33 +112,49 @@ class Code extends Component {
   /**
    * Stores highlighted text from text area in component state: highlighted.
    */
-  handleSelect(e) {
-    /*
-    if (this.editor) {
-      this.setState({highlighted: this.editor.codeMirror.doc.getSelection()});
-      if (this.props.updateHandler !== undefined) {
-        this.props.updateHandler(this.state.highlighted);
-      }
+  handleSelect(e: any /* need to make Flow play nicely */) {
+    let selected = this.refs.aceEditor.editor.session.getTextRange(e.getRange());
+    this.setState( {highlighted: selected} );
+    // this check mitigates a bug caused by spam switching exercises
+    if(this.props.updateHandler !== undefined) {
+      this.props.updateHandler(this.state.highlighted);
     }
-    */
-    console.log("Ping");
-    // TODO: Turn Selection object into a string
-    this.setState( {highlighted: e} );
-    this.props.updateHandler(this.state.highlighted);
   }
 
   /**
-   *  Renders CodeMirror with preferred options.
+   *  Resets both the code state and answer state.
+   */
+  handleReset() {
+    this.setState({code: this.props.code});
+    this.props.updateHandler(this.props.code);
+    this.resetCursor();
+  }
+
+  /**
+   * Sets hint position to the line of the last cursor position within Ace.
+   * TODO: Fix positioning
+   */
+  handleHintRequest() {
+    let ace = this.refs.aceEditor.editor;
+    let line = ace.getCursorPosition().row; // Get line of cursor position
+
+    this.setState({hint: true});
+    this.setState({curLine: line});
+  }
+
+  /**
+   *  Renders Ace with preferred options.
    *  Handles editable/non-editable state for code view.
    *  @returns JSX for the CodeMirror component
    */
-  renderCodeMirror() {
+  renderAce() {
     return <AceEditor
+        ref="aceEditor"
         width="100%"
-        height="100%"
+        height="20em"
         value={this.state.code}
         readOnly={this.props.type !== Types.fillBlank &&
-                  this.props.type !== Types.writeCode}
+        this.props.type !== Types.writeCode}
         mode={this.state.mode}
         theme={this.state.theme}
         highlightActiveLine={true}
@@ -159,32 +171,10 @@ class Code extends Component {
             : undefined}
         setOptions={{
           showLineNumbers: true,
-          tabSize: 2
+          tabSize: 2,
         }}
+        minLines={6}
     />;
-  }
-
-  /**
-   *  Resets both the code state and answer state.
-   */
-  handleReset() {
-    this.setState({code: this.props.code});
-    this.props.updateHandler(this.props.code);
-  }
-
-  /**
-   * Sets hint position to the line of the last cursor position within CodeMirror.
-   */
-  handleHintRequest() {
-    let height = 0;
-    if (this.editor) {
-      let cm = this.editor.codeMirror;
-      let line = cm.doc.getCursor(); // Get line of cursor position
-      height = cm.heightAtLine(line.line, 'local'); // Find height at line
-
-      this.setState({hint: true});
-      this.setState({curLine: height});
-    }
   }
 
   render() {
@@ -199,7 +189,7 @@ class Code extends Component {
         <div ref="code"
              className={'code ' + (isInlineResponseType ? 'full' : 'half') +
              ' ' + this.props.type}>
-          {this.renderCodeMirror()}
+          {this.renderAce()}
           <div className="code-config">
             <button onClick={this.handleHintRequest}>?</button>
             <button onClick={this.handleThemeChange}>
