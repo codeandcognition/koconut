@@ -1,7 +1,6 @@
 // @flow
 import {exampleExercises} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
-import conceptInventory from './Concepts';
 import ExercisePool from '../data/ExercisePool';
 
 import MasteryModel from '../data/MasteryModel';
