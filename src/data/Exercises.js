@@ -28,7 +28,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       type: ExerciseTypes.shortResponse,
       concept: 'arrays',
     },
-    answer: '[7, 36]'
+    answer: '[7, 2]'
   },
   {
     exercise: {
@@ -39,7 +39,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       type: ExerciseTypes.multipleChoice,
       concept: 'boolean'
     },
-    answer: 'false'
+    answer: 'true'
   },
   {
     exercise: {
