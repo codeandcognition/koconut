@@ -1,11 +1,19 @@
 /**
- * Defines all learning concepts.
+ * Defines all learning concepts. Currently sorted alphabetically.
  * @class
  */
 
 const conceptInventory = [
   {
+    name: 'arrays',
+    type: 'langSemantics'
+  },
+  {
     name: 'boolean',
+    type: 'langSemantics'
+  },
+  {
+    name: 'loops',
     type: 'langSemantics'
   },
   {
@@ -16,10 +24,6 @@ const conceptInventory = [
     name: 'variables',
     type: 'langSemantics'
   },
-  {
-    name: 'loops',
-    type: 'langSemantics'
-  }
 ];
 
 export default conceptInventory;
