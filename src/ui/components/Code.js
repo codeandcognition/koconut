@@ -4,20 +4,25 @@ import React, {Component} from 'react';
 
 // CodeMirror bug isn't fixed on main branch yet, so we'll use this package...
 // for now: https://github.com/JedWatson/react-codemirror/pull/107
-import CodeMirror from '@skidding/react-codemirror';
+//import CodeMirror from '@skidding/react-codemirror';
+import brace from 'brace';
+import AceEditor from 'react-ace';
 
 // CodeMirror language support
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/clike/clike';
+//import 'codemirror/mode/javascript/javascript';
+//import 'codemirror/mode/clike/clike';
+import 'brace/mode/java';
 
 // CodeMirror add-ons
-import 'codemirror/addon/selection/mark-selection';
+//import 'codemirror/addon/selection/mark-selection';
 
 // Flow does not like it if you import css from node_modules!
 // CodeMirror localized themes
-import './codemirror/codemirror.css';
-import './codemirror/eclipse.css';
-import './codemirror/material.css';
+//import './codemirror/codemirror.css';
+//import './codemirror/eclipse.css';
+//import './codemirror/material.css';
+import 'brace/theme/eclipse';
+import 'brace/theme/monokai';
 
 // Tool imports
 import Types from '../../data/ExerciseTypes.js'
@@ -63,7 +68,7 @@ class Code extends Component {
     this.state = {
       code: this.props.code,
       lineNumbers: true,
-      mode: 'text/x-java',
+      mode: 'java',
       theme: 'eclipse',
       highlighted: '',
       toggle: true,
@@ -104,20 +109,26 @@ class Code extends Component {
   handleThemeChange() {
     this.setState({
       toggle: !this.state.toggle,
-      theme: (this.state.toggle ? 'material' : 'eclipse'),
+      theme: (this.state.toggle ? 'monokai' : 'eclipse'),
     });
   }
 
   /**
    * Stores highlighted text from text area in component state: highlighted.
    */
-  handleSelect() {
+  handleSelect(e) {
+    /*
     if (this.editor) {
       this.setState({highlighted: this.editor.codeMirror.doc.getSelection()});
       if (this.props.updateHandler !== undefined) {
         this.props.updateHandler(this.state.highlighted);
       }
     }
+    */
+    console.log("Ping");
+    // TODO: Turn Selection object into a string
+    this.setState( {highlighted: e} );
+    this.props.updateHandler(this.state.highlighted);
   }
 
   /**
@@ -126,19 +137,15 @@ class Code extends Component {
    *  @returns JSX for the CodeMirror component
    */
   renderCodeMirror() {
-    let options = {
-      lineNumbers: this.state.lineNumbers,
-      readOnly: this.props.type !== Types.fillBlank &&
-      this.props.type !== Types.writeCode,
-      mode: this.state.mode,
-      theme: this.state.theme,
-      styleSelectedText: true,
-    };
-
-    return <CodeMirror
-        ref="editor"
+    return <AceEditor
+        width="100%"
+        height="100%"
         value={this.state.code}
-        options={options}
+        readOnly={this.props.type !== Types.fillBlank &&
+                  this.props.type !== Types.writeCode}
+        mode={this.state.mode}
+        theme={this.state.theme}
+        highlightActiveLine={true}
         onChange={(e) => {
           this.setState({code: e});
           if (this.props.updateHandler !== undefined) {
@@ -147,9 +154,13 @@ class Code extends Component {
                 : this.state.highlighted);
           }
         }}
-        onCursorActivity={this.props.type === Types.highlightCode
+        onSelectionChange={this.props.type === Types.highlightCode
             ? this.handleSelect
             : undefined}
+        setOptions={{
+          showLineNumbers: true,
+          tabSize: 2
+        }}
     />;
   }
 
