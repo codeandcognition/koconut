@@ -58,4 +58,4 @@ ResponseLog.addResponse = function(id: string, concept: string,
   this.log.push(immutable);
 };
 
-export default ResponseLog;
+export {ResponseLog, ResponseObject};

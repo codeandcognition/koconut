@@ -1,10 +1,10 @@
 // @flow
 import {exampleExercises} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
-import conceptInventory from './Concepts';
 import ExercisePool from '../data/ExercisePool';
 
 import MasteryModel from '../data/MasteryModel';
+
 
 class ExerciseGenerator {
   counter: number;
@@ -14,17 +14,38 @@ class ExerciseGenerator {
   }
 
   /**
+   * Weights values closer to 0 more than values close to 1.
+   * @returns {number} [0:1]
+   */
+  weightByParabolic(): number {
+    let x = Math.random();
+    let val = x*x - 2*x + 1;
+    return val;
+  }
+
+  /**
+   * Gives optimal index of the next concept to generate questions for.
+   * Index is based on a list of concepts, sorted in this order:
+   * least mastered -> most mastered
+   * @param length
+   * @param method
+   * @returns {number}
+   */
+  getConceptIndex(length: number, method: Function): number {
+    return Math.floor(method()*length);
+  }
+
+  /**
    * Returns a concept for the exercise, pulled from mastery model.
    * @returns an exercise concept
    */
   getConcept(): string {
-    let conceptsThatNeedPractice = MasteryModel.model.filter(
-        (con) => con.knowledge < 0.7);
-    if (conceptsThatNeedPractice.length === 0) {
-      conceptsThatNeedPractice = conceptInventory;
-    }
-    return conceptsThatNeedPractice[Math.floor(
-        Math.random() * conceptsThatNeedPractice.length)].concept.name;
+    let orderedConcepts = MasteryModel.model.sort(
+        (a, b) => a.knowledge - b.knowledge);
+    let index = this.getConceptIndex(orderedConcepts.length,
+        this.weightByParabolic);
+    console.log(index);
+    return orderedConcepts[index].concept.name;
   }
 
   /**
