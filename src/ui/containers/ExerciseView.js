@@ -22,23 +22,13 @@ type Props = {
  */
 class Exercise extends Component {
   state: {
-    prompt: string,
-    code: string,
-    type: string,
-    choices?: string[],
     answer: ?string,
-    concept: string
   };
 
   constructor(props: Props) {
     super(props);
     this.state = {
-      prompt: props.exercise.prompt,
-      code: props.exercise.code,
-      type: props.exercise.type,
-      choices: props.exercise.choices,
       answer: null,
-      concept: props.exercise.concept,
     };
   }
 
@@ -48,25 +38,20 @@ class Exercise extends Component {
    */
   componentWillReceiveProps(nextProps: Props) {
     this.setState({
-      prompt: nextProps.exercise.prompt,
-      code: nextProps.exercise.code,
-      type: nextProps.exercise.type,
-      choices: nextProps.exercise.choices,
       answer: null,
-      concept: nextProps.exercise.concept
     });
   }
 
   render() {
     return (
         <div className="problem">
-          <Prompt content={this.state.prompt} type={this.state.type}/>
+          <Prompt content={this.props.exercise.prompt} type={this.props.exercise.type}/>
           <Information
-              code={this.state.code}
-              type={this.state.type}
-              choices={this.state.choices}
+              code={this.props.exercise.code}
+              type={this.props.exercise.type}
+              choices={this.props.exercise.choices}
               answer={this.state.answer}
-              concept={this.state.concept}
+              concept={this.props.exercise.concept}
               updateHandler={(content) => this.setState({answer: content})}
           />
           <Submit submitHandler={() => this.props.submitHandler(this.state.answer)}/>
