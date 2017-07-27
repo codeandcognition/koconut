@@ -174,6 +174,10 @@ class Code extends Component {
           tabSize: 2,
         }}
         minLines={6}
+        editorProps={{
+          $blockScrolling: Infinity
+        }}
+        /* https://github.com/securingsincity/react-ace/issues/29#issuecomment-296398653 */
     />;
   }
 
