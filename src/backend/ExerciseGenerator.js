@@ -34,7 +34,7 @@ class ExerciseGenerator {
    * @returns {number}
    */
   getConceptIndex(concepts: ConceptKnowledge[], method: Function): number {
-    if(concepts.length > 0) {
+    if (concepts.length > 0) {
       let min = concepts[0].knowledge;
       let max = concepts[concepts.length - 1].knowledge;
       return Math.floor(method(max, min) * concepts.length);
@@ -43,15 +43,32 @@ class ExerciseGenerator {
   }
 
   /**
-   * Returns a concept for the exercise, pulled from mastery model.
+   * Returns sorted concepts list sorted by relevance to the user.
+   * @returns {Array.<*>}
+   */
+  getOrderedConcepts(): ConceptKnowledge[] {
+    return MasteryModel.model.sort(
+        (a, b) => (a, b) => a.knowledge - b.knowledge);
+  }
+
+  /**
+   * Returns the most relevant concept. Relevance determined by
+   * getOrderedConcepts() algorithm.
    * @returns an exercise concept
    */
   getConcept(): string {
-    let orderedConcepts = MasteryModel.model.sort(
-        (a, b) => a.knowledge - b.knowledge);
-    let index = this.getConceptIndex(orderedConcepts, this.weightByParabolic);
-    console.log(index);
-    return orderedConcepts[index].concept.name;
+    // let index = this.getConceptIndex(orderedConcepts, this.weightByParabolic);
+    return this.getOrderedConcepts()[0].concept.name;
+  }
+
+  /**
+   * Returns the first N most relevant concepts. Relevance determined
+   * by getOrderedConcepts() algorithm.
+   * @param size
+   * @returns {Array.<ConceptKnowledge>}
+   */
+  getConcepts(size: number): string[] {
+    return this.getOrderedConcepts().slice(0, size).map((c) => c.concept.name);
   }
 
   /**
