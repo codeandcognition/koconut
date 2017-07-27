@@ -13,6 +13,25 @@ export type Exercise = {
 export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
   {
     exercise: {
+      prompt: 'Indicate what the array {6, 3} contents [] would be after the' +
+      ' method mystery was called and passed that array as its parameter.',
+      code: 'public static void mystery2(int[] list) {\n' +
+      '    for (int i = 0; i < list.length - 1; i++) {\n' +
+      '        if (i % 2 == 0) {\n' +
+      '            list[i]++;\n' +
+      '        } else {\n' +
+      '            list[i]--;\n' +
+      '        }\n' +
+      '    }\n' +
+      '}',
+      difficulty: 2,
+      type: ExerciseTypes.shortResponse,
+      concept: 'arrays',
+    },
+    answer: '[7, 2]'
+  },
+  {
+    exercise: {
       prompt: 'What is the value of variable x?',
       code: 'boolean x = 1 != 2',
       choices: ['true', 'false'],
@@ -20,7 +39,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       type: ExerciseTypes.multipleChoice,
       concept: 'boolean'
     },
-    answer: 'false'
+    answer: 'true'
   },
   {
     exercise: {
@@ -31,6 +50,22 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       concept: 'boolean'
     },
     answer: undefined
+  },
+  {
+    exercise: {
+      prompt: 'Which of the following is a properly reversed version of the' +
+      ' following Boolean expression, according to De Morgan\'s Laws?',
+      code: '(2 == 3) && (-1 < 5) && isPrime(n)',
+      choices: ['(2 != 3) || (-1 >= 5) || !isPrime(n)',
+        '(2 == 3) || (-1 < 5) || isPrime(n)',
+        '!(2 != 3) || !(-1 < 5) || isNotPrime(n)',
+        '(2 != 3) && (-1 > 5) && isPrime(n)',
+        '!(2 == 3) && !(-1 < 5) && !isPrime(n)'],
+      difficulty: 2,
+      type: ExerciseTypes.multipleChoice,
+      concept: 'boolean'
+    },
+    answer: '(2 != 3) || (-1 >= 5) || !isPrime(n)'
   },
   {
     exercise: {

@@ -53,4 +53,4 @@ MasteryModel.updateModel = function(concept: string, knowledge: number) {
 };
 
 
-export default MasteryModel;
+export {ConceptKnowledge, MasteryModel};

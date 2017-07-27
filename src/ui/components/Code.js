@@ -8,7 +8,7 @@ import 'brace/mode/java';
 
 // Ace themes
 import 'brace/theme/eclipse';
-import 'brace/theme/monokai';
+import 'brace/theme/solarized_dark';
 
 // Tool imports
 import Types from '../../data/ExerciseTypes.js'
@@ -105,7 +105,7 @@ class Code extends Component {
   handleThemeChange() {
     this.setState({
       toggle: !this.state.toggle,
-      theme: (this.state.toggle ? 'monokai' : 'eclipse'),
+      theme: (this.state.toggle ? 'solarized_dark' : 'eclipse'),
     });
   }
 
