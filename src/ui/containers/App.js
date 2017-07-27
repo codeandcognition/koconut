@@ -7,6 +7,7 @@ import ExerciseView from './ExerciseView';
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
+
 //import Concepts from '../../backend/Concepts';
 
 type Exercise = {
@@ -68,6 +69,10 @@ class App extends Component {
     ResponseEvaluator.evaluateAnswer(this.state.exercise, answer);
   }
 
+  getFeedback(answer: string): boolean {
+    return ResponseEvaluator.getFeedback(this.state.exercise, answer);
+  }
+
   render() {
     return (
         <div className="App">
@@ -88,6 +93,7 @@ class App extends Component {
             <ExerciseView
                 exercise={this.state.exercise}
                 submitHandler = {this.submitResponse}
+                feedback = {this.getFeedback}
             />
           </div>
         </div>

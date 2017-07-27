@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import Prompt from '../components/Prompt';
 import Information from './Information';
 import Submit from '../components/Submit';
+import Feedback from '../components/Feedback';
+
 import './ExerciseView.css';
 
 type Props = {
@@ -13,7 +15,8 @@ type Props = {
     choices?: string[],
     concept: string
   },
-  submitHandler: Function
+  submitHandler: Function,
+  feedback: boolean
 }
 
 /**
@@ -55,6 +58,7 @@ class Exercise extends Component {
               updateHandler={(content) => this.setState({answer: content})}
           />
           <Submit submitHandler={() => this.props.submitHandler(this.state.answer)}/>
+          <Feedback feedback={this.props.feedback}/>
         </div>
     );
   }
