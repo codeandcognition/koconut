@@ -7,7 +7,7 @@ import ExerciseView from './ExerciseView';
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
-
+import {ResponseLog} from '../../data/ResponseLog';
 //import Concepts from '../../backend/Concepts';
 
 type Exercise = {
@@ -30,7 +30,8 @@ class App extends Component {
   // updater: ResponseEvaluator;
 
   state: {
-    exercise: Exercise
+    exercise: Exercise,
+    feedback: string
   };
 
   constructor() {
@@ -39,7 +40,8 @@ class App extends Component {
     this.generator = new ExerciseGenerator();
 
     this.state = {
-      exercise: this.generator.generateExercise()
+      exercise: this.generator.generateExercise(),
+      feedback: ''
     };
 
     // this.updater = new ResponseEvaluator();
@@ -67,10 +69,7 @@ class App extends Component {
    */
   submitResponse(answer: string) {
     ResponseEvaluator.evaluateAnswer(this.state.exercise, answer);
-  }
-
-  getFeedback(answer: string): boolean {
-    return ResponseEvaluator.getFeedback(this.state.exercise, answer);
+    this.setState({feedback: ResponseLog.getFeedback()});
   }
 
   render() {
@@ -83,7 +82,8 @@ class App extends Component {
                   type="button"
                   onClick={() => this.setState(
                       {
-                        exercise: this.getExercise()
+                        exercise: this.getExercise(),
+                        feedback: ''
                       })}
                   value="next exercise type"
               />
@@ -93,7 +93,7 @@ class App extends Component {
             <ExerciseView
                 exercise={this.state.exercise}
                 submitHandler = {this.submitResponse}
-                feedback = {this.getFeedback}
+                feedback = {this.state.feedback}
             />
           </div>
         </div>

@@ -62,8 +62,10 @@ ResponseLog.addResponse = function(id: string, concept: string,
  * Returns feedback for the last response (currently just correctness)
  * @returns whether the last response was correct
  */
-ResponseLog.getFeedback = function(): boolean {
-  return this.log.peek().correct;
+ResponseLog.getFeedback = function(): string {
+  return this.log[this.log.length - 1].correct
+      ? 'correct'
+      : 'incorrect';
 };
 
 export {ResponseLog, ResponseObject};

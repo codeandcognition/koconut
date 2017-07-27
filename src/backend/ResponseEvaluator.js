@@ -67,12 +67,6 @@ class ResponseEvaluator {
     );
     console.log(MasteryModel.model); //Debug/demo
   }
-
-  static getFeedback(exercise: Exercise, answer: string): boolean {
-    // TODO: Check written answers for correctness (currently always false)
-    let isCorrect = answer === ExercisePool.getAnswer(exercise);
-    return isCorrect;
-  }
 }
 
 export default ResponseEvaluator;
