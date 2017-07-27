@@ -58,4 +58,12 @@ ResponseLog.addResponse = function(id: string, concept: string,
   this.log.push(immutable);
 };
 
+/**
+ * Returns feedback for the last response (currently just correctness)
+ * @returns whether the last response was correct
+ */
+ResponseLog.getFeedback = function(): boolean {
+  return this.log.peek().correct;
+};
+
 export {ResponseLog, ResponseObject};
