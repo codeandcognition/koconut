@@ -10,7 +10,8 @@ import './Feedback.css';
 
 class Feedback extends Component {
   props: {
-    feedback: boolean
+    feedback: boolean,
+    nextConcepts: string
   };
 
   render() {
@@ -18,6 +19,7 @@ class Feedback extends Component {
     return (
       <div className="feedback">
         <p>Your answer was: {this.props.feedback} </p>
+        <p>Next concepts: {this.props.nextConcepts} </p>
       </div>
     )
   }

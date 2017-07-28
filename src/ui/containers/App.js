@@ -8,6 +8,7 @@ import ExerciseView from './ExerciseView';
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
 import {ResponseLog} from '../../data/ResponseLog';
+import ExercisePool from '../../data/ExercisePool';
 //import Concepts from '../../backend/Concepts';
 
 type Exercise = {
@@ -31,7 +32,8 @@ class App extends Component {
 
   state: {
     exercise: Exercise,
-    feedback: string
+    feedback: string,
+    nextConcepts: string
   };
 
   constructor() {
@@ -41,7 +43,8 @@ class App extends Component {
 
     this.state = {
       exercise: this.generator.generateExercise(),
-      feedback: ''
+      feedback: '',
+      nextConcepts: ''
     };
 
     // this.updater = new ResponseEvaluator();
@@ -69,7 +72,11 @@ class App extends Component {
    */
   submitResponse(answer: string) {
     ResponseEvaluator.evaluateAnswer(this.state.exercise, answer);
-    this.setState({feedback: ResponseLog.getFeedback()});
+    console.log(ExercisePool.pool);
+    this.setState({
+      feedback: ResponseLog.getFeedback(),
+      nextConcepts: ExercisePool.pool.entries()
+    });
   }
 
   render() {
@@ -94,6 +101,7 @@ class App extends Component {
                 exercise={this.state.exercise}
                 submitHandler = {this.submitResponse}
                 feedback = {this.state.feedback}
+                nextConcepts = {this.state.nextConcepts}
             />
           </div>
         </div>

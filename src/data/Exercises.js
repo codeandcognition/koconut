@@ -11,7 +11,7 @@ export type Exercise = {
 }
 
 export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
-  {
+/*{
     exercise: {
       prompt: 'Indicate what the array {6, 3} contents [] would be after the' +
       ' method mystery was called and passed that array as its parameter.',
@@ -29,8 +29,8 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       concept: 'arrays',
     },
     answer: '[7, 2]'
-  },
-  {
+  },*/
+  { // 
     exercise: {
       prompt: 'What is the value of variable x?',
       code: 'boolean x = 1 != 2',
@@ -40,7 +40,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       concept: 'boolean'
     },
     answer: 'true'
-  },
+  },/*
   {
     exercise: {
       prompt: 'Write code that assigns the value false to x.',
@@ -50,7 +50,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       concept: 'boolean'
     },
     answer: undefined
-  },
+  },*/
   {
     exercise: {
       prompt: 'Which of the following is a properly reversed version of the' +
@@ -127,5 +127,16 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       concept: 'loops'
     },
     answer: '4 1\n2 2'
-  }
+  },
+  {
+    exercise: {
+      prompt: 'What is the value of variable x?',
+      code: 'boolean x = 1 <= 2',
+      choices: ['true', 'false'],
+      difficulty: 0,
+      type: ExerciseTypes.multipleChoice,
+      concept: 'boolean'
+    },
+    answer: 'true'
+  },
 ];
