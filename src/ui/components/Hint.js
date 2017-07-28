@@ -27,10 +27,10 @@ class Hint extends Component {
           <div className="body-text">
             {content}
           </div>
-          <div className="list-resources">
-            {resources.map(
-                (resources) => (<div className="resource-item">resource</div>))}
-          </div>
+          {/*<div className="list-resources">*/}
+            {/*{resources.map(*/}
+                {/*(resources) => (<div className="resource-item">resource</div>))}*/}
+          {/*</div>*/}
           <div className="close-hint"
                onClick={(this.props.close) ? (this.props.close) : {}}>x
           </div>
