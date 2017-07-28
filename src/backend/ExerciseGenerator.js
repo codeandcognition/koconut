@@ -48,7 +48,7 @@ class ExerciseGenerator {
    */
   getOrderedConcepts(): ConceptKnowledge[] {
     return MasteryModel.model.sort(
-        (a, b) => (a, b) => a.knowledge - b.knowledge);
+        (a, b) => (a.knowledge * a.dependencyKnowledge - b.knowledge * b.dependencyKnowledge));
   }
 
   /**

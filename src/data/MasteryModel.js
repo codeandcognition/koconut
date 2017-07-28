@@ -57,7 +57,7 @@ class ConceptKnowledge {
    */
   calculateDependencyKnowledge() {
     this.dependencyKnowledge = (this.dependencies.reduce(
-            (d1, d2) => d1.knowledge + d2.knowledge)) /
+            (sum, d) => sum + d.knowledge, 0)) /
         this.dependencies.length;
   }
 
@@ -89,14 +89,33 @@ MasteryModel.modelMap = new Map();
  * Populates array with each concept from concept model.
  */
 MasteryModel.populate = function() {
+  // Create ConceptKnowledge objects for each concept
   conceptInventory.map((c) => MasteryModel.model.push(
       new ConceptKnowledge(c)));
+
+  // Create a mapping of strings to ConceptKnowledge objects
   let map = MasteryModel.modelMap;
   MasteryModel.model.map((m) => map.set(m.concept.name, m));
-  conceptInventory.forEach(function(c) {
-    let obj = map.get(c.name);
-    c.dependencies.map((d) => obj.addDependency(map.get(d)));
-    c.parents.map((p) => obj.addParent(map.get(p)));
+
+  // Fill ConceptKnowledge objects with references parents/dependencies
+  conceptInventory.forEach((c) => {
+    // Ensure that map gets a valid ConceptKnowledge object
+    let obj_ = map.get(c.name); // Weird type coercion nonsense
+    let obj : ConceptKnowledge;
+    if(obj_ !== undefined && obj_ !== null && obj_ instanceof ConceptKnowledge) {
+      obj = obj_;
+    } else {
+      return;
+    }
+    // Similar type safety for the dependency and parent objects
+    c.dependencies.forEach((d) => {
+      let dependency = map.get(d);
+      if(dependency !== undefined && dependency !== null) obj.addDependency(dependency);
+    });
+    c.parents.forEach((p) => {
+      let parent = map.get(p);
+      if(parent !== undefined && parent !== null) obj.addParent(parent);
+    });
     console.log(obj);
   });
   console.log(MasteryModel.model);
@@ -109,7 +128,8 @@ MasteryModel.populate = function() {
  */
 MasteryModel.updateModel = function(concept: string, knowledge: number) {
   let conceptKnowledge = MasteryModel.modelMap.get(concept);
-  conceptKnowledge.updateKnowledgeValue(knowledge);
+  if(conceptKnowledge !== undefined && conceptKnowledge !== null)
+    conceptKnowledge.updateKnowledgeValue(knowledge);
 };
 
 export {ConceptKnowledge, MasteryModel};
