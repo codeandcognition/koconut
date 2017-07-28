@@ -37,7 +37,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       choices: ['true', 'false'],
       difficulty: 0,
       type: ExerciseTypes.multipleChoice,
-      concept: 'boolean'
+      concept: 'E_OP'
     },
     answer: 'true'
   },/*
@@ -63,7 +63,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
         '!(2 == 3) && !(-1 < 5) && !isPrime(n)'],
       difficulty: 2,
       type: ExerciseTypes.multipleChoice,
-      concept: 'boolean'
+      concept: 'C_OP'
     },
     answer: '(2 != 3) || (-1 >= 5) || !isPrime(n)'
   },
@@ -73,7 +73,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x = 1;',
       difficulty: 1,
       type: ExerciseTypes.writeCode,
-      concept: 'operators'
+      concept: '_A_OP'
     },
     answer: undefined
   },
