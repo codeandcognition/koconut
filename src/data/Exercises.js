@@ -73,7 +73,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x = 1;',
       difficulty: 1,
       type: ExerciseTypes.writeCode,
-      concept: '_A_OP'
+      concept: 'AA_OP'
     },
     answer: undefined
   },
@@ -83,7 +83,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x /!*  *!/ 2;',
       difficulty: 2,
       type: ExerciseTypes.fillBlank,
-      concept: 'operators'
+      concept: '_A_OP'
     },
     answer: '='
   },
@@ -93,7 +93,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x = 3;',
       difficulty: 1,
       type: ExerciseTypes.highlightCode,
-      concept: 'variables'
+      concept: 'PRIM'
     },
     answer: 'int'
   },
@@ -108,7 +108,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       choices: ['3', '7', '10', '12'],
       difficulty: 2,
       type: ExerciseTypes.multipleChoice,
-      concept: 'variables'
+      concept: 'ARITH'
     },
     answer: '12'
   },
@@ -124,7 +124,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       '}',
       difficulty: 2,
       type: ExerciseTypes.shortResponse,
-      concept: 'loops'
+      concept: 'F_LOOP'
     },
     answer: '4 1\n2 2'
   },
@@ -135,7 +135,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       choices: ['true', 'false'],
       difficulty: 0,
       type: ExerciseTypes.multipleChoice,
-      concept: 'boolean'
+      concept: 'E_OP'
     },
     answer: 'true'
   },
