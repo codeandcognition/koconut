@@ -16,7 +16,7 @@ const A_OP = 'assignment operator';
 const AA_OP = 'arithmetic-assignment operators';
 const ARITH = 'arithmetic';
 
-const conceptTypes = {lang: 'langSemantics', des: 'designPatterns'}
+const conceptTypes = {lang: 'langSemantics', des: 'designPatterns'};
 
 const conceptInventory = [
   {
@@ -52,11 +52,11 @@ const conceptInventory = [
   {
     name: _A_OP,
     type: conceptTypes.lang,
-    dependencies: [VAR, A_OP, AA_OP],
+    dependencies: [_VAR, A_OP, AA_OP],
     parents: [F_LOOP]
   },
   {
-    name: VAR,
+    name: _VAR,
     type: conceptTypes.lang,
     dependencies: [REF, PRIM],
     parents: [_A_OP]
@@ -65,13 +65,13 @@ const conceptInventory = [
     name: REF,
     type: conceptTypes.lang,
     dependencies: [],
-    parents: [VAR]
+    parents: [_VAR]
   },
   {
     name: PRIM,
     type: conceptTypes.lang,
     dependencies: [],
-    parents: [VAR]
+    parents: [_VAR]
   },
   {
     name: A_OP,
