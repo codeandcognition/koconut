@@ -202,8 +202,7 @@ class Code extends Component {
             {reset}
           </div>
 
-          { hint ? <Hint active={this.state.hint}
-                         content="//TODO: Place hint here."
+          { hint ? <Hint content="//TODO: Place hint here."
                          pos={curLine}
                          close={() => this.setState({hint: false})}/> : '' }
         </div>

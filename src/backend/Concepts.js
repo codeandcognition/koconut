@@ -6,23 +6,33 @@
 const conceptInventory = [
   {
     name: 'arrays',
-    type: 'langSemantics'
+    type: 'langSemantics',
+    dependencies: [],
+    parents: []
   },
   {
     name: 'boolean',
-    type: 'langSemantics'
+    type: 'langSemantics',
+    dependencies: [],
+    parents: []
   },
   {
     name: 'loops',
-    type: 'langSemantics'
+    type: 'langSemantics',
+    dependencies: [],
+    parents: []
   },
   {
     name: 'operators',
-    type: 'langSemantics'
+    type: 'langSemantics',
+    dependencies: [],
+    parents: []
   },
   {
     name: 'variables',
-    type: 'langSemantics'
+    type: 'langSemantics',
+    dependencies: [],
+    parents: []
   },
 ];
 

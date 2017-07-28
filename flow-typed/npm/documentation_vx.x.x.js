@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // flow-typed signature: 1e3e91d3589ce63098f5b40c610c0af6
+=======
+// flow-typed signature: ed160127988e3e04261ec867c5feba5d
+>>>>>>> master
 // flow-typed version: <<STUB>>/documentation_v^4.0.0-rc.1/flow_v0.49.1
 
 /**
@@ -770,11 +774,19 @@ declare module 'documentation/src/is_jsdoc_comment' {
   declare module.exports: any;
 }
 
+<<<<<<< HEAD
 declare module 'documentation/src/lint' {
   declare module.exports: any;
 }
 
 declare module 'documentation/src/merge_config' {
+=======
+declare module 'documentation/lib/output/markdown_ast' {
+  declare module.exports: any;
+}
+
+declare module 'documentation/lib/output/markdown' {
+>>>>>>> master
   declare module.exports: any;
 }
 
@@ -794,11 +806,19 @@ declare module 'documentation/src/output/html' {
   declare module.exports: any;
 }
 
+<<<<<<< HEAD
 declare module 'documentation/src/output/json' {
   declare module.exports: any;
 }
 
 declare module 'documentation/src/output/markdown_ast' {
+=======
+declare module 'documentation/lib/parse_markdown' {
+  declare module.exports: any;
+}
+
+declare module 'documentation/lib/parse' {
+>>>>>>> master
   declare module.exports: any;
 }
 
