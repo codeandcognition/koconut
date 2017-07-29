@@ -4,9 +4,9 @@
  */
 
 const F_LOOP = 'for loops';
-x const _B_OP = 'boolean operators';
+const _B_OP = 'boolean operators';
 const E_OP = 'equality operators';
-x const R_OP = 'relational operators';
+const R_OP = 'relational operators';
 const C_OP = 'conditional operators';
 const _A_OP = 'assignment operators';
 const _VAR = 'variables';

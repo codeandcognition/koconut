@@ -10,6 +10,19 @@ export type Exercise = {
   concept: string
 }
 
+const F_LOOP = 'for loops';
+const _B_OP = 'boolean operators';
+const E_OP = 'equality operators';
+const R_OP = 'relational operators';
+const C_OP = 'conditional operators';
+const _A_OP = 'assignment operators';
+const _VAR = 'variables';
+const REF = 'reference types';
+const PRIM = 'primitive types';
+const A_OP = 'assignment operator';
+const AA_OP = 'arithmetic-assignment operators';
+const ARITH = 'arithmetic';
+
 export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
 {
     exercise: {
@@ -29,7 +42,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       concept: REF,
     },
     answer: '[7, 2]'
-  },*/
+  },
   { // 
     exercise: {
       prompt: 'What is the value of variable x?',
@@ -40,7 +53,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       concept: E_OP
     },
     answer: 'true'
-  },/*
+  },/*=
   {
     exercise: {
       prompt: 'Write code that assigns the value false to x.',
@@ -86,7 +99,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       concept: _A_OP
     },
     answer: '='
-
+  },
   {
     // https://practiceit.cs.washington.edu/problem/view/bjp4/chapter2/s12-valueOfX
     exercise: {
@@ -109,17 +122,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code:
       'int total = 5; \n' +
       'for (int number = 1; number <= (total / 2); number++) { \n' +
-      '\t total =   },\n' +
-      '  {\n' +
-      '    exercise: {\n' +
-      '      prompt: \'Highlight the variable type in this line of code.\',\n' +
-      '      code: \'int x = 3;\',\n' +
-      '      difficulty: 1,\n' +
-      '      type: ExerciseTypes.highlightCode,\n' +
-      '      concept: \'PRIM\'\n' +
-      '    },\n' +
-      '    answer: \'int\'\n' +
-      '  },total - number; \n' +
+      '\t total = total - number; \n' +
       '\t System.out.println(total + " " + number); \n' +
       '}',
       difficulty: 2,
