@@ -58,7 +58,7 @@ class ExerciseGenerator {
    */
   getConcept(): string {
     // let index = this.getConceptIndex(orderedConcepts, this.weightByParabolic);
-    return this.getOrderedConcepts()[0].concept.name;
+    return this.getOrderedConcepts()[0].name;
   }
 
   /**
@@ -68,7 +68,7 @@ class ExerciseGenerator {
    * @returns {Array.<ConceptKnowledge>}
    */
   getConcepts(size: number): string[] {
-    return this.getOrderedConcepts().slice(0, size).map((c) => c.concept.name);
+    return this.getOrderedConcepts().slice(0, size).map((c) => c.name);
   }
 
   /**

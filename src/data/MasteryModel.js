@@ -7,19 +7,14 @@ import conceptInventory from '../backend/Concepts.js';
  * to represent the student knowing or not knowing.
  */
 class ConceptKnowledge {
-  concept: {
-    name: string
-  };
+  name: string;
   knowledge: number; //Between 0 and 1
   dependencyKnowledge: number; //Between 0 and 1
   dependencies: ConceptKnowledge[];
   parents: ConceptKnowledge[];
 
-  constructor(
-      concept: {
-        name: string
-      }) {
-    this.concept = concept;
+  constructor(name: string) {
+    this.name = name;
     this.knowledge = 0.0;
     this.dependencyKnowledge = 0.0;
     this.dependencies = [];
@@ -91,11 +86,11 @@ MasteryModel.modelMap = new Map();
 MasteryModel.populate = function() {
   // Create ConceptKnowledge objects for each concept
   conceptInventory.map((c) => MasteryModel.model.push(
-      new ConceptKnowledge(c)));
+      new ConceptKnowledge(c.name)));
 
   // Create a mapping of strings to ConceptKnowledge objects
   let map = MasteryModel.modelMap;
-  MasteryModel.model.map((m) => map.set(m.concept.name, m));
+  MasteryModel.model.map((m) => map.set(m.name, m));
 
   // Fill ConceptKnowledge objects with references parents/dependencies
   conceptInventory.forEach((c) => {
