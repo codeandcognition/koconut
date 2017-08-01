@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-// flow-typed signature: d72f1c5862011416b6b4f6cc6528d506
-=======
 // flow-typed signature: 296e449be39840c7f9075b88980454ad
->>>>>>> master
 // flow-typed version: <<STUB>>/@storybook/react_v^3.1.7/flow_v0.49.1
 
 /**
@@ -59,10 +55,6 @@ declare module '@storybook/react/dist/client/preview/client_api' {
 }
 
 declare module '@storybook/react/dist/client/preview/config_api' {
-  declare module.exports: any;
-}
-
-declare module '@storybook/react/dist/client/preview/element_check' {
   declare module.exports: any;
 }
 
@@ -197,9 +189,6 @@ declare module '@storybook/react/dist/client/preview/client_api.js' {
 }
 declare module '@storybook/react/dist/client/preview/config_api.js' {
   declare module.exports: $Exports<'@storybook/react/dist/client/preview/config_api'>;
-}
-declare module '@storybook/react/dist/client/preview/element_check.js' {
-  declare module.exports: $Exports<'@storybook/react/dist/client/preview/element_check'>;
 }
 declare module '@storybook/react/dist/client/preview/error_display.js' {
   declare module.exports: $Exports<'@storybook/react/dist/client/preview/error_display'>;

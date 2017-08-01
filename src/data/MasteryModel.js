@@ -12,8 +12,10 @@ class ConceptKnowledge {
   dependencies: ConceptKnowledge[];
   parents: ConceptKnowledge[];
 
-  knowledge: number; //Between 0 and 1
-  dependencyKnowledge: number; //Between 0 and 1
+  knowledge: number; //p(cognitive mastery) [0,1]
+  dependencyKnowledge: number; //p(support cognitive mastery) [0,1]
+  probL: number; //p(initial learned state) [0,1]
+  probT: number; //p(transition from unlearned -> learned) [0,1]
 
   constructor(name: string) {
     this.name = name;
@@ -23,6 +25,8 @@ class ConceptKnowledge {
 
     this.knowledge = 0.01;
     this.dependencyKnowledge = 0.01;
+    this.probL = 0.2;
+    this.probT = 0.5;
   }
 
   /**
@@ -76,12 +80,19 @@ class ConceptKnowledge {
 const MasteryModel = function() {
 };
 
+MasteryModel.probGuess = 0.1;
+MasteryModel.probSlip = 0.1;
+
 /**
  * Static array that contains all of the concepts. Dummy version of model.
  * @type {Array}
  */
 MasteryModel.model = [];
 
+/**
+ * Mapping between a concept name and concept object
+ * @type {Map}
+ */
 MasteryModel.modelMap = new Map();
 
 /**
