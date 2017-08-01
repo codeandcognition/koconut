@@ -8,17 +8,21 @@ import conceptInventory from '../backend/Concepts.js';
  */
 class ConceptKnowledge {
   name: string;
-  knowledge: number; //Between 0 and 1
-  dependencyKnowledge: number; //Between 0 and 1
+
   dependencies: ConceptKnowledge[];
   parents: ConceptKnowledge[];
 
+  knowledge: number; //Between 0 and 1
+  dependencyKnowledge: number; //Between 0 and 1
+
   constructor(name: string) {
     this.name = name;
-    this.knowledge = 0.0;
-    this.dependencyKnowledge = 0.0;
+
     this.dependencies = [];
     this.parents = [];
+
+    this.knowledge = 0.01;
+    this.dependencyKnowledge = 0.01;
   }
 
   /**
