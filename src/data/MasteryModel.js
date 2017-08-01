@@ -126,9 +126,9 @@ MasteryModel.populate = function() {
       let parent = map.get(p);
       if(parent !== undefined && parent !== null) obj.addParent(parent);
     });
-    console.log(obj);
+    // console.log(obj);
   });
-  console.log(MasteryModel.model);
+  // console.log(MasteryModel.model);
 }();
 
 /**

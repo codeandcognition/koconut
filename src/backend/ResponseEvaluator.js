@@ -60,12 +60,22 @@ class ResponseEvaluator {
     ResponseLog.addResponse(
       '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect, Date.now()
     );
-    console.log(ResponseLog.log); //Debug/demo
+    // console.log(ResponseLog.log); //Debug/demo
 
     MasteryModel.updateModel(
       exercise.concept, ResponseEvaluator.analyzeLog(exercise.concept)
     );
-    console.log(MasteryModel.model); //Debug/demo
+    this.printImportantStuff(); //Debug/demo
+  }
+
+  /**
+   * Debugging method for quick analysis of CK behavior through console
+   */
+  static printImportantStuff() {
+    console.log(MasteryModel.model);
+    MasteryModel.model.forEach((m) => {
+      console.log(m.name + '\n\tk: ' + m.knowledge + '\n\tdk: ' + m.dependencyKnowledge);
+    });
   }
 }
 
