@@ -1,5 +1,7 @@
 // @flow
 import ExerciseTypes from './ExerciseTypes.js';
+import _c from '../backend/ConceptAbbreviations';
+
 
 export type Exercise = {
   prompt: string,
@@ -14,47 +16,20 @@ const difficulty = {
   low: 0,
   med: 1,
   high: 2
-}
-
-const _c = {
-  F_LOOP: 'for loops',
-  _B_OP: 'boolean operators',
-  E_OP: 'equality operators',
-  R_OP: 'relational operators',
-  C_OP: 'conditional operators',
-  _A_OP: 'assignment operators',
-  _VAR: 'variables',
-  REF: 'reference types',
-  PRIM: 'primitive types',
-  A_OP: 'assignment operator',
-  AA_OP: 'arithmetic-assignment operators',
-  ARITH: 'arithmetic',
-}
-// const F_LOOP = 'for loops';
-// const _B_OP = 'boolean operators';
-// const E_OP = 'equality operators';
-// const R_OP = 'relational operators';
-// const C_OP = 'conditional operators';
-// const _A_OP = 'assignment operators';
-// const _VAR = 'variables';
-// const REF = 'reference types';
-// const PRIM = 'primitive types';
-// const A_OP = 'assignment operator';
-// const AA_OP = 'arithmetic-assignment operators';
-// const ARITH = 'arithmetic';
+};
 
 export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
   {
     exercise: {
-    prompt: 'Take this survey before we begin. Rate how confident you are in your abilities for each concept.',
+      prompt: 'Take this survey before we begin. Rate how confident you are in your abilities for each concept.',
       code: '',
-      choices: Object.values(_c),
+      choices: Object.keys().map((k) => _c[k]),
       difficulty: difficulty.low,
       type: ExerciseTypes.survey,
       concept: null,
     },
-      answer: ''
-    },
+    answer: ''
+  },
   {
     exercise: {
       prompt: 'Indicate what the array {6, 3} contents [] would be after the' +

@@ -3,20 +3,7 @@
  * @class
  */
 
-const _c = {
-  F_LOOP: 'for loops',
-  _B_OP: 'boolean operators',
-  E_OP: 'equality operators',
-  R_OP: 'relational operators',
-  C_OP: 'conditional operators',
-  _A_OP: 'assignment operators',
-  _VAR: 'variables',
-  REF: 'reference types',
-  PRIM: 'primitive types',
-  A_OP: 'assignment operator',
-  AA_OP: 'arithmetic-assignment operators',
-  ARITH: 'arithmetic',
-}
+import _c from './ConceptAbbreviations';
 
 const conceptTypes = {lang: 'langSemantics', des: 'designPatterns'};
 
