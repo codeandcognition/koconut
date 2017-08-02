@@ -56,6 +56,7 @@ ResponseLog.addResponse = function(id: string, concept: string,
     new ResponseObject(id, concept, exerciseType, difficulty, correct,
       timestamp));
   this.log.push(immutable);
+  console.log(this.log); // TODO: DEBUG
 };
 
 /**
