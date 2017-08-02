@@ -33,7 +33,8 @@ class App extends Component {
   state: {
     exercise: Exercise,
     feedback: string,
-    nextConcepts: string
+    nextConcepts: string,
+    counter: number // TODO: DEBUG
   };
 
   constructor() {
@@ -44,7 +45,8 @@ class App extends Component {
     this.state = {
       exercise: this.generator.generateExercise(),
       feedback: '',
-      nextConcepts: ''
+      nextConcepts: '',
+      counter: 0
     };
 
     // this.updater = new ResponseEvaluator();
@@ -67,6 +69,16 @@ class App extends Component {
   }
 
   /**
+   * Returns a generated exercise by index
+   * For DEBUG eyes only eyes 👀
+   * @private
+   * @returns the example exercise at the given index
+   */
+  _getExercise(): Exercise {
+    return this.generator._generateExercise(this.state.counter);
+  }
+
+  /**
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
    */
@@ -76,7 +88,8 @@ class App extends Component {
     // console.log(ExercisePool.pool);
     this.setState({
       feedback: ResponseLog.getFeedback(),
-      nextConcepts: ExercisePool.pool.entries()
+      nextConcepts: ExercisePool.pool.entries(),
+      exercise: this.getExercise()
     });
   }
 
@@ -86,16 +99,17 @@ class App extends Component {
           <div className="main">
             <h1 className="title">Welcome to the koconut demo!
               <span className="debug">
-              <input
-                  type="button"
-                  onClick={() => this.setState(
-                      {
-                        exercise: this.getExercise(),
-                        feedback: ''
-                      })}
-                  value="next exercise type"
-              />
-            </span>
+                <input
+                    type="button"
+                    onClick={() => this.setState(
+                        {
+                          exercise: this._getExercise(),
+                          feedback: '',
+                          counter: this.state.counter + 1
+                        })}
+                    value="next exercise type"
+                />
+              </span>
             </h1>
 
             <ExerciseView

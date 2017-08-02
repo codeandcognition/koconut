@@ -108,6 +108,18 @@ class ExerciseGenerator {
     ExercisePool.addExercise(exercise.exercise, exercise.answer);
     return exercise.exercise;
   }
+
+  /**
+   * Gets a specific exercise from the example exercises
+   * For DEBUG eyes only 👀
+   * @private
+   * @returns the exercise at the given index (wraps around if index > size)
+   */
+  _generateExercise(index: number) {
+    let exercise = exampleExercises[index % exampleExercises.length];
+    ExercisePool.addExercise(exercise.exercise, exercise.answer);
+    return exercise.exercise;
+  }
 }
 
 export default ExerciseGenerator;
