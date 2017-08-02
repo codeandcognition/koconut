@@ -16,6 +16,15 @@ class ExerciseTypes {
         type === this.fillBlank ||
         type === this.highlightCode;
   };
+
+  /**
+   * Determines whether the exercise type is a survey.
+   * @param type
+   * @returns {boolean}
+   */
+  static isSurvey = function(type: string): boolean {
+    return type === this.survey;
+  }
 }
 
 ExerciseTypes.survey = 'survey'; // Survey is just another type of exercise
