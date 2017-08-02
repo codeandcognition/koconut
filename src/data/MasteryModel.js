@@ -65,7 +65,7 @@ class ConceptKnowledge {
 
   /**
    * Updates parents' dependency knowledge values.
-   * This is
+   * This is //TODO: an incomplete comment!
    */
   updateParentValues() {
     this.parents.forEach((p) => p.calculateDependencyKnowledge());
@@ -139,3 +139,4 @@ class MasteryModelClass {
 
 export const MasteryModel = new MasteryModelClass();
 export {ConceptKnowledge};
+export default MasteryModelClass;
