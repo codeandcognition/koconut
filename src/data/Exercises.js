@@ -23,10 +23,10 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
     exercise: {
       prompt: 'Take this survey before we begin. Rate how confident you are in your abilities for each concept.',
       code: '',
-      choices: Object.keys().map((k) => _c[k]),
+      choices: Object.keys(_c).map((k) => _c[k]),
       difficulty: difficulty.low,
       type: ExerciseTypes.survey,
-      concept: null,
+      concept: '',
     },
     answer: ''
   },

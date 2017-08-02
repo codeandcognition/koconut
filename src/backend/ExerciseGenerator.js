@@ -90,7 +90,9 @@ class ExerciseGenerator {
   generateExercise() {
     //First exercise to pass is initial survey
     if(this.counter === 0) {
-      return exampleExercises.filter((e) => e.exercise.type === ExerciseTypes.survey)[0].exercise;
+      let ret = exampleExercises.filter((e) => e.exercise.type === ExerciseTypes.survey)[0].exercise;
+      console.log(ret);
+      return ret;
     }
 
     let concept = this.getConcept();

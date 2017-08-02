@@ -15,8 +15,8 @@ const _c:Abb = {
   REF: 'reference types',
   PRIM: 'primitive types',
   A_OP: 'assignment operator',
-  AA_OP: 'arithmetic-assignment operators'
-  // ARITH: 'arithmetic',
+  AA_OP: 'arithmetic-assignment operators',
+  ARITH: 'arithmetic',
 };
 
 export default _c;
