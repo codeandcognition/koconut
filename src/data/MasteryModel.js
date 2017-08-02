@@ -7,23 +7,26 @@ import conceptInventory from '../backend/Concepts.js';
  * to represent the student knowing or not knowing.
  */
 class ConceptKnowledge {
-  concept: {
-    name: string
-  };
-  knowledge: number; //Between 0 and 1
-  dependencyKnowledge: number; //Between 0 and 1
+  name: string;
+
   dependencies: ConceptKnowledge[];
   parents: ConceptKnowledge[];
 
-  constructor(
-      concept: {
-        name: string
-      }) {
-    this.concept = concept;
-    this.knowledge = 0.0;
-    this.dependencyKnowledge = 0.0;
+  knowledge: number; //p(cognitive mastery) [0,1]
+  dependencyKnowledge: number; //p(support cognitive mastery) [0,1]
+  probL: number; //p(initial learned state) [0,1]
+  probT: number; //p(transition from unlearned -> learned) [0,1]
+
+  constructor(name: string) {
+    this.name = name;
+
     this.dependencies = [];
     this.parents = [];
+
+    this.knowledge = 0.01; // Initially set to probL
+    this.dependencyKnowledge = 0.01; // Avg of dependencies' K values
+    this.probL = 0.2; // Set to 0.3/(#dep + 1) * confidence/max-confidence
+    this.probT = 0.5; // (diff + 1) * 0.3
   }
 
   /**
@@ -77,12 +80,19 @@ class ConceptKnowledge {
 const MasteryModel = function() {
 };
 
+MasteryModel.probGuess = 0.1;
+MasteryModel.probSlip = 0.05; //0.05 * (difficulty + 1)
+
 /**
  * Static array that contains all of the concepts. Dummy version of model.
  * @type {Array}
  */
 MasteryModel.model = [];
 
+/**
+ * Mapping between a concept name and concept object
+ * @type {Map}
+ */
 MasteryModel.modelMap = new Map();
 
 /**
@@ -91,11 +101,11 @@ MasteryModel.modelMap = new Map();
 MasteryModel.populate = function() {
   // Create ConceptKnowledge objects for each concept
   conceptInventory.map((c) => MasteryModel.model.push(
-      new ConceptKnowledge(c)));
+      new ConceptKnowledge(c.name)));
 
   // Create a mapping of strings to ConceptKnowledge objects
   let map = MasteryModel.modelMap;
-  MasteryModel.model.map((m) => map.set(m.concept.name, m));
+  MasteryModel.model.map((m) => map.set(m.name, m));
 
   // Fill ConceptKnowledge objects with references parents/dependencies
   conceptInventory.forEach((c) => {
@@ -116,9 +126,9 @@ MasteryModel.populate = function() {
       let parent = map.get(p);
       if(parent !== undefined && parent !== null) obj.addParent(parent);
     });
-    console.log(obj);
+    // console.log(obj);
   });
-  console.log(MasteryModel.model);
+  // console.log(MasteryModel.model);
 }();
 
 /**

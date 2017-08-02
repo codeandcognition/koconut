@@ -71,8 +71,9 @@ class App extends Component {
    * @param answer - the answer being submitted
    */
   submitResponse(answer: string) {
-    ResponseEvaluator.evaluateAnswer(this.state.exercise, answer);
-    console.log(ExercisePool.pool);
+    if(answer !== null && answer !== undefined)
+      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer);
+    // console.log(ExercisePool.pool);
     this.setState({
       feedback: ResponseLog.getFeedback(),
       nextConcepts: ExercisePool.pool.entries()

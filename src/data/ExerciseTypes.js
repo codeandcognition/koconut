@@ -18,6 +18,7 @@ class ExerciseTypes {
   };
 }
 
+ExerciseTypes.survey = 'survey'; // Survey is just another type of exercise
 ExerciseTypes.writeCode = 'writeCode';
 ExerciseTypes.fillBlank = 'fillBlank';
 ExerciseTypes.highlightCode = 'highlightCode';
