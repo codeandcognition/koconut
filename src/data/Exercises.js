@@ -10,21 +10,52 @@ export type Exercise = {
   concept: string
 }
 
-const F_LOOP = 'for loops';
-const _B_OP = 'boolean operators';
-const E_OP = 'equality operators';
-const R_OP = 'relational operators';
-const C_OP = 'conditional operators';
-const _A_OP = 'assignment operators';
-const _VAR = 'variables';
-const REF = 'reference types';
-const PRIM = 'primitive types';
-const A_OP = 'assignment operator';
-const AA_OP = 'arithmetic-assignment operators';
-const ARITH = 'arithmetic';
+const difficulty = {
+  low: 0,
+  med: 1,
+  high: 2
+}
+
+const _c = {
+  F_LOOP: 'for loops',
+  _B_OP: 'boolean operators',
+  E_OP: 'equality operators',
+  R_OP: 'relational operators',
+  C_OP: 'conditional operators',
+  _A_OP: 'assignment operators',
+  _VAR: 'variables',
+  REF: 'reference types',
+  PRIM: 'primitive types',
+  A_OP: 'assignment operator',
+  AA_OP: 'arithmetic-assignment operators',
+  ARITH: 'arithmetic',
+}
+// const F_LOOP = 'for loops';
+// const _B_OP = 'boolean operators';
+// const E_OP = 'equality operators';
+// const R_OP = 'relational operators';
+// const C_OP = 'conditional operators';
+// const _A_OP = 'assignment operators';
+// const _VAR = 'variables';
+// const REF = 'reference types';
+// const PRIM = 'primitive types';
+// const A_OP = 'assignment operator';
+// const AA_OP = 'arithmetic-assignment operators';
+// const ARITH = 'arithmetic';
 
 export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
-{
+  {
+    exercise: {
+    prompt: 'Take this survey before we begin. Rate how confident you are in your abilities for each concept.',
+      code: '',
+      choices: Object.values(_c),
+      difficulty: difficulty.low,
+      type: ExerciseTypes.survey,
+      concept: null,
+    },
+      answer: ''
+    },
+  {
     exercise: {
       prompt: 'Indicate what the array {6, 3} contents [] would be after the' +
       ' method mystery was called and passed that array as its parameter.',
@@ -37,9 +68,9 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       '        }\n' +
       '    }\n' +
       '}',
-      difficulty: 2,
+      difficulty: difficulty.med,
       type: ExerciseTypes.shortResponse,
-      concept: REF,
+      concept: _c.REF,
     },
     answer: '[7, 2]'
   },
@@ -48,9 +79,9 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       prompt: 'What is the value of variable x?',
       code: 'boolean x = 1 != 2',
       choices: ['true', 'false'],
-      difficulty: 0,
+      difficulty: difficulty.high,
       type: ExerciseTypes.multipleChoice,
-      concept: E_OP
+      concept: _c.E_OP
     },
     answer: 'true'
   },/*=
@@ -76,7 +107,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
         '!(2 == 3) && !(-1 < 5) && !isPrime(n)'],
       difficulty: 2,
       type: ExerciseTypes.multipleChoice,
-      concept: C_OP
+      concept: _c.C_OP
     },
     answer: '(2 != 3) || (-1 >= 5) || !isPrime(n)'
   },
@@ -86,7 +117,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x = 1;',
       difficulty: 1,
       type: ExerciseTypes.writeCode,
-      concept: AA_OP
+      concept: _c.AA_OP
     },
     answer: undefined
   },
@@ -96,7 +127,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x /!*  *!/ 2;',
       difficulty: 2,
       type: ExerciseTypes.fillBlank,
-      concept: _A_OP
+      concept: _c._A_OP
     },
     answer: '='
   },
@@ -111,7 +142,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       choices: ['3', '7', '10', '12'],
       difficulty: 2,
       type: ExerciseTypes.multipleChoice,
-      concept: ARITH
+      concept: _c.ARITH
     },
     answer: '12'
   },
@@ -127,7 +158,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       '}',
       difficulty: 2,
       type: ExerciseTypes.shortResponse,
-      concept: F_LOOP
+      concept: _c.F_LOOP
     },
     answer: '4 1\n2 2'
   },
@@ -138,7 +169,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       choices: ['true', 'false'],
       difficulty: 0,
       type: ExerciseTypes.multipleChoice,
-      concept: _B_OP
+      concept: _c._B_OP
     },
     answer: 'true'
   },
@@ -148,7 +179,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x = 1;',
       difficulty: 1,
       type: ExerciseTypes.highlightCode,
-      concept: _VAR
+      concept: _c._VAR
     },
     answer: 'x'
   },
@@ -158,7 +189,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x = 2;',
       difficulty: 1,
       type: ExerciseTypes.writeCode,
-      concept: A_OP
+      concept: _c.A_OP
     },
     answer: 'x'
   },
@@ -168,7 +199,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
           code: 'int x /!*  *!/ y;',
           difficulty: 1,
           type: ExerciseTypes.writeCode,
-          concept: R_OP
+          concept: _c.R_OP
       },
       answer: 'x'
     },

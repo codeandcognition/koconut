@@ -23,10 +23,10 @@ class ConceptKnowledge {
     this.dependencies = [];
     this.parents = [];
 
-    this.knowledge = 0.01;
-    this.dependencyKnowledge = 0.01;
-    this.probL = 0.2;
-    this.probT = 0.5;
+    this.knowledge = 0.01; // Initially set to probL
+    this.dependencyKnowledge = 0.01; // Avg of dependencies' K values
+    this.probL = 0.2; // Set to 0.3/(#dep + 1) * confidence/max-confidence
+    this.probT = 0.5; // (diff + 1) * 0.3
   }
 
   /**
@@ -81,7 +81,7 @@ const MasteryModel = function() {
 };
 
 MasteryModel.probGuess = 0.1;
-MasteryModel.probSlip = 0.1;
+MasteryModel.probSlip = 0.05; //0.05 * (difficulty + 1)
 
 /**
  * Static array that contains all of the concepts. Dummy version of model.
