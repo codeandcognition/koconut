@@ -8,7 +8,6 @@ import ExerciseView from './ExerciseView';
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
 import {ResponseLog} from '../../data/ResponseLog';
-import ExercisePool from '../../data/ExercisePool';
 //import Concepts from '../../backend/Concepts';
 
 type Exercise = {
@@ -88,7 +87,7 @@ class App extends Component {
       // console.log(ExercisePool.pool);
       this.setState({
         feedback: ResponseLog.getFeedback(),
-        nextConcepts: ExercisePool.pool.entries(),
+        nextConcepts: this.generator.getConcepts(3).toString(),
         exercise: this.getExercise()
       });
     }

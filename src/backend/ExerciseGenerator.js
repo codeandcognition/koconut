@@ -3,6 +3,9 @@ import {exampleExercises} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
 import ExercisePool from '../data/ExercisePool';
 
+// import typeof doesn't agree with Flow for some reason:
+//   https://flow.org/en/docs/types/modules/
+// So, we import all of ConceptKnowledge
 import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
 
 class ExerciseGenerator {
@@ -29,7 +32,7 @@ class ExerciseGenerator {
    * Gives optimal index of the next concept to generate questions for.
    * Index is based on a list of concepts, sorted in this order:
    * least mastered -> most mastered
-   * @param length
+   * @param concepts
    * @param method
    * @returns {number}
    */
