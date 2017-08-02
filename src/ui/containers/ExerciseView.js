@@ -38,9 +38,8 @@ class Exercise extends Component {
 
   /**
    * Updates the Exercise state when receiving a new props object
-   * @param nextProps - the next props object being received
    */
-  componentWillReceiveProps(nextProps: Props) {
+  componentWillReceiveProps() {
     this.setState({
       answer: null,
     });

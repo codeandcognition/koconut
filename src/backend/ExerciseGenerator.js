@@ -82,8 +82,7 @@ class ExerciseGenerator {
     let types = Object.keys(ExerciseTypes).filter(
         (obj) => typeof ExerciseTypes[obj] !== 'function',
     );
-    let ret = types[Math.floor(Math.random() * types.length)];
-    return ret;
+    return types[Math.floor(Math.random() * types.length)];
   }
 
   /**
