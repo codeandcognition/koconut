@@ -71,7 +71,9 @@ class ResponseEvaluator {
     // console.log(ResponseLog.log); //Debug/demo
 
     if (ExerciseTypes.isSurvey(exercise.type)) {
-      MasteryModel.surveyUpdateModel(Array.from(answer));
+      MasteryModel.surveyUpdateModel(Array.from(answer).map(x =>
+          parseInt(x, 10),
+      ));
     } else {
       MasteryModel.updateModel(
           exercise.concept, ResponseEvaluator.analyzeLog(exercise.concept),

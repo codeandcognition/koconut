@@ -23,7 +23,9 @@ class ConceptKnowledge {
     this.parents = [];
 
     this.knowledge = 0.01; // Initially set to probL
-    this.dependencyKnowledge = 0.01; // Avg of dependencies' K values
+    this.dependencyKnowledge = 1; // Avg of dependencies' K values
+                                  // default is 1 because having no dependencies
+                                  // means full knowledge
     this.probL = 0.2; // Set to 0.3/(#dep + 1) * confidence/max-confidence
     this.probT = 0.5; // (diff + 1) * 0.3
   }
@@ -59,7 +61,7 @@ class ConceptKnowledge {
    */
   calculateDependencyKnowledge() {
     this.dependencyKnowledge = (this.dependencies.reduce(
-            (sum, d) => sum + d.knowledge, 0)) /
+        (sum, d) => sum + d.knowledge, 0)) /
         this.dependencies.length;
   }
 
@@ -97,7 +99,7 @@ class MasteryModelClass {
    */
   updateModel(concept: string, knowledge: number) {
     let conceptKnowledge = this.modelMap.get(concept);
-    if(conceptKnowledge !== undefined && conceptKnowledge !== null)
+    if (conceptKnowledge !== undefined && conceptKnowledge !== null)
       conceptKnowledge.updateKnowledgeValue(knowledge);
   }
 
@@ -111,7 +113,7 @@ class MasteryModelClass {
       //TODO: Make this not a bad hard coded value
       let denominator = concept.dependencies.length;
       denominator = denominator === 0 ? 1 : denominator;
-      concept.updateKnowledgeValue((0.5/denominator)*(num/5));
+      concept.updateKnowledgeValue((0.5 / denominator) * (num / 5));
     });
   }
 
@@ -132,8 +134,9 @@ class MasteryModelClass {
     conceptInventory.forEach((c) => {
       // Ensure that map gets a valid ConceptKnowledge object
       let obj_ = map.get(c.name); // Weird type coercion nonsense
-      let obj : ConceptKnowledge;
-      if(obj_ !== undefined && obj_ !== null && obj_ instanceof ConceptKnowledge) {
+      let obj: ConceptKnowledge;
+      if (obj_ !== undefined && obj_ !== null &&
+          obj_ instanceof ConceptKnowledge) {
         obj = obj_;
       } else {
         return;
@@ -141,17 +144,16 @@ class MasteryModelClass {
       // Similar type safety for the dependency and parent objects
       c.dependencies.forEach((d) => {
         let dependency = map.get(d);
-        if(dependency !== undefined && dependency !== null) obj.addDependency(dependency);
+        if (dependency !== undefined && dependency !== null) obj.addDependency(
+            dependency);
       });
       c.parents.forEach((p) => {
         let parent = map.get(p);
-        if(parent !== undefined && parent !== null) obj.addParent(parent);
+        if (parent !== undefined && parent !== null) obj.addParent(parent);
       });
     });
   }
 }
-
-
 
 export const MasteryModel = new MasteryModelClass();
 export {ConceptKnowledge};
