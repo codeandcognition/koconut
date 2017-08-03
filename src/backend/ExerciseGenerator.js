@@ -3,6 +3,9 @@ import {exampleExercises} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
 import ExercisePool from '../data/ExercisePool';
 
+// import typeof doesn't agree with Flow for some reason:
+//   https://flow.org/en/docs/types/modules/
+// So, we import all of ConceptKnowledge
 import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
 
 class ExerciseGenerator {
@@ -29,7 +32,7 @@ class ExerciseGenerator {
    * Gives optimal index of the next concept to generate questions for.
    * Index is based on a list of concepts, sorted in this order:
    * least mastered -> most mastered
-   * @param length
+   * @param concepts
    * @param method
    * @returns {number}
    */
@@ -79,8 +82,7 @@ class ExerciseGenerator {
     let types = Object.keys(ExerciseTypes).filter(
         (obj) => typeof ExerciseTypes[obj] !== 'function',
     );
-    let ret = types[Math.floor(Math.random() * types.length)];
-    return ret;
+    return types[Math.floor(Math.random() * types.length)];
   }
 
   /**
@@ -105,6 +107,18 @@ class ExerciseGenerator {
     let exercise = exercisePool[Math.floor(
         Math.random() * exercisePool.length)];
     this.counter += 1;
+    ExercisePool.addExercise(exercise.exercise, exercise.answer);
+    return exercise.exercise;
+  }
+
+  /**
+   * Gets a specific exercise from the example exercises
+   * For DEBUG eyes only 👀
+   * @private
+   * @returns the exercise at the given index (wraps around if index > size)
+   */
+  _generateExercise(index: number) {
+    let exercise = exampleExercises[index % exampleExercises.length];
     ExercisePool.addExercise(exercise.exercise, exercise.answer);
     return exercise.exercise;
   }

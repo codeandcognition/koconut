@@ -14,6 +14,7 @@
 ## Other Docs
 
 - [Flow](docs/flow.md)
+- [Jest](docs/jest.md)
 - [Deprecated](docs/deprecated.md)
 
 ## Project Information

@@ -1,5 +1,8 @@
 //@flow
 
+// import typeof doesn't agree with Flow for some reason:
+//   https://flow.org/en/docs/types/modules/
+// So, we import all of ResponseObject
 import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import {MasteryModel} from '../data/MasteryModel';
 import ExercisePool from '../data/ExercisePool';

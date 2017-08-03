@@ -1,5 +1,4 @@
 // @flow
-
 import conceptInventory from '../backend/Concepts.js';
 
 /**
@@ -66,7 +65,7 @@ class ConceptKnowledge {
 
   /**
    * Updates parents' dependency knowledge values.
-   * This is
+   * This is //TODO: an incomplete comment!
    */
   updateParentValues() {
     this.parents.forEach((p) => p.calculateDependencyKnowledge());
@@ -77,79 +76,83 @@ class ConceptKnowledge {
  * Static class that contains student's knowledge of each concept.
  * @class
  */
-const MasteryModel = function() {
-};
+class MasteryModelClass {
+  probGuess: number;
+  probSlip: number;
+  model: ConceptKnowledge[];
+  modelMap: Map<string, ConceptKnowledge>;
 
-MasteryModel.probGuess = 0.1;
-MasteryModel.probSlip = 0.05; //0.05 * (difficulty + 1)
+  constructor() {
+    this.probGuess = 0.1;
+    this.probSlip = 0.05; // 0.05 * (difficulty + 1)
+    this.model = [];
+    this.modelMap = new Map();
+    this._populate();
+  }
 
-/**
- * Static array that contains all of the concepts. Dummy version of model.
- * @type {Array}
- */
-MasteryModel.model = [];
+  /**
+   * Updates concept in student knowledge model with true/false value.
+   * @param concept
+   * @param knowledge
+   */
+  updateModel(concept: string, knowledge: number) {
+    let conceptKnowledge = this.modelMap.get(concept);
+    if(conceptKnowledge !== undefined && conceptKnowledge !== null)
+      conceptKnowledge.updateKnowledgeValue(knowledge);
+  }
 
-/**
- * Mapping between a concept name and concept object
- * @type {Map}
- */
-MasteryModel.modelMap = new Map();
-
-/**
- * Populates array with each concept from concept model.
- */
-MasteryModel.populate = function() {
-  // Create ConceptKnowledge objects for each concept
-  conceptInventory.map((c) => MasteryModel.model.push(
-      new ConceptKnowledge(c.name)));
-
-  // Create a mapping of strings to ConceptKnowledge objects
-  let map = MasteryModel.modelMap;
-  MasteryModel.model.map((m) => map.set(m.name, m));
-
-  // Fill ConceptKnowledge objects with references parents/dependencies
-  conceptInventory.forEach((c) => {
-    // Ensure that map gets a valid ConceptKnowledge object
-    let obj_ = map.get(c.name); // Weird type coercion nonsense
-    let obj : ConceptKnowledge;
-    if(obj_ !== undefined && obj_ !== null && obj_ instanceof ConceptKnowledge) {
-      obj = obj_;
-    } else {
-      return;
-    }
-    // Similar type safety for the dependency and parent objects
-    c.dependencies.forEach((d) => {
-      let dependency = map.get(d);
-      if(dependency !== undefined && dependency !== null) obj.addDependency(dependency);
+  /**
+   * Updates MasteryModel initial values based on survey data.
+   * @param initialValues
+   */
+  surveyUpdateModel(initialValues: number[]) {
+    initialValues.forEach((num, i) => {
+      let concept = MasteryModel.model[i];
+      //TODO: Make this not a bad hard coded value
+      let denominator = concept.dependencies.length;
+      denominator = denominator === 0 ? 1 : denominator;
+      concept.updateKnowledgeValue((0.5/denominator)*(num/5));
     });
-    c.parents.forEach((p) => {
-      let parent = map.get(p);
-      if(parent !== undefined && parent !== null) obj.addParent(parent);
+  }
+
+  /**
+   * Populates array with each concept from concept model.
+   * @private
+   */
+  _populate() {
+    // Create ConceptKnowledge objects for each concept
+    conceptInventory.map((c) => this.model.push(
+        new ConceptKnowledge(c.name)));
+
+    // Create a mapping of strings to ConceptKnowledge objects
+    let map = this.modelMap;
+    this.model.map((m) => map.set(m.name, m));
+
+    // Fill ConceptKnowledge objects with references parents/dependencies
+    conceptInventory.forEach((c) => {
+      // Ensure that map gets a valid ConceptKnowledge object
+      let obj_ = map.get(c.name); // Weird type coercion nonsense
+      let obj : ConceptKnowledge;
+      if(obj_ !== undefined && obj_ !== null && obj_ instanceof ConceptKnowledge) {
+        obj = obj_;
+      } else {
+        return;
+      }
+      // Similar type safety for the dependency and parent objects
+      c.dependencies.forEach((d) => {
+        let dependency = map.get(d);
+        if(dependency !== undefined && dependency !== null) obj.addDependency(dependency);
+      });
+      c.parents.forEach((p) => {
+        let parent = map.get(p);
+        if(parent !== undefined && parent !== null) obj.addParent(parent);
+      });
     });
-    // console.log(obj);
-  });
-  // console.log(MasteryModel.model);
-}();
+  }
+}
 
-/**
- * Updates concept in student knowledge model with true/false value.
- * @param concept
- * @param knowledge
- */
-MasteryModel.updateModel = function(concept: string, knowledge: number) {
-  let conceptKnowledge = MasteryModel.modelMap.get(concept);
-  if(conceptKnowledge !== undefined && conceptKnowledge !== null)
-    conceptKnowledge.updateKnowledgeValue(knowledge);
-};
 
-MasteryModel.surveyUpdateModel = function(initialValues: number[]) {
-  initialValues.forEach((num, i) => {
-    let concept = MasteryModel.model[i];
-    //TODO: Make this not a bad hard coded value
-    let denominator = concept.dependencies.length;
-    denominator = denominator === 0 ? 1 : denominator;
-    concept.updateKnowledgeValue((0.5/denominator)*(num/5));
-  });
-};
 
-export {ConceptKnowledge, MasteryModel};
+export const MasteryModel = new MasteryModelClass();
+export {ConceptKnowledge};
+export default MasteryModelClass;
