@@ -1,0 +1,17 @@
+.surveyScale {
+  display: flex;
+  justify-content: space-between;
+}
+
+.surveyScaleBox {
+  $size: 1em;
+  width: $size;
+  height: $size;
+  border: 1px solid black;
+  margin-right: .25em;
+  cursor: pointer;
+}
+
+.surveyScaleBox.true {
+  background-color: black;
+}
