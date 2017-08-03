@@ -13,6 +13,7 @@
 
 ## Other Docs
 
+- [Architecture + Design](docs/architecture.md)
 - [Flow](docs/flow.md)
 - [Jest](docs/jest.md)
 - [Deprecated](docs/deprecated.md)
