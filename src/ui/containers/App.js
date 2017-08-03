@@ -32,7 +32,8 @@ class App extends Component {
   state: {
     exercise: Exercise,
     feedback: string,
-    nextConcepts: string
+    nextConcepts: string,
+    counter: number
   };
 
   constructor() {
@@ -43,7 +44,8 @@ class App extends Component {
     this.state = {
       exercise: this.generator.generateExercise(),
       feedback: '',
-      nextConcepts: ''
+      nextConcepts: '',
+      counter: 1
     };
 
     // this.updater = new ResponseEvaluator();
