@@ -51,7 +51,8 @@ class ExerciseGenerator {
    */
   getOrderedConcepts(): ConceptKnowledge[] {
     return MasteryModel.model.sort(
-        (a, b) => (b.knowledge * b.dependencyKnowledge - a.knowledge * a.dependencyKnowledge));
+        (a, b) => (b.dependencyKnowledge / b.knowledge -
+                   a.dependencyKnowledge / a.knowledge));
   }
 
   /**
@@ -93,6 +94,9 @@ class ExerciseGenerator {
     //First exercise to pass is initial survey
     if(this.counter === 0) {
       let ret = exampleExercises.filter((e) => e.exercise.type === ExerciseTypes.survey)[0].exercise;
+      // need to increment
+      this.counter += 1;
+
       console.log(ret);
       return ret;
     }

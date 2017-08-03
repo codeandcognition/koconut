@@ -53,14 +53,8 @@ class App extends Component {
   }
 
   /**
-   * Sets the initial exercise on load
-   */
-  componentWillMount() {
-    this.setState({exercise: this.getExercise()});
-  }
-
-  /**
    * Return a generated exercise
+   * TODO: Remove, this is redundant?
    * @returns a generated exercise
    */
   getExercise(): Exercise {
