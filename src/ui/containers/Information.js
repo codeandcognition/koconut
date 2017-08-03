@@ -20,13 +20,29 @@ class Information extends Component {
   };
 
   /**
+   * Returns JSX for (or not for) the Code container given the current props
+   * @returns JSX for the Code container
+   */
+  renderCodeView() {
+    return Types.isSurvey(this.props.type) ? '' :
+        (<Code
+            type={this.props.type}
+            code={this.props.code}
+            updateHandler={Types.isInlineResponseType(this.props.type)
+                ? this.props.updateHandler
+                : undefined}
+        />);
+  }
+
+  /**
    * Returns JSX for (or not for) the Response container given the current props
    * @returns JSX for the Response container
    */
   renderResponseView() {
-    return Types.isInlineResponseType(this.props.type) ? <div/>
+    let type = this.props.type;
+    return Types.isInlineResponseType(type) ? <div/>
         : <Response
-            type={this.props.type}
+            type={type}
             choices={this.props.choices}
             answer={this.props.answer}
             updateHandler={this.props.updateHandler}
@@ -36,13 +52,7 @@ class Information extends Component {
   render() {
     return (
         <div className="information">
-          <Code
-              type={this.props.type}
-              code={this.props.code}
-              updateHandler={Types.isInlineResponseType(this.props.type)
-                  ? this.props.updateHandler
-                  : undefined}
-          />
+          {this.renderCodeView()}
           {this.renderResponseView()}
         </div>
     );
