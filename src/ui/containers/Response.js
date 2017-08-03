@@ -39,7 +39,7 @@ class Response extends Component {
       case(Types.shortResponse):
         return <ShortResponse inputHandler={update}/>;
       case(Types.survey):
-        return <SurveyView choices={choices} inputHandler={update}/>
+        return <SurveyView choices={choices} inputHandler={update}/>;
       default:
         return <div className="BAD">Not a valid EXERCISE type {type}</div>;
     }
