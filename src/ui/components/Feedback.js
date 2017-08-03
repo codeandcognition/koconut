@@ -15,7 +15,6 @@ class Feedback extends Component {
   };
 
   render() {
-    console.log(this.props.feedback);
     return (
       <div className="feedback">
         <p>Your answer was: {this.props.feedback} </p>

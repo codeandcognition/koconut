@@ -1,5 +1,5 @@
 # deprecated
-> :skull: it's just floobits lol :skull:
+> :skull: _it's just floobits lol_ :skull:
 
 ## Using Floobits in WebStorm
 **Floobits is buggy and no longer maintained, do not use it for general development** :sob:

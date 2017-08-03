@@ -14,7 +14,7 @@ class Hint extends Component {
     let hintH = this.props.height ? this.props.height : 100; // Default height
     let pad = this.props.padding ? this.props.padding : 10; // Default padding
 
-    let resources = this.props.resources;
+    //let resources = this.props.resources;
 
     return (
         <div className="hint" style={{
