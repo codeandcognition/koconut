@@ -3,6 +3,7 @@
 import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import {MasteryModel} from '../data/MasteryModel';
 import ExercisePool from '../data/ExercisePool';
+import ExerciseTypes from '../data/ExerciseTypes';
 import type {Exercise} from '../data/Exercises';
 
 const certaintyWeight = 2; //TODO: Each concept should its own value.
@@ -17,11 +18,12 @@ class ResponseEvaluator {
    * @param weight
    * @returns {number}
    */
-  static multiplicativeInverseMethod(responses: ResponseObject[], weight: number) {
+  static multiplicativeInverseMethod(
+      responses: ResponseObject[], weight: number) {
     let correct = responses.filter((r) => r.correct === true).length;
     let wrong = responses.length - correct;
     let difference = correct - wrong;
-    return difference < 0 ? 0 : ( -1 * weight)/(difference + weight) + 1;
+    return difference < 0 ? 0 : ( -1 * weight) / (difference + weight) + 1;
   }
 
   /**
@@ -42,8 +44,10 @@ class ResponseEvaluator {
    * @returns {number}
    */
   static analyzeLog(concept: string): number {
-    let responsesWithConcept = ResponseLog.log.filter((res) => res.concept === concept);
-    let val = this.calculateCertainty(responsesWithConcept, this.multiplicativeInverseMethod);
+    let responsesWithConcept = ResponseLog.log.filter(
+        (res) => res.concept === concept);
+    let val = this.calculateCertainty(responsesWithConcept,
+        this.multiplicativeInverseMethod);
     return val > 1 ? 1 : val;
   }
 
@@ -58,13 +62,19 @@ class ResponseEvaluator {
     // TODO: Check written answers for correctness (currently always false)
     let isCorrect = answer === ExercisePool.getAnswer(exercise);
     ResponseLog.addResponse(
-      '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect, Date.now()
+        '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect,
+        Date.now(),
     );
     // console.log(ResponseLog.log); //Debug/demo
 
-    MasteryModel.updateModel(
-      exercise.concept, ResponseEvaluator.analyzeLog(exercise.concept)
-    );
+    if (ExerciseTypes.isSurvey(exercise.type)) {
+      MasteryModel.surveyUpdateModel(Array.from(answer));
+    } else {
+      MasteryModel.updateModel(
+          exercise.concept, ResponseEvaluator.analyzeLog(exercise.concept),
+      );
+    }
+
     this.printImportantStuff(); //Debug/demo
   }
 
@@ -74,7 +84,8 @@ class ResponseEvaluator {
   static printImportantStuff() {
     console.log(MasteryModel.model);
     MasteryModel.model.forEach((m) => {
-      console.log(m.name + '\n\tk: ' + m.knowledge + '\n\tdk: ' + m.dependencyKnowledge);
+      console.log(m.name + '\n\tk: ' + m.knowledge + '\n\tdk: ' +
+          m.dependencyKnowledge + '\n\t#d: ' + m.dependencies.length);
     });
   }
 }

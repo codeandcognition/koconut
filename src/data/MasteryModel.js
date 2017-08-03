@@ -142,4 +142,14 @@ MasteryModel.updateModel = function(concept: string, knowledge: number) {
     conceptKnowledge.updateKnowledgeValue(knowledge);
 };
 
+MasteryModel.surveyUpdateModel = function(initialValues: number[]) {
+  initialValues.forEach((num, i) => {
+    let concept = MasteryModel.model[i];
+    //TODO: Make this not a bad hard coded value
+    let denominator = concept.dependencies.length;
+    denominator = denominator === 0 ? 1 : denominator;
+    concept.updateKnowledgeValue((0.5/denominator)*(num/5));
+  });
+};
+
 export {ConceptKnowledge, MasteryModel};
