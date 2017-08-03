@@ -9,6 +9,7 @@ class SurveyScale extends Component {
     val: number,
     boxes: boolean[],
   };
+  handleBoxSelect: Function;
 
   constructor(props: Props) {
     super(props);
@@ -23,6 +24,7 @@ class SurveyScale extends Component {
     for(let i = this.state.val; i < scale; i++) {
       this.state.boxes.push(false);
     }
+    this.handleBoxSelect = this.handleBoxSelect.bind(this);
   }
 
   handleBoxSelect(key: string) {
