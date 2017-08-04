@@ -52,7 +52,7 @@ class Exercise extends Component {
 
   render() {
     return (
-        <div className="problem">
+        <div className="exercise-view">
           <Prompt content={this.props.exercise.prompt} type={this.props.exercise.type}/>
           <Information
               code={this.props.exercise.code}
