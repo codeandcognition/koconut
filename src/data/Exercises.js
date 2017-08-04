@@ -104,7 +104,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       type: ExerciseTypes.fillBlank,
       concept: _c._A_OP
     },
-    answer: '='
+    answer: 'int x = 2;'
   },
   {
     // https://practiceit.cs.washington.edu/problem/view/bjp4/chapter2/s12-valueOfX
@@ -161,21 +161,21 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
   {
     exercise: {
       prompt: 'Create a new variable x and set its value to 2.',
-      code: 'int x = 2;',
+      code: '',
       difficulty: 1,
       type: ExerciseTypes.writeCode,
       concept: _c.A_OP
     },
-    answer: 'x'
+    answer: 'int x = 2;'
   },
     {
       exercise: {
-        prompt: 'Fill in the blank that x is less than y.',
-          code: 'int x /!*  *!/ y;',
+        prompt: 'Fill in the blank so that x is assigned to y less than 5.',
+          code: 'boolean x = y /*  */ 5;',
           difficulty: 1,
           type: ExerciseTypes.writeCode,
           concept: _c.R_OP
       },
-      answer: 'x'
+      answer: 'boolean x = y < 5;'
     },
 ];
