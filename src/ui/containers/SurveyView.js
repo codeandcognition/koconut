@@ -14,6 +14,7 @@ class SurveyView extends Component {
     filled: boolean
   };
   handleUpdate: Function;
+  fillAll: Function;
 
   constructor(props: Props) {
     super(props);
@@ -22,6 +23,7 @@ class SurveyView extends Component {
       filled: false,
     };
     this.handleUpdate = this.handleUpdate.bind(this);
+    this.fillAll = this.fillAll.bind(this);
   }
 
   /**
@@ -37,6 +39,15 @@ class SurveyView extends Component {
       this.setState({filled: true});
       this.props.inputHandler(temp);
     }
+  }
+
+  /**
+   * Dev tool to quickly fill survey.
+   */
+  fillAll() {
+    let temp = this.state.surveys.slice().map((c) =>
+      Math.floor(Math.random() * 5) + 1); //Random between 1 and 5
+    this.setState({surveys: temp, filled: true});
   }
 
   /**
@@ -59,6 +70,8 @@ class SurveyView extends Component {
     return <div className="survey">
       {this.renderChoices(this.props.choices)}
       <br/><br/><br/>
+      <button onClick={this.fillAll}>Quick Fill</button>
+      <br/><br/>
       <b>Completed: {this.state.filled.toString()}</b>
     </div>;
   }
