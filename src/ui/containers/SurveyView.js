@@ -10,14 +10,16 @@ type Props = {
 
 class SurveyView extends Component {
   state: {
-    surveys: number[]
+    surveys: number[],
+    filled: boolean
   };
   handleUpdate: Function;
 
   constructor(props: Props) {
     super(props);
     this.state = {
-      surveys: this.props.choices.map((c) => 0) //Default values
+      surveys: this.props.choices.map((c) => 0), //Defaults
+      filled: false,
     };
     this.handleUpdate = this.handleUpdate.bind(this);
   }
@@ -31,7 +33,10 @@ class SurveyView extends Component {
     let temp = this.state.surveys.slice(); // Immutability
     temp[ind] = val;
     this.setState({surveys: temp});
-    this.props.inputHandler(temp);
+    if(temp.filter((s) => s === 0).length === 0) {
+      this.setState({filled: true});
+      this.props.inputHandler(temp);
+    }
   }
 
   /**
@@ -53,6 +58,8 @@ class SurveyView extends Component {
   render() {
     return <div className="survey">
       {this.renderChoices(this.props.choices)}
+      <p></p>
+      <b>Completed: {this.state.filled.toString()}</b>
     </div>;
   }
 }
