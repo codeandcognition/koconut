@@ -94,7 +94,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       type: ExerciseTypes.writeCode,
       concept: _c.AA_OP
     },
-    answer: undefined
+    answer: 'int x = 1;\nx++;'
   },
   {
     exercise: {
