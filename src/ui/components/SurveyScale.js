@@ -31,7 +31,9 @@ class SurveyScale extends Component {
     );
 
     return <div className="surveyScale">
-      {this.props.value !== 0 ? this.props.value.toString() : ' '}
+      <div className="numeric">
+        {this.props.value !== 0 ? this.props.value.toString() : ' '}
+      </div>
       {displayBoxes}
     </div>;
   }
