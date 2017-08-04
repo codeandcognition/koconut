@@ -170,7 +170,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
   },
   {
     exercise: {
-      prompt: 'Fill in the blank so that x is assigned to y less than 5.',
+      prompt: 'Fill in the blank so that x is assigned to true if y is less than 5.',
         code: 'boolean x = y /*  */ 5;',
         difficulty: 1,
         type: ExerciseTypes.writeCode,
