@@ -8,13 +8,17 @@ import './Submit.css';
  */
 class Submit extends Component {
   props: {
-    submitHandler: Function
+    submitHandler: Function,
+    click: boolean
   };
 
   render() {
     return (
         <div className="submit-container">
-          <div className="btn btn-submit" onClick={this.props.submitHandler}>
+          <div className={"btn btn-submit " + (this.props.click ?
+              'click' : 'no-click')}
+               onClick={this.props.click ? this.props.submitHandler
+                   : (()=>null)}> {/*Return null if cannot click*/}
             Submit
           </div>
         </div>
