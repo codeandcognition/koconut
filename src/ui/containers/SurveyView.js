@@ -58,7 +58,7 @@ class SurveyView extends Component {
   render() {
     return <div className="survey">
       {this.renderChoices(this.props.choices)}
-      <p></p>
+      <br/><br/><br/>
       <b>Completed: {this.state.filled.toString()}</b>
     </div>;
   }
