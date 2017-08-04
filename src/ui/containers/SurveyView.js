@@ -48,6 +48,7 @@ class SurveyView extends Component {
     let temp = this.state.surveys.slice().map((c) =>
       Math.floor(Math.random() * 5) + 1); //Random between 1 and 5
     this.setState({surveys: temp, filled: true});
+    this.props.inputHandler(temp);
   }
 
   /**

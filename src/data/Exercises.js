@@ -168,14 +168,25 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
     },
     answer: 'int x = 2;'
   },
-    {
-      exercise: {
-        prompt: 'Fill in the blank so that x is assigned to y less than 5.',
-          code: 'boolean x = y /*  */ 5;',
-          difficulty: 1,
-          type: ExerciseTypes.writeCode,
-          concept: _c.R_OP
-      },
-      answer: 'boolean x = y < 5;'
+  {
+    exercise: {
+      prompt: 'Fill in the blank so that x is assigned to y less than 5.',
+        code: 'boolean x = y /*  */ 5;',
+        difficulty: 1,
+        type: ExerciseTypes.writeCode,
+        concept: _c.R_OP
     },
+    answer: 'boolean x = y < 5;'
+  },
+  {
+    exercise: {
+      prompt: 'After the arithmetic operation, what is the value of x?',
+      code: 'int x = 5/3;',
+      choices: ['3', '5', '1', '2'],
+      difficulty: 1,
+      type: ExerciseTypes.multipleChoice,
+      concept: _c.ARITH
+    },
+    answer: '1'
+  },
 ];
