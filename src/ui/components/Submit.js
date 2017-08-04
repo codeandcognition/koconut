@@ -12,15 +12,23 @@ class Submit extends Component {
     click: boolean
   };
 
+  /**
+   * Determines whether the submit button is clickable and returns JSX.
+   * @returns {XML}
+   */
+  renderSubmitButton() {
+    let click = this.props.click ? 'click' : 'no-click';
+    let onclick = this.props.click ? this.props.submitHandler : (() => null);
+    return (
+        <div className={"btn btn-submit " + click} onClick={onclick}>
+          Submit
+        </div>);
+  }
+
   render() {
     return (
         <div className="submit-container">
-          <div className={"btn btn-submit " + (this.props.click ?
-              'click' : 'no-click')}
-               onClick={this.props.click ? this.props.submitHandler
-                   : (()=>null)}> {/*Return null if cannot click*/}
-            Submit
-          </div>
+          {this.renderSubmitButton()}
         </div>
     );
   }
