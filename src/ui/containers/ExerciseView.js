@@ -45,6 +45,10 @@ class Exercise extends Component {
     });
   }
 
+  /**
+   * Returns whether the answer is defined and non-null or not.
+   * @returns {boolean}
+   */
   isAnswered() {
     let _a = this.state.answer;
     return _a !== undefined && _a !== null;
