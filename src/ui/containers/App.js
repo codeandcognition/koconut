@@ -133,6 +133,9 @@ class App extends Component {
     );
   }
 
+  /**
+   * Renders the concept selection view
+   */
   renderConceptSelection() {
     return (
         <ConceptSelection
