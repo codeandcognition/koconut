@@ -1,0 +1,9 @@
+@import "../containers/App.scss";
+
+.concept-selection {
+  margin: 2em auto;
+  width: 65vw;
+  border: 1px dashed darkslategray;
+  text-align: center;
+  background-color: $component-background;
+}

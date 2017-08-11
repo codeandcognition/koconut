@@ -88,9 +88,10 @@ class ExerciseGenerator {
 
   /**
    * Returns a generated Exercise
+   * @param concept - specifies a concept type if provided
    * @returns a generated Exercise
    */
-  generateExercise() {
+  generateExercise(concept: ?string) {
     //First exercise to pass is initial survey
     if(this.counter === 0) {
       let ret = exampleExercises.filter((e) => e.exercise.type === ExerciseTypes.survey)[0].exercise;
@@ -101,7 +102,11 @@ class ExerciseGenerator {
       return ret;
     }
 
-    let concept = this.getConcept();
+    // Retrieves a concept if not provided
+    if(typeof concept !== 'string') {
+      concept = this.getConcept();
+    }
+
     // let type = this.getType();
     let exercisePool = exampleExercises.filter(
         (e) => {
@@ -118,6 +123,7 @@ class ExerciseGenerator {
   /**
    * Gets a specific exercise from the example exercises
    * For DEBUG eyes only 👀
+   * @param index - the exercise index to retrieve
    * @private
    * @returns the exercise at the given index (wraps around if index > size)
    */
@@ -126,6 +132,7 @@ class ExerciseGenerator {
     ExercisePool.addExercise(exercise.exercise, exercise.answer);
     return exercise.exercise;
   }
+
 }
 
 export default ExerciseGenerator;

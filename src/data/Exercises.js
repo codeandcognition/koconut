@@ -189,4 +189,15 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
     },
     answer: '1'
   },
+  {
+    exercise: {
+      prompt: 'Stub for primitive types',
+      code: 'the right answer is abc',
+      choices: ['abc'],
+      difficulty: -1,
+      type: ExerciseTypes.multipleChoice,
+      concept: _c.PRIM
+    },
+    answer: 'abc'
+  }
 ];

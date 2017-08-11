@@ -11,14 +11,14 @@ import './Feedback.css';
 class Feedback extends Component {
   props: {
     feedback: boolean,
-    nextConcepts: string
+    nextConcepts: string[]
   };
 
   render() {
     return (
       <div className="feedback">
         <p>Your answer was: {this.props.feedback} </p>
-        <p>Next concepts: {this.props.nextConcepts} </p>
+        <p>Next concepts: {this.props.nextConcepts.toString()} </p>
       </div>
     )
   }
