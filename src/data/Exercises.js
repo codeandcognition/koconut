@@ -189,4 +189,15 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
     },
     answer: '1'
   },
+  {
+    exercise: {
+      prompt: 'After the arithmetic operation, what is the value of x?',
+      code: 'int x = 5/3;',
+      choices: ['3', '5', '1', '2'],
+      difficulty: 1,
+      type: ExerciseTypes.multipleChoice,
+      concept: _c.ARITH
+    },
+    answer: '1'
+  },
 ];
