@@ -17,7 +17,7 @@ type Props = {
   },
   submitHandler: Function,
   feedback: boolean,
-  nextConcepts: string
+  nextConcepts: string[]
 }
 
 /**

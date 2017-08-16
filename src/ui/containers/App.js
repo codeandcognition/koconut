@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 
 import './App.css';
 import ExerciseView from './ExerciseView';
+import ConceptSelection from '../components/ConceptSelection';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -20,20 +21,31 @@ type Exercise = {
   // exerciseID: string
 }
 
+// Display type enum
+const displayType = {
+  exercise: 'EXERCISE',
+  feedback: 'FEEDBACk',
+  concept: 'CONCEPT',
+};
+
 /**
  * Renders the koconut application view.
  * @class
  */
 class App extends Component {
   submitResponse: Function;
+  submitConcept: Function;
   generator: ExerciseGenerator;
   // updater: ResponseEvaluator;
 
   state: {
     exercise: Exercise,
     feedback: string,
-    nextConcepts: string,
-    counter: number
+    nextConcepts: string[],
+    counter: number,
+    display: string, // the current display state
+    conceptOptions: number, // concept options offered
+    currentConcept: ?string
   };
 
   constructor() {
@@ -44,12 +56,16 @@ class App extends Component {
     this.state = {
       exercise: this.generator.generateExercise(),
       feedback: '',
-      nextConcepts: '',
-      counter: 1
+      nextConcepts: [],
+      counter: 1,
+      display: displayType.exercise,
+      conceptOptions: 3,
+      currentConcept: null
     };
 
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
+    this.submitConcept = this.submitConcept.bind(this);
   }
 
   /**
@@ -81,9 +97,65 @@ class App extends Component {
       // console.log(ExercisePool.pool);
       this.setState({
         feedback: ResponseLog.getFeedback(),
-        nextConcepts: this.generator.getConcepts(3).toString(),
-        exercise: this.getExercise()
+        nextConcepts: this.generator.getConcepts(this.state.conceptOptions),
+        exercise: this.generator.generateExercise(this.state.currentConcept),
+        display: this.state.conceptOptions > 1
+               ? displayType.concept
+               : displayType.exercise
       });
+    }
+  }
+
+  /**
+   * Submits the given concept
+   * @param concept - the concept being submit
+   */
+  submitConcept(concept: string){
+    if(concept !== null && concept !== undefined) {
+      this.setState({
+        exercise: this.generator.generateExercise(concept),
+        display: displayType.exercise
+      })
+    }
+  }
+  
+  /**
+   * Renders the exercise view
+   */
+  renderExercise() {
+    return (
+        <ExerciseView
+            exercise={this.state.exercise}
+            submitHandler = {this.submitResponse}
+            feedback = {this.state.feedback}
+            nextConcepts = {this.state.nextConcepts}
+        />
+    );
+  }
+
+  /**
+   * Renders the concept selection view
+   */
+  renderConceptSelection() {
+    return (
+        <ConceptSelection
+            concepts={this.state.nextConcepts}
+            submitHandler={this.submitConcept}
+        />
+    );
+  }
+
+  /**
+   * Renders the display based on display state
+   */
+  renderDisplay() {
+    switch(this.state.display) {
+      case displayType.exercise:
+        return this.renderExercise();
+      case displayType.concept:
+        return this.renderConceptSelection();
+      default:
+        break;
     }
   }
 
@@ -105,13 +177,7 @@ class App extends Component {
                 />
               </span>
             </h1>
-
-            <ExerciseView
-                exercise={this.state.exercise}
-                submitHandler = {this.submitResponse}
-                feedback = {this.state.feedback}
-                nextConcepts = {this.state.nextConcepts}
-            />
+            {this.renderDisplay()}
           </div>
         </div>
     );

@@ -191,13 +191,13 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
   },
   {
     exercise: {
-      prompt: 'After the arithmetic operation, what is the value of x?',
-      code: 'int x = 5/3;',
-      choices: ['3', '5', '1', '2'],
-      difficulty: 1,
+      prompt: 'Stub for primitive types',
+      code: 'the right answer is abc',
+      choices: ['abc'],
+      difficulty: -1,
       type: ExerciseTypes.multipleChoice,
-      concept: _c.ARITH
+      concept: _c.PRIM
     },
-    answer: '1'
-  },
+    answer: 'abc'
+  }
 ];
