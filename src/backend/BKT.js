@@ -10,7 +10,7 @@ class BKT {
     this.L = 0.34; //Corbett
     this.T = 0.2; //Corbett
     this.G = 0.066; //Constant from Baker et al.
-    this.S = 0.102; //Constant from Baker et al.
+    this.S = 0.402; //Constant from Baker et al.
   }
 
   learned(previous: number, correct: boolean) {
