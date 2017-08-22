@@ -13,8 +13,6 @@ class ConceptKnowledge {
 
   knowledge: number; //p(cognitive mastery) [0,1]
   dependencyKnowledge: number; //p(support cognitive mastery) [0,1]
-  probL: number; //p(initial learned state) [0,1]
-  probT: number; //p(transition from unlearned -> learned) [0,1]
 
   constructor(name: string) {
     this.name = name;
@@ -22,12 +20,10 @@ class ConceptKnowledge {
     this.dependencies = [];
     this.parents = [];
 
-    this.knowledge = 0.01; // Initially set to probL
+    this.knowledge = 0.01; // Initially set to survey value
     this.dependencyKnowledge = 1; // Avg of dependencies' K values
                                   // default is 1 because having no dependencies
                                   // means full knowledge
-    this.probL = 0.2; // Set to 0.3/(#dep + 1) * confidence/max-confidence
-    this.probT = 0.5; // (diff + 1) * 0.3
   }
 
   /**
@@ -87,14 +83,10 @@ class ConceptKnowledge {
  * @class
  */
 class MasteryModelClass {
-  probGuess: number;
-  probSlip: number;
   model: ConceptKnowledge[];
   modelMap: Map<string, ConceptKnowledge>;
 
   constructor() {
-    this.probGuess = 0.1;
-    this.probSlip = 0.05; // 0.05 * (difficulty + 1)
     this.model = [];
     this.modelMap = new Map();
     this._populate();
