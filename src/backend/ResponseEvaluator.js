@@ -7,9 +7,8 @@ import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import {MasteryModel} from '../data/MasteryModel';
 import ExercisePool from '../data/ExercisePool';
 import ExerciseTypes from '../data/ExerciseTypes';
+import BKT from './BKT.js';
 import type {Exercise} from '../data/Exercises';
-
-const certaintyWeight = 2; //TODO: Each concept should its own value.
 
 class ResponseEvaluator {
   /**
@@ -22,11 +21,20 @@ class ResponseEvaluator {
    * @returns {number}
    */
   static multiplicativeInverseMethod(
-      responses: ResponseObject[], weight: number) {
+      concept: string, responses: ResponseObject[]) {
     let correct = responses.filter((r) => r.correct === true).length;
     let wrong = responses.length - correct;
     let difference = correct - wrong;
+    let weight = 2; //TODO: make this not horrible
     return difference < 0 ? 0 : ( -1 * weight) / (difference + weight) + 1;
+  }
+
+  static BKT(concept: string, responses: ResponseObject[]) {
+    let bkt = new BKT();
+    let ck = MasteryModel.modelMap.get(concept);
+    let knowledge = 0.01;
+    if(ck !== null && ck !== undefined) knowledge = ck.getKnowledge();
+    return bkt.learned(knowledge, responses[responses.length - 1].correct);
   }
 
   /**
@@ -36,8 +44,8 @@ class ResponseEvaluator {
    * @param method
    * @returns {*}
    */
-  static calculateCertainty(responses: ResponseObject[], method: Function) {
-    return method(responses, certaintyWeight);
+  static calculateCertainty(concept:string, responses: ResponseObject[], method: Function) {
+    return method(concept, responses);
   }
 
   /**
@@ -49,8 +57,8 @@ class ResponseEvaluator {
   static analyzeLog(concept: string): number {
     let responsesWithConcept = ResponseLog.log.filter(
         (res) => res.concept === concept);
-    let val = this.calculateCertainty(responsesWithConcept,
-        this.multiplicativeInverseMethod);
+    let val = this.calculateCertainty(concept, responsesWithConcept,
+        this.BKT);
     return val > 1 ? 1 : val;
   }
 

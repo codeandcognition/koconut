@@ -47,6 +47,14 @@ class ConceptKnowledge {
   }
 
   /**
+   * Returns the current node's knowledge value.
+   * @returns {number}
+   */
+  getKnowledge() {
+    return this.knowledge;
+  }
+
+  /**
    * Update the mastery value for this concept object.
    * When mastery changes, its parent dependency value will need updating too.
    * @param num
@@ -111,9 +119,10 @@ class MasteryModelClass {
     initialValues.forEach((num, i) => {
       let concept = MasteryModel.model[i];
       //TODO: Make this not a bad hard coded value
-      let denominator = concept.dependencies.length;
-      denominator = denominator === 0 ? 1 : denominator;
-      concept.updateKnowledgeValue((0.5 / denominator) * (num / 5));
+      // let denominator = concept.dependencies.length;
+      // denominator = denominator === 0 ? 1 : denominator;
+      // concept.updateKnowledgeValue((0.5 / denominator) * (num / 5));
+      concept.updateKnowledgeValue(num/5);
     });
   }
 

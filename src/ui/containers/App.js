@@ -24,7 +24,7 @@ type Exercise = {
 // Display type enum
 const displayType = {
   exercise: 'EXERCISE',
-  feedback: 'FEEDBACk',
+  feedback: 'FEEDBACK',
   concept: 'CONCEPT',
 };
 
