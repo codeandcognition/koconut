@@ -16,47 +16,44 @@ class ResponseEvaluator {
    * of a differential would be required to reach a level of certainty that the
    * student has learned a concept.
    * f(x) = -k/(x+k) + 1, where k is the weight value.
+   * @param concept
    * @param responses
-   * @param weight
    * @returns {number}
    */
-  static multiplicativeInverseMethod(
-      concept: string, responses: ResponseObject[]) {
+  static multiplicativeInverseMethod(responses: ResponseObject[]) {
     let correct = responses.filter((r) => r.correct === true).length;
     let wrong = responses.length - correct;
     let difference = correct - wrong;
-    let weight = 2; //TODO: make this not horrible
+    let weight = 2;
     return difference < 0 ? 0 : ( -1 * weight) / (difference + weight) + 1;
   }
 
-  static BKT(concept: string, responses: ResponseObject[]) {
+  static BKT(response: ResponseObject) {
+    let concept = response.concept;
     let ck = MasteryModel.modelMap.get(concept);
-    let knowledge = 0.01;
-    if(ck !== null && ck !== undefined) knowledge = ck.getKnowledge();
-    return BayesKT.learned(knowledge, responses[responses.length - 1].correct);
+    let knowledge = !(ck === null || ck === undefined) ? ck.getKnowledge() : 0.01;
+    return BayesKT.learned(knowledge, response);
   }
 
   /**
    * Takes in a relevant set of responses, and a function that calculates the
    * knowledge value of that concept. Assigns that value to the mastery model.
-   * @param responses
+   * @param response
    * @param method
    * @returns {*}
    */
-  static calculateCertainty(concept:string, responses: ResponseObject[], method: Function) {
-    return method(concept, responses);
+  static calculateCertainty(response, method: Function) {
+    return method(response);
   }
 
   /**
    * Takes in a concept, analyzes user log, and performs analysis of user
    * performance to reach conclusion about user knowing a concept.
-   * @param concept
+   * @param response
    * @returns {number}
    */
-  static analyzeLog(concept: string): number {
-    let responsesWithConcept = ResponseLog.log.filter(
-        (res) => res.concept === concept);
-    let val = this.calculateCertainty(concept, responsesWithConcept, this.BKT);
+  static analyzeLog(response: ResponseObject): number {
+    let val = this.calculateCertainty(response, this.BKT);
     return val > 1 ? 1 : val;
   }
 
@@ -82,7 +79,8 @@ class ResponseEvaluator {
       ));
     } else {
       MasteryModel.updateModel(
-          exercise.concept, ResponseEvaluator.analyzeLog(exercise.concept),
+          exercise.concept,
+          ResponseEvaluator.analyzeLog(ResponseLog.getLastElement()),
       );
     }
 
