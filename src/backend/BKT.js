@@ -50,7 +50,7 @@ class BKT {
    */
   contextualize(response: ResponseObject, constant: number, param: string) {
     let ret = constant;
-    console.groupCollapsed("BKT");
+    console.groupCollapsed('BKT ' + ' Param: ' + param + ' Initial: ' + constant);
     if(this.notNullOrUndefined(response)) {
       let features = Object.keys(ResponseFeatures);
       features.forEach((feature) => {
@@ -59,10 +59,12 @@ class BKT {
         let factor = analysis.typeof === 'boolean' ? 1 : analysis; //Takes care of boolean case
 
         //TODO: remove after validated
-        console.log('Feature: ' + feature + ' Param: ' + param);
-        ret += ResponseFeatures[feature][param] * factor;
+        let change = ResponseFeatures[feature][param] * factor;
+        ret += change;
+        console.log('Feature: ' + feature + ' Param: ' + param + ' ' + change);
       });
     }
+    console.log('Final: ' + ret);
     console.groupEnd();
     return this.probabilityBounded(ret);
   }
