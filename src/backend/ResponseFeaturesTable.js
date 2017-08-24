@@ -3,8 +3,9 @@ import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import ExerciseTypes from '../data/ExerciseTypes';
 
 /**
- * Factors out values for contextualized G and S
- * from Baker et al.
+ * Values for contextualized G and S from Baker et al.
+ * Adjust these values as needed. If we define additional features, add to this
+ * object and append the necessary function below.
  */
 const ResponseFeatures = {
   responseIsString:             {g: 0.049,  s: -0.02,   analyze: responseIsString},
