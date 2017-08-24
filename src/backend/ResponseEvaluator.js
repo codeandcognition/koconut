@@ -7,7 +7,7 @@ import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import {MasteryModel} from '../data/MasteryModel';
 import ExercisePool from '../data/ExercisePool';
 import ExerciseTypes from '../data/ExerciseTypes';
-import BKT from './BKT.js';
+import {BayesKT} from './BKT.js';
 import type {Exercise} from '../data/Exercises';
 
 class ResponseEvaluator {
@@ -30,11 +30,10 @@ class ResponseEvaluator {
   }
 
   static BKT(concept: string, responses: ResponseObject[]) {
-    let bkt = new BKT();
     let ck = MasteryModel.modelMap.get(concept);
     let knowledge = 0.01;
     if(ck !== null && ck !== undefined) knowledge = ck.getKnowledge();
-    return bkt.learned(knowledge, responses[responses.length - 1].correct);
+    return BayesKT.learned(knowledge, responses[responses.length - 1].correct);
   }
 
   /**
@@ -57,8 +56,7 @@ class ResponseEvaluator {
   static analyzeLog(concept: string): number {
     let responsesWithConcept = ResponseLog.log.filter(
         (res) => res.concept === concept);
-    let val = this.calculateCertainty(concept, responsesWithConcept,
-        this.BKT);
+    let val = this.calculateCertainty(concept, responsesWithConcept, this.BKT);
     return val > 1 ? 1 : val;
   }
 
