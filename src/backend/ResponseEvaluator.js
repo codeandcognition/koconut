@@ -28,6 +28,12 @@ class ResponseEvaluator {
     return difference < 0 ? 0 : ( -1 * weight) / (difference + weight) + 1;
   }
 
+  /**
+   * Uses Bayesian Knowledge Tracing to update knowledge value.
+   * @param response
+   * @returns {number}
+   * @constructor
+   */
   static BKT(response: ResponseObject) {
     let concept = response.concept;
     let ck = MasteryModel.modelMap.get(concept);
@@ -36,25 +42,22 @@ class ResponseEvaluator {
   }
 
   /**
-   * Takes in a relevant set of responses, and a function that calculates the
-   * knowledge value of that concept. Assigns that value to the mastery model.
+   * Calculates certainty of knowing given a method.
    * @param response
    * @param method
    * @returns {*}
    */
-  static calculateCertainty(response, method: Function) {
+  static calculateCertainty(response: ResponseObject, method: Function) {
     return method(response);
   }
 
   /**
-   * Takes in a concept, analyzes user log, and performs analysis of user
-   * performance to reach conclusion about user knowing a concept.
+   * Calculates certainty using specific analysis method.
    * @param response
    * @returns {number}
    */
   static analyzeLog(response: ResponseObject): number {
-    let val = this.calculateCertainty(response, this.BKT);
-    return val > 1 ? 1 : val;
+    return this.calculateCertainty(response, this.BKT);
   }
 
   /**
@@ -71,7 +74,11 @@ class ResponseEvaluator {
         '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect,
         Date.now(),
     );
-    // console.log(ResponseLog.log); //Debug/demo
+
+    //Debug for demo
+    console.groupCollapsed("Response Log");
+    console.log(ResponseLog.log);
+    console.groupEnd();
 
     if (ExerciseTypes.isSurvey(exercise.type)) {
       MasteryModel.surveyUpdateModel(Array.from(answer).map(x =>
@@ -91,11 +98,13 @@ class ResponseEvaluator {
    * Debugging method for quick analysis of CK behavior through console
    */
   static printImportantStuff() {
+    console.groupCollapsed("Response Evaluator");
     console.log(MasteryModel.model);
     MasteryModel.model.forEach((m) => {
       console.log(m.name + '\n\tk: ' + m.knowledge + '\n\tdk: ' +
           m.dependencyKnowledge + '\n\t#d: ' + m.dependencies.length);
     });
+    console.groupEnd();
   }
 }
 

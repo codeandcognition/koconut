@@ -50,18 +50,32 @@ class BKT {
    */
   contextualize(response: ResponseObject, constant: number, param: string) {
     let ret = constant;
+    console.groupCollapsed("BKT");
     if(this.notNullOrUndefined(response)) {
       let features = Object.keys(ResponseFeatures);
       features.forEach((feature) => {
-        let retVal = ResponseFeatures[feature].analyze(response);
-        let factor = retVal.typeof === 'number' ? retVal : 1;
+
+        let analysis = ResponseFeatures[feature].analyze(response);
+        let factor = analysis.typeof === 'boolean' ? 1 : analysis; //Takes care of boolean case
+
         //TODO: remove after validated
-        console.log('Feature: ' + feature);
-        console.log('Param: ' + param);
+        console.log('Feature: ' + feature + ' Param: ' + param);
         ret += ResponseFeatures[feature][param] * factor;
       });
     }
-    return ret;
+    console.groupEnd();
+    return this.probabilityBounded(ret);
+  }
+
+  /**
+   * Ensures that value is not probabilistically degenerate
+   * @param num
+   * @returns {number}
+   */
+  probabilityBounded(num: number) {
+    num = num <= 0 ? 0.001 : num;
+    num = num >= 1 ? 0.999 : num;
+    return num;
   }
 
   /**

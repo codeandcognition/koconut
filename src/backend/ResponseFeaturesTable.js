@@ -12,7 +12,7 @@ const ResponseFeatures = {
   percentPastErrors:            {g: 0,      s: -0.004,  analyze: percentPastErrors},
   helpRequest:                  {g: 0,      s: 0.066,   analyze: helpRequest},
   percentHelpRequested:         {g: 0,      s: -0.047,  analyze: percentHelpRequested},
-  numberOfLast8HelpRequested:   {g: 0.042,  g: -0.019,  analyze: numberOfLast8HelpRequested},
+  numberOfLast8HelpRequested:   {g: 0.042,  s: -0.019,  analyze: numberOfLast8HelpRequested},
   timeTaken:                    {g: 0.002,  s: -0.0002, analyze: timeTaken},
   timeTakenSD:                  {g: -0.024, s: 0.01,    analyze: timeTakenSD},
   timeTakenInLast5Actions:      {g: -0.003, s: 0.002,   analyze: timeTakenInLast5Actions},
@@ -29,7 +29,6 @@ const ResponseFeatures = {
  * @returns {boolean} true if response is string
  */
 function responseIsString(response: ResponseObject) {
-  return 0;
   return response.exerciseType === ExerciseTypes.writeCode ||
       response.exerciseType === ExerciseTypes.fillBlank ||
       response.exerciseType === ExerciseTypes.shortResponse;
@@ -47,8 +46,7 @@ function percentPastErrors(response: ResponseObject) {
   let responsesOfConcept = ResponseLog.log.filter(
       (res) => res.concept === response.concept);
   let incorrectResponses = responsesOfConcept.filter((res) => res.correct === false);
-  return 0;
-  // return incorrectResponses.length / responsesOfConcept.length;
+  return incorrectResponses.length / responsesOfConcept.length;
 }
 
 /**

@@ -66,14 +66,12 @@ class ResponseLogClass {
         : 'incorrect';
   };
 
-  getFirstElement(): ?ResponseObject {
-    if(this.log.length === 0) return null;
+  getFirstElement(): ResponseObject {
     return this.log[0];
   }
 
-  getLastElement(): ?ResponseObject {
-    if(this.log.length === 0) return null;
-    return this.log[this.log.len]
+  getLastElement(): ResponseObject {
+    return this.log[this.log.length - 1]
   }
 }
 
