@@ -65,6 +65,16 @@ class ResponseLogClass {
         ? 'correct'
         : 'incorrect';
   };
+
+  getFirstElement(): ?ResponseObject {
+    if(this.log.length === 0) return null;
+    return this.log[0];
+  }
+
+  getLastElement(): ?ResponseObject {
+    if(this.log.length === 0) return null;
+    return this.log[this.log.len]
+  }
 }
 
 export const ResponseLog = new ResponseLogClass();
