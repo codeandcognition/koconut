@@ -66,7 +66,7 @@ class BKT {
     }
     console.log('Final: ' + ret);
     console.groupEnd();
-    return this.probabilityBounded(ret);
+    return this.boundedProbability(ret);
   }
 
   /**
@@ -74,7 +74,7 @@ class BKT {
    * @param num
    * @returns {number}
    */
-  probabilityBounded(num: number) {
+  boundedProbability(num: number) {
     num = num <= 0 ? 0.001 : num;
     num = num >= 1 ? 0.999 : num;
     return num;
