@@ -57,9 +57,8 @@ class BKT {
       features.forEach((feature) => {
         let factor = ResponseFeatures[feature].analyze(response);
         let change = ResponseFeatures[feature][param] * factor;
-        // Modify param by change
         ret += change;
-        console.log('Feature: ' + feature + ' Param: ' + param + ' ' + change);
+        console.log('Feature: ' + feature + ' Param: ' + param + ' \n' + change);
       });
     }
     console.log('Final: ' + ret);
