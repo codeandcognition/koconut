@@ -24,6 +24,9 @@ src/**/*.css
 # floo
 .floo*
 
+# void
+/api/java/tmp/
+
 # misc
 .DS_Store
 .env.local
