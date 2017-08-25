@@ -82,8 +82,9 @@ class SurveyView extends Component {
     return <div className="survey">
       {this.renderChoices(this.props.choices)}
       <br/><br/>
-      <button onClick={this.fillAll}>Quick Fill</button>
       <div style={{width: 8 + 'em'}}>
+        {/* This div should be removed at some point. Dev tool only. */}
+        <button onClick={this.fillAll}>Quick Fill</button>
         <p>Fill Uniform:</p>
         <SurveyScale index={-1} value={this.state.surveys[0]} scale={5} updateHandler={this.fillAllUniform} />
       </div>
