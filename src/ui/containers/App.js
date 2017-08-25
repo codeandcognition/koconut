@@ -44,7 +44,7 @@ class App extends Component {
     nextConcepts: string[],
     counter: number,
     display: string, // the current display state
-    conceptOptions: number, // concept options offered
+    conceptOptions: number, // concept options offered, no options if <= 1
     currentConcept: ?string
   };
 

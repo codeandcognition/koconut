@@ -1,6 +1,6 @@
 import {configure, setAddon} from '@storybook/react';
 import infoAddon from '@storybook/addon-info';
-import {exampleExercises} from '../backend/data/Exercises';
+import {exampleExercises} from '../data/Exercises';
 
 setAddon(infoAddon);
 
@@ -18,8 +18,7 @@ import {Button, Welcome} from '@storybook/react/demo';
 
 import App from '../ui/containers/App';
 import Information from '../ui/containers/Information';
-import Problem from '../ui/containers/Exercise';
-import Question from '../ui/components/Question';
+import Exercise from '../ui/containers/ExerciseView';
 import Response from '../ui/containers/Response';
 import Choice from '../ui/components/Choice';
 import Code from '../ui/components/Code';
