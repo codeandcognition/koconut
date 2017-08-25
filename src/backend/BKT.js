@@ -15,7 +15,7 @@ class BKT {
    */
   constructor() {
     //Arbitrary T value
-    this.T = 0.2;
+    this.T = 0.4;
     //Constants from Baker et al.
     this.G = 0.066;
     this.S = 0.402;
@@ -53,13 +53,11 @@ class BKT {
     console.groupCollapsed('BKT ' + ' Param: ' + param + ' Initial: ' + constant);
     if(this.notNullOrUndefined(response)) {
       let features = Object.keys(ResponseFeatures);
+
       features.forEach((feature) => {
-
-        let analysis = ResponseFeatures[feature].analyze(response);
-        let factor = analysis.typeof === 'boolean' ? 1 : analysis; //Takes care of boolean case
-
-        //TODO: remove after validated
+        let factor = ResponseFeatures[feature].analyze(response);
         let change = ResponseFeatures[feature][param] * factor;
+        // Modify param by change
         ret += change;
         console.log('Feature: ' + feature + ' Param: ' + param + ' ' + change);
       });
