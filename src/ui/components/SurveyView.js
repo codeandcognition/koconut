@@ -85,7 +85,7 @@ class SurveyView extends Component {
       <button onClick={this.fillAll}>Quick Fill</button>
       <div style={{width: 8 + 'em'}}>
         <p>Fill Uniform:</p>
-        <SurveyScale index={0} value={0} scale={5} updateHandler={this.fillAllUniform} />
+        <SurveyScale index={-1} value={this.state.surveys[0]} scale={5} updateHandler={this.fillAllUniform} />
       </div>
       <br/>
       <b>Completed: {this.state.filled.toString()}</b>
