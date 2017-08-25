@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import MultipleChoice from '../components/MultipleChoice';
 import ShortResponse from '../components/ShortResponse';
-import SurveyView from './SurveyView.js';
+import SurveyView from '../components/SurveyView.js';
 import './Response.css';
 
 import Types from '../../data/ExerciseTypes.js';

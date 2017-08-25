@@ -1,4 +1,4 @@
-// flow-typed signature: ffe0a9f4ac5b8f6d11cda4bc344c255e
+// flow-typed signature: 24c3171cf8d10361fefd481d04499adc
 // flow-typed version: <<STUB>>/brace_v^0.10.0/flow_v0.49.1
 
 /**
@@ -174,11 +174,11 @@ declare module 'brace/mode/bro' {
   declare module.exports: any;
 }
 
-declare module 'brace/mode/c9search' {
+declare module 'brace/mode/c_cpp' {
   declare module.exports: any;
 }
 
-declare module 'brace/mode/c_cpp' {
+declare module 'brace/mode/c9search' {
   declare module.exports: any;
 }
 
@@ -310,11 +310,11 @@ declare module 'brace/mode/handlebars' {
   declare module.exports: any;
 }
 
-declare module 'brace/mode/haskell' {
+declare module 'brace/mode/haskell_cabal' {
   declare module.exports: any;
 }
 
-declare module 'brace/mode/haskell_cabal' {
+declare module 'brace/mode/haskell' {
   declare module.exports: any;
 }
 
@@ -326,15 +326,15 @@ declare module 'brace/mode/hjson' {
   declare module.exports: any;
 }
 
-declare module 'brace/mode/html' {
-  declare module.exports: any;
-}
-
 declare module 'brace/mode/html_elixir' {
   declare module.exports: any;
 }
 
 declare module 'brace/mode/html_ruby' {
+  declare module.exports: any;
+}
+
+declare module 'brace/mode/html' {
   declare module.exports: any;
 }
 
@@ -746,11 +746,11 @@ declare module 'brace/snippets/bro' {
   declare module.exports: any;
 }
 
-declare module 'brace/snippets/c9search' {
+declare module 'brace/snippets/c_cpp' {
   declare module.exports: any;
 }
 
-declare module 'brace/snippets/c_cpp' {
+declare module 'brace/snippets/c9search' {
   declare module.exports: any;
 }
 
@@ -882,11 +882,11 @@ declare module 'brace/snippets/handlebars' {
   declare module.exports: any;
 }
 
-declare module 'brace/snippets/haskell' {
+declare module 'brace/snippets/haskell_cabal' {
   declare module.exports: any;
 }
 
-declare module 'brace/snippets/haskell_cabal' {
+declare module 'brace/snippets/haskell' {
   declare module.exports: any;
 }
 
@@ -898,15 +898,15 @@ declare module 'brace/snippets/hjson' {
   declare module.exports: any;
 }
 
-declare module 'brace/snippets/html' {
-  declare module.exports: any;
-}
-
 declare module 'brace/snippets/html_elixir' {
   declare module.exports: any;
 }
 
 declare module 'brace/snippets/html_ruby' {
+  declare module.exports: any;
+}
+
+declare module 'brace/snippets/html' {
   declare module.exports: any;
 }
 
@@ -1310,11 +1310,11 @@ declare module 'brace/theme/chrome' {
   declare module.exports: any;
 }
 
-declare module 'brace/theme/clouds' {
+declare module 'brace/theme/clouds_midnight' {
   declare module.exports: any;
 }
 
-declare module 'brace/theme/clouds_midnight' {
+declare module 'brace/theme/clouds' {
   declare module.exports: any;
 }
 
@@ -1362,11 +1362,11 @@ declare module 'brace/theme/kuroir' {
   declare module.exports: any;
 }
 
-declare module 'brace/theme/merbivore' {
+declare module 'brace/theme/merbivore_soft' {
   declare module.exports: any;
 }
 
-declare module 'brace/theme/merbivore_soft' {
+declare module 'brace/theme/merbivore' {
   declare module.exports: any;
 }
 
@@ -1402,14 +1402,6 @@ declare module 'brace/theme/textmate' {
   declare module.exports: any;
 }
 
-declare module 'brace/theme/tomorrow' {
-  declare module.exports: any;
-}
-
-declare module 'brace/theme/tomorrow_night' {
-  declare module.exports: any;
-}
-
 declare module 'brace/theme/tomorrow_night_blue' {
   declare module.exports: any;
 }
@@ -1419,6 +1411,14 @@ declare module 'brace/theme/tomorrow_night_bright' {
 }
 
 declare module 'brace/theme/tomorrow_night_eighties' {
+  declare module.exports: any;
+}
+
+declare module 'brace/theme/tomorrow_night' {
+  declare module.exports: any;
+}
+
+declare module 'brace/theme/tomorrow' {
   declare module.exports: any;
 }
 
@@ -1583,11 +1583,11 @@ declare module 'brace/mode/batchfile.js' {
 declare module 'brace/mode/bro.js' {
   declare module.exports: $Exports<'brace/mode/bro'>;
 }
-declare module 'brace/mode/c9search.js' {
-  declare module.exports: $Exports<'brace/mode/c9search'>;
-}
 declare module 'brace/mode/c_cpp.js' {
   declare module.exports: $Exports<'brace/mode/c_cpp'>;
+}
+declare module 'brace/mode/c9search.js' {
+  declare module.exports: $Exports<'brace/mode/c9search'>;
 }
 declare module 'brace/mode/cirru.js' {
   declare module.exports: $Exports<'brace/mode/cirru'>;
@@ -1685,11 +1685,11 @@ declare module 'brace/mode/haml.js' {
 declare module 'brace/mode/handlebars.js' {
   declare module.exports: $Exports<'brace/mode/handlebars'>;
 }
-declare module 'brace/mode/haskell.js' {
-  declare module.exports: $Exports<'brace/mode/haskell'>;
-}
 declare module 'brace/mode/haskell_cabal.js' {
   declare module.exports: $Exports<'brace/mode/haskell_cabal'>;
+}
+declare module 'brace/mode/haskell.js' {
+  declare module.exports: $Exports<'brace/mode/haskell'>;
 }
 declare module 'brace/mode/haxe.js' {
   declare module.exports: $Exports<'brace/mode/haxe'>;
@@ -1697,14 +1697,14 @@ declare module 'brace/mode/haxe.js' {
 declare module 'brace/mode/hjson.js' {
   declare module.exports: $Exports<'brace/mode/hjson'>;
 }
-declare module 'brace/mode/html.js' {
-  declare module.exports: $Exports<'brace/mode/html'>;
-}
 declare module 'brace/mode/html_elixir.js' {
   declare module.exports: $Exports<'brace/mode/html_elixir'>;
 }
 declare module 'brace/mode/html_ruby.js' {
   declare module.exports: $Exports<'brace/mode/html_ruby'>;
+}
+declare module 'brace/mode/html.js' {
+  declare module.exports: $Exports<'brace/mode/html'>;
 }
 declare module 'brace/mode/ini.js' {
   declare module.exports: $Exports<'brace/mode/ini'>;
@@ -2012,11 +2012,11 @@ declare module 'brace/snippets/batchfile.js' {
 declare module 'brace/snippets/bro.js' {
   declare module.exports: $Exports<'brace/snippets/bro'>;
 }
-declare module 'brace/snippets/c9search.js' {
-  declare module.exports: $Exports<'brace/snippets/c9search'>;
-}
 declare module 'brace/snippets/c_cpp.js' {
   declare module.exports: $Exports<'brace/snippets/c_cpp'>;
+}
+declare module 'brace/snippets/c9search.js' {
+  declare module.exports: $Exports<'brace/snippets/c9search'>;
 }
 declare module 'brace/snippets/cirru.js' {
   declare module.exports: $Exports<'brace/snippets/cirru'>;
@@ -2114,11 +2114,11 @@ declare module 'brace/snippets/haml.js' {
 declare module 'brace/snippets/handlebars.js' {
   declare module.exports: $Exports<'brace/snippets/handlebars'>;
 }
-declare module 'brace/snippets/haskell.js' {
-  declare module.exports: $Exports<'brace/snippets/haskell'>;
-}
 declare module 'brace/snippets/haskell_cabal.js' {
   declare module.exports: $Exports<'brace/snippets/haskell_cabal'>;
+}
+declare module 'brace/snippets/haskell.js' {
+  declare module.exports: $Exports<'brace/snippets/haskell'>;
 }
 declare module 'brace/snippets/haxe.js' {
   declare module.exports: $Exports<'brace/snippets/haxe'>;
@@ -2126,14 +2126,14 @@ declare module 'brace/snippets/haxe.js' {
 declare module 'brace/snippets/hjson.js' {
   declare module.exports: $Exports<'brace/snippets/hjson'>;
 }
-declare module 'brace/snippets/html.js' {
-  declare module.exports: $Exports<'brace/snippets/html'>;
-}
 declare module 'brace/snippets/html_elixir.js' {
   declare module.exports: $Exports<'brace/snippets/html_elixir'>;
 }
 declare module 'brace/snippets/html_ruby.js' {
   declare module.exports: $Exports<'brace/snippets/html_ruby'>;
+}
+declare module 'brace/snippets/html.js' {
+  declare module.exports: $Exports<'brace/snippets/html'>;
 }
 declare module 'brace/snippets/ini.js' {
   declare module.exports: $Exports<'brace/snippets/ini'>;
@@ -2435,11 +2435,11 @@ declare module 'brace/theme/chaos.js' {
 declare module 'brace/theme/chrome.js' {
   declare module.exports: $Exports<'brace/theme/chrome'>;
 }
-declare module 'brace/theme/clouds.js' {
-  declare module.exports: $Exports<'brace/theme/clouds'>;
-}
 declare module 'brace/theme/clouds_midnight.js' {
   declare module.exports: $Exports<'brace/theme/clouds_midnight'>;
+}
+declare module 'brace/theme/clouds.js' {
+  declare module.exports: $Exports<'brace/theme/clouds'>;
 }
 declare module 'brace/theme/cobalt.js' {
   declare module.exports: $Exports<'brace/theme/cobalt'>;
@@ -2474,11 +2474,11 @@ declare module 'brace/theme/kr_theme.js' {
 declare module 'brace/theme/kuroir.js' {
   declare module.exports: $Exports<'brace/theme/kuroir'>;
 }
-declare module 'brace/theme/merbivore.js' {
-  declare module.exports: $Exports<'brace/theme/merbivore'>;
-}
 declare module 'brace/theme/merbivore_soft.js' {
   declare module.exports: $Exports<'brace/theme/merbivore_soft'>;
+}
+declare module 'brace/theme/merbivore.js' {
+  declare module.exports: $Exports<'brace/theme/merbivore'>;
 }
 declare module 'brace/theme/mono_industrial.js' {
   declare module.exports: $Exports<'brace/theme/mono_industrial'>;
@@ -2504,12 +2504,6 @@ declare module 'brace/theme/terminal.js' {
 declare module 'brace/theme/textmate.js' {
   declare module.exports: $Exports<'brace/theme/textmate'>;
 }
-declare module 'brace/theme/tomorrow.js' {
-  declare module.exports: $Exports<'brace/theme/tomorrow'>;
-}
-declare module 'brace/theme/tomorrow_night.js' {
-  declare module.exports: $Exports<'brace/theme/tomorrow_night'>;
-}
 declare module 'brace/theme/tomorrow_night_blue.js' {
   declare module.exports: $Exports<'brace/theme/tomorrow_night_blue'>;
 }
@@ -2518,6 +2512,12 @@ declare module 'brace/theme/tomorrow_night_bright.js' {
 }
 declare module 'brace/theme/tomorrow_night_eighties.js' {
   declare module.exports: $Exports<'brace/theme/tomorrow_night_eighties'>;
+}
+declare module 'brace/theme/tomorrow_night.js' {
+  declare module.exports: $Exports<'brace/theme/tomorrow_night'>;
+}
+declare module 'brace/theme/tomorrow.js' {
+  declare module.exports: $Exports<'brace/theme/tomorrow'>;
 }
 declare module 'brace/theme/twilight.js' {
   declare module.exports: $Exports<'brace/theme/twilight'>;
