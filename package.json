@@ -16,9 +16,12 @@
     "react-scripts": "1.0.10"
   },
   "dependencies": {
+    "body-parser": "^1.17.2",
     "brace": "^0.10.0",
+    "express": "^4.15.4",
     "lodash": "^4.17.4",
     "node-sass-chokidar": "0.0.3",
+    "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.2",
     "react": "^15.6.1",
     "react-ace": "^5.1.1",
@@ -33,6 +36,7 @@
     "flow": "flow",
     "make-flow-nicer": "flow-typed install && flow-scripts stub",
     "start-js": "react-scripts start",
+    "start-node": "nodemon ./api/bin/www",
     "start-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "build-css": "node-sass-chokidar src/ -o src/",
     "start-docs": "documentation serve --watch src/**",
