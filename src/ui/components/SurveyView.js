@@ -15,6 +15,7 @@ class SurveyView extends Component {
   };
   handleUpdate: Function;
   fillAll: Function;
+  fillAllUniform: Function;
 
   constructor(props: Props) {
     super(props);
@@ -24,6 +25,7 @@ class SurveyView extends Component {
     };
     this.handleUpdate = this.handleUpdate.bind(this);
     this.fillAll = this.fillAll.bind(this);
+    this.fillAllUniform = this.fillAllUniform.bind(this);
   }
 
   /**
@@ -46,8 +48,17 @@ class SurveyView extends Component {
    */
   fillAll() {
     let temp = this.state.surveys.slice().map((c) =>
-      Math.floor(Math.random() * 5) + 1); //Random between 1 and 5
+      Math.floor(Math.random() * 5) + 1);
     this.setState({surveys: temp, filled: true});
+    this.props.inputHandler(temp);
+  }
+
+  /**
+   * Another dev tool.
+   */
+  fillAllUniform(ind: number, val: number) {
+    let temp = this.state.surveys.slice().map((c) => val);
+    this.setState({surveys: temp});
     this.props.inputHandler(temp);
   }
 
@@ -70,9 +81,11 @@ class SurveyView extends Component {
   render() {
     return <div className="survey">
       {this.renderChoices(this.props.choices)}
-      <br/><br/><br/>
-      <button onClick={this.fillAll}>Quick Fill</button>
       <br/><br/>
+      <button onClick={this.fillAll}>Quick Fill</button>
+      <p>Fill Uniform:</p>
+      <SurveyScale index={0} value={0} scale={5} updateHandler={this.fillAllUniform}/>
+      <br/>
       <b>Completed: {this.state.filled.toString()}</b>
     </div>;
   }
