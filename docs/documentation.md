@@ -2,14 +2,43 @@
 
 ### Table of Contents
 
--   [Overview](#overview)
+-   [Pseudo-Backend](#pseudo-backend)
 -   [BKT](#bkt)
     -   [constructor](#constructor)
     -   [learned](#learned)
     -   [contextualize](#contextualize)
     -   [boundedProbability](#boundedprobability)
     -   [notNullOrUndefined](#notnullorundefined)
--   [\_c](#_c)
+-   [ResponseFeaturesTable](#responsefeaturestable)
+    -   [ResponseFeatures](#responsefeatures)
+    -   [responseIsString](#responseisstring)
+    -   [percentPastErrors](#percentpasterrors)
+    -   [numberOfLastFiveWrong](#numberoflastfivewrong)
+    -   [helpRequest](#helprequest)
+    -   [percentHelpRequested](#percenthelprequested)
+    -   [numberOfLast8HelpRequested](#numberoflast8helprequested)
+    -   [timeTaken](#timetaken)
+    -   [timeTakenSD](#timetakensd)
+    -   [timeTakenInLast5Actions](#timetakeninlast5actions)
+    -   [timeTakenOnThisConcept](#timetakenonthisconcept)
+    -   [numberOfTimesUsingConcept](#numberoftimesusingconcept)
+    -   [convertMilliToMin](#convertmillitomin)
+-   [MasteryModelClass](#masterymodelclass)
+    -   [updateModel](#updatemodel)
+    -   [surveyUpdateModel](#surveyupdatemodel)
+-   [ConceptKnowledge](#conceptknowledge)
+    -   [addDependency](#adddependency)
+    -   [addParent](#addparent)
+    -   [getKnowledge](#getknowledge)
+    -   [updateKnowledgeValue](#updateknowledgevalue)
+    -   [calculateDependencyKnowledge](#calculatedependencyknowledge)
+    -   [updateParentValues](#updateparentvalues)
+-   [ExerciseTypes](#exercisetypes)
+    -   [isInlineResponseType](#isinlineresponsetype)
+    -   [isSurvey](#issurvey)
+-   [ExercisePoolClass](#exercisepoolclass)
+    -   [addExercise](#addexercise)
+    -   [getAnswer](#getanswer)
 -   [ExerciseGenerator](#exercisegenerator)
     -   [weightByParabolic](#weightbyparabolic)
     -   [getConceptIndex](#getconceptindex)
@@ -18,6 +47,10 @@
     -   [getConcepts](#getconcepts)
     -   [getType](#gettype)
     -   [generateExercise](#generateexercise)
+-   [ResponseObject](#responseobject)
+-   [ResponseLogClass](#responselogclass)
+    -   [addResponse](#addresponse)
+    -   [getFeedback](#getfeedback)
 -   [ResponseEvaluator](#responseevaluator)
     -   [multiplicativeInverseMethod](#multiplicativeinversemethod)
     -   [BKT](#bkt-1)
@@ -26,62 +59,7 @@
     -   [executeJava](#executejava)
     -   [evaluateAnswer](#evaluateanswer)
     -   [printImportantStuff](#printimportantstuff)
--   [ResponseFeatures](#responsefeatures)
--   [responseIsString](#responseisstring)
--   [percentPastErrors](#percentpasterrors)
--   [numberOfLastFiveWrong](#numberoflastfivewrong)
--   [helpRequest](#helprequest)
--   [percentHelpRequested](#percenthelprequested)
--   [numberOfLast8HelpRequested](#numberoflast8helprequested)
--   [timeTaken](#timetaken)
--   [timeTakenSD](#timetakensd)
--   [timeTakenInLast5Actions](#timetakeninlast5actions)
--   [timeTakenOnThisConcept](#timetakenonthisconcept)
--   [numberOfTimesUsingConcept](#numberoftimesusingconcept)
--   [convertMilliToMin](#convertmillitomin)
--   [ExercisePoolClass](#exercisepoolclass)
-    -   [addExercise](#addexercise)
-    -   [getAnswer](#getanswer)
--   [ExerciseTypes](#exercisetypes)
-    -   [isInlineResponseType](#isinlineresponsetype)
-    -   [isSurvey](#issurvey)
--   [ConceptKnowledge](#conceptknowledge)
-    -   [addDependency](#adddependency)
-    -   [addParent](#addparent)
-    -   [getKnowledge](#getknowledge)
-    -   [updateKnowledgeValue](#updateknowledgevalue)
-    -   [calculateDependencyKnowledge](#calculatedependencyknowledge)
-    -   [updateParentValues](#updateparentvalues)
--   [MasteryModelClass](#masterymodelclass)
-    -   [updateModel](#updatemodel)
-    -   [surveyUpdateModel](#surveyupdatemodel)
--   [ResponseObject](#responseobject)
--   [ResponseLogClass](#responselogclass)
-    -   [addResponse](#addresponse)
-    -   [getFeedback](#getfeedback)
--   [Choice](#choice)
--   [Code](#code)
-    -   [componentDidMount](#componentdidmount)
-    -   [componentWillReceiveProps](#componentwillreceiveprops)
-    -   [resetCursor](#resetcursor)
-    -   [handleThemeChange](#handlethemechange)
-    -   [handleSelect](#handleselect)
-    -   [handleReset](#handlereset)
-    -   [handleHintRequest](#handlehintrequest)
-    -   [renderAce](#renderace)
--   [ConceptSelection](#conceptselection)
-    -   [render](#render)
--   [Feedback](#feedback)
--   [Hint](#hint)
--   [MultipleChoice](#multiplechoice)
--   [Prompt](#prompt)
--   [ShortResponse](#shortresponse)
--   [Submit](#submit)
-    -   [renderSubmitButton](#rendersubmitbutton)
--   [handleUpdate](#handleupdate)
--   [fillAll](#fillall)
--   [fillAllUniform](#fillalluniform)
--   [renderChoices](#renderchoices)
+-   [React Components](#react-components)
 -   [App](#app)
     -   [getExercise](#getexercise)
     -   [submitResponse](#submitresponse)
@@ -90,17 +68,46 @@
     -   [renderConceptSelection](#renderconceptselection)
     -   [renderDisplay](#renderdisplay)
 -   [Exercise](#exercise)
-    -   [componentWillReceiveProps](#componentwillreceiveprops-1)
+    -   [componentWillReceiveProps](#componentwillreceiveprops)
     -   [isAnswered](#isanswered)
+-   [Prompt](#prompt)
 -   [Information](#information)
     -   [renderCodeView](#rendercodeview)
     -   [renderResponseView](#renderresponseview)
+-   [Feedback](#feedback)
+-   [Hint](#hint)
+-   [Code](#code)
+    -   [componentDidMount](#componentdidmount)
+    -   [componentWillReceiveProps](#componentwillreceiveprops-1)
+    -   [resetCursor](#resetcursor)
+    -   [handleThemeChange](#handlethemechange)
+    -   [handleSelect](#handleselect)
+    -   [handleReset](#handlereset)
+    -   [handleHintRequest](#handlehintrequest)
+    -   [renderAce](#renderace)
 -   [Response](#response)
     -   [renderResponse](#renderresponse)
+-   [MultipleChoice](#multiplechoice)
+-   [Choice](#choice)
+-   [ShortResponse](#shortresponse)
+-   [SurveyView](#surveyview)
+    -   [handleUpdate](#handleupdate)
+    -   [fillAll](#fillall)
+    -   [fillAllUniform](#fillalluniform)
+    -   [renderChoices](#renderchoices)
+-   [Submit](#submit)
+    -   [renderSubmitButton](#rendersubmitbutton)
+-   [ConceptSelection](#conceptselection)
+    -   [render](#render)
+-   [Unorganized](#unorganized)
 
-## Overview
+## Pseudo-Backend
 
-This is the documentation for _koconut_
+The following classes contain "backend" logic that would account for the
+'M' and 'C' in "MVC". To be clear, this is separate from the actual Node.js
+backend, which exists in the `api/` folder.
+
+All these classes exist in `src/backend` and `src/data`.
 
 
 ## BKT
@@ -155,9 +162,256 @@ Returns true if neither null nor undefined
 
 Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
 
-## \_c
+## ResponseFeaturesTable
 
-Defines all learning concepts. Currently sorted alphabetically.
+### ResponseFeatures
+
+Values for contextualized G and S from Baker et al.
+Adjust these values as needed. If we define additional features, add to this
+object and append the necessary function below.
+
+### responseIsString
+
+Determines whether the response object was a String response
+(WriteCode, FillBlank, or ShortResponse).
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if response is string
+
+### percentPastErrors
+
+Determines the percentage of past responses of the same concept that were
+errors.
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** percentage
+
+### numberOfLastFiveWrong
+
+Determines the percentage of past responses of the same concept that were
+errors.
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** percentage
+
+### helpRequest
+
+Stub, no help request feature built in yet.
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### percentHelpRequested
+
+Stub, no help request feature built in yet.
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### numberOfLast8HelpRequested
+
+Stub, no help request feature built in yet.
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### timeTaken
+
+Returns number of minutes spent on most recent exercise.
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### timeTakenSD
+
+Stub, no collective student data yet.
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### timeTakenInLast5Actions
+
+Returns number of minutes spent on last 5 exercises.
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### timeTakenOnThisConcept
+
+Returns total number of minutes spent on this concept.
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### numberOfTimesUsingConcept
+
+Returns number of times using this concept.
+
+**Parameters**
+
+-   `response` **[ResponseObject](#responseobject)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### convertMilliToMin
+
+Helper function to convert milliseconds to minutes
+
+**Parameters**
+
+-   `time` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+## MasteryModelClass
+
+Static class that contains student's knowledge of each concept.
+
+### updateModel
+
+Updates concept in student knowledge model with true/false value.
+
+**Parameters**
+
+-   `concept` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `knowledge` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### surveyUpdateModel
+
+Updates MasteryModel initial values based on survey data.
+
+**Parameters**
+
+-   `initialValues` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)>** 
+
+## ConceptKnowledge
+
+ConceptKnowledge object is a node containing a concept, with a boolean
+to represent the student knowing or not knowing.
+
+**Parameters**
+
+-   `name` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### addDependency
+
+Append a dependency to the dependencies.
+
+**Parameters**
+
+-   `c` **[ConceptKnowledge](#conceptknowledge)** 
+
+### addParent
+
+Append a parent to the parents.
+
+**Parameters**
+
+-   `c` **[ConceptKnowledge](#conceptknowledge)** 
+
+### getKnowledge
+
+Returns the current node's knowledge value.
+
+Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### updateKnowledgeValue
+
+Update the mastery value for this concept object.
+When mastery changes, its parent dependency value will need updating too.
+
+**Parameters**
+
+-   `num` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### calculateDependencyKnowledge
+
+Calculates current node's dependency knowledge.
+
+### updateParentValues
+
+Updates parents' dependency knowledge values.
+This is //TODO: an incomplete comment!
+
+## ExerciseTypes
+
+Defines all available exercise types.
+Provides logic to determine whether the exercise is an inline response type.
+
+### isInlineResponseType
+
+Determines whether the exercise type is an inline exercise type.
+An inline exercise type requires displaying only the code component,
+rather than the code and response component.
+
+**Parameters**
+
+-   `type`  the exercise type
+
+Returns **any** whether or not the exercise type requires inline responding
+
+### isSurvey
+
+Determines whether the exercise type is a survey.
+
+**Parameters**
+
+-   `type`  
+
+Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
+
+## ExercisePoolClass
+
+Stores the exercise pool
+
+### addExercise
+
+Adds an exercise to the exercise pool
+
+**Parameters**
+
+-   `exercise` **[Exercise](#exercise)** the Exercise to add
+-   `answer` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** the Exercise answer (undefined if the answer must be evaluated)
+
+### getAnswer
+
+Returns the answer for the given Exercise
+
+**Parameters**
+
+-   `exercise` **[Exercise](#exercise)** the Exercise to get an answer for
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** the answer for the given Exercise
 
 ## ExerciseGenerator
 
@@ -225,6 +479,42 @@ Returns a generated Exercise
 -   `concept` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** specifies a concept type if provided
 
 Returns **any** a generated Exercise
+
+## ResponseObject
+
+Stores student performance data for an exercise.
+
+**Parameters**
+
+-   `id` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `concept` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `exerciseType` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `difficulty` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+-   `correct` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
+-   `timestamp` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+## ResponseLogClass
+
+Stores collection of student performance data for exercises.
+
+### addResponse
+
+Static function stores submission results into response log.
+
+**Parameters**
+
+-   `id` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `concept` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `exerciseType` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `difficulty` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+-   `correct` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
+-   `timestamp` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### getFeedback
+
+Returns feedback for the last response (currently just correctness)
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** whether the last response was correct
 
 ## ResponseEvaluator
 
@@ -297,442 +587,13 @@ Takes in an exercise and student response to update log and mastery model.
 
 Debugging method for quick analysis of CK behavior through console
 
-## ResponseFeatures
+## React Components
 
-Values for contextualized G and S from Baker et al.
-Adjust these values as needed. If we define additional features, add to this
-object and append the necessary function below.
+The remaining classes are React components which make up the frontend view
+of _koconut_.
 
-## responseIsString
+All these classes exist in `src/ui`.
 
-Determines whether the response object was a String response
-(WriteCode, FillBlank, or ShortResponse).
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if response is string
-
-## percentPastErrors
-
-Determines the percentage of past responses of the same concept that were
-errors.
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** percentage
-
-## numberOfLastFiveWrong
-
-Determines the percentage of past responses of the same concept that were
-errors.
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** percentage
-
-## helpRequest
-
-Stub, no help request feature built in yet.
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## percentHelpRequested
-
-Stub, no help request feature built in yet.
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## numberOfLast8HelpRequested
-
-Stub, no help request feature built in yet.
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## timeTaken
-
-Returns number of minutes spent on most recent exercise.
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## timeTakenSD
-
-Stub, no collective student data yet.
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## timeTakenInLast5Actions
-
-Returns number of minutes spent on last 5 exercises.
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## timeTakenOnThisConcept
-
-Returns total number of minutes spent on this concept.
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## numberOfTimesUsingConcept
-
-Returns number of times using this concept.
-
-**Parameters**
-
--   `response` **[ResponseObject](#responseobject)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## convertMilliToMin
-
-Helper function to convert milliseconds to minutes
-
-**Parameters**
-
--   `time` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## ExercisePoolClass
-
-Stores the exercise pool
-
-### addExercise
-
-Adds an exercise to the exercise pool
-
-**Parameters**
-
--   `exercise` **[Exercise](#exercise)** the Exercise to add
--   `answer` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** the Exercise answer (undefined if the answer must be evaluated)
-
-### getAnswer
-
-Returns the answer for the given Exercise
-
-**Parameters**
-
--   `exercise` **[Exercise](#exercise)** the Exercise to get an answer for
-
-Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)?** the answer for the given Exercise
-
-## ExerciseTypes
-
-Defines all available exercise types.
-Provides logic to determine whether the exercise is an inline response type.
-
-### isInlineResponseType
-
-Determines whether the exercise type is an inline exercise type.
-An inline exercise type requires displaying only the code component,
-rather than the code and response component.
-
-**Parameters**
-
--   `type`  the exercise type
-
-Returns **any** whether or not the exercise type requires inline responding
-
-### isSurvey
-
-Determines whether the exercise type is a survey.
-
-**Parameters**
-
--   `type`  
-
-Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
-
-## ConceptKnowledge
-
-ConceptKnowledge object is a node containing a concept, with a boolean
-to represent the student knowing or not knowing.
-
-**Parameters**
-
--   `name` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-
-### addDependency
-
-Append a dependency to the dependencies.
-
-**Parameters**
-
--   `c` **[ConceptKnowledge](#conceptknowledge)** 
-
-### addParent
-
-Append a parent to the parents.
-
-**Parameters**
-
--   `c` **[ConceptKnowledge](#conceptknowledge)** 
-
-### getKnowledge
-
-Returns the current node's knowledge value.
-
-Returns **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-### updateKnowledgeValue
-
-Update the mastery value for this concept object.
-When mastery changes, its parent dependency value will need updating too.
-
-**Parameters**
-
--   `num` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-### calculateDependencyKnowledge
-
-Calculates current node's dependency knowledge.
-
-### updateParentValues
-
-Updates parents' dependency knowledge values.
-This is //TODO: an incomplete comment!
-
-## MasteryModelClass
-
-Static class that contains student's knowledge of each concept.
-
-### updateModel
-
-Updates concept in student knowledge model with true/false value.
-
-**Parameters**
-
--   `concept` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `knowledge` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-### surveyUpdateModel
-
-Updates MasteryModel initial values based on survey data.
-
-**Parameters**
-
--   `initialValues` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)>** 
-
-## ResponseObject
-
-Stores student performance data for an exercise.
-
-**Parameters**
-
--   `id` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `concept` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `exerciseType` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `difficulty` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
--   `correct` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
--   `timestamp` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## ResponseLogClass
-
-Stores collection of student performance data for exercises.
-
-### addResponse
-
-Static function stores submission results into response log.
-
-**Parameters**
-
--   `id` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `concept` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `exerciseType` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `difficulty` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
--   `correct` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
--   `timestamp` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-### getFeedback
-
-Returns feedback for the last response (currently just correctness)
-
-Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** whether the last response was correct
-
-## Choice
-
-**Extends Component**
-
-The Choice component represents a choice in a multiple choice exercise
-
-## Code
-
-**Extends Component**
-
-The Code component contains the code view in the assessment problem
-
-**Parameters**
-
--   `props` **Props** 
-
-### componentDidMount
-
-When component renders, set cursor to (0, 0)
-
-### componentWillReceiveProps
-
-Updates the code state when a new code prop is received
-
-**Parameters**
-
--   `nextProps` **Props** the new prop object being received
-
-### resetCursor
-
-Resets the cursor position to (0, 0)
-
-### handleThemeChange
-
-Handles the dark/light checkbox toggle event.
-
-### handleSelect
-
-Stores highlighted text from text area in component state: highlighted.
-
-**Parameters**
-
--   `e` **any** 
-
-### handleReset
-
-Resets both the code state and answer state.
-
-### handleHintRequest
-
-Sets hint position to the line of the last cursor position within Ace.
-TODO: Fix positioning
-
-### renderAce
-
-Renders Ace with preferred options.
- Handles editable/non-editable state for code view.
-
-Returns **any** JSX for the CodeMirror component
-
-## ConceptSelection
-
-**Extends Component**
-
-The ShortResponse component renders short response exercise type
-
-**Parameters**
-
--   `props` **Props** 
-
-### render
-
-Wow modularity!
-
-## Feedback
-
-**Extends Component**
-
-Component that displays a feedback modal after user submits an answer.
-
-## Hint
-
-**Extends Component**
-
-Component displays a hint at code editor's last cursor position.
-
-## MultipleChoice
-
-**Extends Component**
-
-The MultipleChoice component represents multiple choice answer selection
-
-## Prompt
-
-**Extends Component**
-
-The Prompt component contains the assessment prompt.
-
-## ShortResponse
-
-**Extends Component**
-
-The ShortResponse component renders short response exercise type
-
-**Parameters**
-
--   `props` **Props** 
-
-## Submit
-
-**Extends Component**
-
-The Submit component represents a button to submit an answer
-
-### renderSubmitButton
-
-Determines whether the submit button is clickable and returns JSX.
-
-Returns **XML** 
-
-## handleUpdate
-
-When SurveyScale clicked, updates value in corresponding array.
-
-**Parameters**
-
--   `ind` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
--   `val` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## fillAll
-
-Dev tool to quickly fill survey.
-
-## fillAllUniform
-
-Another dev tool.
-
-**Parameters**
-
--   `ind` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
--   `val` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-
-## renderChoices
-
-Renders each choice as a survey field.
-
-**Parameters**
-
--   `choices` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
-
-Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
 
 ## App
 
@@ -795,6 +656,12 @@ Returns whether the answer is defined and non-null or not.
 
 Returns **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
 
+## Prompt
+
+**Extends Component**
+
+The Prompt component contains the assessment prompt.
+
 ## Information
 
 **Extends Component**
@@ -813,6 +680,72 @@ Returns JSX for (or not for) the Response container given the current props
 
 Returns **any** JSX for the Response container
 
+## Feedback
+
+**Extends Component**
+
+Component that displays a feedback modal after user submits an answer.
+
+## Hint
+
+**Extends Component**
+
+Component displays a hint at code editor's last cursor position.
+
+## Code
+
+**Extends Component**
+
+The Code component contains the code view in the assessment problem
+
+**Parameters**
+
+-   `props` **Props** 
+
+### componentDidMount
+
+When component renders, set cursor to (0, 0)
+
+### componentWillReceiveProps
+
+Updates the code state when a new code prop is received
+
+**Parameters**
+
+-   `nextProps` **Props** the new prop object being received
+
+### resetCursor
+
+Resets the cursor position to (0, 0)
+
+### handleThemeChange
+
+Handles the dark/light checkbox toggle event.
+
+### handleSelect
+
+Stores highlighted text from text area in component state: highlighted.
+
+**Parameters**
+
+-   `e` **any** 
+
+### handleReset
+
+Resets both the code state and answer state.
+
+### handleHintRequest
+
+Sets hint position to the line of the last cursor position within Ace.
+TODO: Fix positioning
+
+### renderAce
+
+Renders Ace with preferred options.
+ Handles editable/non-editable state for code view.
+
+Returns **any** JSX for the CodeMirror component
+
 ## Response
 
 **Extends Component**
@@ -824,3 +757,97 @@ The Response component contains the response section in the assessment problem
 Returns JSX based on the response type
 
 Returns **any** JSX for a type of response (MultipleChoice, ShortResponse)
+
+## MultipleChoice
+
+**Extends Component**
+
+The MultipleChoice component represents multiple choice answer selection
+
+## Choice
+
+**Extends Component**
+
+The Choice component represents a choice in a multiple choice exercise
+
+## ShortResponse
+
+**Extends Component**
+
+The ShortResponse component renders short response exercise type
+
+**Parameters**
+
+-   `props` **Props** 
+
+## SurveyView
+
+**Extends Component**
+
+**Parameters**
+
+-   `props` **Props** 
+
+### handleUpdate
+
+When SurveyScale clicked, updates value in corresponding array.
+
+**Parameters**
+
+-   `ind` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+-   `val` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### fillAll
+
+Dev tool to quickly fill survey.
+
+### fillAllUniform
+
+Another dev tool.
+
+**Parameters**
+
+-   `ind` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+-   `val` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+### renderChoices
+
+Renders each choice as a survey field.
+
+**Parameters**
+
+-   `choices` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+
+Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+
+## Submit
+
+**Extends Component**
+
+The Submit component represents a button to submit an answer
+
+### renderSubmitButton
+
+Determines whether the submit button is clickable and returns JSX.
+
+Returns **XML** 
+
+## ConceptSelection
+
+**Extends Component**
+
+The ShortResponse component renders short response exercise type
+
+**Parameters**
+
+-   `props` **Props** 
+
+### render
+
+Wow modularity!
+
+## Unorganized
+
+Everything below here is auto-generated documentation that hasn't been
+sorted yet.
+
