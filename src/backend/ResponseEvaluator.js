@@ -16,7 +16,6 @@ class ResponseEvaluator {
    * of a differential would be required to reach a level of certainty that the
    * student has learned a concept.
    * f(x) = -k/(x+k) + 1, where k is the weight value.
-   * @param concept
    * @param responses
    * @returns {number}
    */
@@ -61,14 +60,11 @@ class ResponseEvaluator {
   }
 
   /**
-   * TODO: Make this have logic.
    * Takes in an exercise and student response to update log and mastery model.
    * @param exercise
    * @param answer
    */
   static evaluateAnswer(exercise: Exercise, answer: string) {
-
-    // TODO: Check written answers for correctness (currently always false)
     let isCorrect = answer === ExercisePool.getAnswer(exercise);
     ResponseLog.addResponse(
         '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect,
