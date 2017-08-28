@@ -38,7 +38,7 @@ class BKT {
     let previously = (previous * S) / ((previous * S) + ((1 - previous) * G));
     return previously + (1 - previously) * this.T;
   }
-  
+
   /**
    * Updates the G and S parameters contextually
    * @param response
@@ -49,7 +49,7 @@ class BKT {
   contextualize(response: ResponseObject, constant: number, param: string) {
     let ret = constant;
     console.groupCollapsed('BKT  Param: ' + param + ' Initial: ' + constant);
-    if(this.notNullOrUndefined(response)) {
+    if(BKT.notNullOrUndefined(response)) {
       let features = Object.keys(ResponseFeatures);
 
       features.forEach((feature) => {
@@ -87,4 +87,4 @@ class BKT {
 }
 
 export const BayesKT = new BKT();
-export default BKT;
+export default {BKT};
