@@ -8,6 +8,9 @@ import ExercisePool from '../data/ExercisePool';
 // So, we import all of ConceptKnowledge
 import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
 
+/**
+ * @class
+ */
 class ExerciseGenerator {
   counter: number;
 

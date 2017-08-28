@@ -1,8 +1,12 @@
 const {exec} = require('child_process');
 const fs = require('fs');
 
+// TODO: Modularize debug messages
 // TODO: Un-hardcode directories
 
+/**
+ * Generates the requested Java code named {req.body.id} from the template
+ */
 exports.generate = (req, res, next) => {
   console.log('attempting to generate code from the following');
   console.log(req.body);

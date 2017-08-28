@@ -61,15 +61,46 @@ class ResponseEvaluator {
   }
 
   /**
+   * Send a POST request to the API to compile and execute the given Java code
+   * @param code - the Java code to compile and execute
+   */
+  static executeJava(code: string): string {
+    fetch('/api/java', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: 'replacemelater', // TODO: Actually get an id
+        content: code,
+      })
+    }).then((res) => {
+      return res.json();
+    }).then((json) => {
+      console.log(json);
+    }).catch((err) => {
+      console.error(err);
+    });
+
+    return 'abc';
+  }
+
+  /**
    * TODO: Make this have logic.
    * Takes in an exercise and student response to update log and mastery model.
    * @param exercise
    * @param answer
    */
   static evaluateAnswer(exercise: Exercise, answer: string) {
+    let isCorrect;
 
-    // TODO: Check written answers for correctness (currently always false)
-    let isCorrect = answer === ExercisePool.getAnswer(exercise);
+    if(exercise.type === ExerciseTypes.writeCode ||
+       exercise.type === ExerciseTypes.fillBlank) {
+      isCorrect = this.executeJava(answer) === ExercisePool.getAnswer(exercise);
+    } else {
+      isCorrect = answer === ExercisePool.getAnswer(exercise);
+    }
+
     ResponseLog.addResponse(
         '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect,
         Date.now(),

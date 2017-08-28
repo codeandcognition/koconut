@@ -47,5 +47,6 @@
     "build-dev": "npm-run-all -p build-docs build-storybook",
     "build-all": "npm-run-all -p build build-dev",
     "build-all-ignore": "npm-run-all -p build-ignore build-dev"
-  }
+  },
+  "proxy": "http://localhost:3001"
 }
