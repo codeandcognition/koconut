@@ -24,7 +24,7 @@ class BKT {
   /**
    * Take in previous K value and correct/incorrect answer to update K value.
    * @param previous
-   * @param correct
+   * @param response
    * @returns {number}
    */
   learned(previous: number, response: ResponseObject) {
@@ -38,9 +38,7 @@ class BKT {
     let previously = (previous * S) / ((previous * S) + ((1 - previous) * G));
     return previously + (1 - previously) * this.T;
   }
-
-  /* TODO: implement table of G and S fitting from Baker paper */
-
+  
   /**
    * Updates the G and S parameters contextually
    * @param response
@@ -50,7 +48,7 @@ class BKT {
    */
   contextualize(response: ResponseObject, constant: number, param: string) {
     let ret = constant;
-    console.groupCollapsed('BKT ' + ' Param: ' + param + ' Initial: ' + constant);
+    console.groupCollapsed('BKT  Param: ' + param + ' Initial: ' + constant);
     if(this.notNullOrUndefined(response)) {
       let features = Object.keys(ResponseFeatures);
 
@@ -63,7 +61,7 @@ class BKT {
     }
     console.log('Final: ' + ret);
     console.groupEnd();
-    return this.boundedProbability(ret);
+    return BKT.boundedProbability(ret);
   }
 
   /**
@@ -71,7 +69,7 @@ class BKT {
    * @param num
    * @returns {number}
    */
-  boundedProbability(num: number) {
+  static boundedProbability(num: number) {
     num = num <= 0 ? 0.001 : num;
     num = num >= 1 ? 0.999 : num;
     return num;
@@ -82,7 +80,7 @@ class BKT {
    * @param input
    * @returns {boolean}
    */
-  notNullOrUndefined(input: any) {
+  static notNullOrUndefined(input: any) {
   return !(input === null || input === undefined);
 }
 
