@@ -8,6 +8,9 @@ type Props = {
   inputHandler: Function,
 }
 
+/**
+ * @class
+ */
 class SurveyView extends Component {
   state: {
     surveys: number[],

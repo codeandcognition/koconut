@@ -1,0 +1,42 @@
+toc:
+  - name: "Pseudo-Backend"
+    description: |
+      The following classes contain "backend" logic that would account for the
+      'M' and 'C' in "MVC". To be clear, this is separate from the actual Node.js
+      backend, which exists in the `api/` folder.
+
+      All these classes exist in `src/backend` and `src/data`.
+  - BKT
+  - ResponseFeaturesTable
+  - MasteryModelClass
+  - ConceptKnowledge
+  - ExerciseTypes
+  - ExercisePoolClass
+  - ExerciseGenerator
+  - ResponseObject
+  - ResponseLogClass
+  - ResponseEvaluator
+  - name: React Components
+    description: |
+      The remaining classes are React components which make up the frontend view
+      of _koconut_.
+
+      All these classes exist in `src/ui`.
+  - App
+  - Exercise
+  - Prompt
+  - Information
+  - Feedback
+  - Hint
+  - Code
+  - Response
+  - MultipleChoice
+  - Choice
+  - ShortResponse
+  - SurveyView
+  - Submit
+  - ConceptSelection
+  - name: Unorganized
+    description: |
+      Everything below here is auto-generated documentation that hasn't been
+      sorted yet.

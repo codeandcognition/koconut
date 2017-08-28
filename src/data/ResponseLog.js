@@ -29,6 +29,7 @@ class ResponseObject {
 
 /**
  * Stores collection of student performance data for exercises.
+ * @class
  */
 class ResponseLogClass {
   log: ResponseObject[];

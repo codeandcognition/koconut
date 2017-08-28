@@ -10,6 +10,9 @@ import ExerciseTypes from '../data/ExerciseTypes';
 import {BayesKT} from './BKT.js';
 import type {Exercise} from '../data/Exercises';
 
+/**
+ * @class
+ */
 class ResponseEvaluator {
   /**
    * Takes in a relevant set of responses, and a weight that scales how strong

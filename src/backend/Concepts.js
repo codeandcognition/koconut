@@ -1,10 +1,8 @@
-/**
- * Defines all learning concepts. Currently sorted alphabetically.
- * @class
- */
-
 import _c from './ConceptAbbreviations';
 
+/*
+ * Defines all learning concepts. Currently sorted alphabetically.
+ */
 const conceptTypes = {lang: 'langSemantics', des: 'designPatterns'};
 
 const conceptInventory = [
