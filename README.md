@@ -1,8 +1,5 @@
 <p align="center">
-![very cool status](https://img.shields.io/badge/very%20cool-passing-green.svg)
-![flow status](https://img.shields.io/badge/flow-happy-yellow.svg)
-![emoji status](https://img.shields.io/badge/emojis-active-blue.svg)
-![productivity status](https://img.shields.io/badge/productivity-infinity-lightgrey.svg)
+![very cool status](https://img.shields.io/badge/very%20cool-passing-green.svg) ![flow status](https://img.shields.io/badge/flow-happy-yellow.svg) ![emoji status](https://img.shields.io/badge/emojis-active-blue.svg) ![productivity status](https://img.shields.io/badge/productivity-infinity-lightgrey.svg)
 </p>
 
 # koconut
@@ -27,15 +24,23 @@
 
 ### Technology Stack
 
-Currently, _koconut_ is built using [React](https://facebook.github.io/react/). In the future, the backend will use Node.js, Express, and an undetermined database system.
+Currently, _koconut_ is built using the following stack:
+
+#### Frontend
+- [React](https://facebook.github.io/react/): a visual framework
+- [Sass](http://sass-lang.com/): a CSS pre-processor
+
+#### Backend
+- [Node.js](https://nodejs.org/en/): a JavaScript runtime
+- [Express](http://expressjs.com/): a web framework
+- _TODO: unknown database_
 
 ### Tools
 
 Development of _koconut_ is assisted by the usage of:
 
-- [Node.js](https://nodejs.org/en/): a JavaScript runtime
 - [Flow](https://flow.org/): a type-checking system for JavaScript
-- [Sass](http://sass-lang.com/): a CSS pre-processor
+- [Jest](https://facebook.github.io/jest/): a JavaScript testing framework
 - [Storybook](https://storybook.js.org/): a live development environment
 - [documentation.js](http://documentation.js.org/): a documentation generator
 
@@ -99,7 +104,7 @@ To have a live preview of the application, simply run the following command:
 `yarn start`
 
 > This command does the following:
->
+
 > - Starts a development server that will host a live preview of the application
 > - Starts a Sass watcher which automatically generates CSS from SCSS files as they are updated
 
@@ -143,11 +148,11 @@ To automatically reformat code, you can simply `Code -> Reformat Code`.
 You can use the follow instructions to add Flow support to WebStorm (you will probably already have Flow installed and will not need to add or change the project's `.flowconfig`): [Using Flow in WebStorm](https://blog.jetbrains.com/webstorm/2016/11/using-flow-in-webstorm/)
 
 > **Note:** The default Flow directory that WebStorm will fill in will not work. It should look something like this:
->
+
 > `[parent directories]/koconut/node_modules/.bin/flow`.
->
+
 > Instead, use the following Flow executable:
->
+
 > `[parent directories]/koconut/node_modules/flow-bin/vendor/flow`.
 
 #### Using GitHub Version Control with WebStorm
@@ -156,7 +161,32 @@ You can register your GitHub account in WebStorm for easy version control: [Regi
 
 It is recommended that you use token authentication: [Personal API Tokens](https://github.com/blog/1509-personal-api-tokens)
 
-## TODO
+### Tutorials and API References
 
-- Provide examples for Flow, Sass, Storybook
-- Consider testing (Jest)
+#### JavaScript
+- [MDN - A re-introduction to JavaScript (JS tutorial)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
+- [MDN - JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+
+#### React
+- [Official Docs (semi-tutorial)](https://facebook.github.io/react/docs/hello-world.html)
+- [Intro to React](https://facebook.github.io/react/tutorial/tutorial.html)
+- [React Developer Tools](https://github.com/facebook/react-devtools)
+
+#### Sass
+- [Sass Basics](http://sass-lang.com/guide)
+- [Official Docs](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)
+
+#### Flow
+- [Official Docs](https://flow.org/en/docs/)
+
+#### Jest
+- [Getting Started](https://facebook.github.io/jest/docs/en/getting-started.html)
+- [API reference](https://facebook.github.io/jest/docs/en/api.html)
+
+#### Node.js
+- [Official Docs](https://nodejs.org/en/docs/)
+- [Getting Started](https://nodejs.org/en/docs/guides/getting-started-guide/)
+
+#### Express
+- [MDN - Express Web Framework (Node.js/JavaScript)](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs)
+- [API reference](http://expressjs.com/en/4x/api.html)

@@ -1,3 +1,4 @@
+//@flow
 const {exec} = require('child_process');
 const fs = require('fs');
 
@@ -7,19 +8,22 @@ const fs = require('fs');
 /**
  * Generates the requested Java code named {req.body.id} from the template
  */
-exports.generate = (req, res, next) => {
+exports.generate = (req: $Request, res: $Response, next: Function) => {
   console.log('attempting to generate code from the following');
   console.log(req.body);
 
+  // Reads the Java template
   fs.readFile('api/java/template.txt', (err, data) => {
     if(err) {
       throw err;
     } else {
+      // Fills in the template
       let code = data.toString();
       code = code.replace('%%ID%%', req.body.id)
                  .replace('%%CONTENT%%', req.body.content || '');
       console.log(code);
 
+      // Writes the Java code to a file
       fs.writeFile(`api/java/tmp/${req.body.id}.java`, code, (err) => {
         if (err) {
           throw err;
@@ -37,7 +41,7 @@ exports.generate = (req, res, next) => {
 /**
  * Compiles the requested Java code named {req.body.id}
  */
-exports.compile = (req, res, next) => {
+exports.compile = (req: $Request, res: $Response, next: Function) => {
   console.log('attempting to compile the following');
   console.log(req.body);
 
@@ -60,7 +64,7 @@ exports.compile = (req, res, next) => {
 /**
  * Executes the requested Java class named {req.body.id}
  */
-exports.execute = (req, res, next) => {
+exports.execute = (req: $Request, res: $Response, next: Function) => {
   console.log('attempting to execute the following');
   console.log(req.body);
 
@@ -87,7 +91,7 @@ exports.execute = (req, res, next) => {
 /**
  * Removes the requested Java program named {req.body.id}
  */
-exports.clean = (req, res) => {
+exports.clean = (req: $Request, res: $Response) => {
   console.log('attempting to clean temporary files');
 
   let callback = (err) => {
@@ -95,6 +99,7 @@ exports.clean = (req, res) => {
     console.log('successful delete');
   };
 
+  // unlink == rm
   fs.unlink(`api/java/tmp/${req.body.id}.java`, callback);
   fs.unlink(`api/java/tmp/${req.body.id}.class`, callback);
 };
