@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react';
 import AceEditor from 'react-ace';
+import ace from 'brace';
 
 // Ace language support
 import 'brace/mode/java';
@@ -18,6 +19,9 @@ import Hint from './Hint.js';
 
 // CSS for Code component
 import './Code.css';
+
+// Ace Range datatype
+const { Range } = ace.acequire('ace/range');
 
 type Props = {
   type: string,

@@ -16,11 +16,11 @@
 ├── public              // contains user assets (images, html)
 │   └── assets
 └── src                 // all frontend JavaScript and SCSS are in '/src'
-    ├── backend         // contains "pseudo-backend" logic classes
-    ├── data            // contains datatype classes
+    ├── backend         // contains "pseudo-backend" logic classes ('C' of "MVC")
+    ├── data            // contains datatype classes ('M' of "MVC")
     ├── stories         // contains Storybook "stories"
     ├── tests           // contains unit tests
-    └── ui              // contains React components
+    └── ui              // contains React components ('V' of "MVC")
         ├── components  // React components that make up individual parts of the view
         └── containers  // React components that hold logic to display components within them
 ```
@@ -31,7 +31,7 @@
 .
 └── api                 // all backend files are in '/api'
     ├── bin             // contains scripts
-    ├── controllers     // contains the 'C' of "MVC"
+    ├── controllers     // contains the 'C' of "MVC" (it's in the name!)
     ├── java            // contains all resources for Java compilation/execution
     │   └── tmp         
     └── routes          // contains Express routes for API endpoints
