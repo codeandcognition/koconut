@@ -35,6 +35,7 @@ class Code extends Component {
   handleSelect: Function;
   handleReset: Function;
   handleHintRequest: Function;
+  handleChange: Function;
   code: Object;
 
   state: {
@@ -65,6 +66,7 @@ class Code extends Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleHintRequest = this.handleHintRequest.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   /**
@@ -148,10 +150,15 @@ class Code extends Component {
    * @param event - an Ace change event
    */
   handleChange(value: string, event: Object) {
-    this.setState({code: value});
-    if (this.props.updateHandler !== undefined) { // wow such type safety
-      // submit code or highlighted code
-      this.props.updateHandler(this.state.code);
+    console.log(event);
+    if(event.start.row === 0) {
+      this.setState({code: value});
+      if (this.props.updateHandler !== undefined) { // wow such type safety
+        // submit code or highlighted code
+        this.props.updateHandler(this.state.code);
+      }
+    } else {
+      this.setState({code: this.state.code});
     }
   }
 

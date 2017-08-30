@@ -1,6 +1,6 @@
 // @flow
 import ExerciseTypes from './ExerciseTypes.js';
-import _c from '../backend/ConceptAbbreviations';
+import _c from './ConceptAbbreviations';
 
 
 export type Exercise = {
