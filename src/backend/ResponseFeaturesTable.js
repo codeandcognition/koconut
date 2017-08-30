@@ -2,6 +2,13 @@
 import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import ExerciseTypes from '../data/ExerciseTypes';
 
+// A note from Harrison:
+//  I tried to make this file better by putting things in a class, but that ended
+//  up breaking things. So, I tried to fix that using binds, and it worked, but
+//  now this class has been cursed by JavaScript black magic. You're going to need
+//  to add binds for things to work in the future.
+//  🔥🌑🔥
+
 /**
  * @class
  */
@@ -11,19 +18,19 @@ class ResponseFeaturesTable {
    * Adjust these values as needed. If we define additional features, add to this
    * object and append the necessary function below.
    */
-  static ResponseFeatures = {
-    responseIsString:             {g: 0.049,  s: -0.02,   analyze: this.responseIsString},
-    numberOfLastFiveWrong:        {g: 0.036,  s: -0.033,  analyze: this.numberOfLastFiveWrong},
-    percentPastErrors:            {g: 0,      s: -0.004,  analyze: this.percentPastErrors},
-    helpRequest:                  {g: 0,      s: 0.066,   analyze: this.helpRequest},
-    percentHelpRequested:         {g: 0,      s: -0.047,  analyze: this.percentHelpRequested},
-    numberOfLast8HelpRequested:   {g: 0.042,  s: -0.019,  analyze: this.numberOfLast8HelpRequested},
-    timeTaken:                    {g: 0.002,  s: -0.0002, analyze: this.timeTaken},
-    timeTakenSD:                  {g: -0.024, s: 0.01,    analyze: this.timeTakenSD},
-    timeTakenInLast5Actions:      {g: -0.003, s: 0.002,   analyze: this.timeTakenInLast5Actions},
-    timeTakenOnThisConcept:       {g: 0.001,  s: -0.001,  analyze: this.timeTakenOnThisConcept},
-    numberOfTimesUsingConcept:    {g: 0.003,  s:-0.001,   analyze: this.numberOfTimesUsingConcept}
-  };
+  static ResponseFeatures() {return {
+    responseIsString:             {g: 0.049,  s: -0.02,   analyze: this.responseIsString.bind(this)},
+    numberOfLastFiveWrong:        {g: 0.036,  s: -0.033,  analyze: this.numberOfLastFiveWrong.bind(this)},
+    percentPastErrors:            {g: 0,      s: -0.004,  analyze: this.percentPastErrors.bind(this)},
+    helpRequest:                  {g: 0,      s: 0.066,   analyze: this.helpRequest.bind(this)},
+    percentHelpRequested:         {g: 0,      s: -0.047,  analyze: this.percentHelpRequested.bind(this)},
+    numberOfLast8HelpRequested:   {g: 0.042,  s: -0.019,  analyze: this.numberOfLast8HelpRequested.bind(this)},
+    timeTaken:                    {g: 0.002,  s: -0.0002, analyze: this.timeTaken.bind(this)},
+    timeTakenSD:                  {g: -0.024, s: 0.01,    analyze: this.timeTakenSD.bind(this)},
+    timeTakenInLast5Actions:      {g: -0.003, s: 0.002,   analyze: this.timeTakenInLast5Actions.bind(this)},
+    timeTakenOnThisConcept:       {g: 0.001,  s: -0.001,  analyze: this.timeTakenOnThisConcept.bind(this)},
+    numberOfTimesUsingConcept:    {g: 0.003,  s: -0.001,  analyze: this.numberOfTimesUsingConcept.bind(this)}
+  }};
 
   /**
    * Determines whether the response object was a String response
@@ -182,7 +189,7 @@ class ResponseFeaturesTable {
 const g = "g";
 //Index for s in features
 const s = "s";
-
-const ResponseFeatures = ResponseFeaturesTable.ResponseFeatures;
+// This is a long-winded way of setting ResponseFeatures to an object
+const ResponseFeatures = ResponseFeaturesTable.ResponseFeatures.bind(ResponseFeaturesTable)();
 
 export {ResponseFeatures, g, s};

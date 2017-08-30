@@ -1,6 +1,4 @@
-<p align="center">
 ![very cool status](https://img.shields.io/badge/very%20cool-passing-green.svg) ![flow status](https://img.shields.io/badge/flow-happy-yellow.svg) ![emoji status](https://img.shields.io/badge/emojis-active-blue.svg) ![productivity status](https://img.shields.io/badge/productivity-infinity-lightgrey.svg)
-</p>
 
 # koconut
 
