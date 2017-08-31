@@ -11,7 +11,7 @@ import 'brace/theme/eclipse';
 import 'brace/theme/solarized_dark';
 
 // Tool imports
-import Types from '../../data/ExerciseTypes.js'
+import Types from '../../data/ExerciseTypes.js';
 
 // Component imports
 import Hint from './Hint.js';
@@ -35,6 +35,7 @@ class Code extends Component {
   handleSelect: Function;
   handleReset: Function;
   handleHintRequest: Function;
+  handleChange: Function;
   code: Object;
 
   state: {
@@ -65,6 +66,7 @@ class Code extends Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleHintRequest = this.handleHintRequest.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   /**
@@ -72,7 +74,7 @@ class Code extends Component {
    */
   componentDidMount() {
     this.resetCursor();
-    
+
     if (this.props.updateHandler !== undefined)
       this.props.updateHandler(this.state.code);
   }
@@ -98,7 +100,6 @@ class Code extends Component {
     this.refs.aceEditor.editor.clearSelection();
   }
 
-
   /**
    * Handles the dark/light checkbox toggle event.
    */
@@ -113,10 +114,11 @@ class Code extends Component {
    * Stores highlighted text from text area in component state: highlighted.
    */
   handleSelect(e: any /* need to make Flow play nicely */) {
-    let selected = this.refs.aceEditor.editor.session.getTextRange(e.getRange());
-    this.setState( {highlighted: selected} );
+    let selected = this.refs.aceEditor.editor.session.getTextRange(
+        e.getRange());
+    this.setState({highlighted: selected});
     // this check mitigates a bug caused by spam switching exercises
-    if(this.props.updateHandler !== undefined) {
+    if (this.props.updateHandler !== undefined) {
       this.props.updateHandler(this.state.highlighted);
     }
   }
@@ -143,9 +145,26 @@ class Code extends Component {
   }
 
   /**
+   * Updates state based on editor changes
+   * @param value - the post-change content
+   * @param event - an Ace change event
+   */
+  handleChange(value: string, event: Object) {
+    console.log(event);
+    if(event.start.row === 0) {
+      this.setState({code: value});
+      if (this.props.updateHandler !== undefined) { // wow such type safety
+        // submit code or highlighted code
+        this.props.updateHandler(this.state.code);
+      }
+    } else {
+      this.setState({code: this.state.code});
+    }
+  }
+
+  /**
    *  Renders Ace with preferred options.
    *  Handles editable/non-editable state for code view.
-   *  @returns JSX for the CodeMirror component
    */
   renderAce() {
     return <AceEditor
@@ -158,14 +177,7 @@ class Code extends Component {
         mode={this.state.mode}
         theme={this.state.theme}
         highlightActiveLine={true}
-        onChange={(e) => {
-          this.setState({code: e});
-          if (this.props.updateHandler !== undefined) {
-            this.props.updateHandler(this.props.type !== Types.highlightCode
-                ? this.state.code
-                : this.state.highlighted);
-          }
-        }}
+        onChange={this.handleChange}
         onSelectionChange={this.props.type === Types.highlightCode
             ? this.handleSelect
             : undefined}
@@ -175,7 +187,7 @@ class Code extends Component {
         }}
         minLines={6}
         editorProps={{
-          $blockScrolling: Infinity
+          $blockScrolling: Infinity,
         }}
         /* https://github.com/securingsincity/react-ace/issues/29#issuecomment-296398653 */
     />;
@@ -202,9 +214,9 @@ class Code extends Component {
             {reset}
           </div>
 
-          { hint ? <Hint content="//TODO: Place hint here."
-                         pos={curLine}
-                         close={() => this.setState({hint: false})}/> : '' }
+          {hint ? <Hint content="//TODO: Place hint here."
+                        pos={curLine}
+                        close={() => this.setState({hint: false})}/> : ''}
         </div>
     );
   }

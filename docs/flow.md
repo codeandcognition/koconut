@@ -136,4 +136,4 @@ declare module 'body-parser' {  declare var exports: any;  }
 
 ## Importing CSS from `node_modules`
 
-Flow gets upset if you import a `.css` file from `node_modules`. There doesn't appear to be any great solution. Just copy the file from `node_modules` and store it somewhere locally in `src`. ¯\_(ツ)_/¯
+Flow gets upset if you import a `.css` file from `node_modules`. There doesn't appear to be any great solution. Just copy the file from `node_modules` and store it somewhere locally in `src`. ¯\\_(ツ)\_/¯
