@@ -13,10 +13,11 @@
     "flow-typed": "^2.1.2",
     "jest": "^20.0.4",
     "jsdoc": "^3.4.3",
-    "react-scripts": "1.0.10",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "react-scripts": "1.0.10"
   },
   "dependencies": {
+    "async": "^2.5.0",
     "body-parser": "^1.17.2",
     "brace": "^0.10.0",
     "express": "^4.15.4",

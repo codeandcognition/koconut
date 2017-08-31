@@ -14,25 +14,21 @@ exports.generate = (req: $Request, res: $Response, next: Function) => {
 
   // Reads the Java template
   fs.readFile('api/java/template.txt', (err, data) => {
-    if(err) {
-      throw err;
-    } else {
-      // Fills in the template
-      let code = data.toString();
-      code = code.replace('%%ID%%', req.body.id)
-                 .replace('%%CONTENT%%', req.body.content || '');
-      console.log(code);
+    if(err) throw err;
 
-      // Writes the Java code to a file
-      fs.writeFile(`api/java/tmp/${req.body.id}.java`, code, (err) => {
-        if (err) {
-          throw err;
-        } else {
-          console.log('successful write');
-          next();
-        }
-      });
-    }
+    // Fills in the template
+    let code = data.toString();
+    code = code.replace('%%ID%%', req.body.id)
+               .replace('%%CONTENT%%', req.body.content || '');
+    console.log(code);
+
+    // Writes the Java code to a file
+    fs.writeFile(`api/java/tmp/${req.body.id}.java`, code, (err) => {
+      if (err) throw err;
+
+      console.log('successful write');
+      next();
+    });
   });
 
   // TODO: Un-hardcode template
