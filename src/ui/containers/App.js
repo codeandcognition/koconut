@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import './App.css';
 import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
+import Feedback from '../components/Feedback';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -146,6 +147,18 @@ class App extends Component {
   }
 
   /**
+   * Renders the feedback view
+   */
+  renderFeedback() {
+    return (
+        <Feedback
+            feedback={this.state.feedback}
+            nextConcepts={this.state.nextConcepts}
+        />
+    );
+  }
+
+  /**
    * Renders the display based on display state
    */
   renderDisplay() {
@@ -154,6 +167,8 @@ class App extends Component {
         return this.renderExercise();
       case displayType.concept:
         return this.renderConceptSelection();
+      case displayType.feedback:
+        return this.renderFeedback();
       default:
         break;
     }
