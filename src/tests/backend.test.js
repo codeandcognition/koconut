@@ -34,8 +34,6 @@ function testCases(directory: string) {
     fs.readdir(`${test_dir}/${directory}`, (err, files) => {
       if (err) throw err;
 
-      // f🌸ck asynchronous programming :(
-      // if this isn't very readable I don't blame out
       async.map(files,
           // callback that returns an object with the file name and the file content
           (file, callback) => {
@@ -64,7 +62,7 @@ function testCases(directory: string) {
               }
 
               // check if file is input or output
-              if (ext === test_ext.input) {
+              if (ext === test_ext.input.toUpperCase()) {
                 // add file's content a test case by key
                 codes[name].input = readFile.content.toString();
               } else if (ext === test_ext.output) {
@@ -78,8 +76,6 @@ function testCases(directory: string) {
     }); // ew, callbacks
   });
 }
-
-
 
 test('Sanity Check', () => {
   expect(1).toBe(1);
