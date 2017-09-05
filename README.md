@@ -127,6 +127,9 @@ Command                     | Description
 `yarn run build-all`        | Builds the application, Storybook, and documentation.js
 `yarn run build-all-ignore` | Builds the application, Storybook, and documentation.js, ignoring type-checking
 
+### Test Script~~s~~
+Jest tests can be quickly run using `yarn test`.
+
 ## Resources
 
 ### WebStorm

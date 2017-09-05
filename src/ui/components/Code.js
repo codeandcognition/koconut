@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import AceEditor from 'react-ace';
-import ace from 'brace';
+//import ace from 'brace';
 
 // Ace language support
 import 'brace/mode/java';
@@ -21,7 +21,7 @@ import Hint from './Hint.js';
 import './Code.css';
 
 // Ace Range datatype
-const { Range } = ace.acequire('ace/range');
+// const { Range } = ace.acequire('ace/range');
 
 type Props = {
   type: string,
@@ -155,7 +155,9 @@ class Code extends Component {
    */
   handleChange(value: string, event: Object) {
     console.log(event);
-    if(event.start.row === 0) {
+    // TODO: Actually prevent rows
+    // TODO: Also, newlines and deletion isn't safe
+    if(event.start.row !== -1) {
       this.setState({code: value});
       if (this.props.updateHandler !== undefined) { // wow such type safety
         // submit code or highlighted code
@@ -193,6 +195,16 @@ class Code extends Component {
         editorProps={{
           $blockScrolling: Infinity,
         }}
+        markers={[//TODO: Remove me :O
+          {
+            startRow: 0,
+            startCol: 0,
+            endRow: 100,
+            endCol: 100,
+            className: 'box',
+            type: 'background'
+          }
+        ]}
         /* https://github.com/securingsincity/react-ace/issues/29#issuecomment-296398653 */
     />;
   }

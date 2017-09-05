@@ -14,7 +14,7 @@ const _tags = {
 };
 
 /**
- * Parses exercise code
+ * Parses exercise code for highlight tags
  * @class
  */
 class CodeParser {

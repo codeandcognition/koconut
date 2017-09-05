@@ -1,4 +1,11 @@
 toc:
+  - name: Overview
+    description: |
+      This documentation provides a collection of JSDoc comments that have been
+      compiled together using [documentation.js](documentation.js.org). Currently,
+      it does not include the project backend. Since everything is automatically
+      generated, items will need to be manually added to `documentation.yml` in
+      `docs/` to be properly organized.
   - name: "Pseudo-Backend"
     description: |
       The following classes contain "backend" logic that would account for the
@@ -16,6 +23,7 @@ toc:
   - ResponseObject
   - ResponseLogClass
   - ResponseEvaluator
+  - CodeParser
   - name: React Components
     description: |
       The remaining classes are React components which make up the frontend view
@@ -39,4 +47,4 @@ toc:
   - name: Unorganized
     description: |
       Everything below here is auto-generated documentation that hasn't been
-      sorted yet.
+      sorted yet and needs to be added to `documentation.yml` in `docs/`.
