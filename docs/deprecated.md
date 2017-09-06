@@ -1,7 +1,38 @@
 # deprecated
-> :skull: _it's just floobits lol_ :skull:
+> :skull: _it's **not** just floobits lol_ :skull:
 
-## Using Floobits in WebStorm
+## To Be Clear
+**None of this documentation is relevant to anything that is currently being worked on.**
+
+**Everything here exists for the sake of having a historical reference if for whatever reason old commits/tools need be used.**
+
+## Project Information
+
+### Tools
+- [Storybook](https://storybook.js.org/): a live development environment
+
+## Setup and Usage
+
+### Development Scripts
+
+Command                    | Description
+-------------------------- | -----------------------------------------------------------------------------------------------
+`yarn run storybook`       | Starts the Storybook server on `:9009`
+`yarn run start-dev`       | Starts both the Storybook and documentation.js servers
+
+### Build Scripts
+
+Command                    | Description
+-------------------------- | -----------------------------------------------------------------------------------------------
+`yarn run build-storybook`  | Builds the Storybook and dumps it in `/dev/storybook`
+`yarn run build-all`        | Builds the application, Storybook, and documentation.js
+`yarn run build-all-ignore` | Builds the application, Storybook, and documentation.js, ignoring type-checking
+
+## Resources
+
+### WebStorm
+
+#### Using Floobits in WebStorm
 **Floobits is buggy and no longer maintained, do not use it for general development** :sob:
 
 > *(But we still use Floobits sometimes :ok_hand:)*

@@ -8,6 +8,9 @@
 
 # production
 /build
+/build_node
+
+# development
 /dev/storybook
 /dev/docs
 

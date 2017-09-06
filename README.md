@@ -39,7 +39,6 @@ Development of _koconut_ is assisted by the usage of:
 
 - [Flow](https://flow.org/): a type-checking system for JavaScript
 - [Jest](https://facebook.github.io/jest/): a JavaScript testing framework
-- [Storybook](https://storybook.js.org/): a live development environment
 - [documentation.js](http://documentation.js.org/): a documentation generator
 
 ## Style Guide
@@ -105,14 +104,13 @@ To have a live preview of the application, simply run the following command:
 
 > - Starts a development server that will host a live preview of the application
 > - Starts a Sass watcher which automatically generates CSS from SCSS files as they are updated
+> - Starts a nodemon server that will host the backend server and update automatically when files are changed
 
 ### Development Scripts
 
 Command                    | Description
 -------------------------- | -----------------------------------------------------------------------------------------------
-`yarn run storybook`       | Starts the Storybook server on `:9009`
 `yarn run start-docs`      | Starts the documentation.js server on `:4001`
-`yarn run start-dev`       | Starts both the Storybook and documentation.js servers
 `yarn run flow`            | Starts a Flow server and type-checks your code
 `yarn run make-flow-nicer` | (Usually) fixes [Flow being mean to you](docs/flow.md#importing-a-new-module-from-node_modules)
 
@@ -120,12 +118,9 @@ Command                    | Description
 
 Command                     | Description
 --------------------------- | -------------------------------------------------------------------------------------------------------------------
-`yarn run build`            | Builds the application and dumps it in `/build`. **The project will not build if it does not correctly type-check**
+`yarn run build`            | Builds the application and dumps it in `/build` and `/build_node`. **The project will not build if it does not correctly type-check**
 `yarn run build-ignore`     | Builds the application, ignoring type-checking
-`yarn run build-storybook`  | Builds the Storybook and dumps it in `/dev/storybook`
 `yarn run build-docs`       | Builds documentation.js and dumps it in `/dev/docs`
-`yarn run build-all`        | Builds the application, Storybook, and documentation.js
-`yarn run build-all-ignore` | Builds the application, Storybook, and documentation.js, ignoring type-checking
 
 ### Test Script~~s~~
 Jest tests can be quickly run using `yarn test`.
