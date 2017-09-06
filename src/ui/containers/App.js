@@ -36,6 +36,7 @@ const displayType = {
 class App extends Component {
   submitResponse: Function;
   submitConcept: Function;
+  submitOk: Function;
   generator: ExerciseGenerator;
   // updater: ResponseEvaluator;
 
@@ -67,6 +68,7 @@ class App extends Component {
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
     this.submitConcept = this.submitConcept.bind(this);
+    this.submitOk = this.submitOk.bind(this);
   }
 
   /**
@@ -95,14 +97,11 @@ class App extends Component {
   submitResponse(answer: string) {
     if(answer !== null && answer !== undefined) {
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer);
-      // console.log(ExercisePool.pool);
       this.setState({
         feedback: ResponseLog.getFeedback(),
         nextConcepts: this.generator.getConcepts(this.state.conceptOptions),
-        exercise: this.generator.generateExercise(this.state.currentConcept),
-        display: this.state.conceptOptions > 1
-               ? displayType.concept
-               : displayType.exercise
+        // exercise: this.generator.generateExercise(this.state.currentConcept),
+        display: this.state.exercise.type === 'survey' ? displayType.concept : displayType.feedback
       });
     }
   }
@@ -116,8 +115,14 @@ class App extends Component {
       this.setState({
         exercise: this.generator.generateExercise(concept),
         display: displayType.exercise
-      })
+      });
     }
+  }
+
+  submitOk() {
+    this.setState({
+      nextConcepts: this.generator.getConcepts(this.state.conceptOptions),
+      display: displayType.concept});
   }
   
   /**
@@ -153,7 +158,7 @@ class App extends Component {
     return (
         <Feedback
             feedback={this.state.feedback}
-            nextConcepts={this.state.nextConcepts}
+            submitHandler={this.submitOk}
         />
     );
   }
