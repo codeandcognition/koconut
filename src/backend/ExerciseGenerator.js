@@ -19,19 +19,6 @@ class ExerciseGenerator {
   }
 
   /**
-   * Weights values closer to 0 more than values close to 1.
-   * As range of mastery narrows, topics' chances gain equality.
-   * @returns {number} [0:1]
-   */
-  weightByParabolic(max?: number, min?: number): number {
-    let x = Math.random();
-    let k = (max && min && (max - min > 0)) ?
-        1 / (max - min) + (1 - (max - min)) :
-        1;
-    return (x * x - (1 + k) * x + 1) / k + (1 - 1 / k);
-  }
-
-  /**
    * Gives optimal index of the next concept to generate questions for.
    * Index is based on a list of concepts, sorted in this order:
    * least mastered -> most mastered
@@ -64,7 +51,6 @@ class ExerciseGenerator {
    * @returns an exercise concept
    */
   getConcept(): string {
-    // let index = this.getConceptIndex(orderedConcepts, this.weightByParabolic);
     return this.getOrderedConcepts()[0].name;
   }
 

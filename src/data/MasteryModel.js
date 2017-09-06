@@ -129,7 +129,7 @@ class MasteryModelClass {
 
     // Create a mapping of strings to ConceptKnowledge objects
     let map = this.modelMap;
-    this.model.map((m) => map.set(m.name, m));
+    this.model.forEach((m) => map.set(m.name, m));
 
     // Fill ConceptKnowledge objects with references parents/dependencies
     conceptInventory.forEach((c) => {
