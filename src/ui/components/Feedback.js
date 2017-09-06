@@ -1,24 +1,33 @@
 // @flow
 import React, {Component} from 'react';
+import VisualFeedback from './VisualFeedback';
 
 import './Feedback.css';
+
 
 /**
  * Component that displays a feedback modal after user submits an answer.
  * @class
  */
 
+type Props = {feedback: boolean, submitHandler: Function};
+
 class Feedback extends Component {
-  props: {
-    feedback: boolean,
-    nextConcepts: string[]
-  };
+
+  constructor(props: Props) {
+    super(props);
+  }
 
   render() {
     return (
       <div className="feedback">
-        <p>Your answer was: {this.props.feedback} </p>
-        <p>Next concepts: {this.props.nextConcepts.toString()} </p>
+        <div className="feedback-correctness">
+          <p>Your answer was: {this.props.feedback}</p>
+        </div>
+        <VisualFeedback feedback={this.props.feedback}/>
+        <div className="feedback-ok">
+          <button onClick={this.props.submitHandler}>OK</button>
+        </div>
       </div>
     )
   }
