@@ -37,7 +37,7 @@
     "flow": "flow",
     "make-flow-nicer": "flow-typed install && flow-scripts stub",
     "start-js": "react-scripts start",
-    "start-node": "nodemon ./api/bin/www",
+    "start-node": "nodemon --exec npm run babel-node -- ./api/bin/www",
     "start-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "build-css": "node-sass-chokidar src/ -o src/",
     "start-docs": "documentation serve --watch src/** --config docs/documentation.yml",
@@ -48,7 +48,8 @@
     "start-dev": "npm-run-all -p start-docs storybook",
     "build-dev": "npm-run-all -p build-docs build-storybook",
     "build-all": "npm-run-all -p build build-dev",
-    "build-all-ignore": "npm-run-all -p build-ignore build-dev"
+    "build-all-ignore": "npm-run-all -p build-ignore build-dev",
+    "babel-node": "babel-node --presets=flow"
   },
   "proxy": "http://localhost:3001"
 }
