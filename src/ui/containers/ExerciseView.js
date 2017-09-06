@@ -67,7 +67,7 @@ class Exercise extends Component {
               updateHandler={(content) => this.setState({answer: content})}
           />
           <Submit click={this.isAnswered()} submitHandler={() => this.props.submitHandler(this.state.answer)}/>
-          <Feedback feedback={this.props.feedback} nextConcepts={this.props.nextConcepts}/>
+          {/*<Feedback feedback={this.props.feedback} nextConcepts={this.props.nextConcepts}/>*/}
         </div>
     );
   }
