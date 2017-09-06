@@ -17,7 +17,7 @@ const quote = { single: "'", double: "\"" };
 
 const keyword = { new: "new", true: "true", false: "false", if: "if", else: "else",
   for: "for", do: "do", while: "while", continue: "continue", return: "return",
-  null: "null",
+  null: "null", this: "this", super: "super",
 };
 
 const identifier = "identifier", classType = "classType", expression = "expression",
@@ -37,7 +37,7 @@ const identifier = "identifier", classType = "classType", expression = "expressi
     equalityExpression = "equalityExpression", conditionalAndExpression = "conditionalAndExpression",
     conditionalOrExpression = "conditionalOrExpression", relationalExpression = "relationalExpression",
     leftHandSide = "leftHandSide", assignmentOperator = "assignmentOperator", string = "string",
-    referenceType = "referenceType";
+    referenceType = "referenceType", fieldAccess = "fieldAccess";
 /*
  { name: ,
    dependencies: [],
@@ -167,8 +167,13 @@ const conceptInventory = [
     should_teach: true
   },
   { name: leftHandSide,
-    dependencies: [identifier, arrayAccessExpression],
+    dependencies: [identifier, fieldAccess, arrayAccessExpression],
     parents: [],
+    should_teach: true
+  },
+  { name: fieldAccess,
+    dependencies: [keyword.this, keyword.super, sep.dot],
+    parents: [leftHandSide],
     should_teach: true
   },
   { name: assignmentOperator,
@@ -207,12 +212,12 @@ const conceptInventory = [
     should_teach: true
   },
   { name: postIncrementExpression,
-    dependencies: [identifier, op.incr],
+    dependencies: [leftHandSide, op.incr],
     parents: [expression],
     should_teach: true
   },
   { name: postDecrementExpression,
-    dependencies: [identifier, op.decr],
+    dependencies: [leftHandSide, op.decr],
     parents: [expression],
     should_teach: true
   },
@@ -232,22 +237,22 @@ const conceptInventory = [
     should_teach: true
   },
   { name: multiplicativeExpression,
-    dependencies: [identifier, literal, op.mult],
+    dependencies: [leftHandSide, literal, op.mult],
     parents: [expression],
     should_teach: true
   },
   { name: additiveExpression,
-    dependencies: [identifier, literal, op.add],
+    dependencies: [leftHandSide, literal, op.add],
     parents: [expression],
     should_teach: true
   },
   { name: relationalExpression,
-    dependencies: [identifier, literal, op.greater, op.lesser, op.greater_equality, op.lesser_equality],
+    dependencies: [leftHandSide, literal, op.greater, op.lesser, op.greater_equality, op.lesser_equality],
     parents: [conditionalAndExpression, conditionalOrExpression],
     should_teach: true
   },
   { name: equalityExpression,
-    dependencies: [identifier, literal, op.equality],
+    dependencies: [leftHandSide, literal, op.equality],
     parents: [conditionalAndExpression, conditionalOrExpression],
     should_teach: true
   },
@@ -262,27 +267,32 @@ const conceptInventory = [
     should_teach: true
   },
   { name: statement,
-    dependencies: [],
-    parents: [ifThenStatement, ifThenElseStatement, forStatement, doStatement, whileStatement, breakStatement, continueStatement, returnStatement],
+    dependencies: [ifThenStatement, ifThenElseStatement, forStatement, doStatement, whileStatement, breakStatement, continueStatement, returnStatement],
+    parents: [],
+    should_teach: true
+  },
+  { name: ifThenStatement,
+    dependencies: [keyword.if, expression, sep.left_curl, sep.right_curl],
+    parents: [],
     should_teach: true
   },
   { name: ifThenElseStatement,
-    dependencies: [keyword.if, keyword.else],
+    dependencies: [keyword.if, expression, keyword.else, sep.left_curl, sep.right_curl],
     parents: [statement],
     should_teach: true
   },
   { name: forStatement,
-    dependencies: [keyword.for, sep.left_paren, variableDeclaration, expression, statementExpression, sep.right_paren, sep.semicolon],
+    dependencies: [keyword.for, sep.left_paren, variableDeclaration, expression, statementExpression, sep.right_paren, sep.semicolon, sep.left_curl, sep.right_curl],
     parents: [statement],
     should_teach: true
   },
   { name: doStatement,
-    dependencies: [keyword.do, keyword.while, sep.left_paren, expression, sep.right_paren ],
+    dependencies: [keyword.do, keyword.while, sep.left_paren, expression, sep.right_paren, sep.left_curl, sep.right_curl],
     parents: [statement],
     should_teach: true
   },
   { name: whileStatement,
-    dependencies: [keyword.while, sep.left_paren, expression, sep.right_paren],
+    dependencies: [keyword.while, sep.left_paren, expression, sep.right_paren, sep.left_curl, sep.right_curl],
     parents: [statement],
     should_teach: true
   },
