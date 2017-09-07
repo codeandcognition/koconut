@@ -4,7 +4,6 @@ import React, {Component} from 'react';
 import './App.css';
 import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
-import Feedback from '../components/Feedback';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';

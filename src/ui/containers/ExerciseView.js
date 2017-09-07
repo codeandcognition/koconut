@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import Prompt from '../components/Prompt';
 import Information from './Information';
 import Submit from '../components/Submit';
-import Feedback from '../components/Feedback';
 
 import './ExerciseView.css';
 
