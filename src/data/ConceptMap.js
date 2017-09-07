@@ -179,7 +179,8 @@ const conceptInventory = [
   { name: assignmentOperator,
     dependencies: [op.assign, op.add_assign, op.sub_assign, op.div_assign, op.mult_assign],
     parents: [],
-    should_teach: true
+    should_teach: true,
+    container: true
   },
   { name: op.assign,
     dependencies: [],

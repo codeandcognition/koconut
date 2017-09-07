@@ -4,7 +4,7 @@
 
 /* Here... */
 .correct {
-  border: solid 15px green;
+  border: solid 15px #0a1;
   width: 100px;
   height: 50px;
   border-top: none;
@@ -47,7 +47,7 @@
   top: 50px;
   width: 100px;
   height: 0;
-  border: solid 15px red;
+  border: solid 15px #f00;
   border-top: none;
   transform-origin: 50% 50%;
   transform: rotate(45deg);
@@ -60,7 +60,7 @@
   top: 50px;
   width: 100px;
   height: 0;
-  border: solid 15px red;
+  border: solid 15px #f00;
   border-top: none;
   transform-origin: 50% 50%;
   transform: rotate(-45deg);
