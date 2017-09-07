@@ -1,10 +1,9 @@
 @import "../containers/App.scss";
 
 .feedback {
-  margin: 2em auto;
+  margin: 0;
   padding: 1em;
-  width: 65vw;
-  border: 1px dashed darkslategray;
+  border-left: 1px dotted darkslategray;
   text-align: center;
   background-color: $component-background;
   position: relative;
