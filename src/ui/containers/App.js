@@ -101,7 +101,8 @@ class App extends Component {
         feedback: ResponseLog.getFeedback(),
         nextConcepts: this.generator.getConcepts(this.state.conceptOptions),
         // exercise: this.generator.generateExercise(this.state.currentConcept),
-        display: this.state.exercise.type === 'survey' ? displayType.concept : displayType.feedback
+        display: this.state.exercise.type !== 'survey' ? displayType.feedback :
+            ( this.state.conceptOptions > 1 ? displayType.concept : displayType.exercise )
       });
     }
   }
@@ -135,6 +136,8 @@ class App extends Component {
             submitHandler = {this.submitResponse}
             feedback = {this.state.feedback}
             nextConcepts = {this.state.nextConcepts}
+            submitOk = {this.submitOk}
+            mode = {this.state.display}
         />
     );
   }
@@ -152,28 +155,15 @@ class App extends Component {
   }
 
   /**
-   * Renders the feedback view
-   */
-  renderFeedback() {
-    return (
-        <Feedback
-            feedback={this.state.feedback}
-            submitHandler={this.submitOk}
-        />
-    );
-  }
-
-  /**
    * Renders the display based on display state
    */
   renderDisplay() {
     switch(this.state.display) {
       case displayType.exercise:
+      case displayType.feedback:
         return this.renderExercise();
       case displayType.concept:
         return this.renderConceptSelection();
-      case displayType.feedback:
-        return this.renderFeedback();
       default:
         break;
     }
