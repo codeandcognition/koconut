@@ -17,7 +17,9 @@ type Props = {
   },
   submitHandler: Function,
   feedback: boolean,
-  nextConcepts: string[]
+  nextConcepts: string[],
+  submitOk: Function,
+  mode: string
 }
 
 /**
@@ -65,6 +67,9 @@ class Exercise extends Component {
               answer={this.state.answer}
               concept={this.props.exercise.concept}
               updateHandler={(content) => this.setState({answer: content})}
+              feedback={this.props.feedback}
+              submitOk={this.props.submitOk}
+              mode={this.props.mode}
           />
           <Submit click={this.isAnswered()} submitHandler={() => this.props.submitHandler(this.state.answer)}/>
           {/*<Feedback feedback={this.props.feedback} nextConcepts={this.props.nextConcepts}/>*/}
