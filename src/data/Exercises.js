@@ -1,7 +1,7 @@
 // @flow
 import ExerciseTypes from './ExerciseTypes.js';
-import _c from './ConceptAbbreviations';
-
+import {conceptInventory} from './ConceptMap';
+import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
 
 export type Exercise = {
   prompt: string,
@@ -18,12 +18,24 @@ const difficulty = {
   high: 2
 };
 
+export const stubExercise: {exercise: Exercise, answer: ?string} = {
+  exercise: {
+    prompt: 'this is a stub exercise',
+    code: 'the right answer is abc',
+    choices: ['abc'],
+    difficulty: -1,
+    type: ExerciseTypes.multipleChoice,
+    concept: ''
+  },
+  answer: 'abc'
+}
+
 export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
   {
     exercise: {
       prompt: 'Take this survey before we begin. Rate how confident you are in your abilities for each concept.',
       code: '',
-      choices: Object.keys(_c).map((k) => _c[k]),
+      choices: conceptInventory.map((k) => k.name),
       difficulty: difficulty.low,
       type: ExerciseTypes.survey,
       concept: '',
@@ -45,7 +57,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       '}',
       difficulty: difficulty.med,
       type: ExerciseTypes.shortResponse,
-      concept: _c.REF,
+      concept: g.referenceType
     },
     answer: '[7, 2]'
   },
@@ -56,7 +68,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       choices: ['true', 'false'],
       difficulty: difficulty.high,
       type: ExerciseTypes.multipleChoice,
-      concept: _c.E_OP
+      concept: g.equalityExpression
     },
     answer: 'true'
   },/*=
@@ -82,7 +94,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
         '!(2 == 3) && !(-1 < 5) && !isPrime(n)'],
       difficulty: 2,
       type: ExerciseTypes.multipleChoice,
-      concept: _c.C_OP
+      concept: g.conditionalOrExpression
     },
     answer: '(2 != 3) || (-1 >= 5) || !isPrime(n)'
   },
@@ -92,7 +104,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x = 1;',
       difficulty: 1,
       type: ExerciseTypes.writeCode,
-      concept: _c.AA_OP
+      concept: g.postIncrementExpression
     },
     answer: 'int x = 1;\nx++;'
   },
@@ -102,7 +114,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x /!*  *!/ 2;',
       difficulty: 2,
       type: ExerciseTypes.fillBlank,
-      concept: _c._A_OP
+      concept: g.assignmentExpression
     },
     answer: 'int x = 2;'
   },
@@ -117,7 +129,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       choices: ['3', '7', '10', '12'],
       difficulty: 2,
       type: ExerciseTypes.multipleChoice,
-      concept: _c.ARITH
+      concept: op.add_assign
     },
     answer: '12'
   },
@@ -133,7 +145,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       '}',
       difficulty: 2,
       type: ExerciseTypes.shortResponse,
-      concept: _c.F_LOOP
+      concept: g.forStatement
     },
     answer: '4 1\n2 2'
   },
@@ -144,7 +156,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       choices: ['true', 'false'],
       difficulty: 0,
       type: ExerciseTypes.multipleChoice,
-      concept: _c._B_OP
+      concept: g.booleanLiteral
     },
     answer: 'true'
   },
@@ -154,7 +166,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: 'int x = 1;',
       difficulty: 1,
       type: ExerciseTypes.highlightCode,
-      concept: _c._VAR
+      concept: g.variableDeclaration
     },
     answer: 'x'
   },
@@ -164,7 +176,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       code: '',
       difficulty: 1,
       type: ExerciseTypes.writeCode,
-      concept: _c.A_OP
+      concept: g.assignmentExpression
     },
     answer: 'int x = 2;'
   },
@@ -174,7 +186,7 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
         code: 'boolean x = y /*  */ 5;',
         difficulty: 1,
         type: ExerciseTypes.writeCode,
-        concept: _c.R_OP
+        concept: g.relationalExpression
     },
     answer: 'boolean x = y < 5;'
   },
@@ -185,19 +197,8 @@ export const exampleExercises: {exercise: Exercise, answer: ?string}[] = [
       choices: ['3', '5', '1', '2'],
       difficulty: 1,
       type: ExerciseTypes.multipleChoice,
-      concept: _c.ARITH
+      concept: g.integerLiteral
     },
     answer: '1'
   },
-  {
-    exercise: {
-      prompt: 'Stub for primitive types',
-      code: 'the right answer is abc',
-      choices: ['abc'],
-      difficulty: -1,
-      type: ExerciseTypes.multipleChoice,
-      concept: _c.PRIM
-    },
-    answer: 'abc'
-  }
 ];
