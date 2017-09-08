@@ -36,11 +36,15 @@ class ResponseEvaluator {
    * @returns {number}
    * @constructor
    */
-  static BKT(response: ResponseObject) {
-    let concept = response.concept;
-    let ck = MasteryModel.modelMap.get(concept);
-    let knowledge = !(ck === null || ck === undefined) ? ck.getKnowledge() : 0.01;
-    return BayesKT.learned(knowledge, response);
+  static BKT(response: ResponseObject): number[] {
+    let concepts = response.concepts;
+    let ck = concepts.map((concept) => {
+      return MasteryModel.modelMap.get(concept);
+    });
+    return ck.map((val) => {
+      let knowledge = !(val === null || val === undefined) ? val.getKnowledge() : 0.01;
+      return BayesKT.learned(knowledge, response);
+    });
   }
 
   /**
@@ -56,9 +60,9 @@ class ResponseEvaluator {
   /**
    * Calculates certainty using specific analysis method.
    * @param response
-   * @returns {number}
+   * @returns {number[]}
    */
-  static analyzeLog(response: ResponseObject): number {
+  static analyzeLog(response: ResponseObject): number[] {
     return this.calculateCertainty(response, this.BKT);
   }
 
@@ -103,7 +107,7 @@ class ResponseEvaluator {
     }
 
     ResponseLog.addResponse(
-        '123', exercise.concept, exercise.type, exercise.difficulty, isCorrect,
+        '123', exercise.concepts, exercise.type, exercise.difficulty, isCorrect,
         Date.now(),
     );
 
@@ -118,7 +122,7 @@ class ResponseEvaluator {
       ));
     } else {
       MasteryModel.updateModel(
-          exercise.concept,
+          exercise.concepts,
           ResponseEvaluator.analyzeLog(ResponseLog.getLastElement()),
       );
     }

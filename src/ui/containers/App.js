@@ -11,15 +11,7 @@ import ResponseEvaluator from '../../backend/ResponseEvaluator';
 import {ResponseLog} from '../../data/ResponseLog';
 //import Concepts from '../../backend/Concepts';
 
-type Exercise = {
-  prompt: string,
-  code: string,
-  choices?: string[],
-  difficulty: number,
-  type: string,
-  concept: string
-  // exerciseID: string
-}
+import type {Exercise} from '../../data/Exercises';
 
 // Display type enum
 const displayType = {

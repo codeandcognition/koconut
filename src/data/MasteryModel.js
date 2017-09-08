@@ -7,6 +7,7 @@ import conceptInventory from './ConceptMap.js';
  */
 class ConceptKnowledge {
   name: string;
+  teach: boolean;
 
   dependencies: ConceptKnowledge[];
   parents: ConceptKnowledge[];
@@ -14,8 +15,9 @@ class ConceptKnowledge {
   knowledge: number; //p(cognitive mastery) [0,1]
   dependencyKnowledge: number; //p(support cognitive mastery) [0,1]
 
-  constructor(name: string) {
+  constructor(name: string, teach: boolean) {
     this.name = name;
+    this.teach = teach;
 
     this.dependencies = [];
     this.parents = [];
@@ -94,13 +96,15 @@ class MasteryModelClass {
 
   /**
    * Updates concept in student knowledge model with true/false value.
-   * @param concept
-   * @param knowledge
+   * @param concepts
+   * @param knowledges
    */
-  updateModel(concept: string, knowledge: number) {
-    let conceptKnowledge = this.modelMap.get(concept);
-    if (conceptKnowledge !== undefined && conceptKnowledge !== null)
-      conceptKnowledge.updateKnowledgeValue(knowledge);
+  updateModel(concepts: string[], knowledges: number[]) {
+    concepts.forEach((concept, i) => {
+      let conceptKnowledge = this.modelMap.get(concept);
+      if (conceptKnowledge !== undefined && conceptKnowledge !== null)
+        conceptKnowledge.updateKnowledgeValue(knowledges[i]);
+    });
   }
 
   /**
@@ -125,7 +129,7 @@ class MasteryModelClass {
   _populate() {
     // Create ConceptKnowledge objects for each concept
     conceptInventory.map((c) => this.model.push(
-        new ConceptKnowledge(c.name)));
+        new ConceptKnowledge(c.name, c.should_teach)));
 
     // Create a mapping of strings to ConceptKnowledge objects
     let map = this.modelMap;

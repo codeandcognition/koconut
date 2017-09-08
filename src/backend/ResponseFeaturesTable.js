@@ -1,6 +1,7 @@
 //@flow
 import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import ExerciseTypes from '../data/ExerciseTypes';
+import _ from 'lodash';
 
 // A note from Harrison:
 //  I tried to make this file better by putting things in a class, but that ended
@@ -55,7 +56,7 @@ class ResponseFeaturesTable {
     let len = ResponseLog.log.length;
     if (len > 0) {
       let responsesOfConcept = ResponseLog.log.filter(
-          (res) => res.concept === response.concept);
+          (res) => _.intersection(res.concepts, response.concepts).length > 0);
       let incorrectResponses = responsesOfConcept.filter(
           (res) => res.correct === false);
       return incorrectResponses.length / responsesOfConcept.length;
@@ -153,7 +154,7 @@ class ResponseFeaturesTable {
     let len = ResponseLog.log.length;
     if (len > 1) {
       let relevant = ResponseLog.log.filter(
-          (res) => res.concept === response.concept);
+          (res) => _.intersection(res.concepts, response.concepts).length > 0);
       // Running sum to compute total time taken on this concept
       return relevant.reduce((sum, res) => {
         let pos = ResponseLog.log.indexOf(res);
@@ -172,7 +173,7 @@ class ResponseFeaturesTable {
    */
   static numberOfTimesUsingConcept(response: ResponseObject) {
     return ResponseLog.log.filter(
-        (res) => res.concept === response.concept).length;
+        (res) => _.intersection(res.concepts, response.concepts).length > 0).length;
   }
 
   /**

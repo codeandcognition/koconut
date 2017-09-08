@@ -40,7 +40,7 @@ class ExerciseGenerator {
    * @returns {Array.<*>}
    */
   getOrderedConcepts(): ConceptKnowledge[] {
-    return MasteryModel.model.sort(
+    return MasteryModel.model.filter((concept) => concept.teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
                    a.dependencyKnowledge / a.knowledge));
   }
@@ -99,7 +99,11 @@ class ExerciseGenerator {
     // let type = this.getType();
     let exercisePool = exampleExercises.filter(
       (e) => {
-        return e.exercise.concept === concept;
+        if(typeof concept === 'string') {
+          return e.exercise.concepts.includes(concept);
+        } else {
+          return false;
+        }
       },
     );
 
@@ -109,7 +113,7 @@ class ExerciseGenerator {
           [Math.floor(Math.random() * exercisePool.length)];
     } else {
       exercise = stubExercise;
-      exercise.exercise.concept = concept;
+      exercise.exercise.concepts = [concept];
     }
     this.counter += 1;
     ExercisePool.addExercise(exercise.exercise, exercise.answer);

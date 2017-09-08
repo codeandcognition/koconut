@@ -5,7 +5,7 @@
  */
 class ResponseObject {
   id: string;
-  concept: string;
+  concepts: string[];
   exerciseType: string;
   difficulty: number;
   correct: boolean;
@@ -13,13 +13,13 @@ class ResponseObject {
 
   constructor(
       id: string, //Prompt ID for matching
-      concept: string, //Programming concept, maps to mastery model
+      concepts: string[], //Programming concept, maps to mastery model
       exerciseType: string, //Type of exercise
       difficulty: number, //
       correct: boolean,
       timestamp: number) {
     this.id = id;
-    this.concept = concept;
+    this.concepts = concepts;
     this.exerciseType = exerciseType;
     this.difficulty = difficulty;
     this.correct = correct;
@@ -41,18 +41,18 @@ class ResponseLogClass {
   /**
    * Static function stores submission results into response log.
    * @param id
-   * @param concept
+   * @param concepts
    * @param exerciseType
    * @param difficulty
    * @param correct
    * @param timestamp
    */
-  addResponse(id: string, concept: string,
+  addResponse(id: string, concepts: string[],
                          exerciseType: string,
                          difficulty: number, correct: boolean,
                          timestamp: number) {
     const immutable = Object.freeze(
-        new ResponseObject(id, concept, exerciseType, difficulty, correct,
+        new ResponseObject(id, concepts, exerciseType, difficulty, correct,
             timestamp));
     this.log.push(immutable);
   };
