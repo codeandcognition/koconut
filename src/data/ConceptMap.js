@@ -1,6 +1,3 @@
-/*
-Currently standalone file. Must confirm the mapping before using
- */
 import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
 
 export const conceptInventory = [
