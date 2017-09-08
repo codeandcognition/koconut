@@ -31,10 +31,10 @@ class Welcome extends Component {
           <li>Guided learning -- you're not sure what to study</li>
         </ol>
 
-        <h5>Language: Java</h5>
+        <h4>Language: Java</h4>
         <p>We're using Java because it's the introductory language in University of Washington CS courses.</p>
 
-        <h5>This is an example of Java code:</h5>
+        <h4>This is an example of Java code:</h4>
 
         <code>int x = 1337;</code><br/>
         <code>System.out.println("So " + x);</code>
@@ -43,7 +43,8 @@ class Welcome extends Component {
           <i>this project is NSF funded</i>
         </h4>
 
-        <button onClick={this.props.callBack}>OK</button>
+        <p>I have read and understand the purposes of this program.</p>
+        <button onClick={this.props.callBack}>I Agree</button>
       </div>)
   }
 }
