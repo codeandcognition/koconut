@@ -177,9 +177,11 @@ class App extends Component {
     return (
         <div className="App">
           <div className="main">
-            {/*<h1 className="title">Welcome to the koconut demo!*/}
+            {this.renderDisplay()}
+          </div>
+          <h1 className="title">
             {this.state.display !== displayType.welcome ?
-              <span className="debug">
+                <span className="debug">
                 <input
                     type="button"
                     onClick={() => this.setState(
@@ -191,9 +193,7 @@ class App extends Component {
                     value="next exercise type"
                 />
               </span> : ''}
-            {/*</h1>*/}
-            {this.renderDisplay()}
-          </div>
+          </h1>
         </div>
     );
   }
