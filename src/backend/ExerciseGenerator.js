@@ -1,5 +1,5 @@
 // @flow
-import {exampleExercises} from '../data/Exercises.js';
+import {exampleExercises, stubExercise} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
 import ExercisePool from '../data/ExercisePool';
 
@@ -98,12 +98,19 @@ class ExerciseGenerator {
 
     // let type = this.getType();
     let exercisePool = exampleExercises.filter(
-        (e) => {
-          return e.exercise.concept === concept;
-        },
+      (e) => {
+        return e.exercise.concept === concept;
+      },
     );
-    let exercise = exercisePool[Math.floor(
-        Math.random() * exercisePool.length)];
+
+    let exercise;
+    if(exercisePool.length > 0) {
+      exercise = exercisePool
+          [Math.floor(Math.random() * exercisePool.length)];
+    } else {
+      exercise = stubExercise;
+      exercise.exercise.concept = concept;
+    }
     this.counter += 1;
     ExercisePool.addExercise(exercise.exercise, exercise.answer);
     return exercise.exercise;

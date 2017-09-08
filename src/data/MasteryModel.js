@@ -1,5 +1,5 @@
 // @flow
-import conceptInventory from './Concepts.js';
+import conceptInventory from './ConceptMap.js';
 
 /**
  * ConceptKnowledge object is a node containing a concept, with a boolean

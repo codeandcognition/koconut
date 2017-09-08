@@ -10,13 +10,13 @@ import './Feedback.css';
  * @class
  */
 
-type Props = {feedback: boolean, submitHandler: Function};
+// type Props = {feedback: boolean, submitHandler: Function};
 
 class Feedback extends Component {
 
-  constructor(props: Props) {
-    super(props);
-  }
+  // constructor(props: Props) {
+  //   super(props);
+  // }
 
   render() {
     return (

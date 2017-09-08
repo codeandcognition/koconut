@@ -2,9 +2,16 @@
 import React, {Component} from 'react';
 import Code from '../components/Code';
 import Response from './Response';
-
+import Feedback from '../components/Feedback';
 import Types from '../../data/ExerciseTypes.js';
 import './Information.css';
+
+// Display type enum
+const displayType = {
+  exercise: 'EXERCISE',
+  feedback: 'FEEDBACK',
+  concept: 'CONCEPT',
+};
 
 /**
  * The Information container contains Code or both Code and Response.
@@ -16,7 +23,10 @@ class Information extends Component {
     type: string,
     choices?: string[], // Optional type - can be omitted (use undefined)
     answer: ?string,  // Maybe type - can be null/void
-    updateHandler: Function
+    updateHandler: Function,
+    feedback: string,
+    submitOk: Function,
+    mode: string
   };
 
   /**
@@ -40,12 +50,21 @@ class Information extends Component {
    */
   renderResponseView() {
     let type = this.props.type;
+    if (this.props.mode === displayType.feedback) {
+      return <Feedback
+          feedback={this.props.feedback}
+          submitHandler={this.props.submitOk}
+      />
+    }
     return Types.isInlineResponseType(type) ? <div/>
         : <Response
             type={type}
             choices={this.props.choices}
             answer={this.props.answer}
             updateHandler={this.props.updateHandler}
+            feedback={this.props.feedback}
+            submitOk={this.props.submitOk}
+            mode={this.props.mode}
         />;
   }
 
