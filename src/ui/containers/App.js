@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import './App.css';
 import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
+import Welcome from '../components/Welcome';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -15,6 +16,7 @@ import type {Exercise} from '../../data/Exercises';
 
 // Display type enum
 const displayType = {
+  welcome: 'WELCOME',
   exercise: 'EXERCISE',
   feedback: 'FEEDBACK',
   concept: 'CONCEPT',
@@ -51,7 +53,7 @@ class App extends Component {
       feedback: '',
       nextConcepts: [],
       counter: 1,
-      display: displayType.exercise,
+      display: displayType.welcome,
       conceptOptions: 3,
       currentConcept: null
     };
@@ -115,10 +117,19 @@ class App extends Component {
     }
   }
 
+  /**
+   * Invoked when student toggles OK button after receiving feedback
+   */
   submitOk() {
     this.setState({
       nextConcepts: this.generator.getConcepts(this.state.conceptOptions),
       display: displayType.concept});
+  }
+
+  renderWelcome() {
+    return (
+      <Welcome callBack={() => this.setState({display: displayType.exercise})}/>
+    );
   }
   
   /**
@@ -154,6 +165,8 @@ class App extends Component {
    */
   renderDisplay() {
     switch(this.state.display) {
+      case displayType.welcome:
+        return this.renderWelcome();
       case displayType.exercise:
       case displayType.feedback:
         return this.renderExercise();
@@ -168,8 +181,11 @@ class App extends Component {
     return (
         <div className="App">
           <div className="main">
-            <h1 className="title">Welcome to the koconut demo!
-              <span className="debug">
+            {this.renderDisplay()}
+          </div>
+          <h1 className="title">
+            {this.state.display !== displayType.welcome ?
+                <span className="debug">
                 <input
                     type="button"
                     onClick={() => this.setState(
@@ -180,10 +196,8 @@ class App extends Component {
                         })}
                     value="next exercise type"
                 />
-              </span>
-            </h1>
-            {this.renderDisplay()}
-          </div>
+              </span> : ''}
+          </h1>
         </div>
     );
   }
