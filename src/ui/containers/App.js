@@ -87,13 +87,17 @@ class App extends Component {
    */
   submitResponse(answer: string) {
     if(answer !== null && answer !== undefined) {
-      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer);
-      this.setState({
-        feedback: ResponseLog.getFeedback(),
-        nextConcepts: this.generator.getConcepts(this.state.conceptOptions),
-        // exercise: this.generator.generateExercise(this.state.currentConcept),
-        display: this.state.exercise.type !== 'survey' ? displayType.feedback :
-            ( this.state.conceptOptions > 1 ? displayType.concept : displayType.exercise )
+      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => {
+        this.setState({
+          feedback: ResponseLog.getFeedback(),
+          nextConcepts: this.generator.getConcepts(this.state.conceptOptions),
+          // exercise: this.generator.generateExercise(this.state.currentConcept),
+          display: this.state.exercise.type !== 'survey'
+              ? displayType.feedback
+              : ( this.state.conceptOptions > 1
+                  ? displayType.concept
+                  : displayType.exercise )
+        });
       });
     }
   }

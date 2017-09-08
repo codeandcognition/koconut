@@ -110,7 +110,7 @@ let variable17061 = [
         'one2',
         '1Two',
         'All options are acceptable variable names.'],
-      'concepts': ['identifiers'],
+      'concepts': ['identifier'],
       'type': 'multipleChoice',
     },
     'answer': '1Two',
@@ -168,7 +168,7 @@ let variable17061 = [
   {
     'exercise': {
       'prompt': 'Fill in the blank to make the if statement true.',
-      'code': 'int x = 3;\nint y = 7;\nif( x /*  <FILL ME IN> */ y) {\n     System.out.println("You\'re beautiful!");\n}',
+      'code': 'int x = 3;\nint y = 7;\nif( x /*  <FILL ME IN> */ y) {\n     System.out.print("You\'re beautiful!");\n}',
       'difficulty': 0,
       'choices': [],
       'concepts': ['relationalExpression'],

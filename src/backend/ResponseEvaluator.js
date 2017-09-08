@@ -70,8 +70,8 @@ class ResponseEvaluator {
    * Send a POST request to the API to compile and execute the given Java code
    * @param code - the Java code to compile and execute
    */
-  static executeJava(code: string): string {
-    fetch('/api/java', {
+  static executeJava(code: string): Promise<Object> {
+    return fetch('/api/java', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -80,54 +80,63 @@ class ResponseEvaluator {
         id: 'replacemelater', // TODO: Actually get an id
         content: code,
       })
-    }).then((res) => {
-      return res.json();
-    }).then((json) => {
-      console.log(json);
-    }).catch((err) => {
-      console.error(err);
     });
-
-    return 'abc';
   }
 
   /**
    * Takes in an exercise and student response to update log and mastery model.
    * @param exercise
    * @param answer
+   * @param next - callback to be executed after evaluation
    */
-  static evaluateAnswer(exercise: Exercise, answer: string) {
-    let isCorrect;
+  static evaluateAnswer(exercise: Exercise, answer: string, next: Function) {
+    // no one can escape asyncronous programming!!!!
+    // >:D
 
+    // wrap it in a function for async
+    let addResponseAndUpdate = (isCorrect, exercise) => {
+      ResponseLog.addResponse( // TODO: replace '123' with a real ID
+          '123', exercise.concepts, exercise.type, exercise.difficulty, isCorrect,
+          Date.now(),
+      );
+
+      //Debug for demo
+      console.groupCollapsed("Response Log");
+      console.log(ResponseLog.log);
+      console.groupEnd();
+
+      if (ExerciseTypes.isSurvey(exercise.type)) {
+        MasteryModel.surveyUpdateModel(Array.from(answer).map(x =>
+            parseInt(x, 10),
+        ));
+      } else {
+        MasteryModel.updateModel(
+            exercise.concepts,
+            ResponseEvaluator.analyzeLog(ResponseLog.getLastElement()),
+        );
+      }
+
+      this.printImportantStuff(); //Debug/demo
+      next();
+    };
+
+    // actual logic
+    // it's backwards, I know :(
     if(exercise.type === ExerciseTypes.writeCode ||
        exercise.type === ExerciseTypes.fillBlank) {
-      isCorrect = this.executeJava(answer) === ExercisePool.getAnswer(exercise);
+      this.executeJava(answer)//ExercisePool.getAnswer(exercise);
+      .then((res) => {
+        return res.json();
+      }).then((json) => {
+        console.log(json);
+        addResponseAndUpdate(json.stdout === ExercisePool.getAnswer(exercise), exercise);
+      }).catch((err) => {
+        console.log(err);
+        addResponseAndUpdate(false, exercise); // TODO: remove hardcode
+      });
     } else {
-      isCorrect = answer === ExercisePool.getAnswer(exercise);
+      addResponseAndUpdate(answer === ExercisePool.getAnswer(exercise), exercise);
     }
-
-    ResponseLog.addResponse(
-        '123', exercise.concepts, exercise.type, exercise.difficulty, isCorrect,
-        Date.now(),
-    );
-
-    //Debug for demo
-    console.groupCollapsed("Response Log");
-    console.log(ResponseLog.log);
-    console.groupEnd();
-
-    if (ExerciseTypes.isSurvey(exercise.type)) {
-      MasteryModel.surveyUpdateModel(Array.from(answer).map(x =>
-          parseInt(x, 10),
-      ));
-    } else {
-      MasteryModel.updateModel(
-          exercise.concepts,
-          ResponseEvaluator.analyzeLog(ResponseLog.getLastElement()),
-      );
-    }
-
-    this.printImportantStuff(); //Debug/demo
   }
 
   /**
