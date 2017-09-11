@@ -3,7 +3,7 @@ import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
 export const conceptInventory = [
   {	name: g.literal,
     dependencies: [g.integerLiteral, g.floatingPointLiteral, g.booleanLiteral, g.characterLiteral, g.stringLiteral, g.nullLiteral],
-    parents: [],
+    parents: [g.multiplicativeExpression, g.additiveExpression, g.relationalExpression, g.equalityExpression],
     should_teach: false,
     container: true
   },
@@ -302,18 +302,21 @@ export const conceptInventory = [
   },
   { name: g.breakStatement,
     dependencies: [keyword.break, sep.semicolon],
+    contextual_dependencies: [g.forStatement, g.whileStatement, g.doStatement],
     parents: [g.statement],
     should_teach: true,
     container: false
   },
   { name: g.continueStatement,
     dependencies: [keyword.continue, sep.semicolon],
+    contextual_dependencies: [g.forStatement, g.whileStatement, g.doStatement],
     parents: [g.statement],
     should_teach: true,
     container: false
   },
   { name: g.returnStatement,
     dependencies: [keyword.return, g.statement, sep.semicolon],
+    contextual_dependencies: [g.methodInvocationExpression],
     parents: [],
     should_teach: true,
     container: false
