@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react';
+import ReactMarkdown from 'react-markdown';
 import './Prompt.css';
 
 /**
@@ -15,10 +16,10 @@ class Prompt extends Component {
   render() {
     return (
         <div className="prompt">
-          <h2>{this.props.content}
+          <ReactMarkdown source={this.props.content}>
             {/* for debugging */}
             <span className="exercise-type">({this.props.type})</span>
-          </h2>
+          </ReactMarkdown>
         </div>
     );
   }
