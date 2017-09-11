@@ -89,7 +89,7 @@ export const conceptInventory = [
     dependencies: [g.integerLiteral],
     parents: [g.primitiveType],
     explanations: [],
-    should_teach: true,
+    should_teach: false,
     container: false
   },
   { name: g.long,
@@ -103,28 +103,28 @@ export const conceptInventory = [
     dependencies: [g.characterLiteral],
     parents: [g.primitiveType],
     explanations: [],
-    should_teach: true,
+    should_teach: false,
     container: false
   },
   { name: g.float,
     dependencies: [g.floatingPointLiteral],
     parents: [g.primitiveType],
     explanations: [],
-    should_teach: true,
+    should_teach: false,
     container: false
   },
   { name: g.boolean,
     dependencies: [g.booleanLiteral],
     parents: [g.primitiveType],
     explanations: [],
-    should_teach: true,
+    should_teach: false,
     container: false
   },
   { name: g.referenceType,
     dependencies: [g.string],
     parents: [],
     explanations: [],
-    should_teach: true,
+    should_teach: false,
     container: true
   },
   { name: g.string,
@@ -145,12 +145,12 @@ export const conceptInventory = [
     dependencies: [],
     parents: [g.classInstanceExpression, g.arrayCreationExpression],
     explanations: [],
-    should_teach: true,
+    should_teach: false,
     container: false
   },
   { name: g.expression,
     dependencies: [g.assignmentExpression, g.postIncrementExpression, g.postDecrementExpression, g.classInstanceExpression, g.methodInvocationExpression, g.arrayCreationExpression, g.arrayAccessExpression],
-    parents: [],
+    parents: [g.ifThenStatement, g.ifThenElseStatement, g.forStatement, g.doStatement, g.whileStatement],
     explanations: [],
     should_teach: true,
     container: true
@@ -166,7 +166,7 @@ export const conceptInventory = [
     dependencies: [g.identifier, g.fieldAccess, g.arrayAccessExpression],
     parents: [],
     explanations: [],
-    should_teach: true,
+    should_teach: false,
     container: true
   },
   { name: g.fieldAccess,
@@ -187,7 +187,7 @@ export const conceptInventory = [
     dependencies: [],
     parents: [g.assignmentOperator],
     explanations: [],
-    should_teach: true,
+    should_teach: false,
     container: false
   },
   { name: op.add_assign,
@@ -272,6 +272,7 @@ export const conceptInventory = [
     parents: [g.expression],
     explanations: [],
     should_teach: true,
+    container: false
   },
   { name: g.relationalOperator,
     dependencies: [op.greater, op.lesser, op.greater_equality, op.lesser_equality],
@@ -312,7 +313,7 @@ export const conceptInventory = [
     dependencies: [g.ifThenStatement, g.ifThenElseStatement, g.forStatement, g.doStatement, g.whileStatement, g.breakStatement, g.continueStatement, g.returnStatement],
     parents: [],
     explanations: [],
-    should_teach: true,
+    should_teach: false,
     container: true
   },
   { name: g.ifThenStatement,
