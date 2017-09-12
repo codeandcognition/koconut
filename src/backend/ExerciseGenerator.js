@@ -110,8 +110,7 @@ class ExerciseGenerator {
 
     let exercise;
     if(exercisePool.length > 0) {
-      exercise = exercisePool
-          [Math.floor(Math.random() * exercisePool.length)];
+      exercise = exercisePool[Math.floor(Math.random() * exercisePool.length)];
     } else {
       exercise = stubExercise;
       exercise.exercise.concepts = [concept];
