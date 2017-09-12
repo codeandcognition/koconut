@@ -144,6 +144,7 @@ class App extends Component {
             nextConcepts = {this.state.nextConcepts}
             submitOk = {this.submitOk}
             mode = {this.state.display}
+            concept = {this.state.currentConcept}
         />
     );
   }
