@@ -11,6 +11,8 @@ import {BayesKT} from './BKT.js';
 import type {Exercise} from '../data/Exercises';
 
 /**
+ * Evaluates and calculates correctness of a student response, and the
+ * probability that their response indicates knowing a concept
  * @class
  */
 class ResponseEvaluator {

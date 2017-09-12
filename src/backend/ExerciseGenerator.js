@@ -9,6 +9,7 @@ import ExercisePool from '../data/ExercisePool';
 import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
 
 /**
+ * Generates exercises associated with concepts
  * @class
  */
 class ExerciseGenerator {

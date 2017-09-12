@@ -9,6 +9,7 @@ type Props = {
 }
 
 /**
+ * Component that defines the visual and interactive elements of a survey
  * @class
  */
 class SurveyView extends Component {
