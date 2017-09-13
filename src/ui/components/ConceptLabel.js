@@ -1,5 +1,6 @@
 //@flow
 import React, {Component} from 'react';
+import './ConceptLabel.css'
 
 type Props = {concepts: string};
 
