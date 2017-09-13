@@ -11,12 +11,19 @@ class ConceptLabel extends Component {
     console.log(props.concepts)
   }
 
-  render() {
-    // console.log(this.props.concept);
-    return <div className="concept-label">
-      {this.props.concepts}
-    </div>
+  renderConceptLabel() {
+    return this.props.concepts.length > 0 ?
+        <div className="concept-label">
+          concepts: {this.props.concepts.toString()}
+        </div>
+        :
+        <div></div>
   }
+
+  render() {
+    return this.renderConceptLabel();
+  }
+
 }
 
 export default ConceptLabel;
