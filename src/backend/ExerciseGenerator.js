@@ -83,6 +83,7 @@ class ExerciseGenerator {
    */
   generateExercise(concept: ?string) {
     //First exercise to pass is initial survey
+    // TODO: This is probably bad architecture
     if(this.counter === 0) {
       let ret = exampleExercises.filter((e) => e.exercise.type === ExerciseTypes.survey)[0].exercise;
       // need to increment

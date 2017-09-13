@@ -23,7 +23,7 @@ class ConceptKnowledge {
     this.parents = [];
 
     this.knowledge = 0.01; // Initially set to survey value
-    this.dependencyKnowledge = -99; // Avg of dependencies' K values
+    this.dependencyKnowledge = 1; // Avg of dependencies' K values
                                   // default is 1 because having no dependencies
                                   // means full knowledge
   }

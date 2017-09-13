@@ -154,7 +154,6 @@ class Code extends Component {
    * @param event - an Ace change event
    */
   handleChange(value: string, event: Object) {
-    console.log(event);
     // TODO: Actually prevent rows
     // TODO: Also, newlines and deletion isn't safe
     if(event.start.row !== -1) {
