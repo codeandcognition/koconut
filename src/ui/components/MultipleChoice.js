@@ -27,7 +27,9 @@ class MultipleChoice extends Component {
                   key={choice}
                   content={choice}
                   answer={choice === this.props.answer}
-                  tooltip={this.props.tooltips !== undefined
+                  tooltip={
+                    this.props.tooltips !== undefined &&
+                    this.props.tooltips !== null
                       ? this.props.tooltips[i]
                       : undefined
                   }

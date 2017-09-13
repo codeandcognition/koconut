@@ -29,7 +29,8 @@
     "react-tooltip": "^3.3.0"
   },
   "scripts": {
-    "start": "npm-run-all -p start-css start-js start-api",
+    "start": "npm-run-all -p start-css start-js",
+    "start-all": "npm-run-all -p start-css start-js start-api",
     "build": "yarn run make-flow-nicer && yarn run flow && yarn run build-css && react-scripts build && babel api -d build_node",
     "build-ignore": "yarn run build-css && react-scripts build && babel api -d build_node",
     "test": "react-scripts test --env=jsdom",

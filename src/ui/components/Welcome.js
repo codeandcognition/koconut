@@ -28,7 +28,7 @@ const strings = {
 }
 
 class Welcome extends Component {
-
+  // TODO: Maybe this should be a ReactMarkdown component
   render() {
     return (
       <div className="welcome-page">

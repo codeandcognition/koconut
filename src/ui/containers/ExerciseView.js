@@ -38,6 +38,13 @@ class Exercise extends Component {
   }
 
   /**
+   * Moves the Exercise view to the top
+   */
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
+
+  /**
    * Updates the Exercise state when receiving a new props object
    */
   componentWillReceiveProps() {

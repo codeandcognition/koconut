@@ -62,7 +62,7 @@ class Code extends Component {
       theme: 'eclipse',
       highlighted: '',
       toggle: true,
-      hint: true,
+      hint: false,
       curLine: 0,
     };
 
