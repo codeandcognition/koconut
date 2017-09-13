@@ -9,6 +9,7 @@ import ExercisePool from '../data/ExercisePool';
 import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
 
 /**
+ * Generates exercises associated with concepts
  * @class
  */
 class ExerciseGenerator {
@@ -46,15 +47,6 @@ class ExerciseGenerator {
   }
 
   /**
-   * Returns the most relevant concept. Relevance determined by
-   * getOrderedConcepts() algorithm.
-   * @returns an exercise concept
-   */
-  getConcept(): string {
-    return this.getOrderedConcepts()[0].name;
-  }
-
-  /**
    * Returns the first N most relevant concepts. Relevance determined
    * by getOrderedConcepts() algorithm.
    * @param size
@@ -62,6 +54,15 @@ class ExerciseGenerator {
    */
   getConcepts(size: number): string[] {
     return this.getOrderedConcepts().slice(0, size).map((c) => c.name);
+  }
+
+  /**
+   * Returns the most relevant concept. Relevance determined by
+   * getOrderedConcepts() algorithm.
+   * @returns an exercise concept
+   */
+  getConcept(): string {
+    return this.getConcepts(1)[0];
   }
 
   /**
@@ -109,8 +110,7 @@ class ExerciseGenerator {
 
     let exercise;
     if(exercisePool.length > 0) {
-      exercise = exercisePool
-          [Math.floor(Math.random() * exercisePool.length)];
+      exercise = exercisePool[Math.floor(Math.random() * exercisePool.length)];
     } else {
       exercise = stubExercise;
       exercise.exercise.concepts = [concept];

@@ -11,6 +11,7 @@ import _ from 'lodash';
 //  🔥🌑🔥
 
 /**
+ * Defines response features used for Bayesian Knowledge Tracing.
  * @class
  */
 class ResponseFeaturesTable {

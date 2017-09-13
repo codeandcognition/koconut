@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import Prompt from '../components/Prompt';
 import Information from './Information';
 import Submit from '../components/Submit';
+import ConceptLabel from '../components/ConceptLabel';
 
 import './ExerciseView.css';
 
@@ -65,6 +66,7 @@ class Exercise extends Component {
   render() {
     return (
         <div className="exercise-view">
+          <ConceptLabel concept={this.props.exercise.concept}/>
           <Prompt content={this.props.exercise.prompt} type={this.props.exercise.type}/>
           <Information
               code={this.props.exercise.code}
