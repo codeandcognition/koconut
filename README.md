@@ -104,6 +104,11 @@ To have a live preview of the application, simply run the following command:
 
 > - Starts a development server that will host a live preview of the application
 > - Starts a Sass watcher which automatically generates CSS from SCSS files as they are updated
+
+To also run the backend api, use a similar command:
+
+`yarn start-all`
+
 > - Starts a nodemon server that will host the backend server and update automatically when files are changed
 
 ### Development Scripts
