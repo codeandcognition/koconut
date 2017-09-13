@@ -41,7 +41,7 @@ class ConceptSelection extends Component {
               // Yucky!
               tooltips={this.props.concepts.map(concept =>
                   conceptInventory.filter(item => item.name === concept)[0]
-                      .explanations.define
+                      .explanations.definition
               )}
               answer={this.state.answer}
               handleClick={(content) => this.setState({answer: content})}
