@@ -66,7 +66,6 @@ class Exercise extends Component {
   render() {
     return (
         <div className="exercise-view">
-          <ConceptLabel concepts={this.props.exercise.concepts.toString()}/>
           <Prompt content={this.props.exercise.prompt} type={this.props.exercise.type}/>
           <Information
               code={this.props.exercise.code}
@@ -80,7 +79,7 @@ class Exercise extends Component {
               mode={this.props.mode}
           />
           <Submit click={this.isAnswered()} submitHandler={() => this.props.submitHandler(this.state.answer)}/>
-          {/*<Feedback feedback={this.props.feedback} nextConcepts={this.props.nextConcepts}/>*/}
+          <ConceptLabel concepts={this.props.exercise.concepts}/>
         </div>
     );
   }
