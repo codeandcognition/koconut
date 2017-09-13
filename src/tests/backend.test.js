@@ -28,6 +28,12 @@ const test_dir = 'src/tests/cases';
 // promise resolves to an object like this:
 // [string]: TestCase
 // TODO: no rejection case
+// TODO: modularize testing
+/**
+ * Returns an object containing all the tests cases in the given directory
+ * @param directory - folder containing tests
+ * @returns a promise that returns an object of keys to TestCases
+ */
 function testCases(directory: string) {
   return new Promise((resolve, reject) => {
     // get all code files

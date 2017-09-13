@@ -23,7 +23,7 @@ class ConceptKnowledge {
     this.parents = [];
 
     this.knowledge = 0.01; // Initially set to survey value
-    this.dependencyKnowledge = 1; // Avg of dependencies' K values
+    this.dependencyKnowledge = -99; // Avg of dependencies' K values
                                   // default is 1 because having no dependencies
                                   // means full knowledge
   }
@@ -156,6 +156,7 @@ class MasteryModelClass {
         let parent = map.get(p);
         if (parent !== undefined && parent !== null) obj.addParent(parent);
       });
+      obj.updateParentValues();
     });
   }
 }
