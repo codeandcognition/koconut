@@ -32,9 +32,10 @@ class ConceptSelection extends Component {
   render() {
     return (
         <div className="concept-selection">
-          <h1>Select the next concept!</h1>
           <MultipleChoice
+              title='Select the next concept:'
               choices={this.props.concepts}
+              tooltips={this.props.concepts.map(() => 'stub')}
               answer={this.state.answer}
               handleClick={(content) => this.setState({answer: content})}
           />

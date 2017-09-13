@@ -6,6 +6,10 @@
   border-bottom: 1px dotted black;
   text-align: center;
   background-color: $component-background;
+
+  p {
+    font-size: 1.75em;
+  }
 }
 
 .exercise-type {

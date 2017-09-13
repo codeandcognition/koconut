@@ -34,7 +34,8 @@ class Information extends Component {
    * @returns JSX for the Code container
    */
   renderCodeView() {
-    return Types.isSurvey(this.props.type) ? '' :
+    return (Types.isSurvey(this.props.type) ||
+        (this.props.type === Types.multipleChoice && this.props.code === '')) ? '' :
         (<Code
             type={this.props.type}
             code={this.props.code}

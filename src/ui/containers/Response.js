@@ -32,6 +32,7 @@ class Response extends Component {
     switch (type) {
       case(Types.multipleChoice):
         return <MultipleChoice
+            title='Select the correct answer:'
             choices={choices}
             answer={answer}
             handleClick={update}
