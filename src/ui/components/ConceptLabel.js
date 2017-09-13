@@ -1,5 +1,9 @@
 //@flow
 import React, {Component} from 'react';
+import ReactTooltip from 'react-tooltip';
+import conceptInventory from '../../data/ConceptMap';
+import Choice from './Choice';
+import './ConceptLabel.css'
 
 type Props = {concepts: string};
 
@@ -7,15 +11,45 @@ class ConceptLabel extends Component {
 
   constructor(props: Props) {
     super(props);
-    console.log(props.concepts)
+  }
+
+  renderTooltip(content: string) {
+    console.log(content);
+    return (
+        <ReactTooltip
+            id={content}
+            place="right"
+            effect="solid"
+        />
+    )
+  }
+
+  renderConceptLabel() {
+    // console.log(this.props.concepts);
+    let concepts = this.props.concepts;
+    let explanations = concepts.map((c) => conceptInventory.filter((d) => d.name === c)[0]);
+    return this.props.concepts.length > 0 ?
+        <div className="concept-label">
+          concepts: {concepts.map((e, i) =>
+              <div
+                  key={i}
+                  className="concept"
+                  data-tip
+                  data-for={e}
+              >
+                {e}
+                {this.renderTooltip(explanations[i].explanations.definition)}
+              </div>
+        )}
+        </div>
+        :
+        <div></div>
   }
 
   render() {
-    // console.log(this.props.concept);
-    return <div className="concept-label">
-      {this.props.concepts}
-    </div>
+    return this.renderConceptLabel();
   }
+
 }
 
 export default ConceptLabel;
