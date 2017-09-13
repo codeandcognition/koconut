@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import MultipleChoice from './MultipleChoice';
 import Submit from './Submit';
+import conceptInventory from '../../data/ConceptMap';
 import './ConceptSelection.css';
 
 type Props = {
@@ -30,12 +31,18 @@ class ConceptSelection extends Component {
    * Wow modularity!
    */
   render() {
+    // TODO: the implementation below is less than ideal but constrained by
+    // the conceptInventory data structure
     return (
         <div className="concept-selection">
           <MultipleChoice
               title='Select the next concept:'
               choices={this.props.concepts}
-              tooltips={this.props.concepts.map(() => 'stub')}
+              // Yucky!
+              tooltips={this.props.concepts.map(concept =>
+                  conceptInventory.filter(item => item.name === concept)[0]
+                      .explanations.define
+              )}
               answer={this.state.answer}
               handleClick={(content) => this.setState({answer: content})}
           />

@@ -13,7 +13,7 @@ type Props = {
     code: string,
     type: string,
     choices?: string[],
-    concept: string
+    concepts: string[]
   },
   submitHandler: Function,
   feedback: boolean,
@@ -66,14 +66,14 @@ class Exercise extends Component {
   render() {
     return (
         <div className="exercise-view">
-          <ConceptLabel concept={this.props.exercise.concept}/>
+          <ConceptLabel concepts={this.props.exercise.concepts.toString()}/>
           <Prompt content={this.props.exercise.prompt} type={this.props.exercise.type}/>
           <Information
               code={this.props.exercise.code}
               type={this.props.exercise.type}
               choices={this.props.exercise.choices}
               answer={this.state.answer}
-              concept={this.props.exercise.concept}
+              concepts={this.props.exercise.concepts}
               updateHandler={(content) => this.setState({answer: content})}
               feedback={this.props.feedback}
               submitOk={this.props.submitOk}
