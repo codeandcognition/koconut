@@ -144,6 +144,7 @@ class App extends Component {
             nextConcepts = {this.state.nextConcepts}
             submitOk = {this.submitOk}
             mode = {this.state.display}
+            concept = {this.state.currentConcept}
         />
     );
   }
@@ -181,11 +182,9 @@ class App extends Component {
     return (
         <div className="App">
           <div className="main">
-            {this.renderDisplay()}
-          </div>
-          <h1 className="title">
-            {this.state.display !== displayType.welcome ?
-                <span className="debug">
+            <h1 className="title">
+              {this.state.display !== displayType.welcome ?
+                  <span className="debug">
                 <input
                     type="button"
                     onClick={() => this.setState(
@@ -197,7 +196,9 @@ class App extends Component {
                     value="next exercise type"
                 />
               </span> : ''}
-          </h1>
+            </h1>
+            {this.renderDisplay()}
+          </div>
         </div>
     );
   }

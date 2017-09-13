@@ -4,7 +4,7 @@ import './Welcome.css';
 
 const strings = {
   welcome: "Welcome to Koconut!",
-  intro: "This is an intelligent tutoring system. We're doing this to help you learn introductory programming. We'll keep track of your knowledge, and make recommendations. We also ask for your feedback in the interest of making this learning experience collaborative.",
+  intro: "This is an intelligent tutoring system for introductory programming. We'll keep track of your knowledge, make recommendations and provide hints. We also ask for honest and consistent feedback in the interest of making this learning experience collaborative.",
   use_cases: {
     title: "Use Cases",
     cases: ["Study for your test", "Review material", "Challenge yourself",

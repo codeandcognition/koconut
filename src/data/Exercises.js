@@ -487,7 +487,7 @@ let survey =
       exercise: {
         prompt: 'Take this survey before we begin. Rate how confident you are in your abilities for each concept.',
         code: '',
-        choices: conceptInventory.map((k) => k.name),
+        choices: conceptInventory.filter((c) => c.should_teach).map((k) => k.name),
         difficulty: difficulty.low,
         type: ExerciseTypes.survey,
         concepts: [],
