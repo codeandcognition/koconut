@@ -9,6 +9,7 @@ import './Choice.css';
  */
 class Choice extends Component {
   props: {
+    choice: string,
     content: string,
     answer: boolean,
     tooltip: ?string,
@@ -32,7 +33,7 @@ class Choice extends Component {
     return (
         <div
             className={'choice ' + (this.props.answer ? 'answer' : '')}
-            onClick={() => this.props.handleClick(this.props.content)}
+            onClick={() => this.props.handleClick(this.props.choice)}
             data-tip
             data-for={this.props.content}
         >
