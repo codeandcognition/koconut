@@ -88,7 +88,6 @@ class App extends Component {
   getConcepts() {
     let size = this.state.conceptOptions;
     let concept = this.state.currentConcept;
-    console.log('curr concept: ' + concept);
     let ret;
     if(concept !== null && concept !== undefined) {
       ret = this.generator.getConceptsRelativeTo(concept)
