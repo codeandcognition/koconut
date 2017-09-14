@@ -26,7 +26,8 @@ class Feedback extends Component {
         </div>
         <VisualFeedback feedback={this.props.feedback}/>
         <div className="feedback-ok">
-          <button onClick={this.props.submitHandler}>OK</button>
+          <button onClick={this.props.submitOk}>OK</button>
+          <button onClick={this.props.submitTryAgain}>Try Again</button>
         </div>
       </div>
     )
