@@ -86,7 +86,7 @@ let variable17061 = [
       'difficulty': 0,
       'choices': ['"123"', '\'123\'', '123', 'None of the above.'],
       'concepts': ['stringLiteral'],
-      'type': 'shortResponse',
+      'type': 'multipleChoice',
     },
     'answer': '"123"',
   },
@@ -150,7 +150,7 @@ let variable17061 = [
       'concepts': ['forStatement'],
       'type': 'writeCode',
     },
-    'answer': '2\n4\n6\n8\n10\n12\n14\n16\n18\n20',
+    'answer': '2\n4\n6\n8\n10\n12\n14\n16\n18\n20\n',
   },
   {
     'exercise': {
