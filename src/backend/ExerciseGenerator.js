@@ -43,7 +43,7 @@ class ExerciseGenerator {
   getOrderedConcepts(): ConceptKnowledge[] {
     return MasteryModel.model.filter((concept) => concept.teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
-                   a.dependencyKnowledge / a.knowledge));
+        a.dependencyKnowledge / a.knowledge));
   }
 
   /**
@@ -54,6 +54,29 @@ class ExerciseGenerator {
    */
   getConcepts(size: number): string[] {
     return this.getOrderedConcepts().slice(0, size).map((c) => c.name);
+  }
+
+  getConceptsRelativeTo(concept: string): string[] {
+    console.log('relative to ' + concept);
+    let ck = MasteryModel.model.filter((c) => c.name === concept)[0];
+    return [this.getHarderConcept(ck), this.getEasierConcept(ck),
+            this.getNewerConcept(ck), concept];
+  }
+  
+  getHarderConcept(concept: ConceptKnowledge) {
+    let chosen = concept.parents.sort(
+        (a, b) => a.dependencyKnowledge - b.dependencyKnowledge)[0];
+    return chosen ? chosen.name : "";
+  }
+
+  getEasierConcept(concept: ConceptKnowledge) {
+    let chosen = concept.dependencies.sort(
+        (a, b) => a.knowledge - b.knowledge)[0];
+    return chosen ? chosen.name : "";
+  }
+  
+  getNewerConcept(concept: ConceptKnowledge) {
+    return this.getOrderedConcepts().filter((c) => c !== concept)[0].name;
   }
 
   /**
@@ -84,7 +107,8 @@ class ExerciseGenerator {
   generateExercise(concept: ?string) {
     //First exercise to pass is initial survey
     if(this.counter === 0) {
-      let ret = exampleExercises.filter((e) => e.exercise.type === ExerciseTypes.survey)[0].exercise;
+      let ret = exampleExercises.filter(
+          (e) => e.exercise.type === ExerciseTypes.survey)[0].exercise;
       // need to increment
       this.counter += 1;
 
