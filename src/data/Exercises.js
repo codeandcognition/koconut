@@ -2,6 +2,7 @@
 import ExerciseTypes from './ExerciseTypes.js';
 import {conceptInventory} from './ConceptMap';
 import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
+import _ from 'lodash';
 
 export type Exercise = {
   prompt: string,
@@ -488,7 +489,9 @@ let survey =
         prompt: 'Take this survey before we begin. Rate how confident you are in your abilities for each concept.',
         code: '',
         // TODO: better survey selection policy (or no survey)
-        choices: conceptInventory.filter((c) => c.container).map((k) => k.name),
+        choices: _.filter(
+            _.map(conceptInventory, (c, name: string) => c.container ? name : ''),
+            k => k !== ''),
         difficulty: difficulty.low,
         type: ExerciseTypes.survey,
         concepts: [],

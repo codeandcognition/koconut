@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import ReactTooltip from 'react-tooltip';
 import conceptInventory from '../../data/ConceptMap';
 import Choice from './Choice';
+import _ from 'lodash';
 import './ConceptLabel.css'
 
 type Props = {concepts: string};
@@ -27,7 +28,7 @@ class ConceptLabel extends Component {
   renderConceptLabel() {
     // console.log(this.props.concepts);
     let concepts = this.props.concepts;
-    let explanations = concepts.map((c) => conceptInventory.filter((d) => d.name === c)[0]);
+    let explanations = concepts.map(c => conceptInventory[c]);
     return this.props.concepts.length > 0 ?
         <div className="concept-label">
           concepts: {concepts.map((e, i) =>
