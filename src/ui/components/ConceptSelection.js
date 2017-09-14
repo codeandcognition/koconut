@@ -30,7 +30,7 @@ class ConceptSelection extends Component {
   constructTooltips() {
     return this.props.concepts.map(concept => {
       if(concept.length === 0) return "";
-      let obj = conceptInventory.filter(item => item.name === concept)[0];
+      let obj = conceptInventory[concept];
       let ret = "";
       if(obj) {
         let name = obj.explanations.name;

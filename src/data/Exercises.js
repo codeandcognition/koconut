@@ -2,6 +2,7 @@
 import ExerciseTypes from './ExerciseTypes.js';
 import {conceptInventory} from './ConceptMap';
 import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
+import _ from 'lodash';
 
 export type Exercise = {
   prompt: string,
@@ -85,7 +86,7 @@ let variable17061 = [
       'difficulty': 0,
       'choices': ['"123"', '\'123\'', '123', 'None of the above.'],
       'concepts': ['stringLiteral'],
-      'type': 'shortResponse',
+      'type': 'multipleChoice',
     },
     'answer': '"123"',
   },
@@ -149,7 +150,7 @@ let variable17061 = [
       'concepts': ['forStatement'],
       'type': 'writeCode',
     },
-    'answer': '2\n4\n6\n8\n10\n12\n14\n16\n18\n20',
+    'answer': '2\n4\n6\n8\n10\n12\n14\n16\n18\n20\n',
   },
   {
     'exercise': {
@@ -487,7 +488,10 @@ let survey =
       exercise: {
         prompt: 'Take this survey before we begin. Rate how confident you are in your abilities for each concept.',
         code: '',
-        choices: conceptInventory.filter((c) => c.should_teach).map((k) => k.name),
+        // TODO: better survey selection policy (or no survey)
+        choices: _.filter(
+            _.map(conceptInventory, (c, name: string) => c.container ? name : ''),
+            k => k !== ''),
         difficulty: difficulty.low,
         type: ExerciseTypes.survey,
         concepts: [],
