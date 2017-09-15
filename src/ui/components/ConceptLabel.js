@@ -1,6 +1,7 @@
 //@flow
 import React, {Component} from 'react';
 import ReactTooltip from 'react-tooltip';
+import ReactMarkdown from 'react-markdown';
 import conceptInventory from '../../data/ConceptMap';
 import Choice from './Choice';
 import _ from 'lodash';
@@ -14,35 +15,37 @@ class ConceptLabel extends Component {
     super(props);
   }
 
-  renderTooltip(content: string) {
-    console.log(content);
-    return (
-        <ReactTooltip
-            id={content}
-            place="right"
-            effect="solid"
-        />
-    )
+  renderTooltip(id: number, name: string, example:string, content: string) {
+    return content ? (
+        <ReactTooltip id={id} place="top" effect="solid">
+          <ReactMarkdown source={
+            "We think you'll find **"
+            + name
+            + "s** useful because they "
+            + content
+            + ". Example: \n"
+            + "```java \n "
+            + example
+            + " \n```"
+          }>
+          </ReactMarkdown>
+        </ReactTooltip>
+    ) : ''
   }
 
   renderConceptLabel() {
-    // console.log(this.props.concepts);
     let concepts = this.props.concepts;
     let explanations = concepts.map(c => conceptInventory[c]);
     return this.props.concepts.length > 0 ?
         <div className="concept-label">
-          concepts: {concepts.map((e, i) =>
-              <div
-                  key={i}
-                  className="concept"
-                  data-tip
-                  data-for={e}
-              >
-                {e}
-                {this.renderTooltip(explanations[i].explanations.definition)}
-              </div>
-        )}
-        </div>
+          concepts: {concepts.map((concept, i) => {
+            let curr = explanations[i].explanations;
+            return (
+              <div key={i} className="concept" data-tip data-for={concept}>
+                {concept}
+                {this.renderTooltip(concept, curr.name, curr.examples[0], curr.definition)}
+              </div>);
+          })}</div>
         :
         <div></div>
   }

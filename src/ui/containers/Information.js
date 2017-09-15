@@ -26,6 +26,7 @@ class Information extends Component {
     updateHandler: Function,
     feedback: string,
     submitOk: Function,
+    submitTryAgain: Function,
     mode: string
   };
 
@@ -54,7 +55,8 @@ class Information extends Component {
     if (this.props.mode === displayType.feedback) {
       return <Feedback
           feedback={this.props.feedback}
-          submitHandler={this.props.submitOk}
+          submitOk={this.props.submitOk}
+          submitTryAgain={this.props.submitTryAgain}
       />
     }
     return Types.isInlineResponseType(type) ? <div/>

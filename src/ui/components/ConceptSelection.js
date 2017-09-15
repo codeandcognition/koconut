@@ -27,6 +27,22 @@ class ConceptSelection extends Component {
     };
   }
 
+  constructTooltips() {
+    return this.props.concepts.map(concept => {
+      if(concept.length === 0) return "";
+      let obj = conceptInventory[concept];
+      let ret = "";
+      if(obj) {
+        let name = obj.explanations.name;
+        let def = obj.explanations.definition;
+        if(name.length > 0 && def.length > 0) {
+          ret = name + 's\n\n' + def;
+        }
+      }
+      return ret;
+    });
+  }
+
   /**
    * Wow modularity!
    */
@@ -38,10 +54,9 @@ class ConceptSelection extends Component {
           <MultipleChoice
               title='Select the next concept:'
               choices={this.props.concepts}
+              labels={['harder','easier','new','same']}
               // Yucky!
-              tooltips={this.props.concepts.map(concept =>
-                  conceptInventory[concept].explanations.definition
-              )}
+              tooltips={this.constructTooltips()}
               answer={this.state.answer}
               handleClick={(content) => this.setState({answer: content})}
           />

@@ -2,6 +2,7 @@
 import {exampleExercises, stubExercise} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
 import ExercisePool from '../data/ExercisePool';
+import conceptInventory from '../data/ConceptMap';
 
 // import typeof doesn't agree with Flow for some reason:
 //   https://flow.org/en/docs/types/modules/
@@ -43,7 +44,7 @@ class ExerciseGenerator {
   getOrderedConcepts(): ConceptKnowledge[] {
     return MasteryModel.model.filter((concept) => concept.teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
-                   a.dependencyKnowledge / a.knowledge));
+        a.dependencyKnowledge / a.knowledge));
   }
 
   /**
@@ -54,6 +55,38 @@ class ExerciseGenerator {
    */
   getConcepts(size: number): string[] {
     return this.getOrderedConcepts().slice(0, size).map((c) => c.name);
+  }
+
+  getConceptsRelativeTo(concept: string): string[] {
+    console.log('relative to ' + concept);
+    let ck = MasteryModel.model.filter((c) => c.name === concept)[0];
+    return [this.getHarderConcept(ck), this.getEasierConcept(ck),
+            this.getNewerConcept(ck), concept];
+  }
+
+  filterShouldTeach(concepts: ConceptKnowledge[]): ConceptKnowledge[] {
+    return concepts.filter((c) => conceptInventory[c.name].should_teach);
+  }
+  
+  getHarderConcept(concept: ConceptKnowledge) {
+    if(!concept) return '';
+    let chosen = concept.parents.sort(
+        (a, b) => a.dependencyKnowledge - b.dependencyKnowledge);
+    chosen = this.filterShouldTeach(chosen)[0];
+    return chosen ? chosen.name : '';
+  }
+
+  getEasierConcept(concept: ConceptKnowledge) {
+    if(!concept) return '';
+    let chosen = concept.dependencies.sort(
+        (a, b) => a.knowledge - b.knowledge);
+    chosen = this.filterShouldTeach(chosen)[0];
+    return chosen ? chosen.name : '';
+  }
+  
+  getNewerConcept(concept: ConceptKnowledge) {
+    let chosen = this.getOrderedConcepts().filter((c) => c !== concept);
+    return this.filterShouldTeach(chosen)[0].name;
   }
 
   /**
@@ -85,7 +118,8 @@ class ExerciseGenerator {
     //First exercise to pass is initial survey
     // TODO: This is probably bad architecture
     if(this.counter === 0) {
-      let ret = exampleExercises.filter((e) => e.exercise.type === ExerciseTypes.survey)[0].exercise;
+      let ret = exampleExercises.filter(
+          (e) => e.exercise.type === ExerciseTypes.survey)[0].exercise;
       // need to increment
       this.counter += 1;
 

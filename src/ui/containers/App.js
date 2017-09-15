@@ -30,6 +30,7 @@ class App extends Component {
   submitResponse: Function;
   submitConcept: Function;
   submitOk: Function;
+  submitTryAgain: Function;
   generator: ExerciseGenerator;
   // updater: ResponseEvaluator;
 
@@ -54,7 +55,7 @@ class App extends Component {
       nextConcepts: [],
       counter: 1,
       display: displayType.welcome,
-      conceptOptions: 3,
+      conceptOptions: 4, //TODO: Make this not hard coded
       currentConcept: null
     };
 
@@ -62,6 +63,7 @@ class App extends Component {
     this.submitResponse = this.submitResponse.bind(this);
     this.submitConcept = this.submitConcept.bind(this);
     this.submitOk = this.submitOk.bind(this);
+    this.submitTryAgain = this.submitTryAgain.bind(this);
   }
 
   /**
@@ -75,12 +77,24 @@ class App extends Component {
 
   /**
    * Returns a generated exercise by index
-   * For DEBUG eyes only eyes 👀
+   * For DEBUG eyes only eyes 👀😭
    * @private
    * @returns the example exercise at the given index
    */
   _getExercise(): Exercise {
     return this.generator._generateExercise(this.state.counter);
+  }
+
+  getConcepts() {
+    let size = this.state.conceptOptions;
+    let concept = this.state.currentConcept;
+    let ret;
+    if(concept !== null && concept !== undefined) {
+      ret = this.generator.getConceptsRelativeTo(concept)
+    } else {
+      ret = this.generator.getConcepts(size);
+    }
+    return ret;
   }
 
   /**
@@ -92,7 +106,7 @@ class App extends Component {
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => {
         this.setState({
           feedback: ResponseLog.getFeedback(),
-          nextConcepts: this.generator.getConcepts(this.state.conceptOptions),
+          nextConcepts: this.getConcepts(),
           // exercise: this.generator.generateExercise(this.state.currentConcept),
           display: this.state.exercise.type !== 'survey'
               ? displayType.feedback
@@ -111,6 +125,7 @@ class App extends Component {
   submitConcept(concept: string){
     if(concept !== null && concept !== undefined) {
       this.setState({
+        currentConcept: concept,
         exercise: this.generator.generateExercise(concept),
         display: displayType.exercise
       });
@@ -122,8 +137,14 @@ class App extends Component {
    */
   submitOk() {
     this.setState({
-      nextConcepts: this.generator.getConcepts(this.state.conceptOptions),
+      nextConcepts: this.getConcepts(),
       display: displayType.concept});
+  }
+
+  submitTryAgain() {
+    this.setState({
+      display: displayType.exercise
+    });
   }
 
   renderWelcome() {
@@ -143,6 +164,7 @@ class App extends Component {
             feedback = {this.state.feedback}
             nextConcepts = {this.state.nextConcepts}
             submitOk = {this.submitOk}
+            submitTryAgain = {this.submitTryAgain}
             mode = {this.state.display}
             concept = {this.state.currentConcept}
         />
