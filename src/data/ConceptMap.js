@@ -239,7 +239,7 @@ export const conceptInventory = {
   },
   [g.leftHandSide]: {
     dependencies: [g.identifier, g.fieldAccess, g.arrayAccessExpression],
-    parents: [],
+    parents: [g.assignmentExpression],
     explanations: {name: '', definition: '', examples: [''], future: ['']},
     should_teach: false,
     container: true,
@@ -263,7 +263,7 @@ export const conceptInventory = {
       op.sub_assign,
       op.div_assign,
       op.mult_assign],
-    parents: [],
+    parents: [g.assignmentExpression],
     explanations: {name: '', definition: '', examples: [''], future: ['']},
     should_teach: true,
     container: true,
@@ -304,7 +304,7 @@ export const conceptInventory = {
     container: false,
   },
   [g.assignmentExpression]: {
-    dependencies: [g.leftHandSide, g.assignmentOperator, g.expression],
+    dependencies: [g.leftHandSide, g.assignmentOperator],
     parents: [g.expression],
     explanations: {
       name: 'assignment expression',
