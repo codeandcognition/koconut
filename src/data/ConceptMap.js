@@ -24,7 +24,7 @@ export const conceptInventory = {
   },
   [g.integerLiteral]: {
     dependencies: [],
-    parents: [g.literal],
+    parents: [g.literal, g.short, g.int, g.long],
     explanations: {
       name: 'integer literal',
       definition: 'represent integer values',
@@ -36,7 +36,7 @@ export const conceptInventory = {
   },
   [g.floatingPointLiteral]: {
     dependencies: [sep.dot],
-    parents: [g.literal],
+    parents: [g.literal, g.float],
     explanations: {
       name: 'floating point literal',
       definition: 'represent decimal values',
@@ -48,7 +48,7 @@ export const conceptInventory = {
   },
   [g.booleanLiteral]: {
     dependencies: [keyword.true, keyword.false],
-    parents: [g.literal],
+    parents: [g.literal, g.boolean],
     explanations: {
       name: 'boolean literal',
       definition: 'represent true or false',
@@ -74,7 +74,7 @@ export const conceptInventory = {
   },
   [g.characterLiteral]: {
     dependencies: [quote.single],
-    parents: [g.literal],
+    parents: [g.literal, g.char],
     explanations: {
       name: 'character literal',
       definition: 'represent character values',
@@ -97,7 +97,7 @@ export const conceptInventory = {
     container: false,
   },
   [g.nullLiteral]: {
-    dependencies: [],
+    dependencies: [keyword.null],
     parents: [g.literal],
     explanations: {
       name: 'null literal',
@@ -184,8 +184,6 @@ export const conceptInventory = {
       g.classInstanceExpression,
       g.arrayCreationExpression,
       g.methodInvocationExpression,
-      g.postIncrementExpression,
-      g.postDecrementExpression,
       g.arrayAccessExpression,
       g.leftHandSide],
     explanations: {
@@ -207,6 +205,10 @@ export const conceptInventory = {
   [g.expression]: {
     dependencies: [
       g.assignmentExpression,
+      g.multiplicativeExpression,
+      g.additiveExpression,
+      g.conditionalOrExpression,
+      g.conditionalAndExpression,
       g.postIncrementExpression,
       g.postDecrementExpression,
       g.classInstanceExpression,
@@ -225,7 +227,7 @@ export const conceptInventory = {
   },
   [g.arrayAccessExpression]: {
     dependencies: [g.identifier, sep.left_sqr, sep.right_sqr,],
-    parents: [g.expression],
+    parents: [g.expression, g.leftHandSide],
     explanations: {
       name: 'Array access expression',
       definition: 'give you what\'s stored in an array',
