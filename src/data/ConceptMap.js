@@ -2,8 +2,7 @@ import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
 
 export const conceptInventory = {
   [g.literal]: {
-    dependencies: [
-      g.integerLiteral,
+    dependencies: [g.integerLiteral,
       g.floatingPointLiteral,
       g.booleanLiteral,
       g.characterLiteral,
@@ -221,7 +220,7 @@ export const conceptInventory = {
       g.doStatement,
       g.whileStatement],
     explanations: {name: '', definition: '', examples: [''], future: ['']},
-    should_teach: true,
+    should_teach: false,
     container: true,
   },
   [g.arrayAccessExpression]: {

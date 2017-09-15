@@ -2,6 +2,7 @@
 import {exampleExercises, stubExercise} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
 import ExercisePool from '../data/ExercisePool';
+import conceptInventory from '../data/ConceptMap';
 
 // import typeof doesn't agree with Flow for some reason:
 //   https://flow.org/en/docs/types/modules/
@@ -62,21 +63,30 @@ class ExerciseGenerator {
     return [this.getHarderConcept(ck), this.getEasierConcept(ck),
             this.getNewerConcept(ck), concept];
   }
+
+  filterShouldTeach(concepts: ConceptKnowledge[]): ConceptKnowledge[] {
+    return concepts.filter((c) => conceptInventory[c.name].should_teach);
+  }
   
   getHarderConcept(concept: ConceptKnowledge) {
+    if(!concept) return '';
     let chosen = concept.parents.sort(
-        (a, b) => a.dependencyKnowledge - b.dependencyKnowledge)[0];
-    return chosen ? chosen.name : "";
+        (a, b) => a.dependencyKnowledge - b.dependencyKnowledge);
+    chosen = this.filterShouldTeach(chosen)[0];
+    return chosen ? chosen.name : '';
   }
 
   getEasierConcept(concept: ConceptKnowledge) {
+    if(!concept) return '';
     let chosen = concept.dependencies.sort(
-        (a, b) => a.knowledge - b.knowledge)[0];
-    return chosen ? chosen.name : "";
+        (a, b) => a.knowledge - b.knowledge);
+    chosen = this.filterShouldTeach(chosen)[0];
+    return chosen ? chosen.name : '';
   }
   
   getNewerConcept(concept: ConceptKnowledge) {
-    return this.getOrderedConcepts().filter((c) => c !== concept)[0].name;
+    let chosen = this.getOrderedConcepts().filter((c) => c !== concept);
+    return this.filterShouldTeach(chosen)[0].name;
   }
 
   /**
