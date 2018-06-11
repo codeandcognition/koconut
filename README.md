@@ -94,6 +94,8 @@ If you don't already have Yarn, you can install it using npm (which diplomatical
 
 > Yarn is an alternative package manager that we use because it's both faster and cuter (_npm has no cats_ :cat:). [All `npm` commands can be replaced with `yarn` commands](https://yarnpkg.com/en/docs/migrating-from-npm)!
 
+It may be necessary to change your version of Node and update package.json. Node v8.11.2 worked at time or writing. Run `n 8.11.2` to set the version of Node (download may be required) and then update package.json with `npm update`.
+
 ### Quick Start
 
 To have a live preview of the application, simply run the following command:
