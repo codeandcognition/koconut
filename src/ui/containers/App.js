@@ -46,7 +46,8 @@ class App extends Component {
     counter: number,
     display: string, // the current display state
     conceptOptions: number, // concept options offered, no options if <= 1
-    currentConcept: ?string
+    currentConcept: ?string,
+    firebaseUser: ?mixed
   };
 
   constructor() {
@@ -91,14 +92,25 @@ class App extends Component {
     return this.generator._generateExercise(this.state.counter);
   }
 
+  /**
+   * Set up a firebase authentication listener when component mounts
+   * Will set the state of firebaseUser to be the current logged in user
+   * or null if no user is logged in.
+   *
+   * Can be passed down to props as this.state.firebaseUser, useful for
+   * data collection.
+   */
   componentDidMount() {
-      this.stopWatchingAuth = firebase.auth().onAuthStateChanged((firebaseUser) => {
-          firebaseUser ?
-            this.setState({firebaseUser: firebaseUser}) :
+      this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
+          fbUser ?
+            this.setState({firebaseUser: fbUser}) :
             this.setState({firebaseUser: null});
       });
   }
 
+  /**
+   * Un app un-mount, stop watching authentication
+   */
   componentWillUnmount() {
       this.stopWatchingAuth();
   }
@@ -170,10 +182,16 @@ class App extends Component {
    * Renders the sign up view
    */
   renderSignup() {
-    return(
+    if(this.state.firebaseUser) {
+        this.setState({
+            display: displayType.welcome
+        });
+    } else {
+        return(
         <Signup
             callback={() => this.setState({display: displayType.welcome})}/>
-    );
+         );
+    }
   }
 
   renderWelcome() {
