@@ -26,7 +26,8 @@
     "react-ace": "^5.10.0",
     "react-dom": "^15.6.2",
     "react-markdown": "^2.5.1",
-    "react-tooltip": "^3.6.1"
+    "react-tooltip": "^3.6.1",
+    "yarn": "^1.7.0"
   },
   "scripts": {
     "start": "npm-run-all -p start-css start-js",
