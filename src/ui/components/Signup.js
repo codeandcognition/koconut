@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import  FormGroup from '@material-ui/core/FormGroup';
+import  FormLabel from '@material-ui/core/FormLabel';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 class Signup extends Component {
   constructor(props) {
@@ -15,26 +19,33 @@ class Signup extends Component {
 
   render() {
     return(
-        <div>
-          <h1>Welcome to Koconut!</h1>
-          <h2>Sign up</h2>
-          <form>
-            <label
-                htmlFor="email">Email</label>
-            <input
-                type="email"/>
-            <label
-                htmlFor="password">Password</label>
-            <input
-                type="password" />
-            <label
-                htmlFor="password" >Confirm Password</label>
-            <input
-                type="password" />
-            <button type="submit" >Submit</button>
-          </form>
-        </div>
-    );
+        <FormGroup>
+        <TextField
+    id="displayName"
+    type="text"
+    label="Display name"
+    placeholder="Enter your display name"/>
+        <TextField
+    id="email"
+    type="email"
+    label="Email Address"
+    placeholder="Enter your email address"/>
+        <TextField
+    id="password"
+    type="password"
+    label="Password"
+    placeholder="Enter your password"/>
+        <TextField
+    id="confirmPassword"
+    type="password"
+    label="Confirm Password"
+    placeholder="Re-enter your password"/>
+        <Button
+    type="submit"
+    variant="flat"
+        color="primary">Submit</Button>
+        </FormGroup>
+  );
   }
 }
 
