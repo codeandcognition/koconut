@@ -1,5 +1,7 @@
 // @flow
 import React, {Component} from 'react';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 import './App.css';
 import ExerciseView from './ExerciseView';
@@ -56,7 +58,8 @@ class App extends Component {
       counter: 1,
       display: displayType.welcome,
       conceptOptions: 4, //TODO: Make this not hard coded
-      currentConcept: null
+      currentConcept: null,
+      firebaseUser: null
     };
 
     // this.updater = new ResponseEvaluator();
@@ -83,6 +86,18 @@ class App extends Component {
    */
   _getExercise(): Exercise {
     return this.generator._generateExercise(this.state.counter);
+  }
+
+  componentDidMount() {
+      this.stopWatchingAuth = firebase.auth().onAuthStateChanged((firebaseUser) => {
+          firebaseUser ?
+            this.setState({firebaseUser: firebaseUser}) :
+            this.setState({firebaseUser: null});
+      });
+  }
+
+  componentWillUnmount() {
+      this.stopWatchingAuth();
   }
 
   getConcepts() {

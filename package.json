@@ -19,6 +19,7 @@
     "body-parser": "^1.18.3",
     "brace": "^0.10.0",
     "express": "^4.16.3",
+    "firebase": "^5.0.4",
     "lodash": "^4.17.10",
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.1.3",
