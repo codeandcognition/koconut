@@ -46,7 +46,8 @@ class App extends Component {
     counter: number,
     display: string, // the current display state
     conceptOptions: number, // concept options offered, no options if <= 1
-    currentConcept: ?string
+    currentConcept: ?string,
+    firebaseUser: ?mixed
   };
 
   constructor() {
