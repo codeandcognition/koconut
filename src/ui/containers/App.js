@@ -62,10 +62,7 @@ class App extends Component {
       display: displayType.signup, // TODO: Change this to sign in
       conceptOptions: 4, //TODO: Make this not hard coded
       currentConcept: null,
-<<<<<<< HEAD
       firebaseUser: null
-=======
->>>>>>> c6d9dda8b3af25eaf41b9c3a2785074655a7316c
     };
 
     // this.updater = new ResponseEvaluator();
