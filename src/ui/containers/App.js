@@ -1,13 +1,11 @@
 // @flow
 import React, {Component} from 'react';
-import firebase from 'firebase/app';
-import 'firebase/auth';
 
 import './App.css';
 import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
-import Signup from '../components/Signup';
+import SignIn from '../components/SignIn';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -19,8 +17,6 @@ import type {Exercise} from '../../data/Exercises';
 
 // Display type enum
 const displayType = {
-  signup: 'SIGNUP',
-  signin: 'SIGNIN',
   welcome: 'WELCOME',
   exercise: 'EXERCISE',
   feedback: 'FEEDBACK',
@@ -31,7 +27,7 @@ const displayType = {
  * Renders the koconut application view.
  * @class
  */
-class App extends Component {
+export default class App extends Component {
   submitResponse: Function;
   submitConcept: Function;
   submitOk: Function;
@@ -59,10 +55,9 @@ class App extends Component {
       feedback: '',
       nextConcepts: [],
       counter: 1,
-      display: displayType.signup, // TODO: Change this to sign in
+      display: displayType.welcome,
       conceptOptions: 4, //TODO: Make this not hard coded
-      currentConcept: null,
-      firebaseUser: null
+      currentConcept: null
     };
 
     // this.updater = new ResponseEvaluator();
@@ -91,24 +86,12 @@ class App extends Component {
     return this.generator._generateExercise(this.state.counter);
   }
 
-  componentDidMount() {
-      this.stopWatchingAuth = firebase.auth().onAuthStateChanged((firebaseUser) => {
-          firebaseUser ?
-            this.setState({firebaseUser: firebaseUser}) :
-            this.setState({firebaseUser: null});
-      });
-  }
-
-  componentWillUnmount() {
-      this.stopWatchingAuth();
-  }
-
   getConcepts() {
     let size = this.state.conceptOptions;
     let concept = this.state.currentConcept;
     let ret;
-    if (concept !== null && concept !== undefined) {
-      ret = this.generator.getConceptsRelativeTo(concept);
+    if(concept !== null && concept !== undefined) {
+      ret = this.generator.getConceptsRelativeTo(concept)
     } else {
       ret = this.generator.getConcepts(size);
     }
@@ -120,7 +103,7 @@ class App extends Component {
    * @param answer - the answer being submitted
    */
   submitResponse(answer: string) {
-    if (answer !== null && answer !== undefined) {
+    if(answer !== null && answer !== undefined) {
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => {
         this.setState({
           feedback: ResponseLog.getFeedback(),
@@ -128,9 +111,9 @@ class App extends Component {
           // exercise: this.generator.generateExercise(this.state.currentConcept),
           display: this.state.exercise.type !== 'survey'
               ? displayType.feedback
-              : (this.state.conceptOptions > 1
+              : ( this.state.conceptOptions > 1
                   ? displayType.concept
-                  : displayType.exercise),
+                  : displayType.exercise )
         });
       });
     }
@@ -140,12 +123,12 @@ class App extends Component {
    * Submits the given concept
    * @param concept - the concept being submit
    */
-  submitConcept(concept: string) {
-    if (concept !== null && concept !== undefined) {
+  submitConcept(concept: string){
+    if(concept !== null && concept !== undefined) {
       this.setState({
         currentConcept: concept,
         exercise: this.generator.generateExercise(concept),
-        display: displayType.exercise,
+        display: displayType.exercise
       });
     }
   }
@@ -156,30 +139,18 @@ class App extends Component {
   submitOk() {
     this.setState({
       nextConcepts: this.getConcepts(),
-      display: displayType.concept,
-    });
+      display: displayType.concept});
   }
 
   submitTryAgain() {
     this.setState({
-      display: displayType.exercise,
+      display: displayType.exercise
     });
-  }
-
-  /**
-   * Renders the sign up view
-   */
-  renderSignup() {
-    return(
-        <Signup
-            callback={() => this.setState({display: displayType.welcome})}/>
-    );
   }
 
   renderWelcome() {
     return (
-        <Welcome
-            callBack={() => this.setState({display: displayType.exercise})}/>
+        <Welcome callBack={() => this.setState({display: displayType.exercise})}/>
     );
   }
 
@@ -190,13 +161,13 @@ class App extends Component {
     return (
         <ExerciseView
             exercise={this.state.exercise}
-            submitHandler={this.submitResponse}
-            feedback={this.state.feedback}
-            nextConcepts={this.state.nextConcepts}
-            submitOk={this.submitOk}
-            submitTryAgain={this.submitTryAgain}
-            mode={this.state.display}
-            concept={this.state.currentConcept}
+            submitHandler = {this.submitResponse}
+            feedback = {this.state.feedback}
+            nextConcepts = {this.state.nextConcepts}
+            submitOk = {this.submitOk}
+            submitTryAgain = {this.submitTryAgain}
+            mode = {this.state.display}
+            concept = {this.state.currentConcept}
         />
     );
   }
@@ -217,9 +188,7 @@ class App extends Component {
    * Renders the display based on display state
    */
   renderDisplay() {
-    switch (this.state.display) {
-      case displayType.signup:
-        return this.renderSignup();
+    switch(this.state.display) {
       case displayType.welcome:
         return this.renderWelcome();
       case displayType.exercise:
@@ -235,7 +204,7 @@ class App extends Component {
   render() {
     return (
         <div className="App">
-          <div className="main">
+          {/*<div className="main">
             <h1 className="title">
               {this.state.display !== displayType.welcome ?
                   <span className="debug">
@@ -245,17 +214,16 @@ class App extends Component {
                         {
                           exercise: this._getExercise(),
                           feedback: '',
-                          counter: this.state.counter + 1,
+                          counter: this.state.counter + 1
                         })}
                     value="next exercise type"
                 />
               </span> : ''}
             </h1>
             {this.renderDisplay()}
-          </div>
+          </div>*/}
+          <SignIn />
         </div>
     );
   }
 }
-
-export default App;
