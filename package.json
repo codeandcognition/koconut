@@ -15,6 +15,7 @@
     "react-scripts": "1.0.10"
   },
   "dependencies": {
+    "@material-ui/core": "^1.2.2",
     "async": "^2.6.1",
     "body-parser": "^1.18.3",
     "brace": "^0.10.0",

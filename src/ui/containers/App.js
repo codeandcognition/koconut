@@ -5,6 +5,7 @@ import './App.css';
 import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
+import Signup from '../components/Signup';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -16,6 +17,8 @@ import type {Exercise} from '../../data/Exercises';
 
 // Display type enum
 const displayType = {
+  signup: 'SIGNUP',
+  signin: 'SIGNIN',
   welcome: 'WELCOME',
   exercise: 'EXERCISE',
   feedback: 'FEEDBACK',
@@ -54,7 +57,7 @@ class App extends Component {
       feedback: '',
       nextConcepts: [],
       counter: 1,
-      display: displayType.welcome,
+      display: displayType.signup, // TODO: Change this to sign in
       conceptOptions: 4, //TODO: Make this not hard coded
       currentConcept: null,
     };
@@ -148,6 +151,16 @@ class App extends Component {
     });
   }
 
+  /**
+   * Renders the sign up view
+   */
+  renderSignup() {
+    return(
+        <Signup
+            callback={() => this.setState({display: displayType.welcome})}/>
+    );
+  }
+
   renderWelcome() {
     return (
         <Welcome
@@ -190,6 +203,8 @@ class App extends Component {
    */
   renderDisplay() {
     switch (this.state.display) {
+      case displayType.signup:
+        return this.renderSignup();
       case displayType.welcome:
         return this.renderWelcome();
       case displayType.exercise:
