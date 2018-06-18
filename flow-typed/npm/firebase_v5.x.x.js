@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // flow-typed signature: d0d53d3dca35c3a1c38f05c45ed84d3e
+=======
+// flow-typed signature: 90140ca59c8bbfd0ec485ffa8feedcb5
+>>>>>>> 37038306ce590927902fb1ede17465055346708b
 // flow-typed version: 63cba5e9af/firebase_v5.x.x/flow_>=v0.34.x
 
 /* @flow */
