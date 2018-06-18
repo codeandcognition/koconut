@@ -170,10 +170,16 @@ class App extends Component {
    * Renders the sign up view
    */
   renderSignup() {
-    return(
+    if(this.state.firebaseUser) {
+        this.setState({
+            display: displayType.welcome
+        });
+    } else {
+        return(
         <Signup
             callback={() => this.setState({display: displayType.welcome})}/>
-    );
+         );
+    }
   }
 
   renderWelcome() {
