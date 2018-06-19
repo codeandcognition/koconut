@@ -21,12 +21,10 @@ class WorldView extends Component {
             a.dependencyKnowledge / a.knowledge));
   }
 
-
   render() {
     console.log(this.getOrderedConcepts());
     return (
         <div>
-
         </div>
     );
   }
