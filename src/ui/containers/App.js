@@ -9,7 +9,8 @@ import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
 import Signup from '../components/Signup';
-// import SignIn from '../components/SignIn';
+import Signin from '../components/SignIn';
+
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
@@ -30,195 +31,228 @@ const displayType = {
  * @class
  */
 class App extends Component {
-	submitResponse: Function;
-	submitConcept: Function;
-	submitOk: Function;
-	submitTryAgain: Function;
-	generator: ExerciseGenerator;
-	theme: mixed;
-	// updater: ResponseEvaluator;
-	state: {
-		exercise: Exercise,
-		feedback: string,
-		nextConcepts: string[],
-		counter: number,
-		display: string, // the current display state
-		conceptOptions: number, // concept options offered, no options if <= 1
-		currentConcept: ?string,
-		firebaseUser: ?mixed
-	};
-	constructor() {
-		super();
-		this.generator = new ExerciseGenerator();
-		this.theme = createMuiTheme();
+  submitResponse: Function;
+  submitConcept: Function;
+  submitOk: Function;
+  submitTryAgain: Function;
+  generator: ExerciseGenerator;
+  theme: mixed;
+  // updater: ResponseEvaluator;
+  state: {
+    exercise: Exercise,
+    feedback: string,
+    nextConcepts: string[],
+    counter: number,
+    display: string, // the current display state
+    conceptOptions: number, // concept options offered, no options if <= 1
+    currentConcept: ?string,
+    firebaseUser: ?mixed
+  };
+  constructor() {
+    super();
+    this.generator = new ExerciseGenerator();
+    this.theme = createMuiTheme();
 
-		this.state = {
-			exercise: this.generator.generateExercise(),
-			feedback: '',
-			nextConcepts: [],
-			counter: 1,
-			display: displayType.signup, // TODO: Change this to sign in
-			conceptOptions: 4, //TODO: Make this not hard coded
-			currentConcept: null,
-			firebaseUser: null
-		};
-		// this.updater = new ResponseEvaluator();
-		this.submitResponse = this.submitResponse.bind(this);
-		this.submitConcept = this.submitConcept.bind(this);
-		this.submitOk = this.submitOk.bind(this);
-		this.submitTryAgain = this.submitTryAgain.bind(this);
-	}
+    this.state = {
+      exercise: this.generator.generateExercise(),
+      feedback: '',
+      nextConcepts: [],
+      counter: 1,
+      display: displayType.signup, // TODO: Change this to sign in
+      conceptOptions: 4, //TODO: Make this not hard coded
+      currentConcept: null,
+      firebaseUser: null
+    };
+    // this.updater = new ResponseEvaluator();
+    this.submitResponse = this.submitResponse.bind(this);
+    this.submitConcept = this.submitConcept.bind(this);
+    this.submitOk = this.submitOk.bind(this);
+    this.submitTryAgain = this.submitTryAgain.bind(this);
+    this.switchToSignin = this.switchToSignin.bind(this);
+  }
+  /**
+   * Return a generated exercise
+   * TODO: Remove, this is redundant?
+   * @returns a generated exercise
+   */
+  getExercise(): Exercise {
+    return this.generator.generateExercise();
+  }
+  /**
+   * Returns a generated exercise by index
+   * For DEBUG eyes only eyes 👀😭
+   * @private
+   * @returns the example exercise at the given index
+   */
+  _getExercise(): Exercise {
+    return this.generator._generateExercise(this.state.counter);
+  }
+  /**
+   * Set up a firebase authentication listener when component mounts
+   * Will set the state of firebaseUser to be the current logged in user
+   * or null if no user is logged in.
+   *
+   * Can be passed down to props as this.state.firebaseUser, useful for
+   * data collection.
+   */
+  componentDidMount() {
+      this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
+        console.log("changed");
+          fbUser ?
+            this.setState({firebaseUser: fbUser}) :
+            this.setState({firebaseUser: null, display: displayType.signup});
+      });
+
+  }
+  /**
+   * Un app un-mount, stop watching authentication
+   */
+  componentWillUnmount() {
+    this.stopWatchingAuth();
+  }
+  getConcepts() {
+    let size = this.state.conceptOptions;
+    let concept = this.state.currentConcept;
+    let ret;
+    if (concept !== null && concept !== undefined) {
+      ret = this.generator.getConceptsRelativeTo(concept);
+    } else {
+      ret = this.generator.getConcepts(size);
+    }
+    return ret;
+  }
+  /**
+   * Submits the give answer to current exercise
+   * @param answer - the answer being submitted
+   */
+  submitResponse(answer: string) {
+    if (answer !== null && answer !== undefined) {
+      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => {
+        this.setState({
+          feedback: ResponseLog.getFeedback(),
+          nextConcepts: this.getConcepts(),
+          // exercise: this.generator.generateExercise(this.state.currentConcept),
+          display: this.state.exercise.type !== 'survey'
+              ? displayType.feedback
+              : (this.state.conceptOptions > 1
+                  ? displayType.concept
+                  : displayType.exercise),
+        });
+      });
+    }
+  }
+  /**
+   * Submits the given concept
+   * @param concept - the concept being submit
+   */
+  submitConcept(concept: string) {
+    if (concept !== null && concept !== undefined) {
+      this.setState({
+        currentConcept: concept,
+        exercise: this.generator.generateExercise(concept),
+        display: displayType.exercise,
+      });
+    }
+  }
+  /**
+   * Invoked when student toggles OK button after receiving feedback
+   */
+  submitOk() {
+    this.setState({
+      nextConcepts: this.getConcepts(),
+      display: displayType.concept,
+    });
+  }
+  submitTryAgain() {
+    this.setState({
+      display: displayType.exercise,
+    });
+  }
+  /**
+   * Renders the sign up view
+   */
+  renderSignup() {
+    if(this.state.firebaseUser) {
+      this.setState({
+        display: displayType.welcome
+      });
+    } else {
+      return(
+          <Signup toSignin={this.switchToSignin}/>
+      );
+    }
+  }
+
 	/**
-	 * Return a generated exercise
-	 * TODO: Remove, this is redundant?
-	 * @returns a generated exercise
-	 */
-	getExercise(): Exercise {
-		return this.generator.generateExercise();
-	}
-	/**
-	 * Returns a generated exercise by index
-	 * For DEBUG eyes only eyes 👀😭
-	 * @private
-	 * @returns the example exercise at the given index
-	 */
-	_getExercise(): Exercise {
-		return this.generator._generateExercise(this.state.counter);
-	}
-	/**
-	 * Set up a firebase authentication listener when component mounts
-	 * Will set the state of firebaseUser to be the current logged in user
-	 * or null if no user is logged in.
 	 *
-	 * Can be passed down to props as this.state.firebaseUser, useful for
-	 * data collection.
 	 */
-	componentDidMount() {
-		this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
-			console.log("changed");
-			fbUser ?
-					this.setState({firebaseUser: fbUser}) :
-					this.setState({firebaseUser: null, display: displayType.signup});
-		});
-
-	}
-	/**
-	 * Un app un-mount, stop watching authentication
-	 */
-	componentWillUnmount() {
-		this.stopWatchingAuth();
-	}
-	getConcepts() {
-		let size = this.state.conceptOptions;
-		let concept = this.state.currentConcept;
-		let ret;
-		if (concept !== null && concept !== undefined) {
-			ret = this.generator.getConceptsRelativeTo(concept);
-		} else {
-			ret = this.generator.getConcepts(size);
-		}
-		return ret;
-	}
-	/**
-	 * Submits the give answer to current exercise
-	 * @param answer - the answer being submitted
-	 */
-	submitResponse(answer: string) {
-		if (answer !== null && answer !== undefined) {
-			ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => {
-				this.setState({
-					feedback: ResponseLog.getFeedback(),
-					nextConcepts: this.getConcepts(),
-					// exercise: this.generator.generateExercise(this.state.currentConcept),
-					display: this.state.exercise.type !== 'survey'
-							? displayType.feedback
-							: (this.state.conceptOptions > 1
-									? displayType.concept
-									: displayType.exercise),
-				});
-			});
-		}
-	}
-	/**
-	 * Submits the given concept
-	 * @param concept - the concept being submit
-	 */
-	submitConcept(concept: string) {
-		if (concept !== null && concept !== undefined) {
-			this.setState({
-				currentConcept: concept,
-				exercise: this.generator.generateExercise(concept),
-				display: displayType.exercise,
-			});
-		}
-	}
-	/**
-	 * Invoked when student toggles OK button after receiving feedback
-	 */
-	submitOk() {
-		this.setState({
-			nextConcepts: this.getConcepts(),
-			display: displayType.concept,
-		});
-	}
-	submitTryAgain() {
-		this.setState({
-			display: displayType.exercise,
-		});
-	}
-	/**
-	 * Renders the sign up view
-	 */
-	renderSignup() {
+	renderSignin() {
 		if(this.state.firebaseUser) {
 			this.setState({
 				display: displayType.welcome
 			});
 		} else {
 			return(
-					<Signup />
+					<Signin toSignup={this.switchToSignup}/>
 			);
 		}
 	}
-	renderWelcome() {
-		return (
-				<Welcome
-						callBack={() => this.setState({display: displayType.exercise})}/>
-		);
-	}
 
-	renderSignin() {
-		return true;
+	/**
+	 * Sets the display state to 'signin'. This function is passed as a prop
+	 * to the Sign up view.
+	 */
+	switchToSignin() {
+		this.setState({display: displayType.signin});
 	}
 
 	/**
-	 * Renders the exercise view
+	 * Sets the display state to 'signup'. This function is passed as a prop
+	 * to the Sign in view
 	 */
-	renderExercise() {
-		return (
-				<ExerciseView
-						exercise={this.state.exercise}
-						submitHandler={this.submitResponse}
-						feedback={this.state.feedback}
-						nextConcepts={this.state.nextConcepts}
-						submitOk={this.submitOk}
-						submitTryAgain={this.submitTryAgain}
-						mode={this.state.display}
-						concept={this.state.currentConcept}
-				/>
-		);
+	switchToSignup() {
+		this.setState({display: displayType.signup});
 	}
+
 	/**
-	 * Renders the concept selection view
+	 * Renders the welcome view
+	 * @returns {*}
 	 */
-	renderConceptSelection() {
-		return (
-				<ConceptSelection
-						concepts={this.state.nextConcepts}
-						submitHandler={this.submitConcept}
-				/>
-		);
-	}
+  renderWelcome() {
+    return (
+        <Welcome
+            callBack={() => this.setState({display: displayType.exercise})}/>
+    );
+  }
+  /**
+   * Renders the exercise view
+   */
+  renderExercise() {
+    return (
+        <ExerciseView
+            exercise={this.state.exercise}
+            submitHandler={this.submitResponse}
+            feedback={this.state.feedback}
+            nextConcepts={this.state.nextConcepts}
+            submitOk={this.submitOk}
+            submitTryAgain={this.submitTryAgain}
+            mode={this.state.display}
+            concept={this.state.currentConcept}
+        />
+    );
+  }
+  /**
+   * Renders the concept selection view
+   */
+  renderConceptSelection() {
+    return (
+        <ConceptSelection
+            concepts={this.state.nextConcepts}
+            submitHandler={this.submitConcept}
+        />
+    );
+  }
+
 	/**
 	 * Renders the display based on display state
 	 */
@@ -239,10 +273,11 @@ class App extends Component {
 				break;
 		}
 	}
-	render() {
-		return (
-				<div className="App">
-					{<MuiThemeProvider theme={this.theme}>
+
+  render() {
+    return (
+        <div className="App">
+          <MuiThemeProvider theme={this.theme}>
             <Navbar firebaseUser={this.state.firebaseUser} />
             <div className="main">
               <h1 className="title">
@@ -262,7 +297,7 @@ class App extends Component {
               </h1>
               {this.renderDisplay()}
             </div>
-          </MuiThemeProvider>}
+          </MuiThemeProvider>
 				</div>
 		);
 	}
