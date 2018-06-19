@@ -9,6 +9,7 @@ import _ from 'lodash';
 class ConceptKnowledge {
   name: string;
   teach: boolean;
+  container: boolean;
 
   dependencies: ConceptKnowledge[];
   parents: ConceptKnowledge[];
@@ -16,9 +17,10 @@ class ConceptKnowledge {
   knowledge: number; //p(cognitive mastery) [0,1]
   dependencyKnowledge: number; //p(support cognitive mastery) [0,1]
 
-  constructor(name: string, teach: boolean) {
+  constructor(name: string, teach: boolean, container: boolean) {
     this.name = name;
     this.teach = teach;
+    this.container = container;
 
     this.dependencies = [];
     this.parents = [];
@@ -130,7 +132,7 @@ class MasteryModelClass {
   _populate() {
     // Create ConceptKnowledge objects for each concept
     _.forEach(conceptInventory, (c, name) => this.model.push(
-        new ConceptKnowledge(name, c.should_teach)));
+        new ConceptKnowledge(name, c.should_teach, c.container)));
 
     // Create a mapping of strings to ConceptKnowledge objects
     let map = this.modelMap;

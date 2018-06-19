@@ -295,21 +295,21 @@ class App extends Component {
           <MuiThemeProvider theme={this.theme}>
             <Navbar firebaseUser={this.state.firebaseUser} />
             <div className="main">
-              <h1 className="title">
-                {(this.state.display !== displayType.signin) && (this.state.display !== displayType.signup) ?
-                    <span className="debug">
-                  <input
-                      type="button"
-                      onClick={() => this.setState(
-                          {
-                            exercise: this._getExercise(),
-                            feedback: '',
-                            counter: this.state.counter + 1,
-                          })}
-                      value="next exercise type"
-                  />
-                </span> : ''}
-              </h1>
+              {/*<h1 className="title">*/}
+                {/*{this.state.display !== displayType.welcome ?*/}
+                    {/*<span className="debug">*/}
+                  {/*<input*/}
+                      {/*type="button"*/}
+                      {/*onClick={() => this.setState(*/}
+                          {/*{*/}
+                            {/*exercise: this._getExercise(),*/}
+                            {/*feedback: '',*/}
+                            {/*counter: this.state.counter + 1,*/}
+                          {/*})}*/}
+                      {/*value="next exercise type"*/}
+                  {/*/>*/}
+                {/*</span> : ''}*/}
+              {/*</h1>*/}
               {this.renderDisplay()}
             </div>
           </MuiThemeProvider>
