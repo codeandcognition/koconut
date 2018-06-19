@@ -4,7 +4,8 @@ import _ from 'lodash';
 
 /**
  * ConceptKnowledge object is a node containing a concept, with a boolean
- * to represent the student knowing or not knowing.
+ * to represent the student knowing or not knowing, along with a second
+ * boolean to represent if it is a container or not.
  */
 class ConceptKnowledge {
   name: string;
