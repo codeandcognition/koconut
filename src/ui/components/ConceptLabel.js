@@ -3,17 +3,15 @@ import React, {Component} from 'react';
 import ReactTooltip from 'react-tooltip';
 import ReactMarkdown from 'react-markdown';
 import conceptInventory from '../../data/ConceptMap';
-import Choice from './Choice';
-import _ from 'lodash';
 import './ConceptLabel.css'
 
-type Props = {concepts: string};
+// type Props = {concepts: string};
 
 class ConceptLabel extends Component {
 
-  constructor(props: Props) {
-    super(props);
-  }
+  // constructor(props: Props) {
+  //   super(props);
+  // }
 
   renderTooltip(id: number, name: string, example:string, content: string) {
     return content ? (
