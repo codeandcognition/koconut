@@ -4,12 +4,14 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import './App.css';
-import Navbar from './Navbar';
+import Navbar from '../components/Navbar';
 import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
 import Signup from '../components/Signup';
 import SignIn from '../components/SignIn';
+import WorldView from './WorldView';
+
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -26,6 +28,7 @@ const displayType = {
 	exercise: 'EXERCISE',
 	feedback: 'FEEDBACK',
 	concept: 'CONCEPT',
+  world: 'WORLD'
 };
 /**
  * Renders the koconut application view.
@@ -59,7 +62,7 @@ class App extends Component {
       feedback: '',
       nextConcepts: [],
       counter: 1,
-      display: displayType.signup, // TODO: Change this to sign in
+      display: displayType.signin, // TODO: Change this to sign in
       conceptOptions: 4, //TODO: Make this not hard coded
       currentConcept: null,
       firebaseUser: null
@@ -70,6 +73,7 @@ class App extends Component {
     this.submitOk = this.submitOk.bind(this);
     this.submitTryAgain = this.submitTryAgain.bind(this);
     this.switchToSignin = this.switchToSignin.bind(this);
+    this.switchToSignup = this.switchToSignup.bind(this);
   }
   /**
    * Return a generated exercise
@@ -100,7 +104,7 @@ class App extends Component {
       this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
           fbUser ?
             this.setState({firebaseUser: fbUser}) :
-            this.setState({firebaseUser: null, display: displayType.signup});
+            this.setState({firebaseUser: null, display: displayType.signin});
       });
 
   }
@@ -221,7 +225,7 @@ class App extends Component {
   renderWelcome() {
     return (
         <Welcome
-            callBack={() => this.setState({display: displayType.exercise})}/>
+            callBack={() => this.setState({display: displayType.world})}/>
     );
   }
   /**
@@ -253,6 +257,15 @@ class App extends Component {
     );
   }
 
+  /**
+   * Renders the world view
+   */
+  renderWorldView() {
+    return(
+        <WorldView />
+    )
+  }
+
 	/**
 	 * Renders the display based on display state
 	 */
@@ -269,6 +282,8 @@ class App extends Component {
 				return this.renderExercise();
 			case displayType.concept:
 				return this.renderConceptSelection();
+      case displayType.world:
+        return this.renderWorldView();
 			default:
 				break;
 		}
@@ -277,7 +292,7 @@ class App extends Component {
   render() {
     return (
         <div className="App">
-          {/*<MuiThemeProvider theme={this.theme}>
+          <MuiThemeProvider theme={this.theme}>
             <Navbar firebaseUser={this.state.firebaseUser} />
             <div className="main">
               <h1 className="title">
@@ -297,8 +312,7 @@ class App extends Component {
               </h1>
               {this.renderDisplay()}
             </div>
-          </MuiThemeProvider>*/}
-          <SignIn />
+          </MuiThemeProvider>
 				</div>
 		);
 	}
