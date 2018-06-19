@@ -9,21 +9,23 @@ import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
 import Signup from '../components/Signup';
-import SignIn from '../components/SignIn';
+import Signin from '../components/SignIn';
+
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
 import {ResponseLog} from '../../data/ResponseLog';
 //import Concepts from '../../backend/Concepts';
 import type {Exercise} from '../../data/Exercises';
+import typeof FirebaseUser from 'firebase';
 // Display type enum
 const displayType = {
-  signup: 'SIGNUP',
-  signin: 'SIGNIN',
-  welcome: 'WELCOME',
-  exercise: 'EXERCISE',
-  feedback: 'FEEDBACK',
-  concept: 'CONCEPT',
+	signup: 'SIGNUP',
+	signin: 'SIGNIN',
+	welcome: 'WELCOME',
+	exercise: 'EXERCISE',
+	feedback: 'FEEDBACK',
+	concept: 'CONCEPT',
 };
 /**
  * Renders the koconut application view.
@@ -45,7 +47,7 @@ class App extends Component {
     display: string, // the current display state
     conceptOptions: number, // concept options offered, no options if <= 1
     currentConcept: ?string,
-    firebaseUser: ?mixed
+    firebaseUser: ?FirebaseUser
   };
   constructor() {
     super();
@@ -67,6 +69,7 @@ class App extends Component {
     this.submitConcept = this.submitConcept.bind(this);
     this.submitOk = this.submitOk.bind(this);
     this.submitTryAgain = this.submitTryAgain.bind(this);
+    this.switchToSignin = this.switchToSignin.bind(this);
   }
   /**
    * Return a generated exercise
@@ -95,7 +98,6 @@ class App extends Component {
    */
   componentDidMount() {
       this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
-        console.log("changed");
           fbUser ?
             this.setState({firebaseUser: fbUser}) :
             this.setState({firebaseUser: null, display: displayType.signup});
@@ -176,10 +178,46 @@ class App extends Component {
       });
     } else {
       return(
-          <Signup />
+          <Signup toSignin={this.switchToSignin}/>
       );
     }
   }
+
+	/**
+	 *
+	 */
+	renderSignin() {
+		if(this.state.firebaseUser) {
+			this.setState({
+				display: displayType.welcome
+			});
+		} else {
+			return(
+					<Signin toSignup={this.switchToSignup}/>
+			);
+		}
+	}
+
+	/**
+	 * Sets the display state to 'signin'. This function is passed as a prop
+	 * to the Sign up view.
+	 */
+	switchToSignin() {
+		this.setState({display: displayType.signin});
+	}
+
+	/**
+	 * Sets the display state to 'signup'. This function is passed as a prop
+	 * to the Sign in view
+	 */
+	switchToSignup() {
+		this.setState({display: displayType.signup});
+	}
+
+	/**
+	 * Renders the welcome view
+	 * @returns {*}
+	 */
   renderWelcome() {
     return (
         <Welcome
@@ -214,28 +252,32 @@ class App extends Component {
         />
     );
   }
-  /**
-   * Renders the display based on display state
-   */
-  renderDisplay() {
-    switch (this.state.display) {
-      case displayType.signup:
-        return this.renderSignup();
-      case displayType.welcome:
-        return this.renderWelcome();
-      case displayType.exercise:
-      case displayType.feedback:
-        return this.renderExercise();
-      case displayType.concept:
-        return this.renderConceptSelection();
-      default:
-        break;
-    }
-  }
+
+	/**
+	 * Renders the display based on display state
+	 */
+	renderDisplay() {
+		switch (this.state.display) {
+			case displayType.signin:
+				return this.renderSignin();
+			case displayType.signup:
+				return this.renderSignup();
+			case displayType.welcome:
+				return this.renderWelcome();
+			case displayType.exercise:
+			case displayType.feedback:
+				return this.renderExercise();
+			case displayType.concept:
+				return this.renderConceptSelection();
+			default:
+				break;
+		}
+	}
+
   render() {
     return (
         <div className="App">
-          {/*<MuiThemeProvider theme={this.theme}>
+          <MuiThemeProvider theme={this.theme}>
             <Navbar firebaseUser={this.state.firebaseUser} />
             <div className="main">
               <h1 className="title">
@@ -255,11 +297,10 @@ class App extends Component {
               </h1>
               {this.renderDisplay()}
             </div>
-          </MuiThemeProvider>*/}
-          <SignIn />
-        </div>
-    );
-  }
+          </MuiThemeProvider>
+				</div>
+		);
+	}
 }
 
 export default App;
