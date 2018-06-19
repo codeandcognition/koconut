@@ -2,8 +2,10 @@
 import React, {Component} from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 
 import './App.css';
+import Navbar from './Navbar';
 import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
@@ -37,6 +39,7 @@ class App extends Component {
   submitOk: Function;
   submitTryAgain: Function;
   generator: ExerciseGenerator;
+  theme: mixed;
   // updater: ResponseEvaluator;
 
   state: {
@@ -54,6 +57,7 @@ class App extends Component {
     super();
 
     this.generator = new ExerciseGenerator();
+    this.theme = createMuiTheme();
 
     this.state = {
       exercise: this.generator.generateExercise(),
@@ -252,24 +256,27 @@ class App extends Component {
   render() {
     return (
         <div className="App">
-          <div className="main">
-            <h1 className="title">
-              {this.state.display !== displayType.welcome ?
-                  <span className="debug">
-                <input
-                    type="button"
-                    onClick={() => this.setState(
-                        {
-                          exercise: this._getExercise(),
-                          feedback: '',
-                          counter: this.state.counter + 1,
-                        })}
-                    value="next exercise type"
-                />
-              </span> : ''}
-            </h1>
-            {this.renderDisplay()}
-          </div>
+          <MuiThemeProvider theme={this.theme}>
+            <Navbar firebaseUser={this.state.firebaseUser} />
+            <div className="main">
+              <h1 className="title">
+                {this.state.display !== displayType.welcome ?
+                    <span className="debug">
+                  <input
+                      type="button"
+                      onClick={() => this.setState(
+                          {
+                            exercise: this._getExercise(),
+                            feedback: '',
+                            counter: this.state.counter + 1,
+                          })}
+                      value="next exercise type"
+                  />
+                </span> : ''}
+              </h1>
+              {this.renderDisplay()}
+            </div>
+          </MuiThemeProvider>
         </div>
     );
   }
