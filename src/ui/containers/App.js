@@ -17,6 +17,7 @@ import ResponseEvaluator from '../../backend/ResponseEvaluator';
 import {ResponseLog} from '../../data/ResponseLog';
 //import Concepts from '../../backend/Concepts';
 import type {Exercise} from '../../data/Exercises';
+import typeof FirebaseUser from 'firebase';
 // Display type enum
 const displayType = {
 	signup: 'SIGNUP',
@@ -46,7 +47,7 @@ class App extends Component {
     display: string, // the current display state
     conceptOptions: number, // concept options offered, no options if <= 1
     currentConcept: ?string,
-    firebaseUser: ?mixed
+    firebaseUser: ?FirebaseUser
   };
   constructor() {
     super();
