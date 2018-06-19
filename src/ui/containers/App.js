@@ -9,7 +9,8 @@ import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
 import Signup from '../components/Signup';
-import SignIn from '../components/SignIn';
+import Signin from '../components/SignIn';
+
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
@@ -19,12 +20,12 @@ import type {Exercise} from '../../data/Exercises';
 import typeof FirebaseUser from 'firebase';
 // Display type enum
 const displayType = {
-  signup: 'SIGNUP',
-  signin: 'SIGNIN',
-  welcome: 'WELCOME',
-  exercise: 'EXERCISE',
-  feedback: 'FEEDBACK',
-  concept: 'CONCEPT',
+	signup: 'SIGNUP',
+	signin: 'SIGNIN',
+	welcome: 'WELCOME',
+	exercise: 'EXERCISE',
+	feedback: 'FEEDBACK',
+	concept: 'CONCEPT',
 };
 /**
  * Renders the koconut application view.
@@ -68,6 +69,7 @@ class App extends Component {
     this.submitConcept = this.submitConcept.bind(this);
     this.submitOk = this.submitOk.bind(this);
     this.submitTryAgain = this.submitTryAgain.bind(this);
+    this.switchToSignin = this.switchToSignin.bind(this);
   }
   /**
    * Return a generated exercise
@@ -176,10 +178,46 @@ class App extends Component {
       });
     } else {
       return(
-          <Signup />
+          <Signup toSignin={this.switchToSignin}/>
       );
     }
   }
+
+	/**
+	 *
+	 */
+	renderSignin() {
+		if(this.state.firebaseUser) {
+			this.setState({
+				display: displayType.welcome
+			});
+		} else {
+			return(
+					<Signin toSignup={this.switchToSignup}/>
+			);
+		}
+	}
+
+	/**
+	 * Sets the display state to 'signin'. This function is passed as a prop
+	 * to the Sign up view.
+	 */
+	switchToSignin() {
+		this.setState({display: displayType.signin});
+	}
+
+	/**
+	 * Sets the display state to 'signup'. This function is passed as a prop
+	 * to the Sign in view
+	 */
+	switchToSignup() {
+		this.setState({display: displayType.signup});
+	}
+
+	/**
+	 * Renders the welcome view
+	 * @returns {*}
+	 */
   renderWelcome() {
     return (
         <Welcome
@@ -214,24 +252,28 @@ class App extends Component {
         />
     );
   }
-  /**
-   * Renders the display based on display state
-   */
-  renderDisplay() {
-    switch (this.state.display) {
-      case displayType.signup:
-        return this.renderSignup();
-      case displayType.welcome:
-        return this.renderWelcome();
-      case displayType.exercise:
-      case displayType.feedback:
-        return this.renderExercise();
-      case displayType.concept:
-        return this.renderConceptSelection();
-      default:
-        break;
-    }
-  }
+
+	/**
+	 * Renders the display based on display state
+	 */
+	renderDisplay() {
+		switch (this.state.display) {
+			case displayType.signin:
+				return this.renderSignin();
+			case displayType.signup:
+				return this.renderSignup();
+			case displayType.welcome:
+				return this.renderWelcome();
+			case displayType.exercise:
+			case displayType.feedback:
+				return this.renderExercise();
+			case displayType.concept:
+				return this.renderConceptSelection();
+			default:
+				break;
+		}
+	}
+
   render() {
     return (
         <div className="App">
@@ -256,9 +298,9 @@ class App extends Component {
               {this.renderDisplay()}
             </div>
           </MuiThemeProvider>
-        </div>
-    );
-  }
+				</div>
+		);
+	}
 }
 
 export default App;
