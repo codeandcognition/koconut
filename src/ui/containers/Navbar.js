@@ -16,15 +16,6 @@ class Navbar extends Component {
     firebaseUser: ?mixed
   };
 
-  constructor(props) {
-    super(props);
-    this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  handleLogout() {
-    firebase.auth().signOut();
-  }
-
   render() {
     return (
         <div>
@@ -38,7 +29,7 @@ class Navbar extends Component {
                     type="submit"
                     variant="flat"
                     color="secondary"
-                    onClick={() => this.handleLogout()}>Logout</Button>
+                    onClick={() => firebase.auth().signOut()}>Logout</Button>
               }
             </Toolbar>
           </AppBar>
