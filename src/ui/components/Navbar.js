@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Button from '@material-ui/core/Button/Button';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import typeof FirebaseUser from 'firebase';
 
 /**
  * Navbar adds a navigation bar to the app
@@ -13,7 +14,7 @@ import 'firebase/auth';
  */
 class Navbar extends Component {
   props: {
-    firebaseUser: ?mixed
+    firebaseUser: ?FirebaseUser
   };
 
   render() {
