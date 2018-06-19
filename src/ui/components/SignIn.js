@@ -37,17 +37,15 @@ class SignIn extends React.Component {
       marginBottom: "10px"
     }
 
-    var errorStyle ={
-      backgroundColor: "#ffcccc",
-      color: "#ff3333",
-      borderRadius: "8px",
-      border: "2px solid #ff8080",
-      width: "25vh",
-      padding: "5px",
-      margin: "auto",
-      marginTop: "10px",
-      fontWeight: "bold",
-      textAlign: "left"
+    var errorStyle = {
+      minWidth: "150px",
+      padding: "15px",
+      marginBottom: "20px",
+      border: "1px solid transparent",
+      borderRadius: "3px",
+      backgroundColor: "lighten(#d43f3a, 15%)",
+      borderColor: "lighten(#d43f3a, 10%)",
+      color: "darken(#d43f3a, 15%)"
     }
 
     return <div style={{textAlign: "center", padding: "10vw"}} className="container">
@@ -69,9 +67,8 @@ class SignIn extends React.Component {
       <Button style={buttonStyle} variant={"outlined"} onClick={() => this.props.toSignup()}>Create Account</Button>
       <br />
       <a href={""}>Forgot Password</a>
-      {this.state.errorMessage &&
-        <p style={errorStyle}>{this.state.errorMessage}</p>
-      }
+
+        <p style={errorStyle}>test</p>
     </div>
 
   }
