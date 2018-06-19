@@ -1,44 +1,39 @@
 // @flow
 import React, {Component} from 'react';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import 'firebase/auth';
-
 import './App.css';
 import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
-import SignIn from '../components/SignIn';
 import Signup from '../components/Signup';
-
-
+import SignIn from '../components/SignIn';
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
 import {ResponseLog} from '../../data/ResponseLog';
 //import Concepts from '../../backend/Concepts';
-
 import type {Exercise} from '../../data/Exercises';
-
 // Display type enum
 const displayType = {
+  signup: 'SIGNUP',
+  signin: 'SIGNIN',
   welcome: 'WELCOME',
   exercise: 'EXERCISE',
   feedback: 'FEEDBACK',
   concept: 'CONCEPT',
 };
-
 /**
  * Renders the koconut application view.
  * @class
  */
-export default class App extends Component {
+class App extends Component {
   submitResponse: Function;
   submitConcept: Function;
   submitOk: Function;
   submitTryAgain: Function;
   generator: ExerciseGenerator;
   // updater: ResponseEvaluator;
-
   state: {
     exercise: Exercise,
     feedback: string,
@@ -49,30 +44,25 @@ export default class App extends Component {
     currentConcept: ?string,
     firebaseUser: ?mixed
   };
-
   constructor() {
     super();
-
     this.generator = new ExerciseGenerator();
-
     this.state = {
       exercise: this.generator.generateExercise(),
       feedback: '',
       nextConcepts: [],
       counter: 1,
-      display: displayType.welcome,
+      display: displayType.signup, // TODO: Change this to sign in
       conceptOptions: 4, //TODO: Make this not hard coded
       currentConcept: null,
       firebaseUser: null
     };
-
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
     this.submitConcept = this.submitConcept.bind(this);
     this.submitOk = this.submitOk.bind(this);
     this.submitTryAgain = this.submitTryAgain.bind(this);
   }
-
   /**
    * Return a generated exercise
    * TODO: Remove, this is redundant?
@@ -81,7 +71,6 @@ export default class App extends Component {
   getExercise(): Exercise {
     return this.generator.generateExercise();
   }
-
   /**
    * Returns a generated exercise by index
    * For DEBUG eyes only eyes 👀😭
@@ -91,7 +80,6 @@ export default class App extends Component {
   _getExercise(): Exercise {
     return this.generator._generateExercise(this.state.counter);
   }
-
   /**
    * Set up a firebase authentication listener when component mounts
    * Will set the state of firebaseUser to be the current logged in user
@@ -101,38 +89,35 @@ export default class App extends Component {
    * data collection.
    */
   componentDidMount() {
-      this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
-          fbUser ?
-            this.setState({firebaseUser: fbUser}) :
-            this.setState({firebaseUser: null});
-      });
+    this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
+      fbUser ?
+          this.setState({firebaseUser: fbUser}) :
+          this.setState({firebaseUser: null});
+    });
   }
-
   /**
    * Un app un-mount, stop watching authentication
    */
   componentWillUnmount() {
-      this.stopWatchingAuth();
+    this.stopWatchingAuth();
   }
-
   getConcepts() {
     let size = this.state.conceptOptions;
     let concept = this.state.currentConcept;
     let ret;
-    if(concept !== null && concept !== undefined) {
-      ret = this.generator.getConceptsRelativeTo(concept)
+    if (concept !== null && concept !== undefined) {
+      ret = this.generator.getConceptsRelativeTo(concept);
     } else {
       ret = this.generator.getConcepts(size);
     }
     return ret;
   }
-
   /**
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
    */
   submitResponse(answer: string) {
-    if(answer !== null && answer !== undefined) {
+    if (answer !== null && answer !== undefined) {
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => {
         this.setState({
           feedback: ResponseLog.getFeedback(),
@@ -140,65 +125,60 @@ export default class App extends Component {
           // exercise: this.generator.generateExercise(this.state.currentConcept),
           display: this.state.exercise.type !== 'survey'
               ? displayType.feedback
-              : ( this.state.conceptOptions > 1
+              : (this.state.conceptOptions > 1
                   ? displayType.concept
-                  : displayType.exercise )
+                  : displayType.exercise),
         });
       });
     }
   }
-
   /**
    * Submits the given concept
    * @param concept - the concept being submit
    */
-  submitConcept(concept: string){
-    if(concept !== null && concept !== undefined) {
+  submitConcept(concept: string) {
+    if (concept !== null && concept !== undefined) {
       this.setState({
         currentConcept: concept,
         exercise: this.generator.generateExercise(concept),
-        display: displayType.exercise
+        display: displayType.exercise,
       });
     }
   }
-
   /**
    * Invoked when student toggles OK button after receiving feedback
    */
   submitOk() {
     this.setState({
       nextConcepts: this.getConcepts(),
-      display: displayType.concept});
-  }
-
-  submitTryAgain() {
-    this.setState({
-      display: displayType.exercise
+      display: displayType.concept,
     });
   }
-
-
+  submitTryAgain() {
+    this.setState({
+      display: displayType.exercise,
+    });
+  }
   /**
    * Renders the sign up view
    */
   renderSignup() {
     if(this.state.firebaseUser) {
-        this.setState({
-            display: displayType.welcome
-        });
+      this.setState({
+        display: displayType.welcome
+      });
     } else {
-        return(
-        <Signup />
-         );
+      return(
+          <Signup />
+      );
     }
   }
-
   renderWelcome() {
     return (
-        <Welcome callBack={() => this.setState({display: displayType.exercise})}/>
+        <Welcome
+            callBack={() => this.setState({display: displayType.exercise})}/>
     );
   }
-
   /**
    * Renders the exercise view
    */
@@ -206,17 +186,16 @@ export default class App extends Component {
     return (
         <ExerciseView
             exercise={this.state.exercise}
-            submitHandler = {this.submitResponse}
-            feedback = {this.state.feedback}
-            nextConcepts = {this.state.nextConcepts}
-            submitOk = {this.submitOk}
-            submitTryAgain = {this.submitTryAgain}
-            mode = {this.state.display}
-            concept = {this.state.currentConcept}
+            submitHandler={this.submitResponse}
+            feedback={this.state.feedback}
+            nextConcepts={this.state.nextConcepts}
+            submitOk={this.submitOk}
+            submitTryAgain={this.submitTryAgain}
+            mode={this.state.display}
+            concept={this.state.currentConcept}
         />
     );
   }
-
   /**
    * Renders the concept selection view
    */
@@ -228,12 +207,13 @@ export default class App extends Component {
         />
     );
   }
-
   /**
    * Renders the display based on display state
    */
   renderDisplay() {
-    switch(this.state.display) {
+    switch (this.state.display) {
+      case displayType.signup:
+        return this.renderSignup();
       case displayType.welcome:
         return this.renderWelcome();
       case displayType.exercise:
@@ -245,11 +225,10 @@ export default class App extends Component {
         break;
     }
   }
-
   render() {
     return (
         <div className="App">
-          <div className="main">
+          {/*<div className="main">
             <h1 className="title">
               {this.state.display !== displayType.welcome ?
                   <span className="debug">
@@ -259,16 +238,17 @@ export default class App extends Component {
                         {
                           exercise: this._getExercise(),
                           feedback: '',
-                          counter: this.state.counter + 1
+                          counter: this.state.counter + 1,
                         })}
                     value="next exercise type"
                 />
               </span> : ''}
             </h1>
             {this.renderDisplay()}
-          </div>
-          {/*<SignIn />*/}
+          </div>*/}
+          <SignIn />
         </div>
     );
   }
 }
+export default App;

@@ -1,4 +1,4 @@
-// flow-typed signature: bac0ee66e0653772d037dc47b51a5e1f
+// flow-typed signature: 5799a2714d02dc30910a4c1e85636cf3
 // flow-typed version: da30fe6876/body-parser_v1.x.x/flow_>=v0.25.x
 
 import type { Middleware, $Request, $Response } from "express";
