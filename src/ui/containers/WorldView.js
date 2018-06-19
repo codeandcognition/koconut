@@ -11,6 +11,8 @@ class WorldView extends Component {
 
   /**
    * Returns sorted concepts list sorted by relevance to the user.
+   * Only includes concepts where concept.teach is true and concept.container
+   * is false
    * @returns {Array.<*>}
    */
   getOrderedConcepts(): ConceptKnowledge[] {
