@@ -249,7 +249,7 @@ export default class App extends Component {
   render() {
     return (
         <div className="App">
-          {/*<div className="main">
+          <div className="main">
             <h1 className="title">
               {this.state.display !== displayType.welcome ?
                   <span className="debug">
@@ -266,8 +266,8 @@ export default class App extends Component {
               </span> : ''}
             </h1>
             {this.renderDisplay()}
-          </div>*/}
-          <SignIn />
+          </div>
+          {/*<SignIn />*/}
         </div>
     );
   }
