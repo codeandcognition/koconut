@@ -188,8 +188,7 @@ class App extends Component {
         });
     } else {
         return(
-        <Signup
-            callback={() => this.setState({display: displayType.welcome})}/>
+        <Signup />
          );
     }
   }
