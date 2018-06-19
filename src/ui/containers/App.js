@@ -3,22 +3,19 @@ import React, {Component} from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
-
 import './App.css';
 import Navbar from './Navbar';
 import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
 import Signup from '../components/Signup';
-
+import SignIn from '../components/SignIn';
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../backend/ResponseEvaluator';
 import {ResponseLog} from '../../data/ResponseLog';
 //import Concepts from '../../backend/Concepts';
-
 import type {Exercise} from '../../data/Exercises';
-
 // Display type enum
 const displayType = {
   signup: 'SIGNUP',
@@ -28,7 +25,6 @@ const displayType = {
   feedback: 'FEEDBACK',
   concept: 'CONCEPT',
 };
-
 /**
  * Renders the koconut application view.
  * @class
@@ -41,7 +37,6 @@ class App extends Component {
   generator: ExerciseGenerator;
   theme: mixed;
   // updater: ResponseEvaluator;
-
   state: {
     exercise: Exercise,
     feedback: string,
@@ -52,10 +47,8 @@ class App extends Component {
     currentConcept: ?string,
     firebaseUser: ?mixed
   };
-
   constructor() {
     super();
-
     this.generator = new ExerciseGenerator();
     this.theme = createMuiTheme();
 
@@ -69,14 +62,12 @@ class App extends Component {
       currentConcept: null,
       firebaseUser: null
     };
-
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
     this.submitConcept = this.submitConcept.bind(this);
     this.submitOk = this.submitOk.bind(this);
     this.submitTryAgain = this.submitTryAgain.bind(this);
   }
-
   /**
    * Return a generated exercise
    * TODO: Remove, this is redundant?
@@ -85,7 +76,6 @@ class App extends Component {
   getExercise(): Exercise {
     return this.generator.generateExercise();
   }
-
   /**
    * Returns a generated exercise by index
    * For DEBUG eyes only eyes 👀😭
@@ -95,7 +85,6 @@ class App extends Component {
   _getExercise(): Exercise {
     return this.generator._generateExercise(this.state.counter);
   }
-
   /**
    * Set up a firebase authentication listener when component mounts
    * Will set the state of firebaseUser to be the current logged in user
@@ -110,15 +99,14 @@ class App extends Component {
             this.setState({firebaseUser: fbUser}) :
             this.setState({firebaseUser: null, display: displayType.signup});
       });
-  }
 
+  }
   /**
    * Un app un-mount, stop watching authentication
    */
   componentWillUnmount() {
-      this.stopWatchingAuth();
+    this.stopWatchingAuth();
   }
-
   getConcepts() {
     let size = this.state.conceptOptions;
     let concept = this.state.currentConcept;
@@ -130,7 +118,6 @@ class App extends Component {
     }
     return ret;
   }
-
   /**
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
@@ -151,7 +138,6 @@ class App extends Component {
       });
     }
   }
-
   /**
    * Submits the given concept
    * @param concept - the concept being submit
@@ -165,7 +151,6 @@ class App extends Component {
       });
     }
   }
-
   /**
    * Invoked when student toggles OK button after receiving feedback
    */
@@ -175,35 +160,31 @@ class App extends Component {
       display: displayType.concept,
     });
   }
-
   submitTryAgain() {
     this.setState({
       display: displayType.exercise,
     });
   }
-
   /**
    * Renders the sign up view
    */
   renderSignup() {
     if(this.state.firebaseUser) {
-        this.setState({
-            display: displayType.welcome
-        });
+      this.setState({
+        display: displayType.welcome
+      });
     } else {
-        return(
-        <Signup />
-         );
+      return(
+          <Signup />
+      );
     }
   }
-
   renderWelcome() {
     return (
         <Welcome
             callBack={() => this.setState({display: displayType.exercise})}/>
     );
   }
-
   /**
    * Renders the exercise view
    */
@@ -221,7 +202,6 @@ class App extends Component {
         />
     );
   }
-
   /**
    * Renders the concept selection view
    */
@@ -233,7 +213,6 @@ class App extends Component {
         />
     );
   }
-
   /**
    * Renders the display based on display state
    */
@@ -252,7 +231,6 @@ class App extends Component {
         break;
     }
   }
-
   render() {
     return (
         <div className="App">
