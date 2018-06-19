@@ -2,8 +2,11 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import firebase from 'firebase';
-
-
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 class SignIn extends React.Component {
 
@@ -13,7 +16,11 @@ class SignIn extends React.Component {
     this.state = {
       errorMessage: "",
       emailAddress: "",
-      password: ""
+      password: "",
+      showPasswordResetView: false,
+      forgotPasswordEmail: "",
+      passwordResetMessage: "",
+      passwordResetError: false
     }
   }
 
@@ -24,28 +31,41 @@ class SignIn extends React.Component {
         });
     }
 
+  togglePasswordResetView(openView) {
+    this.setState({
+      showPasswordResetView: openView,
+      forgotPasswordEmail: "",
+      passwordResetMessage: "",
+      passwordResetError: false
+    });
+  }
+
+  sendPasswordResetEmail() {
+    firebase.auth().sendPasswordResetEmail(this.state.forgotPasswordEmail).then(() => {
+      this.setState({
+        passwordResetMessage: "A password reset email has been sent.",
+        passwordResetError: false
+
+      });
+    }).catch((error) => {
+      this.setState({
+        passwordResetMessage: error.message,
+        passwordResetError: true
+      })
+    });
+  }
+
 
   render() {
 
     var buttonStyle = {
       margin: "2px",
-      marginTop: "12px",
-      marginBottom: "12px"
+      marginBottom: "15px"
     }
 
     var textFieldStyle = {
-      marginBottom: "10px"
-    }
-
-    var errorStyle = {
-      minWidth: "150px",
-      padding: "15px",
-      marginBottom: "20px",
-      border: "1px solid transparent",
-      borderRadius: "3px",
-      backgroundColor: "lighten(#d43f3a, 15%)",
-      borderColor: "lighten(#d43f3a, 10%)",
-      color: "darken(#d43f3a, 15%)"
+      marginBottom: "10px",
+      width: "12vw"
     }
 
     return <div style={{textAlign: "center", padding: "10vw"}} className="container">
@@ -63,12 +83,38 @@ class SignIn extends React.Component {
                  label={"Password"} placeholder={"Enter your password"}
                  type="password" />
       <br />
-      <Button style={buttonStyle} variant={"outlined"} onClick={() => this.signInUser()}>Sign In</Button>
-      <Button style={buttonStyle} variant={"outlined"} onClick={() => this.props.toSignup()}>Create Account</Button>
+      {this.state.errorMessage &&
+        <p style={{textAlign: "left", marginBottom: "0"}} className={"alert alert-danger"}>{this.state.errorMessage}</p>
+      }
       <br />
-      <a href={""}>Forgot Password</a>
-
-        <p style={errorStyle}>test</p>
+      <Button style={buttonStyle} variant={"outlined"} onClick={() => this.signInUser()}>Sign In</Button>
+      <br />
+      <p onClick={() => this.props.toSignup()}
+         style={{fontSize: '14px', color: '#e91363', cursor: 'pointer'}}>Create Account</p>
+      <p onClick={(e) => this.togglePasswordResetView(true)}
+         style={{marginBottom: "15px", fontSize: '14px', color: '#00BCD4', cursor: 'pointer'}}>Forgot Password</p>
+      <Dialog open={this.state.showPasswordResetView}
+              title={"Reset Password"}
+              primary={true}
+              aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Reset Password</DialogTitle>
+        <DialogContent>
+        <label style={{marginTop: '2%'}}>Email Address</label>
+        <br />
+        <TextField hintText="Enter your email address"
+                   style={{ width: '100%', marginBottom: "10px" }}
+                   onInput={e => this.setState({ forgotPasswordEmail: e.target.value })}
+                   type={"email"}/>
+          {this.state.passwordResetError ?
+          <p className={"alert alert-danger"}>{this.state.passwordResetMessage}</p> :
+          <p>{this.state.passwordResetMessage}</p>
+          }
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => this.sendPasswordResetEmail()}>Submit</Button>,
+          <Button onClick={() => this.togglePasswordResetView(false)}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </div>
 
   }

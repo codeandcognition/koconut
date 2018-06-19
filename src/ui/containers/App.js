@@ -9,8 +9,9 @@ import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
 import Signup from '../components/Signup';
-import Signin from '../components/SignIn';
+import SignIn from '../components/SignIn';
 import WorldView from './WorldView';
+
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -61,7 +62,7 @@ class App extends Component {
       feedback: '',
       nextConcepts: [],
       counter: 1,
-      display: displayType.signup, // TODO: Change this to sign in
+      display: displayType.signin, // TODO: Change this to sign in
       conceptOptions: 4, //TODO: Make this not hard coded
       currentConcept: null,
       firebaseUser: null
@@ -72,6 +73,7 @@ class App extends Component {
     this.submitOk = this.submitOk.bind(this);
     this.submitTryAgain = this.submitTryAgain.bind(this);
     this.switchToSignin = this.switchToSignin.bind(this);
+    this.switchToSignup = this.switchToSignup.bind(this);
   }
   /**
    * Return a generated exercise
@@ -102,7 +104,7 @@ class App extends Component {
       this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
           fbUser ?
             this.setState({firebaseUser: fbUser}) :
-            this.setState({firebaseUser: null, display: displayType.signup});
+            this.setState({firebaseUser: null, display: displayType.signin});
       });
 
   }
@@ -195,7 +197,7 @@ class App extends Component {
 			});
 		} else {
 			return(
-					<Signin toSignup={this.switchToSignup}/>
+					<SignIn toSignup={this.switchToSignup}/>
 			);
 		}
 	}
