@@ -4,12 +4,13 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import './App.css';
-import Navbar from './Navbar';
+import Navbar from '../components/Navbar';
 import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
 import Signup from '../components/Signup';
 import Signin from '../components/SignIn';
+import WorldView from './WorldView';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -26,6 +27,7 @@ const displayType = {
 	exercise: 'EXERCISE',
 	feedback: 'FEEDBACK',
 	concept: 'CONCEPT',
+  world: 'WORLD'
 };
 /**
  * Renders the koconut application view.
@@ -221,7 +223,7 @@ class App extends Component {
   renderWelcome() {
     return (
         <Welcome
-            callBack={() => this.setState({display: displayType.exercise})}/>
+            callBack={() => this.setState({display: displayType.world})}/>
     );
   }
   /**
@@ -253,6 +255,15 @@ class App extends Component {
     );
   }
 
+  /**
+   * Renders the world view
+   */
+  renderWorldView() {
+    return(
+        <WorldView />
+    )
+  }
+
 	/**
 	 * Renders the display based on display state
 	 */
@@ -269,6 +280,8 @@ class App extends Component {
 				return this.renderExercise();
 			case displayType.concept:
 				return this.renderConceptSelection();
+      case displayType.world:
+        return this.renderWorldView();
 			default:
 				break;
 		}
