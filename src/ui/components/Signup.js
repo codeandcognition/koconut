@@ -8,25 +8,44 @@ import 'firebase/auth';
 class Signup extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			email: "",
+			password: "",
+			confirmation: ""
+		}; // need this declaration here, render crashes otherwise
 	}
 
 	handleSubmit(evt) {
 		evt.preventDefault();
-		console.log(this.state);
-		firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-		.then(user => {
-			return user.updateProfile({displaName: this.state.displayName});
-		}).catch(err => this.setState({
-			errorMessage: err.message,
-			errCode: err.code
-		}));
+		let mismatch = this.state.password !== this.state.confirmation;
+		this.setState({errorMessage: "", errCode: ""});
+		if (!mismatch) {
+			firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+			.then(user => {
+				console.log("inside success branch");
+				return user.updateProfile({displaName: this.state.displayName});
+			})
+			.catch((error) => {
+				this.setState({
+					errorMessage: error.message,
+					errCode: error.code
+				});
+			});
+		} else {
+			this.setState({mismatch: mismatch});
+		}
 	}
 
 	render() {
 		return(
 				<FormGroup style={{maxWidth: '50vh', margin: 'auto'}}>
-					<h1 style={{margin: 'auto'}}>Koconut</h1>
+					<h1 style={{margin: 'auto', marginTop: '10%'}}>Koconut</h1>
 					<img style={{width: "10vh", margin: 'auto'}} src={"https://i.pinimg.com/originals/bd/87/87/bd8787a601af7682d857f6c365d4421b.png"} alt={"cocount"} />
+					{this.state.errCode ?
+							<p className="alert alert-danger" style={{marginTop: '3%', marginBottom: '0%'}}>{this.state.errorMessage}</p>
+							:
+							null
+					}
 					<TextField
 							id="displayName"
 							type="text"
@@ -39,6 +58,7 @@ class Signup extends Component {
 							label="Email Address"
 							placeholder="Enter your email address"
 							onInput={evt => this.setState({email: evt.target.value})}/>
+					{this.state.mismatch ? <p className="alert alert-warning" style={{marginTop: '3%', marginBottom: '0%'}}>Make sure your passwords match</p> : null}
 					<TextField
 							id="password"
 							type="password"
