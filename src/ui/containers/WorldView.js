@@ -1,6 +1,8 @@
 // @flow
 import React, {Component} from 'react';
 import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
+import {conceptInventory} from '../../data/ConceptMap.js';
+import ConceptCard from './../components/ConceptCard';
 
 /**
  * WorldView is the world view for the app, where the user can see all the
@@ -9,17 +11,18 @@ import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
  */
 class WorldView extends Component {
 
-  /**
-   * Returns sorted concepts list sorted by relevance to the user.
-   * Only includes concepts where concept.teach is true and concept.container
-   * is false
-   * @returns {Array.<*>}
-   */
-  getOrderedConcepts(): ConceptKnowledge[] {
-    return MasteryModel.model.filter((concept) => concept.teach && !concept.container).sort(
-        (a, b) => (b.dependencyKnowledge / b.knowledge -
-            a.dependencyKnowledge / a.knowledge));
-  }
+	/**
+	 * Returns sorted concepts list sorted by relevance to the user.
+	 * Only includes concepts where concept.teach is true and concept.container
+	 * is false
+	 * @returns {Array.<*>}
+	 */
+	getOrderedConcepts(): ConceptKnowledge[] {
+		return MasteryModel.model.filter((concept) => concept.teach && !concept.container).sort(
+				(a, b) => (b.dependencyKnowledge / b.knowledge -
+						a.dependencyKnowledge / a.knowledge));
+	}
+
 
   render() {
     let conceptList = this.getOrderedConcepts();
@@ -29,16 +32,15 @@ class WorldView extends Component {
 					<li>Here you'll learn to code</li>
 					<li>How code runs</li>
 					<h1>Concepts</h1>
-          <ul className="list-group">
-						{
-							conceptList.map((concept, index) => {
-								return <li className="list-group-item" key={index} style={{margin: '.5%'}}>{concept.name}</li>
-							})
-						}
-          </ul>
-        </div>
-    );
-  }
+					{
+						conceptList.map((concept, index) => {
+							let name = conceptInventory[concept.name].explanations.name;
+							return <ConceptCard title={name} key={index}/>
+						})
+					}
+				</div>
+		);
+	}
 }
 
 export default WorldView;
