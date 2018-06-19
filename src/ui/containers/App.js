@@ -1,5 +1,7 @@
 // @flow
 import React, {Component} from 'react';
+import firebase from 'firebase';
+import 'firebase/auth';
 
 import './App.css';
 import ExerciseView from './ExerciseView';
@@ -7,7 +9,7 @@ import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
 import SignIn from '../components/SignIn';
 import Signup from '../components/Signup';
-import firebase from 'firebase';
+
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -60,7 +62,8 @@ export default class App extends Component {
       counter: 1,
       display: displayType.welcome,
       conceptOptions: 4, //TODO: Make this not hard coded
-      currentConcept: null
+      currentConcept: null,
+      firebaseUser: null
     };
 
     // this.updater = new ResponseEvaluator();
