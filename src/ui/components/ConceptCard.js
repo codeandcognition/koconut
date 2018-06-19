@@ -7,14 +7,23 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ExpandMoreIcon from '@material-ui/icons/ChevronRight';
 
+type Props = {
+	title: String,
+	key: number
+}
+
 class ConceptCard extends Component {
-	constructor(props) {
+
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			expand: false
 		}
 	}
 
+	/**
+	 * Toggles the state of a concept card between open and closed
+	 */
 	handleExpandClick() {
 		this.setState({expand: !this.state.expand});
 	}
