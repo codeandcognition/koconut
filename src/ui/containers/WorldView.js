@@ -23,10 +23,20 @@ class WorldView extends Component {
 
 
   render() {
-    console.log(this.getOrderedConcepts());
+    let conceptList = this.getOrderedConcepts();
     return (
-        <div>
-
+        <div className="container" style={{marginTop: '5%'}}>
+					<h1>Intro</h1>
+					<li>Here you'll learn to code</li>
+					<li>How code runs</li>
+					<h1>Concepts</h1>
+          <ul className="list-group">
+						{
+							conceptList.map((concept, index) => {
+								return <li className="list-group-item" key={index} style={{margin: '.5%'}}>{concept.name}</li>
+							})
+						}
+          </ul>
         </div>
     );
   }
