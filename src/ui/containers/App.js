@@ -235,7 +235,7 @@ class App extends Component {
   render() {
     return (
         <div className="App">
-          <MuiThemeProvider theme={this.theme}>
+          {/*<MuiThemeProvider theme={this.theme}>
             <Navbar firebaseUser={this.state.firebaseUser} />
             <div className="main">
               <h1 className="title">
@@ -255,7 +255,8 @@ class App extends Component {
               </h1>
               {this.renderDisplay()}
             </div>
-          </MuiThemeProvider>
+          </MuiThemeProvider>*/}
+          <SignIn />
         </div>
     );
   }
