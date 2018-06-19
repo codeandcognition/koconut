@@ -97,7 +97,6 @@ class App extends Component {
    */
   componentDidMount() {
       this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
-        console.log("changed");
           fbUser ?
             this.setState({firebaseUser: fbUser}) :
             this.setState({firebaseUser: null, display: displayType.signup});
