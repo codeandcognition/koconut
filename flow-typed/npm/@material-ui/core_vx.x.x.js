@@ -1974,6 +1974,10 @@ declare module '@material-ui/core/Stepper/Stepper' {
   declare module.exports: any;
 }
 
+declare module '@material-ui/core/styles' {
+  declare module.exports: any;
+}
+
 declare module '@material-ui/core/styles/colorManipulator' {
   declare module.exports: any;
 }
