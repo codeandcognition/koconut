@@ -35,13 +35,13 @@ class Welcome extends Component {
         <h2>{strings.welcome}</h2>
         <p>{strings.intro}</p>
         <h4>{strings.use_cases.title}</h4>
-        <ul>{strings.use_cases.cases.map((c, i) => <li id={i}>{c}</li>)}</ul>
+        <ul>{strings.use_cases.cases.map((c, i) => <li key={i}>{c}</li>)}</ul>
         <h4>{strings.user_modes.title}</h4>
-        <ol>{strings.user_modes.modes.map((m, i) => <li id={i}>{m}</li>)}</ol>
+        <ol>{strings.user_modes.modes.map((m, i) => <li key={i}>{m}</li>)}</ol>
         <h4>{strings.language.desc}</h4>
         <p>{strings.language.rationale}</p>
         <h4>{strings.language.example_desc}</h4>
-        {strings.language.example_code.map((c, i) => <div id={i}><code>{c}</code></div>)}
+        {strings.language.example_code.map((c, i) => <div key={i}><code>{c}</code></div>)}
         <h4><i>{strings.nsf}</i></h4>
         <p>{strings.agreement}</p>
         <button onClick={this.props.callBack}>{strings.iagree}</button>
