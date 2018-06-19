@@ -56,6 +56,7 @@ class Signup extends Component {
     variant="flat"
     color="primary"
     onClick={evt => this.handleSubmit(evt)}>Create account</Button>
+        <p>Sign in instead</p>
     </FormGroup>
   );
   }
