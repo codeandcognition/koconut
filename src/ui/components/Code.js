@@ -123,7 +123,7 @@ class Code extends Component {
     this.setState({highlighted: selected});
     // this check mitigates a bug caused by spam switching exercises
     if (this.props.updateHandler !== undefined) {
-      this.props.updateHandler(this.state.highlighted);
+      this.props.updateHandler(selected); // William summer 2018
     }
   }
 
@@ -160,7 +160,7 @@ class Code extends Component {
       this.setState({code: value});
       if (this.props.updateHandler !== undefined) { // wow such type safety
         // submit code or highlighted code
-        this.props.updateHandler(this.state.code);
+        this.props.updateHandler(value); // William Summer 2018 // shift-ctrl-f note in case fix doesn't work
       }
     } else {
       this.setState({code: this.state.code});
