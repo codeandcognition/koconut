@@ -23,6 +23,7 @@ class SignIn extends React.Component {
     }
   }
 
+  // Signs user into their account via Firebase authentication
   signInUser() {
     firebase.auth().signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
         .catch((error) => {
@@ -30,6 +31,7 @@ class SignIn extends React.Component {
         });
     }
 
+  // Closes and opens window allowing user to reset their password
   togglePasswordResetView(openView) {
     this.setState({
       showPasswordResetView: openView,
@@ -39,6 +41,7 @@ class SignIn extends React.Component {
     });
   }
 
+  // Sends a password reset email to the provided email address if it is valid
   sendPasswordResetEmail() {
     firebase.auth().sendPasswordResetEmail(this.state.forgotPasswordEmail).then(() => {
       this.setState({

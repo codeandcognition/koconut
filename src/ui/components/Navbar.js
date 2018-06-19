@@ -7,31 +7,35 @@ import Button from '@material-ui/core/Button/Button';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import typeof FirebaseUser from 'firebase';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu/Menu';
+import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 
 /**
  * Navbar adds a navigation bar to the app
  * @class
  */
-class Navbar extends Component {
-  props: {
-    firebaseUser: ?FirebaseUser
-  };
 
-  constructor(props) {
+type Props = {
+  firebaseUser: ?FirebaseUser
+}
+
+class Navbar extends Component {
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       menuAnchor: null
     }
   }
 
-  handleMenuClick(e) {
+  // Opens the hamburger menu when it is clicked
+  handleMenuClick(e: Event) {
     this.setState({
       menuAnchor: e.currentTarget
     });
   }
 
+  // Closes hamburger menu
   handleMenuClose() {
     this.setState({
       menuAnchor: null
@@ -39,7 +43,8 @@ class Navbar extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener("click", (e) => {
+    // Closes hamburger menu when user clicks away
+    document.addEventListener("click", (e: Event) => {
       if (e.target.id !== 'menu-img') {
         this.handleMenuClose();
       }
