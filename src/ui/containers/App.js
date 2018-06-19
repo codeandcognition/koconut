@@ -281,7 +281,7 @@ class App extends Component {
             <Navbar firebaseUser={this.state.firebaseUser} />
             <div className="main">
               <h1 className="title">
-                {this.state.display !== displayType.welcome ?
+                {(this.state.display !== displayType.signin) && (this.state.display !== displayType.signup) ?
                     <span className="debug">
                   <input
                       type="button"
