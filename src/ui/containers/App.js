@@ -39,6 +39,8 @@ class App extends Component {
   submitConcept: Function;
   submitOk: Function;
   submitTryAgain: Function;
+  switchToSignin: Function;
+  switchToSignup: Function;
   generator: ExerciseGenerator;
   theme: mixed;
   // updater: ResponseEvaluator;
