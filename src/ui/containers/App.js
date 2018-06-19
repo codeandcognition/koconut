@@ -9,7 +9,7 @@ import ExerciseView from './ExerciseView';
 import ConceptSelection from '../components/ConceptSelection';
 import Welcome from '../components/Welcome';
 import Signup from '../components/Signup';
-import Signin from '../components/SignIn';
+import SignIn from '../components/SignIn';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -193,7 +193,7 @@ class App extends Component {
 			});
 		} else {
 			return(
-					<Signin toSignup={this.switchToSignup}/>
+					<SignIn toSignup={this.switchToSignup}/>
 			);
 		}
 	}
@@ -277,7 +277,7 @@ class App extends Component {
   render() {
     return (
         <div className="App">
-          <MuiThemeProvider theme={this.theme}>
+          {/*<MuiThemeProvider theme={this.theme}>
             <Navbar firebaseUser={this.state.firebaseUser} />
             <div className="main">
               <h1 className="title">
@@ -297,7 +297,8 @@ class App extends Component {
               </h1>
               {this.renderDisplay()}
             </div>
-          </MuiThemeProvider>
+          </MuiThemeProvider>*/}
+          <SignIn />
 				</div>
 		);
 	}
