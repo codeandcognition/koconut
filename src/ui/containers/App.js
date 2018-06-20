@@ -64,7 +64,7 @@ class App extends Component {
       feedback: '',
       nextConcepts: [],
       counter: 1,
-      display: displayType.signin, // TODO: Change this to sign in
+      display: displayType.signin,
       conceptOptions: 4, //TODO: Make this not hard coded
       currentConcept: null,
       firebaseUser: null
