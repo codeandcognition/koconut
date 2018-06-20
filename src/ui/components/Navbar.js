@@ -44,28 +44,19 @@ class Navbar extends Component {
     });
   }
 
-  componentDidMount() {
-    // Closes hamburger menu when user clicks away
-    document.addEventListener("click", (e: Event) => {
-      if (e.target.id !== 'menu-img') {
-        this.handleMenuClose();
-      }
-    })
-  }
-
   render() {
     return (
         <div>
           <AppBar>
             <Toolbar>
               {this.props.display === "EXERCISE" ?
-              <div style={{marginRight: 5}}><Button onClick={this.props.switchToWorldView}
+              <div style={{marginRight: 5}}><button onClick={this.props.switchToWorldView}
                            aria-owns='menu'
                            aria-haspopup="true"
                            id="menu-button"
                            color={"secondary"}>
                 Back to World View
-              </Button></div> : <div></div>
+              </button></div> : <div></div>
               }
               <Typography style={{flexGrow: 1}} variant={"title"} color={"secondary"}>
                   Koconut
@@ -77,10 +68,9 @@ class Navbar extends Component {
                           aria-owns='menu'
                           aria-haspopup="true"
                           id="menu-button">
-                    <img alt={"hamburger menu"}
-                    style={{width: "2vw", filter: "invert(100%)"}}
-                    id={"menu-img"}
-                    src={"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/220px-Hamburger_icon.svg.png"}/>
+                      <img alt={"hamburger menu"}
+                      style={{width: "2vw", filter: "invert(100%)", pointerEvents: "none"}}
+                      src={"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/220px-Hamburger_icon.svg.png"}/>
                   </Button>
                   <Menu id={'menu'}
                         anchorEl={this.state.menuAnchor}

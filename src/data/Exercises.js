@@ -448,8 +448,7 @@ export let variable51520 = [
       'concepts': ['returnStatement'],
     },
     'answer': 'return',
-  },
-  {
+  },{
     'exercise': {
       'prompt': 'Highlight the symbol that assigns the value 7 to the variable.',
       'code': 'int number = 7;',
@@ -459,7 +458,8 @@ export let variable51520 = [
       'type': 'highlightCode',
     },
     'answer': '=',
-  },
+  }
+  ,
   {
     'exercise': {
       'prompt': 'Write the code that instantiates an integer array of size 1024. Then, print out its size to the console.',
