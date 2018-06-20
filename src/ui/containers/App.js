@@ -28,7 +28,8 @@ const displayType = {
 	exercise: 'EXERCISE',
 	feedback: 'FEEDBACK',
 	concept: 'CONCEPT',
-  world: 'WORLD'
+  world: 'WORLD',
+  load: 'LOAD'
 };
 /**
  * Renders the koconut application view.
