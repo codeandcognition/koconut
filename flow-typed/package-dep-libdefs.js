@@ -4,6 +4,10 @@ declare module '@material-ui/core' {
   declare module.exports: any;
 }
 
+declare module '@material-ui/icons' {
+  declare module.exports: any;
+}
+
 declare module 'react' {
   declare module.exports: any;
 }
