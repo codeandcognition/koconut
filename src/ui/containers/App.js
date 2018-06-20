@@ -310,6 +310,7 @@ class App extends Component {
                       {/*type="button"*/}
                       {/*onClick={() => this.setState(*/}
                           {/*{*/}
+                            {/*display: displayType.exercise,*/}
                             {/*exercise: this._getExercise(),*/}
                             {/*feedback: '',*/}
                             {/*counter: this.state.counter + 1,*/}
