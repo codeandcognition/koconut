@@ -12,7 +12,7 @@ import Signup from '../components/Signup';
 import SignIn from '../components/SignIn';
 import WorldView from './WorldView';
 import PopOverMessage from './PopoverMessage';
-import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button/Button';
 
 
 // Fake AJAX
@@ -73,7 +73,8 @@ class App extends Component {
       display: displayType.signin,
       conceptOptions: 4, //TODO: Make this not hard coded
       currentConcept: null,
-      firebaseUser: null
+      firebaseUser: null,
+			error: false
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);

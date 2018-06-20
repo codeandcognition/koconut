@@ -1,4 +1,4 @@
-// flow-typed signature: d23e9bf47289033225082d9fb4f3761b
+// flow-typed signature: 5364cd375e6b523d83b144e0cc2293a0
 // flow-typed version: <<STUB>>/npm_v^6.1.0/flow_v0.49.1
 
 /**
@@ -39,10 +39,6 @@ declare module 'npm/lib/access' {
 }
 
 declare module 'npm/lib/adduser' {
-  declare module.exports: any;
-}
-
-declare module 'npm/lib/audit' {
   declare module.exports: any;
 }
 
@@ -226,15 +222,7 @@ declare module 'npm/lib/help' {
   declare module.exports: any;
 }
 
-declare module 'npm/lib/hook' {
-  declare module.exports: any;
-}
-
 declare module 'npm/lib/init' {
-  declare module.exports: any;
-}
-
-declare module 'npm/lib/install-ci-test' {
   declare module.exports: any;
 }
 
@@ -323,10 +311,6 @@ declare module 'npm/lib/install/and-finish-tracker' {
 }
 
 declare module 'npm/lib/install/and-ignore-errors' {
-  declare module.exports: any;
-}
-
-declare module 'npm/lib/install/audit' {
   declare module.exports: any;
 }
 
@@ -718,10 +702,6 @@ declare module 'npm/lib/utils/no-progress-while-running' {
   declare module.exports: any;
 }
 
-declare module 'npm/lib/utils/open-url' {
-  declare module.exports: any;
-}
-
 declare module 'npm/lib/utils/output' {
   declare module.exports: any;
 }
@@ -822,6 +802,1278 @@ declare module 'npm/scripts/publish-tag' {
   declare module.exports: any;
 }
 
+declare module 'npm/test/broken-under-nyc-and-travis/lifecycle-path' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/broken-under-nyc-and-travis/whoami' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/common-tap' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/fixtures/onload' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/belongs-in-pacote/git-races' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/ignore-shrinkwrap' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/legacy-array-bin' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/legacy-dir-bin' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/legacy-npm-self-install' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/legacy-optional-deps' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/legacy-shrinkwrap' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/lifecycle-signal' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/move-no-clobber-dest-node-modules' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/need-only-update-save-optional/update-save' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/need-outdated/update-symlink' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/outdated-depth-deep' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/outdated-depth-integer' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/outdated-include-devdependencies' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/outdated-local' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/outdated-new-versions' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/outdated-notarget' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/outdated-private' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/outdated-symlink' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/peer-deps-invalid' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/peer-deps-toplevel' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/peer-deps-without-package-json' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/rm-linked' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/shrinkwrap-complete-except-dev' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/network/git-cache-locking' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/network/git-cache-no-hooks' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/network/legacy-bundled-git' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/network/legacy-url-dep' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/network/registry' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/00-check-mock-dep' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/00-config-setup' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/00-verify-bundle-deps' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/00-verify-ls-ok' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/00-verify-no-scoped' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/404-parent' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/404-private-registry-scoped' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/404-private-registry' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/access' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/add-named-update-protocol-port' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/add-remote-git-file' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/add-remote-git-shrinkwrap' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/add-remote-git-submodule' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/add-remote-git' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/adduser-always-auth' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/adduser-legacy-auth' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/adduser-oauth' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/adduser-saml' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/all-package-metadata-cache-stream-unit' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/all-package-metadata-entry-stream-unit' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/all-package-metadata-update-stream-unit' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/all-package-metadata-write-stream-unit' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/all-package-metadata' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/anon-cli-metrics' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/auto-prune' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bearer-token-check' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bin' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bitbucket-https-url-with-creds-package' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bitbucket-https-url-with-creds' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bitbucket-shortcut-package' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bitbucket-shortcut' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bugs' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/build-already-built' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/builtin-config' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bundled-dependencies-nonarray' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bundled-dependencies' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bundled-no-add-to-move' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/bundled-transitive-deps' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/cache-add-unpublished' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/cache-shasum-fork' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/check-cpu-reqs' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/check-engine-reqs' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/check-install-self' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/check-os-reqs' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/check-permissions' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ci-header' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ci' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/circular-dep' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-basic' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-builtin' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-certfile' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-credentials' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-edit' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-envReplace' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-list' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-malformed' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-meta' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-new-cafile' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-private' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-project' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/config-save' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/correct-mkdir' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/cruft-test' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/debug-logs' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/dedupe-scoped' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/dedupe' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/deprecate' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/dist-tag' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/do-not-remove-other-bins' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/doctor' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/extraneous-dep-cycle-ls-ok' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/false-name' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/fetch-package-metadata' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/files-and-ignores' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/full-warning-messages' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/gently-rm-cmdshims' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/gently-rm-linked-module' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/gently-rm-overeager' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/gently-rm-symlinked-global-dir' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/get' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/gist-short-shortcut-package' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/gist-short-shortcut' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/gist-shortcut-package' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/gist-shortcut' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/git-dependency-install-link' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/git-npmignore' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/git-prepare' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/github-shortcut-package' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/github-shortcut' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/gitlab-shortcut-package' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/gitlab-shortcut' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/global-prefix-set-in-userconfig' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/graceful-restart' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/help' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ignore-install-link' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ignore-scripts' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/init-interrupt' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-actions' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-at-locally' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-bad-dep-format' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-bad-man' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-bin-null' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-cli-only-development' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-cli-only-production' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-cli-only-shrinkwrap' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-cli-production-nosave' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-cli-production' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-cli-unicode' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-contributors-count' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-duplicate-deps-warning' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-from-local' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-into-likenamed-folder' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-link-scripts' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-local-dep-cycle' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-man' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-noargs-dev' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-order' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-package-json-order' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-package-lock-only' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-parse-error' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-property-conflicts' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-report-just-installed' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-save-consistent-newlines' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-save-exact' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-save-local' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-save-prefix' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-scoped-already-installed' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-scoped-link' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-scoped-with-bundled-dependency' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-scoped-with-peer-dependency' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-shrinkwrapped-git' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-windows-newlines' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/install-with-dev-dep-duplicate' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/invalid-cmd-exit-code' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/invalid-dep-version-filtering' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/is-fs-access-available' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/is-registry' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/it' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/legacy-ignore-nested-nm' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/legacy-missing-bindir' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/legacy-no-auth-leak' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/legacy-platform-all' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/legacy-platform' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/legacy-private' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/legacy-test-package' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/lifecycle-INIT_CWD' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/lifecycle-order' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/link' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/local-args-relative-to-cwd' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/locker' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/lockfile-http-deps' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/logout-scoped' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/logout' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ls-depth-cli' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ls-depth-unmet' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ls-env' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ls-l-depth-0' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ls-no-results' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ls-production-and-dev' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ls-top-errors' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ls' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/map-to-registry' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/nerf-dart' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/nested-extraneous' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/no-global-warns' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/no-scan-full-global-dir' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/noargs-install-config-save' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/node-modules-path-munge' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/normalize-package-explode' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/npm-api-not-loaded-error' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/onload' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/optional-metadep-rollback-collision' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/outdated-bad-read-tree' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/outdated-color' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/outdated-depth' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/outdated-git' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/outdated-json' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/outdated-long' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/outdated' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/override-bundled' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/owner' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/pack-scoped' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/peer-deps' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/pick-manifest-from-registry-metadata' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/ping' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/prepare' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/prepublish-only' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/prepublish' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/process-logger' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/progress-config' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/prune-dev-dep-cycle' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/prune-dev-dep-with-bins' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/prune-with-dev-dep-duplicate' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/prune-with-only-dev-deps' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/prune' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/publish-access-scoped' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/publish-access-unscoped-restricted-fails' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/publish-access-unscoped' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/publish-config' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/publish-invalid-semver-tag' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/publish-scoped' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/pwd-prefix' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/referer' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/repo' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/retry-on-stale-cache' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/run-script-filter-private' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/run-script' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/scope-header' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/scripts-whitespace-windows' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/search.all-package-search' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/search.esearch' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/search' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/semver-doc' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shared-linked' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-_auth' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-default-dev' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-dev-dependency' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-empty-deps' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-extra-metadata' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-global-auth' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-lifecycle-cwd' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-lifecycle' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-local-dependency' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-nested' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-optional-dependency' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-optional-platform' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-optional-property' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-prod-dependency-also' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-prod-dependency' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-resolve-conflict' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-save-dev-with-existing-deps' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-save-with-existing-dev-deps' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-scoped-auth' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-shared-dev-dependency' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/shrinkwrap-version-match' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/sorted-package-json' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/spawn-enoent-help' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/spawn-enoent' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/spec-local-specifiers' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/splat-with-only-prerelease-to-latest' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/startstop' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/symlink-cycle' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/tag-version-prefix' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/tagged-version-matching' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/team' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/test-run-ls' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/tree-style' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/umask-lifecycle' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/uninstall-in-reverse' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/uninstall-link-clean' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/uninstall-package' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/uninstall-save' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/unit-child-path' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/unit-deps-earliestInstallable' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/unit-deps-removeObsoleteDep' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/unit-deps-replaceModule' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/unit-module-name' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/unit-package-id' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/unit-token-validate-cidr' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/unpack-foreign-tarball' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/unpublish-config' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/unsupported' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/update-examples' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/update-path' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/upgrade-lifecycles' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/url-dependencies' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/verify-no-lifecycle-on-repo' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-allow-same-version' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-commit-hooks-default' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-commit-hooks' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-consistent-newlines' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-from-git' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-git-not-clean' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-lifecycle' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-message-config' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-no-git' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-no-package' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-no-tags' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-sub-directory-shrinkwrap' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-sub-directory' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/version-update-shrinkwrap' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/view' {
+  declare module.exports: any;
+}
+
+declare module 'npm/test/tap/zz-cleanup' {
+  declare module.exports: any;
+}
+
 // Filename aliases
 declare module 'npm/bin/npm-cli.js' {
   declare module.exports: $Exports<'npm/bin/npm-cli'>;
@@ -837,9 +2089,6 @@ declare module 'npm/lib/access.js' {
 }
 declare module 'npm/lib/adduser.js' {
   declare module.exports: $Exports<'npm/lib/adduser'>;
-}
-declare module 'npm/lib/audit.js' {
-  declare module.exports: $Exports<'npm/lib/audit'>;
 }
 declare module 'npm/lib/auth/legacy.js' {
   declare module.exports: $Exports<'npm/lib/auth/legacy'>;
@@ -976,14 +2225,8 @@ declare module 'npm/lib/help-search.js' {
 declare module 'npm/lib/help.js' {
   declare module.exports: $Exports<'npm/lib/help'>;
 }
-declare module 'npm/lib/hook.js' {
-  declare module.exports: $Exports<'npm/lib/hook'>;
-}
 declare module 'npm/lib/init.js' {
   declare module.exports: $Exports<'npm/lib/init'>;
-}
-declare module 'npm/lib/install-ci-test.js' {
-  declare module.exports: $Exports<'npm/lib/install-ci-test'>;
 }
 declare module 'npm/lib/install-test.js' {
   declare module.exports: $Exports<'npm/lib/install-test'>;
@@ -1050,9 +2293,6 @@ declare module 'npm/lib/install/and-finish-tracker.js' {
 }
 declare module 'npm/lib/install/and-ignore-errors.js' {
   declare module.exports: $Exports<'npm/lib/install/and-ignore-errors'>;
-}
-declare module 'npm/lib/install/audit.js' {
-  declare module.exports: $Exports<'npm/lib/install/audit'>;
 }
 declare module 'npm/lib/install/check-permissions.js' {
   declare module.exports: $Exports<'npm/lib/install/check-permissions'>;
@@ -1345,9 +2585,6 @@ declare module 'npm/lib/utils/move.js' {
 declare module 'npm/lib/utils/no-progress-while-running.js' {
   declare module.exports: $Exports<'npm/lib/utils/no-progress-while-running'>;
 }
-declare module 'npm/lib/utils/open-url.js' {
-  declare module.exports: $Exports<'npm/lib/utils/open-url'>;
-}
 declare module 'npm/lib/utils/output.js' {
   declare module.exports: $Exports<'npm/lib/utils/output'>;
 }
@@ -1422,4 +2659,958 @@ declare module 'npm/scripts/index-build.js' {
 }
 declare module 'npm/scripts/publish-tag.js' {
   declare module.exports: $Exports<'npm/scripts/publish-tag'>;
+}
+declare module 'npm/test/broken-under-nyc-and-travis/lifecycle-path.js' {
+  declare module.exports: $Exports<'npm/test/broken-under-nyc-and-travis/lifecycle-path'>;
+}
+declare module 'npm/test/broken-under-nyc-and-travis/whoami.js' {
+  declare module.exports: $Exports<'npm/test/broken-under-nyc-and-travis/whoami'>;
+}
+declare module 'npm/test/common-tap.js' {
+  declare module.exports: $Exports<'npm/test/common-tap'>;
+}
+declare module 'npm/test/fixtures/onload.js' {
+  declare module.exports: $Exports<'npm/test/fixtures/onload'>;
+}
+declare module 'npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved'>;
+}
+declare module 'npm/test/need-npm5-update/belongs-in-pacote/git-races.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/belongs-in-pacote/git-races'>;
+}
+declare module 'npm/test/need-npm5-update/ignore-shrinkwrap.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/ignore-shrinkwrap'>;
+}
+declare module 'npm/test/need-npm5-update/legacy-array-bin.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/legacy-array-bin'>;
+}
+declare module 'npm/test/need-npm5-update/legacy-dir-bin.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/legacy-dir-bin'>;
+}
+declare module 'npm/test/need-npm5-update/legacy-npm-self-install.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/legacy-npm-self-install'>;
+}
+declare module 'npm/test/need-npm5-update/legacy-optional-deps.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/legacy-optional-deps'>;
+}
+declare module 'npm/test/need-npm5-update/legacy-shrinkwrap.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/legacy-shrinkwrap'>;
+}
+declare module 'npm/test/need-npm5-update/lifecycle-signal.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/lifecycle-signal'>;
+}
+declare module 'npm/test/need-npm5-update/move-no-clobber-dest-node-modules.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/move-no-clobber-dest-node-modules'>;
+}
+declare module 'npm/test/need-npm5-update/need-only-update-save-optional/update-save.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/need-only-update-save-optional/update-save'>;
+}
+declare module 'npm/test/need-npm5-update/need-outdated/update-symlink.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/need-outdated/update-symlink'>;
+}
+declare module 'npm/test/need-npm5-update/outdated-depth-deep.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/outdated-depth-deep'>;
+}
+declare module 'npm/test/need-npm5-update/outdated-depth-integer.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/outdated-depth-integer'>;
+}
+declare module 'npm/test/need-npm5-update/outdated-include-devdependencies.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/outdated-include-devdependencies'>;
+}
+declare module 'npm/test/need-npm5-update/outdated-local.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/outdated-local'>;
+}
+declare module 'npm/test/need-npm5-update/outdated-new-versions.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/outdated-new-versions'>;
+}
+declare module 'npm/test/need-npm5-update/outdated-notarget.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/outdated-notarget'>;
+}
+declare module 'npm/test/need-npm5-update/outdated-private.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/outdated-private'>;
+}
+declare module 'npm/test/need-npm5-update/outdated-symlink.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/outdated-symlink'>;
+}
+declare module 'npm/test/need-npm5-update/peer-deps-invalid.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/peer-deps-invalid'>;
+}
+declare module 'npm/test/need-npm5-update/peer-deps-toplevel.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/peer-deps-toplevel'>;
+}
+declare module 'npm/test/need-npm5-update/peer-deps-without-package-json.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/peer-deps-without-package-json'>;
+}
+declare module 'npm/test/need-npm5-update/rm-linked.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/rm-linked'>;
+}
+declare module 'npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/shrinkwrap-complete-except-dev'>;
+}
+declare module 'npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle.js' {
+  declare module.exports: $Exports<'npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle'>;
+}
+declare module 'npm/test/network/git-cache-locking.js' {
+  declare module.exports: $Exports<'npm/test/network/git-cache-locking'>;
+}
+declare module 'npm/test/network/git-cache-no-hooks.js' {
+  declare module.exports: $Exports<'npm/test/network/git-cache-no-hooks'>;
+}
+declare module 'npm/test/network/legacy-bundled-git.js' {
+  declare module.exports: $Exports<'npm/test/network/legacy-bundled-git'>;
+}
+declare module 'npm/test/network/legacy-url-dep.js' {
+  declare module.exports: $Exports<'npm/test/network/legacy-url-dep'>;
+}
+declare module 'npm/test/network/registry.js' {
+  declare module.exports: $Exports<'npm/test/network/registry'>;
+}
+declare module 'npm/test/tap/00-check-mock-dep.js' {
+  declare module.exports: $Exports<'npm/test/tap/00-check-mock-dep'>;
+}
+declare module 'npm/test/tap/00-config-setup.js' {
+  declare module.exports: $Exports<'npm/test/tap/00-config-setup'>;
+}
+declare module 'npm/test/tap/00-verify-bundle-deps.js' {
+  declare module.exports: $Exports<'npm/test/tap/00-verify-bundle-deps'>;
+}
+declare module 'npm/test/tap/00-verify-ls-ok.js' {
+  declare module.exports: $Exports<'npm/test/tap/00-verify-ls-ok'>;
+}
+declare module 'npm/test/tap/00-verify-no-scoped.js' {
+  declare module.exports: $Exports<'npm/test/tap/00-verify-no-scoped'>;
+}
+declare module 'npm/test/tap/404-parent.js' {
+  declare module.exports: $Exports<'npm/test/tap/404-parent'>;
+}
+declare module 'npm/test/tap/404-private-registry-scoped.js' {
+  declare module.exports: $Exports<'npm/test/tap/404-private-registry-scoped'>;
+}
+declare module 'npm/test/tap/404-private-registry.js' {
+  declare module.exports: $Exports<'npm/test/tap/404-private-registry'>;
+}
+declare module 'npm/test/tap/access.js' {
+  declare module.exports: $Exports<'npm/test/tap/access'>;
+}
+declare module 'npm/test/tap/add-named-update-protocol-port.js' {
+  declare module.exports: $Exports<'npm/test/tap/add-named-update-protocol-port'>;
+}
+declare module 'npm/test/tap/add-remote-git-file.js' {
+  declare module.exports: $Exports<'npm/test/tap/add-remote-git-file'>;
+}
+declare module 'npm/test/tap/add-remote-git-shrinkwrap.js' {
+  declare module.exports: $Exports<'npm/test/tap/add-remote-git-shrinkwrap'>;
+}
+declare module 'npm/test/tap/add-remote-git-submodule.js' {
+  declare module.exports: $Exports<'npm/test/tap/add-remote-git-submodule'>;
+}
+declare module 'npm/test/tap/add-remote-git.js' {
+  declare module.exports: $Exports<'npm/test/tap/add-remote-git'>;
+}
+declare module 'npm/test/tap/adduser-always-auth.js' {
+  declare module.exports: $Exports<'npm/test/tap/adduser-always-auth'>;
+}
+declare module 'npm/test/tap/adduser-legacy-auth.js' {
+  declare module.exports: $Exports<'npm/test/tap/adduser-legacy-auth'>;
+}
+declare module 'npm/test/tap/adduser-oauth.js' {
+  declare module.exports: $Exports<'npm/test/tap/adduser-oauth'>;
+}
+declare module 'npm/test/tap/adduser-saml.js' {
+  declare module.exports: $Exports<'npm/test/tap/adduser-saml'>;
+}
+declare module 'npm/test/tap/all-package-metadata-cache-stream-unit.js' {
+  declare module.exports: $Exports<'npm/test/tap/all-package-metadata-cache-stream-unit'>;
+}
+declare module 'npm/test/tap/all-package-metadata-entry-stream-unit.js' {
+  declare module.exports: $Exports<'npm/test/tap/all-package-metadata-entry-stream-unit'>;
+}
+declare module 'npm/test/tap/all-package-metadata-update-stream-unit.js' {
+  declare module.exports: $Exports<'npm/test/tap/all-package-metadata-update-stream-unit'>;
+}
+declare module 'npm/test/tap/all-package-metadata-write-stream-unit.js' {
+  declare module.exports: $Exports<'npm/test/tap/all-package-metadata-write-stream-unit'>;
+}
+declare module 'npm/test/tap/all-package-metadata.js' {
+  declare module.exports: $Exports<'npm/test/tap/all-package-metadata'>;
+}
+declare module 'npm/test/tap/anon-cli-metrics.js' {
+  declare module.exports: $Exports<'npm/test/tap/anon-cli-metrics'>;
+}
+declare module 'npm/test/tap/auto-prune.js' {
+  declare module.exports: $Exports<'npm/test/tap/auto-prune'>;
+}
+declare module 'npm/test/tap/bearer-token-check.js' {
+  declare module.exports: $Exports<'npm/test/tap/bearer-token-check'>;
+}
+declare module 'npm/test/tap/bin.js' {
+  declare module.exports: $Exports<'npm/test/tap/bin'>;
+}
+declare module 'npm/test/tap/bitbucket-https-url-with-creds-package.js' {
+  declare module.exports: $Exports<'npm/test/tap/bitbucket-https-url-with-creds-package'>;
+}
+declare module 'npm/test/tap/bitbucket-https-url-with-creds.js' {
+  declare module.exports: $Exports<'npm/test/tap/bitbucket-https-url-with-creds'>;
+}
+declare module 'npm/test/tap/bitbucket-shortcut-package.js' {
+  declare module.exports: $Exports<'npm/test/tap/bitbucket-shortcut-package'>;
+}
+declare module 'npm/test/tap/bitbucket-shortcut.js' {
+  declare module.exports: $Exports<'npm/test/tap/bitbucket-shortcut'>;
+}
+declare module 'npm/test/tap/bugs.js' {
+  declare module.exports: $Exports<'npm/test/tap/bugs'>;
+}
+declare module 'npm/test/tap/build-already-built.js' {
+  declare module.exports: $Exports<'npm/test/tap/build-already-built'>;
+}
+declare module 'npm/test/tap/builtin-config.js' {
+  declare module.exports: $Exports<'npm/test/tap/builtin-config'>;
+}
+declare module 'npm/test/tap/bundled-dependencies-nonarray.js' {
+  declare module.exports: $Exports<'npm/test/tap/bundled-dependencies-nonarray'>;
+}
+declare module 'npm/test/tap/bundled-dependencies.js' {
+  declare module.exports: $Exports<'npm/test/tap/bundled-dependencies'>;
+}
+declare module 'npm/test/tap/bundled-no-add-to-move.js' {
+  declare module.exports: $Exports<'npm/test/tap/bundled-no-add-to-move'>;
+}
+declare module 'npm/test/tap/bundled-transitive-deps.js' {
+  declare module.exports: $Exports<'npm/test/tap/bundled-transitive-deps'>;
+}
+declare module 'npm/test/tap/cache-add-unpublished.js' {
+  declare module.exports: $Exports<'npm/test/tap/cache-add-unpublished'>;
+}
+declare module 'npm/test/tap/cache-shasum-fork.js' {
+  declare module.exports: $Exports<'npm/test/tap/cache-shasum-fork'>;
+}
+declare module 'npm/test/tap/check-cpu-reqs.js' {
+  declare module.exports: $Exports<'npm/test/tap/check-cpu-reqs'>;
+}
+declare module 'npm/test/tap/check-engine-reqs.js' {
+  declare module.exports: $Exports<'npm/test/tap/check-engine-reqs'>;
+}
+declare module 'npm/test/tap/check-install-self.js' {
+  declare module.exports: $Exports<'npm/test/tap/check-install-self'>;
+}
+declare module 'npm/test/tap/check-os-reqs.js' {
+  declare module.exports: $Exports<'npm/test/tap/check-os-reqs'>;
+}
+declare module 'npm/test/tap/check-permissions.js' {
+  declare module.exports: $Exports<'npm/test/tap/check-permissions'>;
+}
+declare module 'npm/test/tap/ci-header.js' {
+  declare module.exports: $Exports<'npm/test/tap/ci-header'>;
+}
+declare module 'npm/test/tap/ci.js' {
+  declare module.exports: $Exports<'npm/test/tap/ci'>;
+}
+declare module 'npm/test/tap/circular-dep.js' {
+  declare module.exports: $Exports<'npm/test/tap/circular-dep'>;
+}
+declare module 'npm/test/tap/config-basic.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-basic'>;
+}
+declare module 'npm/test/tap/config-builtin.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-builtin'>;
+}
+declare module 'npm/test/tap/config-certfile.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-certfile'>;
+}
+declare module 'npm/test/tap/config-credentials.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-credentials'>;
+}
+declare module 'npm/test/tap/config-edit.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-edit'>;
+}
+declare module 'npm/test/tap/config-envReplace.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-envReplace'>;
+}
+declare module 'npm/test/tap/config-list.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-list'>;
+}
+declare module 'npm/test/tap/config-malformed.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-malformed'>;
+}
+declare module 'npm/test/tap/config-meta.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-meta'>;
+}
+declare module 'npm/test/tap/config-new-cafile.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-new-cafile'>;
+}
+declare module 'npm/test/tap/config-private.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-private'>;
+}
+declare module 'npm/test/tap/config-project.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-project'>;
+}
+declare module 'npm/test/tap/config-save.js' {
+  declare module.exports: $Exports<'npm/test/tap/config-save'>;
+}
+declare module 'npm/test/tap/correct-mkdir.js' {
+  declare module.exports: $Exports<'npm/test/tap/correct-mkdir'>;
+}
+declare module 'npm/test/tap/cruft-test.js' {
+  declare module.exports: $Exports<'npm/test/tap/cruft-test'>;
+}
+declare module 'npm/test/tap/debug-logs.js' {
+  declare module.exports: $Exports<'npm/test/tap/debug-logs'>;
+}
+declare module 'npm/test/tap/dedupe-scoped.js' {
+  declare module.exports: $Exports<'npm/test/tap/dedupe-scoped'>;
+}
+declare module 'npm/test/tap/dedupe.js' {
+  declare module.exports: $Exports<'npm/test/tap/dedupe'>;
+}
+declare module 'npm/test/tap/deprecate.js' {
+  declare module.exports: $Exports<'npm/test/tap/deprecate'>;
+}
+declare module 'npm/test/tap/dist-tag.js' {
+  declare module.exports: $Exports<'npm/test/tap/dist-tag'>;
+}
+declare module 'npm/test/tap/do-not-remove-other-bins.js' {
+  declare module.exports: $Exports<'npm/test/tap/do-not-remove-other-bins'>;
+}
+declare module 'npm/test/tap/doctor.js' {
+  declare module.exports: $Exports<'npm/test/tap/doctor'>;
+}
+declare module 'npm/test/tap/extraneous-dep-cycle-ls-ok.js' {
+  declare module.exports: $Exports<'npm/test/tap/extraneous-dep-cycle-ls-ok'>;
+}
+declare module 'npm/test/tap/false-name.js' {
+  declare module.exports: $Exports<'npm/test/tap/false-name'>;
+}
+declare module 'npm/test/tap/fetch-package-metadata.js' {
+  declare module.exports: $Exports<'npm/test/tap/fetch-package-metadata'>;
+}
+declare module 'npm/test/tap/files-and-ignores.js' {
+  declare module.exports: $Exports<'npm/test/tap/files-and-ignores'>;
+}
+declare module 'npm/test/tap/full-warning-messages.js' {
+  declare module.exports: $Exports<'npm/test/tap/full-warning-messages'>;
+}
+declare module 'npm/test/tap/gently-rm-cmdshims.js' {
+  declare module.exports: $Exports<'npm/test/tap/gently-rm-cmdshims'>;
+}
+declare module 'npm/test/tap/gently-rm-linked-module.js' {
+  declare module.exports: $Exports<'npm/test/tap/gently-rm-linked-module'>;
+}
+declare module 'npm/test/tap/gently-rm-overeager.js' {
+  declare module.exports: $Exports<'npm/test/tap/gently-rm-overeager'>;
+}
+declare module 'npm/test/tap/gently-rm-symlinked-global-dir.js' {
+  declare module.exports: $Exports<'npm/test/tap/gently-rm-symlinked-global-dir'>;
+}
+declare module 'npm/test/tap/get.js' {
+  declare module.exports: $Exports<'npm/test/tap/get'>;
+}
+declare module 'npm/test/tap/gist-short-shortcut-package.js' {
+  declare module.exports: $Exports<'npm/test/tap/gist-short-shortcut-package'>;
+}
+declare module 'npm/test/tap/gist-short-shortcut.js' {
+  declare module.exports: $Exports<'npm/test/tap/gist-short-shortcut'>;
+}
+declare module 'npm/test/tap/gist-shortcut-package.js' {
+  declare module.exports: $Exports<'npm/test/tap/gist-shortcut-package'>;
+}
+declare module 'npm/test/tap/gist-shortcut.js' {
+  declare module.exports: $Exports<'npm/test/tap/gist-shortcut'>;
+}
+declare module 'npm/test/tap/git-dependency-install-link.js' {
+  declare module.exports: $Exports<'npm/test/tap/git-dependency-install-link'>;
+}
+declare module 'npm/test/tap/git-npmignore.js' {
+  declare module.exports: $Exports<'npm/test/tap/git-npmignore'>;
+}
+declare module 'npm/test/tap/git-prepare.js' {
+  declare module.exports: $Exports<'npm/test/tap/git-prepare'>;
+}
+declare module 'npm/test/tap/github-shortcut-package.js' {
+  declare module.exports: $Exports<'npm/test/tap/github-shortcut-package'>;
+}
+declare module 'npm/test/tap/github-shortcut.js' {
+  declare module.exports: $Exports<'npm/test/tap/github-shortcut'>;
+}
+declare module 'npm/test/tap/gitlab-shortcut-package.js' {
+  declare module.exports: $Exports<'npm/test/tap/gitlab-shortcut-package'>;
+}
+declare module 'npm/test/tap/gitlab-shortcut.js' {
+  declare module.exports: $Exports<'npm/test/tap/gitlab-shortcut'>;
+}
+declare module 'npm/test/tap/global-prefix-set-in-userconfig.js' {
+  declare module.exports: $Exports<'npm/test/tap/global-prefix-set-in-userconfig'>;
+}
+declare module 'npm/test/tap/graceful-restart.js' {
+  declare module.exports: $Exports<'npm/test/tap/graceful-restart'>;
+}
+declare module 'npm/test/tap/help.js' {
+  declare module.exports: $Exports<'npm/test/tap/help'>;
+}
+declare module 'npm/test/tap/ignore-install-link.js' {
+  declare module.exports: $Exports<'npm/test/tap/ignore-install-link'>;
+}
+declare module 'npm/test/tap/ignore-scripts.js' {
+  declare module.exports: $Exports<'npm/test/tap/ignore-scripts'>;
+}
+declare module 'npm/test/tap/init-interrupt.js' {
+  declare module.exports: $Exports<'npm/test/tap/init-interrupt'>;
+}
+declare module 'npm/test/tap/install-actions.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-actions'>;
+}
+declare module 'npm/test/tap/install-at-locally.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-at-locally'>;
+}
+declare module 'npm/test/tap/install-bad-dep-format.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-bad-dep-format'>;
+}
+declare module 'npm/test/tap/install-bad-man.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-bad-man'>;
+}
+declare module 'npm/test/tap/install-bin-null.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-bin-null'>;
+}
+declare module 'npm/test/tap/install-cli-only-development.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-cli-only-development'>;
+}
+declare module 'npm/test/tap/install-cli-only-production.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-cli-only-production'>;
+}
+declare module 'npm/test/tap/install-cli-only-shrinkwrap.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-cli-only-shrinkwrap'>;
+}
+declare module 'npm/test/tap/install-cli-production-nosave.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-cli-production-nosave'>;
+}
+declare module 'npm/test/tap/install-cli-production.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-cli-production'>;
+}
+declare module 'npm/test/tap/install-cli-unicode.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-cli-unicode'>;
+}
+declare module 'npm/test/tap/install-contributors-count.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-contributors-count'>;
+}
+declare module 'npm/test/tap/install-duplicate-deps-warning.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-duplicate-deps-warning'>;
+}
+declare module 'npm/test/tap/install-from-local.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-from-local'>;
+}
+declare module 'npm/test/tap/install-into-likenamed-folder.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-into-likenamed-folder'>;
+}
+declare module 'npm/test/tap/install-link-scripts.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-link-scripts'>;
+}
+declare module 'npm/test/tap/install-local-dep-cycle.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-local-dep-cycle'>;
+}
+declare module 'npm/test/tap/install-man.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-man'>;
+}
+declare module 'npm/test/tap/install-noargs-dev.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-noargs-dev'>;
+}
+declare module 'npm/test/tap/install-order.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-order'>;
+}
+declare module 'npm/test/tap/install-package-json-order.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-package-json-order'>;
+}
+declare module 'npm/test/tap/install-package-lock-only.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-package-lock-only'>;
+}
+declare module 'npm/test/tap/install-parse-error.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-parse-error'>;
+}
+declare module 'npm/test/tap/install-property-conflicts.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-property-conflicts'>;
+}
+declare module 'npm/test/tap/install-report-just-installed.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-report-just-installed'>;
+}
+declare module 'npm/test/tap/install-save-consistent-newlines.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-save-consistent-newlines'>;
+}
+declare module 'npm/test/tap/install-save-exact.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-save-exact'>;
+}
+declare module 'npm/test/tap/install-save-local.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-save-local'>;
+}
+declare module 'npm/test/tap/install-save-prefix.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-save-prefix'>;
+}
+declare module 'npm/test/tap/install-scoped-already-installed.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-scoped-already-installed'>;
+}
+declare module 'npm/test/tap/install-scoped-link.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-scoped-link'>;
+}
+declare module 'npm/test/tap/install-scoped-with-bundled-dependency.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-scoped-with-bundled-dependency'>;
+}
+declare module 'npm/test/tap/install-scoped-with-peer-dependency.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-scoped-with-peer-dependency'>;
+}
+declare module 'npm/test/tap/install-shrinkwrapped-git.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-shrinkwrapped-git'>;
+}
+declare module 'npm/test/tap/install-windows-newlines.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-windows-newlines'>;
+}
+declare module 'npm/test/tap/install-with-dev-dep-duplicate.js' {
+  declare module.exports: $Exports<'npm/test/tap/install-with-dev-dep-duplicate'>;
+}
+declare module 'npm/test/tap/invalid-cmd-exit-code.js' {
+  declare module.exports: $Exports<'npm/test/tap/invalid-cmd-exit-code'>;
+}
+declare module 'npm/test/tap/invalid-dep-version-filtering.js' {
+  declare module.exports: $Exports<'npm/test/tap/invalid-dep-version-filtering'>;
+}
+declare module 'npm/test/tap/is-fs-access-available.js' {
+  declare module.exports: $Exports<'npm/test/tap/is-fs-access-available'>;
+}
+declare module 'npm/test/tap/is-registry.js' {
+  declare module.exports: $Exports<'npm/test/tap/is-registry'>;
+}
+declare module 'npm/test/tap/it.js' {
+  declare module.exports: $Exports<'npm/test/tap/it'>;
+}
+declare module 'npm/test/tap/legacy-ignore-nested-nm.js' {
+  declare module.exports: $Exports<'npm/test/tap/legacy-ignore-nested-nm'>;
+}
+declare module 'npm/test/tap/legacy-missing-bindir.js' {
+  declare module.exports: $Exports<'npm/test/tap/legacy-missing-bindir'>;
+}
+declare module 'npm/test/tap/legacy-no-auth-leak.js' {
+  declare module.exports: $Exports<'npm/test/tap/legacy-no-auth-leak'>;
+}
+declare module 'npm/test/tap/legacy-platform-all.js' {
+  declare module.exports: $Exports<'npm/test/tap/legacy-platform-all'>;
+}
+declare module 'npm/test/tap/legacy-platform.js' {
+  declare module.exports: $Exports<'npm/test/tap/legacy-platform'>;
+}
+declare module 'npm/test/tap/legacy-private.js' {
+  declare module.exports: $Exports<'npm/test/tap/legacy-private'>;
+}
+declare module 'npm/test/tap/legacy-test-package.js' {
+  declare module.exports: $Exports<'npm/test/tap/legacy-test-package'>;
+}
+declare module 'npm/test/tap/lifecycle-INIT_CWD.js' {
+  declare module.exports: $Exports<'npm/test/tap/lifecycle-INIT_CWD'>;
+}
+declare module 'npm/test/tap/lifecycle-order.js' {
+  declare module.exports: $Exports<'npm/test/tap/lifecycle-order'>;
+}
+declare module 'npm/test/tap/link.js' {
+  declare module.exports: $Exports<'npm/test/tap/link'>;
+}
+declare module 'npm/test/tap/local-args-relative-to-cwd.js' {
+  declare module.exports: $Exports<'npm/test/tap/local-args-relative-to-cwd'>;
+}
+declare module 'npm/test/tap/locker.js' {
+  declare module.exports: $Exports<'npm/test/tap/locker'>;
+}
+declare module 'npm/test/tap/lockfile-http-deps.js' {
+  declare module.exports: $Exports<'npm/test/tap/lockfile-http-deps'>;
+}
+declare module 'npm/test/tap/logout-scoped.js' {
+  declare module.exports: $Exports<'npm/test/tap/logout-scoped'>;
+}
+declare module 'npm/test/tap/logout.js' {
+  declare module.exports: $Exports<'npm/test/tap/logout'>;
+}
+declare module 'npm/test/tap/ls-depth-cli.js' {
+  declare module.exports: $Exports<'npm/test/tap/ls-depth-cli'>;
+}
+declare module 'npm/test/tap/ls-depth-unmet.js' {
+  declare module.exports: $Exports<'npm/test/tap/ls-depth-unmet'>;
+}
+declare module 'npm/test/tap/ls-env.js' {
+  declare module.exports: $Exports<'npm/test/tap/ls-env'>;
+}
+declare module 'npm/test/tap/ls-l-depth-0.js' {
+  declare module.exports: $Exports<'npm/test/tap/ls-l-depth-0'>;
+}
+declare module 'npm/test/tap/ls-no-results.js' {
+  declare module.exports: $Exports<'npm/test/tap/ls-no-results'>;
+}
+declare module 'npm/test/tap/ls-production-and-dev.js' {
+  declare module.exports: $Exports<'npm/test/tap/ls-production-and-dev'>;
+}
+declare module 'npm/test/tap/ls-top-errors.js' {
+  declare module.exports: $Exports<'npm/test/tap/ls-top-errors'>;
+}
+declare module 'npm/test/tap/ls.js' {
+  declare module.exports: $Exports<'npm/test/tap/ls'>;
+}
+declare module 'npm/test/tap/map-to-registry.js' {
+  declare module.exports: $Exports<'npm/test/tap/map-to-registry'>;
+}
+declare module 'npm/test/tap/nerf-dart.js' {
+  declare module.exports: $Exports<'npm/test/tap/nerf-dart'>;
+}
+declare module 'npm/test/tap/nested-extraneous.js' {
+  declare module.exports: $Exports<'npm/test/tap/nested-extraneous'>;
+}
+declare module 'npm/test/tap/no-global-warns.js' {
+  declare module.exports: $Exports<'npm/test/tap/no-global-warns'>;
+}
+declare module 'npm/test/tap/no-scan-full-global-dir.js' {
+  declare module.exports: $Exports<'npm/test/tap/no-scan-full-global-dir'>;
+}
+declare module 'npm/test/tap/noargs-install-config-save.js' {
+  declare module.exports: $Exports<'npm/test/tap/noargs-install-config-save'>;
+}
+declare module 'npm/test/tap/node-modules-path-munge.js' {
+  declare module.exports: $Exports<'npm/test/tap/node-modules-path-munge'>;
+}
+declare module 'npm/test/tap/normalize-package-explode.js' {
+  declare module.exports: $Exports<'npm/test/tap/normalize-package-explode'>;
+}
+declare module 'npm/test/tap/npm-api-not-loaded-error.js' {
+  declare module.exports: $Exports<'npm/test/tap/npm-api-not-loaded-error'>;
+}
+declare module 'npm/test/tap/onload.js' {
+  declare module.exports: $Exports<'npm/test/tap/onload'>;
+}
+declare module 'npm/test/tap/optional-metadep-rollback-collision.js' {
+  declare module.exports: $Exports<'npm/test/tap/optional-metadep-rollback-collision'>;
+}
+declare module 'npm/test/tap/outdated-bad-read-tree.js' {
+  declare module.exports: $Exports<'npm/test/tap/outdated-bad-read-tree'>;
+}
+declare module 'npm/test/tap/outdated-color.js' {
+  declare module.exports: $Exports<'npm/test/tap/outdated-color'>;
+}
+declare module 'npm/test/tap/outdated-depth.js' {
+  declare module.exports: $Exports<'npm/test/tap/outdated-depth'>;
+}
+declare module 'npm/test/tap/outdated-git.js' {
+  declare module.exports: $Exports<'npm/test/tap/outdated-git'>;
+}
+declare module 'npm/test/tap/outdated-json.js' {
+  declare module.exports: $Exports<'npm/test/tap/outdated-json'>;
+}
+declare module 'npm/test/tap/outdated-long.js' {
+  declare module.exports: $Exports<'npm/test/tap/outdated-long'>;
+}
+declare module 'npm/test/tap/outdated.js' {
+  declare module.exports: $Exports<'npm/test/tap/outdated'>;
+}
+declare module 'npm/test/tap/override-bundled.js' {
+  declare module.exports: $Exports<'npm/test/tap/override-bundled'>;
+}
+declare module 'npm/test/tap/owner.js' {
+  declare module.exports: $Exports<'npm/test/tap/owner'>;
+}
+declare module 'npm/test/tap/pack-scoped.js' {
+  declare module.exports: $Exports<'npm/test/tap/pack-scoped'>;
+}
+declare module 'npm/test/tap/peer-deps.js' {
+  declare module.exports: $Exports<'npm/test/tap/peer-deps'>;
+}
+declare module 'npm/test/tap/pick-manifest-from-registry-metadata.js' {
+  declare module.exports: $Exports<'npm/test/tap/pick-manifest-from-registry-metadata'>;
+}
+declare module 'npm/test/tap/ping.js' {
+  declare module.exports: $Exports<'npm/test/tap/ping'>;
+}
+declare module 'npm/test/tap/prepare.js' {
+  declare module.exports: $Exports<'npm/test/tap/prepare'>;
+}
+declare module 'npm/test/tap/prepublish-only.js' {
+  declare module.exports: $Exports<'npm/test/tap/prepublish-only'>;
+}
+declare module 'npm/test/tap/prepublish.js' {
+  declare module.exports: $Exports<'npm/test/tap/prepublish'>;
+}
+declare module 'npm/test/tap/process-logger.js' {
+  declare module.exports: $Exports<'npm/test/tap/process-logger'>;
+}
+declare module 'npm/test/tap/progress-config.js' {
+  declare module.exports: $Exports<'npm/test/tap/progress-config'>;
+}
+declare module 'npm/test/tap/prune-dev-dep-cycle.js' {
+  declare module.exports: $Exports<'npm/test/tap/prune-dev-dep-cycle'>;
+}
+declare module 'npm/test/tap/prune-dev-dep-with-bins.js' {
+  declare module.exports: $Exports<'npm/test/tap/prune-dev-dep-with-bins'>;
+}
+declare module 'npm/test/tap/prune-with-dev-dep-duplicate.js' {
+  declare module.exports: $Exports<'npm/test/tap/prune-with-dev-dep-duplicate'>;
+}
+declare module 'npm/test/tap/prune-with-only-dev-deps.js' {
+  declare module.exports: $Exports<'npm/test/tap/prune-with-only-dev-deps'>;
+}
+declare module 'npm/test/tap/prune.js' {
+  declare module.exports: $Exports<'npm/test/tap/prune'>;
+}
+declare module 'npm/test/tap/publish-access-scoped.js' {
+  declare module.exports: $Exports<'npm/test/tap/publish-access-scoped'>;
+}
+declare module 'npm/test/tap/publish-access-unscoped-restricted-fails.js' {
+  declare module.exports: $Exports<'npm/test/tap/publish-access-unscoped-restricted-fails'>;
+}
+declare module 'npm/test/tap/publish-access-unscoped.js' {
+  declare module.exports: $Exports<'npm/test/tap/publish-access-unscoped'>;
+}
+declare module 'npm/test/tap/publish-config.js' {
+  declare module.exports: $Exports<'npm/test/tap/publish-config'>;
+}
+declare module 'npm/test/tap/publish-invalid-semver-tag.js' {
+  declare module.exports: $Exports<'npm/test/tap/publish-invalid-semver-tag'>;
+}
+declare module 'npm/test/tap/publish-scoped.js' {
+  declare module.exports: $Exports<'npm/test/tap/publish-scoped'>;
+}
+declare module 'npm/test/tap/pwd-prefix.js' {
+  declare module.exports: $Exports<'npm/test/tap/pwd-prefix'>;
+}
+declare module 'npm/test/tap/referer.js' {
+  declare module.exports: $Exports<'npm/test/tap/referer'>;
+}
+declare module 'npm/test/tap/repo.js' {
+  declare module.exports: $Exports<'npm/test/tap/repo'>;
+}
+declare module 'npm/test/tap/retry-on-stale-cache.js' {
+  declare module.exports: $Exports<'npm/test/tap/retry-on-stale-cache'>;
+}
+declare module 'npm/test/tap/run-script-filter-private.js' {
+  declare module.exports: $Exports<'npm/test/tap/run-script-filter-private'>;
+}
+declare module 'npm/test/tap/run-script.js' {
+  declare module.exports: $Exports<'npm/test/tap/run-script'>;
+}
+declare module 'npm/test/tap/scope-header.js' {
+  declare module.exports: $Exports<'npm/test/tap/scope-header'>;
+}
+declare module 'npm/test/tap/scripts-whitespace-windows.js' {
+  declare module.exports: $Exports<'npm/test/tap/scripts-whitespace-windows'>;
+}
+declare module 'npm/test/tap/search.all-package-search.js' {
+  declare module.exports: $Exports<'npm/test/tap/search.all-package-search'>;
+}
+declare module 'npm/test/tap/search.esearch.js' {
+  declare module.exports: $Exports<'npm/test/tap/search.esearch'>;
+}
+declare module 'npm/test/tap/search.js' {
+  declare module.exports: $Exports<'npm/test/tap/search'>;
+}
+declare module 'npm/test/tap/semver-doc.js' {
+  declare module.exports: $Exports<'npm/test/tap/semver-doc'>;
+}
+declare module 'npm/test/tap/shared-linked.js' {
+  declare module.exports: $Exports<'npm/test/tap/shared-linked'>;
+}
+declare module 'npm/test/tap/shrinkwrap-_auth.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-_auth'>;
+}
+declare module 'npm/test/tap/shrinkwrap-default-dev.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-default-dev'>;
+}
+declare module 'npm/test/tap/shrinkwrap-dev-dependency.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-dev-dependency'>;
+}
+declare module 'npm/test/tap/shrinkwrap-empty-deps.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-empty-deps'>;
+}
+declare module 'npm/test/tap/shrinkwrap-extra-metadata.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-extra-metadata'>;
+}
+declare module 'npm/test/tap/shrinkwrap-global-auth.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-global-auth'>;
+}
+declare module 'npm/test/tap/shrinkwrap-lifecycle-cwd.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-lifecycle-cwd'>;
+}
+declare module 'npm/test/tap/shrinkwrap-lifecycle.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-lifecycle'>;
+}
+declare module 'npm/test/tap/shrinkwrap-local-dependency.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-local-dependency'>;
+}
+declare module 'npm/test/tap/shrinkwrap-nested.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-nested'>;
+}
+declare module 'npm/test/tap/shrinkwrap-optional-dependency.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-optional-dependency'>;
+}
+declare module 'npm/test/tap/shrinkwrap-optional-platform.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-optional-platform'>;
+}
+declare module 'npm/test/tap/shrinkwrap-optional-property.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-optional-property'>;
+}
+declare module 'npm/test/tap/shrinkwrap-prod-dependency-also.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-prod-dependency-also'>;
+}
+declare module 'npm/test/tap/shrinkwrap-prod-dependency.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-prod-dependency'>;
+}
+declare module 'npm/test/tap/shrinkwrap-resolve-conflict.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-resolve-conflict'>;
+}
+declare module 'npm/test/tap/shrinkwrap-save-dev-with-existing-deps.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-save-dev-with-existing-deps'>;
+}
+declare module 'npm/test/tap/shrinkwrap-save-with-existing-dev-deps.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-save-with-existing-dev-deps'>;
+}
+declare module 'npm/test/tap/shrinkwrap-scoped-auth.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-scoped-auth'>;
+}
+declare module 'npm/test/tap/shrinkwrap-shared-dev-dependency.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-shared-dev-dependency'>;
+}
+declare module 'npm/test/tap/shrinkwrap-version-match.js' {
+  declare module.exports: $Exports<'npm/test/tap/shrinkwrap-version-match'>;
+}
+declare module 'npm/test/tap/sorted-package-json.js' {
+  declare module.exports: $Exports<'npm/test/tap/sorted-package-json'>;
+}
+declare module 'npm/test/tap/spawn-enoent-help.js' {
+  declare module.exports: $Exports<'npm/test/tap/spawn-enoent-help'>;
+}
+declare module 'npm/test/tap/spawn-enoent.js' {
+  declare module.exports: $Exports<'npm/test/tap/spawn-enoent'>;
+}
+declare module 'npm/test/tap/spec-local-specifiers.js' {
+  declare module.exports: $Exports<'npm/test/tap/spec-local-specifiers'>;
+}
+declare module 'npm/test/tap/splat-with-only-prerelease-to-latest.js' {
+  declare module.exports: $Exports<'npm/test/tap/splat-with-only-prerelease-to-latest'>;
+}
+declare module 'npm/test/tap/startstop.js' {
+  declare module.exports: $Exports<'npm/test/tap/startstop'>;
+}
+declare module 'npm/test/tap/symlink-cycle.js' {
+  declare module.exports: $Exports<'npm/test/tap/symlink-cycle'>;
+}
+declare module 'npm/test/tap/tag-version-prefix.js' {
+  declare module.exports: $Exports<'npm/test/tap/tag-version-prefix'>;
+}
+declare module 'npm/test/tap/tagged-version-matching.js' {
+  declare module.exports: $Exports<'npm/test/tap/tagged-version-matching'>;
+}
+declare module 'npm/test/tap/team.js' {
+  declare module.exports: $Exports<'npm/test/tap/team'>;
+}
+declare module 'npm/test/tap/test-run-ls.js' {
+  declare module.exports: $Exports<'npm/test/tap/test-run-ls'>;
+}
+declare module 'npm/test/tap/tree-style.js' {
+  declare module.exports: $Exports<'npm/test/tap/tree-style'>;
+}
+declare module 'npm/test/tap/umask-lifecycle.js' {
+  declare module.exports: $Exports<'npm/test/tap/umask-lifecycle'>;
+}
+declare module 'npm/test/tap/uninstall-in-reverse.js' {
+  declare module.exports: $Exports<'npm/test/tap/uninstall-in-reverse'>;
+}
+declare module 'npm/test/tap/uninstall-link-clean.js' {
+  declare module.exports: $Exports<'npm/test/tap/uninstall-link-clean'>;
+}
+declare module 'npm/test/tap/uninstall-package.js' {
+  declare module.exports: $Exports<'npm/test/tap/uninstall-package'>;
+}
+declare module 'npm/test/tap/uninstall-save.js' {
+  declare module.exports: $Exports<'npm/test/tap/uninstall-save'>;
+}
+declare module 'npm/test/tap/unit-child-path.js' {
+  declare module.exports: $Exports<'npm/test/tap/unit-child-path'>;
+}
+declare module 'npm/test/tap/unit-deps-earliestInstallable.js' {
+  declare module.exports: $Exports<'npm/test/tap/unit-deps-earliestInstallable'>;
+}
+declare module 'npm/test/tap/unit-deps-removeObsoleteDep.js' {
+  declare module.exports: $Exports<'npm/test/tap/unit-deps-removeObsoleteDep'>;
+}
+declare module 'npm/test/tap/unit-deps-replaceModule.js' {
+  declare module.exports: $Exports<'npm/test/tap/unit-deps-replaceModule'>;
+}
+declare module 'npm/test/tap/unit-module-name.js' {
+  declare module.exports: $Exports<'npm/test/tap/unit-module-name'>;
+}
+declare module 'npm/test/tap/unit-package-id.js' {
+  declare module.exports: $Exports<'npm/test/tap/unit-package-id'>;
+}
+declare module 'npm/test/tap/unit-token-validate-cidr.js' {
+  declare module.exports: $Exports<'npm/test/tap/unit-token-validate-cidr'>;
+}
+declare module 'npm/test/tap/unpack-foreign-tarball.js' {
+  declare module.exports: $Exports<'npm/test/tap/unpack-foreign-tarball'>;
+}
+declare module 'npm/test/tap/unpublish-config.js' {
+  declare module.exports: $Exports<'npm/test/tap/unpublish-config'>;
+}
+declare module 'npm/test/tap/unsupported.js' {
+  declare module.exports: $Exports<'npm/test/tap/unsupported'>;
+}
+declare module 'npm/test/tap/update-examples.js' {
+  declare module.exports: $Exports<'npm/test/tap/update-examples'>;
+}
+declare module 'npm/test/tap/update-path.js' {
+  declare module.exports: $Exports<'npm/test/tap/update-path'>;
+}
+declare module 'npm/test/tap/upgrade-lifecycles.js' {
+  declare module.exports: $Exports<'npm/test/tap/upgrade-lifecycles'>;
+}
+declare module 'npm/test/tap/url-dependencies.js' {
+  declare module.exports: $Exports<'npm/test/tap/url-dependencies'>;
+}
+declare module 'npm/test/tap/verify-no-lifecycle-on-repo.js' {
+  declare module.exports: $Exports<'npm/test/tap/verify-no-lifecycle-on-repo'>;
+}
+declare module 'npm/test/tap/version-allow-same-version.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-allow-same-version'>;
+}
+declare module 'npm/test/tap/version-commit-hooks-default.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-commit-hooks-default'>;
+}
+declare module 'npm/test/tap/version-commit-hooks.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-commit-hooks'>;
+}
+declare module 'npm/test/tap/version-consistent-newlines.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-consistent-newlines'>;
+}
+declare module 'npm/test/tap/version-from-git.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-from-git'>;
+}
+declare module 'npm/test/tap/version-git-not-clean.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-git-not-clean'>;
+}
+declare module 'npm/test/tap/version-lifecycle.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-lifecycle'>;
+}
+declare module 'npm/test/tap/version-message-config.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-message-config'>;
+}
+declare module 'npm/test/tap/version-no-git.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-no-git'>;
+}
+declare module 'npm/test/tap/version-no-package.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-no-package'>;
+}
+declare module 'npm/test/tap/version-no-tags.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-no-tags'>;
+}
+declare module 'npm/test/tap/version-sub-directory-shrinkwrap.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-sub-directory-shrinkwrap'>;
+}
+declare module 'npm/test/tap/version-sub-directory.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-sub-directory'>;
+}
+declare module 'npm/test/tap/version-update-shrinkwrap.js' {
+  declare module.exports: $Exports<'npm/test/tap/version-update-shrinkwrap'>;
+}
+declare module 'npm/test/tap/view.js' {
+  declare module.exports: $Exports<'npm/test/tap/view'>;
+}
+declare module 'npm/test/tap/zz-cleanup.js' {
+  declare module.exports: $Exports<'npm/test/tap/zz-cleanup'>;
 }
