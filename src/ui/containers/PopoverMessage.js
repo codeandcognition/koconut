@@ -10,6 +10,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 class PopOver extends Component {
 	constructor(props) {
 		super(props);
+		this.handleClose = this.handleClose.bind(this);
+		this.state = {
+			open: true
+		}
 	}
 
 	handleClose() {

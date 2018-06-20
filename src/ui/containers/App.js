@@ -12,6 +12,7 @@ import Signup from '../components/Signup';
 import SignIn from '../components/SignIn';
 import WorldView from './WorldView';
 import PopOverMessage from './PopoverMessage';
+import Button from '@material-ui/core/Button';
 
 
 // Fake AJAX
@@ -56,7 +57,8 @@ class App extends Component {
     display: string, // the current display state
     conceptOptions: number, // concept options offered, no options if <= 1
     currentConcept: ?string,
-    firebaseUser: any
+    firebaseUser: any,
+		error: boolean
   };
   constructor() {
     super();
@@ -90,14 +92,15 @@ class App extends Component {
    *
    */
   generateExercise(concept: string, exerciseType: string) {
-  	let exercises = this.generator.getExercisesByTypeAndConcept(concept, exerciseType);
+  	console.log(this.state.counter);
+  	let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept);
   	if (exercises.length == 0) {
-			// TODO: /
+			this.setState({error: true});
 		} else {
-			// TODO: Generates the first exercise for now. Change this later.
 			this.setState({
 				display: displayType.exercise,
-				exercise: exercises[0]
+				exercise: exercises[0].exercise,
+				currentConcept: concept
 			});
 		}
   }
@@ -208,7 +211,7 @@ class App extends Component {
   }
 
 	/**
-	 *
+	 * Renders the sign in view
 	 */
 	renderSignin() {
 		if(this.state.firebaseUser) {
@@ -222,6 +225,10 @@ class App extends Component {
 		}
 	}
 
+	/**
+	 * Renders the PopOverMessage if we run out of exercises
+	 * @returns {*}
+	 */
 	renderErrorMessage() {
 		return (<PopOverMessage/>);
 	}
@@ -341,21 +348,23 @@ class App extends Component {
             <div className="main">
               <h1 className="title">
                 {this.state.display !== displayType.welcome ?
-                    <span className="debug">
-                  <input
-                      type="button"
-                      onClick={() => this.setState(
-                          {
-                            display: displayType.exercise,
-                            exercise: this._getExercise(),
-                            feedback: '',
-                            counter: this.state.counter + 1,
-                          })}
-                      value="next exercise type"
-                  />
-                </span> : ''}
+										<Button
+												style={{marginTop: '5%'}}
+												variant="outlined"
+												color="secondary"
+												onClick={() => this.setState(
+														{
+															display: displayType.exercise,
+															exercise: this._getExercise(),
+															feedback: '',
+															counter: this.state.counter + 1,
+														})}
+										>Next Exercise</Button>
+										: null
+								}
               </h1>
               {this.renderDisplay()}
+							{this.state.error && this.renderErrorMessage()}
             </div>
           </MuiThemeProvider>
 				</div>

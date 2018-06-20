@@ -21,6 +21,8 @@ class ConceptCard extends Component {
 
 	constructor(props: Props) {
 		super(props);
+		this.handleExpandClick = this.handleExpandClick.bind(this);
+
 		this.state = {
 			expand: false
 		}
@@ -34,8 +36,7 @@ class ConceptCard extends Component {
 	}
 
 	render() {
-
-		var linkStyle = {
+		let linkStyle = {
 			textDecoration: "underline",
 			fontWeight: "bold",
 			cursor: "pointer",
@@ -45,7 +46,7 @@ class ConceptCard extends Component {
 			display: "inline-block"
 		}
 
-		var titleStyle = {
+		let titleStyle = {
 			marginBottom: "0"
 		}
 
@@ -53,7 +54,7 @@ class ConceptCard extends Component {
 				<Card>
 					<CardContent>
 						<div>
-						<div style={{display: 'flex', cursor: "pointer"}} onClick={evt => this.handleExpandClick()}>
+						<div style={{display: 'flex', cursor: "pointer"}} onClick={this.handleExpandClick}>
 							{this.state.expand ?
 							<ExpandedIcon /> :
               <ExpandMoreIcon />
@@ -63,16 +64,16 @@ class ConceptCard extends Component {
 						{this.state.expand &&
 								<div style={{paddingLeft: "5%"}}>
 									<p style={linkStyle}
-										 onClick={this.props.generateExercise(this.props.concept, this.exerciseType.read)}>read instruction</p>
+										 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>read instruction</p>
 									<br />
 									<p style={linkStyle}
-										 onClick={this.props.generateExercise(this.props.concept, this.exerciseType.read)}>read practice</p>
+										 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>read practice</p>
 									<br />
 									<p style={linkStyle}
-										 onClick={this.props.generateExercise(this.props.concept, this.exerciseType.write)}>write instruction</p>
+										 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>write instruction</p>
 									<br />
 									<p style={linkStyle}
-										 onClick={this.props.generateExercise(this.props.concept, this.exerciseType.write)}>write practice</p>
+										 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>write practice</p>
 								</div>
 						}
 						</div>
