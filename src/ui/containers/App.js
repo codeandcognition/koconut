@@ -11,6 +11,7 @@ import Welcome from '../components/Welcome';
 import Signup from '../components/Signup';
 import SignIn from '../components/SignIn';
 import WorldView from './WorldView';
+import PopOverMessage from './PopoverMessage';
 
 
 // Fake AJAX
@@ -41,6 +42,7 @@ class App extends Component {
   submitTryAgain: Function;
   switchToSignin: Function;
   switchToSignup: Function;
+  generateExercise: Function;
   generator: ExerciseGenerator;
   theme: mixed;
   // updater: ResponseEvaluator;
@@ -76,14 +78,25 @@ class App extends Component {
     this.submitTryAgain = this.submitTryAgain.bind(this);
     this.switchToSignin = this.switchToSignin.bind(this);
     this.switchToSignup = this.switchToSignup.bind(this);
+    this.generateExercise = this.generateExercise.bind(this);
   }
   /**
-   * Return a generated exercise
-   * TODO: Remove, this is redundant?
-   * @returns a generated exercise
+   * Passed in as a prop to WorldView -> ConceptCard
+	 * When invoked in concept card, it generates an exercise of the given
+	 * concept and type
+   *
    */
-  getExercise(): Exercise {
-    return this.generator.generateExercise();
+  generateExercise(concept: String, exerciseType: String) {
+  	let exercises = this.generator.getExercisesByTypeAndConcept(concept, exerciseType);
+  	if (exercises.length == 0) {
+			// TODO: /
+		} else {
+			// TODO: Generates the first exercise for now. Change this later.
+			this.setState({
+				display: displayType.exercise,
+				exercise: exercises[0]
+			});
+		}
   }
   /**
    * Returns a generated exercise by index
@@ -116,6 +129,8 @@ class App extends Component {
   componentWillUnmount() {
     this.stopWatchingAuth();
   }
+
+
   getConcepts() {
     let size = this.state.conceptOptions;
     let concept = this.state.currentConcept;
@@ -204,6 +219,10 @@ class App extends Component {
 		}
 	}
 
+	renderErrorMessage() {
+		return (<PopOverMessage/>);
+	}
+
 	/**
 	 * Sets the display state to 'signin'. This function is passed as a prop
 	 * to the Sign up view.
@@ -229,7 +248,7 @@ class App extends Component {
         <Welcome
             callBack={() => {
               this.setState({display: displayType.world});
-              var databaseRef = firebase.database().ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
+              let databaseRef = firebase.database().ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
               databaseRef.set(true);
             }}
         firebaseUser={this.state.firebaseUser}
@@ -270,7 +289,7 @@ class App extends Component {
    */
   renderWorldView() {
     return(
-        <WorldView />
+        <WorldView generateExercise={this.generateExercise}/>
     )
   }
 

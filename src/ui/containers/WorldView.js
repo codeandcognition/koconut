@@ -4,6 +4,10 @@ import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
 import {conceptInventory} from '../../data/ConceptMap.js';
 import ConceptCard from './../components/ConceptCard';
 
+type Props = {
+	generateExercise: Function
+}
+
 /**
  * WorldView is the world view for the app, where the user can see all the
  * exercises they can do and are suggested to do
@@ -35,7 +39,7 @@ class WorldView extends Component {
 					{
 						conceptList.map((concept, index) => {
 							let name = conceptInventory[concept.name].explanations.name;
-							return <ConceptCard title={name} key={index}/>
+							return <ConceptCard title={name} key={index} concept={concept.name} generateExercise={this.props.generateExercise}/>
 						})
 					}
 				</div>

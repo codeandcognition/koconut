@@ -1,8 +1,5 @@
 
 import React, {Component} from 'react';
-import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
-import {conceptInventory} from '../../data/ConceptMap.js';
-
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ExpandMoreIcon from '@material-ui/icons/ChevronRight';
@@ -10,7 +7,14 @@ import ExpandedIcon from '@material-ui/icons/KeyboardArrowDown';
 
 type Props = {
 	title: String,
-	key: number
+	key: number,
+	concept: String,
+	generateExercise: Function
+}
+
+const exerciseType = {
+	read: "READ",
+	write: "WRITE"
 }
 
 class ConceptCard extends Component {
@@ -58,13 +62,17 @@ class ConceptCard extends Component {
 						</div>
 						{this.state.expand &&
 								<div style={{paddingLeft: "5%"}}>
-									<p style={linkStyle}>read instruction</p>
+									<p style={linkStyle}
+										 onClick={this.props.generateExercise(this.props.concept, this.exerciseType.read)}>read instruction</p>
 									<br />
-									<p style={linkStyle}>read practice</p>
+									<p style={linkStyle}
+										 onClick={this.props.generateExercise(this.props.concept, this.exerciseType.read)}>read practice</p>
 									<br />
-									<p style={linkStyle}>write instruction</p>
+									<p style={linkStyle}
+										 onClick={this.props.generateExercise(this.props.concept, this.exerciseType.write)}>write instruction</p>
 									<br />
-									<p style={linkStyle}>write practice</p>
+									<p style={linkStyle}
+										 onClick={this.props.generateExercise(this.props.concept, this.exerciseType.write)}>write practice</p>
 								</div>
 						}
 						</div>
