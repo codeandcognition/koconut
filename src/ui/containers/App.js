@@ -42,6 +42,7 @@ class App extends Component {
   submitTryAgain: Function;
   switchToSignin: Function;
   switchToSignup: Function;
+  switchToWorldView: Function;
   generator: ExerciseGenerator;
   theme: mixed;
   // updater: ResponseEvaluator;
@@ -53,7 +54,7 @@ class App extends Component {
     display: string, // the current display state
     conceptOptions: number, // concept options offered, no options if <= 1
     currentConcept: ?string,
-    firebaseUser: ?FirebaseUser
+    firebaseUser: any
   };
   constructor() {
     super();
@@ -77,6 +78,7 @@ class App extends Component {
     this.submitTryAgain = this.submitTryAgain.bind(this);
     this.switchToSignin = this.switchToSignin.bind(this);
     this.switchToSignup = this.switchToSignup.bind(this);
+    this.switchToWorldView = this.switchToWorldView.bind(this);
   }
   /**
    * Return a generated exercise
@@ -221,6 +223,14 @@ class App extends Component {
 		this.setState({display: displayType.signup});
 	}
 
+  /**
+   * Sets the display state to 'WORLD". This function is passed as a prop
+   * to the the navigationbar.
+   */
+	switchToWorldView() {
+	  this.setState({display: displayType.world});
+  }
+
 	/**
 	 * Renders the welcome view
 	 * @returns {*}
@@ -229,9 +239,13 @@ class App extends Component {
     return (
         <Welcome
             callBack={() => {
-              this.setState({display: displayType.world});
-              var databaseRef = firebase.database().ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
-              databaseRef.set(true);
+              if(this.state.firebaseUser) {
+                this.setState({display: displayType.world});
+                var databaseRef = firebase.database().
+                    ref("Users/" + this.state.firebaseUser.uid +
+                        "/waiverStatus");
+                databaseRef.set(true);
+              }
             }}
         firebaseUser={this.state.firebaseUser}
         app={this}/>
@@ -302,24 +316,26 @@ class App extends Component {
     return (
         <div className="App">
           <MuiThemeProvider theme={this.theme}>
-            <Navbar firebaseUser={this.state.firebaseUser} />
+            <Navbar firebaseUser={this.state.firebaseUser}
+                    switchToWorldView={this.switchToWorldView}
+                    display={this.state.display}/>
             <div className="main">
-              {/*<h1 className="title">*/}
-                {/*{this.state.display !== displayType.welcome ?*/}
-                    {/*<span className="debug">*/}
-                  {/*<input*/}
-                      {/*type="button"*/}
-                      {/*onClick={() => this.setState(*/}
-                          {/*{*/}
-                            {/*display: displayType.exercise,*/}
-                            {/*exercise: this._getExercise(),*/}
-                            {/*feedback: '',*/}
-                            {/*counter: this.state.counter + 1,*/}
-                          {/*})}*/}
-                      {/*value="next exercise type"*/}
-                  {/*/>*/}
-                {/*</span> : ''}*/}
-              {/*</h1>*/}
+              <h1 className="title">
+                {this.state.display !== displayType.welcome ?
+                    <span className="debug">
+                  <input
+                      type="button"
+                      onClick={() => this.setState(
+                          {
+                            display: displayType.exercise,
+                            exercise: this._getExercise(),
+                            feedback: '',
+                            counter: this.state.counter + 1,
+                          })}
+                      value="next exercise type"
+                  />
+                </span> : ''}
+              </h1>
               {this.renderDisplay()}
             </div>
           </MuiThemeProvider>
