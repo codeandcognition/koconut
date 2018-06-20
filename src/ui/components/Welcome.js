@@ -1,6 +1,8 @@
 //@flow
 import React, {Component} from 'react';
 import './Welcome.css';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 const strings = {
   welcome: "Welcome to Koconut!",
@@ -29,6 +31,17 @@ const strings = {
 
 class Welcome extends Component {
   // TODO: Maybe this should be a ReactMarkdown component
+
+  componentWillMount() {
+    var databaseRef = firebase.database().ref("Users/" + this.props.firebaseUser.uid + "/waiverStatus");
+    databaseRef.once("value", (snapshot) => {
+      if (snapshot != null && snapshot.val()) {
+        this.props.app.setState({display: "WORLD"});
+      }
+    })
+  }
+
+
   render() {
     return (
       <div className="welcome-page">
