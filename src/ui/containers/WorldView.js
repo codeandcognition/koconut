@@ -28,6 +28,7 @@ class WorldView extends Component {
 						a.dependencyKnowledge / a.knowledge));
 	}
 
+
   render() {
     let conceptList = this.getOrderedConcepts();
     return (
