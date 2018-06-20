@@ -67,7 +67,8 @@ class Navbar extends Component {
                 Back to World View
               </Button></div> : <div></div>
               }
-              <Typography style={{flexGrow: 1}} variant={"title"} color={"secondary"}>
+              {/* color imported from Material UI */}
+              <Typography style={{flexGrow: 1, color: "#FAFAFA"}} variant={"title"}>
                   Koconut
               </Typography>
 
