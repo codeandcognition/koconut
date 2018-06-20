@@ -77,7 +77,7 @@ class App extends Component {
     this.submitTryAgain = this.submitTryAgain.bind(this);
     this.switchToSignin = this.switchToSignin.bind(this);
     this.switchToSignup = this.switchToSignup.bind(this);
-    this.switchToWorldVIew = this.switchToWorldView.bind(this);
+    this.switchToWorldView = this.switchToWorldView.bind(this);
   }
   /**
    * Return a generated exercise
@@ -224,7 +224,7 @@ class App extends Component {
 
   /**
    * Sets the display state to 'WORLD". This function is passed as a prop
-   * to the ExerciseView.
+   * to the the navigationbar.
    */
 	switchToWorldView() {
 	  this.setState({display: displayType.world});
@@ -244,7 +244,7 @@ class App extends Component {
                     ref("Users/" + this.state.firebaseUser.uid +
                         "/waiverStatus");
                 databaseRef.set(true);
-              }1
+              }
             }}
         firebaseUser={this.state.firebaseUser}
         app={this}/>
@@ -256,7 +256,6 @@ class App extends Component {
   renderExercise() {
     return (
         <ExerciseView
-            switchToWorldView={this.switchToWorldView}
             exercise={this.state.exercise}
             submitHandler={this.submitResponse}
             feedback={this.state.feedback}
@@ -316,7 +315,9 @@ class App extends Component {
     return (
         <div className="App">
           <MuiThemeProvider theme={this.theme}>
-            <Navbar firebaseUser={this.state.firebaseUser} />
+            <Navbar firebaseUser={this.state.firebaseUser}
+                    switchToWorldView={this.switchToWorldView}
+                    display={this.state.display}/>
             <div className="main">
               <h1 className="title">
                 {this.state.display !== displayType.welcome ?
