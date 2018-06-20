@@ -29,6 +29,8 @@ class ExercisePoolClass {
   getAnswer(exercise: Exercise): ?string {
     return this.pool.get(exercise);
   }
+
+
 }
 
 let ExercisePool = new ExercisePoolClass();

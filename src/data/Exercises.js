@@ -31,7 +31,7 @@ export const stubExercise: { exercise: Exercise, answer: ?string } = {
   answer: 'abc',
 };
 
-let variable17061 = [
+export let variable17061 = [
   {
     'exercise': {
       'prompt': 'What does this expression simplify to?',
@@ -192,7 +192,7 @@ let variable17061 = [
     },
     'answer': 'x = x * 4',
   }];
-let variable60932 = [
+export let variable60932 = [
   {
     'exercise': {
       'prompt': 'Highlight the integer literal',
@@ -248,7 +248,7 @@ let variable60932 = [
     },
     'answer': 'new',
   }];
-let variable18916 = [
+export let variable18916 = [
   {
     'exercise': {
       'prompt': 'What is the value of x after the following code executes?',
@@ -337,7 +337,7 @@ let variable18916 = [
     },
     'answer': '\'3\'',
   }];
-let variable88688 = [
+export let variable88688 = [
   {
     'exercise': {
       'prompt': 'Choose the correct output of the following code',
@@ -437,7 +437,7 @@ let variable88688 = [
     },
     'answer': 'false',
   }];
-let variable51520 = [
+export let variable51520 = [
   {
     'exercise': {
       'prompt': 'Fill in the blank so that the method behaves as follows:\naddTen(15); //would evaluate to 25\naddTen(1); //would evaluate to 11',
@@ -483,7 +483,7 @@ let variable51520 = [
     'answer': '7',
   }];
 
-let survey =
+export let survey =
     {
       exercise: {
         prompt: 'Take this survey before we begin. Rate how confident you are in your abilities for each concept.',
