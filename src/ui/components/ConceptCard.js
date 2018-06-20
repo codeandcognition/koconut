@@ -53,10 +53,10 @@ class ConceptCard extends Component {
 				<Card>
 					<CardContent>
 						<div>
-						<div style={{display: 'flex'}}>
+						<div style={{display: 'flex', cursor: "pointer"}} onClick={evt => this.handleExpandClick()}>
 							{this.state.expand ?
-							<ExpandedIcon style={{cursor: "pointer"}} onClick={evt => this.handleExpandClick()} /> :
-              <ExpandMoreIcon style={{cursor: 'pointer'}} onClick={evt => this.handleExpandClick()}/>
+							<ExpandedIcon /> :
+              <ExpandMoreIcon />
 							}
 							<p style={titleStyle}>{this.props.title}</p>
 						</div>

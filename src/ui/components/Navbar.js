@@ -16,7 +16,9 @@ import MenuItem from '@material-ui/core/MenuItem/MenuItem';
  */
 
 type Props = {
-  firebaseUser: ?FirebaseUser
+  firebaseUser: ?FirebaseUser,
+  display: string,
+  switchToWorldView: Function
 }
 
 class Navbar extends Component {
@@ -56,9 +58,19 @@ class Navbar extends Component {
         <div>
           <AppBar>
             <Toolbar>
-              <Typography style={{flexGrow: 1}} variant={"title"} color={"primary"}>
+              {this.props.display === "EXERCISE" ?
+              <div style={{marginRight: 5}}><Button onClick={this.props.switchToWorldView}
+                           aria-owns='menu'
+                           aria-haspopup="true"
+                           id="menu-button"
+                           color={"secondary"}>
+                Back to World View
+              </Button></div> : <div></div>
+              }
+              <Typography style={{flexGrow: 1}} variant={"title"} color={"secondary"}>
                   Koconut
               </Typography>
+
               {this.props.firebaseUser &&
               (<div>
                   <Button onClick={(e) => this.handleMenuClick(e)}

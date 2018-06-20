@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
 import {conceptInventory} from '../../data/ConceptMap.js';
 import ConceptCard from './../components/ConceptCard';
+import ExerciseGenerator from '../../backend/ExerciseGenerator';
 
 type Props = {
 	generateExercise: Function
@@ -26,7 +27,6 @@ class WorldView extends Component {
 				(a, b) => (b.dependencyKnowledge / b.knowledge -
 						a.dependencyKnowledge / a.knowledge));
 	}
-
 
   render() {
     let conceptList = this.getOrderedConcepts();

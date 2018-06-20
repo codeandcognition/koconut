@@ -29,7 +29,8 @@ const displayType = {
 	exercise: 'EXERCISE',
 	feedback: 'FEEDBACK',
 	concept: 'CONCEPT',
-  world: 'WORLD'
+  world: 'WORLD',
+  load: 'LOAD'
 };
 /**
  * Renders the koconut application view.
@@ -43,6 +44,7 @@ class App extends Component {
   switchToSignin: Function;
   switchToSignup: Function;
   generateExercise: Function;
+  switchToWorldView: Function;
   generator: ExerciseGenerator;
   theme: mixed;
   // updater: ResponseEvaluator;
@@ -54,7 +56,7 @@ class App extends Component {
     display: string, // the current display state
     conceptOptions: number, // concept options offered, no options if <= 1
     currentConcept: ?string,
-    firebaseUser: ?FirebaseUser
+    firebaseUser: any
   };
   constructor() {
     super();
@@ -79,6 +81,7 @@ class App extends Component {
     this.switchToSignin = this.switchToSignin.bind(this);
     this.switchToSignup = this.switchToSignup.bind(this);
     this.generateExercise = this.generateExercise.bind(this);
+    this.switchToWorldView = this.switchToWorldView.bind(this);
   }
   /**
    * Passed in as a prop to WorldView -> ConceptCard
@@ -86,7 +89,7 @@ class App extends Component {
 	 * concept and type
    *
    */
-  generateExercise(concept: String, exerciseType: String) {
+  generateExercise(concept: string, exerciseType: string) {
   	let exercises = this.generator.getExercisesByTypeAndConcept(concept, exerciseType);
   	if (exercises.length == 0) {
 			// TODO: /
@@ -239,6 +242,14 @@ class App extends Component {
 		this.setState({display: displayType.signup});
 	}
 
+  /**
+   * Sets the display state to 'WORLD". This function is passed as a prop
+   * to the the navigationbar.
+   */
+	switchToWorldView() {
+	  this.setState({display: displayType.world});
+  }
+
 	/**
 	 * Renders the welcome view
 	 * @returns {*}
@@ -247,9 +258,13 @@ class App extends Component {
     return (
         <Welcome
             callBack={() => {
-              this.setState({display: displayType.world});
-              let databaseRef = firebase.database().ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
-              databaseRef.set(true);
+              if(this.state.firebaseUser) {
+                this.setState({display: displayType.world});
+                let databaseRef = firebase.database().
+                    ref("Users/" + this.state.firebaseUser.uid +
+                        "/waiverStatus");
+                databaseRef.set(true);
+              }
             }}
         firebaseUser={this.state.firebaseUser}
         app={this}/>
@@ -320,24 +335,26 @@ class App extends Component {
     return (
         <div className="App">
           <MuiThemeProvider theme={this.theme}>
-            <Navbar firebaseUser={this.state.firebaseUser} />
+            <Navbar firebaseUser={this.state.firebaseUser}
+                    switchToWorldView={this.switchToWorldView}
+                    display={this.state.display}/>
             <div className="main">
-              {/*<h1 className="title">*/}
-                {/*{this.state.display !== displayType.welcome ?*/}
-                    {/*<span className="debug">*/}
-                  {/*<input*/}
-                      {/*type="button"*/}
-                      {/*onClick={() => this.setState(*/}
-                          {/*{*/}
-                            {/*display: displayType.exercise,*/}
-                            {/*exercise: this._getExercise(),*/}
-                            {/*feedback: '',*/}
-                            {/*counter: this.state.counter + 1,*/}
-                          {/*})}*/}
-                      {/*value="next exercise type"*/}
-                  {/*/>*/}
-                {/*</span> : ''}*/}
-              {/*</h1>*/}
+              <h1 className="title">
+                {this.state.display !== displayType.welcome ?
+                    <span className="debug">
+                  <input
+                      type="button"
+                      onClick={() => this.setState(
+                          {
+                            display: displayType.exercise,
+                            exercise: this._getExercise(),
+                            feedback: '',
+                            counter: this.state.counter + 1,
+                          })}
+                      value="next exercise type"
+                  />
+                </span> : ''}
+              </h1>
               {this.renderDisplay()}
             </div>
           </MuiThemeProvider>
