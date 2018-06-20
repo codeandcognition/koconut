@@ -41,6 +41,7 @@ class App extends Component {
   submitTryAgain: Function;
   switchToSignin: Function;
   switchToSignup: Function;
+  switchToWorldView: Function;
   generator: ExerciseGenerator;
   theme: mixed;
   // updater: ResponseEvaluator;
@@ -76,6 +77,7 @@ class App extends Component {
     this.submitTryAgain = this.submitTryAgain.bind(this);
     this.switchToSignin = this.switchToSignin.bind(this);
     this.switchToSignup = this.switchToSignup.bind(this);
+    this.switchToWorldVIew = this.switchToWorldView.bind(this);
   }
   /**
    * Return a generated exercise
@@ -220,6 +222,14 @@ class App extends Component {
 		this.setState({display: displayType.signup});
 	}
 
+  /**
+   * Sets the display state to 'WORLD". This function is passed as a prop
+   * to the ExerciseView.
+   */
+	switchToWorldView() {
+	  this.setState({display: displayType.world});
+  }
+
 	/**
 	 * Renders the welcome view
 	 * @returns {*}
@@ -246,6 +256,7 @@ class App extends Component {
   renderExercise() {
     return (
         <ExerciseView
+            switchToWorldView={this.switchToWorldView}
             exercise={this.state.exercise}
             submitHandler={this.submitResponse}
             feedback={this.state.feedback}
@@ -307,22 +318,22 @@ class App extends Component {
           <MuiThemeProvider theme={this.theme}>
             <Navbar firebaseUser={this.state.firebaseUser} />
             <div className="main">
-              {/*<h1 className="title">*/}
-                {/*{this.state.display !== displayType.welcome ?*/}
-                    {/*<span className="debug">*/}
-                  {/*<input*/}
-                      {/*type="button"*/}
-                      {/*onClick={() => this.setState(*/}
-                          {/*{*/}
-                            {/*display: displayType.exercise,*/}
-                            {/*exercise: this._getExercise(),*/}
-                            {/*feedback: '',*/}
-                            {/*counter: this.state.counter + 1,*/}
-                          {/*})}*/}
-                      {/*value="next exercise type"*/}
-                  {/*/>*/}
-                {/*</span> : ''}*/}
-              {/*</h1>*/}
+              <h1 className="title">
+                {this.state.display !== displayType.welcome ?
+                    <span className="debug">
+                  <input
+                      type="button"
+                      onClick={() => this.setState(
+                          {
+                            display: displayType.exercise,
+                            exercise: this._getExercise(),
+                            feedback: '',
+                            counter: this.state.counter + 1,
+                          })}
+                      value="next exercise type"
+                  />
+                </span> : ''}
+              </h1>
               {this.renderDisplay()}
             </div>
           </MuiThemeProvider>
