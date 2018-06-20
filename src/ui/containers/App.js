@@ -227,7 +227,13 @@ class App extends Component {
   renderWelcome() {
     return (
         <Welcome
-            callBack={() => this.setState({display: displayType.world})}/>
+            callBack={() => {
+              this.setState({display: displayType.world});
+              var databaseRef = firebase.database().ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
+              databaseRef.set(true);
+            }}
+        firebaseUser={this.state.firebaseUser}
+        app={this}/>
     );
   }
   /**

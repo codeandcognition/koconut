@@ -37,7 +37,8 @@ class ConceptCard extends Component {
 			cursor: "pointer",
 			textIndent: "8px",
 			margin: "3px",
-			fontSize: "14px"
+			fontSize: "14px",
+			display: "inline-block"
 		}
 
 		var titleStyle = {
@@ -47,6 +48,7 @@ class ConceptCard extends Component {
 		return(
 				<Card>
 					<CardContent>
+						<div>
 						<div style={{display: 'flex', cursor: "pointer"}} onClick={evt => this.handleExpandClick()}>
 							{this.state.expand ?
 							<ExpandedIcon /> :
@@ -57,11 +59,15 @@ class ConceptCard extends Component {
 						{this.state.expand &&
 								<div style={{paddingLeft: "5%"}}>
 									<p style={linkStyle}>read instruction</p>
+									<br />
 									<p style={linkStyle}>read practice</p>
+									<br />
 									<p style={linkStyle}>write instruction</p>
+									<br />
 									<p style={linkStyle}>write practice</p>
 								</div>
 						}
+						</div>
 					</CardContent>
 				</Card>
 		);
