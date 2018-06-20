@@ -31,7 +31,7 @@ class WorldView extends Component {
 					<h1>Intro</h1>
 					<li>Here you'll learn to code</li>
 					<li>How code runs</li>
-					<h1>Concepts</h1>
+					<h1 style={{marginTop: "5vh"}}>Concepts</h1>
 					{
 						conceptList.map((concept, index) => {
 							let name = conceptInventory[concept.name].explanations.name;
