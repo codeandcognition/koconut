@@ -32,6 +32,10 @@ $component-background: #fff;
   background-color: #eee;
 }
 
+body {
+  overflow-y: scroll !important;
+}
+
 // temporary
 .debug {
   margin-left: 0.5em;
