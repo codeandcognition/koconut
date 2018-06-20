@@ -22,12 +22,16 @@ type Props = {
 }
 
 class Navbar extends Component {
+  handleMenuClose: Function;
+  handleMenuClick: Function;
 
   constructor(props: Props) {
     super(props);
     this.state = {
       menuAnchor: null
     }
+    this.handleMenuClose = this.handleMenuClose.bind(this);
+    this.handleMenuClick = this.handleMenuClick.bind(this);
   }
 
   // Opens the hamburger menu when it is clicked
@@ -64,8 +68,9 @@ class Navbar extends Component {
 
               {this.props.firebaseUser &&
               (<div>
-                  <Button onClick={(e) => this.handleMenuClick(e)}
-                          aria-owns='menu'
+                  <Button
+                          onClick={(e) => this.handleMenuClick(e)}
+                          aria-owns={this.menuAnchor ? 'menu' : null}
                           aria-haspopup="true"
                           id="menu-button">
                       <img alt={"hamburger menu"}
@@ -74,10 +79,20 @@ class Navbar extends Component {
                   </Button>
                   <Menu id={'menu'}
                         anchorEl={this.state.menuAnchor}
-                        open={this.state.menuAnchor != null}
-                        ref={"menu"}>
-                    <MenuItem onClick={() => this.handleMenuClose()}>Profile</MenuItem>
-                    <MenuItem onClick={() => this.handleMenuClose()}>Settings</MenuItem>
+                        open={Boolean(this.state.menuAnchor)}
+                        onClose={this.handleMenuClose}
+                        anchorOrigin={{
+                          vertical: 45, // TODO RENAME THIS CONSTANT
+                          horizontal: 'left',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'left',
+                        }}
+                        getContentAnchorEl={null}
+                      >
+                    <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+                    <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
                     <MenuItem onClick={() => firebase.auth().signOut()}>Logout</MenuItem>
                   </Menu>
                 </div>)
