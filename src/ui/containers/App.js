@@ -52,7 +52,7 @@ class App extends Component {
     display: string, // the current display state
     conceptOptions: number, // concept options offered, no options if <= 1
     currentConcept: ?string,
-    firebaseUser: ?FirebaseUser
+    firebaseUser: any
   };
   constructor() {
     super();
@@ -228,9 +228,13 @@ class App extends Component {
     return (
         <Welcome
             callBack={() => {
-              this.setState({display: displayType.world});
-              var databaseRef = firebase.database().ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
-              databaseRef.set(true);
+              if(this.state.firebaseUser) {
+                this.setState({display: displayType.world});
+                var databaseRef = firebase.database().
+                    ref("Users/" + this.state.firebaseUser.uid +
+                        "/waiverStatus");
+                databaseRef.set(true);
+              }1
             }}
         firebaseUser={this.state.firebaseUser}
         app={this}/>
