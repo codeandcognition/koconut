@@ -93,15 +93,16 @@ class App extends Component {
    *
    */
   generateExercise(concept: string, exerciseType: string) {
-  	console.log(this.state.counter);
   	let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept);
   	if (exercises.length == 0) {
+			console.log(this.state.error);
 			this.setState({error: true});
 		} else {
 			this.setState({
 				display: displayType.exercise,
 				exercise: exercises[0].exercise,
-				currentConcept: concept
+				currentConcept: concept,
+				error: false // resets the error message
 			});
 		}
   }
@@ -128,7 +129,6 @@ class App extends Component {
             this.setState({firebaseUser: fbUser}) :
             this.setState({firebaseUser: null, display: displayType.signin});
       });
-
   }
   /**
    * Un app un-mount, stop watching authentication
@@ -227,11 +227,13 @@ class App extends Component {
 	}
 
 	/**
-	 * Renders the PopOverMessage if we run out of exercises
+	 * Renders the PopOverMessage if we run out of exercises. Passes error state
+	 * as a prop
+	 *
 	 * @returns {*}
 	 */
 	renderErrorMessage() {
-		return (<PopOverMessage/>);
+		return (<PopOverMessage toggleError={this.state.error}/>);
 	}
 
 	/**
@@ -365,7 +367,7 @@ class App extends Component {
 								}
               </h1>
               {this.renderDisplay()}
-							{this.state.error && this.renderErrorMessage()}
+							{this.state.error && this.renderErrorMessage() }
             </div>
           </MuiThemeProvider>
 				</div>
