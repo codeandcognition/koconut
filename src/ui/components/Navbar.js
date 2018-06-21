@@ -91,6 +91,7 @@ class Navbar extends Component {
                           horizontal: 'left',
                         }}
                         getContentAnchorEl={null}
+                        style={{paddingRight: 0}}
                       >
                     <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
                     <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
