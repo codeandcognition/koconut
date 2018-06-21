@@ -226,11 +226,16 @@ class App extends Component {
             ref("Users/" + fbUser.uid + "/waiverStatus");
         databaseRef.once("value", (snapshot) => {
           if (snapshot != null && snapshot.val()) {
-            this.setState({display: displayType.world});
+            this.setState({
+              firebaseUser: fbUser,
+              display: displayType.world});
           }
         });
       } else {
-        this.setState({display: displayType.signin});
+        this.setState({
+          display: displayType.signin,
+          firebaseUser: fbUser
+        });
       }
     });
   }
