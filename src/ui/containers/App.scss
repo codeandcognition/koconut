@@ -4,8 +4,8 @@ $component-background: #fff;
 .App {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  min-height: 100%;
   background-color: $app-background;
 }
 
@@ -14,7 +14,7 @@ $component-background: #fff;
 }
 
 .main {
-  padding: 3em;
+  padding: 0;
 }
 
 .btn {
