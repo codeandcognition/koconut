@@ -101,7 +101,8 @@ class App extends Component {
 			this.setState({
 				display: displayType.exercise,
 				exercise: exercises[0].exercise,
-				currentConcept: concept
+				currentConcept: concept,
+        error: false
 			});
 		}
   }
@@ -231,7 +232,7 @@ class App extends Component {
 	 * @returns {*}
 	 */
 	renderErrorMessage() {
-		return (<PopOverMessage/>);
+		return (<PopOverMessage />);
 	}
 
 	/**
@@ -365,7 +366,7 @@ class App extends Component {
 								}
               </h1>
               {this.renderDisplay()}
-							{this.state.error && this.renderErrorMessage()}
+							<PopOverMessage open={this.state.error} />
             </div>
           </MuiThemeProvider>
 				</div>
