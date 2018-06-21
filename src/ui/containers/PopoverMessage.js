@@ -16,6 +16,19 @@ class PopOver extends Component {
 			changed: false
 		}
 	}
+	handleClose() {
+		this.setState({open: !this.props.toggleError});
+	}
+
+	/**
+	 * Listens for a change in the props, mainly the error state and updates the
+	 * state accordingly
+	 *
+	 * @param nextProps
+	 */
+	componentWillReceiveProps(nextProps) {
+		this.setState({open: nextProps.toggleError});
+	}
 
 	render() {
 
