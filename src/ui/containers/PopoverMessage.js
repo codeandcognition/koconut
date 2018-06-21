@@ -10,12 +10,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 class PopOver extends Component {
 	constructor(props) {
 		super(props);
-		this.handleClose = this.handleClose.bind(this);
+		// this.handleClose = this.handleClose.bind(this);
 		this.state = {
-			open: true
+			open: false,
+			changed: false
 		}
 	}
-
 	handleClose() {
 		this.setState({open: !this.props.toggleError});
 	}
@@ -31,10 +31,11 @@ class PopOver extends Component {
 	}
 
 	render() {
+
 		return(
+
 				<Dialog
 						open={this.state.open}
-						onClose={this.handleClose}
 						aria-labelledby="Oops"
 						aria-describedby="Sorry, there are no exercises available for this concept right now."
 				>
@@ -45,7 +46,7 @@ class PopOver extends Component {
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
-						<Button onClick={this.handleClose} color="primary" autoFocus>
+						<Button color="primary" autoFocus>
 							Close
 						</Button>
 					</DialogActions>
