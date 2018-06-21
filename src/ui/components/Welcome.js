@@ -1,6 +1,8 @@
 //@flow
 import React, {Component} from 'react';
 import './Welcome.css';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 const strings = {
   welcome: "Welcome to Koconut!",
@@ -29,19 +31,30 @@ const strings = {
 
 class Welcome extends Component {
   // TODO: Maybe this should be a ReactMarkdown component
+
+  componentWillMount() {
+    var databaseRef = firebase.database().ref("Users/" + this.props.firebaseUser.uid + "/waiverStatus");
+    databaseRef.once("value", (snapshot) => {
+      if (snapshot != null && snapshot.val()) {
+        this.props.app.setState({display: "WORLD"});
+      }
+    })
+  }
+
+
   render() {
     return (
       <div className="welcome-page">
         <h2>{strings.welcome}</h2>
         <p>{strings.intro}</p>
         <h4>{strings.use_cases.title}</h4>
-        <ul>{strings.use_cases.cases.map((c, i) => <li id={i}>{c}</li>)}</ul>
+        <ul>{strings.use_cases.cases.map((c, i) => <li key={i}>{c}</li>)}</ul>
         <h4>{strings.user_modes.title}</h4>
-        <ol>{strings.user_modes.modes.map((m, i) => <li id={i}>{m}</li>)}</ol>
+        <ol>{strings.user_modes.modes.map((m, i) => <li key={i}>{m}</li>)}</ol>
         <h4>{strings.language.desc}</h4>
         <p>{strings.language.rationale}</p>
         <h4>{strings.language.example_desc}</h4>
-        {strings.language.example_code.map((c, i) => <div id={i}><code>{c}</code></div>)}
+        {strings.language.example_code.map((c, i) => <div key={i}><code>{c}</code></div>)}
         <h4><i>{strings.nsf}</i></h4>
         <p>{strings.agreement}</p>
         <button onClick={this.props.callBack}>{strings.iagree}</button>

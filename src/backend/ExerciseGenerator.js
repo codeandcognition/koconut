@@ -9,6 +9,8 @@ import conceptInventory from '../data/ConceptMap';
 // So, we import all of ConceptKnowledge
 import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
 
+var exercises = require('../data/Exercises');
+
 /**
  * Generates exercises associated with concepts
  * @class
@@ -19,6 +21,32 @@ class ExerciseGenerator {
   constructor() {
     this.counter = 0;
   }
+
+  /**
+   * Returns and array of exercises for the given exercise type and concept
+   * @param exerciseType - String ("READ" or "WRITE")
+   * @param concept - String (Camel Cased)
+   */
+  getExercisesByTypeAndConcept(exerciseType: string, concept: string) {
+    var exerciseInventory = [exercises.variable17061, exercises.variable18916, exercises.variable51520,
+      exercises.variable60932, exercises.variable88688]; // Add variable to this array as exercise inventory grows
+    var exerciseList = [];
+    for (var i = 0; i < exerciseInventory.length; i++) {
+      exerciseList = exerciseList.concat(exerciseInventory[i]);
+    }
+    var results = [];
+    var readTypes = ["highlightCode", "multipleChoice", "shortResponse"];
+    exerciseList.forEach((item) => {
+      if (item.exercise.concepts.includes(concept)) {
+        if ((exerciseType === "READ" && readTypes.includes(item.exercise.type)) ||
+            (exerciseType === "WRITE" && !readTypes.includes(item.exercise.type))) {
+            results.push(item);
+        }
+      }
+    });
+    return results;
+  }
+
 
   /**
    * Gives optimal index of the next concept to generate questions for.

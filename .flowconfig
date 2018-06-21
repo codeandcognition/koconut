@@ -2,11 +2,3 @@
 .*/build/.*
 .*/dev/.*
 .*/node_modules/.*
-
-[include]
-
-[libs]
-
-[options]
-
-[lints]

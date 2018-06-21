@@ -159,6 +159,9 @@ class ResponseFeaturesTable {
       // Running sum to compute total time taken on this concept
       return relevant.reduce((sum, res) => {
         let pos = ResponseLog.log.indexOf(res);
+        if(pos === 0) {
+          return 0;
+        }
         let pre = ResponseLog.log[pos - 1];
         let time = this.convertMilliToMin(res.timestamp - pre.timestamp);
         return sum + time;
