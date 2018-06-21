@@ -13,7 +13,7 @@ import SignIn from '../components/SignIn';
 import WorldView from './WorldView';
 import PopOverMessage from './PopoverMessage';
 import Button from '@material-ui/core/Button/Button';
-
+import LoadingView from '../components/LoadingView';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -46,6 +46,7 @@ class App extends Component {
   switchToSignup: Function;
   generateExercise: Function;
   switchToWorldView: Function;
+  loadDisplay: Function;
   generator: ExerciseGenerator;
   theme: mixed;
   // updater: ResponseEvaluator;
@@ -58,8 +59,9 @@ class App extends Component {
     conceptOptions: number, // concept options offered, no options if <= 1
     currentConcept: ?string,
     firebaseUser: any,
-		error: boolean
+    error: boolean
   };
+
   constructor() {
     super();
     this.generator = new ExerciseGenerator();
@@ -70,11 +72,11 @@ class App extends Component {
       feedback: '',
       nextConcepts: [],
       counter: 1,
-      display: displayType.signin,
+      display: displayType.load,
       conceptOptions: 4, //TODO: Make this not hard coded
       currentConcept: null,
       firebaseUser: null,
-			error: false
+      error: false
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -85,28 +87,32 @@ class App extends Component {
     this.switchToSignup = this.switchToSignup.bind(this);
     this.generateExercise = this.generateExercise.bind(this);
     this.switchToWorldView = this.switchToWorldView.bind(this);
+    this.loadDisplay = this.loadDisplay.bind(this);
   }
+
   /**
    * Passed in as a prop to WorldView -> ConceptCard
-	 * When invoked in concept card, it generates an exercise of the given
-	 * concept and type
+   * When invoked in concept card, it generates an exercise of the given
+   * concept and type
    *
    */
   generateExercise(concept: string, exerciseType: string) {
-  	let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept);
-  	if (exercises.length == 0) {
-			console.log(this.state.error);
-			this.setState({error: true});
-		} else {
-			this.setState({
-				display: displayType.exercise,
-				exercise: exercises[0].exercise,
-				currentConcept: concept,
+    let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType,
+        concept);
+    if (exercises.length == 0) {
+      console.log(this.state.error);
+      this.setState({error: true});
+    } else {
+      this.setState({
+        display: displayType.exercise,
+        exercise: exercises[0].exercise,
+        currentConcept: concept,
         error: false
 
-			});
-		}
+      });
+    }
   }
+
   /**
    * Returns a generated exercise by index
    * For DEBUG eyes only eyes 👀😭
@@ -116,6 +122,7 @@ class App extends Component {
   _getExercise(): Exercise {
     return this.generator._generateExercise(this.state.counter);
   }
+
   /**
    * Set up a firebase authentication listener when component mounts
    * Will set the state of firebaseUser to be the current logged in user
@@ -125,19 +132,24 @@ class App extends Component {
    * data collection.
    */
   componentDidMount() {
-      this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
-          fbUser ?
-            this.setState({firebaseUser: fbUser}) :
-            this.setState({firebaseUser: null, display: displayType.signin});
-      });
+    /*this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
+      fbUser ?
+          this.setState({firebaseUser: fbUser}) :
+          this.setState({firebaseUser: null, display: displayType.signin});
+    });*/
   }
+
   /**
    * Un app un-mount, stop watching authentication
    */
   componentWillUnmount() {
+    this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
+      fbUser ?
+          this.setState({firebaseUser: fbUser}) :
+          this.setState({firebaseUser: null, display: displayType.signin});
+    });
     this.stopWatchingAuth();
   }
-
 
   getConcepts() {
     let size = this.state.conceptOptions;
@@ -150,6 +162,7 @@ class App extends Component {
     }
     return ret;
   }
+
   /**
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
@@ -170,6 +183,7 @@ class App extends Component {
       });
     }
   }
+
   /**
    * Submits the given concept
    * @param concept - the concept being submit
@@ -183,6 +197,7 @@ class App extends Component {
       });
     }
   }
+
   /**
    * Invoked when student toggles OK button after receiving feedback
    */
@@ -192,18 +207,53 @@ class App extends Component {
       display: displayType.concept,
     });
   }
+
   submitTryAgain() {
     this.setState({
       display: displayType.exercise,
     });
   }
+
+  renderLoadView() {
+    return <LoadingView loadDisplay={() => this.loadDisplay()}/>
+  }
+
+  // Checks is user is signed in and waiver status
+  loadDisplay() {
+    firebase.auth().onAuthStateChanged((fbUser) => {
+      if (fbUser != null) {
+        var databaseRef = firebase.database().
+            ref("Users/" + fbUser.uid + "/waiverStatus");
+        databaseRef.once("value", (snapshot) => {
+          if (snapshot != null && snapshot.val()) {
+            this.setState({display: displayType.world});
+          }
+        });
+      } else {
+        this.setState({display: displayType.signin});
+      }
+    });
+  }
+
+  updateWaiverStatus() {
+    if (this.state.firebaseUser) {
+      this.setState({display: displayType.world});
+      let databaseRef = firebase.database().
+          ref("Users/" + this.state.firebaseUser.uid +
+              "/waiverStatus");
+      databaseRef.set(true);
+    }
+  }
+
+
+
   /**
    * Renders the sign up view
    */
   renderSignup() {
     if(this.state.firebaseUser) {
       this.setState({
-        display: displayType.welcome
+        display: displayType.load
       });
     } else {
       return(
@@ -216,9 +266,9 @@ class App extends Component {
 	 * Renders the sign in view
 	 */
 	renderSignin() {
-		if(this.state.firebaseUser) {
+		if (this.state.firebaseUser) {
 			this.setState({
-				display: displayType.welcome
+				display: displayType.load
 			});
 		} else {
 			return(
@@ -268,19 +318,11 @@ class App extends Component {
   renderWelcome() {
     return (
         <Welcome
-            callBack={() => {
-              if(this.state.firebaseUser) {
-                this.setState({display: displayType.world});
-                let databaseRef = firebase.database().
-                    ref("Users/" + this.state.firebaseUser.uid +
-                        "/waiverStatus");
-                databaseRef.set(true);
-              }
-            }}
-        firebaseUser={this.state.firebaseUser}
+        callback={() => this.updateWaiverStatus()}
         app={this}/>
     );
   }
+
   /**
    * Renders the exercise view
    */
@@ -337,6 +379,8 @@ class App extends Component {
 				return this.renderConceptSelection();
       case displayType.world:
         return this.renderWorldView();
+      case displayType.load:
+        return this.renderLoadView();
 			default:
 				break;
 		}
