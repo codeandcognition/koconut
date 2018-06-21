@@ -52,6 +52,7 @@ class App extends Component {
   // updater: ResponseEvaluator;
   state: {
     exercise: Exercise,
+		exerciseType: string,
     feedback: string,
     nextConcepts: string[],
     counter: number,
@@ -59,7 +60,8 @@ class App extends Component {
     conceptOptions: number, // concept options offered, no options if <= 1
     currentConcept: ?string,
     firebaseUser: any,
-    error: boolean
+		error: boolean,
+		errorMessage: string
   };
 
   constructor() {
@@ -69,14 +71,16 @@ class App extends Component {
 
     this.state = {
       exercise: this.generator.generateExercise(),
+			exerciseType: '', // yet to be defined
       feedback: '',
       nextConcepts: [],
-      counter: 1,
-      display: displayType.load,
-      conceptOptions: 4, //TODO: Make this not hard coded
+      counter: 0, // Changed this from 1 to 0 -- cuz 0-based indexing
+      display: displayType.signin,
+      conceptOptions: 4, // TODO: Make this not hard coded
       currentConcept: null,
       firebaseUser: null,
-      error: false
+			error: false,
+			errorMessage: '' // none
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -97,20 +101,26 @@ class App extends Component {
    *
    */
   generateExercise(concept: string, exerciseType: string) {
-    let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType,
-        concept);
-    if (exercises.length == 0) {
-      console.log(this.state.error);
-      this.setState({error: true});
-    } else {
-      this.setState({
-        display: displayType.exercise,
-        exercise: exercises[0].exercise,
-        currentConcept: concept,
-        error: false
-
-      });
-    }
+		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept);
+		// console.log(exercises);
+		if (exercises.length === 0) {
+			this.setState({
+				error: true,
+				errorMessage: 'Sorry, there are no exercises available for this concept right now.'
+			});
+		} else if (this.state.counter === exercises.length) { // reached the end of the list
+			// TODO: Handle this case more elegantly
+			window.alert('We ran out of questions for this topic! Stay-tuned for more');
+			this.switchToWorldView();
+		} else {
+			this.setState({
+				display: displayType.exercise,
+				exercise: exercises[this.state.counter].exercise,
+				currentConcept: concept,
+				exerciseType: exerciseType,
+				error: false // resets the error message
+			});
+		}
   }
 
   /**
@@ -130,7 +140,16 @@ class App extends Component {
    *
    * Can be passed down to props as this.state.firebaseUser, useful for
    * data collection.
-   *
+   */
+  componentDidMount() {
+      this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
+          fbUser ?
+            this.setState({firebaseUser: fbUser}) :
+            this.setState({firebaseUser: null, display: displayType.signin});
+      });
+  }
+
+  /**
    * Un app un-mount, stop watching authentication
    */
   componentWillUnmount() {
@@ -142,6 +161,10 @@ class App extends Component {
     this.stopWatchingAuth();
   }
 
+	/**
+	 * Returns a list of concepts relevant to the current concept
+	 * @returns {*}
+	 */
   getConcepts() {
     let size = this.state.conceptOptions;
     let concept = this.state.currentConcept;
@@ -164,7 +187,6 @@ class App extends Component {
         this.setState({
           feedback: ResponseLog.getFeedback(),
           nextConcepts: this.getConcepts(),
-          // exercise: this.generator.generateExercise(this.state.currentConcept),
           display: this.state.exercise.type !== 'survey'
               ? displayType.feedback
               : (this.state.conceptOptions > 1
@@ -180,14 +202,14 @@ class App extends Component {
    * @param concept - the concept being submit
    */
   submitConcept(concept: string) {
-    if (concept !== null && concept !== undefined) {
-      this.setState({
-        currentConcept: concept,
-        exercise: this.generator.generateExercise(concept),
-        display: displayType.exercise,
-      });
-    }
-  }
+		if (concept !== null && concept !== undefined) {
+			let newCounter = concept === this.state.currentConcept ? (this.state.counter + 1) : 0;
+			this.setState({
+				concept: concept,
+				counter: newCounter
+			}, () => this.generateExercise(concept, this.state.exerciseType));
+		}
+	}
 
   /**
    * Invoked when student toggles OK button after receiving feedback
@@ -280,7 +302,8 @@ class App extends Component {
 	 * @returns {*}
 	 */
 	renderErrorMessage() {
-		return (<PopOverMessage />);
+		return (<PopOverMessage toggleError={this.state.error}
+														errorMessage={this.state.errorMessage}/>);
 	}
 
 	/**
@@ -323,6 +346,7 @@ class App extends Component {
    * Renders the exercise view
    */
   renderExercise() {
+  	console.log(this.state.nextConcepts);
     return (
         <ExerciseView
             exercise={this.state.exercise}
@@ -391,6 +415,7 @@ class App extends Component {
                     display={this.state.display}/>
             <div className="main">
               <h1 className="title">
+								{/*
                 {this.state.display !== displayType.welcome ?
 										<Button
 												style={{marginTop: '5%'}}
@@ -406,9 +431,21 @@ class App extends Component {
 										>Next Exercise</Button>
 										: null
 								}
+								*/}
               </h1>
+							{/*this.state.error &&
+							<div className="alert alert-warning alert-dismissible fade show" role="alert" style={{marginTop: '5%'}}>
+								<div>{this.state.errorMessage}</div>
+								<button type="button"
+												className="close"
+												aria-label="Close"
+												onClick={() => this.setState({error: false})}>
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							*/}
               {this.renderDisplay()}
-							{this.state.error && this.renderErrorMessage() }
+							{this.state.error && this.renderErrorMessage()}
             </div>
           </MuiThemeProvider>
 				</div>

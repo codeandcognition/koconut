@@ -64,7 +64,7 @@ class ConceptCard extends Component {
 						{this.state.expand &&
 								<div style={{paddingLeft: "5%"}}>
 									<p style={linkStyle}
-										 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>read instruction</p>
+										 onClick={() => this.props.generateExercise(this.props.concept, '')}>read instruction</p>
 									<br />
 									<p style={linkStyle}
 										 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>read practice</p>

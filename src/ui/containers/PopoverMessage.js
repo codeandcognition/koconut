@@ -12,12 +12,12 @@ class PopOver extends Component {
 		super(props);
 		// this.handleClose = this.handleClose.bind(this);
 		this.state = {
-			open: false,
-			changed: false
+			open: true,
+			dialogText: this.props.errorMessage
 		}
 	}
 	handleClose() {
-		this.setState({open: !this.props.toggleError});
+		this.setState({open: !this.state.open});
 	}
 
 	/**
@@ -27,7 +27,10 @@ class PopOver extends Component {
 	 * @param nextProps
 	 */
 	componentWillReceiveProps(nextProps) {
-		this.setState({open: nextProps.toggleError});
+		this.setState({
+			open: nextProps.toggleError,
+			dialogText: nextProps.errorMessage
+		});
 	}
 
 	render() {
@@ -37,16 +40,17 @@ class PopOver extends Component {
 				<Dialog
 						open={this.state.open}
 						aria-labelledby="Oops"
-						aria-describedby="Sorry, there are no exercises available for this concept right now."
+						aria-describedby={this.state.dialogText}
 				>
 					<DialogTitle>{"Oops"}</DialogTitle>
 					<DialogContent>
 						<DialogContentText>
-							Sorry, there are no exercises available for this concept right now.
+							{this.state.dialogText}
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
-						<Button color="primary" autoFocus>
+						<Button onClick={() => this.handleClose()}
+										color="primary" autoFocus>
 							Close
 						</Button>
 					</DialogActions>
