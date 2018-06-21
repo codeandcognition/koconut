@@ -44,3 +44,5 @@ export let exampleInstructions1 = [
     'content':'test \n * test \n * test'
   },
 ];
+
+export const exampleInstructions = exampleInstructions1; //.concat();
