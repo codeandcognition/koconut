@@ -106,9 +106,12 @@ class App extends Component {
 					errorMessage: 'Sorry, there are no exercises available for this concept right now.'
   			});
 		} else if (this.state.counter === exercises.length) { // reached the end of the list
-				// TODO: Handle this case more elegantly
-				window.alert('We ran out of questions for this topic! Stay-tuned for more');
+  			// go back to the world view
 				this.switchToWorldView();
+				this.setState({
+					error: true,
+					errorMessage: 'Looks like we ran out of questions for this concept, stay-tuned for more!'
+				});
 		} else {
 			this.setState({
 				display: displayType.exercise,
@@ -301,7 +304,6 @@ class App extends Component {
    * Renders the exercise view
    */
   renderExercise() {
-  	console.log(this.state.nextConcepts);
     return (
         <ExerciseView
             exercise={this.state.exercise}
