@@ -81,8 +81,8 @@ class BKT {
    * @returns {boolean}
    */
   static notNullOrUndefined(input: any) {
-  return !(input === null || input === undefined);
-}
+    return !(input === null || input === undefined);
+  }
 
 }
 
