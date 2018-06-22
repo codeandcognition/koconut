@@ -21,6 +21,8 @@ export default class InstructionView extends Component {
     instructionList: any // will always be an instruction object from firebase
   };
   mounted: boolean;
+  prevInstruction: Function;
+  nextInstruction: Function;
 
   constructor(props: Props) {
     super(props);
@@ -28,6 +30,8 @@ export default class InstructionView extends Component {
       currInstructionIndex: 0,
       instructionList: null
     };
+    this.prevInstruction = this.prevInstruction.bind(this);
+    this.nextInstruction = this.nextInstruction.bind(this);
   }
 
   /**
@@ -116,7 +120,7 @@ export default class InstructionView extends Component {
     }
     console.log(this.state.instructionList);
     return (
-      <div style={{marginTop: 40}}>
+      <div style={{marginTop: "100px", marginLeft: 40}}> {/* TODO REPLACE MARGIN */ }
         <BreadCrumbs />
         {this.state.instructionList &&
             <div>
