@@ -112,12 +112,10 @@ class InstructTool extends Component {
 					</div>
 					<br />
 					<textarea value={this.state.content} name="content" onChange={(e) => this.handleChange(e)} rows="10" style={{width: "50%", marginTop: "50px"}} placeholder={"Instruction Content"}></textarea>
-					<h4>Preview</h4>
-					<textarea rows={"10"} style={{pointerEvents: "none", width: "50%"}} value={this.getPreview()}></textarea>
 					<br />
 					<Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.addInstruction()}>Add Instruction</Button>
 					<br />
-					<h4 style={{marginTop: "80px"}}>JSON Output</h4>
+					<h4 style={{marginTop: "80px"}}>Instruction Steps</h4>
 					<textarea rows={"10"} style={{width: "50%"}} value={JSON.stringify(this.state.instructions, null, 2)}></textarea>
 				</Paper>
 		);
