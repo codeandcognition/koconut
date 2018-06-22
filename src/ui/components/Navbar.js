@@ -94,7 +94,10 @@ class Navbar extends Component {
                       >
                     <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
                     <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
-                    <MenuItem onClick={() => firebase.auth().signOut()}>Logout</MenuItem>
+                    <MenuItem onClick={() => {
+                      this.handleMenuClose();
+                      firebase.auth().signOut();
+                    }}>Logout</MenuItem>
                   </Menu>
                 </div>)
               }

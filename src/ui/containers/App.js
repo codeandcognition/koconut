@@ -75,7 +75,7 @@ class App extends Component {
       feedback: '',
       nextConcepts: [],
       counter: 0, // Changed this from 1 to 0 -- cuz 0-based indexing
-      display: displayType.signin,
+      display: displayType.load,
       conceptOptions: 4, // TODO: Make this not hard coded
       currentConcept: null,
       firebaseUser: null,
@@ -143,16 +143,7 @@ class App extends Component {
    *
    * Can be passed down to props as this.state.firebaseUser, useful for
    * data collection.
-   */
-  componentDidMount() {
-      this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
-          fbUser ?
-            this.setState({firebaseUser: fbUser}) :
-            this.setState({firebaseUser: null, display: displayType.signin});
-      });
-  }
-
-  /**
+   *
    * Un app un-mount, stop watching authentication
    */
   componentWillUnmount() {
