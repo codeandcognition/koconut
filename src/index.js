@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './ui/containers/App';
+import App from './ui/koconut/containers/App';
 import registerServiceWorker from './registerServiceWorker';
 import firebase from 'firebase/app';
 

@@ -5,7 +5,7 @@ import ShortResponse from '../components/ShortResponse';
 import SurveyView from '../components/SurveyView.js';
 import './Response.css';
 
-import Types from '../../data/ExerciseTypes.js';
+import Types from '../../../data/ExerciseTypes.js';
 
 /**
  * The Response component contains the response section in the assessment problem

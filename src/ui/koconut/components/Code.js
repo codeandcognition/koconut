@@ -12,7 +12,7 @@ import 'brace/theme/eclipse';
 import 'brace/theme/solarized_dark';
 
 // Tool imports
-import Types from '../../data/ExerciseTypes.js';
+import Types from '../../../data/ExerciseTypes.js';
 
 // Component imports
 import Hint from './Hint.js';

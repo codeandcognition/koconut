@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import ReactTooltip from 'react-tooltip';
 import ReactMarkdown from 'react-markdown';
-import conceptInventory from '../../data/ConceptMap';
+import conceptInventory from '../../../data/ConceptMap';
 import './ConceptLabel.css'
 
 // type Props = {concepts: string};

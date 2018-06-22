@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import Code from '../components/Code';
 import Response from './Response';
 import Feedback from '../components/Feedback';
-import Types from '../../data/ExerciseTypes.js';
+import Types from '../../../data/ExerciseTypes.js';
 import './Information.css';
 
 // Display type enum

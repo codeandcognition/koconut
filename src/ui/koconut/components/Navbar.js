@@ -53,7 +53,7 @@ class Navbar extends Component {
         <div>
           <AppBar>
             <Toolbar>
-              {this.props.display === "EXERCISE" ?
+              {this.props.display === "EXERCISE" || this.props.display === "AUTHOR" ?
               <div style={{marginRight: 5}}><button onClick={this.props.switchToWorldView}
                            aria-owns='menu'
                            aria-haspopup="true"
@@ -93,6 +93,7 @@ class Navbar extends Component {
                         getContentAnchorEl={null}
                         style={{paddingRight: 0}}
                       >
+										<MenuItem onClick={() => {this.props.switchToAuthorView()}}>Author</MenuItem>
                     <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
                     <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
                     <MenuItem onClick={() => firebase.auth().signOut()}>Logout</MenuItem>
