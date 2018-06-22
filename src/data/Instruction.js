@@ -19,7 +19,7 @@ export const stubInstruction: {} = {
   concept: 'integerLiteral',
   type: instructionType.read,
   content: "## header 2 in markup\n"
-}
+};
 
 export let exampleInstructions1 = [
   {
