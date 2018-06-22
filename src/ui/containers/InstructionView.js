@@ -20,6 +20,7 @@ export default class InstructionView extends Component {
     currInstructionIndex: number,
     instructionList: any // will always be an instruction object from firebase
   };
+  mounted: boolean;
 
   constructor(props: Props) {
     super(props);
@@ -61,9 +62,51 @@ export default class InstructionView extends Component {
     }
   }
 
-  componentWillMount() {
-    // set up firebase listener
-    // set instructionlist to that.
+  /**
+   * On component mount, grab the data for the specific instruction off of
+   * firebase.
+   *
+   * Filtering of which instruction list to show is based off the firebase
+   * path rather than grabbing ALL the instructions and filtering here.
+   * Might as well do that instead of calculations here because we call
+   * firebase when instructions change anyways.
+   *
+   * Also sets a boolean this.mounted to true. This is so that when component
+   * unloads, the firebase listener won't act.
+   */
+  componentDidMount() {
+    this.mounted = true;
+    this.firebaseListener = firebase.database()
+      .ref(`Instructions/${this.props.conceptType}/${this.props.readOrWrite}`);
+    this.firebaseListener.on('value', (snap) => {
+      if(this.mounted) {
+        this.setState({instructionList: snap.val()});
+      }
+    });
+  }
+
+  /**
+   * Reset the firebaseListener to be instructions from the new props.
+   * I don't think the way our program is structured will ever require this to
+   * be called, but better safe than sorry.
+   * @param nextProps- the new prop object being received
+   */
+  componentWillReceiveProps(nextProps: Props) {
+    this.firebaseListener = firebase.database()
+    .ref(`Instructions/${this.nextProps.conceptType}/${this.nextProps.readOrWrite}`);
+    this.firebaseListener.on('value', (snap) => {
+      if(this.mounted) {
+        this.setState({instructionList: snap.val()});
+      }
+    });
+  }
+
+  /**
+   * unmount the component and set this.mounted to be false, so firebaseListener
+   * event doesn't continue firing uselessly.
+   */
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   render() {
@@ -71,6 +114,7 @@ export default class InstructionView extends Component {
     if(this.state.instructionList) {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
+    console.log(this.state.instructionList);
     return (
       <div style={{marginTop: 40}}>
         <BreadCrumbs />
