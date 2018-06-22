@@ -47,10 +47,14 @@ class ConceptSelection extends Component {
    * Wow modularity!
    */
   render() {
+    let styles = {
+      marginTop: '7%'
+    }
+
     // TODO: the implementation below is less than ideal but constrained by
     // the conceptInventory data structure
     return (
-        <div className="concept-selection">
+        <div className="concept-selection" style={styles}>
           <MultipleChoice
               title='Select the next concept:'
               choices={this.props.concepts}

@@ -65,8 +65,11 @@ class Exercise extends Component {
   }
 
   render() {
+    let styles = {
+      marginTop: '10%'
+    }
     return (
-        <div className="exercise-view">
+        <div className="exercise-view" style={styles}>
           <Prompt content={this.props.exercise.prompt} type={this.props.exercise.type}/>
           <Information
               code={this.props.exercise.code}

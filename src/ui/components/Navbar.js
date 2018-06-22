@@ -9,6 +9,7 @@ import 'firebase/auth';
 import typeof FirebaseUser from 'firebase';
 import Menu from '@material-ui/core/Menu/Menu';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
+import BackButton from '@material-ui/icons/ChevronLeft';
 
 /**
  * Navbar adds a navigation bar to the app
@@ -53,20 +54,18 @@ class Navbar extends Component {
         <div>
           <AppBar>
             <Toolbar>
-              {this.props.display === "EXERCISE" ?
-              <div style={{marginRight: 5}}><button onClick={this.props.switchToWorldView}
-                           aria-owns='menu'
-                           aria-haspopup="true"
-                           id="menu-button"
-                           color={"secondary"}>
-                Back to World View
-              </button></div> : <div></div>
-              }
-              {/* color imported from Material UI */}
-              <Typography style={{flexGrow: 1, color: "#FAFAFA"}} variant={"title"}>
-                  Koconut
-              </Typography>
+							{this.props.display === "EXERCISE" ?
+									<div style={{marginRight: 5, cursor: 'pointer'}}><BackButton onClick={this.props.switchToWorldView}
+																														aria-owns='menu'
+																														aria-haspopup="true"
+																														id="menu-button">
 
+									</BackButton></div> : <div></div>
+							}
+							{/* color imported from Material UI */}
+							<Typography style={{flexGrow: 1, color: "#FAFAFA"}} variant={"title"}>
+								Koconut
+							</Typography>
               {this.props.firebaseUser &&
               (<div>
                   <Button
