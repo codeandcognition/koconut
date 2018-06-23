@@ -75,6 +75,8 @@ export default class InstructionView extends Component {
    * Might as well do that instead of calculations here because we call
    * firebase when instructions change anyways.
    *
+   * sets the firebaseListener to null regardless if the link doesn't work
+   *
    * Also sets a boolean this.mounted to true. This is so that when component
    * unloads, the firebase listener won't act.
    */
@@ -119,7 +121,7 @@ export default class InstructionView extends Component {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
     return (
-      <div style={{marginTop: "100px", marginLeft: 40}}> {/* TODO REPLACE MARGIN */ }
+      <div style={{paddingTop: "100px", width: "100%", paddingLeft: 40, paddingRight: 40}}> {/* TODO REPLACE MARGIN */ }
         <BreadCrumbs />
         {this.state.instructionList &&
             <div>
