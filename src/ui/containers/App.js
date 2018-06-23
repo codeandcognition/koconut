@@ -14,6 +14,7 @@ import WorldView from './WorldView';
 import PopOverMessage from './PopoverMessage';
 import Button from '@material-ui/core/Button/Button';
 import LoadingView from '../components/LoadingView';
+import InstructionView from './InstructionView';
 
 // Fake AJAX
 import ExerciseGenerator from '../../backend/ExerciseGenerator';
@@ -31,7 +32,8 @@ const displayType = {
 	feedback: 'FEEDBACK',
 	concept: 'CONCEPT',
   world: 'WORLD',
-  load: 'LOAD'
+  load: 'LOAD',
+  instruct: 'INSTRUCT'
 };
 /**
  * Renders the koconut application view.
@@ -235,7 +237,7 @@ class App extends Component {
           if (snapshot != null && snapshot.val()) {
             this.setState({
               firebaseUser: fbUser,
-              display: displayType.world});
+              display: displayType.instruct}); //TODO CHANGE THIS BACK TO WORLD
           }
         });
       } else {
@@ -374,6 +376,16 @@ class App extends Component {
     )
   }
 
+  /**
+   * test method to render instruction view
+   * @private
+   */
+  _renderInstructionView() {
+    return(
+        <InstructionView conceptType={"test"} readOrWrite={"READ"}/>
+    )
+  }
+
 	/**
 	 * Renders the display based on display state
 	 */
@@ -394,6 +406,8 @@ class App extends Component {
         return this.renderWorldView();
       case displayType.load:
         return this.renderLoadView();
+      case displayType.instruct:
+        return this._renderInstructionView();
 			default:
 				break;
 		}
