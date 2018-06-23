@@ -6,6 +6,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
+import firebase from 'firebase';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
 class InstructTool extends Component {
 
@@ -14,7 +19,7 @@ class InstructTool extends Component {
 		this.state = {
 			instructions: [],
 			//Math.round(Math.random() * 999999999)
-			name: "",
+			title: "",
 			concept: "",
 			type: "",
 			content: "",
@@ -23,6 +28,7 @@ class InstructTool extends Component {
 			selectedTypeKey: 0
 		}
 	}
+
 
 	componentDidMount() {
 		this.setState({
@@ -35,39 +41,36 @@ class InstructTool extends Component {
 		let field = event.target.name;
 		let changes = {};
 		changes[field] = value;
-		this.setState(changes);
+		this.setState(changes, () => {
+      if (this.state.concept !== "" && this.state.type !== "") {
+        this.getCurrentInstructions()
+      }
+		});
 	}
 
 	addInstruction = () => {
 		let instruction = {
-			id: Math.round(Math.random() * 999999999),
-			name: this.state.name,
-			concept: this.state.concept,
-			type: this.state.type,
+			title: this.state.title,
 			content: this.state.content
 		};
 		this.setState({
 			instructions: [...this.state.instructions, instruction],
-			name: "",
-			concept: "",
-			type: "",
+			title: "",
 			content: ""
+		}, () => {
+			var databaseRef = firebase.database().ref('Instructions/' + this.state.concept + "/" + this.state.type);
+			databaseRef.set(this.state.instructions);
 		});
 	}
 
-	getPreview = () => {
-		return JSON.stringify({
-			id: "___ (generated on add) ___",
-			name: this.state.name,
-			concept: this.state.concept,
-			type: this.state.type,
-			content: this.state.content
-		}, null, 2)
-	}
 
-	getCodeOutput = () => {
-		"let variable" + Math.round(Math.random() * 9999999).toString() + " = "
-		+ JSON.stringify(this.state.instructions) + ";"
+	getCurrentInstructions() {
+		var databaseRef = firebase.database().ref('Instructions/' + this.state.concept + "/" + this.state.type);
+		databaseRef.on("value", (snapshot) => {
+			if (snapshot.val() !== null) {
+        this.setState({instructions: snapshot.val()});
+			}
+		});
 	}
 
 
@@ -76,21 +79,21 @@ class InstructTool extends Component {
 		var containerStyle = {
 			width: "80vw",
 			margin: "auto",
-			padding: "80px",
-			textAlign: "center"
+			padding: "80px"
 		}
 
 		return (
 				<Paper style={containerStyle} elevation={4}>
-					<TextField label={"Instruction Name"} style={{width: "30%"}} value={this.state.name} name="name" onChange={(e) => this.handleChange(e)}/>
+            <TextField fullWidth={true} label={"Instruction Name"} value={this.state.title} style={{width: "30%"}} name="title" onChange={(e) => this.handleChange(e)}/>
 					<br />
 					<div className="concept-select" style={{marginTop: "50px"}}>
 						<InputLabel htmlFor={"concept-selector"}>Choose Concept</InputLabel>
 						<Select id={"concept-selector"}
 										autoWidth={true}
 										value={this.state.concept}
-										style={{marginLeft: "100px"}}
-										onChange={(e) => this.setState({concept: e.target.value})}>
+										style={{marginLeft: "80px"}}
+										name={"concept"}
+										onChange={(e) => this.handleChange(e)}>
 							{this.state.conceptList.map((item, index) => {
 								return (
 										<MenuItem value={item} key={index}>{item}</MenuItem>
@@ -103,9 +106,10 @@ class InstructTool extends Component {
 						<InputLabel htmlFor={"type-selector"}>Choose Instruction Type</InputLabel>
 						<Select id={"type-selector"}
 										autoWidth={true}
+										name={"type"}
 										value={this.state.type}
-										style={{marginLeft: "100px"}}
-										onChange={(e) => this.setState({type: e.target.value})}>
+										style={{marginLeft: "80px"}}
+										onChange={(e) => this.handleChange(e)}>
 							<MenuItem value={"READ"}>READ</MenuItem>
 							<MenuItem value={"WRITE"}>WRITE</MenuItem>
 						</Select>
@@ -116,7 +120,22 @@ class InstructTool extends Component {
 					<Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.addInstruction()}>Add Instruction</Button>
 					<br />
 					<h4 style={{marginTop: "80px"}}>Instruction Steps</h4>
-					<textarea rows={"10"} style={{width: "50%"}} value={JSON.stringify(this.state.instructions, null, 2)}></textarea>
+					<div id={"instruction-steps"}>
+						{this.state.instructions && this.state.instructions.map((item, index) => {
+							return(
+                  <Card key={index}>
+                    <CardContent>
+                      <Typography variant={"headline"} component={"h3"}>{item.title}</Typography>
+                      <Typography color={"textSecondary"}>{item.content}</Typography>
+                    </CardContent>
+										<CardActions>
+											<Button color={"primary"} size={"small"}>Edit</Button>
+											<Button color={"secondary"} size={"small"}>Delete</Button>
+										</CardActions>
+                  </Card>
+							);
+						})}
+					</div>
 				</Paper>
 		);
 	}

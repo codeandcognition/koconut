@@ -32,7 +32,7 @@ class AuthorView extends Component {
 		}
 
 		return(
-				<div className="container">
+				<div style={{marginTop: "100px"}} className="container">
 					<div className="header">
 						<h1>This is the super cool authoring tool</h1>
 					</div>
