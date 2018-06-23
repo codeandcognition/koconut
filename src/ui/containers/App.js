@@ -237,7 +237,7 @@ class App extends Component {
           if (snapshot != null && snapshot.val()) {
             this.setState({
               firebaseUser: fbUser,
-              display: displayType.instruct}); //TODO CHANGE THIS BACK TO WORLD
+              display: displayType.world}); //TODO CHANGE THIS BACK TO WORLD
           }
         });
       } else {
