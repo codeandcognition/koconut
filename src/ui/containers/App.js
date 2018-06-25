@@ -391,7 +391,7 @@ class App extends Component {
    */
   _renderInstructionView() {
     return(
-        <InstructionView conceptType={"test"} readOrWrite={"READ"}/>
+        <InstructionView conceptType={"booleanLiteral"} readOrWrite={"READ"}/>
     )
   }
 

@@ -99,7 +99,7 @@ export default class InstructionView extends Component {
    */
   componentWillReceiveProps(nextProps: Props) {
     this.firebaseListener = firebase.database()
-    .ref(`Instructions/${this.nextProps.conceptType}/${this.nextProps.readOrWrite}`);
+    .ref(`Instructions/${nextProps.conceptType}/${nextProps.readOrWrite}`);
     this.firebaseListener.on('value', (snap) => {
       if(this.mounted) {
         this.setState({instructionList: snap.val()});
@@ -120,7 +120,6 @@ export default class InstructionView extends Component {
     if(this.state.instructionList) {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
-    console.log(this.state.instructionList);
     return (
       <div style={{paddingTop: "100px", width: "100%", paddingLeft: 40, paddingRight: 40}}>
         <BreadCrumbs />
