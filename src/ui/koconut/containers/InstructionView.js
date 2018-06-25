@@ -98,8 +98,7 @@ export default class InstructionView extends Component {
    * @param nextProps- the new prop object being received
    */
   componentWillReceiveProps(nextProps: Props) {
-    this.firebaseListener = firebase.database()
-    .ref(`Instructions/${this.nextProps.conceptType}/${this.nextProps.readOrWrite}`);
+    this.firebaseListener = firebase.database().ref(`Instructions/${nextProps.conceptType}/${nextProps.readOrWrite}`);
     this.firebaseListener.on('value', (snap) => {
       if(this.mounted) {
         this.setState({instructionList: snap.val()});

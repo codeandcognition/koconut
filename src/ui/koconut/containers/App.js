@@ -110,7 +110,6 @@ class App extends Component {
    */
   generateExercise(concept: string, exerciseType: string) {
 		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept);
-		// console.log(exercises);
 		if (exercises.length === 0) {
 			this.setState({
 				error: true,
@@ -133,6 +132,12 @@ class App extends Component {
 			});
 		}
   }
+
+  getInstruction(concept: string, instructionType: string) {
+		// save concept type
+		// save instruction type
+		// change display type
+	}
 
   /**
    * Returns a generated exercise by index
@@ -240,11 +245,11 @@ class App extends Component {
         var databaseRef = firebase.database().
             ref("Users/" + fbUser.uid);
         databaseRef.once("value", (snapshot) => {
-        	if (snapshot) {
+        	if (snapshot !== null && snapshot.val() !== null) {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
-        		waiverStatus ? this.setState({firebaseUser: fbUser, display: displayType.world}) : null;
-        		author ? this.setState({author: author}) : null;
+        		waiverStatus ? this.setState({firebaseUser: fbUser, display: displayType.instruct}) : false; // TODO: change this back to world
+        		author ? this.setState({author: author}) : false;
 					}
         });
       } else {
@@ -300,7 +305,6 @@ class App extends Component {
 	 * Remders the author view
 	 */
 	renderAuthorView() {
-		// TODO: Implement permissions to restrict access to AuthorView
 		return (<AuthorView></AuthorView>);
 	}
 
@@ -403,7 +407,7 @@ class App extends Component {
    */
   _renderInstructionView() {
     return(
-        <InstructionView conceptType={"test"} readOrWrite={"READ"}/>
+        <InstructionView conceptType={"booleanLiteral"} readOrWrite={"READ"} />
     )
   }
 
