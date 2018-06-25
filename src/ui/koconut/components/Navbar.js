@@ -95,7 +95,7 @@ class Navbar extends Component {
                         getContentAnchorEl={null}
                         style={{paddingRight: 0}}
                       >
-										{this.props.author && <MenuItem onClick={() => {this.props.switchToAuthorView()}}>Author</MenuItem>}
+										{this.props.author && <MenuItem onClick={() => {this.handleMenuClose(); this.props.switchToAuthorView()}}>Author</MenuItem>}
                     <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
                     <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
                     <MenuItem onClick={() => {
