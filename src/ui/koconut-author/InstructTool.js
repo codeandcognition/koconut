@@ -11,7 +11,6 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import Input from '@material-ui/core/Input';
 
 class InstructTool extends Component {
 
@@ -28,7 +27,9 @@ class InstructTool extends Component {
 			selectedConceptKey: 0,
 			selectedTypeKey: 0,
 			editMode: false,
-			editIndex: null
+			editIndex: null,
+			reorder: "",
+			reorderError: ""
 		}
 	}
 
@@ -119,11 +120,43 @@ class InstructTool extends Component {
 		});
 	}
 
+	// Deletes instruction from database
 	handleDeleteInstruction(index) {
 		var result = this.state.instructions;
 		result.splice(index, 1);
 		var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type);
 		databaseRef.set(result);
+	}
+
+	// Reorders the instruction pages based on the given reorder sequence stored in state -> reorder
+	reorderInstructions() {
+		var orderString = this.state.reorder;
+		var pattern = /^([0-9],)+[0-9]$/g;
+		var orderArr = orderString.split(",");
+		var oldInstruct = this.state.instructions;
+		var error = "";
+		if (!pattern.test(orderString)) {
+			error = "Incorrectly formatted input. Please enter reorder as a comma-separated list of numbers.";
+		} else if (orderArr.length != oldInstruct.length) {
+			error = "Numbers provided do not equal the amount of pages for reordering.";
+		} else {
+			var result = [];
+			for (var i = 0; i < orderArr.length; i++) {
+        var index = Number(orderArr[i]) - 1;
+				if (result[i] !== null || index >= orderArr.length) {
+          error = "Invalid order provided. Reordering failed."
+				} else {
+          result[i] = oldInstruct[index];
+				}
+			}
+			if (error === "") {
+        var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type);
+        databaseRef.set(result);
+			}
+    }
+		this.setState({
+			reorderError: error
+		});
 	}
 
 	render() {
@@ -139,7 +172,8 @@ class InstructTool extends Component {
 
 		return (
 				<Paper style={containerStyle} elevation={4}>
-            <TextField fullWidth={true} label={"Instruction Name"} value={this.state.title} style={{width: "30%"}} name="title" onChange={(e) => this.handleChange(e)}/>
+          <h3 style={{textAlign: "center"}}>Instruction Form</h3>
+					<TextField fullWidth={true} label={"Instruction Name"} value={this.state.title} style={{width: "30%"}} name="title" onChange={(e) => this.handleChange(e)}/>
 					<br />
 					<div className="concept-select" style={{marginTop: "50px"}}>
 						<InputLabel htmlFor={"concept-selector"}>Choose Concept</InputLabel>
@@ -182,14 +216,16 @@ class InstructTool extends Component {
 					) :
               <Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.addInstruction()}>Add Instruction</Button>
 					}
-					<br />
-					<h4 style={{marginTop: "80px"}}>Instruction Steps</h4>
+					<h3 style={{textAlign: "center", marginTop: "60px", marginBottom: "20px"}}>Instruction Steps</h3>
 					<div id={"instruction-steps"}>
 						{this.state.instructions && this.state.instructions.map((item, index) => {
 							return (
                   <Card key={index}>
                     <CardContent>
-                      <Typography variant={"headline"} component={"h3"}>{item.title}
+                      <Typography style={{float: "right", color: "gray", fontSize: "11px"}}>
+                        Page: {index + 1}
+                      </Typography>
+                      <Typography variant={"headline"} component={"h4"}>{item.title}
 												{(this.state.editMode && this.state.editIndex == index) &&
 													<span style={{color: "yellow", fontSize: "14px"}}> (editing)</span>
 												}
@@ -208,6 +244,17 @@ class InstructTool extends Component {
 							);
 						})}
 					</div>
+					{this.state.instructions.length > 1 &&
+						<div style={{marginTop: "30px"}}>
+              <TextField name="reorder" style={{width: "70%"}} id={"order-input"} label={"Re-Order Instruction Steps"} onChange={(e) => this.handleChange(e)}/>
+							<Button style={{marginLeft: "20px"}} color={"secondary"} variant={"contained"} onClick={() => this.reorderInstructions()}>Re-order</Button>
+              <p style={{marginTop: "10px", color: "gray", fontSize: "10px"}}>Type new order of steps as a comma separated list. (i.e. "1,3,2,4,5" will swap steps 3 and 2).</p>
+							{this.state.reorderError &&
+							<p className={"alert alert-danger"}>{this.state.reorderError}</p>
+							}
+						</div>
+					}
+
 				</Paper>
 		);
 	}
