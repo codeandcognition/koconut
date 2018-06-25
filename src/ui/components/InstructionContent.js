@@ -15,6 +15,8 @@ export default class InstructionContent extends Component {
           <LargeButton click={this.props.prev}
                        type={largeButtonTypes.prev}
                         types={largeButtonTypes}
+                       instructionIndex={this.props.currentInstructionIndex}
+                       maxInstruction={this.props.maxInstruction}
                         className={"p-2"}/>
           <div style={{textAlign: "left", width: "100%", paddingLeft: "100px"}}>
           <ReactMarkdown className={"flex-grow-1"}
@@ -23,7 +25,9 @@ export default class InstructionContent extends Component {
           <LargeButton click={this.props.next}
                        type={largeButtonTypes.next}
                        types={largeButtonTypes}
-                       className={"p-2"}/>
+                       className={"p-2"}
+                       instructionIndex={this.props.currentInstructionIndex}
+                       maxInstruction={this.props.maxInstruction}/>
         </div>
     )
   }

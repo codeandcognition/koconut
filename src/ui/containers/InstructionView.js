@@ -60,8 +60,8 @@ export default class InstructionView extends Component {
     // so it's just to be safe (and possibly make flow not complain.
     if(this.state.instructionList) {
       this.setState({currInstructionIndex:
-        index > this.state.instructionList.length-2  ? // TODO probably better way to detect edge case
-            this.state.instructionList.length-1 :     // mind fried atm
+        index >= this.state.instructionList.length-1  ?
+            this.state.instructionList.length-1 :
             index + 1});
     }
   }
@@ -121,7 +121,7 @@ export default class InstructionView extends Component {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
     return (
-      <div style={{paddingTop: "100px", width: "100%", paddingLeft: 40, paddingRight: 40}}> {/* TODO REPLACE MARGIN */ }
+      <div style={{paddingTop: "100px", width: "100%", paddingLeft: 40, paddingRight: 40}}>
         <BreadCrumbs />
         {this.state.instructionList &&
             <div>
