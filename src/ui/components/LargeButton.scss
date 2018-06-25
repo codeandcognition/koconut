@@ -2,6 +2,9 @@ $outerWidth: 400px;
 $height: 70vh;
 $buttonbackgroundColor: #d1d1d1;
 $greyedColor: grey;
+$buttonRadius: 5px;
+$fontSize: 20px;
+$buttonWidthScalar: 3.5;
 
 .outerPart {
   width: $outerWidth;
@@ -11,12 +14,13 @@ $greyedColor: grey;
 }
 
 .buttonPart {
-  width: $outerWidth/4;
+  width: $outerWidth/$buttonWidthScalar;
   cursor: pointer;
   color: black;
   background-color: $buttonbackgroundColor;
   margin: auto;
   margin-top: $height/3;
+  border-radius: $buttonRadius;
 }
 
 .greyed {
@@ -31,5 +35,5 @@ $greyedColor: grey;
 .textPart {
   display: inline-flex;
   vertical-align: middle;
-  font-size: 20px;
+  font-size: $fontSize;
 }

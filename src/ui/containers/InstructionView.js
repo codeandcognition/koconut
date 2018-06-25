@@ -120,6 +120,7 @@ export default class InstructionView extends Component {
     if(this.state.instructionList) {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
+    console.log(this.state.instructionList);
     return (
       <div style={{paddingTop: "100px", width: "100%", paddingLeft: 40, paddingRight: 40}}>
         <BreadCrumbs />

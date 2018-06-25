@@ -15,3 +15,4 @@ export default class BreadCrumbs extends Component {
       </nav></div>)
   }
 }
+
