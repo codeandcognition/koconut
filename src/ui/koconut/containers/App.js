@@ -49,6 +49,7 @@ class App extends Component {
   switchToSignin: Function;
   switchToSignup: Function;
   generateExercise: Function;
+  getInstruction: Function;
   switchToWorldView: Function;
   switchToAuthorView: Function;
   loadDisplay: Function;
@@ -58,6 +59,7 @@ class App extends Component {
   state: {
     exercise: Exercise,
 		exerciseType: string,
+		instructionType: string,
     feedback: string,
     nextConcepts: string[],
     counter: number,
@@ -78,6 +80,7 @@ class App extends Component {
     this.state = {
       exercise: this.generator.generateExercise(),
 			exerciseType: '', // yet to be defined
+			instructionType: '',
       feedback: '',
       nextConcepts: [],
       counter: 0, // Changed this from 1 to 0 -- cuz 0-based indexing
@@ -97,6 +100,7 @@ class App extends Component {
     this.switchToSignin = this.switchToSignin.bind(this);
     this.switchToSignup = this.switchToSignup.bind(this);
     this.generateExercise = this.generateExercise.bind(this);
+    this.getInstruction = this.getInstruction.bind(this);
     this.switchToWorldView = this.switchToWorldView.bind(this);
     this.loadDisplay = this.loadDisplay.bind(this);
     this.switchToAuthorView = this.switchToAuthorView.bind(this);
@@ -133,10 +137,20 @@ class App extends Component {
 		}
   }
 
+	/**
+	 * Passed in as a prop to WorldView -> ConceptCard
+	 * When invoked in concept card, this function redirects the user
+	 * to the corresponding instruction view.
+	 *
+	 * @param concept
+	 * @param instructionType
+	 */
   getInstruction(concept: string, instructionType: string) {
-		// save concept type
-		// save instruction type
-		// change display type
+  	this.setState({
+			currentConcept: concept,
+			instructionType: instructionType,
+			display: displayType.instruct
+  	});
 	}
 
   /**
@@ -238,8 +252,12 @@ class App extends Component {
     return <LoadingView loadDisplay={() => this.loadDisplay()}/>
   }
 
-  // Checks is user is signed in and waiver status
-  loadDisplay() {
+	/**
+	 * Checks whether the user is signed in, their waiver status, their
+	 * permissions and changes the display type accordingly
+	 *
+	 */
+	loadDisplay() {
     firebase.auth().onAuthStateChanged((fbUser) => {
       if (fbUser != null) {
         var databaseRef = firebase.database().
@@ -248,7 +266,7 @@ class App extends Component {
         	if (snapshot !== null && snapshot.val() !== null) {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
-        		waiverStatus ? this.setState({firebaseUser: fbUser, display: displayType.instruct}) : false; // TODO: change this back to world
+        		waiverStatus ? this.setState({firebaseUser: fbUser, display: displayType.world}) : false;
         		author ? this.setState({author: author}) : false;
 					}
         });
@@ -261,7 +279,10 @@ class App extends Component {
     });
   }
 
-  updateWaiverStatus() {
+	/**
+	 * Updates the user's waiver status upon signing up for an account
+	 */
+	updateWaiverStatus() {
     if (this.state.firebaseUser) {
       this.setState({display: displayType.world});
       let databaseRef = firebase.database().
@@ -397,7 +418,7 @@ class App extends Component {
    */
   renderWorldView() {
     return(
-        <WorldView generateExercise={this.generateExercise}/>
+        <WorldView generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
     )
   }
 
@@ -407,7 +428,7 @@ class App extends Component {
    */
   _renderInstructionView() {
     return(
-        <InstructionView conceptType={"booleanLiteral"} readOrWrite={"READ"} />
+        <InstructionView conceptType={this.state.currentConcept} readOrWrite={this.state.instructionType} />
     )
   }
 
