@@ -18,7 +18,6 @@ export default class CodeBlock extends Component {
 
   highlightCode() {
     hljs.highlightBlock(this.refs.code);
-    console.log(this.refs.code);
   }
 
   render() {

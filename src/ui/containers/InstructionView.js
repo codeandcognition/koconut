@@ -121,7 +121,7 @@ export default class InstructionView extends Component {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
     return (
-      <div style={{paddingTop: "100px", width: "100%", paddingLeft: 40, paddingRight: 40}}>
+      <div style={{paddingTop: "100px", width: "100%", height: "100%", paddingLeft: 40, paddingRight: 40}}>
         <BreadCrumbs />
         {this.state.instructionList &&
             <div>

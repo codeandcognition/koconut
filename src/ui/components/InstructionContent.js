@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import LargeButton from './LargeButton';
 import CodeBlock from'./CodeBlock';
 import assign from 'lodash.assign';
+import './InstructionContent.css';
 
 const largeButtonTypes = {
   prev: "PREV",
@@ -13,14 +14,14 @@ const largeButtonTypes = {
 export default class InstructionContent extends Component {
   render() {
     return (
-        <div className={"d-flex"} style={{textAlign: "center", width: "100%"}}>
+        <div className={"d-flex totalContent"}>
           <LargeButton click={this.props.prev}
                        type={largeButtonTypes.prev}
                         types={largeButtonTypes}
                        instructionIndex={this.props.currentInstructionIndex}
                        maxInstruction={this.props.maxInstruction}
                         className={"p-2"}/>
-          <div style={{textAlign: "left", width: "100%"}}>
+          <div className={"markdownContent"}>
           <ReactMarkdown className={"flex-grow-1"}
                          source={this.props.instruction.content}
                          renderers={assign({}, ReactMarkdown.renderers, {CodeBlock: CodeBlock})}
