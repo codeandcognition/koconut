@@ -76,6 +76,8 @@ class InstructTool extends Component {
 		databaseRef.on("value", (snapshot) => {
 			if (snapshot.val() !== null) {
         this.setState({instructions: snapshot.val()});
+			} else {
+				this.setState({instructions: []});
 			}
 		});
 	}
@@ -117,6 +119,12 @@ class InstructTool extends Component {
 		});
 	}
 
+	handleDeleteInstruction(index) {
+		var result = this.state.instructions;
+		result.splice(index, 1);
+		var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type);
+		databaseRef.set(result);
+	}
 
 	render() {
 		var containerStyle = {
@@ -178,7 +186,7 @@ class InstructTool extends Component {
 					<h4 style={{marginTop: "80px"}}>Instruction Steps</h4>
 					<div id={"instruction-steps"}>
 						{this.state.instructions && this.state.instructions.map((item, index) => {
-							return(
+							return (
                   <Card key={index}>
                     <CardContent>
                       <Typography variant={"headline"} component={"h3"}>{item.title}
@@ -192,7 +200,7 @@ class InstructTool extends Component {
 											{!this.state.editMode &&
 												<div>
 													<Button color={"primary"} size={"small"} onClick={() => this.handleEditClick(index)}>Edit</Button>
-													<Button color={"secondary"} size={"small"}>Delete</Button>
+													<Button color={"secondary"} size={"small"} onClick={() => this.handleDeleteInstruction(index)}>Delete</Button>
 												</div>
 											}
 										</CardActions>
