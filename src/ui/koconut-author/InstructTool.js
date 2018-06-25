@@ -6,6 +6,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
+import firebase from 'firebase';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
 class InstructTool extends Component {
 
@@ -14,15 +19,20 @@ class InstructTool extends Component {
 		this.state = {
 			instructions: [],
 			//Math.round(Math.random() * 999999999)
-			name: "",
+			title: "",
 			concept: "",
 			type: "",
 			content: "",
 			conceptList: [],
 			selectedConceptKey: 0,
-			selectedTypeKey: 0
+			selectedTypeKey: 0,
+			editMode: false,
+			editIndex: null,
+			reorder: "",
+			reorderError: ""
 		}
 	}
+
 
 	componentDidMount() {
 		this.setState({
@@ -30,67 +40,150 @@ class InstructTool extends Component {
 		})
 	}
 
+	// Handles a change in any of the input fields
 	handleChange = (event) => {
 		let value = event.target.value;
 		let field = event.target.name;
 		let changes = {};
 		changes[field] = value;
-		this.setState(changes);
+		this.setState(changes, () => {
+      if (this.state.concept !== "" && this.state.type !== "") {
+        this.getCurrentInstructions()
+      }
+		});
 	}
 
+	// Takes user-inputted data and turns it into an instruction. Pushes new
+	// instruction to firebase, clears fields, and updates instruction steps view
 	addInstruction = () => {
 		let instruction = {
-			id: Math.round(Math.random() * 999999999),
-			name: this.state.name,
-			concept: this.state.concept,
-			type: this.state.type,
+			title: this.state.title,
 			content: this.state.content
 		};
 		this.setState({
 			instructions: [...this.state.instructions, instruction],
-			name: "",
-			concept: "",
-			type: "",
+			title: "",
 			content: ""
+		}, () => {
+			var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type);
+			databaseRef.set(this.state.instructions);
 		});
 	}
 
-	getPreview = () => {
-		return JSON.stringify({
-			id: "___ (generated on add) ___",
-			name: this.state.name,
-			concept: this.state.concept,
-			type: this.state.type,
-			content: this.state.content
-		}, null, 2)
+	// Populates the instruction steps section with existing instruction data pulled from firebase
+	// when the user sets concept and type
+	getCurrentInstructions() {
+		var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type);
+		databaseRef.on("value", (snapshot) => {
+			if (snapshot.val() !== null) {
+        this.setState({instructions: snapshot.val()});
+			} else {
+				this.setState({instructions: []});
+			}
+		});
 	}
 
-	getCodeOutput = () => {
-		"let variable" + Math.round(Math.random() * 9999999).toString() + " = "
-		+ JSON.stringify(this.state.instructions) + ";"
+	// Takes user out of edit mode when they click on cancel
+	handleEditCancel() {
+		this.setState({
+			editIndex: null,
+			editMode: false,
+			title: "",
+			content: ""
+    });
 	}
 
+	// Enters user into edit mode and populates fields with values to edit
+	handleEditClick(index) {
+		var data = this.state.instructions[index];
+		this.setState({
+			content: data.content,
+			title: data.title,
+			editIndex: index,
+			editMode: true
+		});
+	}
 
+	// Saves users edits to firebase database
+	handleSaveEdits() {
+    var newInstruction = {
+      title: this.state.title,
+      content: this.state.content
+    }
+    var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type + "/" + this.state.editIndex);
+    databaseRef.set(newInstruction);
+    this.setState({
+			title: "",
+			content: "",
+			editMode: false,
+			editIndex: null
+		});
+	}
+
+	// Deletes instruction from database
+	handleDeleteInstruction(index) {
+		var result = this.state.instructions;
+		result.splice(index, 1);
+		var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type);
+		databaseRef.set(result);
+	}
+
+	// Reorders the instruction pages based on the given reorder sequence stored in state -> reorder
+	reorderInstructions() {
+		var orderString = this.state.reorder;
+		var pattern = /^([0-9],)+[0-9]$/g;
+		var orderArr = orderString.split(",");
+		var oldInstruct = this.state.instructions;
+		var error = "";
+		if (!pattern.test(orderString)) {
+			error = "Incorrectly formatted input. Please enter reorder as a comma-separated list of numbers.";
+		} else if (orderArr.length != oldInstruct.length) {
+			error = "Numbers provided do not equal the amount of pages for reordering.";
+		} else {
+			var result = [];
+			for (var i = 0; i < orderArr.length; i++) {
+        var index = Number(orderArr[i]) - 1;
+				if (result[i] !== null || index >= orderArr.length) {
+          error = "Invalid order provided. Reordering failed."
+				} else {
+          result[i] = oldInstruct[index];
+				}
+			}
+			if (error === "") {
+        var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type);
+        databaseRef.set(result);
+			}
+    }
+		this.setState({
+			reorderError: error
+		});
+	}
 
 	render() {
 		var containerStyle = {
 			width: "80vw",
 			margin: "auto",
 			padding: "80px",
-			textAlign: "center"
+		};
+
+    if (this.state.editMode) {
+			containerStyle["border"] = "1px solid yellow";
 		}
 
 		return (
 				<Paper style={containerStyle} elevation={4}>
-					<TextField label={"Instruction Name"} style={{width: "30%"}} value={this.state.name} name="name" onChange={(e) => this.handleChange(e)}/>
+          <h3 style={{textAlign: "center"}}>Instruction Form</h3>
+					<TextField fullWidth={true} label={"Instruction Name"} value={this.state.title} style={{width: "30%"}} name="title" onChange={(e) => this.handleChange(e)}/>
 					<br />
 					<div className="concept-select" style={{marginTop: "50px"}}>
 						<InputLabel htmlFor={"concept-selector"}>Choose Concept</InputLabel>
 						<Select id={"concept-selector"}
 										autoWidth={true}
 										value={this.state.concept}
-										style={{marginLeft: "100px"}}
-										onChange={(e) => this.setState({concept: e.target.value})}>
+										style={{marginLeft: "80px"}}
+										name={"concept"}
+										disabled={this.state.editMode}
+										onChange={(e) => this.handleChange(e)}>
 							{this.state.conceptList.map((item, index) => {
 								return (
 										<MenuItem value={item} key={index}>{item}</MenuItem>
@@ -103,22 +196,65 @@ class InstructTool extends Component {
 						<InputLabel htmlFor={"type-selector"}>Choose Instruction Type</InputLabel>
 						<Select id={"type-selector"}
 										autoWidth={true}
+										name={"type"}
 										value={this.state.type}
-										style={{marginLeft: "100px"}}
-										onChange={(e) => this.setState({type: e.target.value})}>
+										style={{marginLeft: "80px"}}
+										disabled={this.state.editMode}
+										onChange={(e) => this.handleChange(e)}>
 							<MenuItem value={"READ"}>READ</MenuItem>
 							<MenuItem value={"WRITE"}>WRITE</MenuItem>
 						</Select>
 					</div>
 					<br />
 					<textarea value={this.state.content} name="content" onChange={(e) => this.handleChange(e)} rows="10" style={{width: "50%", marginTop: "50px"}} placeholder={"Instruction Content"}></textarea>
-					<h4>Preview</h4>
-					<textarea rows={"10"} style={{pointerEvents: "none", width: "50%"}} value={this.getPreview()}></textarea>
 					<br />
-					<Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.addInstruction()}>Add Instruction</Button>
-					<br />
-					<h4 style={{marginTop: "80px"}}>JSON Output</h4>
-					<textarea rows={"10"} style={{width: "50%"}} value={JSON.stringify(this.state.instructions, null, 2)}></textarea>
+					{this.state.editMode ? (
+							<div>
+									<Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.handleSaveEdits()}>Save</Button>
+									<Button style={{marginTop: "50px", marginLeft:"30px"}} variant={"contained"} color={"secondary"} onClick={() => this.handleEditCancel()}>Cancel</Button>
+							</div>
+					) :
+              <Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.addInstruction()}>Add Instruction</Button>
+					}
+					<h3 style={{textAlign: "center", marginTop: "60px", marginBottom: "20px"}}>Instruction Steps</h3>
+					<div id={"instruction-steps"}>
+						{this.state.instructions && this.state.instructions.map((item, index) => {
+							return (
+                  <Card key={index}>
+                    <CardContent>
+                      <Typography style={{float: "right", color: "gray", fontSize: "11px"}}>
+                        Page: {index + 1}
+                      </Typography>
+                      <Typography variant={"headline"} component={"h4"}>{item.title}
+												{(this.state.editMode && this.state.editIndex == index) &&
+													<span style={{color: "yellow", fontSize: "14px"}}> (editing)</span>
+												}
+                      </Typography>
+                      <Typography color={"textSecondary"}>{item.content}</Typography>
+                    </CardContent>
+										<CardActions>
+											{!this.state.editMode &&
+												<div>
+													<Button color={"primary"} size={"small"} onClick={() => this.handleEditClick(index)}>Edit</Button>
+													<Button color={"secondary"} size={"small"} onClick={() => this.handleDeleteInstruction(index)}>Delete</Button>
+												</div>
+											}
+										</CardActions>
+                  </Card>
+							);
+						})}
+					</div>
+					{this.state.instructions.length > 1 &&
+						<div style={{marginTop: "30px"}}>
+              <TextField name="reorder" style={{width: "70%"}} id={"order-input"} label={"Re-Order Instruction Steps"} onChange={(e) => this.handleChange(e)}/>
+							<Button style={{marginLeft: "20px"}} color={"secondary"} variant={"contained"} onClick={() => this.reorderInstructions()}>Re-order</Button>
+              <p style={{marginTop: "10px", color: "gray", fontSize: "10px"}}>Type new order of steps as a comma separated list. (i.e. "1,3,2,4,5" will swap steps 3 and 2).</p>
+							{this.state.reorderError &&
+							<p className={"alert alert-danger"}>{this.state.reorderError}</p>
+							}
+						</div>
+					}
+
 				</Paper>
 		);
 	}

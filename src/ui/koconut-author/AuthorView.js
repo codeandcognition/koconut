@@ -32,8 +32,10 @@ class AuthorView extends Component {
 		}
 
 		return(
-				<div className="container" style={componentStyles}>
-					<h4 className={"text-warning text-center"}>This is the super cool authoring tool</h4>
+				<div style={{marginTop: "100px"}} className="container">
+					<div className="header">
+						<h1>This is the super cool authoring tool</h1>
+					</div>
 					<Paper style={menuStyle}>
 						<Tabs value={this.state.activeTab} fullWidth centered>
 							<Tab label={"Exercise Tool"} id="EXERCISE TAB" onClick={() => this.toggleDisplay(0, true)}/>

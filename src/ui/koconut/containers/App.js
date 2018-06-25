@@ -151,7 +151,6 @@ class App extends Component {
    *
    * Can be passed down to props as this.state.firebaseUser, useful for
    * data collection.
-   *
    * Un app un-mount, stop watching authentication
    */
   componentWillUnmount() {
