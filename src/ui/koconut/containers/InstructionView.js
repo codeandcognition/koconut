@@ -67,10 +67,6 @@ export default class InstructionView extends Component {
     }
   }
 
-  popOverMessage() {
-
-	}
-
   /**
    * On component mount, grab the data for the specific instruction off of
    * firebase.
@@ -95,6 +91,17 @@ export default class InstructionView extends Component {
       }
     });
   }
+
+	/**
+	 * Called immediately after the component updates. It checks if the
+	 * instructionList is null and invokes the setError function in App.js
+	 *
+	 * Invoking this here (rather than in render) prevents the app
+	 * from throwing a console warning.
+	 */
+	componentDidUpdate() {
+  	this.state.instructionList === null && this.props.setError();
+	}
 
   /**
    * Reset the firebaseListener to be instructions from the new props.

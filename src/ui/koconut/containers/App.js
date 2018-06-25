@@ -48,6 +48,7 @@ class App extends Component {
   switchToSignup: Function;
   generateExercise: Function;
   getInstruction: Function;
+  setInstructionViewError: Function;
   switchToWorldView: Function;
   switchToAuthorView: Function;
   loadDisplay: Function;
@@ -99,6 +100,7 @@ class App extends Component {
     this.switchToSignup = this.switchToSignup.bind(this);
     this.generateExercise = this.generateExercise.bind(this);
     this.getInstruction = this.getInstruction.bind(this);
+    this.setInstructionViewError = this.setInstructionViewError.bind(this);
     this.switchToWorldView = this.switchToWorldView.bind(this);
     this.loadDisplay = this.loadDisplay.bind(this);
     this.switchToAuthorView = this.switchToAuthorView.bind(this);
@@ -149,6 +151,19 @@ class App extends Component {
 			instructionType: instructionType,
 			display: displayType.instruct
   	});
+	}
+
+	/**
+	 * Passed as a prop to InstructionView. Invoked when there are no instructions
+	 * available for a concept.
+	 *
+	 */
+	setInstructionViewError() {
+		this.switchToWorldView();
+  	this.setState({
+			error: true,
+			errorMessage: 'Looks like there are no instructions on this concept right now. Please come back later!'
+		});
 	}
 
   /**
@@ -425,7 +440,9 @@ class App extends Component {
    */
   _renderInstructionView() {
     return(
-        <InstructionView conceptType={this.state.currentConcept} readOrWrite={this.state.instructionType} />
+        <InstructionView conceptType={this.state.currentConcept}
+												 readOrWrite={this.state.instructionType}
+												 setError={this.setInstructionViewError}/>
     )
   }
 
