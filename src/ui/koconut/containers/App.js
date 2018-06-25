@@ -66,7 +66,8 @@ class App extends Component {
     currentConcept: ?string,
     firebaseUser: any,
 		error: boolean,
-		errorMessage: string
+		errorMessage: string,
+		author: boolean
   };
 
   constructor() {
@@ -85,7 +86,8 @@ class App extends Component {
       currentConcept: null,
       firebaseUser: null,
 			error: false,
-			errorMessage: '' // none
+			errorMessage: '', // none
+			author: false
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -236,13 +238,14 @@ class App extends Component {
     firebase.auth().onAuthStateChanged((fbUser) => {
       if (fbUser != null) {
         var databaseRef = firebase.database().
-            ref("Users/" + fbUser.uid + "/waiverStatus");
+            ref("Users/" + fbUser.uid);
         databaseRef.once("value", (snapshot) => {
-          if (snapshot != null && snapshot.val()) {
-            this.setState({
-              firebaseUser: fbUser,
-              display: displayType.world}); //TODO CHANGE THIS BACK TO WORLD
-          }
+        	if (snapshot) {
+        		let waiverStatus = snapshot.val().waiverStatus;
+        		let author = snapshot.val().permission === 'author';
+        		waiverStatus ? this.setState({firebaseUser: fbUser, display: displayType.world}) : null;
+        		author ? this.setState({author: author}) : null;
+					}
         });
       } else {
         this.setState({
@@ -440,7 +443,8 @@ class App extends Component {
             <Navbar firebaseUser={this.state.firebaseUser}
                     switchToWorldView={this.switchToWorldView}
 										switchToAuthorView={this.switchToAuthorView}
-                    display={this.state.display}/>
+                    display={this.state.display}
+										author={this.state.author}/>
             <div className="main">
               <h1 className="title">
 								{/*
