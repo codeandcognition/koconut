@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import BreadCrumbs from '../components/BreadCrumbs';
 import InstructionTitle from '../components/InstructionTitle';
 import InstructionContent from '../components/InstructionContent';
+import PopOver from './PopoverMessage';
 
 type Props = {
   conceptType: string,
@@ -65,6 +66,10 @@ export default class InstructionView extends Component {
             index + 1});
     }
   }
+
+  popOverMessage() {
+
+	}
 
   /**
    * On component mount, grab the data for the specific instruction off of

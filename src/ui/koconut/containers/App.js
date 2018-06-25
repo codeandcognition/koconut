@@ -13,7 +13,6 @@ import SignIn from '../components/SignIn';
 import WorldView from './WorldView';
 import AuthorView from './../../koconut-author/AuthorView';
 import PopOverMessage from './PopoverMessage';
-import Button from '@material-ui/core/Button/Button';
 import LoadingView from '../components/LoadingView';
 import InstructionView from './InstructionView';
 
@@ -21,9 +20,8 @@ import InstructionView from './InstructionView';
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
 import {ResponseLog} from '../../../data/ResponseLog';
-//import Concepts from '../../backend/Concepts';
 import type {Exercise} from '../../../data/Exercises';
-import typeof FirebaseUser from 'firebase';
+
 // Display type enum
 const displayType = {
 	signup: 'SIGNUP',
@@ -260,8 +258,7 @@ class App extends Component {
 	loadDisplay() {
     firebase.auth().onAuthStateChanged((fbUser) => {
       if (fbUser != null) {
-        var databaseRef = firebase.database().
-            ref("Users/" + fbUser.uid);
+        let databaseRef = firebase.database().ref("Users/" + fbUser.uid);
         databaseRef.once("value", (snapshot) => {
         	if (snapshot !== null && snapshot.val() !== null) {
         		let waiverStatus = snapshot.val().waiverStatus;
@@ -285,8 +282,8 @@ class App extends Component {
 	updateWaiverStatus() {
     if (this.state.firebaseUser) {
       this.setState({display: displayType.world});
-      let databaseRef = firebase.database().
-          ref("Users/" + this.state.firebaseUser.uid +
+      let databaseRef = firebase.database()
+				.ref("Users/" + this.state.firebaseUser.uid +
               "/waiverStatus");
       databaseRef.set(true);
     }
