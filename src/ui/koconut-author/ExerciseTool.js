@@ -13,8 +13,17 @@
 */
 
 import React, {Component} from 'react';
-// import './ExerciseTool.css';
 import conceptInventory from './ConceptMap';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import Button from '@material-ui/core/Button/Button';
+
 
 class ExerciseTool extends Component {
 	constructor(props) {
@@ -59,26 +68,42 @@ class ExerciseTool extends Component {
 		}
 	}
 
+	/**
+	 * renders choices and answer
+	 */
 	renderAnswer() {
+		let styles= {
+			width: '100%',
+			height: '10em',
+			borderStyle: 'solid',
+			borderColor: '#BBDEFB'
+		};
+
 		if(this.state.currentExercise.choices.length < 1) {
-			return <textarea
-					className="answer"
-					onChange={(e) => this.setState({
-						currentAnswer: e.target.value
-					})}
-					value={this.state.currentAnswer}
-			/>
+			<div>
+				<TextField fullWidth={true}
+									 style={{display: 'block'}}
+									 onChange={(evt) => this.setState({currentAnswer: evt.target.value})}
+									 value={this.state.currentAnswer}
+				/>
+				<br/>
+			</div>
 		} else {
 			return (
-					<select
-							name="answer"
-							onChange={(e) => this.setState({currentAnswer: e.target.value})}
-					>
-						<option value=""></option>
-						{this.state.currentExercise.choices.map((key) => {
-							return <option value={key}>{key}</option>
-						})}
-					</select>
+					<FormControl style={{display: 'block'}}
+											 fullWidth={true}>
+						<label className={"text-primary"} >Answer</label>
+						<br/>
+						<NativeSelect name={"Answer"}
+													onChange={(evt) => this.setState({currentAnswer: evt.target.value})}>
+							<option value="">Select answer</option>
+							{
+								this.state.currentExercise.choices.map((key, index) => {
+									return <option value={key} key={index}>{key}</option>
+								})
+							}
+						</NativeSelect>
+					</FormControl>
 			)
 		}
 	}
@@ -93,195 +118,221 @@ class ExerciseTool extends Component {
 	}
 
 	render() {
+		let code = {
+			border: '1px solid darkgray',
+			fontFamily: 'monospace',
+			whiteSpace: 'pre-wrap',
+			textAlign: 'left',
+			width: '100%',
+			margin: '10px auto'
+		};
+
 		return (
-				<div className="tool">
-					<div className="row">
-						<div className="container">
-							<h2>Prompt</h2>
-							{this.renderPrompt()}
+				<Paper className={"container"}>
+					<div style={{margin: '5%', paddingTop: '5%'}}>
+						<div>
+							<label className={"text-primary"}>Prompt</label>
+							<TextField style={{display: 'block'}} fullWidth={true}
+												 value={this.state.currentExercise.prompt}
+												 onChange={this.handleChange('prompt')}/>
 						</div>
+						<br/>
 
-						<div className="container big">
-							<h2>Code</h2>
-							<textarea
-									className="big-code"
-									onChange={this.handleChange('code')}
-									value={this.state.currentExercise.code}
-							>
-              </textarea>
+						<div>
+							<label className={"text-primary"}>Code</label>
+							<textarea style={{display: 'block', width: '100%', height: '10em'}}
+												onChange={this.handleChange()}></textarea>
 						</div>
+						<br />
 
-						<div className="container">
-							<h2>Type</h2>
-							<select
-									name="type"
-									className="type"
-									onChange={this.handleChange('type')}
-							>
-								<option value=""></option>
-								{Object.keys(this.ExerciseTypes).map((key) => {
-									return <option value={key}>{key}</option>
-								})}
-							</select>
+						<div>
+							<label className={"text-primary"}>Exercise Type</label>
+							<FormControl style={{display: 'block'}}
+													 fullWidth={true}>
+								<NativeSelect name={"Exercise Type"}
+															onChange={this.handleChange('type')}>
+									<option>Select exercise type</option>
+									{
+										Object.keys(this.ExerciseTypes).map((key, index) => {
+											return <option value={key} key={index}>{key}</option>
+										})
+									}
+								</NativeSelect>
+							</FormControl>
 						</div>
-					</div>
+						<br />
 
-					<div className="row">
-						<div className="container">
-							<h2>Choices</h2>
-							<textarea
-									onChange={(e) => this.setState({currentChoice: e.target.value})}
-									value={this.state.currentChoice}
-							>
-              </textarea>
-							<div
-									className="button"
-									onClick={(e) => {
-										if(this.state.currentChoice === '') return;
-										let choicesCopy = [...this.state.currentExercise.choices];
-										choicesCopy.push(this.state.currentChoice);
-										this.updateExercise('choices', choicesCopy);
-										this.setState({currentChoice: ''});
-									}}
-							>
+						<div>
+							<label className={"text-primary"}>Choices</label>
+							<TextField fullWidth={true}
+												 style={{display: 'block'}}
+												 onChange={(evt) => this.setState({currentChoice: evt.target.value})}
+												 value={this.state.currentChoice}/>
+							<br/>
+
+							<Button variant={'outlined'}
+											color={'secondary'}
+											onClick={(evt) => {
+												if (this.state.currentChoice === '') return;
+												let choicesCopy = [...this.state.currentExercise.choices];
+												choicesCopy.push(this.state.currentChoice);
+												this.updateExercise('choices', choicesCopy);
+												this.setState({currentChoice: ''});
+											}}>
 								Add choice
-							</div>
+							</Button>
 						</div>
+						<br/>
 
-						<div className="container border big">
-							{this.state.currentExercise.choices.map((choice) => {return (
-									<div
-											onClick={(e) => {
-												let index = this.state.currentExercise.choices.indexOf(e.target.innerText);
+						<div style={{width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
+							{/* This is where the output appears */}
+							{
+								this.state.currentExercise.choices.map((choice, key) => {
+									return(
+											<Button onClick={(evt) => {
+												let index = this.state.currentExercise.choices.indexOf(evt.target.innerText);
 												let choicesCopy = [...this.state.currentExercise.choices];
 												choicesCopy.splice(index, 1);
 												this.updateExercise('choices', choicesCopy);
 											}}
-											className="choice"
-									>
-										{choice}
-									</div>
-							)})}
+															key={key}
+															variant={'flat'}
+															className={"bg-warning"}
+															style={{margin: '.25%'}}>
+												{choice}
+											</Button>
+									);
+								})
+							}
 						</div>
+						<br/>
 
-						<div className="container">
-							<h2>Answer</h2>
-							{this.renderAnswer()}
-						</div>
-					</div>
+						<div>{this.renderAnswer()}</div>
+						<br/>
 
-					<div className="row">
-						<div className="container">
-							<h2>Concepts</h2>
-							<select
-									name="concept"
-									onChange={(e) => this.setState({currentConcept: e.target.value})}
-							>
-								<option value=""></option>
-								{this.Concepts.map((concept) => {
-									return <option value={concept}>{concept}</option>
-								})}
-							</select>
-							<div
-									className="button"
-									onClick={(e) => {
-										if(this.state.currentConcept === '') return;
-										let conceptsCopy = [...this.state.currentExercise.concepts];
-										conceptsCopy.push(this.state.currentConcept);
-										this.updateExercise('concepts', conceptsCopy);
-										this.setState({currentConcept: ''});
-									}}
-							>
-								Add concept
-							</div>
-						</div>
+						<div>
+							<label className={"text-primary"}>Concepts</label>
+							<FormControl style={{display: 'block'}}>
+								<NativeSelect name={"Concept name"}
+															onChange={(evt) => this.setState({currentConcept: evt.target.value})}>
+									<option value={""}>Select concept</option>
+									{
+										this.Concepts.map((concept, index) => {
+											return <option key={index} value={concept}>{concept}</option>
+										})
+									}
+								</NativeSelect>
+							</FormControl>
+							<br />
 
-						<div className="container border big">
-							{this.state.currentExercise.concepts.map((concept) => {return (
-									<div
-											onClick={(e) => {
-												let index = this.state.currentExercise.concepts.indexOf(concept);
+							<Button variant={'outlined'}
+											color={"secondary"}
+											onClick={(evt) => {
+												if (this.state.currentConcept === '') return;
 												let conceptsCopy = [...this.state.currentExercise.concepts];
-												conceptsCopy.splice(index, 1);
+												conceptsCopy.push(this.state.currentConcept);
 												this.updateExercise('concepts', conceptsCopy);
-											}}
-											className="choice"
-									>
-										{concept}
-									</div>
-							)})}
+												this.setState({currentConcept: ''});
+											}}>
+								Add concept
+							</Button>
 						</div>
-					</div>
+						<br/>
 
-					<div className="row">
-						<div className="container">
-							<h2>Preview</h2>
-							<div className="code output">
-								{JSON.stringify({
-									exercise: this.state.currentExercise,
-									answer: this.state.currentAnswer
-								}, null, 2)}
+						<div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
+							{/* concept list appears here */}
+							{
+								this.state.currentExercise.concepts.map((concept, key) => {
+									return (
+											<Button key={key}
+															onClick={(evt) => {
+																let index = this.state.currentExercise.concepts.indexOf(concept);
+																let conceptsCopy = [...this.state.currentExercise.concepts];
+																conceptsCopy.splice(index, 1);
+																this.updateExercise('concepts', conceptsCopy);
+															}}
+															className={"bg-warning"}
+															style={{margin: '0.25%'}}>
+												{concept}
+											</Button>
+									);
+								})
+							}
+						</div>
+						<br/>
+
+
+						<div>
+							<p><b>Preview</b></p>
+							<div style={code}>
+								{
+									/* code output */
+									JSON.stringify({
+										exercise: this.state.currentExercise,
+										answer: this.state.currentAnswer,
+									}, null, 2)
+								}
 							</div>
 						</div>
-					</div>
+						<Button variant={'outlined'}
+										color={'secondary'}
+										onClick={(evt) => {
+											if (this.state.currentExercise.prompt !== ''
+													&& this.state.currentAnswer !== ''
+													&& this.state.currentExercise.type !== '') {
+												this.setState({
+													exercises: [...this.state.exercises, {
+														exercise: this.state.currentExercise,
+														answer: this.state.currentAnswer
+													}],
+													currentExercise: {
+														prompt: '',
+														code: '',
+														difficulty: 0,
+														choices: [],
+														concepts: [],
+														type: ''
+													},
+													currentAnswer: ''
+												});
+											}
+										}}>
+							Add exercise!
+						</Button>
+						<br /><br/>
 
-					<div
-							onClick={(e) => {
-								if(this.state.currentExercise.prompt !== ''
-										&& this.state.currentAnswer !== ''
-										&& this.state.currentExercise.type !== '')
-									this.setState({
-										exercises: [...this.state.exercises, {
-											exercise: this.state.currentExercise,
-											answer: this.state.currentAnswer
-										}],
-										currentExercise: {
-											prompt: '',
-											code: '',
-											difficulty: 0,
-											choices: [],
-											concepts: [],
-											type: ''
-										},
-										currentAnswer: ''
-									});}}
-							className="button"
-					>
-						Add exercise!!
-					</div>
+						<label className={"text-primary"}>Exercies</label>
+						<div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
+							{
+								this.state.exercises.map((exercise, key) => {
+									return(
+											<Button className={'bg-warning'}
+															style={{margin: '0.25%'}}
+															key={key}
+															onClick={(evt) => {
+																let index = this.state.exercises.indexOf(exercise);
+																let exercisesCopy = [...this.state.exercises];
+																exercisesCopy.splice(index, 1);
+																this.setState({exercises: exercisesCopy});
+															}}>
+												{exercise.exercise.prompt}
+											</Button>
+									);
+								})
+							}
+						</div>
+						<br/>
 
-					<div className="row">
-						<div className="container exercises border">
-							<h2>Exercises</h2>
-							{this.state.exercises.map((exercise) => {return (
-									<div
-											onClick={(e) => {
-												let index = this.state.exercises.indexOf(exercise);
-												let exercisesCopy = [...this.state.exercises];
-												exercisesCopy.splice(index, 1);
-												this.setState({exercises: exercisesCopy});
-											}}
-											className="choice"
-									>
-										{exercise.exercise.prompt}
-									</div>
-							)})}
+						<p className={"text-primary"}>JSON Output</p>
+						<div style={code}>
+							{JSON.stringify(this.state.exercises, null, 2)}
+						</div>
+						<div style={code}>
+							{"let variable" + Math.round(Math.random() * 99999).toString() + " = "
+							+ JSON.stringify(this.state.exercises) + ";"}
 						</div>
 					</div>
-
-					<div className="row">
-						<div className="container">
-							<h2>JSON Output</h2>
-							<div className="code output">
-								{JSON.stringify(this.state.exercises, null, 2)}
-							</div>
-							<div className="code output">
-								{"let variable" + Math.round(Math.random() * 99999).toString() + " = "
-								+ JSON.stringify(this.state.exercises) + ";"}
-							</div>
-						</div>
-					</div>
-				</div>
+				</Paper>
 		);
 	}
 }

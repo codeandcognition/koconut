@@ -78,7 +78,7 @@ class App extends Component {
       feedback: '',
       nextConcepts: [],
       counter: 0, // Changed this from 1 to 0 -- cuz 0-based indexing
-      display: displayType.signin,
+      display: displayType.author, // TODO: Change this back to signin
       conceptOptions: 4, // TODO: Make this not hard coded
       currentConcept: null,
       firebaseUser: null,
