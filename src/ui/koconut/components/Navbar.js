@@ -54,7 +54,7 @@ class Navbar extends Component {
         <div>
           <AppBar>
             <Toolbar>
-							{this.props.display === "EXERCISE" || this.props.display === "AUTHOR" ?
+							{this.props.display === "EXERCISE" || this.props.display === "AUTHOR" || this.props.display === 'INSTRUCT' ?
 									<div style={{marginRight: 5}}>
 										<BackButton onClick={this.props.switchToWorldView}
 																aria-owns='menu'

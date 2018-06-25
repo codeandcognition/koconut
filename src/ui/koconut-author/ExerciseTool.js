@@ -16,11 +16,7 @@ import React, {Component} from 'react';
 import conceptInventory from './ConceptMap';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import Button from '@material-ui/core/Button/Button';
 

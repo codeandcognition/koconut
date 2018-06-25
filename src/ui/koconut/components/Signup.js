@@ -45,7 +45,7 @@ class Signup extends Component {
 
 	render() {
 		return(
-				<FormGroup style={{maxWidth: '50vh', margin: 'auto'}}>
+				<FormGroup style={{maxWidth: '50vh', marginLeft: 'auto', marginRight: 'auto', marginTop: '10%'}}>
 					<h1 style={{margin: 'auto', marginTop: '10%'}}>Koconut</h1>
 					<img style={{width: "10vh", margin: 'auto'}}
 							 src={"https://i.pinimg.com/originals/bd/87/87/bd8787a601af7682d857f6c365d4421b.png"}

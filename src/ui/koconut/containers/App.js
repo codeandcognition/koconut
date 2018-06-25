@@ -13,7 +13,6 @@ import SignIn from '../components/SignIn';
 import WorldView from './WorldView';
 import AuthorView from './../../koconut-author/AuthorView';
 import PopOverMessage from './PopoverMessage';
-import Button from '@material-ui/core/Button/Button';
 import LoadingView from '../components/LoadingView';
 import InstructionView from './InstructionView';
 
@@ -21,9 +20,8 @@ import InstructionView from './InstructionView';
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
 import {ResponseLog} from '../../../data/ResponseLog';
-//import Concepts from '../../backend/Concepts';
 import type {Exercise} from '../../../data/Exercises';
-import typeof FirebaseUser from 'firebase';
+
 // Display type enum
 const displayType = {
 	signup: 'SIGNUP',
@@ -49,6 +47,7 @@ class App extends Component {
   switchToSignin: Function;
   switchToSignup: Function;
   generateExercise: Function;
+  getInstruction: Function;
   switchToWorldView: Function;
   switchToAuthorView: Function;
   loadDisplay: Function;
@@ -58,6 +57,7 @@ class App extends Component {
   state: {
     exercise: Exercise,
 		exerciseType: string,
+		instructionType: string,
     feedback: string,
     nextConcepts: string[],
     counter: number,
@@ -78,6 +78,7 @@ class App extends Component {
     this.state = {
       exercise: this.generator.generateExercise(),
 			exerciseType: '', // yet to be defined
+			instructionType: '',
       feedback: '',
       nextConcepts: [],
       counter: 0, // Changed this from 1 to 0 -- cuz 0-based indexing
@@ -97,6 +98,7 @@ class App extends Component {
     this.switchToSignin = this.switchToSignin.bind(this);
     this.switchToSignup = this.switchToSignup.bind(this);
     this.generateExercise = this.generateExercise.bind(this);
+    this.getInstruction = this.getInstruction.bind(this);
     this.switchToWorldView = this.switchToWorldView.bind(this);
     this.loadDisplay = this.loadDisplay.bind(this);
     this.switchToAuthorView = this.switchToAuthorView.bind(this);
@@ -110,7 +112,6 @@ class App extends Component {
    */
   generateExercise(concept: string, exerciseType: string) {
 		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept);
-		// console.log(exercises);
 		if (exercises.length === 0) {
 			this.setState({
 				error: true,
@@ -133,6 +134,22 @@ class App extends Component {
 			});
 		}
   }
+
+	/**
+	 * Passed in as a prop to WorldView -> ConceptCard
+	 * When invoked in concept card, this function redirects the user
+	 * to the corresponding instruction view.
+	 *
+	 * @param concept
+	 * @param instructionType
+	 */
+  getInstruction(concept: string, instructionType: string) {
+  	this.setState({
+			currentConcept: concept,
+			instructionType: instructionType,
+			display: displayType.instruct
+  	});
+	}
 
   /**
    * Returns a generated exercise by index
@@ -232,18 +249,21 @@ class App extends Component {
     return <LoadingView loadDisplay={() => this.loadDisplay()}/>
   }
 
-  // Checks is user is signed in and waiver status
-  loadDisplay() {
+	/**
+	 * Checks whether the user is signed in, their waiver status, their
+	 * permissions and changes the display type accordingly
+	 *
+	 */
+	loadDisplay() {
     firebase.auth().onAuthStateChanged((fbUser) => {
       if (fbUser != null) {
-        var databaseRef = firebase.database().
-            ref("Users/" + fbUser.uid);
+        let databaseRef = firebase.database().ref("Users/" + fbUser.uid);
         databaseRef.once("value", (snapshot) => {
-        	if (snapshot) {
+        	if (snapshot !== null && snapshot.val() !== null) {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
-        		waiverStatus ? this.setState({firebaseUser: fbUser, display: displayType.world}) : null;
-        		author ? this.setState({author: author}) : null;
+        		waiverStatus ? this.setState({firebaseUser: fbUser, display: displayType.world}) : false;
+        		author ? this.setState({author: author}) : false;
 					}
         });
       } else {
@@ -255,11 +275,14 @@ class App extends Component {
     });
   }
 
-  updateWaiverStatus() {
+	/**
+	 * Updates the user's waiver status upon signing up for an account
+	 */
+	updateWaiverStatus() {
     if (this.state.firebaseUser) {
       this.setState({display: displayType.world});
-      let databaseRef = firebase.database().
-          ref("Users/" + this.state.firebaseUser.uid +
+      let databaseRef = firebase.database()
+				.ref("Users/" + this.state.firebaseUser.uid +
               "/waiverStatus");
       databaseRef.set(true);
     }
@@ -299,7 +322,6 @@ class App extends Component {
 	 * Remders the author view
 	 */
 	renderAuthorView() {
-		// TODO: Implement permissions to restrict access to AuthorView
 		return (<AuthorView></AuthorView>);
 	}
 
@@ -392,7 +414,7 @@ class App extends Component {
    */
   renderWorldView() {
     return(
-        <WorldView generateExercise={this.generateExercise}/>
+        <WorldView generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
     )
   }
 
@@ -402,7 +424,7 @@ class App extends Component {
    */
   _renderInstructionView() {
     return(
-        <InstructionView conceptType={"test"} readOrWrite={"READ"}/>
+        <InstructionView conceptType={this.state.currentConcept} readOrWrite={this.state.instructionType} />
     )
   }
 
