@@ -11,6 +11,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import Input from '@material-ui/core/Input';
 
 class InstructTool extends Component {
 
@@ -25,7 +26,9 @@ class InstructTool extends Component {
 			content: "",
 			conceptList: [],
 			selectedConceptKey: 0,
-			selectedTypeKey: 0
+			selectedTypeKey: 0,
+			editMode: false,
+			editIndex: null
 		}
 	}
 
@@ -36,6 +39,7 @@ class InstructTool extends Component {
 		})
 	}
 
+	// Handles a change in any of the input fields
 	handleChange = (event) => {
 		let value = event.target.value;
 		let field = event.target.name;
@@ -48,6 +52,8 @@ class InstructTool extends Component {
 		});
 	}
 
+	// Takes user-inputted data and turns it into an instruction. Pushes new
+	// instruction to firebase, clears fields, and updates instruction steps view
 	addInstruction = () => {
 		let instruction = {
 			title: this.state.title,
@@ -58,14 +64,15 @@ class InstructTool extends Component {
 			title: "",
 			content: ""
 		}, () => {
-			var databaseRef = firebase.database().ref('Instructions/' + this.state.concept + "/" + this.state.type);
+			var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type);
 			databaseRef.set(this.state.instructions);
 		});
 	}
 
-
+	// Populates the instruction steps section with existing instruction data pulled from firebase
+	// when the user sets concept and type
 	getCurrentInstructions() {
-		var databaseRef = firebase.database().ref('Instructions/' + this.state.concept + "/" + this.state.type);
+		var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type);
 		databaseRef.on("value", (snapshot) => {
 			if (snapshot.val() !== null) {
         this.setState({instructions: snapshot.val()});
@@ -73,13 +80,53 @@ class InstructTool extends Component {
 		});
 	}
 
+	// Takes user out of edit mode when they click on cancel
+	handleEditCancel() {
+		this.setState({
+			editIndex: null,
+			editMode: false,
+			title: "",
+			content: ""
+    });
+	}
+
+	// Enters user into edit mode and populates fields with values to edit
+	handleEditClick(index) {
+		var data = this.state.instructions[index];
+		this.setState({
+			content: data.content,
+			title: data.title,
+			editIndex: index,
+			editMode: true
+		});
+	}
+
+	// Saves users edits to firebase database
+	handleSaveEdits() {
+    var newInstruction = {
+      title: this.state.title,
+      content: this.state.content
+    }
+    var databaseRef = firebase.database().ref("Instructions/" + this.state.concept + "/" + this.state.type + "/" + this.state.editIndex);
+    databaseRef.set(newInstruction);
+    this.setState({
+			title: "",
+			content: "",
+			editMode: false,
+			editIndex: null
+		});
+	}
 
 
 	render() {
 		var containerStyle = {
 			width: "80vw",
 			margin: "auto",
-			padding: "80px"
+			padding: "80px",
+		};
+
+    if (this.state.editMode) {
+			containerStyle["border"] = "1px solid yellow";
 		}
 
 		return (
@@ -93,6 +140,7 @@ class InstructTool extends Component {
 										value={this.state.concept}
 										style={{marginLeft: "80px"}}
 										name={"concept"}
+										disabled={this.state.editMode}
 										onChange={(e) => this.handleChange(e)}>
 							{this.state.conceptList.map((item, index) => {
 								return (
@@ -109,6 +157,7 @@ class InstructTool extends Component {
 										name={"type"}
 										value={this.state.type}
 										style={{marginLeft: "80px"}}
+										disabled={this.state.editMode}
 										onChange={(e) => this.handleChange(e)}>
 							<MenuItem value={"READ"}>READ</MenuItem>
 							<MenuItem value={"WRITE"}>WRITE</MenuItem>
@@ -117,7 +166,14 @@ class InstructTool extends Component {
 					<br />
 					<textarea value={this.state.content} name="content" onChange={(e) => this.handleChange(e)} rows="10" style={{width: "50%", marginTop: "50px"}} placeholder={"Instruction Content"}></textarea>
 					<br />
-					<Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.addInstruction()}>Add Instruction</Button>
+					{this.state.editMode ? (
+							<div>
+									<Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.handleSaveEdits()}>Save</Button>
+									<Button style={{marginTop: "50px", marginLeft:"30px"}} variant={"contained"} color={"secondary"} onClick={() => this.handleEditCancel()}>Cancel</Button>
+							</div>
+					) :
+              <Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.addInstruction()}>Add Instruction</Button>
+					}
 					<br />
 					<h4 style={{marginTop: "80px"}}>Instruction Steps</h4>
 					<div id={"instruction-steps"}>
@@ -125,12 +181,20 @@ class InstructTool extends Component {
 							return(
                   <Card key={index}>
                     <CardContent>
-                      <Typography variant={"headline"} component={"h3"}>{item.title}</Typography>
+                      <Typography variant={"headline"} component={"h3"}>{item.title}
+												{(this.state.editMode && this.state.editIndex == index) &&
+													<span style={{color: "yellow", fontSize: "14px"}}> (editing)</span>
+												}
+                      </Typography>
                       <Typography color={"textSecondary"}>{item.content}</Typography>
                     </CardContent>
 										<CardActions>
-											<Button color={"primary"} size={"small"}>Edit</Button>
-											<Button color={"secondary"} size={"small"}>Delete</Button>
+											{!this.state.editMode &&
+												<div>
+													<Button color={"primary"} size={"small"} onClick={() => this.handleEditClick(index)}>Edit</Button>
+													<Button color={"secondary"} size={"small"}>Delete</Button>
+												</div>
+											}
 										</CardActions>
                   </Card>
 							);

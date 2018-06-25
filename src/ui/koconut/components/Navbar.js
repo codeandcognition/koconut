@@ -93,7 +93,10 @@ class Navbar extends Component {
                       getContentAnchorEl={null}
                       style={{paddingRight: 0}}
                 >
-                  <MenuItem onClick={() => {this.props.switchToAuthorView()}}>Author</MenuItem>
+                  <MenuItem onClick={() => {
+                    this.props.switchToAuthorView();
+                    this.handleMenuClose();
+                  }}>Author</MenuItem>
                   <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
                   <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
                   <MenuItem onClick={() => firebase.auth().signOut()}>Logout</MenuItem>
