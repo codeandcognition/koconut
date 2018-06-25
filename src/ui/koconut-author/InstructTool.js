@@ -131,7 +131,7 @@ class InstructTool extends Component {
 	// Reorders the instruction pages based on the given reorder sequence stored in state -> reorder
 	reorderInstructions() {
 		var orderString = this.state.reorder;
-		var pattern = /^([0-9],)+[0-9]$/g;
+		var pattern = /^([0-9]+,)+[0-9]+$/g;
 		var orderArr = orderString.split(",");
 		var oldInstruct = this.state.instructions;
 		var error = "";
@@ -143,8 +143,8 @@ class InstructTool extends Component {
 			var result = [];
 			for (var i = 0; i < orderArr.length; i++) {
         var index = Number(orderArr[i]) - 1;
-				if (result[i] !== null || index >= orderArr.length) {
-          error = "Invalid order provided. Reordering failed."
+				if (result[i] || index >= orderArr.length) {
+          error = "Invalid order provided. Reordering failed.";
 				} else {
           result[i] = oldInstruct[index];
 				}
