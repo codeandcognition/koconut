@@ -11,17 +11,18 @@ import Welcome from '../components/Welcome';
 import Signup from '../components/Signup';
 import SignIn from '../components/SignIn';
 import WorldView from './WorldView';
+import AuthorView from './../../koconut-author/AuthorView';
 import PopOverMessage from './PopoverMessage';
 import Button from '@material-ui/core/Button/Button';
 import LoadingView from '../components/LoadingView';
 import InstructionView from './InstructionView';
 
 // Fake AJAX
-import ExerciseGenerator from '../../backend/ExerciseGenerator';
-import ResponseEvaluator from '../../backend/ResponseEvaluator';
-import {ResponseLog} from '../../data/ResponseLog';
+import ExerciseGenerator from '../../../backend/ExerciseGenerator';
+import ResponseEvaluator from '../../../backend/ResponseEvaluator';
+import {ResponseLog} from '../../../data/ResponseLog';
 //import Concepts from '../../backend/Concepts';
-import type {Exercise} from '../../data/Exercises';
+import type {Exercise} from '../../../data/Exercises';
 import typeof FirebaseUser from 'firebase';
 // Display type enum
 const displayType = {
@@ -33,7 +34,8 @@ const displayType = {
 	concept: 'CONCEPT',
   world: 'WORLD',
   load: 'LOAD',
-  instruct: 'INSTRUCT'
+  instruct: 'INSTRUCT',
+	author: 'AUTHOR'
 };
 /**
  * Renders the koconut application view.
@@ -48,6 +50,7 @@ class App extends Component {
   switchToSignup: Function;
   generateExercise: Function;
   switchToWorldView: Function;
+  switchToAuthorView: Function;
   loadDisplay: Function;
   generator: ExerciseGenerator;
   theme: mixed;
@@ -94,6 +97,7 @@ class App extends Component {
     this.generateExercise = this.generateExercise.bind(this);
     this.switchToWorldView = this.switchToWorldView.bind(this);
     this.loadDisplay = this.loadDisplay.bind(this);
+    this.switchToAuthorView = this.switchToAuthorView.bind(this);
   }
 
   /**
@@ -259,8 +263,6 @@ class App extends Component {
     }
   }
 
-
-
   /**
    * Renders the sign up view
    */
@@ -289,6 +291,14 @@ class App extends Component {
 					<SignIn toSignup={this.switchToSignup}/>
 			);
 		}
+	}
+
+	/**
+	 * Remders the author view
+	 */
+	renderAuthorView() {
+		// TODO: Implement permissions to restrict access to AuthorView
+		return (<AuthorView></AuthorView>);
 	}
 
 	/**
@@ -325,6 +335,14 @@ class App extends Component {
 	switchToWorldView() {
 	  this.setState({display: displayType.world});
   }
+
+	/**
+	 * Sets the display state to 'AUTHOR'. This function is passed as a prop to
+	 * to the NavBar
+	 */
+	switchToAuthorView() {
+		this.setState({display: displayType.author});
+	}
 
 	/**
 	 * Renders the welcome view
@@ -408,6 +426,8 @@ class App extends Component {
         return this.renderLoadView();
       case displayType.instruct:
         return this._renderInstructionView();
+			case displayType.author:
+				return this.renderAuthorView();
 			default:
 				break;
 		}
@@ -419,6 +439,7 @@ class App extends Component {
           <MuiThemeProvider theme={this.theme}>
             <Navbar firebaseUser={this.state.firebaseUser}
                     switchToWorldView={this.switchToWorldView}
+										switchToAuthorView={this.switchToAuthorView}
                     display={this.state.display}/>
             <div className="main">
               <h1 className="title">

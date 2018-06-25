@@ -1,9 +1,9 @@
 // @flow
 import React, {Component} from 'react';
-import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
-import {conceptInventory} from '../../data/ConceptMap.js';
+import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
+import {conceptInventory} from '../../../data/ConceptMap.js';
 import ConceptCard from './../components/ConceptCard';
-import ExerciseGenerator from '../../backend/ExerciseGenerator';
+import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 
 type Props = {
 	generateExercise: Function

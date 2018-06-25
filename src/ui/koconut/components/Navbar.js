@@ -54,13 +54,16 @@ class Navbar extends Component {
         <div>
           <AppBar>
             <Toolbar>
-							{this.props.display === "EXERCISE" ?
-									<div style={{marginRight: 5, cursor: 'pointer'}}><BackButton onClick={this.props.switchToWorldView}
-																														aria-owns='menu'
-																														aria-haspopup="true"
-																														id="menu-button">
-
-									</BackButton></div> : <div></div>
+							{this.props.display === "EXERCISE" || this.props.display === "AUTHOR" ?
+									<div style={{marginRight: 5}}>
+										<BackButton onClick={this.props.switchToWorldView}
+																aria-owns='menu'
+																aria-haspopup="true"
+																id="menu-button"
+																style={{color: '#fff', cursor: 'pointer'}}>
+											Back to World View
+										</BackButton>
+									</div> : <div></div>
 							}
 							{/* color imported from Material UI */}
 							<Typography style={{flexGrow: 1, color: "#FAFAFA"}} variant={"title"}>
@@ -92,6 +95,7 @@ class Navbar extends Component {
                         getContentAnchorEl={null}
                         style={{paddingRight: 0}}
                       >
+										<MenuItem onClick={() => {this.props.switchToAuthorView()}}>Author</MenuItem>
                     <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
                     <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
                     <MenuItem onClick={() => {
