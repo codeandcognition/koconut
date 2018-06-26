@@ -104,6 +104,7 @@ class App extends Component {
     this.switchToWorldView = this.switchToWorldView.bind(this);
     this.loadDisplay = this.loadDisplay.bind(this);
     this.switchToAuthorView = this.switchToAuthorView.bind(this);
+    this.updateWaiverStatus = this.updateWaiverStatus.bind(this);
   }
 
   /**
@@ -275,12 +276,19 @@ class App extends Component {
       if (fbUser != null) {
         let databaseRef = firebase.database().ref("Users/" + fbUser.uid);
         databaseRef.once("value", (snapshot) => {
+          console.log(snapshot.val());
         	if (snapshot !== null && snapshot.val() !== null) {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
-        		waiverStatus ? this.setState({firebaseUser: fbUser, display: displayType.world}) : false;
+        		if (waiverStatus) {
+              this.setState({firebaseUser: fbUser, display: displayType.world})
+            } else {
+              this.setState({firebaseUser: fbUser, display: displayType.welcome})
+            }
         		author ? this.setState({author: author}) : false;
-					}
+					} else {
+        	  this.setState({firebaseUser: fbUser, display: displayType.welcome});
+          }
         });
       } else {
         this.setState({
@@ -295,6 +303,7 @@ class App extends Component {
 	 * Updates the user's waiver status upon signing up for an account
 	 */
 	updateWaiverStatus() {
+	  console.log(this.state.firebaseUser);
     if (this.state.firebaseUser) {
       this.setState({display: displayType.world});
       let databaseRef = firebase.database()
@@ -329,7 +338,7 @@ class App extends Component {
 			});
 		} else {
 			return(
-					<SignIn toSignup={this.switchToSignup}/>
+					<SignIn toSignup={this.switchToSignup} />
 			);
 		}
 	}
@@ -391,7 +400,8 @@ class App extends Component {
   renderWelcome() {
     return (
         <Welcome
-        callback={() => this.updateWaiverStatus()}
+        callBack={() => this.updateWaiverStatus()}
+        firebaseUser={this.state.firebaseUser}
         app={this}/>
     );
   }
