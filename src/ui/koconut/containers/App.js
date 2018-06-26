@@ -275,12 +275,17 @@ class App extends Component {
       if (fbUser != null) {
         let databaseRef = firebase.database().ref("Users/" + fbUser.uid);
         databaseRef.once("value", (snapshot) => {
+          console.log(snapshot.val());
         	if (snapshot !== null && snapshot.val() !== null) {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
-        		waiverStatus ? this.setState({firebaseUser: fbUser, display: displayType.world}) : false;
+        		if (waiverStatus) {
+              this.setState({firebaseUser: fbUser, display: displayType.world})
+            }
         		author ? this.setState({author: author}) : false;
-					}
+					} else {
+        	  this.setState({firebaseUser: fbUser, display: displayType.welcome});
+          }
         });
       } else {
         this.setState({
@@ -329,7 +334,7 @@ class App extends Component {
 			});
 		} else {
 			return(
-					<SignIn toSignup={this.switchToSignup}/>
+					<SignIn toSignup={this.switchToSignup} />
 			);
 		}
 	}
@@ -391,7 +396,8 @@ class App extends Component {
   renderWelcome() {
     return (
         <Welcome
-        callback={() => this.updateWaiverStatus()}
+        callBack={() => this.updateWaiverStatus()}
+        firebaseUser={this.state.firebaseUser}
         app={this}/>
     );
   }

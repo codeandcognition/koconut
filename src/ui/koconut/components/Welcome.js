@@ -57,7 +57,7 @@ class Welcome extends Component {
         {strings.language.example_code.map((c, i) => <div key={i}><code>{c}</code></div>)}
         <h4><i>{strings.nsf}</i></h4>
         <p>{strings.agreement}</p>
-        <button onClick={this.props.callBack}>{strings.iagree}</button>
+        <button onClick={() => this.props.callBack()}>{strings.iagree}</button>
       </div>)
   }
 }

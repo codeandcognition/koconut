@@ -139,7 +139,7 @@ class InstructTool extends Component {
 		var error = "";
 		if (!pattern.test(orderString)) {
 			error = "Incorrectly formatted input. Please enter reorder as a comma-separated list of numbers.";
-		} else if (orderArr.length != oldInstruct.length) {
+		} else if (orderArr.length !== oldInstruct.length) {
 			error = "Numbers provided do not equal the amount of pages for reordering.";
 		} else {
 			var result = [];
@@ -234,7 +234,7 @@ class InstructTool extends Component {
                         Page: {index + 1}
                       </Typography>
                       <Typography variant={"headline"} component={"h4"}>{item.title}
-												{(this.state.editMode && this.state.editIndex == index) &&
+												{(this.state.editMode && this.state.editIndex === index) &&
 													<span style={{color: "yellow", fontSize: "14px"}}> (editing)</span>
 												}
                       </Typography>
