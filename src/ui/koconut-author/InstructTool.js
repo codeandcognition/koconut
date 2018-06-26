@@ -163,7 +163,6 @@ class InstructTool extends Component {
 
 	render() {
 		var containerStyle = {
-			width: "80vw",
 			margin: "auto",
 			padding: "80px",
 		};
@@ -181,7 +180,7 @@ class InstructTool extends Component {
 		return (
 				<Paper style={containerStyle} elevation={4}>
           <h3 style={{textAlign: "center"}}>Instruction Form</h3>
-					<TextField fullWidth={true} label={"Instruction Name"} value={this.state.title} style={{width: "30%"}} name="title" onChange={(e) => this.handleChange(e)}/>
+					<TextField fullWidth={true} label={"Instruction Name"} value={this.state.title} style={{width: "60%"}} name="title" onChange={(e) => this.handleChange(e)}/>
 					<br />
 					<div className="concept-select" style={{marginTop: "50px"}}>
 						<InputLabel htmlFor={"concept-selector"}>Choose Concept</InputLabel>
@@ -214,7 +213,7 @@ class InstructTool extends Component {
 						</Select>
 					</div>
 					<br />
-					<textarea value={this.state.content} name="content" onChange={(e) => this.handleChange(e)} rows="10" style={{width: "80%", marginTop: "50px", whiteSpace: "pre-line"}} placeholder={"Instruction Content (Markdown)"}></textarea>
+					<textarea value={this.state.content} name="content" onChange={(e) => this.handleChange(e)} rows="10" style={{width: "60%", marginTop: "50px", whiteSpace: "pre-line"}} placeholder={"Instruction Content (Markdown)"}></textarea>
 					<br />
 					{this.state.editMode ? (
 							<div>
