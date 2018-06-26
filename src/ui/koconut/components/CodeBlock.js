@@ -4,7 +4,7 @@ import './CodeBlock.css'
 
 type Props = {
   literal: string,
-  language: string
+  value: string
 };
 
 /**
@@ -26,10 +26,11 @@ export default class CodeBlock extends Component {
   }
 
   render() {
+    console.log(this.props.value);
     return (
         <pre>
           <code ref="code" className={this.props.language || 'js'}>
-            {this.props.literal}
+            {this.props.value}
           </code>
         </pre>
     )

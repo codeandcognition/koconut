@@ -28,7 +28,7 @@ export default class InstructionContent extends Component {
           <div className={"markdownContent"}>
           <ReactMarkdown className={"flex-grow-1"}
                          source={this.props.instruction.content}
-                         renderers={{CodeBlock: CodeBlock}}
+                         renderers={{code: CodeBlock}}
                          escapeHtml={true}
                          />
           </div>
