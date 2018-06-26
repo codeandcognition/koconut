@@ -23,13 +23,9 @@ class AuthorView extends Component {
 	}
 
 	render() {
-		let componentStyles = {
-			marginTop: '5%',
-		}
-
 		let menuStyle = {
 			marginBottom: "4vh"
-		}
+		};
 
 		return(
 				<div style={{marginTop: "100px"}} className="container">
