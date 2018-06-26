@@ -11,6 +11,8 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import ReactMarkdown from 'react-markdown';
+import CodeBlock from'../koconut/components/CodeBlock';
 
 class InstructTool extends Component {
 
@@ -212,7 +214,7 @@ class InstructTool extends Component {
 						</Select>
 					</div>
 					<br />
-					<textarea value={this.state.content} name="content" onChange={(e) => this.handleChange(e)} rows="10" style={{width: "50%", marginTop: "50px", whiteSpace: "pre-line"}} placeholder={"Instruction Content"}></textarea>
+					<textarea value={this.state.content} name="content" onChange={(e) => this.handleChange(e)} rows="10" style={{width: "80%", marginTop: "50px", whiteSpace: "pre-line"}} placeholder={"Instruction Content (Markdown)"}></textarea>
 					<br />
 					{this.state.editMode ? (
 							<div>
@@ -236,13 +238,9 @@ class InstructTool extends Component {
 													<span style={{color: "yellow", fontSize: "14px"}}> (editing)</span>
 												}
                       </Typography>
-                      <Typography color={"textSecondary"}>{item.content.split(/\n/g).map((item2, index2) => {
-                      	return(
-                            <p style={{marginBottom: "3px"}} key={index2}>{item2}</p>
-												);
-
-											})}
-											</Typography>
+											<ReactMarkdown className={"flex-grow-1"}
+																			source={item.content}
+																			renderers={{CodeBlock: CodeBlock}}/>
                     </CardContent>
 										<CardActions>
 											{!this.state.editMode &&
