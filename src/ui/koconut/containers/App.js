@@ -149,7 +149,8 @@ class App extends Component {
   	this.setState({
 			currentConcept: concept,
 			instructionType: instructionType,
-			display: displayType.instruct
+			display: displayType.instruct,
+			error: false // resets error state
   	});
 	}
 
