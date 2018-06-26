@@ -5,12 +5,14 @@ $greyedColor: grey;
 $buttonRadius: 5px;
 $fontSize: 20px;
 $buttonWidthScalar: 3.5;
+$outerPadding: 2px;
 
 .outerPart {
   width: $outerWidth;
   height: $height;
   text-align: center;
   align-content: center;
+  padding: $outerPadding;
 }
 
 .buttonPart {
