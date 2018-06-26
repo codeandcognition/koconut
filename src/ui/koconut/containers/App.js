@@ -104,7 +104,6 @@ class App extends Component {
     this.switchToWorldView = this.switchToWorldView.bind(this);
     this.loadDisplay = this.loadDisplay.bind(this);
     this.switchToAuthorView = this.switchToAuthorView.bind(this);
-    this.updateWaiverStatus = this.updateWaiverStatus.bind(this);
   }
 
   /**
@@ -282,8 +281,6 @@ class App extends Component {
         		let author = snapshot.val().permission === 'author';
         		if (waiverStatus) {
               this.setState({firebaseUser: fbUser, display: displayType.world})
-            } else {
-              this.setState({firebaseUser: fbUser, display: displayType.welcome})
             }
         		author ? this.setState({author: author}) : false;
 					} else {
@@ -303,7 +300,6 @@ class App extends Component {
 	 * Updates the user's waiver status upon signing up for an account
 	 */
 	updateWaiverStatus() {
-	  console.log(this.state.firebaseUser);
     if (this.state.firebaseUser) {
       this.setState({display: displayType.world});
       let databaseRef = firebase.database()
