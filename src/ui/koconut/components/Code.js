@@ -19,6 +19,7 @@ import Hint from './Hint.js';
 
 // CSS for Code component
 import './Code.css';
+import ExerciseTypes from '../../../data/ExerciseTypes';
 
 // Ace Range datatype
 // const { Range } = ace.acequire('ace/range');
@@ -211,7 +212,9 @@ class Code extends Component {
   }
 
   render() {
-    let isInlineResponseType = Types.isInlineResponseType(this.props.type);
+  	// don't render the reset button for a highlightCode exercise
+    let isInlineResponseType = Types.isInlineResponseType(this.props.type) &&
+															this.props.type !== Types.highlightCode;
     let reset = isInlineResponseType ? <input type="button" value="reset code"
                                               onClick={this.handleReset}/> : '';
 
