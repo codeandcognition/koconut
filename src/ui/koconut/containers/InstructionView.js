@@ -4,7 +4,7 @@ import firebase from 'firebase';
 import BreadCrumbs from '../components/BreadCrumbs';
 import InstructionTitle from '../components/InstructionTitle';
 import InstructionContent from '../components/InstructionContent';
-import PopOver from './PopoverMessage';
+import './InstructionView.css';
 
 type Props = {
   conceptType: string,
@@ -61,15 +61,11 @@ export default class InstructionView extends Component {
     // so it's just to be safe (and possibly make flow not complain.
     if(this.state.instructionList) {
       this.setState({currInstructionIndex:
-        index > this.state.instructionList.length-2  ? // TODO probably better way to detect edge case
-            this.state.instructionList.length-1 :     // mind fried atm
+        index >= this.state.instructionList.length-1  ?
+            this.state.instructionList.length-1 :
             index + 1});
     }
   }
-
-  popOverMessage() {
-
-	}
 
   /**
    * On component mount, grab the data for the specific instruction off of
@@ -95,6 +91,17 @@ export default class InstructionView extends Component {
       }
     });
   }
+
+	/**
+	 * Called immediately after the component updates. It checks if the
+	 * instructionList is null and invokes the setError function in App.js
+	 *
+	 * Invoking this here (rather than in render) prevents the app
+	 * from throwing a console warning.
+	 */
+	componentDidUpdate() {
+  	this.state.instructionList === null && this.props.setError();
+	}
 
   /**
    * Reset the firebaseListener to be instructions from the new props.
@@ -125,8 +132,12 @@ export default class InstructionView extends Component {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
     return (
-      <div style={{paddingTop: "100px", width: "100%", paddingLeft: 40, paddingRight: 40}}> {/* TODO REPLACE MARGIN */ }
-        <BreadCrumbs />
+      <div className={"overallView"}>
+        <BreadCrumbs
+          conceptType={this.props.conceptType}
+          readOrWrite={this.props.readOrWrite}
+          chosenInstruction={chosenInstruction}
+        />
         {this.state.instructionList &&
             <div>
               <InstructionTitle
