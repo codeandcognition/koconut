@@ -4,7 +4,6 @@ import firebase from 'firebase';
 import BreadCrumbs from '../components/BreadCrumbs';
 import InstructionTitle from '../components/InstructionTitle';
 import InstructionContent from '../components/InstructionContent';
-import PopOver from './PopoverMessage';
 
 type Props = {
   conceptType: string,

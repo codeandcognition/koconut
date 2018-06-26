@@ -3,11 +3,6 @@ import React, {Component} from 'react';
 import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import {conceptInventory} from '../../../data/ConceptMap.js';
 import ConceptCard from './../components/ConceptCard';
-import ExerciseGenerator from '../../../backend/ExerciseGenerator';
-
-type Props = {
-	generateExercise: Function
-}
 
 /**
  * WorldView is the world view for the app, where the user can see all the
