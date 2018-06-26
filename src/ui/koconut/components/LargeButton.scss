@@ -1,11 +1,12 @@
-$outerWidth: 400px;
+$outerWidth: 30%;
+$buttonWidth: 100%;
 $height: 70vh;
 $buttonbackgroundColor: #d1d1d1;
 $greyedColor: grey;
 $buttonRadius: 5px;
 $fontSize: 20px;
 $buttonWidthScalar: 3.5;
-$outerPadding: 2px;
+$outerPadding: 10px;
 
 .outerPart {
   width: $outerWidth;
@@ -16,7 +17,7 @@ $outerPadding: 2px;
 }
 
 .buttonPart {
-  width: $outerWidth/$buttonWidthScalar;
+  width: $buttonWidth;
   cursor: pointer;
   color: black;
   background-color: $buttonbackgroundColor;
