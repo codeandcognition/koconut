@@ -49,6 +49,7 @@ class App extends Component {
   generateExercise: Function;
   getInstruction: Function;
   setInstructionViewError: Function;
+  resetError: Function;
   switchToWorldView: Function;
   switchToAuthorView: Function;
   loadDisplay: Function;
@@ -101,6 +102,7 @@ class App extends Component {
     this.generateExercise = this.generateExercise.bind(this);
     this.getInstruction = this.getInstruction.bind(this);
     this.setInstructionViewError = this.setInstructionViewError.bind(this);
+    this.resetError = this.resetError.bind(this);
     this.switchToWorldView = this.switchToWorldView.bind(this);
     this.loadDisplay = this.loadDisplay.bind(this);
     this.switchToAuthorView = this.switchToAuthorView.bind(this);
@@ -165,6 +167,13 @@ class App extends Component {
 			error: true,
 			errorMessage: 'Looks like there are no instructions on this concept right now. Please come back later!'
 		});
+	}
+
+	/**
+	 *
+	 */
+	resetError() {
+		this.setState({error: false});
 	}
 
   /**
@@ -354,7 +363,8 @@ class App extends Component {
 	 */
 	renderErrorMessage() {
 		return (<PopOverMessage toggleError={this.state.error}
-														errorMessage={this.state.errorMessage}/>);
+														errorMessage={this.state.errorMessage}
+														resetError={this.resetError}/>);
 	}
 
 	/**
