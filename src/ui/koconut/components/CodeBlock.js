@@ -7,6 +7,11 @@ type Props = {
   language: string
 };
 
+/**
+ * CodeBlock is boilerplate code provided by the React-Markdown to support
+ * syntax highlighting in code.
+ * @class
+ */
 export default class CodeBlock extends Component {
   componentDidMount() {
     this.highlightCode();
