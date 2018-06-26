@@ -16,7 +16,11 @@ type Props = {
   instructionIndex: number,
   maxInstruction: number
 }
-
+/**
+ * LargeButton is the side buttons for the InstructView.
+ * In reality I probably should have named this something else.
+ * @class
+ */
 export default class LargeButton extends Component {
   render() {
     let greyed = false;

@@ -11,6 +11,11 @@ const largeButtonTypes = {
   next: "NEXT"
 }
 
+/**
+ * InstructionContent is the main content of the instructions, along with
+ * the large buttons
+ * @class
+ */
 export default class InstructionContent extends Component {
   render() {
     return (
