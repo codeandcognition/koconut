@@ -11,6 +11,11 @@ const largeButtonTypes = {
   next: "NEXT"
 }
 
+/**
+ * InstructionContent is the main content of the instructions, along with
+ * the large buttons
+ * @class
+ */
 export default class InstructionContent extends Component {
   render() {
     return (
@@ -24,7 +29,8 @@ export default class InstructionContent extends Component {
           <div className={"markdownContent"}>
           <ReactMarkdown className={"flex-grow-1"}
                          source={this.props.instruction.content}
-                         renderers={assign({}, ReactMarkdown.renderers, {CodeBlock: CodeBlock})}
+                         renderers={{CodeBlock: CodeBlock}}
+                         escapeHtml={true}
                          />
           </div>
           <LargeButton click={this.props.next}
