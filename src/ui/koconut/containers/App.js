@@ -91,7 +91,8 @@ class App extends Component {
       firebaseUser: null,
 			error: false,
 			errorMessage: '', // none
-			author: false
+			author: false,
+      codeTheme: 'eclipse'
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -427,6 +428,8 @@ class App extends Component {
             submitTryAgain={this.submitTryAgain}
             mode={this.state.display}
             concept={this.state.currentConcept}
+            codeTheme={this.state.codeTheme}
+            toggleCodeTheme={(theme) => this.setState({codeTheme: theme})}
         />
     );
   }

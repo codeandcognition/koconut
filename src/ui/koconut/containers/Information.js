@@ -40,6 +40,8 @@ class Information extends Component {
         (<Code
             type={this.props.type}
             code={this.props.code}
+            codeTheme={this.props.codeTheme}
+            toggleCodeTheme={(theme) => this.props.toggleCodeTheme(theme)}
             updateHandler={Types.isInlineResponseType(this.props.type)
                 ? this.props.updateHandler
                 : undefined}

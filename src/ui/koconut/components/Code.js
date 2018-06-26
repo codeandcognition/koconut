@@ -59,7 +59,7 @@ class Code extends Component {
       code: this.props.code,
       lineNumbers: true,
       mode: 'java',
-      theme: 'eclipse',
+      theme: this.props.codeTheme,
       highlighted: '',
       toggle: true,
       hint: false,
@@ -111,6 +111,8 @@ class Code extends Component {
     this.setState({
       toggle: !this.state.toggle,
       theme: (this.state.toggle ? 'solarized_dark' : 'eclipse'),
+    }, () => {
+      this.props.toggleCodeTheme(this.state.theme);
     });
   }
 
