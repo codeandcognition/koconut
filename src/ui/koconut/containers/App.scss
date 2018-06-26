@@ -1,15 +1,17 @@
 $app-background: #f8f8f8; // pulled from codemirror lol
-$component-background: #fff;
+$component-background: #f8f8f8;
 
 html {
   background-color: $app-background;
+  padding: 0px;
+  margin: 0px;
 }
 
 .App {
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   background-color: $component-background;
 }
 
@@ -38,6 +40,7 @@ html {
 
 body {
   overflow-y: scroll !important;
+  height: 100%;
 }
 
 // temporary
