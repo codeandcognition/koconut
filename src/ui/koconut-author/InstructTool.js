@@ -13,6 +13,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from'../koconut/components/CodeBlock';
+import './InstructTool.css';
 
 class InstructTool extends Component {
 
@@ -232,7 +233,7 @@ class InstructTool extends Component {
                       <Typography style={{float: "right", color: "gray", fontSize: "11px"}}>
                         Page: {index + 1}
                       </Typography>
-                      <Typography variant={"headline"} component={"h4"}>{item.title}
+                      <Typography variant={"headline"} component={"h4"} style={{marginBottom: "1S0px"}}>{item.title}
 												{(this.state.editMode && this.state.editIndex === index) &&
 													<span style={{color: "yellow", fontSize: "14px"}}> (editing)</span>
 												}
