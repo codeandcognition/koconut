@@ -27,12 +27,7 @@ $buttonWidthScalar: 3.5;
   color: $greyedColor;
 }
 
-.chevron {
-  display: inline-flex;
-  vertical-align: middle;
-}
-
-.textPart {
+.textPart, .chevron {
   display: inline-flex;
   vertical-align: middle;
   font-size: $fontSize;

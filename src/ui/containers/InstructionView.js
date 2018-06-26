@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import BreadCrumbs from '../components/BreadCrumbs';
 import InstructionTitle from '../components/InstructionTitle';
 import InstructionContent from '../components/InstructionContent';
+import './InstructionView.css';
 
 type Props = {
   conceptType: string,
@@ -121,8 +122,12 @@ export default class InstructionView extends Component {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
     return (
-      <div style={{paddingTop: "100px", width: "100%", height: "100%", paddingLeft: 40, paddingRight: 40}}>
-        <BreadCrumbs />
+      <div className={"overallView"}>
+        <BreadCrumbs
+          conceptType={this.props.conceptType}
+          readOrWrite={this.props.readOrWrite}
+          chosenInstruction={chosenInstruction}
+        />
         {this.state.instructionList &&
             <div>
               <InstructionTitle
