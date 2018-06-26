@@ -16,6 +16,7 @@ class PopOver extends Component {
 			dialogText: this.props.errorMessage
 		}
 	}
+
 	handleClose() {
 		this.setState({open: !this.state.open});
 	}
@@ -34,14 +35,12 @@ class PopOver extends Component {
 	}
 
 	render() {
-
 		return(
 
 				<Dialog
 						open={this.state.open}
 						aria-labelledby="Oops"
-						aria-describedby={this.state.dialogText}
-				>
+						aria-describedby={this.state.dialogText}>
 					<DialogTitle>{"Oops"}</DialogTitle>
 					<DialogContent>
 						<DialogContentText>

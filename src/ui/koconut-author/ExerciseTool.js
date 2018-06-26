@@ -68,27 +68,24 @@ class ExerciseTool extends Component {
 	 * renders choices and answer
 	 */
 	renderAnswer() {
-		let styles= {
-			width: '100%',
-			height: '10em',
-			borderStyle: 'solid',
-			borderColor: '#BBDEFB'
-		};
-
-		if(this.state.currentExercise.choices.length < 1) {
-			<div>
-				<TextField fullWidth={true}
-									 style={{display: 'block'}}
-									 onChange={(evt) => this.setState({currentAnswer: evt.target.value})}
-									 value={this.state.currentAnswer}
-				/>
-				<br/>
-			</div>
+		if (this.state.currentExercise.choices.length < 1) {
+			return(
+					<div>
+						<TextField fullWidth={true}
+											 style={{display: 'block'}}
+											 onChange={(evt) => this.setState({currentAnswer: evt.target.value})}
+											 value={this.state.currentAnswer}
+						/>
+						<br/>
+					</div>
+			);
 		} else {
 			return (
 					<FormControl style={{display: 'block'}}
 											 fullWidth={true}>
-						<label className={"text-primary"} >Answer</label>
+						<label className={"text-primary"}>
+							Answer
+						</label>
 						<br/>
 						<NativeSelect name={"Answer"}
 													onChange={(evt) => this.setState({currentAnswer: evt.target.value})}>
