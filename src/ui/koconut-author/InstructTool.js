@@ -170,6 +170,12 @@ class InstructTool extends Component {
 			containerStyle["border"] = "1px solid yellow";
 		}
 
+		var missingFields = true;
+		if (this.state.title && this.state.content && this.state.concept && this.state.type) {
+    	missingFields = false;
+		}
+
+
 		return (
 				<Paper style={containerStyle} elevation={4}>
           <h3 style={{textAlign: "center"}}>Instruction Form</h3>
@@ -206,7 +212,7 @@ class InstructTool extends Component {
 						</Select>
 					</div>
 					<br />
-					<textarea value={this.state.content} name="content" onChange={(e) => this.handleChange(e)} rows="10" style={{width: "50%", marginTop: "50px"}} placeholder={"Instruction Content"}></textarea>
+					<textarea value={this.state.content} name="content" onChange={(e) => this.handleChange(e)} rows="10" style={{width: "50%", marginTop: "50px", whiteSpace: "pre-line"}} placeholder={"Instruction Content"}></textarea>
 					<br />
 					{this.state.editMode ? (
 							<div>
@@ -214,7 +220,7 @@ class InstructTool extends Component {
 									<Button style={{marginTop: "50px", marginLeft:"30px"}} variant={"contained"} color={"secondary"} onClick={() => this.handleEditCancel()}>Cancel</Button>
 							</div>
 					) :
-              <Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.addInstruction()}>Add Instruction</Button>
+              <Button style={{marginTop: "50px"}} variant={"contained"} color={"primary"} onClick={() => this.addInstruction()} disabled={missingFields}>Add Instruction</Button>
 					}
 					<h3 style={{textAlign: "center", marginTop: "60px", marginBottom: "20px"}}>Instruction Steps</h3>
 					<div id={"instruction-steps"}>
@@ -230,7 +236,13 @@ class InstructTool extends Component {
 													<span style={{color: "yellow", fontSize: "14px"}}> (editing)</span>
 												}
                       </Typography>
-                      <Typography color={"textSecondary"}>{item.content}</Typography>
+                      <Typography color={"textSecondary"}>{item.content.split(/\n/g).map((item2, index2) => {
+                      	return(
+                            <p style={{marginBottom: "3px"}} key={index2}>{item2}</p>
+												);
+
+											})}
+											</Typography>
                     </CardContent>
 										<CardActions>
 											{!this.state.editMode &&
@@ -257,6 +269,7 @@ class InstructTool extends Component {
 
 				</Paper>
 		);
+
 	}
 }
 
