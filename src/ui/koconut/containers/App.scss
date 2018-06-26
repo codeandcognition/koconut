@@ -1,6 +1,10 @@
 $app-background: #f8f8f8; // pulled from codemirror lol
 $component-background: #fff;
 
+html {
+  background-color: $app-background;
+}
+
 .App {
   margin: 0;
   padding: 0;
