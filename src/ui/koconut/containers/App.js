@@ -70,7 +70,8 @@ class App extends Component {
     firebaseUser: any,
 		error: boolean,
 		errorMessage: string,
-		author: boolean
+		author: boolean,
+    codeTheme: string
   };
 
   constructor() {
