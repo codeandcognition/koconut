@@ -1,6 +1,38 @@
-import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
+import {sep, op, quote, keyword, g, t} from './ConceptAbbreviations';
 
 export const conceptInventory = {
+  [g.howCodeRuns]: {
+    dependencies: [
+        g.dataTypes
+    ],
+    parents: [],
+    explanations: {
+      name: "How Code Runs",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.semantic
+  },
+  [g.dataTypes]: {
+    dependencies: [],
+    parents: [g.howCodeRuns],
+    explanations: {
+      name: "Data Types",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.semantic
+  }
+};
+
+
+/*export const conceptInventory = {
   [g.literal]: {
     dependencies: [g.integerLiteral,
       g.floatingPointLiteral,
@@ -604,6 +636,6 @@ export const conceptInventory = {
     should_teach: true,
     container: false,
   },
-};
+};*/
 
 export default conceptInventory;
