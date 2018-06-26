@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import * as hljs from 'highlight.js';
-import './default.css'
+import '../../components/default.css'
 
 type Props = {
   literal: string,
