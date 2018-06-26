@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import ReactMarkdown from 'react-markdown';
 import LargeButton from './LargeButton';
 import CodeBlock from'./CodeBlock';
-import assign from 'lodash.assign';
 import './InstructionContent.css';
 
 const largeButtonTypes = {

@@ -18,6 +18,7 @@ class PopOver extends Component {
 	}
 
 	handleClose() {
+		this.props.resetError(); // reset error state in App.js
 		this.setState({open: !this.state.open});
 	}
 
