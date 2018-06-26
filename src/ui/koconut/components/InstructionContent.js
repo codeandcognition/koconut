@@ -21,7 +21,7 @@ export default class InstructionContent extends Component {
         <div className={"d-flex totalContent"}>
           <LargeButton click={this.props.prev}
                        type={largeButtonTypes.prev}
-                        types={largeButtonTypes}
+                       types={largeButtonTypes}
                        instructionIndex={this.props.currentInstructionIndex}
                        maxInstruction={this.props.maxInstruction}
                         className={"p-2"}/>

@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress/CircularProgres
 class LoadingView extends Component {
 
   componentDidMount() {
-    this.props.loadDisplay();
+     this.props.loadDisplay();
   }
 
   render() {
