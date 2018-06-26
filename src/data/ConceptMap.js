@@ -2,10 +2,8 @@ import {sep, op, quote, keyword, g, t} from './ConceptAbbreviations';
 
 export const conceptInventory = {
   [g.howCodeRuns]: {
-    dependencies: [
-        g.dataTypes
-    ],
-    parents: [],
+    dependencies: [],
+    parents: [g.dataTypes],
     explanations: {
       name: "How Code Runs",
       definition: "",
@@ -17,8 +15,8 @@ export const conceptInventory = {
     type: t.semantic
   },
   [g.dataTypes]: {
-    dependencies: [],
-    parents: [g.howCodeRuns],
+    dependencies: [g.howCodeRuns],
+    parents: [g.printStatements, g.variables, g.arithmeticOperators, g.relationalOperators],
     explanations: {
       name: "Data Types",
       definition: "",
@@ -28,7 +26,124 @@ export const conceptInventory = {
     should_teach: true,
     container: false,
     type: t.semantic
-  }
+  },
+  [g.printStatements]: {
+    dependencies: [g.dataTypes],
+    parents: [],
+    explanations: {
+      name: "Print Statements",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.semantic
+  },
+  [g.variables]: {
+    dependencies: [g.dataTypes],
+    parents: [g.variableSwap, g.digitProcessing],
+    explanations: {
+      name: "Variables",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.semantic
+  },
+  [g.arithmeticOperators]: {
+    dependencies: [g.dataTypes],
+    parents: [g.digitProcessing, g.floatEquality],
+    explanations: {
+      name: "Arithmetic Operators",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.semantic
+  },
+  [g.relationalOperators]: {
+    dependencies: [g.dataTypes],
+    parents: [g.floatEquality, g.conditionals],
+    explanations: {
+      name: "Relational Operators",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.semantic
+  },
+  [g.variableSwap]: {
+    dependencies: [g.variables],
+    parents: [],
+    explanations: {
+      name: "Variable Swap",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.template
+  },
+  [g.digitProcessing]: {
+    dependencies: [g.variables, g.arithmeticOperators],
+    parents: [],
+    explanations: {
+      name: "Digit Processing",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.template
+  },
+  [g.floatEquality]: {
+    dependencies: [g.arithmeticOperators, g.relationalOperators],
+    parents: [],
+    explanations: {
+      name: "Float Equality",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.template
+  },
+  [g.conditionals]: {
+    dependencies: [g.relationalOperators],
+    parents: [g.findMaxMin],
+    explanations: {
+      name: "Conditionals",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.semantic
+  },
+  [g.findMaxMin]: {
+    dependencies: [g.conditionals],
+    parents: [],
+    explanations: {
+      name: "Find Max/Min",
+      definition: "",
+      examples: [],
+      future: []
+    },
+    should_teach: true,
+    container: false,
+    type: t.template
+  },
 };
 
 
