@@ -54,6 +54,7 @@ class App extends Component {
   loadDisplay: Function;
   generator: ExerciseGenerator;
   theme: mixed;
+  updateWaiverStatus: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: Exercise,
