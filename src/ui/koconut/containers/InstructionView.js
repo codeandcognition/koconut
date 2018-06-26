@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import BreadCrumbs from '../components/BreadCrumbs';
 import InstructionTitle from '../components/InstructionTitle';
 import InstructionContent from '../components/InstructionContent';
+import LoadingView from '../components/LoadingView';
 import './InstructionView.css';
 
 type Props = {
@@ -132,26 +133,32 @@ export default class InstructionView extends Component {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
     return (
-      <div className={"overallView"}>
-        <BreadCrumbs
-          conceptType={this.props.conceptType}
-          readOrWrite={this.props.readOrWrite}
-          chosenInstruction={chosenInstruction}
-        />
-        {this.state.instructionList &&
-            <div>
-              <InstructionTitle
-                  instruction={chosenInstruction}/>
-              <InstructionContent
-                  maxInstruction={this.state.instructionList.length}
-                  instruction={chosenInstruction}
-                  currentInstructionIndex={this.state.currInstructionIndex}
-                  prev={this.prevInstruction}
-                  next={this.nextInstruction}
-                />
-            </div>
-        }
-      </div>
+				<div>
+					{
+						this.state.instructionList === null ? <LoadingView loadDisplay={() => {return}}/>
+								:
+								<div className={"overallView"}>
+									<BreadCrumbs
+											conceptType={this.props.conceptType}
+											readOrWrite={this.props.readOrWrite}
+											chosenInstruction={chosenInstruction}
+									/>
+									{this.state.instructionList &&
+									<div>
+										<InstructionTitle
+												instruction={chosenInstruction}/>
+										<InstructionContent
+												maxInstruction={this.state.instructionList.length}
+												instruction={chosenInstruction}
+												currentInstructionIndex={this.state.currInstructionIndex}
+												prev={this.prevInstruction}
+												next={this.nextInstruction}
+										/>
+									</div>
+									}
+								</div>
+					}
+				</div>
     )
   }
 }
