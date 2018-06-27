@@ -43,8 +43,13 @@ class Welcome extends Component {
 
 
   render() {
+
+    var welcomeStyle = {
+      marginTop: "15vh"
+    }
+
     return (
-      <div className="welcome-page">
+      <div style={welcomeStyle} className="welcome-page">
         <h2>{strings.welcome}</h2>
         <p>{strings.intro}</p>
         <h4>{strings.use_cases.title}</h4>
