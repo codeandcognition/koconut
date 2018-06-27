@@ -23,14 +23,14 @@ class Signup extends Component {
 	 * Creates a Firebase user account if user info is acceptable,
 	 * displays a warning otherwise
 	 */
-	handleSubmit() {
+	handleSubmit(evt) {
+		evt.preventDefault();
 		let mismatch = this.state.password !== this.state.confirmation;
 		this.setState({errorMessage: "", errCode: ""});
 		if (!mismatch) {
 			firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
 			.then(user => {
-				console.log("inside success branch");
-				return user.updateProfile({displaName: this.state.displayName});
+				return user.updateProfile({displayName: this.state.displayName});
 			})
 			.catch((error) => {
 				this.setState({
@@ -87,10 +87,10 @@ class Signup extends Component {
 								style={{marginTop: '5%', width: '30vh', marginLeft: 'auto', marginRight: 'auto'}}
 								type="submit"
 								variant="outlined"
-								onClick={evt => this.handleSubmit()}>Create account</Button>
+								onClick={(evt) => this.handleSubmit(evt)}>Create account</Button>
 						{/* Sign in link is styled to go along with Material UI's styles */}
 						<p style={{cursor: 'pointer', color: '#E91E63', textAlign: 'center'}}
-							 onClick={evt => this.props.toSignin()}>Sign in instead</p>
+							 onClick={() => this.props.toSignin()}>Sign in instead</p>
 					</FormGroup>
 				</form>
 		);

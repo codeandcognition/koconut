@@ -284,23 +284,28 @@ class App extends Component {
 	 */
 	loadDisplay() {
     firebase.auth().onAuthStateChanged((fbUser) => {
-      if (fbUser != null) {
+    	this.setState({firebaseUser: fbUser});
+      if (fbUser) {
         let databaseRef = firebase.database().ref("Users/" + fbUser.uid);
-        databaseRef.on("value", (snapshot) => {
+        databaseRef.once("value", (snapshot) => {
         	if (snapshot !== null && snapshot.val() !== null) {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
         		if (waiverStatus) {
-              this.setState({firebaseUser: fbUser, display: displayType.world})
-            }
-        		author ? this.setState({author: author}) : false;
+              this.setState({display: displayType.world});
+            } else {
+        			this.setState({display: displayType.welcome});
+						}
+            if (author) {
+        			this.setState({author: author});
+						}
 					} else {
-        	  this.setState({firebaseUser: fbUser, display: displayType.welcome});
+        	  this.setState({display: displayType.welcome});
           }
         });
       } else {
-        this.setState({firebaseUser: fbUser, display: displayType.signin});
-      }
+      	this.setState({display: displayType.signin});
+			}
     });
   }
 
@@ -321,7 +326,7 @@ class App extends Component {
    * Renders the sign up view
    */
   renderSignup() {
-    if(this.state.firebaseUser) {
+    if (this.state.firebaseUser) {
       this.setState({
         display: displayType.load
       });
