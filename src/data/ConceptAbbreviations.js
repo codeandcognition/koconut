@@ -69,7 +69,8 @@ export const g = {
 
 export const t = {
   semantic: "semantic",
-  template: "template"
+  template: "template",
+  onboarding: "onboarding"
 }
 
 export default g;

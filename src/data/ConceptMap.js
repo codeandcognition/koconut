@@ -11,8 +11,8 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
-    type: t.semantic
+    container: true,
+    type: t.onboarding
   },
   [g.dataTypes]: {
     dependencies: [g.howCodeRuns],
@@ -24,7 +24,7 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
+    container: true,
     type: t.semantic
   },
   [g.printStatements]: {
@@ -37,7 +37,7 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
+    container: true,
     type: t.semantic
   },
   [g.variables]: {
@@ -50,7 +50,7 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
+    container: true,
     type: t.semantic
   },
   [g.arithmeticOperators]: {
@@ -63,7 +63,7 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
+    container: true,
     type: t.semantic
   },
   [g.relationalOperators]: {
@@ -76,7 +76,7 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
+    container: true,
     type: t.semantic
   },
   [g.variableSwap]: {
@@ -89,7 +89,7 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
+    container: true,
     type: t.template
   },
   [g.digitProcessing]: {
@@ -102,7 +102,7 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
+    container: true,
     type: t.template
   },
   [g.floatEquality]: {
@@ -115,7 +115,7 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
+    container: true,
     type: t.template
   },
   [g.conditionals]: {
@@ -128,7 +128,7 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
+    container: true,
     type: t.semantic
   },
   [g.findMaxMin]: {
@@ -141,7 +141,7 @@ export const conceptInventory = {
       future: []
     },
     should_teach: true,
-    container: false,
+    container: true,
     type: t.template
   },
 };
