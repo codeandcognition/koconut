@@ -14,6 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from'../koconut/components/CodeBlock';
 import './InstructTool.css';
+import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
+
 
 class InstructTool extends Component {
 
@@ -38,8 +40,9 @@ class InstructTool extends Component {
 
 
 	componentDidMount() {
+		var list = this.getConcepts();
 		this.setState({
-			conceptList: conceptInventory.map((concept) => concept.name)
+			conceptList: list
 		})
 	}
 
@@ -162,6 +165,10 @@ class InstructTool extends Component {
 		});
 	}
 
+  getConcepts(): ConceptKnowledge[] {
+    return MasteryModel.model.filter((concept) => concept.teach && !concept.container);
+  }
+
 	render() {
 		var containerStyle = {
 			margin: "auto",
@@ -176,7 +183,6 @@ class InstructTool extends Component {
 		if (this.state.title && this.state.content && this.state.concept && this.state.type) {
     	missingFields = false;
 		}
-
 
 		return (
 				<Paper style={containerStyle} elevation={4}>
@@ -194,7 +200,7 @@ class InstructTool extends Component {
 										onChange={(e) => this.handleChange(e)}>
 							{this.state.conceptList.map((item, index) => {
 								return (
-										<MenuItem value={item} key={index}>{item}</MenuItem>
+										<MenuItem value={item.name} key={index}>{item.name}</MenuItem>
 								);
 							})}
 						</Select>
