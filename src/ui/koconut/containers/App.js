@@ -286,7 +286,7 @@ class App extends Component {
     firebase.auth().onAuthStateChanged((fbUser) => {
       if (fbUser != null) {
         let databaseRef = firebase.database().ref("Users/" + fbUser.uid);
-        databaseRef.once("value", (snapshot) => {
+        databaseRef.on("value", (snapshot) => {
         	if (snapshot !== null && snapshot.val() !== null) {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
@@ -299,10 +299,7 @@ class App extends Component {
           }
         });
       } else {
-        this.setState({
-          display: displayType.signin,
-          firebaseUser: fbUser
-        });
+        this.setState({firebaseUser: fbUser, display: displayType.signin});
       }
     });
   }
