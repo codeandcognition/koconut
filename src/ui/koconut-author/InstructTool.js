@@ -142,7 +142,7 @@ class InstructTool extends Component {
 		var oldInstruct = this.state.instructions;
 		var error = "";
 		if (!pattern.test(orderString)) {
-			error = "Incorrectly formatted input. Please enter reorder as a comma-separated list of numbers.";
+			error = "Incorrectly formatted input. Please enter a comma-separated list of numbers.";
 		} else if (orderArr.length !== oldInstruct.length) {
 			error = "Numbers provided do not equal the amount of pages for reordering.";
 		} else {
@@ -245,8 +245,9 @@ class InstructTool extends Component {
 												}
                       </Typography>
 											<ReactMarkdown className={"flex-grow-1"}
-																			source={item.content}
-																			renderers={{CodeBlock: CodeBlock}}/>
+																		 source={item.content}
+																		 renderers={{CodeBlock: CodeBlock}}/>
+
                     </CardContent>
 										<CardActions>
 											{!this.state.editMode &&
