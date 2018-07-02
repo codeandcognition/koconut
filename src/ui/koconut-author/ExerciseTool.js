@@ -48,7 +48,8 @@ class ExerciseTool extends Component {
 		fillBlank: 'fillBlank',
 		highlightCode: 'highlightCode',
 		multipleChoice: 'multipleChoice',
-		shortResponse: 'shortResponse'
+		shortResponse: 'shortResponse',
+		memoryTable: 'memoryTable'
 	};
 
 	componentDidMount() {
@@ -134,8 +135,9 @@ class ExerciseTool extends Component {
 		return (
 				<Paper className={"container"}>
 					<div style={{margin: '5%', paddingTop: '5%'}}>
+						<p>Exercise: ...... </p>
 						<div>
-							<label className={"text-primary"}>Prompt</label>
+							<label className={"text-primary"}>Overarching Prompt (Optional)</label>
 							<TextField style={{display: 'block'}} fullWidth={true}
 												 value={this.state.currentExercise.prompt}
 												 onChange={this.handleChange('prompt')}/>
@@ -143,7 +145,7 @@ class ExerciseTool extends Component {
 						<br/>
 
 						<div>
-							<label className={"text-primary"}>Code</label>
+							<label className={"text-primary"}>Overarching Code (Optional)</label>
 							<textarea style={{display: 'block', width: '100%', height: '10em'}}
 												onChange={this.handleChange()}></textarea>
 						</div>
