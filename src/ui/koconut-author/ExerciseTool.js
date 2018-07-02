@@ -26,20 +26,28 @@ class ExerciseTool extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			exercises: [],
-			currentExercise: {
-				prompt: '',
-				code: '',
-				difficulty: 0,
-				choices: [],
-				type: '',
-				concepts: []
-			},
-			currentAnswer: '',
-			currentChoice: '',
-			currentConcept: '',
-			conceptList: []
-		};
+      exercises: [],
+      currentExercise: {
+        prompt: "",
+        code: "",
+        labels: {},
+        questions: [],
+        concepts: [],
+        tables: []
+      },
+      currentQuestion: {
+        prompt: "",
+        code: "",
+        difficulty: 0,
+        choices: [],
+        type: "",
+        answer: "",
+        hint: "",
+        feedback: "",
+        followupPrompt: "",
+        followupQuestions: ""
+      }
+    }
 	}
 
 	ExerciseTypes = {
