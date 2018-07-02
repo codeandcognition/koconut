@@ -42,16 +42,48 @@ const difficulty = {
   high: 2,
 };
 
-export const stubExercise: { exercise: Exercise, answer: ?string } = {
-  exercise: {
-    prompt: 'this is a stub exercise',
-    code: 'the right answer is abc',
-    choices: ['abc'],
-    difficulty: -1,
-    type: ExerciseTypes.multipleChoice,
-    concepts: [],
+export const stubExercise: Exercise =
+    {
+  "code": "",
+    "prompt": "This is a stub exercise",
+    "concepts": [
+  "dataTypes",
+  "primitives"
+  ],
+    "questions": [
+  {
+    "answer": "integer",
+    "choices": [
+      "integer",
+      "float",
+      "string",
+      "boolean"
+    ],
+    "code": "123",
+    "difficulty": 0,
+    "feedback": "",
+    "followupPrompt": "",
+    "hint": "",
+    "prompt": "Value",
+    "type": "multipleChoice"
   },
-  answer: 'abc',
+  {
+    "answer": "string",
+    "choices": [
+      "integer",
+      "float",
+      "string",
+      "boolean"
+    ],
+    "code": "\"123\"",
+    "difficulty": 0,
+    "feedback": "",
+    "followupPrompt": "",
+    "hint": "",
+    "prompt": "Value",
+    "type": "multipleChoice"
+  }
+  ]
 };
 
 export let variable17061 = [

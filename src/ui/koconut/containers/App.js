@@ -79,7 +79,7 @@ class App extends Component {
     this.theme = createMuiTheme();
 
     this.state = {
-      exercise: this.generator.generateExercise(),
+      exercise: this.generator.generateExercise(),  // TODO: make this a stub generator for initial exercise?
 			exerciseType: '', // yet to be defined
 			instructionType: '',
       feedback: '',
@@ -91,7 +91,8 @@ class App extends Component {
       firebaseUser: null,
 			error: false,
 			errorMessage: '', // none
-			author: false
+			author: false,
+      exerciseList: null
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -132,7 +133,7 @@ class App extends Component {
 		} else {
 			this.setState({
 				display: displayType.exercise,
-				exercise: exercises[this.state.counter].exercise,
+				exercise: exercises[this.state.counter].exercise, // TODO: make this a stub exercise as well
 				currentConcept: concept,
 				exerciseType: exerciseType,
 				error: false // resets the error message
