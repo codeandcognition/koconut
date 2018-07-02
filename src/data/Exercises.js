@@ -16,11 +16,24 @@ type Question = {
   type: string
 }
 
+type TableCell = {
+  prompt: string,
+  answer?: string
+}
+
+type Table = {
+  labels: Map<string, string[]>,
+  data: TableCell[],
+  followupPrompt: string,
+  followupQuestions: Question[]
+}
+
 export type Exercise = {
   code: string,
   concepts: string[],
   prompt: string,
-  questions: Question[]
+  questions: Question[],
+  tables?: Table[]
 }
 
 const difficulty = {
