@@ -33,5 +33,7 @@ ExerciseTypes.fillBlank = 'fillBlank';
 ExerciseTypes.highlightCode = 'highlightCode';
 ExerciseTypes.multipleChoice = 'multipleChoice';
 ExerciseTypes.shortResponse = 'shortResponse';
+ExerciseTypes.memoryTable = 'memoryTable';
+ExerciseTypes.selectMultiple = 'selectMultiple';
 
 export default ExerciseTypes;
