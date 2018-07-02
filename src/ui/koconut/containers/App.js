@@ -297,6 +297,10 @@ class App extends Component {
         	  this.setState({firebaseUser: fbUser, display: displayType.welcome});
           }
         });
+        this.exerciseGetter = firebase.database().ref('Exercises');
+        this.exerciseGetter.on('value', (snap) => {
+          this.setState({exerciseList:snap.val()});
+          console.log(this.state.exerciseList); });
       } else {
         this.setState({
           display: displayType.signin,

@@ -4,13 +4,23 @@ import {conceptInventory} from './ConceptMap';
 // import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
 import _ from 'lodash';
 
-export type Exercise = {
-  prompt: string,
+type Question = {
+  answer: string,
+  choices: string[],
   code: string,
-  choices?: string[],
   difficulty: number,
-  type: string,
-  concepts: string[]
+  feedback: string,
+  followupPrompt: string,
+  hint: string,
+  prompt: string,
+  type: string
+}
+
+export type Exercise = {
+  code: string,
+  concepts: string[],
+  prompt: string,
+  questions: Question[]
 }
 
 const difficulty = {
