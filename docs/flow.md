@@ -22,7 +22,7 @@ It is worthwhile to note the [Flow + React](https://flow.org/en/docs/frameworks/
 
 Flow will throw an error for declarations like the following:
 
-```
+```javascript
 constructor(props: Props) {
   super(props);
   this.state = {
@@ -41,7 +41,7 @@ As noted in [this issue here](https://github.com/facebook/flow/issues/1397), you
 
 > So the workaround is to explicitly specify these re-bound methods as properties on the class as such:
 
-```
+```javascript
 class Foo {
   _fetch;          // here
   _rowHasChanged;  // these fields
@@ -67,7 +67,7 @@ Preferably, you choose the first.
 
 If you are working with a component that has a constructor, you might get an error from Flow that demands you annotate props. There are several ways to do this, but we use the following convention (example snippet from the source):
 
-```
+```javascript
 // Create a type outside your class
 type Props = {
   question: {
@@ -126,7 +126,7 @@ If Flow complains that `Required module not found`, use the following script: `n
 
 If that command does not work for some reason, you can manually create a module in the `/flow-typed` folder [like so](https://github.com/facebook/flow/issues/869#issuecomment-256643823):
 
-```
+```javascript
 declare module 'express' {  declare var exports: any;  }
 declare module 'serve-favicon' {  declare var exports: any;  }
 declare module 'morgan' {  declare var exports: any;  }
