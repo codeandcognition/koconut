@@ -23,6 +23,12 @@ import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 import firebase from "firebase";
 
 
@@ -60,7 +66,9 @@ class ExerciseTool extends Component {
 				rows: 0,
 				data: {}
 			},
-			columnNames: []
+			columnNames: [],
+			tabValue: 0,
+			exercises: []
     }
 	}
 
@@ -251,7 +259,6 @@ class ExerciseTool extends Component {
 	 * renders choices and answer
 	 */
 	renderAnswer(reqs) {
-		console.log(this.state.currentQuestion.type);
 		if (this.state.currentQuestion.type === this.QuestionTypes.multipleChoice) {
 			return(
 					<div>
@@ -353,172 +360,215 @@ class ExerciseTool extends Component {
 		var databaseRef = firebase.database().ref("ConceptExerciseMap/" + concept);
 		databaseRef.on("value", function(snapshot) {
 			var exerciseList = snapshot.val() ? snapshot.val() : [];
-			console.log(exerciseList);
 			componentRef.setState({
 				exercises: exerciseList
 			});
 		});
 	}
 
+	handleTabChange(value) {
+		this.setState({
+			tabValue: value
+		})
+	}
+
+	renderBuildExercise() {
+    let code = {
+      border: '1px solid darkgray',
+      fontFamily: 'monospace',
+      whiteSpace: 'pre-wrap',
+      textAlign: 'left',
+      width: '100%',
+      margin: '10px auto'
+    };
+
+    let fieldReqs = {
+      required: {
+        float: 'right',
+        color: '#EF5350'
+      },
+      optional: {
+        float: 'right',
+        color: '#4DD0E1'
+      }
+    }
+
+		return (
+				<div>
+          <div style={{margin: '5%', paddingTop: '2%'}}>
+            <p>Exercise {" " + this.state.currentExercise.prompt} </p>
+            <p className={"text-primary"}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
+            <TextField style={{display: 'block'}} fullWidth={true}
+                       value={this.state.currentExercise.prompt}
+                       onChange={this.handleExerciseChange('prompt')}/>
+          </div>
+          <div>
+            <p className={"text-primary"}>Overarching Code <span style={fieldReqs.optional}>optional</span></p>
+            <textarea style={{display: 'block', width: '100%', height: '10em'}}
+                      onChange={this.handleExerciseChange()} />
+          </div>
+
+          <p>Tag concepts for this exercise <span style={fieldReqs.required}>required</span></p>
+          <FormControl>
+            <NativeSelect onChange={(evt) => this.setState({currentConcept: evt.target.value})}>
+              <option>Select concept</option>
+              {
+                this.state.conceptList.map((concept, index) => {
+                  return <option key={index} value={concept.name}>{concept.name}</option>
+                })
+              }
+            </NativeSelect>
+            <Button variant={'outlined'}
+                    color={"secondary"}
+                    onClick={(evt) => {
+                      if (this.state.currentConcept === '') return;
+                      let conceptsCopy = [...this.state.currentExercise.concepts];
+                      conceptsCopy.push(this.state.currentConcept);
+                      this.updateExercise("concepts", conceptsCopy);
+                      this.setState({currentConcept: ''});
+                    }}>Add concept</Button>
+          </FormControl>
+
+          <div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
+            {
+              this.state.currentExercise.concepts.map((concept, key) => {
+                return <Button
+                    key={key}
+                    style={{backgroundColor: '#ffecb3'}}
+                    onClick={() => {
+                      let index = this.state.currentExercise.concepts.indexOf(concept);
+                      let conceptsCopy = [...this.state.currentExercise.concepts];
+                      conceptsCopy.splice(index, 1);
+                      this.updateExercise('concepts', conceptsCopy);
+                    }
+                    }>{concept}</Button>
+              })
+            }
+          </div>
+
+          <p>An exercise can have multiple parts, use the following form to add one question at a time!</p>
+          <div>
+            <p>How do you want to format the question? <span style={fieldReqs.required}>required</span></p>
+            <FormControl>
+              <RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
+                <FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
+                <FormControlLabel value={"table"} control={<Radio color={"primary"}/>} label={"Format as a table"}/>
+              </RadioGroup>
+            </FormControl>
+          </div>
+
+          {
+            this.state.currentQuestionFormat === 'standAlone' ?
+                this.standAloneQuestion(fieldReqs) : this.formatAsTable(fieldReqs)
+          }
+
+
+          <div>
+            <p><b>Preview</b></p>
+            <div style={code}>
+              {
+                JSON.stringify({
+                  exercise: this.state.currentExercise,
+                  answer: this.state.currentAnswer,
+                }, null, 2)
+              }
+            </div>
+          </div>
+          <Button variant={'outlined'}
+                  color={'secondary'}
+                  onClick={(evt) => {
+                    if (this.state.currentExercise.prompt !== ''
+                        && this.state.currentAnswer !== ''
+                        && this.state.currentExercise.type !== '') {
+                      this.setState({
+                        exercises: [...this.state.exercises, {
+                          exercise: this.state.currentExercise,
+                          answer: this.state.currentAnswer
+                        }],
+                        currentExercise: {
+                          prompt: '',
+                          code: '',
+                          difficulty: 0,
+                          choices: [],
+                          concepts: [],
+                          type: ''
+                        },
+                        currentAnswer: ''
+                      });
+                    }
+                  }}>
+            Add exercise!
+          </Button>
+          <br /><br/>
+
+          <label className={"text-primary"}>Exercies</label>
+          <div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
+            {
+              this.state.questions.map((exercise, key) => {
+                return(
+                    <Button className={'bg-warning'}
+                            style={{margin: '0.25%'}}
+                            key={key}
+                            onClick={(evt) => {
+                              let index = this.state.exercises.indexOf(exercise);
+                              let exercisesCopy = [...this.state.exercises];
+                              exercisesCopy.splice(index, 1);
+                              this.setState({exercises: exercisesCopy});
+                            }}>
+                      {/*exercise.exercise.prompt*/}
+                    </Button>
+                );
+              })
+            }
+          </div>
+          <br/>
+
+          <p className={"text-primary"}>JSON Output</p>
+          <div style={code}>
+            {JSON.stringify(this.state.exercises, null, 2)}
+          </div>
+          <div style={code}>
+            {"let variable" + Math.round(Math.random() * 99999).toString() + " = "
+            + JSON.stringify(this.state.exercises) + ";"}
+          </div>
+				</div>
+		);
+	}
+
+	renderViewExercise() {
+		return (
+			<div style={{marginTop: "6%"}}>
+        <NativeSelect onChange={(evt) => {
+        	this.getExercisesForConcept(evt.target.value);
+        }}>
+          <option>Select concept</option>
+          {this.state.conceptList.map((concept, index) => {
+              return <option key={index} value={concept.name}>{concept.name}</option>
+					})}
+					{this.state.exercises.map((exercise, index) => {
+						return (
+							<Card>
+								<CardContent>
+									<Typography>{exercise.prompt}</Typography>
+								</CardContent>
+							</Card>
+						);
+					})}
+        </NativeSelect>
+			</div>
+		);
+	}
 
 	render() {
-		let code = {
-			border: '1px solid darkgray',
-			fontFamily: 'monospace',
-			whiteSpace: 'pre-wrap',
-			textAlign: 'left',
-			width: '100%',
-			margin: '10px auto'
-		};
-
-		let fieldReqs = {
-			required: {
-				float: 'right',
-				color: '#EF5350'
-			},
-			optional: {
-				float: 'right',
-				color: '#4DD0E1'
-			}
-		}
 		return (
-				<Paper className={"container"}>
-					<div style={{margin: '5%', paddingTop: '5%'}}>
-						<p>Exercise {" " + this.state.currentExercise.prompt} </p>
-						<p className={"text-primary"}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
-						<TextField style={{display: 'block'}} fullWidth={true}
-											 value={this.state.currentExercise.prompt}
-											 onChange={this.handleExerciseChange('prompt')}/>
-					</div>
-						<div>
-							<p className={"text-primary"}>Overarching Code <span style={fieldReqs.optional}>optional</span></p>
-							<textarea style={{display: 'block', width: '100%', height: '10em'}}
-												onChange={this.handleExerciseChange()} />
-						</div>
-
-						<p>Tag concepts for this exercise <span style={fieldReqs.required}>required</span></p>
-						<FormControl>
-							<NativeSelect onChange={(evt) => this.setState({currentConcept: evt.target.value})}>
-								<option>Select concept</option>
-								{
-									this.state.conceptList.map((concept, index) => {
-										return <option key={index} value={concept.name}>{concept.name}</option>
-									})
-								}
-							</NativeSelect>
-							<Button variant={'outlined'}
-											color={"secondary"}
-											onClick={(evt) => {
-												if (this.state.currentConcept === '') return;
-												let conceptsCopy = [...this.state.currentExercise.concepts];
-												conceptsCopy.push(this.state.currentConcept);
-												this.updateExercise("concepts", conceptsCopy);
-												this.setState({currentConcept: ''});
-											}}>Add concept</Button>
-						</FormControl>
-
-						<div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
-							{
-								this.state.currentExercise.concepts.map((concept, key) => {
-									return <Button
-														key={key}
-														style={{backgroundColor: '#ffecb3'}}
-														onClick={() => {
-																let index = this.state.currentExercise.concepts.indexOf(concept);
-																let conceptsCopy = [...this.state.currentExercise.concepts];
-																conceptsCopy.splice(index, 1);
-																this.updateExercise('concepts', conceptsCopy);
-															}
-														}>{concept}</Button>
-								})
-							}
-						</div>
-
-						<p>An exercise can have multiple parts, use the following form to add one question at a time!</p>
-						<div>
-							<p>How do you want to format the question? <span style={fieldReqs.required}>required</span></p>
-							<FormControl>
-								<RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
-									<FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
-									<FormControlLabel value={"table"} control={<Radio color={"primary"}/>} label={"Format as a table"}/>
-								</RadioGroup>
-							</FormControl>
-						</div>
-
-						{
-							this.state.currentQuestionFormat === 'standAlone' ?
-									this.standAloneQuestion(fieldReqs) : this.formatAsTable(fieldReqs)
-						}
-
-
-						<div>
-							<p><b>Preview</b></p>
-							<div style={code}>
-								{
-									JSON.stringify({
-										exercise: this.state.currentExercise,
-										answer: this.state.currentAnswer,
-									}, null, 2)
-								}
-							</div>
-						</div>
-						<Button variant={'outlined'}
-										color={'secondary'}
-										onClick={(evt) => {
-											if (this.state.currentExercise.prompt !== ''
-													&& this.state.currentAnswer !== ''
-													&& this.state.currentExercise.type !== '') {
-												this.setState({
-													exercises: [...this.state.exercises, {
-														exercise: this.state.currentExercise,
-														answer: this.state.currentAnswer
-													}],
-													currentExercise: {
-														prompt: '',
-														code: '',
-														difficulty: 0,
-														choices: [],
-														concepts: [],
-														type: ''
-													},
-													currentAnswer: ''
-												});
-											}
-										}}>
-							Add exercise!
-						</Button>
-						<br /><br/>
-
-						<label className={"text-primary"}>Exercies</label>
-						<div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
-							{
-								this.state.questions.map((exercise, key) => {
-									return(
-											<Button className={'bg-warning'}
-															style={{margin: '0.25%'}}
-															key={key}
-															onClick={(evt) => {
-																let index = this.state.exercises.indexOf(exercise);
-																let exercisesCopy = [...this.state.exercises];
-																exercisesCopy.splice(index, 1);
-																this.setState({exercises: exercisesCopy});
-															}}>
-												{/*exercise.exercise.prompt*/}
-											</Button>
-									);
-								})
-							}
-						</div>
-						<br/>
-
-						<p className={"text-primary"}>JSON Output</p>
-						<div style={code}>
-							{JSON.stringify(this.state.exercises, null, 2)}
-						</div>
-						<div style={code}>
-							{"let variable" + Math.round(Math.random() * 99999).toString() + " = "
-							+ JSON.stringify(this.state.exercises) + ";"}
-						</div>
+				<Paper style={{padding: "60px"}} className={"container"}>
+          <Tabs indicatorColor={"primary"} value={this.state.tabValue} onChange={(e, value) => this.handleTabChange(value)}>
+            <Tab label={"Build Exercise"} />
+            <Tab label={"View Exercises"} />
+          </Tabs>
+					{this.state.tabValue == 0 ?
+						this.renderBuildExercise() : this.renderViewExercise()
+					}
 				</Paper>
 		);
 	}
