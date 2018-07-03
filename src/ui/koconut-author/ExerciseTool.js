@@ -138,6 +138,7 @@ class ExerciseTool extends Component {
   }
 
   // Adds current exercises to the database
+  // TODO: Add current exercise to ConceptExerciseMap branch in database ordered by difficulty
   addExercise() {
 		this.setState({
 			exercises: [...this.state.exercises, this.state.currentExercise]
@@ -151,7 +152,7 @@ class ExerciseTool extends Component {
 		});
 	}
 
-	// Adds a question to the current exercise
+	// Adds current question stored in state to the current exercise stored in state
 	addQuestion() {
 		var exercise = this.state.currentExercise;
 		exercise.questions.push(this.state.currentQuestion);
@@ -159,6 +160,15 @@ class ExerciseTool extends Component {
 			currentExercise: exercise
 		});
 	}
+
+	// Adds current table data stored in state to the current exercise stored in state
+	addTableData() {
+	  var exercise = this.state.currentExercise;
+	  exercise.tables.push(this.state.currentTableData);
+	  this.setState({
+      currentExercise: exercise
+    });
+  }
 
 	// Retrieves all exercises from the database that are associated with the given concept
 	// and sets state "exercises" to that list
