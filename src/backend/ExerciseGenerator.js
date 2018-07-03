@@ -44,7 +44,7 @@ class ExerciseGenerator {
 
     // TODO: Note, it would be better to have item.questions[].type be coming
     // in as a parameter to this function, in case we ever want to refactor
-    // the code. For now, it isn't much work.
+    // the code.
 
     var results = [];
     if(exerciseList && conceptMapGetter) { // Only go to this loop if exerciseList and conceptMapGetter is defined
