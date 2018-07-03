@@ -70,7 +70,9 @@ class App extends Component {
     firebaseUser: any,
 		error: boolean,
 		errorMessage: string,
-		author: boolean
+		author: boolean,
+    exerciseList: ?Exercise[],
+    conceptMapGetter: ?Map<string,number[]>
   };
 
   constructor() {
@@ -92,7 +94,8 @@ class App extends Component {
 			error: false,
 			errorMessage: '', // none
 			author: false,
-      exerciseList: null
+      exerciseList: null,
+      conceptMapGetter: null
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -117,7 +120,7 @@ class App extends Component {
    *
    */
   generateExercise(concept: string, exerciseType: string) {
-		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept);
+		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
 		if (exercises.length === 0) {
 			this.setState({
 				error: true,
@@ -301,7 +304,11 @@ class App extends Component {
         this.exerciseGetter = firebase.database().ref('Exercises');
         this.exerciseGetter.on('value', (snap) => {
           this.setState({exerciseList:snap.val()});
-          console.log(this.state.exerciseList); });
+        });
+        this.conceptMapGetter = firebase.database().ref('ConceptExerciseMap');
+        this.conceptMapGetter.on('value', (snap) => {
+          this.setState({conceptMapGetter: snap.val()});
+        });
       } else {
         this.setState({
           display: displayType.signin,

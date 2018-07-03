@@ -4,7 +4,7 @@ import ExerciseTypes from '../data/ExerciseTypes.js';
 import ExercisePool from '../data/ExercisePool';
 import conceptInventory from '../data/ConceptMap';
 
-import type Exercise from '../data/Exercises.js';
+import type {Exercise} from '../data/Exercises.js';
 
 // import typeof doesn't agree with Flow for some reason:
 //   https://flow.org/en/docs/types/modules/
@@ -29,13 +29,15 @@ class ExerciseGenerator {
    * @param exerciseType - String ("READ" or "WRITE")
    * @param concept - String (Camel Cased)
    */
-  getExercisesByTypeAndConcept(exerciseType: string, concept: string) {
-    var exerciseInventory = [exercises.variable17061, exercises.variable18916, exercises.variable51520,
-      exercises.variable60932, exercises.variable88688]; // Add variable to this array as exercise inventory grows
-    var exerciseList = [];
-    for (var i = 0; i < exerciseInventory.length; i++) {
-      exerciseList = exerciseList.concat(exerciseInventory[i]);
-    }
+  getExercisesByTypeAndConcept(exerciseType: string, concept: string, exerciseList: ?Exercise[], conceptMapGetter: ?Map<string,number[]>) {
+    // Deprecated
+    // var exerciseInventory = [exercises.variable17061, exercises.variable18916, exercises.variable51520,
+    //   exercises.variable60932, exercises.variable88688]; // Add variable to this array as exercise inventory grows
+    // var exerciseList = [];
+    // for (var i = 0; i < exerciseInventory.length; i++) {
+    //   exerciseList = exerciseList.concat(exerciseInventory[i]);
+    // }
+    console.log("getex", exerciseList);
     var results = [];
     var readTypes = ["highlightCode", "multipleChoice", "shortResponse"];
     exerciseList.forEach((item) => {
