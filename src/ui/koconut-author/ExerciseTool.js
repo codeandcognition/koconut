@@ -23,6 +23,7 @@ import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import firebase from "firebase";
 
 
 class ExerciseTool extends Component {
@@ -289,6 +290,42 @@ class ExerciseTool extends Component {
     return MasteryModel.model.filter((concept) => concept.teach && !concept.container);
   }
 
+  // Adds current exercises to the database
+  addExercise() {
+		this.setState({
+			exercises: [...this.state.exercises, this.state.currentExercise]
+		}, () => {
+			var exerciseRef = firebase.database().ref("Exercises");
+			exerciseRef.once("value", function(snapshot) {
+				var currentExercises = snapshot.val() ? snapshot.val() : [];
+				currentExercises.concat(this.state.exercises);
+				exerciseRef.set(currentExercises);
+			});
+		});
+	}
+
+	// Adds a question to the current exercise
+	addQuestion() {
+		var exercise = this.state.currentExercise;
+		exercise.questions.push(this.state.currentQuestion);
+		this.setState({
+			currentExercise: exercise
+		});
+	}
+
+	// Retrieves all exercises from the database that are associated with the given concept
+	// and sets state "exercises" to that list
+	getExercisesForConcept(concept) {
+		var databaseRef = firebase.database().ref("ConceptExerciseMap/" + concept);
+		databaseRef.on("value", function(snapshot) {
+			var exerciseList = snapshot.val() ? snapshot.val() : [];
+			this.setState({
+				exercises: exerciseList
+			});
+		});
+	}
+
+
 	render() {
 		let code = {
 			border: '1px solid darkgray',
@@ -313,7 +350,6 @@ class ExerciseTool extends Component {
 				<Paper className={"container"}>
 					<div style={{margin: '5%', paddingTop: '5%'}}>
 						<p>Exercise {" " + this.state.currentExercise.prompt} </p>
-
 						<div>
 							<p className={"text-primary"}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
 							<TextField style={{display: 'block'}} fullWidth={true}
@@ -338,8 +374,8 @@ class ExerciseTool extends Component {
 								}
 							</NativeSelect>
 							<Button variant={'outlined'}
-											color={'secondary'}
-											onClick={() => {
+											color={"secondary"}
+											onClick={(evt) => {
 												if (this.state.currentConcept === '') return;
 												let conceptsCopy = [...this.state.currentExercise.concepts];
 												conceptsCopy.push(this.state.currentConcept);
@@ -348,7 +384,7 @@ class ExerciseTool extends Component {
 											}}>Add concept</Button>
 						</FormControl>
 
-						<div>
+						<div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
 							{
 								this.state.currentExercise.concepts.map((concept, key) => {
 									return <Button
@@ -386,7 +422,6 @@ class ExerciseTool extends Component {
 							<p><b>Preview</b></p>
 							<div style={code}>
 								{
-									/* code output */
 									JSON.stringify({
 										exercise: this.state.currentExercise,
 										answer: this.state.currentAnswer,
@@ -451,7 +486,7 @@ class ExerciseTool extends Component {
 							{"let variable" + Math.round(Math.random() * 99999).toString() + " = "
 							+ JSON.stringify(this.state.exercises) + ";"}
 						</div>
-					</div>
+						</div>
 				</Paper>
 		);
 	}
