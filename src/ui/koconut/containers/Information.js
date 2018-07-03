@@ -35,15 +35,40 @@ class Information extends Component {
    * @returns JSX for the Code container
    */
   renderCodeView() {
-    return (Types.isSurvey(this.props.type) ||
-        (this.props.type === Types.multipleChoice && this.props.code === '')) ? '' :
-        (<Code
-            type={this.props.type}
-            code={this.props.code}
-            updateHandler={Types.isInlineResponseType(this.props.type)
-                ? this.props.updateHandler
-                : undefined}
-        />);
+    return this.props.exercise.questions.map((question, index) => {
+      // split apart so easier to parse
+      if(Types.isSurvey(question.type) ||
+          (question.type === Types.multipleChoice
+          &&
+              ((question.code && question.code === '') || (!question.code))
+          )
+      ) {
+        return '';
+      } else {
+        return (<Code
+                      key={"code" + index}
+                      type={question.type}
+                      code={question.code}
+                      updateHandler={
+                        Types.isInlineResponseType(question.type) ?
+                            this.props.updateHandler :
+                            undefined
+                      }/>);
+      }
+    });
+
+
+    // Deprecated below
+
+    // return (Types.isSurvey(this.props.type) ||
+    //     (this.props.type === Types.multipleChoice && this.props.code === '')) ? '' :
+    //     (<Code
+    //         type={this.props.type}
+    //         code={this.props.code}
+    //         updateHandler={Types.isInlineResponseType(this.props.type)
+    //             ? this.props.updateHandler
+    //             : undefined}
+    //     />);
   }
 
   /**
