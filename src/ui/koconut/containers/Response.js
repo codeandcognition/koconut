@@ -15,7 +15,7 @@ class Response extends Component {
   props: {
     type: string,
     choices?: string[],
-    answer: ?string,
+    answer: ?string[],
     updateHandler: Function,
     questionIndex: number
   };
