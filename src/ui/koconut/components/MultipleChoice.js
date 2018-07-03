@@ -14,8 +14,9 @@ class MultipleChoice extends Component {
     choices: string[],
     labels: ?string[],
     tooltips: ?string[],
-    answer: ?string,
-    handleClick: Function
+    answer: string[],
+    handleClick: Function,
+    questionIndex: number
   };
 
   render() {
@@ -24,13 +25,13 @@ class MultipleChoice extends Component {
         <div className='multiple-choice'>
           <h3>{this.props.title}</h3>
           {/* Create a choice component for each item in answers */}
-          {this.props.choices.map((choice, i) =>
+          {this.props.answer !== undefined && this.props.questionIndex > -1 && this.props.choices.map((choice, i) =>
               choice.length > 0 ?
               (<Choice
                   key={choice}
                   choice={choice}
                   content={labels !== null && labels !== undefined?labels[i]:choice}
-                  answer={choice === this.props.answer}
+                  answer={choice === this.props.answer[this.props.questionIndex] }
                   tooltip={
                     this.props.tooltips !== undefined &&
                     this.props.tooltips !== null
@@ -38,6 +39,7 @@ class MultipleChoice extends Component {
                       : undefined
                   }
                   handleClick={this.props.handleClick}
+                  questionIndex={this.props.questionIndex}
               />) : ''
           )}
         </div>

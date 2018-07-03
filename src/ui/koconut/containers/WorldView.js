@@ -18,7 +18,7 @@ class WorldView extends Component {
 	 * @returns {Array.<*>}
 	 */
 	getOrderedConcepts(): ConceptKnowledge[] {
-		return MasteryModel.model.filter((concept) => concept.teach && !concept.container).sort(
+		return MasteryModel.model.filter((concept) => concept.teach && concept.container).sort(
 				(a, b) => (b.dependencyKnowledge / b.knowledge -
 						a.dependencyKnowledge / a.knowledge));
 	}

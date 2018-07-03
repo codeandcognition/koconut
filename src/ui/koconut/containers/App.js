@@ -71,7 +71,12 @@ class App extends Component {
 		error: boolean,
 		errorMessage: string,
 		author: boolean,
+<<<<<<< HEAD
     codeTheme: string
+=======
+    exerciseList: ?Exercise[],
+    conceptMapGetter: ?Map<string,number[]>
+>>>>>>> 7ee1e5fe7d4ed8981e35fdd2c175eafaf0c6ea02
   };
 
   constructor() {
@@ -80,7 +85,7 @@ class App extends Component {
     this.theme = createMuiTheme();
 
     this.state = {
-      exercise: this.generator.generateExercise(),
+      exercise: this.generator.getStubExercise(),
 			exerciseType: '', // yet to be defined
 			instructionType: '',
       feedback: '',
@@ -93,7 +98,12 @@ class App extends Component {
 			error: false,
 			errorMessage: '', // none
 			author: false,
+<<<<<<< HEAD
       codeTheme: 'eclipse'
+=======
+      exerciseList: null,
+      conceptMapGetter: null
+>>>>>>> 7ee1e5fe7d4ed8981e35fdd2c175eafaf0c6ea02
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -118,28 +128,31 @@ class App extends Component {
    *
    */
   generateExercise(concept: string, exerciseType: string) {
-		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept);
-		if (exercises.length === 0) {
-			this.setState({
-				error: true,
-				errorMessage: 'Sorry, there are no exercises available for this concept right now.'
-			});
-		} else if (this.state.counter === exercises.length) { // reached the end of the list
-  			// go back to the world view
-				this.switchToWorldView();
-				this.setState({
-					error: true,
-					errorMessage: 'Looks like we ran out of questions for this concept, stay-tuned for more!'
-				});
-		} else {
-			this.setState({
-				display: displayType.exercise,
-				exercise: exercises[this.state.counter].exercise,
-				currentConcept: concept,
-				exerciseType: exerciseType,
-				error: false // resets the error message
-			});
-		}
+		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
+		console.log("asdf", exercises);
+		if(exercises) {
+      if (exercises.length === 0) {
+        this.setState({
+          error: true,
+          errorMessage: 'Sorry, there are no exercises available for this concept right now.'
+        });
+      } else if (this.state.counter === exercises.length) { // reached the end of the list
+        // go back to the world view
+        this.switchToWorldView();
+        this.setState({
+          error: true,
+          errorMessage: 'Looks like we ran out of questions for this concept, stay-tuned for more!'
+        });
+      } else {
+        this.setState({
+          display: displayType.exercise,
+          exercise: exercises[this.state.counter],//this.generator.getStubExercise(), // exercises[this.state.counter].exercise, // TODO: convert this for testing
+          currentConcept: concept,
+          exerciseType: exerciseType,
+          error: false // resets the error message
+        });
+      }
+    }
   }
 
 	/**
@@ -227,7 +240,7 @@ class App extends Component {
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
    */
-  submitResponse(answer: string) {
+  submitResponse(answer: string[]) {
     if (answer !== null && answer !== undefined) {
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => {
         this.setState({
@@ -302,6 +315,14 @@ class App extends Component {
 					} else {
         	  this.setState({display: displayType.welcome});
           }
+        });
+        this.exerciseGetter = firebase.database().ref('Exercises');
+        this.exerciseGetter.on('value', (snap) => {
+          this.setState({exerciseList:snap.val()});
+        });
+        this.conceptMapGetter = firebase.database().ref('ConceptExerciseMap');
+        this.conceptMapGetter.on('value', (snap) => {
+          this.setState({conceptMapGetter: snap.val()});
         });
       } else {
       	this.setState({display: displayType.signin});

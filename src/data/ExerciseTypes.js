@@ -25,6 +25,15 @@ class ExerciseTypes {
   static isSurvey = function(type: string): boolean {
     return type === this.survey;
   }
+
+  /**
+   * Determines whether the exercise type is a read type
+   * @param type
+   * @returns {boolean}
+   */
+  static isReadType = function(type: string): boolean {
+    return this.readTypes.includes(type);
+  }
 }
 
 ExerciseTypes.survey = 'survey'; // Survey is just another type of exercise
@@ -33,5 +42,8 @@ ExerciseTypes.fillBlank = 'fillBlank';
 ExerciseTypes.highlightCode = 'highlightCode';
 ExerciseTypes.multipleChoice = 'multipleChoice';
 ExerciseTypes.shortResponse = 'shortResponse';
+ExerciseTypes.memoryTable = 'memoryTable';
+ExerciseTypes.selectMultiple = 'selectMultiple';
+ExerciseTypes.readTypes = ["highlightCode", "multipleChoice", "shortResponse"]; // Can probably define this based on the above, but it's fine for now
 
 export default ExerciseTypes;

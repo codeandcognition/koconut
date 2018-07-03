@@ -29,13 +29,17 @@ type Props = {
  */
 class Exercise extends Component {
   state: {
-    answer: ?string,
+    answer: string[],
   };
 
   constructor(props: Props) {
     super(props);
     this.state = {
+<<<<<<< HEAD
       answer: null
+=======
+      answer: [],
+>>>>>>> 7ee1e5fe7d4ed8981e35fdd2c175eafaf0c6ea02
     };
   }
 
@@ -51,7 +55,7 @@ class Exercise extends Component {
    */
   componentWillReceiveProps() {
     this.setState({
-      answer: null,
+      answer: [],
     });
   }
 
@@ -66,19 +70,21 @@ class Exercise extends Component {
 
 
   render() {
-    let styles = {
+    let styles = {  // TODO put this in the constructor, unnecessary calculations per render
       marginTop: '10%'
     }
+    console.log(this.state.answer);
     return (
         <div className="exercise-view" style={styles}>
-          <Prompt content={this.props.exercise.prompt} type={this.props.exercise.type}/>
+          <Prompt exercise={this.props.exercise} />
           <Information
-              code={this.props.exercise.code}
-              type={this.props.exercise.type}
-              choices={this.props.exercise.choices}
+              exercise={this.props.exercise}
               answer={this.state.answer}
-              concepts={this.props.exercise.concepts}
-              updateHandler={(content) => this.setState({answer: content})}
+              updateHandler={(content, index) => {
+                let temp = this.state.answer;
+                temp[index] = content;
+                this.setState({answer: temp});
+              }}
               feedback={this.props.feedback}
               submitOk={this.props.submitOk}
               submitTryAgain={this.props.submitTryAgain}

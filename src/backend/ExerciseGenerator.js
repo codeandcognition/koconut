@@ -4,6 +4,8 @@ import ExerciseTypes from '../data/ExerciseTypes.js';
 import ExercisePool from '../data/ExercisePool';
 import conceptInventory from '../data/ConceptMap';
 
+import type {Exercise} from '../data/Exercises.js';
+
 // import typeof doesn't agree with Flow for some reason:
 //   https://flow.org/en/docs/types/modules/
 // So, we import all of ConceptKnowledge
@@ -26,24 +28,34 @@ class ExerciseGenerator {
    * Returns and array of exercises for the given exercise type and concept
    * @param exerciseType - String ("READ" or "WRITE")
    * @param concept - String (Camel Cased)
+   * @param exerciseList - List of exercises coming from firebase
+   * @param conceptMapGetter - List of concept mappings coming from firebase
+   * @return {Exercise[]} Array of exercises for the given exercise type and concept
    */
-  getExercisesByTypeAndConcept(exerciseType: string, concept: string) {
-    var exerciseInventory = [exercises.variable17061, exercises.variable18916, exercises.variable51520,
-      exercises.variable60932, exercises.variable88688]; // Add variable to this array as exercise inventory grows
-    var exerciseList = [];
-    for (var i = 0; i < exerciseInventory.length; i++) {
-      exerciseList = exerciseList.concat(exerciseInventory[i]);
-    }
+  getExercisesByTypeAndConcept(exerciseType: string, concept: string, exerciseList: ?Exercise[], conceptMapGetter: ?Map<string,number[]>): ?Exercise[]{
+    // Deprecated
+    // var exerciseInventory = [exercises.variable17061, exercises.variable18916, exercises.variable51520,
+    //   exercises.variable60932, exercises.variable88688]; // Add variable to this array as exercise inventory grows
+    // var exerciseList = [];
+    // for (var i = 0; i < exerciseInventory.length; i++) {
+    //   exerciseList = exerciseList.concat(exerciseInventory[i]);
+    // }
+
+    // TODO: Note, it would be better to have item.questions[].type be coming
+    // in as a parameter to this function, in case we ever want to refactor
+    // the code.
+
     var results = [];
-    var readTypes = ["highlightCode", "multipleChoice", "shortResponse"];
-    exerciseList.forEach((item) => {
-      if (item.exercise.concepts.includes(concept)) {
-        if ((exerciseType === "READ" && readTypes.includes(item.exercise.type)) ||
-            (exerciseType === "WRITE" && !readTypes.includes(item.exercise.type))) {
+    if(exerciseList && conceptMapGetter) { // Only go to this loop if exerciseList and conceptMapGetter is defined
+      exerciseList.forEach((item) => {
+        if (item.concepts.includes(concept)) {
+          if ((exerciseType === "READ" && ExerciseTypes.isReadType(item.questions[0].type)) ||
+              (exerciseType === "WRITE" && !ExerciseTypes.isReadType(item.questions[0].type) )) {
             results.push(item);
+          }
         }
-      }
-    });
+      });
+    }
     return results;
   }
 
@@ -73,6 +85,14 @@ class ExerciseGenerator {
     return MasteryModel.model.filter((concept) => concept.teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
         a.dependencyKnowledge / a.knowledge));
+  }
+
+  /**
+   * Get a stub exercise defined in Exercises.js
+   * @returns {Exercise} stub exercise
+   */
+  getStubExercise() : Exercise {
+    return stubExercise;
   }
 
   /**

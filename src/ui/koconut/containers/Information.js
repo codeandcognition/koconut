@@ -6,6 +6,8 @@ import Feedback from '../components/Feedback';
 import Types from '../../../data/ExerciseTypes.js';
 import './Information.css';
 
+import type {Exercise} from '../../../data/Exercises';
+
 // Display type enum
 const displayType = {
   exercise: 'EXERCISE',
@@ -19,9 +21,7 @@ const displayType = {
  */
 class Information extends Component {
   props: {
-    code: string,
-    type: string,
-    choices?: string[], // Optional type - can be omitted (use undefined)
+    exercise: Exercise,
     answer: ?string,  // Maybe type - can be null/void
     updateHandler: Function,
     feedback: string,
@@ -37,6 +37,7 @@ class Information extends Component {
    * @returns JSX for the Code container
    */
   renderCodeView() {
+<<<<<<< HEAD
     return (Types.isSurvey(this.props.type) ||
         (this.props.type === Types.multipleChoice && this.props.code === '')) ? '' :
         (<Code
@@ -48,6 +49,42 @@ class Information extends Component {
                 ? this.props.updateHandler
                 : undefined}
         />);
+=======
+    return this.props.exercise.questions.map((question, index) => {
+      // split apart so easier to parse
+      if(Types.isSurvey(question.type) ||
+          (question.type === Types.multipleChoice
+          &&
+              ((question.code && question.code === '') || (!question.code))
+          )
+      ) {
+        return '';
+      } else {
+        return (<Code
+                      key={"code" + index}
+                      type={question.type}
+                      code={question.code}
+                      updateHandler={
+                        Types.isInlineResponseType(question.type) ?
+                            this.props.updateHandler :
+                            undefined
+                      }/>);
+      }
+    });
+
+
+    // Deprecated below
+
+    // return (Types.isSurvey(this.props.type) ||
+    //     (this.props.type === Types.multipleChoice && this.props.code === '')) ? '' :
+    //     (<Code
+    //         type={this.props.type}
+    //         code={this.props.code}
+    //         updateHandler={Types.isInlineResponseType(this.props.type)
+    //             ? this.props.updateHandler
+    //             : undefined}
+    //     />);
+>>>>>>> 7ee1e5fe7d4ed8981e35fdd2c175eafaf0c6ea02
   }
 
   /**
@@ -55,7 +92,6 @@ class Information extends Component {
    * @returns JSX for the Response container
    */
   renderResponseView() {
-    let type = this.props.type;
     if (this.props.mode === displayType.feedback) {
       return <Feedback
           feedback={this.props.feedback}
@@ -63,16 +99,35 @@ class Information extends Component {
           submitTryAgain={this.props.submitTryAgain}
       />
     }
-    return Types.isInlineResponseType(type) ? <div/>
-        : <Response
+
+    return this.props.exercise.questions.map((question, index) => {
+      let type = question.type;
+      return Types.isInlineResponseType(type) ? <div /> :
+          <Response
+              key={"response"+index}
             type={type}
-            choices={this.props.choices}
+            choices={question.choices}
             answer={this.props.answer}
+            questionIndex={index}
             updateHandler={this.props.updateHandler}
             feedback={this.props.feedback}
             submitOk={this.props.submitOk}
             mode={this.props.mode}
-        />;
+            />
+    })
+
+    // Deprecated below
+
+    // return Types.isInlineResponseType(type) ? <div/>
+    //     : <Response
+    //         type={type}
+    //         choices={this.props.choices}
+    //         answer={this.props.answer}
+    //         updateHandler={this.props.updateHandler}
+    //         feedback={this.props.feedback}
+    //         submitOk={this.props.submitOk}
+    //         mode={this.props.mode}
+    //     />;
   }
 
   render() {

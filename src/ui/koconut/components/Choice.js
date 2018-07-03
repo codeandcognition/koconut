@@ -13,7 +13,8 @@ class Choice extends Component {
     content: string,
     answer: boolean,
     tooltip: ?string,
-    handleClick: Function
+    handleClick: Function,
+    questionIndex: number
   };
 
   renderTooltip() {
@@ -33,7 +34,7 @@ class Choice extends Component {
     return (
         <div
             className={'choice ' + (this.props.answer ? 'answer' : '')}
-            onClick={() => this.props.handleClick(this.props.choice)}
+            onClick={() => this.props.handleClick(this.props.choice, this.props.questionIndex)}
             data-tip
             data-for={this.props.content}
         >

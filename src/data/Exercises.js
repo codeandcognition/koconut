@@ -4,13 +4,37 @@ import {conceptInventory} from './ConceptMap';
 // import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
 import _ from 'lodash';
 
-export type Exercise = {
-  prompt: string,
-  code: string,
-  choices?: string[],
+type Question = {
+  answer: string,
+  choices: string[],
+  code?: string,
   difficulty: number,
-  type: string,
-  concepts: string[]
+  feedback?: string,
+  followupPrompt?: string,
+  hint?: string,
+  prompt: string,
+  type: string
+}
+
+type TableCell = {
+  prompt: string,
+  answer?: string
+}
+
+type Table = {
+  labels: Map<string, string[]>,
+  data: TableCell[],
+  followupPrompt: string,
+  followupQuestions: Question[]
+}
+
+export type Exercise = {
+  code?: string,
+  concepts: string[],
+  prompt?: string,
+  questions: Question[],
+  tables?: Table[],
+  labels?: Map<string,string>
 }
 
 const difficulty = {
@@ -19,16 +43,47 @@ const difficulty = {
   high: 2,
 };
 
-export const stubExercise: { exercise: Exercise, answer: ?string } = {
-  exercise: {
-    prompt: 'this is a stub exercise',
-    code: 'the right answer is abc',
-    choices: ['abc'],
-    difficulty: -1,
-    type: ExerciseTypes.multipleChoice,
-    concepts: [],
+export const stubExercise: Exercise =
+    {
+  "code": "",
+    "prompt": "This is a stub exercise",
+    "concepts": [
+  "dataTypes"
+  ],
+    "questions": [
+  {
+    "answer": "integer",
+    "choices": [
+      "integer",
+      "float",
+      "string",
+      "boolean"
+    ],
+    "code": "123",
+    "difficulty": 0,
+    "feedback": "",
+    "followupPrompt": "",
+    "hint": "",
+    "prompt": "Value",
+    "type": "multipleChoice"
   },
-  answer: 'abc',
+  {
+    "answer": "string",
+    "choices": [
+      "integer",
+      "float",
+      "string",
+      "boolean"
+    ],
+    "code": "\"123\"",
+    "difficulty": 0,
+    "feedback": "",
+    "followupPrompt": "",
+    "hint": "",
+    "prompt": "Value",
+    "type": "multipleChoice"
+  }
+  ]
 };
 
 export let variable17061 = [
