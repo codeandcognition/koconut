@@ -4,6 +4,8 @@ import ExerciseTypes from '../data/ExerciseTypes.js';
 import ExercisePool from '../data/ExercisePool';
 import conceptInventory from '../data/ConceptMap';
 
+import type Exercise from '../data/Exercises.js';
+
 // import typeof doesn't agree with Flow for some reason:
 //   https://flow.org/en/docs/types/modules/
 // So, we import all of ConceptKnowledge
@@ -73,6 +75,14 @@ class ExerciseGenerator {
     return MasteryModel.model.filter((concept) => concept.teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
         a.dependencyKnowledge / a.knowledge));
+  }
+
+  /**
+   * Get a stub exercise defined in Exercises.js
+   * @returns {Exercise} stub exercise
+   */
+  getStubExercise() : Exercise {
+    return stubExercise;
   }
 
   /**
