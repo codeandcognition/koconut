@@ -91,7 +91,7 @@ class ExerciseTool extends Component {
 	 * renders choices and answer
 	 */
 	renderAnswer() {
-		if (this.state.currentExercise.choices.length < 1) {
+		if (this.state.currentQuestion.choices.length < 1) {
 			return(
 					<div>
 						<TextField fullWidth={true}
@@ -114,7 +114,7 @@ class ExerciseTool extends Component {
 													onChange={(evt) => this.setState({currentAnswer: evt.target.value})}>
 							<option value="">Select answer</option>
 							{
-								this.state.currentExercise.choices.map((key, index) => {
+								this.state.currentQuestion.choices.map((key, index) => {
 									return <option value={key} key={index}>{key}</option>
 								})
 							}
@@ -128,7 +128,7 @@ class ExerciseTool extends Component {
 		return (<textarea
 				className="prompt"
 				onChange={this.handleChange('prompt')}
-				value={this.state.currentExercise.prompt}
+				value={this.state.currentQuestion.prompt}
 		>
               </textarea>)
 	}
@@ -137,20 +137,48 @@ class ExerciseTool extends Component {
     return MasteryModel.model.filter((concept) => concept.teach && !concept.container);
   }
 
-  // Adds current exercises to the database
-  // TODO: Add current exercise to ConceptExerciseMap branch in database ordered by difficulty
-  addExercise() {
-		this.setState({
-			exercises: [...this.state.exercises, this.state.currentExercise]
-		}, () => {
-			var exerciseRef = firebase.database().ref("Exercises");
-			exerciseRef.once("value", function(snapshot) {
+  // Adds current exercises to the database in Exercises branch and ConceptExerciseMap branch
+	// ordered by difficulty
+  addExercise() {  // NOT TESTED
+		var exerciseRef = firebase.database().ref("Exercises");
+		exerciseRef.once("value", function(snapshot) {
+			var currentExercises = snapshot.val() ? snapshot.val() : [];
+			currentExercises.push(this.state.currentExercise);
+			exerciseRef.set(currentExercises);
+		});
+
+		this.state.currentExercise.concepts.forEach((item) => {
+			var conceptRef = firebase.database().ref("ConceptExerciseMap/" + item);
+			conceptRef.once("value", function(snapshot) {
 				var currentExercises = snapshot.val() ? snapshot.val() : [];
-				currentExercises.concat(this.state.exercises);
-				exerciseRef.set(currentExercises);
+
+				var currentDifficulty = this.getAverageDifficulty(this.state.currentExercise, 0, 0, 0);
+				for (var i = 0; i < currentExercises.length; i++) {
+					var avgDifficulty = this.getAverageDifficulty(currentExercises[i], 0, 0, 0);
+					if (avgDifficulty > currentDifficulty) {
+						currentExercises.splice(i, 0, this.state.currentExercise);
+					}
+				}
+				conceptRef.set(currentExercises);
 			});
 		});
 	}
+
+	// Helper function: returns the average difficulty of given exercise based on
+	// the difficulties of each of its questions
+	getAverageDifficulty(exercise, questionIndex, total, count) { // NOT TESTED
+		if (!exercise) {
+			return 0;
+		} else if (exercise.questions[questionIndex]) {
+			var difficulty = exercise.questions[questionIndex].difficulty;
+			var newTotal = total + difficulty;
+			return this.getAverageDifficulty(exercise, questionIndex + 1, newTotal, count + 1);
+		} else {
+			return total / count;
+		}
+  }
+
+
 
 	// Adds current question stored in state to the current exercise stored in state
 	addQuestion() {
@@ -173,10 +201,12 @@ class ExerciseTool extends Component {
 	// Retrieves all exercises from the database that are associated with the given concept
 	// and sets state "exercises" to that list
 	getExercisesForConcept(concept) {
+		var componentRef = this;
 		var databaseRef = firebase.database().ref("ConceptExerciseMap/" + concept);
 		databaseRef.on("value", function(snapshot) {
 			var exerciseList = snapshot.val() ? snapshot.val() : [];
-			this.setState({
+			console.log(exerciseList);
+			componentRef.setState({
 				exercises: exerciseList
 			});
 		});
@@ -195,7 +225,7 @@ class ExerciseTool extends Component {
 
 		return (
 				<Paper className={"container"}>
-					{/*<div style={{margin: '5%', paddingTop: '5%'}}>
+					<div style={{margin: '5%', paddingTop: '5%'}}>
 						<div>
 							<label className={"text-primary"}>Prompt</label>
 							<TextField style={{display: 'block'}} fullWidth={true}
@@ -219,7 +249,7 @@ class ExerciseTool extends Component {
 															onChange={this.handleChange('type')}>
 									<option>Select exercise type</option>
 									{
-										Object.keys(this.ExerciseTypes).map((key, index) => {
+										Object.keys(this.QuestionTypes).map((key, index) => {
 											return <option value={key} key={index}>{key}</option>
 										})
 									}
@@ -240,7 +270,7 @@ class ExerciseTool extends Component {
 											color={'secondary'}
 											onClick={(evt) => {
 												if (this.state.currentChoice === '') return;
-												let choicesCopy = [...this.state.currentExercise.choices];
+												let choicesCopy = [...this.state.currentQuestion.choices];
 												choicesCopy.push(this.state.currentChoice);
 												this.updateExercise('choices', choicesCopy);
 												this.setState({currentChoice: ''});
@@ -252,11 +282,11 @@ class ExerciseTool extends Component {
 
 						<div style={{width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
 							{
-								this.state.currentExercise.choices.map((choice, key) => {
+								this.state.currentQuestion.choices.map((choice, key) => {
 									return(
 											<Button onClick={(evt) => {
-												let index = this.state.currentExercise.choices.indexOf(evt.target.innerText);
-												let choicesCopy = [...this.state.currentExercise.choices];
+												let index = this.state.currentQuestion.choices.indexOf(evt.target.innerText);
+												let choicesCopy = [...this.state.currentQuestion.choices];
 												choicesCopy.splice(index, 1);
 												this.updateExercise('choices', choicesCopy);
 											}}
@@ -378,7 +408,7 @@ class ExerciseTool extends Component {
 																exercisesCopy.splice(index, 1);
 																this.setState({exercises: exercisesCopy});
 															}}>
-												{exercise.exercise.prompt}
+												{/*exercise.exercise.prompt*/}
 											</Button>
 									);
 								})
@@ -394,7 +424,7 @@ class ExerciseTool extends Component {
 							{"let variable" + Math.round(Math.random() * 99999).toString() + " = "
 							+ JSON.stringify(this.state.exercises) + ";"}
 						</div>
-					</div>*/}
+					</div>
 				</Paper>
 		);
 	}
