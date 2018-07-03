@@ -7,11 +7,11 @@ import _ from 'lodash';
 type Question = {
   answer: string,
   choices: string[],
-  code: string,
+  code?: string,
   difficulty: number,
-  feedback: string,
-  followupPrompt: string,
-  hint: string,
+  feedback?: string,
+  followupPrompt?: string,
+  hint?: string,
   prompt: string,
   type: string
 }
@@ -29,11 +29,12 @@ type Table = {
 }
 
 export type Exercise = {
-  code: string,
+  code?: string,
   concepts: string[],
-  prompt: string,
+  prompt?: string,
   questions: Question[],
-  tables?: Table[]
+  tables?: Table[],
+  labels?: Map<string,string>
 }
 
 const difficulty = {
