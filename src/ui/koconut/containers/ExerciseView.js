@@ -65,13 +65,13 @@ class Exercise extends Component {
   }
 
   render() {
-    let styles = {
+    let styles = {  // TODO put this in the constructor, unnecessary calculations per render
       marginTop: '10%'
     }
     console.log("dsa", this.props.exercise);
     return (
         <div className="exercise-view" style={styles}>
-          <Prompt content={this.props.exercise.prompt} type={this.props.exercise.type}/>
+          <Prompt exercise={this.props.exercise} />
           <Information
               code={this.props.exercise.code}
               type={this.props.exercise.type}
