@@ -16,7 +16,8 @@ class Response extends Component {
     type: string,
     choices?: string[],
     answer: ?string,
-    updateHandler: Function
+    updateHandler: Function,
+    questionIndex: number
   };
 
   /**
@@ -28,19 +29,21 @@ class Response extends Component {
     let choices = this.props.choices;
     let answer = this.props.answer;
     let update = this.props.updateHandler;
+    let index = this.props.questionIndex;
 
     switch (type) {
       case(Types.multipleChoice):
-        return <MultipleChoice
+        return <MultipleChoice  // want to modify the handle click? be prepared to dig deep in this nest
             title='Select the correct answer:'
             choices={choices}
             answer={answer}
             handleClick={update}
+            questionIndex={index}
         />;
       case(Types.shortResponse):
-        return <ShortResponse inputHandler={update}/>;
+        return <ShortResponse inputHandler={update} questionIndex={index}/>;
       case(Types.survey):
-        return <SurveyView choices={choices} inputHandler={update}/>;
+        return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       default:
         return <div className="BAD">Not a valid EXERCISE type {type}</div>;
     }

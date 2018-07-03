@@ -29,13 +29,13 @@ type Props = {
  */
 class Exercise extends Component {
   state: {
-    answer: ?string,
+    answer: string[],
   };
 
   constructor(props: Props) {
     super(props);
     this.state = {
-      answer: null,
+      answer: [],
     };
   }
 
@@ -51,7 +51,7 @@ class Exercise extends Component {
    */
   componentWillReceiveProps() {
     this.setState({
-      answer: null,
+      answer: [],
     });
   }
 
@@ -75,7 +75,11 @@ class Exercise extends Component {
           <Information
               exercise={this.props.exercise}
               answer={this.state.answer}
-              updateHandler={(content) => this.setState({answer: content})}
+              updateHandler={(content, index) => {
+                let temp = this.state.answer;
+                temp[index] = content;
+                this.setState({answer: temp});
+              }}
               feedback={this.props.feedback}
               submitOk={this.props.submitOk}
               submitTryAgain={this.props.submitTryAgain}

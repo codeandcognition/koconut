@@ -76,7 +76,6 @@ class Information extends Component {
    * @returns JSX for the Response container
    */
   renderResponseView() {
-    let type = this.props.type;
     if (this.props.mode === displayType.feedback) {
       return <Feedback
           feedback={this.props.feedback}
@@ -84,16 +83,34 @@ class Information extends Component {
           submitTryAgain={this.props.submitTryAgain}
       />
     }
-    return Types.isInlineResponseType(type) ? <div/>
-        : <Response
+
+    return this.props.exercise.questions.map((question, index) => {
+      let type = question.type;
+      return Types.isInlineResponseType(type) ? <div /> :
+          <Response
             type={type}
-            choices={this.props.choices}
-            answer={this.props.answer}
+            choices={question.choices}
+            answer={question.answer}
+            questionIndex={index}
             updateHandler={this.props.updateHandler}
             feedback={this.props.feedback}
             submitOk={this.props.submitOk}
             mode={this.props.mode}
-        />;
+            />
+    })
+
+    // Deprecated below
+
+    // return Types.isInlineResponseType(type) ? <div/>
+    //     : <Response
+    //         type={type}
+    //         choices={this.props.choices}
+    //         answer={this.props.answer}
+    //         updateHandler={this.props.updateHandler}
+    //         feedback={this.props.feedback}
+    //         submitOk={this.props.submitOk}
+    //         mode={this.props.mode}
+    //     />;
   }
 
   render() {

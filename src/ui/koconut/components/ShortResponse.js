@@ -30,7 +30,7 @@ class ShortResponse extends Component {
             <div className="short-response-value">
               <textarea onChange={(event) => {
                 this.setState({value: event.target.value});
-                this.props.inputHandler(event.target.value);
+                this.props.inputHandler(event.target.value, this.props.questionIndex);
               }}>
               </textarea>
               <p>{this.state.value}</p>
