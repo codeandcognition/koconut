@@ -88,9 +88,10 @@ class Information extends Component {
       let type = question.type;
       return Types.isInlineResponseType(type) ? <div /> :
           <Response
+              key={"response"+index}
             type={type}
             choices={question.choices}
-            answer={question.answer}
+            answer={this.props.answer}
             questionIndex={index}
             updateHandler={this.props.updateHandler}
             feedback={this.props.feedback}
