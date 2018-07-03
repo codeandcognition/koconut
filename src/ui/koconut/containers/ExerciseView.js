@@ -68,6 +68,7 @@ class Exercise extends Component {
     let styles = {
       marginTop: '10%'
     }
+    console.log("dsa", this.props.exercise);
     return (
         <div className="exercise-view" style={styles}>
           <Prompt content={this.props.exercise.prompt} type={this.props.exercise.type}/>

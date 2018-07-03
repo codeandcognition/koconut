@@ -121,27 +121,30 @@ class App extends Component {
    */
   generateExercise(concept: string, exerciseType: string) {
 		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
-		if (exercises.length === 0) {
-			this.setState({
-				error: true,
-				errorMessage: 'Sorry, there are no exercises available for this concept right now.'
-			});
-		} else if (this.state.counter === exercises.length) { // reached the end of the list
-  			// go back to the world view
-				this.switchToWorldView();
-				this.setState({
-					error: true,
-					errorMessage: 'Looks like we ran out of questions for this concept, stay-tuned for more!'
-				});
-		} else {
-			this.setState({
-				display: displayType.exercise,
-				exercise: this.generator.getStubExercise(), // exercises[this.state.counter].exercise, // TODO: convert this for testing
-				currentConcept: concept,
-				exerciseType: exerciseType,
-				error: false // resets the error message
-			});
-		}
+		console.log("asdf", exercises);
+		if(exercises) {
+      if (exercises.length === 0) {
+        this.setState({
+          error: true,
+          errorMessage: 'Sorry, there are no exercises available for this concept right now.'
+        });
+      } else if (this.state.counter === exercises.length) { // reached the end of the list
+        // go back to the world view
+        this.switchToWorldView();
+        this.setState({
+          error: true,
+          errorMessage: 'Looks like we ran out of questions for this concept, stay-tuned for more!'
+        });
+      } else {
+        this.setState({
+          display: displayType.exercise,
+          exercise: exercises[this.state.counter],//this.generator.getStubExercise(), // exercises[this.state.counter].exercise, // TODO: convert this for testing
+          currentConcept: concept,
+          exerciseType: exerciseType,
+          error: false // resets the error message
+        });
+      }
+    }
   }
 
 	/**

@@ -47,8 +47,7 @@ export const stubExercise: Exercise =
   "code": "",
     "prompt": "This is a stub exercise",
     "concepts": [
-  "dataTypes",
-  "primitives"
+  "dataTypes"
   ],
     "questions": [
   {

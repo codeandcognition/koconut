@@ -40,7 +40,6 @@ class ExerciseGenerator {
     // for (var i = 0; i < exerciseInventory.length; i++) {
     //   exerciseList = exerciseList.concat(exerciseInventory[i]);
     // }
-    console.log("getex", exerciseList);
 
     // TODO: Note, it would be better to have item.questions[].type be coming
     // in as a parameter to this function, in case we ever want to refactor
