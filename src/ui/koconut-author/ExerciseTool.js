@@ -20,6 +20,9 @@ import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import Button from '@material-ui/core/Button/Button';
 import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import firebase from "firebase";
 
 
@@ -27,7 +30,6 @@ class ExerciseTool extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-      exercises: [],
       currentExercise: {
         prompt: "",
         code: "",
@@ -36,9 +38,12 @@ class ExerciseTool extends Component {
         concepts: [],
         tables: []
       },
+			questions: [],
+			conceptList: [],
       currentQuestion: {
         prompt: "",
         code: "",
+				index: 0,
         difficulty: 0,
         choices: [],
         type: "",
@@ -48,13 +53,14 @@ class ExerciseTool extends Component {
         followupPrompt: "",
         followupQuestions: ""
       },
-			currentTableData: {
-      	labels: {},
-				data: [],
-				followupPrompt: "",
-				followupQuestions: ""
+			currentQuestionFormat: 'standAlone',
+			currentChoice: '',
+			currentTable: {
+				colNames: [],
+				rows: 0,
+				data: {}
 			},
-      conceptList: []
+			columnNames: []
     }
 	}
 
@@ -64,7 +70,8 @@ class ExerciseTool extends Component {
 		fillBlank: 'fillBlank',
 		highlightCode: 'highlightCode',
 		multipleChoice: 'multipleChoice',
-		shortResponse: 'shortResponse'
+		shortResponse: 'shortResponse',
+		memoryTable: 'memoryTable'
 	};
 
 	componentDidMount() {
@@ -74,63 +81,204 @@ class ExerciseTool extends Component {
 		})
 	}
 
+	/**
+	 *
+	 * @param field
+	 * @param value
+	 */
 	updateExercise(field, value) {
-		console.log(`updating ${field} with ${value}`);
-		let disgustingDeepCopy = JSON.parse(JSON.stringify(this.state.currentExercise));
-		disgustingDeepCopy[field] = value;
-		this.setState({currentExercise: disgustingDeepCopy});
+		let temp = this.state.currentExercise;
+		temp[field] = value;
+		this.setState({currentExercise: temp});
 	}
 
+	/**
+	 * Updates the questions array in the current exercise
+	 * @param field
+	 * @param value
+	 */
+	updateQuestion(field, value) {
+		let temp = this.state.currentQuestion;
+		temp[field] = value;
+		this.setState({currentQuestion: temp});
+	}
+
+	/**
+	 * Handles a change in the current question object
+	 *
+	 * @param field
+	 * @returns {Function}
+	 */
 	handleChange(field) {
+		return (e) => {
+			this.updateQuestion(field, e.target.value);
+		}
+	}
+
+	/**
+	 * Handles a change in the exercise
+	 *
+	 * @param field
+	 * @returns {Function}
+	 */
+	handleExerciseChange(field) {
 		return (e) => {
 			this.updateExercise(field, e.target.value);
 		}
 	}
 
+	formatAsTable(fieldReqs) {
+		return (
+				<div>
+					<p>Enter the column names <span style={fieldReqs.required}>required</span></p>
+					{this.addColumnNameForm()}
+					<p>Number of rows<span style={fieldReqs.required}>required</span></p>
+					<TextField fullWidth={true} onChange={(evt) => this.handleTableChange('rows', parseInt(evt.target.value))}/>
+				</div>
+		);
+
+	}
+
+	handleTableChange(field, value) {
+		let temp = this.state.currentTable;
+		temp[field] = value;
+		console.log(temp);
+		this.setState({currenTable: temp});
+	}
+
+	addColumnNameForm() {
+		return(
+				<div>
+					<TextField fullWidth={true}/>
+					<Button variant={'outlined'}
+									color={'secondary'}>Add column name</Button>
+				</div>
+		);
+	}
+
+	standAloneQuestion(fieldReqs) {
+		return(
+				<div>
+					{this.renderQuestionTypeDropdown()}
+					{this.renderChoicesInputForm()}
+					{this.renderChoices()}
+					{this.renderAnswer(fieldReqs)}
+				</div>
+		);
+	}
+
 	/**
-	 * renders choices and answer
+	 * Function to render the question type drop down
+	 *
+	 * @returns {*} html div
 	 */
-	renderAnswer() {
-		if (this.state.currentQuestion.choices.length < 1) {
-			return(
-					<div>
-						<TextField fullWidth={true}
-											 style={{display: 'block'}}
-											 onChange={(evt) => this.setState({currentAnswer: evt.target.value})}
-											 value={this.state.currentAnswer}
-						/>
-						<br/>
-					</div>
-			);
-		} else {
-			return (
+	renderQuestionTypeDropdown() {
+		return(
+				<div>
+					<label className={"text-primary"}>Question Type</label>
 					<FormControl style={{display: 'block'}}
 											 fullWidth={true}>
-						<label className={"text-primary"}>
-							Answer
-						</label>
-						<br/>
-						<NativeSelect name={"Answer"}
-													onChange={(evt) => this.setState({currentAnswer: evt.target.value})}>
-							<option value="">Select answer</option>
+						<NativeSelect name={"Question Type"}
+													onChange={this.handleChange('type')}>
+							<option>Select question type</option>
 							{
-								this.state.currentQuestion.choices.map((key, index) => {
-									return <option value={key} key={index}>{key}</option>
+								Object.keys(this.QuestionTypes).map((qType, key) => {
+									let type = this.QuestionTypes[qType];
+									return <option key={key}>{type}</option>
 								})
 							}
 						</NativeSelect>
 					</FormControl>
-			)
-		}
+				</div>
+		);
 	}
 
-	renderPrompt() {
-		return (<textarea
-				className="prompt"
-				onChange={this.handleChange('prompt')}
-				value={this.state.currentQuestion.prompt}
-		>
-              </textarea>)
+	/**
+	 * Function to render the choices input form
+	 *
+	 * @returns {*} html div
+	 */
+	renderChoicesInputForm() {
+		return(
+				<div>
+					<label className={"text-primary"}>Choices</label>
+					<TextField fullWidth={true}
+										 style={{display: 'block'}}
+										 onChange={(evt) => this.setState({currentChoice: evt.target.value})}
+										 value={this.state.currentChoice}/>
+					<Button variant={'outlined'}
+									color={'secondary'}
+									onClick={(evt) => {
+										if (this.state.currentChoice === '') return;
+										let choicesCopy = [...this.state.currentQuestion.choices];
+										choicesCopy.push(this.state.currentChoice);
+										this.updateQuestion('choices', choicesCopy);
+										this.setState({currentChoice: ''});
+									}}>
+						Add choice
+					</Button>
+				</div>
+		);
+	}
+
+	/**
+	 * Function to render the choices for a multiple choice question
+	 * @returns {*}
+	 */
+	renderChoices() {
+		return(
+				<div style={{width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
+					{
+						this.state.currentQuestion.choices.map((choice, key) => {
+							return <Button key={key}
+														 variant={'flat'}
+														 style={{backgroundColor: '#ffecb3'}}
+														 onClick={(evt) => {
+														 	let index = this.state.currentQuestion.choices.indexOf(evt.target.innerText);
+														 	let choicesCopy = [...this.state.currentQuestion.choices];
+														 	choicesCopy.splice(index, 1);
+														 	this.updateQuestion('choices', choicesCopy);
+														 }}>
+								{choice}
+								</Button>
+						})
+					}
+				</div>
+		);
+	}
+
+	/**
+	 * renders choices and answer
+	 */
+	renderAnswer(reqs) {
+		console.log(this.state.currentQuestion.type);
+		if (this.state.currentQuestion.type === this.QuestionTypes.multipleChoice) {
+			return(
+					<div>
+						<p>Answer <span style={reqs.required}>required</span></p>
+						<NativeSelect onChange={(evt) => this.setState({currentAnswer: evt.target.value})}>
+							<option>Select the answer</option>
+							{
+								this.state.currentQuestion.choices.map((choice, key) => {
+									return <option key={key}>{choice}</option>
+								})
+							}
+						</NativeSelect>
+					</div>
+			);
+		} else if (this.state.currentQuestion.type === this.QuestionTypes.memoryTable) {
+				// TODO: Design the UI
+		} else {
+				// returns a text field for answer
+				return (
+						<div>
+							<p>Answer <span style={reqs.required}>required</span></p>
+							<TextField fullWidth={true}
+												 value={this.state.currentAnswer}
+												 onChange={(evt) => this.setState({currentAnswer: evt.target.value})} />
+						</div>
+				);
+		}
 	}
 
   getConcepts(): ConceptKnowledge[] {
@@ -223,137 +371,84 @@ class ExerciseTool extends Component {
 			margin: '10px auto'
 		};
 
+		let fieldReqs = {
+			required: {
+				float: 'right',
+				color: '#EF5350'
+			},
+			optional: {
+				float: 'right',
+				color: '#4DD0E1'
+			}
+		}
 		return (
 				<Paper className={"container"}>
 					<div style={{margin: '5%', paddingTop: '5%'}}>
+						<p>Exercise {" " + this.state.currentExercise.prompt} </p>
+						<p className={"text-primary"}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
+						<TextField style={{display: 'block'}} fullWidth={true}
+											 value={this.state.currentExercise.prompt}
+											 onChange={this.handleExerciseChange('prompt')}/>
+					</div>
 						<div>
-							<label className={"text-primary"}>Prompt</label>
-							<TextField style={{display: 'block'}} fullWidth={true}
-												 value={this.state.currentExercise.prompt}
-												 onChange={this.handleChange('prompt')}/>
-						</div>
-						<br/>
-
-						<div>
-							<label className={"text-primary"}>Code</label>
+							<p className={"text-primary"}>Overarching Code <span style={fieldReqs.optional}>optional</span></p>
 							<textarea style={{display: 'block', width: '100%', height: '10em'}}
-												onChange={this.handleChange()}></textarea>
+												onChange={this.handleExerciseChange()} />
 						</div>
-						<br />
 
-						<div>
-							<label className={"text-primary"}>Exercise Type</label>
-							<FormControl style={{display: 'block'}}
-													 fullWidth={true}>
-								<NativeSelect name={"Exercise Type"}
-															onChange={this.handleChange('type')}>
-									<option>Select exercise type</option>
-									{
-										Object.keys(this.QuestionTypes).map((key, index) => {
-											return <option value={key} key={index}>{key}</option>
-										})
-									}
-								</NativeSelect>
-							</FormControl>
-						</div>
-						<br />
-
-						<div>
-							<label className={"text-primary"}>Choices</label>
-							<TextField fullWidth={true}
-												 style={{display: 'block'}}
-												 onChange={(evt) => this.setState({currentChoice: evt.target.value})}
-												 value={this.state.currentChoice}/>
-							<br/>
-
-							<Button variant={'outlined'}
-											color={'secondary'}
-											onClick={(evt) => {
-												if (this.state.currentChoice === '') return;
-												let choicesCopy = [...this.state.currentQuestion.choices];
-												choicesCopy.push(this.state.currentChoice);
-												this.updateExercise('choices', choicesCopy);
-												this.setState({currentChoice: ''});
-											}}>
-								Add choice
-							</Button>
-						</div>
-						<br/>
-
-						<div style={{width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
-							{
-								this.state.currentQuestion.choices.map((choice, key) => {
-									return(
-											<Button onClick={(evt) => {
-												let index = this.state.currentQuestion.choices.indexOf(evt.target.innerText);
-												let choicesCopy = [...this.state.currentQuestion.choices];
-												choicesCopy.splice(index, 1);
-												this.updateExercise('choices', choicesCopy);
-											}}
-															key={key}
-															variant={'flat'}
-															className={"bg-warning"}
-															style={{margin: '.25%'}}>
-												{choice}
-											</Button>
-									);
-								})
-							}
-						</div>
-						<br/>
-
-						<div>{this.renderAnswer()}</div>
-						<br/>
-
-						<div>
-							<label className={"text-primary"}>Concepts</label>
-							<FormControl style={{display: 'block'}}>
-								<NativeSelect name={"Concept name"}
-															onChange={(evt) => this.setState({currentConcept: evt.target.value})}>
-									<option value={""}>Select concept</option>
-									{
-										this.state.conceptList.map((concept, index) => {
-											return <option key={index} value={concept.name}>{concept.name}</option>
-										})
-									}
-								</NativeSelect>
-							</FormControl>
-							<br />
-
+						<p>Tag concepts for this exercise <span style={fieldReqs.required}>required</span></p>
+						<FormControl>
+							<NativeSelect onChange={(evt) => this.setState({currentConcept: evt.target.value})}>
+								<option>Select concept</option>
+								{
+									this.state.conceptList.map((concept, index) => {
+										return <option key={index} value={concept.name}>{concept.name}</option>
+									})
+								}
+							</NativeSelect>
 							<Button variant={'outlined'}
 											color={"secondary"}
 											onClick={(evt) => {
 												if (this.state.currentConcept === '') return;
 												let conceptsCopy = [...this.state.currentExercise.concepts];
 												conceptsCopy.push(this.state.currentConcept);
-												this.updateExercise('concepts', conceptsCopy);
+												this.updateExercise("concepts", conceptsCopy);
 												this.setState({currentConcept: ''});
-											}}>
-								Add concept
-							</Button>
-						</div>
-						<br/>
+											}}>Add concept</Button>
+						</FormControl>
 
 						<div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
 							{
 								this.state.currentExercise.concepts.map((concept, key) => {
-									return (
-											<Button key={key}
-															onClick={(evt) => {
+									return <Button
+														key={key}
+														style={{backgroundColor: '#ffecb3'}}
+														onClick={() => {
 																let index = this.state.currentExercise.concepts.indexOf(concept);
 																let conceptsCopy = [...this.state.currentExercise.concepts];
 																conceptsCopy.splice(index, 1);
 																this.updateExercise('concepts', conceptsCopy);
-															}}
-															className={"bg-warning"}
-															style={{margin: '0.25%'}}>
-												{concept}
-											</Button>
-									);
+															}
+														}>{concept}</Button>
 								})
 							}
 						</div>
-						<br/>
+
+						<p>An exercise can have multiple parts, use the following form to add one question at a time!</p>
+						<div>
+							<p>How do you want to format the question? <span style={fieldReqs.required}>required</span></p>
+							<FormControl>
+								<RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
+									<FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
+									<FormControlLabel value={"table"} control={<Radio color={"primary"}/>} label={"Format as a table"}/>
+								</RadioGroup>
+							</FormControl>
+						</div>
+
+						{
+							this.state.currentQuestionFormat === 'standAlone' ?
+									this.standAloneQuestion(fieldReqs) : this.formatAsTable(fieldReqs)
+						}
 
 
 						<div>
@@ -397,7 +492,7 @@ class ExerciseTool extends Component {
 						<label className={"text-primary"}>Exercies</label>
 						<div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
 							{
-								this.state.exercises.map((exercise, key) => {
+								this.state.questions.map((exercise, key) => {
 									return(
 											<Button className={'bg-warning'}
 															style={{margin: '0.25%'}}
@@ -424,7 +519,6 @@ class ExerciseTool extends Component {
 							{"let variable" + Math.round(Math.random() * 99999).toString() + " = "
 							+ JSON.stringify(this.state.exercises) + ";"}
 						</div>
-					</div>
 				</Paper>
 		);
 	}
