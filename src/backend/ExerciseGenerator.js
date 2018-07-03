@@ -28,8 +28,11 @@ class ExerciseGenerator {
    * Returns and array of exercises for the given exercise type and concept
    * @param exerciseType - String ("READ" or "WRITE")
    * @param concept - String (Camel Cased)
+   * @param exerciseList - List of exercises coming from firebase
+   * @param conceptMapGetter - List of concept mappings coming from firebase
+   * @return {Exercise[]} Array of exercises for the given exercise type and concept
    */
-  getExercisesByTypeAndConcept(exerciseType: string, concept: string, exerciseList: ?Exercise[], conceptMapGetter: ?Map<string,number[]>) {
+  getExercisesByTypeAndConcept(exerciseType: string, concept: string, exerciseList: ?Exercise[], conceptMapGetter: ?Map<string,number[]>): ?Exercise[]{
     // Deprecated
     // var exerciseInventory = [exercises.variable17061, exercises.variable18916, exercises.variable51520,
     //   exercises.variable60932, exercises.variable88688]; // Add variable to this array as exercise inventory grows
@@ -38,16 +41,22 @@ class ExerciseGenerator {
     //   exerciseList = exerciseList.concat(exerciseInventory[i]);
     // }
     console.log("getex", exerciseList);
+
+    // TODO: Note, it would be better to have item.questions[].type be coming
+    // in as a parameter to this function, in case we ever want to refactor
+    // the code. For now, it isn't much work.
+
     var results = [];
-    var readTypes = ["highlightCode", "multipleChoice", "shortResponse"];
-    exerciseList.forEach((item) => {
-      if (item.exercise.concepts.includes(concept)) {
-        if ((exerciseType === "READ" && readTypes.includes(item.exercise.type)) ||
-            (exerciseType === "WRITE" && !readTypes.includes(item.exercise.type))) {
+    if(exerciseList && conceptMapGetter) { // Only go to this loop if exerciseList and conceptMapGetter is defined
+      exerciseList.forEach((item) => {
+        if (item.concepts.includes(concept)) {
+          if ((exerciseType === "READ" && ExerciseTypes.isReadType(item.questions[0].type)) ||
+              (exerciseType === "WRITE" && !ExerciseTypes.isReadType(item.questions[0].type) )) {
             results.push(item);
+          }
         }
-      }
-    });
+      });
+    }
     return results;
   }
 
