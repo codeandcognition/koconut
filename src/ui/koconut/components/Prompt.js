@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import ReactMarkdown from 'react-markdown';
 import './Prompt.css';
 
-import type {Exercise} from '../../../data/ExerciseTypes.js';
+import type {Exercise} from '../../../data/Exercises';
 
 /**
  * The Prompt component contains the assessment prompt.

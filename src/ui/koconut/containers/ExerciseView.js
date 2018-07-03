@@ -73,11 +73,8 @@ class Exercise extends Component {
         <div className="exercise-view" style={styles}>
           <Prompt exercise={this.props.exercise} />
           <Information
-              code={this.props.exercise.code}
-              type={this.props.exercise.type}
-              choices={this.props.exercise.choices}
+              exercise={this.props.exercise}
               answer={this.state.answer}
-              concepts={this.props.exercise.concepts}
               updateHandler={(content) => this.setState({answer: content})}
               feedback={this.props.feedback}
               submitOk={this.props.submitOk}

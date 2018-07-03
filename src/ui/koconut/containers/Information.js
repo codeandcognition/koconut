@@ -6,6 +6,8 @@ import Feedback from '../components/Feedback';
 import Types from '../../../data/ExerciseTypes.js';
 import './Information.css';
 
+import type {Exercise} from '../../../data/Exercises';
+
 // Display type enum
 const displayType = {
   exercise: 'EXERCISE',
@@ -19,9 +21,7 @@ const displayType = {
  */
 class Information extends Component {
   props: {
-    code: string,
-    type: string,
-    choices?: string[], // Optional type - can be omitted (use undefined)
+    exercise: Exercise,
     answer: ?string,  // Maybe type - can be null/void
     updateHandler: Function,
     feedback: string,
