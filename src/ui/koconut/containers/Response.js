@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import MultipleChoice from '../components/MultipleChoice';
 import ShortResponse from '../components/ShortResponse';
 import SurveyView from '../components/SurveyView.js';
+import Feedback from '../components/Feedback';
 import './Response.css';
 
 import Types from '../../../data/ExerciseTypes.js';
@@ -17,7 +18,8 @@ class Response extends Component {
     choices?: string[],
     answer: ?string[],
     updateHandler: Function,
-    questionIndex: number
+    questionIndex: number,
+    feedback?: string
   };
 
   /**
@@ -30,6 +32,19 @@ class Response extends Component {
     let answer = this.props.answer;
     let update = this.props.updateHandler;
     let index = this.props.questionIndex;
+
+    // if feedback is set, then display feedback instead.
+
+    {/*<Feedback*/}
+        //       feedback={this.props.feedback}
+        //       submitOk={this.props.submitOk}
+        //       submitTryAgain={this.props.submitTryAgain}
+    if(this.props.feedback) {
+      return <Feedback
+          feedback={this.props.feedback} // TODO:  modify this so that if correct, try again button dont appear
+          submitTryAgain={this.props.submitTryAgain} // TODO also modify submitOk functionality
+        />
+    }
 
     switch (type) {
       case(Types.multipleChoice):

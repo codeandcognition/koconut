@@ -76,16 +76,20 @@ class Information extends Component {
    * @returns JSX for the Response container
    */
   renderResponseView() {
-    if (this.props.mode === displayType.feedback) {
-      return <Feedback
-          feedback={this.props.feedback}
-          submitOk={this.props.submitOk}
-          submitTryAgain={this.props.submitTryAgain}
-      />
-    }
+    // Deprecated below
+    //
+    // if (this.props.mode === displayType.feedback) {
+    //   console.log("____", this.props.feedback);
+    //   return <Feedback
+    //       feedback={this.props.feedback}
+    //       submitOk={this.props.submitOk}
+    //       submitTryAgain={this.props.submitTryAgain}
+    //   />
+    // }
 
     return this.props.exercise.questions.map((question, index) => {
       let type = question.type;
+
       return Types.isInlineResponseType(type) ? <div /> :
           <Response
               key={"response"+index}
@@ -94,7 +98,7 @@ class Information extends Component {
             answer={this.props.answer}
             questionIndex={index}
             updateHandler={this.props.updateHandler}
-            feedback={this.props.feedback}
+            feedback={this.props.feedback[index]}
             submitOk={this.props.submitOk}
             mode={this.props.mode}
             />
