@@ -19,6 +19,7 @@ import Hint from './Hint.js';
 
 // CSS for Code component
 import './Code.css';
+import ExerciseTypes from '../../../data/ExerciseTypes';
 
 // Ace Range datatype
 // const { Range } = ace.acequire('ace/range');
@@ -59,7 +60,7 @@ class Code extends Component {
       code: this.props.code,
       lineNumbers: true,
       mode: 'java',
-      theme: 'eclipse',
+      theme: this.props.codeTheme,
       highlighted: '',
       toggle: true,
       hint: false,
@@ -111,6 +112,8 @@ class Code extends Component {
     this.setState({
       toggle: !this.state.toggle,
       theme: (this.state.toggle ? 'solarized_dark' : 'eclipse'),
+    }, () => {
+      this.props.toggleCodeTheme(this.state.theme);
     });
   }
 
@@ -209,7 +212,9 @@ class Code extends Component {
   }
 
   render() {
-    let isInlineResponseType = Types.isInlineResponseType(this.props.type);
+  	// don't render the reset button for a highlightCode exercise
+    let isInlineResponseType = Types.isInlineResponseType(this.props.type) &&
+															this.props.type !== Types.highlightCode;
     let reset = isInlineResponseType ? <input type="button" value="reset code"
                                               onClick={this.handleReset}/> : '';
 

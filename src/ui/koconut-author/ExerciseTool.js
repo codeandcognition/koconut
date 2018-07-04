@@ -19,6 +19,7 @@ import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import Button from '@material-ui/core/Button/Button';
+import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
 
 
 class ExerciseTool extends Component {
@@ -36,7 +37,8 @@ class ExerciseTool extends Component {
 			},
 			currentAnswer: '',
 			currentChoice: '',
-			currentConcept: ''
+			currentConcept: '',
+			conceptList: []
 		};
 	}
 
@@ -49,7 +51,12 @@ class ExerciseTool extends Component {
 		shortResponse: 'shortResponse'
 	};
 
-	Concepts = conceptInventory.map((concept) => concept.name);
+	componentDidMount() {
+		var list = this.getConcepts();
+		this.setState({
+			conceptList: list
+		})
+	}
 
 	updateExercise(field, value) {
 		console.log(`updating ${field} with ${value}`);
@@ -109,6 +116,10 @@ class ExerciseTool extends Component {
 		>
               </textarea>)
 	}
+
+  getConcepts(): ConceptKnowledge[] {
+    return MasteryModel.model.filter((concept) => concept.teach && !concept.container);
+  }
 
 	render() {
 		let code = {
@@ -210,8 +221,8 @@ class ExerciseTool extends Component {
 															onChange={(evt) => this.setState({currentConcept: evt.target.value})}>
 									<option value={""}>Select concept</option>
 									{
-										this.Concepts.map((concept, index) => {
-											return <option key={index} value={concept}>{concept}</option>
+										this.state.conceptList.map((concept, index) => {
+											return <option key={index} value={concept.name}>{concept.name}</option>
 										})
 									}
 								</NativeSelect>

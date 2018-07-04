@@ -74,16 +74,18 @@ class SignIn extends React.Component {
       <h1>Koconut</h1>
       <img style={{width: "10vh" }} src={"https://i.pinimg.com/originals/bd/87/87/bd8787a601af7682d857f6c365d4421b.png"} alt={"cocount"} />
       <h3>a tutor to help you learn</h3>
-      <TextField style={textFieldStyle}
-                 onInput={(e) => this.setState({emailAddress: e.target.value})}
-                 label={"Email Address"}
-                 placeholder={"Enter your email address"}
-                 type={"email"} />
-      <br />
-      <TextField style={textFieldStyle}
-                 onInput={(e) => this.setState({password: e.target.value})}
-                 label={"Password"} placeholder={"Enter your password"}
-                 type="password" />
+      <form>
+        <TextField style={textFieldStyle}
+                   onInput={(e) => this.setState({emailAddress: e.target.value})}
+                   label={"Email Address"}
+                   placeholder={"Enter your email address"}
+                   type={"email"} />
+        <br />
+        <TextField style={textFieldStyle}
+                   onInput={(e) => this.setState({password: e.target.value})}
+                   label={"Password"} placeholder={"Enter your password"}
+                   type="password" />
+      </form>
       <br />
       {this.state.errorMessage &&
         <p style={{textAlign: "left", marginBottom: "0"}} className={"alert alert-danger"}>{this.state.errorMessage}</p>

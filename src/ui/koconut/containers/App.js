@@ -289,18 +289,23 @@ class App extends Component {
 	 */
 	loadDisplay() {
     firebase.auth().onAuthStateChanged((fbUser) => {
-      if (fbUser != null) {
+    	this.setState({firebaseUser: fbUser});
+      if (fbUser) {
         let databaseRef = firebase.database().ref("Users/" + fbUser.uid);
         databaseRef.once("value", (snapshot) => {
         	if (snapshot !== null && snapshot.val() !== null) {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
         		if (waiverStatus) {
-              this.setState({firebaseUser: fbUser, display: displayType.world})
-            }
-        		author ? this.setState({author: author}) : false;
+              this.setState({display: displayType.world});
+            } else {
+        			this.setState({display: displayType.welcome});
+						}
+            if (author) {
+        			this.setState({author: author});
+						}
 					} else {
-        	  this.setState({firebaseUser: fbUser, display: displayType.welcome});
+        	  this.setState({display: displayType.welcome});
           }
         });
         this.exerciseGetter = firebase.database().ref('Exercises');
@@ -312,11 +317,8 @@ class App extends Component {
           this.setState({conceptMapGetter: snap.val()});
         });
       } else {
-        this.setState({
-          display: displayType.signin,
-          firebaseUser: fbUser
-        });
-      }
+      	this.setState({display: displayType.signin});
+			}
     });
   }
 
@@ -337,7 +339,7 @@ class App extends Component {
    * Renders the sign up view
    */
   renderSignup() {
-    if(this.state.firebaseUser) {
+    if (this.state.firebaseUser) {
       this.setState({
         display: displayType.load
       });
@@ -441,6 +443,8 @@ class App extends Component {
             submitTryAgain={this.submitTryAgain}
             mode={this.state.display}
             concept={this.state.currentConcept}
+            codeTheme={this.state.codeTheme}
+            toggleCodeTheme={(theme) => this.setState({codeTheme: theme})}
         />
     );
   }

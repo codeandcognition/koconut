@@ -13,6 +13,9 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from'../koconut/components/CodeBlock';
+import './InstructTool.css';
+import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
+
 
 class InstructTool extends Component {
 
@@ -37,8 +40,9 @@ class InstructTool extends Component {
 
 
 	componentDidMount() {
+		var list = this.getConcepts();
 		this.setState({
-			conceptList: conceptInventory.map((concept) => concept.name)
+			conceptList: list
 		})
 	}
 
@@ -138,7 +142,7 @@ class InstructTool extends Component {
 		var oldInstruct = this.state.instructions;
 		var error = "";
 		if (!pattern.test(orderString)) {
-			error = "Incorrectly formatted input. Please enter reorder as a comma-separated list of numbers.";
+			error = "Incorrectly formatted input. Please enter a comma-separated list of numbers.";
 		} else if (orderArr.length !== oldInstruct.length) {
 			error = "Numbers provided do not equal the amount of pages for reordering.";
 		} else {
@@ -161,6 +165,10 @@ class InstructTool extends Component {
 		});
 	}
 
+  getConcepts(): ConceptKnowledge[] {
+    return MasteryModel.model.filter((concept) => concept.teach && !concept.container);
+  }
+
 	render() {
 		var containerStyle = {
 			margin: "auto",
@@ -175,7 +183,6 @@ class InstructTool extends Component {
 		if (this.state.title && this.state.content && this.state.concept && this.state.type) {
     	missingFields = false;
 		}
-
 
 		return (
 				<Paper style={containerStyle} elevation={4}>
@@ -193,7 +200,7 @@ class InstructTool extends Component {
 										onChange={(e) => this.handleChange(e)}>
 							{this.state.conceptList.map((item, index) => {
 								return (
-										<MenuItem value={item} key={index}>{item}</MenuItem>
+										<MenuItem value={item.name} key={index}>{item.name}</MenuItem>
 								);
 							})}
 						</Select>
@@ -232,14 +239,15 @@ class InstructTool extends Component {
                       <Typography style={{float: "right", color: "gray", fontSize: "11px"}}>
                         Page: {index + 1}
                       </Typography>
-                      <Typography variant={"headline"} component={"h4"}>{item.title}
+                      <Typography variant={"headline"} component={"h4"} style={{marginBottom: "1S0px"}}>{item.title}
 												{(this.state.editMode && this.state.editIndex === index) &&
 													<span style={{color: "yellow", fontSize: "14px"}}> (editing)</span>
 												}
                       </Typography>
 											<ReactMarkdown className={"flex-grow-1"}
-																			source={item.content}
-																			renderers={{CodeBlock: CodeBlock}}/>
+																		 source={item.content}
+																		 renderers={{CodeBlock: CodeBlock}}/>
+
                     </CardContent>
 										<CardActions>
 											{!this.state.editMode &&

@@ -35,7 +35,7 @@ class Exercise extends Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      answer: [],
+      answer: []
     };
   }
 
@@ -64,6 +64,7 @@ class Exercise extends Component {
     return _a !== undefined && _a !== null;
   }
 
+
   render() {
     let styles = {  // TODO put this in the constructor, unnecessary calculations per render
       marginTop: '10%'
@@ -84,6 +85,8 @@ class Exercise extends Component {
               submitOk={this.props.submitOk}
               submitTryAgain={this.props.submitTryAgain}
               mode={this.props.mode}
+              codeTheme={this.props.codeTheme}
+              toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
           />
           <Submit click={this.isAnswered()} submitHandler={() => this.props.submitHandler(this.state.answer)}/>
           <ConceptLabel concepts={this.props.exercise.concepts}/>

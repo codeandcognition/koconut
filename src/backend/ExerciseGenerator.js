@@ -106,7 +106,6 @@ class ExerciseGenerator {
   }
 
   getConceptsRelativeTo(concept: string): string[] {
-    console.log('relative to ' + concept);
     let ck = MasteryModel.model.filter((c) => c.name === concept)[0];
     return [this.getHarderConcept(ck), this.getEasierConcept(ck),
             this.getNewerConcept(ck), concept];
@@ -171,7 +170,6 @@ class ExerciseGenerator {
       // need to increment
       this.counter += 1;
 
-      console.log(ret);
       return ret;
     }
 

@@ -26,8 +26,9 @@ class WorldView extends Component {
 
   render() {
     let conceptList = this.getOrderedConcepts();
+
     return (
-        <div className="container" style={{marginTop: '5%'}}>
+        <div className="container" style={{marginTop: '12vh'}}>
 					<h1>Intro</h1>
 					<li>Here you'll learn to code</li>
 					<li>How code runs</li>

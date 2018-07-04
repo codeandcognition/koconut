@@ -27,7 +27,9 @@ class Information extends Component {
     feedback: string,
     submitOk: Function,
     submitTryAgain: Function,
-    mode: string
+    mode: string,
+    toggleCodeTheme: Function,
+    codeTheme: string
   };
 
   /**
