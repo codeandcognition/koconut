@@ -71,12 +71,8 @@ class App extends Component {
 		error: boolean,
 		errorMessage: string,
 		author: boolean,
-<<<<<<< HEAD
-    codeTheme: string
-=======
     exerciseList: ?Exercise[],
     conceptMapGetter: ?Map<string,number[]>
->>>>>>> 7ee1e5fe7d4ed8981e35fdd2c175eafaf0c6ea02
   };
 
   constructor() {
@@ -98,12 +94,8 @@ class App extends Component {
 			error: false,
 			errorMessage: '', // none
 			author: false,
-<<<<<<< HEAD
-      codeTheme: 'eclipse'
-=======
       exerciseList: null,
       conceptMapGetter: null
->>>>>>> 7ee1e5fe7d4ed8981e35fdd2c175eafaf0c6ea02
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);

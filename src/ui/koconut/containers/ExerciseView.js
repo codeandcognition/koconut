@@ -35,11 +35,7 @@ class Exercise extends Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-<<<<<<< HEAD
-      answer: null
-=======
-      answer: [],
->>>>>>> 7ee1e5fe7d4ed8981e35fdd2c175eafaf0c6ea02
+      answer: []
     };
   }
 

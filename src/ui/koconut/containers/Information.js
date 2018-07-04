@@ -37,19 +37,6 @@ class Information extends Component {
    * @returns JSX for the Code container
    */
   renderCodeView() {
-<<<<<<< HEAD
-    return (Types.isSurvey(this.props.type) ||
-        (this.props.type === Types.multipleChoice && this.props.code === '')) ? '' :
-        (<Code
-            type={this.props.type}
-            code={this.props.code}
-            codeTheme={this.props.codeTheme}
-            toggleCodeTheme={(theme) => this.props.toggleCodeTheme(theme)}
-            updateHandler={Types.isInlineResponseType(this.props.type)
-                ? this.props.updateHandler
-                : undefined}
-        />);
-=======
     return this.props.exercise.questions.map((question, index) => {
       // split apart so easier to parse
       if(Types.isSurvey(question.type) ||
@@ -84,7 +71,6 @@ class Information extends Component {
     //             ? this.props.updateHandler
     //             : undefined}
     //     />);
->>>>>>> 7ee1e5fe7d4ed8981e35fdd2c175eafaf0c6ea02
   }
 
   /**
