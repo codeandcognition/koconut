@@ -296,9 +296,12 @@ class App extends Component {
 
   // TODO William rewrite this to make it clear feedback instead of
   // just changing displaytype
-  submitTryAgain() {
+  submitTryAgain(questionIndex: number) {
+    let tempFeedback = this.state.feedback;
+    tempFeedback[questionIndex] = null;
     this.setState({
       display: displayType.exercise,
+      feedback: tempFeedback
     });
   }
 

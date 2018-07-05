@@ -105,6 +105,7 @@ class Information extends Component {
             updateHandler={this.props.updateHandler}
             feedback={this.props.feedback[index]}
             submitOk={this.props.submitOk}
+            submitTryAgain={this.props.submitTryAgain}
             mode={this.props.mode}
             submitHandler={this.props.submitHandler}
             />

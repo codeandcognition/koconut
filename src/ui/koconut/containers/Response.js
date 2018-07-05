@@ -21,7 +21,8 @@ class Response extends Component {
     updateHandler: Function,
     questionIndex: number,
     feedback?: string[],
-    submitHandler: Function
+    submitHandler: Function,
+    submitTryAgain: Function
   };
 
   /**
@@ -45,7 +46,7 @@ class Response extends Component {
       return <Feedback
           feedback={this.props.feedback} // TODO:  modify this so that if correct, try again button dont appear
           questionIndex={this.props.questionIndex}
-          submitTryAgain={this.props.submitTryAgain} // TODO also modify submitOk functionality
+          submitTryAgain={() => this.props.submitTryAgain(index)} // TODO also modify submitOk functionality
         />
     }
 
