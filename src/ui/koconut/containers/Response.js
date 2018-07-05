@@ -4,6 +4,7 @@ import MultipleChoice from '../components/MultipleChoice';
 import ShortResponse from '../components/ShortResponse';
 import SurveyView from '../components/SurveyView.js';
 import Feedback from '../components/Feedback';
+import Submit from '../components/Submit';
 import './Response.css';
 
 import Types from '../../../data/ExerciseTypes.js';
@@ -19,7 +20,8 @@ class Response extends Component {
     answer: ?string[],
     updateHandler: Function,
     questionIndex: number,
-    feedback?: string[]
+    feedback?: string[],
+    submitHandler: Function
   };
 
   /**
@@ -39,7 +41,7 @@ class Response extends Component {
         //       feedback={this.props.feedback}
         //       submitOk={this.props.submitOk}
         //       submitTryAgain={this.props.submitTryAgain}
-    if(this.props.feedback && this.props.feedback !== "") {
+    if(this.props.feedback) {
       return <Feedback
           feedback={this.props.feedback} // TODO:  modify this so that if correct, try again button dont appear
           questionIndex={this.props.questionIndex}
@@ -70,6 +72,10 @@ class Response extends Component {
     return (
         <div className={'response ' + responseWidth}>
           {this.renderResponse()}
+
+          {!(this.props.feedback) &&
+            <Submit submitHandler={() => this.props.submitHandler(this.props.answer, this.props.questionIndex)} />
+          }
         </div>
     );
   }

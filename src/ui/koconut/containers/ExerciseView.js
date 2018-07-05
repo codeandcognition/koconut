@@ -87,8 +87,8 @@ class Exercise extends Component {
               mode={this.props.mode}
               codeTheme={this.props.codeTheme}
               toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
+              submitHandler={this.props.submitHandler}
           />
-          <Submit click={this.isAnswered()} submitHandler={() => this.props.submitHandler(this.state.answer)}/>
           <ConceptLabel concepts={this.props.exercise.concepts}/>
         </div>
     );

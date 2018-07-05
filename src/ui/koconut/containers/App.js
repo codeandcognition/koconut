@@ -234,13 +234,13 @@ class App extends Component {
    * @param {string[]} answer string array of answers for each question
    * @return {string[]}
    */
-  checkAnswer(answer: string[]) : string[] {
+  checkAnswer(answer: string[], questionIndex: number) {
     let feedback = this.state.exercise.questions.map((question,index) => {
       if(!answer[index]) {
         if(this.state.feedback[index]) {
           return this.state.feedback[index];
         }
-        return "";
+        return null;
       } else if(question.answer === answer[index]) {
         return 'correct';
       } else {
@@ -254,9 +254,9 @@ class App extends Component {
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
    */
-  submitResponse(answer: string[]) {
+  submitResponse(answer: string[], questionIndex: number) {
     if (answer !== null && answer !== undefined) {
-      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => {
+      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer[questionIndex], () => {
         this.setState({
           feedback: this.checkAnswer(answer),
           nextConcepts: this.getConcepts(),
@@ -294,6 +294,8 @@ class App extends Component {
     });
   }
 
+  // TODO William rewrite this to make it clear feedback instead of
+  // just changing displaytype
   submitTryAgain() {
     this.setState({
       display: displayType.exercise,

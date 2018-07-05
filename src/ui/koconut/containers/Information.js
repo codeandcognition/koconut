@@ -29,7 +29,8 @@ class Information extends Component {
     submitTryAgain: Function,
     mode: string,
     toggleCodeTheme: Function,
-    codeTheme: string
+    codeTheme: string,
+    submitHandler: Function
   };
 
   /**
@@ -103,6 +104,7 @@ class Information extends Component {
             feedback={this.props.feedback[index]}
             submitOk={this.props.submitOk}
             mode={this.props.mode}
+            submitHandler={this.props.submitHandler}
             />
     })
 
