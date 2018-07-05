@@ -61,7 +61,7 @@ class App extends Component {
     exercise: Exercise,
 		exerciseType: string,
 		instructionType: string,
-    feedback: string[],
+    feedback: any, // flow pls
     nextConcepts: string[],
     counter: number,
     display: string, // the current display state
