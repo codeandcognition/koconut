@@ -23,6 +23,7 @@ import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Question from './Question';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
@@ -41,25 +42,10 @@ class ExerciseTool extends Component {
         code: "",
         labels: {},
         questions: [],
-        concepts: [],
-        tables: []
+        concepts: []
       },
-			questions: [],
 			conceptList: [],
-      currentQuestion: {
-        prompt: "",
-        code: "",
-				index: 0,
-        difficulty: 0,
-        choices: [],
-        type: "",
-        answer: "",
-        hint: "",
-        feedback: "",
-        followupPrompt: "",
-        followupQuestions: ""
-      },
-			currentQuestionFormat: 'standAlone',
+			isFollowup: false,
 			currentChoice: '',
 			currentTable: {
 				colNames: [],
@@ -69,8 +55,11 @@ class ExerciseTool extends Component {
 			columnNames: [],
 			tabValue: 0,
 			exercises: {},
-			currentConcept: ""
+			tabValue: 0
     }
+
+    // Bind the functions so they can be used in Question.js
+		this.addQuestion = this.addQuestion.bind(this);
 	}
 
 	QuestionTypes = {
@@ -102,29 +91,6 @@ class ExerciseTool extends Component {
 	}
 
 	/**
-	 * Updates the questions array in the current exercise
-	 * @param field
-	 * @param value
-	 */
-	updateQuestion(field, value) {
-		let temp = this.state.currentQuestion;
-		temp[field] = value;
-		this.setState({currentQuestion: temp});
-	}
-
-	/**
-	 * Handles a change in the current question object
-	 *
-	 * @param field
-	 * @returns {Function}
-	 */
-	handleChange(field) {
-		return (e) => {
-			this.updateQuestion(field, e.target.value);
-		}
-	}
-
-	/**
 	 * Handles a change in the exercise
 	 *
 	 * @param field
@@ -143,6 +109,7 @@ class ExerciseTool extends Component {
 					{this.addColumnNameForm()}
 					<p>Number of rows<span style={fieldReqs.required}>required</span></p>
 					<TextField fullWidth={true} onChange={(evt) => this.handleTableChange('rows', parseInt(evt.target.value))}/>
+					<Question addQuestion={this.addQuestion}/>
 				</div>
 		);
 
@@ -163,130 +130,6 @@ class ExerciseTool extends Component {
 									color={'secondary'}>Add column name</Button>
 				</div>
 		);
-	}
-
-	standAloneQuestion(fieldReqs) {
-		return(
-				<div>
-					{this.renderQuestionTypeDropdown()}
-					{this.renderChoicesInputForm()}
-					{this.renderChoices()}
-					{this.renderAnswer(fieldReqs)}
-				</div>
-		);
-	}
-
-	/**
-	 * Function to render the question type drop down
-	 *
-	 * @returns {*} html div
-	 */
-	renderQuestionTypeDropdown() {
-		return(
-				<div>
-					<label className={"text-primary"}>Question Type</label>
-					<FormControl style={{display: 'block'}}
-											 fullWidth={true}>
-						<NativeSelect name={"Question Type"}
-													onChange={this.handleChange('type')}>
-							<option>Select question type</option>
-							{
-								Object.keys(this.QuestionTypes).map((qType, key) => {
-									let type = this.QuestionTypes[qType];
-									return <option key={key}>{type}</option>
-								})
-							}
-						</NativeSelect>
-					</FormControl>
-				</div>
-		);
-	}
-
-	/**
-	 * Function to render the choices input form
-	 *
-	 * @returns {*} html div
-	 */
-	renderChoicesInputForm() {
-		return(
-				<div>
-					<label className={"text-primary"}>Choices</label>
-					<TextField fullWidth={true}
-										 style={{display: 'block'}}
-										 onChange={(evt) => this.setState({currentChoice: evt.target.value})}
-										 value={this.state.currentChoice}/>
-					<Button variant={'outlined'}
-									color={'secondary'}
-									onClick={(evt) => {
-										if (this.state.currentChoice === '') return;
-										let choicesCopy = [...this.state.currentQuestion.choices];
-										choicesCopy.push(this.state.currentChoice);
-										this.updateQuestion('choices', choicesCopy);
-										this.setState({currentChoice: ''});
-									}}>
-						Add choice
-					</Button>
-				</div>
-		);
-	}
-
-	/**
-	 * Function to render the choices for a multiple choice question
-	 * @returns {*}
-	 */
-	renderChoices() {
-		return(
-				<div style={{width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
-					{
-						this.state.currentQuestion.choices.map((choice, key) => {
-							return <Button key={key}
-														 variant={'flat'}
-														 style={{backgroundColor: '#ffecb3'}}
-														 onClick={(evt) => {
-														 	let index = this.state.currentQuestion.choices.indexOf(evt.target.innerText);
-														 	let choicesCopy = [...this.state.currentQuestion.choices];
-														 	choicesCopy.splice(index, 1);
-														 	this.updateQuestion('choices', choicesCopy);
-														 }}>
-								{choice}
-								</Button>
-						})
-					}
-				</div>
-		);
-	}
-
-	/**
-	 * renders choices and answer
-	 */
-	renderAnswer(reqs) {
-		if (this.state.currentQuestion.type === this.QuestionTypes.multipleChoice) {
-			return(
-					<div>
-						<p>Answer <span style={reqs.required}>required</span></p>
-						<NativeSelect onChange={(evt) => this.setState({currentAnswer: evt.target.value})}>
-							<option>Select the answer</option>
-							{
-								this.state.currentQuestion.choices.map((choice, key) => {
-									return <option key={key}>{choice}</option>
-								})
-							}
-						</NativeSelect>
-					</div>
-			);
-		} else if (this.state.currentQuestion.type === this.QuestionTypes.memoryTable) {
-				// TODO: Design the UI
-		} else {
-				// returns a text field for answer
-				return (
-						<div>
-							<p>Answer <span style={reqs.required}>required</span></p>
-							<TextField fullWidth={true}
-												 value={this.state.currentAnswer}
-												 onChange={(evt) => this.setState({currentAnswer: evt.target.value})} />
-						</div>
-				);
-		}
 	}
 
   getConcepts(): ConceptKnowledge[] {
@@ -331,6 +174,22 @@ class ExerciseTool extends Component {
     });
 	}
 
+	/**
+	 * Adds a question to the exercise. `followup` is a boolean indicating whether
+	 * this question has a followup
+	 *
+	 * @param followup
+	 */
+	addQuestion(question) {
+		let exercise = this.state.currentExercise;
+		exercise.questions.push(question);
+		console.log(exercise);
+		this.setState({
+			currentExercise: exercise
+		});
+		window.alert("Preview has been updated");
+	}
+
 	// Helper function: returns the average difficulty of given exercise based on
 	// the difficulties of each of its questions
 	getAverageDifficulty(exercise, questionIndex, total, count) { // NOT TESTED
@@ -343,17 +202,6 @@ class ExerciseTool extends Component {
 		} else {
 			return total / count;
 		}
-  }
-
-
-
-	// Adds current question stored in state to the current exercise stored in state
-	addQuestion() {
-		var exercise = this.state.currentExercise;
-		exercise.questions.push(this.state.currentQuestion);
-		this.setState({
-			currentExercise: exercise
-		});
 	}
 
 	// Adds current table data stored in state to the current exercise stored in state
@@ -391,11 +239,58 @@ class ExerciseTool extends Component {
 		});
 	}
 
+
 	// Toggles between Build Exercise and View Exercises Tab
 	handleTabChange(value) {
-		this.setState({
-			tabValue: value
-		})
+    this.setState({
+      tabValue: value
+    })
+  }
+
+	renderQuestionCard() {
+		return <Question addQuestion={this.addQuestion} isFollowup={this.state.isFollowup}/>
+	}
+
+	/**
+	 * Renders the follow up prompt
+	 *
+	 * @param fieldReqs
+	 * @returns {*}
+	 */
+	renderFollowupPrompt() {
+		return (
+				<div>
+					<Button color={'secondary'}
+									onClick={() => this.setState({isFollowup: true})}>Follow-up Question</Button>
+					<Button color={"primary"}
+									onClick={() => this.setState({isFollowup: false})}>New Question</Button>
+				</div>
+		);
+	}
+
+	/**
+	 *
+	 * @returns {*}
+	 */
+	renderExercisePreview() {
+		let code = {
+			border: '1px solid darkgray',
+			fontFamily: 'monospace',
+			whiteSpace: 'pre-wrap',
+			textAlign: 'left',
+			width: '100%',
+			margin: '10px auto'
+		};
+		return (
+				<div>
+					<p>Preview</p>
+					<div style={code}>
+						{
+							JSON.stringify(this.state.currentExercise, null, 2)
+						}
+					</div>
+				</div>
+		);
 	}
 
 	handleDeleteExercise(exerciseID) {
@@ -435,7 +330,7 @@ class ExerciseTool extends Component {
 
 		return (
 				<div>
-          <div style={{margin: '5%', paddingTop: '2%'}}>
+          <div>
             <p>Exercise {" " + this.state.currentExercise.prompt} </p>
             <p className={"text-primary"}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
             <TextField style={{display: 'block'}} fullWidth={true}
@@ -571,6 +466,8 @@ class ExerciseTool extends Component {
             {"let variable" + Math.round(Math.random() * 99999).toString() + " = "
             + JSON.stringify(this.state.exercises) + ";"}
           </div>
+					{this.renderQuestionCard()}
+					<Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
 				</div>
 		);
 	}
@@ -607,6 +504,12 @@ class ExerciseTool extends Component {
 				})}
 			</div>
 		);
+	}
+
+	handleTabChange(value) {
+		this.setState({
+			tabValue: value
+		})
 	}
 
 	render() {
