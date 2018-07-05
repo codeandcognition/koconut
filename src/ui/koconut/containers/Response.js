@@ -19,7 +19,7 @@ class Response extends Component {
     answer: ?string[],
     updateHandler: Function,
     questionIndex: number,
-    feedback?: string
+    feedback?: string[]
   };
 
   /**
@@ -39,9 +39,10 @@ class Response extends Component {
         //       feedback={this.props.feedback}
         //       submitOk={this.props.submitOk}
         //       submitTryAgain={this.props.submitTryAgain}
-    if(this.props.feedback) {
+    if(this.props.feedback && this.props.feedback !== "") {
       return <Feedback
           feedback={this.props.feedback} // TODO:  modify this so that if correct, try again button dont appear
+          questionIndex={this.props.questionIndex}
           submitTryAgain={this.props.submitTryAgain} // TODO also modify submitOk functionality
         />
     }

@@ -24,7 +24,7 @@ class Information extends Component {
     exercise: Exercise,
     answer: ?string,  // Maybe type - can be null/void
     updateHandler: Function,
-    feedback: string,
+    feedback: string[],
     submitOk: Function,
     submitTryAgain: Function,
     mode: string,

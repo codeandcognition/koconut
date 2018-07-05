@@ -61,7 +61,7 @@ class App extends Component {
     exercise: Exercise,
 		exerciseType: string,
 		instructionType: string,
-    feedback: string,
+    feedback: string[],
     nextConcepts: string[],
     counter: number,
     display: string, // the current display state
@@ -84,7 +84,7 @@ class App extends Component {
       exercise: this.generator.getStubExercise(),
 			exerciseType: '', // yet to be defined
 			instructionType: '',
-      feedback: '',
+      feedback: [],
       nextConcepts: [],
       counter: 0, // Changed this from 1 to 0 -- cuz 0-based indexing
       display: displayType.load,
@@ -229,6 +229,28 @@ class App extends Component {
   }
 
   /**
+   * checkAnswer will check the answers client side to provide the feedback
+   * to the Response.js object later on
+   * @param {string[]} answer string array of answers for each question
+   * @return {string[]}
+   */
+  checkAnswer(answer: string[]) : string[] {
+    let feedback = this.state.exercise.questions.map((question,index) => {
+      if(!answer[index]) {
+        if(this.state.feedback[index]) {
+          return this.state.feedback[index];
+        }
+        return "";
+      } else if(question.answer === answer[index]) {
+        return 'correct';
+      } else {
+        return 'incorrect';
+      }
+    });
+    return feedback;
+  }
+
+  /**
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
    */
@@ -236,7 +258,7 @@ class App extends Component {
     if (answer !== null && answer !== undefined) {
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => {
         this.setState({
-          feedback: ResponseLog.getFeedback(),
+          feedback: this.checkAnswer(answer),
           nextConcepts: this.getConcepts(),
           display: this.state.exercise.type !== 'survey'
               ? displayType.feedback

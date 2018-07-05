@@ -16,7 +16,7 @@ type Props = {
     concepts: string[]
   },
   submitHandler: Function,
-  feedback: boolean,
+  feedback?: string[],
   nextConcepts: string[],
   submitOk: Function,
   submitTryAgain: Function,
