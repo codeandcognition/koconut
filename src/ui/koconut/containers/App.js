@@ -121,7 +121,6 @@ class App extends Component {
    */
   generateExercise(concept: string, exerciseType: string) {
 		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
-		console.log("asdf", exercises);
 		if(exercises) {
       if (exercises.length === 0) {
         this.setState({
@@ -232,22 +231,18 @@ class App extends Component {
    * checkAnswer will check the answers client side to provide the feedback
    * to the Response.js object later on
    * @param {string[]} answer string array of answers for each question
+   * @param {number} questionIndex index of question to check the answer of
    * @return {string[]}
    */
   checkAnswer(answer: string[], questionIndex: number) {
-    let feedback = this.state.exercise.questions.map((question,index) => {
-      if(!answer[index]) {
-        if(this.state.feedback[index]) {
-          return this.state.feedback[index];
-        }
-        return null;
-      } else if(question.answer === answer[index]) {
-        return 'correct';
-      } else {
-        return 'incorrect';
-      }
-    });
-    return feedback;
+    let question = this.state.exercise.questions[questionIndex];
+    let feedbackTemp = this.state.feedback;
+    if(question.answer === answer[questionIndex]) {
+      feedbackTemp[questionIndex] = "correct";
+    } else {
+      feedbackTemp[questionIndex] = "incorrect";
+    }
+    return feedbackTemp;
   }
 
   /**
@@ -258,7 +253,7 @@ class App extends Component {
     if (answer !== null && answer !== undefined) {
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer[questionIndex], () => {
         this.setState({
-          feedback: this.checkAnswer(answer),
+          feedback: this.checkAnswer(answer, questionIndex),
           nextConcepts: this.getConcepts(),
           display: this.state.exercise.type !== 'survey'
               ? displayType.feedback
@@ -266,7 +261,7 @@ class App extends Component {
                   ? displayType.concept
                   : displayType.exercise),
         });
-      });
+      }, questionIndex);
     }
   }
 

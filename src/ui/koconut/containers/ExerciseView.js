@@ -46,14 +46,14 @@ class Exercise extends Component {
     window.scrollTo(0, 0);
   }
 
-  /**
-   * Updates the Exercise state when receiving a new props object
-   */
-  componentWillReceiveProps() {
-    this.setState({
-      answer: [],
-    });
-  }
+  // /**
+  //  * Updates the Exercise state when receiving a new props object
+  //  */
+  // componentWillReceiveProps() {
+  //   this.setState({
+  //     answer: [],
+  //   });
+  // }
 
   /**
    * Returns whether the answer is defined and non-null or not.

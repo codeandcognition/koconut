@@ -45,6 +45,9 @@ class ExerciseGenerator {
     // in as a parameter to this function, in case we ever want to refactor
     // the code.
 
+    // TODO: Use conceptMapGetter to generate the items rather than an if loop
+    // TODO: forEach will no longer work for object vs array
+
     var results = [];
     if(exerciseList && conceptMapGetter) { // Only go to this loop if exerciseList and conceptMapGetter is defined
       exerciseList.forEach((item) => {

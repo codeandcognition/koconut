@@ -90,15 +90,18 @@ class ResponseEvaluator {
    * @param exercise
    * @param answer
    * @param next - callback to be executed after evaluation
+   * @param questionIndex - index of question being evaluated
    */
-  static evaluateAnswer(exercise: Exercise, answer: string, next: Function) {
+  static evaluateAnswer(exercise: Exercise, answer: string, next: Function, questionIndex: number) {
     // no one can escape asyncronous programming!!!!
     // >:D
 
     // wrap it in a function for async
     let addResponseAndUpdate = (isCorrect, exercise) => {
       ResponseLog.addResponse( // TODO: replace '123' with a real ID
-          '123', exercise.concepts, exercise.type, exercise.difficulty, isCorrect,
+          '123', exercise.concepts,
+            exercise.questions[questionIndex].type,
+            exercise.questions[questionIndex].difficulty, isCorrect,
           Date.now(),
       );
 
@@ -107,7 +110,7 @@ class ResponseEvaluator {
       console.log(ResponseLog.log);
       console.groupEnd();
 
-      if (ExerciseTypes.isSurvey(exercise.type)) {
+      if (ExerciseTypes.isSurvey(exercise.questions[questionIndex].type)) {
         MasteryModel.surveyUpdateModel(Array.from(answer).map(x =>
             parseInt(x, 10),
         ));
@@ -124,20 +127,20 @@ class ResponseEvaluator {
 
     // actual logic
     // it's backwards, I know :(
-    if(exercise.type === ExerciseTypes.writeCode ||
-       exercise.type === ExerciseTypes.fillBlank) {
+    if(exercise.questions[questionIndex].type === ExerciseTypes.writeCode ||
+       exercise.questions[questionIndex].type === ExerciseTypes.fillBlank) {
       this.executeJava(answer)//ExercisePool.getAnswer(exercise);
       .then((res) => {
         return res.json();
       }).then((json) => {
         console.log(json);
-        addResponseAndUpdate(json.stdout === ExercisePool.getAnswer(exercise), exercise);
+        addResponseAndUpdate(json.stdout === exercise.questions[questionIndex].answer, exercise);
       }).catch((err) => {
         console.log(err);
         addResponseAndUpdate(false, exercise); // TODO: remove hardcode
       });
     } else {
-      addResponseAndUpdate(answer === ExercisePool.getAnswer(exercise), exercise);
+      addResponseAndUpdate(answer === exercise.questions[questionIndex].answer, exercise);
     }
   }
 
