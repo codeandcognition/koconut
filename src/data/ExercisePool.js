@@ -2,6 +2,8 @@
 import type {Exercise} from './Exercises';
 
 /**
+ * Deprecated
+ *
  * Stores the exercise pool
  * @class
  */
@@ -17,9 +19,9 @@ class ExercisePoolClass {
    * @param exercise - the Exercise to add
    * @param answer - the Exercise answer (undefined if the answer must be evaluated)
    */
-  addExercise(exercise: Exercise, answer: ?string) {
-    this.pool.set(exercise, answer);
-  }
+  //addExercise(exercise: Exercise, answer: ?string) {
+  //  this.pool.set(exercise, answer);
+  //}
 
   /**
    * Returns the answer for the given Exercise

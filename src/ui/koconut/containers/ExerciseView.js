@@ -20,7 +20,8 @@ type Props = {
   nextConcepts: string[],
   submitOk: Function,
   submitTryAgain: Function,
-  mode: string
+  mode: string,
+  codeTheme: string
 }
 
 /**

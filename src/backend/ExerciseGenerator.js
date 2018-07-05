@@ -11,8 +11,6 @@ import type {Exercise} from '../data/Exercises.js';
 // So, we import all of ConceptKnowledge
 import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
 
-var exercises = require('../data/Exercises');
-
 /**
  * Generates exercises associated with concepts
  * @class
@@ -32,32 +30,21 @@ class ExerciseGenerator {
    * @param conceptMapGetter - List of concept mappings coming from firebase
    * @return {Exercise[]} Array of exercises for the given exercise type and concept
    */
-  getExercisesByTypeAndConcept(exerciseType: string, concept: string, exerciseList: ?Exercise[], conceptMapGetter: ?Map<string,number[]>): ?Exercise[]{
-    // Deprecated
-    // var exerciseInventory = [exercises.variable17061, exercises.variable18916, exercises.variable51520,
-    //   exercises.variable60932, exercises.variable88688]; // Add variable to this array as exercise inventory grows
-    // var exerciseList = [];
-    // for (var i = 0; i < exerciseInventory.length; i++) {
-    //   exerciseList = exerciseList.concat(exerciseInventory[i]);
-    // }
+  getExercisesByTypeAndConcept(exerciseType: string,
+                               concept: string,
+                               exerciseList: any, // calm down flow jeez
+                               conceptMapGetter: any): ?Exercise[]{ // made conceptMapGetter an any type to stop flow's anger
+    // TODO: Address the isReadType issue, can the type just be brought out?
+    // what happens if there are more than 1 type?
 
-    // TODO: Note, it would be better to have item.questions[].type be coming
-    // in as a parameter to this function, in case we ever want to refactor
-    // the code.
-
-    // TODO: Use conceptMapGetter to generate the items rather than an if loop
-    // TODO: forEach will no longer work for object vs array
-
-    var results = [];
-    if(exerciseList && conceptMapGetter) { // Only go to this loop if exerciseList and conceptMapGetter is defined
-      exerciseList.forEach((item) => {
-        if (item.concepts.includes(concept)) {
-          if ((exerciseType === "READ" && ExerciseTypes.isReadType(item.questions[0].type)) ||
-              (exerciseType === "WRITE" && !ExerciseTypes.isReadType(item.questions[0].type) )) {
-            results.push(item);
-          }
+    let results = [];
+    if(exerciseList && conceptMapGetter) {
+      conceptMapGetter[concept].map((exerciseId) => {
+        if ((exerciseType === "READ" && ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type)) ||
+            (exerciseType === "WRITE" && !ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type) )) {
+          results.push(exerciseList[exerciseId]);
         }
-      });
+      })
     }
     return results;
   }
@@ -159,12 +146,15 @@ class ExerciseGenerator {
     return types[Math.floor(Math.random() * types.length)];
   }
 
+
   /**
+   * D E P R E C A T E D - Deprecated
+   *
    * Returns a generated Exercise
    * @param concept - specifies a concept type if provided
    * @returns a generated Exercise
    */
-  generateExercise(concept: ?string) {
+  /*generateExercise(concept: ?string) {
     //First exercise to pass is initial survey
     // TODO: This is probably bad architecture
     if(this.counter === 0) {
@@ -202,7 +192,7 @@ class ExerciseGenerator {
     this.counter += 1;
     ExercisePool.addExercise(exercise.exercise, exercise.answer);
     return exercise.exercise;
-  }
+  }*/
 
   /**
    * Gets a specific exercise from the example exercises

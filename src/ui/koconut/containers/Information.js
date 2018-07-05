@@ -56,7 +56,9 @@ class Information extends Component {
                         Types.isInlineResponseType(question.type) ?
                             this.props.updateHandler :
                             undefined
-                      }/>);
+                      }
+                      toggleCodeTheme={this.props.toggleCodeTheme}
+                      />);
       }
     });
 

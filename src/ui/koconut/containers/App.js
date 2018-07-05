@@ -72,7 +72,8 @@ class App extends Component {
 		errorMessage: string,
 		author: boolean,
     exerciseList: ?Exercise[],
-    conceptMapGetter: ?Map<string,number[]>
+    conceptMapGetter: ?Map<string,number[]>,
+    codeTheme: string
   };
 
   constructor() {
@@ -95,7 +96,8 @@ class App extends Component {
 			errorMessage: '', // none
 			author: false,
       exerciseList: null,
-      conceptMapGetter: null
+      conceptMapGetter: null,
+      codeTheme: ''
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -184,14 +186,17 @@ class App extends Component {
 	}
 
   /**
+   * DEPRECATED
+   *
    * Returns a generated exercise by index
    * For DEBUG eyes only eyes 👀😭
    * @private
    * @returns the example exercise at the given index
    */
+  /**
   _getExercise(): Exercise {
     return this.generator._generateExercise(this.state.counter);
-  }
+  }*/
 
   /**
    * Set up a firebase authentication listener when component mounts
