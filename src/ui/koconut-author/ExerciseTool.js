@@ -158,6 +158,8 @@ class ExerciseTool extends Component {
                 var otherExercise = snapshot2.val();
                 var otherDifficulty = componentRef.getAverageDifficulty(
                     otherExercise, 0, 0, 0);
+                console.log(difficulty);
+                console.log(otherDifficulty);
                 if (otherDifficulty > difficulty) {
                   exerciseKeys.splice(i, 0, pushKey);
                 }
