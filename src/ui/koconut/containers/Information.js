@@ -6,7 +6,7 @@ import Feedback from '../components/Feedback';
 import Types from '../../../data/ExerciseTypes.js';
 import './Information.css';
 
-import type {Exercise} from '../../../data/Exercises';
+import type {Exercise, Question} from '../../../data/Exercises';
 
 // Display type enum
 const displayType = {
@@ -35,10 +35,11 @@ class Information extends Component {
 
   /**
    * Returns JSX for (or not for) the Code container given the current props
+   * @param question question object in Exercise
+   * @param index index of question in Exercise
    * @returns JSX for the Code container
    */
-  renderCodeView(question, index) {
-
+  renderCodeView(question: Question, index: number) {
       if(Types.isSurvey(question.type) ||
           (question.type === Types.multipleChoice
           &&
@@ -75,9 +76,11 @@ class Information extends Component {
 
   /**
    * Returns JSX for (or not for) the Response container given the current props
+   * @param question question object in Exercise
+   * @param index index of question in Exercise
    * @returns JSX for the Response container
    */
-  renderResponseView(question, index) {
+  renderResponseView(question: Question, index: number) {
     // Deprecated below
     //
     // if (this.props.mode === displayType.feedback) {

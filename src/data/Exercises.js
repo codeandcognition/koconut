@@ -4,7 +4,7 @@ import {conceptInventory} from './ConceptMap';
 // import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
 import _ from 'lodash';
 
-type Question = {
+export type Question = {
   answer: string,
   choices: string[],
   code?: string,
