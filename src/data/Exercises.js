@@ -4,36 +4,12 @@ import {conceptInventory} from './ConceptMap';
 // import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
 import _ from 'lodash';
 
-export type Question = {
-  answer: string,
-  choices: string[],
-  code?: string,
-  difficulty: number,
-  feedback?: string,
-  followupPrompt?: string,
-  hint?: string,
-  prompt: string,
-  type: string
-}
-
-type TableCell = {
-  prompt: string,
-  answer?: string
-}
-
-type Table = {
-  labels: Map<string, string[]>,
-  data: TableCell[],
-  followupPrompt: string,
-  followupQuestions: Question[]
-}
 
 export type Exercise = {
   code?: string,
   concepts: string[],
   prompt?: string,
-  questions: Question[],
-  tables?: Table[],
+  questions: any,
   labels?: Map<string,string>
 }
 

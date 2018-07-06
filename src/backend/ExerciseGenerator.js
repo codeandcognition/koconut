@@ -1,7 +1,6 @@
 // @flow
-import {exampleExercises, stubExercise} from '../data/Exercises.js';
+import {stubExercise} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
-import ExercisePool from '../data/ExercisePool';
 import conceptInventory from '../data/ConceptMap';
 
 import type {Exercise} from '../data/Exercises.js';
@@ -148,7 +147,8 @@ class ExerciseGenerator {
 
 
   /**
-   * D E P R E C A T E D - Deprecated
+   * D E P R E C A T E D - Deprecated, keeping in here because we may want
+   * to use similar functionality in the future
    *
    * Returns a generated Exercise
    * @param concept - specifies a concept type if provided

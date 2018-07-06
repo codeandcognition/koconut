@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 import Prompt from '../components/Prompt';
 import Information from './Information';
-import Submit from '../components/Submit';
 import ConceptLabel from '../components/ConceptLabel';
 
 import './ExerciseView.css';
@@ -47,15 +46,6 @@ class Exercise extends Component {
     window.scrollTo(0, 0);
   }
 
-  // /**
-  //  * Updates the Exercise state when receiving a new props object
-  //  */
-  // componentWillReceiveProps() {
-  //   this.setState({
-  //     answer: [],
-  //   });
-  // }
-
   /**
    * Returns whether the answer is defined and non-null or not.
    * @returns {boolean}
@@ -69,7 +59,7 @@ class Exercise extends Component {
   render() {
     let styles = {  // TODO put this in the constructor, unnecessary calculations per render
       marginTop: '10%'
-    }
+    };
     return (
         <div className="exercise-view" style={styles}>
           <Prompt exercise={this.props.exercise} />

@@ -37,11 +37,6 @@ class Response extends Component {
     let index = this.props.questionIndex;
 
     // if feedback is set, then display feedback instead.
-
-    {/*<Feedback*/}
-        //       feedback={this.props.feedback}
-        //       submitOk={this.props.submitOk}
-        //       submitTryAgain={this.props.submitTryAgain}
     if(this.props.feedback) {
       return <Feedback
           feedback={this.props.feedback} // TODO:  modify this so that if correct, try again button dont appear

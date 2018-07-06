@@ -13,11 +13,6 @@ import './Feedback.css';
 // type Props = {feedback: boolean, submitHandler: Function};
 
 class Feedback extends Component {
-
-  // constructor(props: Props) {
-  //   super(props);
-  // }
-
   render() {
     return (
       <div className="feedback">

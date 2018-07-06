@@ -5,7 +5,6 @@
 // So, we import all of ResponseObject
 import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import {MasteryModel} from '../data/MasteryModel';
-import ExercisePool from '../data/ExercisePool';
 import ExerciseTypes from '../data/ExerciseTypes';
 import {BayesKT} from './BKT.js';
 import type {Exercise} from '../data/Exercises';

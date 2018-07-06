@@ -34,6 +34,7 @@ class ConceptLabel extends Component {
   renderConceptLabel() {
     let concepts = this.props.concepts;
     let explanations = concepts.map(c => conceptInventory[c]);
+    console.log("asdf", this.props.concepts ? this.props.concepts.length : "");
     return this.props.concepts.length > 0 ?
         <div className="concept-label">
           concepts: {concepts.map((concept, i) => {

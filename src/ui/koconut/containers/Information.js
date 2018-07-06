@@ -2,18 +2,10 @@
 import React, {Component} from 'react';
 import Code from '../components/Code';
 import Response from './Response';
-import Feedback from '../components/Feedback';
 import Types from '../../../data/ExerciseTypes.js';
 import './Information.css';
 
-import type {Exercise, Question} from '../../../data/Exercises';
-
-// Display type enum
-const displayType = {
-  exercise: 'EXERCISE',
-  feedback: 'FEEDBACK',
-  concept: 'CONCEPT',
-};
+import type {Exercise} from '../../../data/Exercises';
 
 /**
  * The Information container contains Code or both Code and Response.
@@ -39,7 +31,7 @@ class Information extends Component {
    * @param index index of question in Exercise
    * @returns JSX for the Code container
    */
-  renderCodeView(question: Question, index: number) {
+  renderCodeView(question: any, index: number) {
       if(Types.isSurvey(question.type) ||
           (question.type === Types.multipleChoice
           &&
@@ -60,18 +52,6 @@ class Information extends Component {
                       toggleCodeTheme={this.props.toggleCodeTheme}
                       />);
       }
-
-    // Deprecated below
-
-    // return (Types.isSurvey(this.props.type) ||
-    //     (this.props.type === Types.multipleChoice && this.props.code === '')) ? '' :
-    //     (<Code
-    //         type={this.props.type}
-    //         code={this.props.code}
-    //         updateHandler={Types.isInlineResponseType(this.props.type)
-    //             ? this.props.updateHandler
-    //             : undefined}
-    //     />);
   }
 
   /**
@@ -80,19 +60,7 @@ class Information extends Component {
    * @param index index of question in Exercise
    * @returns JSX for the Response container
    */
-  renderResponseView(question: Question, index: number) {
-    // Deprecated below
-    //
-    // if (this.props.mode === displayType.feedback) {
-    //   console.log("____", this.props.feedback);
-    //   return <Feedback
-    //       feedback={this.props.feedback}
-    //       submitOk={this.props.submitOk}
-    //       submitTryAgain={this.props.submitTryAgain}
-    //   />
-    // }
-
-
+  renderResponseView(question: any, index: number) {
       let type = question.type;
 
       return Types.isInlineResponseType(type) ? <div /> :
@@ -109,19 +77,6 @@ class Information extends Component {
             mode={this.props.mode}
             submitHandler={this.props.submitHandler}
             />
-
-    // Deprecated below
-
-    // return Types.isInlineResponseType(type) ? <div/>
-    //     : <Response
-    //         type={type}
-    //         choices={this.props.choices}
-    //         answer={this.props.answer}
-    //         updateHandler={this.props.updateHandler}
-    //         feedback={this.props.feedback}
-    //         submitOk={this.props.submitOk}
-    //         mode={this.props.mode}
-    //     />;
   }
 
   render() {

@@ -186,19 +186,6 @@ class App extends Component {
 	}
 
   /**
-   * DEPRECATED
-   *
-   * Returns a generated exercise by index
-   * For DEBUG eyes only eyes 👀😭
-   * @private
-   * @returns the example exercise at the given index
-   */
-  /**
-  _getExercise(): Exercise {
-    return this.generator._generateExercise(this.state.counter);
-  }*/
-
-  /**
    * Set up a firebase authentication listener when component mounts
    * Will set the state of firebaseUser to be the current logged in user
    * or null if no user is logged in.
