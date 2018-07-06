@@ -175,6 +175,20 @@ class ExerciseTool extends Component {
     });
 	}
 
+  // Helper function: returns the average difficulty of given exercise based on
+  // the difficulties of each of its questions
+  getAverageDifficulty(exercise, questionIndex, total, count) { // NOT TESTED
+    if (!exercise) {
+      return 0;
+    } else if (exercise.questions[questionIndex]) {
+      var difficulty = exercise.questions[questionIndex].difficulty;
+      var newTotal = total + difficulty;
+      return this.getAverageDifficulty(exercise, questionIndex + 1, newTotal, count + 1);
+    } else {
+      return total / count;
+    }
+  }
+
 	/**
 	 * Adds a question to the exercise. `followup` is a boolean indicating whether
 	 * this question has a followup
@@ -187,20 +201,6 @@ class ExerciseTool extends Component {
 		this.setState({
 			currentExercise: exercise
 		});
-	}
-
-	// Helper function: returns the average difficulty of given exercise based on
-	// the difficulties of each of its questions
-	getAverageDifficulty(exercise, questionIndex, total, count) { // NOT TESTED
-		if (!exercise) {
-			return 0;
-		} else if (exercise.questions[questionIndex]) {
-			var difficulty = exercise.questions[questionIndex].difficulty;
-			var newTotal = total + difficulty;
-			return this.getAverageDifficulty(exercise, questionIndex + 1, newTotal, count + 1);
-		} else {
-			return total / count;
-		}
 	}
 
 	// Adds current table data stored in state to the current exercise stored in state
@@ -393,21 +393,6 @@ class ExerciseTool extends Component {
 					</div>
 
           <p>An exercise can have multiple parts, use the following form to add one question at a time!</p>
-          <div style={formSectionStyle}>
-            <p>How do you want to format the question? <span style={fieldReqs.required}>required</span></p>
-            <FormControl>
-              <RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
-                <FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
-                <FormControlLabel value={"table"} control={<Radio color={"primary"}/>} label={"Format as a table"}/>
-              </RadioGroup>
-            </FormControl>
-          </div>
-
-          {/*
-            this.state.currentQuestionFormat === 'standAlone' ?
-                this.standAloneQuestion(fieldReqs) : this.formatAsTable(fieldReqs)
-          */}
-
 					{this.renderQuestionCard()}
 					<br />
           <div style={formSectionStyle}>
