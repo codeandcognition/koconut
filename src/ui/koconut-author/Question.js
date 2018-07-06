@@ -30,26 +30,7 @@ class Question extends Component {
 			},
 			currentChoice: '',
 			currentAnswer: '',
-			currentQuestionFormat: 'standAlone',
-			currentTable: {
-				colNames: [],
-				data: [],
-				followupPrompt: '',
-				followupQuestions: []
-			},
-			currColName: '',
-			currNumRows: 0
-		}
-	}
-
-	fieldReqs = {
-		required: {
-			float: 'right',
-			color: '#EF5350'
-		},
-		optional: {
-			float: 'right',
-			color: '#4DD0E1'
+			currentQuestionFormat: 'standAlone'
 		}
 	}
 
@@ -69,12 +50,24 @@ class Question extends Component {
 		high: 2
 	};
 
+	fieldReqs = {
+		required: {
+			float: 'right',
+			color: '#EF5350'
+		},
+		optional: {
+			float: 'right',
+			color: '#4DD0E1'
+		}
+	}
+
+
 	componentWillReceiveProps(nextProps) {
 		let question = {
 					prompt: "",
 					code: "",
 					index: 0,
-					difficulty: -1,
+					difficulty: 0,
 					choices: [],
 					type: "",
 					answer: "",
@@ -139,8 +132,7 @@ class Question extends Component {
 				<div>
 					<p>Difficulty level <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
-						<NativeSelect value={"Select difficulty level"} onChange={this.handleChange('difficulty')}>
-							<option>Select difficulty level</option>
+						<NativeSelect value={this.state.currentQuestion.difficulty} onChange={this.handleChange('difficulty')}>
 							{
 								Object.keys(this.Difficulty).map((level, key) => {
 									let value = this.Difficulty[level];
@@ -165,7 +157,7 @@ class Question extends Component {
 					<FormControl style={{display: 'block'}}
 											 fullWidth={true}>
 						<NativeSelect name={"Question Type"}
-													value={"Select Question Type"}
+													value={this.state.currentQuestion.type}
 													onChange={this.handleChange('type')}>
 							<option>Select question type</option>
 							{
@@ -325,13 +317,21 @@ class Question extends Component {
 					</CardActions>
 					<CardContent>
 						{this.renderFormatForm()}
+						<br/>
 						{this.renderPromptField()}
+						<br/>
 						{this.renderCodeField()}
+						<br/>
 						{this.renderQuestionTypeDropdown()}
+						<br/>
 						{this.renderAnswer()}
+						<br/>
 						{this.renderDifficultyField()}
+						<br/>
 						{this.renderHintField()}
+						<br/>
 						{this.renderFeedbackField()}
+						<br/>
 						{this.renderQuestionActions()}
 					</CardContent>
 				</Card>
@@ -350,11 +350,10 @@ class Question extends Component {
 	 * to the exercise.
 	 */
 	writeQuestion() {
-		if (this.state.currentQuestion.difficulty !== -1 &&
-				this.state.currentQuestion.type !== '' &&
-				this.state.currentQuestion.answer !== '' &&
-				this.state.currentQuestion.hint !== '' &&
-				this.state.currentQuestion.feedback !== '') {
+		if (this.state.currentQuestion.type &&
+				this.state.currentQuestion.answer &&
+				this.state.currentQuestion.hint &&
+				this.state.currentQuestion.feedback) {
 			this.props.addQuestion(this.state.currentQuestion);
 		} else {
 			// TODO: Make this more user friendly!

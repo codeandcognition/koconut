@@ -47,6 +47,14 @@ class ExerciseTool extends Component {
 			conceptList: [],
 			isFollowup: false,
 			currentChoice: '',
+			currentTable: {
+				colNames: [],
+				rows: 0,
+				data: {}
+			},
+			columnNames: [],
+			tabValue: 0,
+			exercises: {},
 			tabValue: 0
     }
 
@@ -97,7 +105,6 @@ class ExerciseTool extends Component {
 	handleTableChange(field, value) {
 		let temp = this.state.currentTable;
 		temp[field] = value;
-		console.log(temp);
 		this.setState({currenTable: temp});
 	}
 
@@ -118,28 +125,41 @@ class ExerciseTool extends Component {
   // Adds current exercises to the database in Exercises branch and ConceptExerciseMap branch
 	// ordered by difficulty
   addExercise() {  // NOT TESTED
-		var exerciseRef = firebase.database().ref("Exercises");
-		exerciseRef.once("value", function(snapshot) {
-			var currentExercises = snapshot.val() ? snapshot.val() : [];
-			currentExercises.push(this.state.currentExercise);
-			exerciseRef.set(currentExercises);
-		});
+		var pushKey = firebase.database().ref().child("Exercises").push().key;
+		console.log(pushKey);
+		var exerciseRef = firebase.database().ref("Exercises/" + pushKey);
+		exerciseRef.set(this.state.currentExercise);
 
-		this.state.currentExercise.concepts.forEach((item) => {
-			var conceptRef = firebase.database().ref("ConceptExerciseMap/" + item);
-			conceptRef.once("value", function(snapshot) {
-				var currentExercises = snapshot.val() ? snapshot.val() : [];
-
-				var currentDifficulty = this.getAverageDifficulty(this.state.currentExercise, 0, 0, 0);
-				for (var i = 0; i < currentExercises.length; i++) {
-					var avgDifficulty = this.getAverageDifficulty(currentExercises[i], 0, 0, 0);
-					if (avgDifficulty > currentDifficulty) {
-						currentExercises.splice(i, 0, this.state.currentExercise);
-					}
+		var componentRef = this;
+		var difficulty = this.getAverageDifficulty(this.state.currentExercise, 0, 0, 0);
+		this.state.currentExercise.concepts.forEach((concept) => {
+      var conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
+      conceptRef.once("value", function(snapshot) {
+        if (snapshot.val()) {
+          var exerciseKeys = snapshot.val();
+          for (var i = 0; i < exerciseKeys.length; i++) {
+            var exerciseKeyRef = firebase.database().
+                ref("Exercises/" + exerciseKeys[i]);
+            exerciseKeyRef.once("value", function(snapshot2) {
+              if (snapshot2.val()) {
+                var otherExercise = snapshot2.val();
+                var otherDifficulty = componentRef.getAverageDifficulty(
+                    otherExercise, 0, 0, 0);
+                console.log(difficulty);
+                console.log(otherDifficulty);
+                if (otherDifficulty > difficulty) {
+                  exerciseKeys.splice(i, 0, pushKey);
+                }
+              }
+              conceptRef.set(exerciseKeys);
+            });
+          }
+        } else {
+        	var exerciseKeys = [pushKey];
+        	conceptRef.set(exerciseKeys);
 				}
-				conceptRef.set(currentExercises);
-			});
-		});
+      });
+    });
 	}
 
 	/**
@@ -151,11 +171,9 @@ class ExerciseTool extends Component {
 	addQuestion(question) {
 		let exercise = this.state.currentExercise;
 		exercise.questions.push(question);
-		console.log(exercise);
 		this.setState({
 			currentExercise: exercise
 		});
-		window.alert("Preview has been updated");
 	}
 
 	// Helper function: returns the average difficulty of given exercise based on
@@ -182,17 +200,38 @@ class ExerciseTool extends Component {
   }
 
 	// Retrieves all exercises from the database that are associated with the given concept
-	// and sets state "exercises" to that list
+  // and sets state "exercises" to that list
 	getExercisesForConcept(concept) {
 		var componentRef = this;
-		var databaseRef = firebase.database().ref("ConceptExerciseMap/" + concept);
-		databaseRef.on("value", function(snapshot) {
-			var exerciseList = snapshot.val() ? snapshot.val() : [];
-			componentRef.setState({
-				exercises: exerciseList
+		var conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
+    var exerciseList = {};
+    this.setState({
+			exercises: exerciseList,
+      currentConcept: concept
+    });
+		conceptRef.on("value", function(snapshot) {
+			var exerciseKeys = snapshot.val() ? snapshot.val() : [];
+			exerciseKeys.forEach((key) => {
+				var exerciseRef = firebase.database().ref("Exercises/" + key);
+				exerciseRef.on("value", function(snapshot) {
+					if (snapshot.val()) {
+						exerciseList[key] = snapshot.val();
+					}
+          componentRef.setState({
+            exercises: exerciseList
+          })
+				});
 			});
 		});
 	}
+
+
+	// Toggles between Build Exercise and View Exercises Tab
+	handleTabChange(value) {
+    this.setState({
+      tabValue: value
+    })
+  }
 
 	renderQuestionCard() {
 		return <Question addQuestion={this.addQuestion} isFollowup={this.state.isFollowup}/>
@@ -240,6 +279,20 @@ class ExerciseTool extends Component {
 		);
 	}
 
+	handleDeleteExercise(exerciseID) {
+		var exerciseRef = firebase.database().ref("Exercises/" + exerciseID);
+		exerciseRef.once("value", function(snapshot) {
+			if (snapshot.val()) {
+				var conceptsList = snapshot.val().concepts;
+				conceptsList.forEach((concept) => {
+					var conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept + "/" + exerciseID);
+					conceptRef.set(null);
+				});
+			}
+			exerciseRef.set(null);
+		});
+	}
+
 	renderBuildExercise() {
     let code = {
       border: '1px solid darkgray',
@@ -261,86 +314,121 @@ class ExerciseTool extends Component {
       }
     }
 
+    let formSectionStyle = {
+    	marginBottom: "60px"
+		}
+
 		return (
-				<div>
-          <div>
-            <p>Exercise {" " + this.state.currentExercise.prompt} </p>
+				<div style={{marginTop: "50px"}}>
+          <div style={formSectionStyle}>
+            <p>Exercise: {" " + this.state.currentExercise.prompt} </p>
             <p className={"text-primary"}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
             <TextField style={{display: 'block'}} fullWidth={true}
                        value={this.state.currentExercise.prompt}
                        onChange={this.handleExerciseChange('prompt')}/>
           </div>
-          <div>
+
+          <div style={formSectionStyle}>
             <p className={"text-primary"}>Overarching Code <span style={fieldReqs.optional}>optional</span></p>
             <textarea style={{display: 'block', width: '100%', height: '10em'}}
-                      onChange={this.handleExerciseChange()} />
+                      onChange={this.handleExerciseChange('code')} />
           </div>
 
-          <p>Tag concepts for this exercise <span style={fieldReqs.required}>required</span></p>
-          <FormControl>
-            <NativeSelect onChange={(evt) => this.setState({currentConcept: evt.target.value})}>
-              <option>Select concept</option>
+					<div style={formSectionStyle}>
+						<p>Tag concepts for this exercise <span style={fieldReqs.required}>required</span></p>
+						<FormControl style={{display: "flex", flexDirection: "row", justifyContent: "center", marginBottom: "30px"}}>
+							<NativeSelect onChange={(evt) => {
+											evt.preventDefault();
+											this.setState({currentConcept: evt.target.value});
+											}}
+														style={{width: "30%", marginRight: "15px"}}>
+								<option>Select concept</option>
+								{
+									this.state.conceptList.map((concept, index) => {
+										return <option key={index} value={concept.name}>{concept.name}</option>
+									})
+								}
+							</NativeSelect>
+							<Button variant={'outlined'}
+											style={{width: "30%", marginLeft: "15px"}}
+											color={"secondary"}
+											onClick={(evt) => {
+												evt.preventDefault();
+												if (this.state.currentConcept === '') return;
+												let conceptsCopy = [...this.state.currentExercise.concepts];
+												conceptsCopy.push(this.state.currentConcept);
+												this.updateExercise("concepts", conceptsCopy);
+												this.setState({currentConcept: ''});
+											}}>Add concept</Button>
+						</FormControl>
+            <div style={{display: 'inline'}}>
               {
-                this.state.conceptList.map((concept, index) => {
-                  return <option key={index} value={concept.name}>{concept.name}</option>
+                this.state.currentExercise.concepts.map((concept, key) => {
+                  return <Button
+                      key={key}
+                      style={{backgroundColor: '#ffecb3'}}
+                      onClick={() => {
+                        let index = this.state.currentExercise.concepts.indexOf(concept);
+                        let conceptsCopy = [...this.state.currentExercise.concepts];
+                        conceptsCopy.splice(index, 1);
+                        this.updateExercise('concepts', conceptsCopy);
+                      }
+                      }>{concept}</Button>
                 })
               }
-            </NativeSelect>
-            <Button variant={'outlined'}
-                    color={"secondary"}
-                    onClick={(evt) => {
-                      if (this.state.currentConcept === '') return;
-                      let conceptsCopy = [...this.state.currentExercise.concepts];
-                      conceptsCopy.push(this.state.currentConcept);
-                      this.updateExercise("concepts", conceptsCopy);
-                      this.setState({currentConcept: ''});
-                    }}>Add concept</Button>
-          </FormControl>
-
-          <div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
-            {
-              this.state.currentExercise.concepts.map((concept, key) => {
-                return <Button
-                    key={key}
-                    style={{backgroundColor: '#ffecb3'}}
-                    onClick={() => {
-                      let index = this.state.currentExercise.concepts.indexOf(concept);
-                      let conceptsCopy = [...this.state.currentExercise.concepts];
-                      conceptsCopy.splice(index, 1);
-                      this.updateExercise('concepts', conceptsCopy);
-                    }
-                    }>{concept}</Button>
-              })
-            }
-          </div>
+            </div>
+					</div>
 
           <p>An exercise can have multiple parts, use the following form to add one question at a time!</p>
+
 					{this.renderQuestionCard()}
-					<Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
+					<br />
+          <div style={formSectionStyle}>
+            <p><b>Preview</b></p>
+            <div style={code}>
+              {
+                JSON.stringify({
+                  exercise: this.state.currentExercise,
+                  answer: this.state.currentAnswer,
+                }, null, 2)
+              }
+            </div>
+            <Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
+          </div>
 				</div>
 		);
 	}
 
 	renderViewExercise() {
+
+		var exerciseCardStyle = {
+			whiteSpace: "pre-wrap",
+			padding: "30px"
+		}
+
 		return (
 			<div style={{marginTop: "6%"}}>
         <NativeSelect onChange={(evt) => {
         	this.getExercisesForConcept(evt.target.value);
-        }}>
+        }} style={{marginBottom: "50px"}}>
           <option>Select concept</option>
           {this.state.conceptList.map((concept, index) => {
               return <option key={index} value={concept.name}>{concept.name}</option>
 					})}
-					{this.state.exercises.map((exercise, index) => {
-						return (
-							<Card>
-								<CardContent>
-									<Typography>{exercise.prompt}</Typography>
-								</CardContent>
-							</Card>
-						);
-					})}
         </NativeSelect>
+				{Object.keys(this.state.exercises).map((id) => {
+					return (
+						<Card style={exerciseCardStyle} key={id}>
+							<CardContent>
+								<p>{JSON.stringify(this.state.exercises[id], null, 4)}</p>
+							</CardContent>
+							<CardActions>
+								<Button color={"primary"}>Edit</Button>
+								<Button color={"secondary"} onClick={() => this.handleDeleteExercise(id)}>Delete</Button>
+							</CardActions>
+						</Card>
+					);
+				})}
 			</div>
 		);
 	}
