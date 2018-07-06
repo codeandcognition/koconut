@@ -22,7 +22,7 @@ const displayType = {
 class Information extends Component {
   props: {
     exercise: Exercise,
-    answer: ?string,  // Maybe type - can be null/void
+    answer: ?string[],  // Maybe type - can be null/void
     updateHandler: Function,
     feedback: string[],
     submitOk: Function,
@@ -122,10 +122,16 @@ class Information extends Component {
   }
 
   render() {
+    let correctCount = this.props.feedback.reduce((acc, item) =>
+      item === "correct" ? acc + 1 : acc
+    , 0);
+    let expectedCorrect = this.props.exercise.questions.length;
     return (
         <div>
-          {
-            this.props.exercise.questions.map((question, index) => {
+          {/* TODO replace learn yourself a good 1*/}
+          {correctCount >= expectedCorrect ?
+                <div> wow good joob you learnt yourself a good 1 </div> :
+                this.props.exercise.questions.map((question, index) => {
               return (<div className="information" key={"information" + index}>
                 {this.renderCodeView(question, index)}
                 {this.renderResponseView(question, index)}

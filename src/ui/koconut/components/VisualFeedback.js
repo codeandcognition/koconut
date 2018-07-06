@@ -23,7 +23,6 @@ class VisualFeedback extends Component {
    * @returns JSX
    */
   renderFeedback() {
-    console.log(this.props.feedback);
     return this.props.feedback === "correct" ? <div className="correct"/>
         : ( <div className="incorrect-container">
               <div className="incorrect"/>
