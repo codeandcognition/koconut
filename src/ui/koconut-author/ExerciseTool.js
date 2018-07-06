@@ -102,19 +102,6 @@ class ExerciseTool extends Component {
 		}
 	}
 
-	formatAsTable(fieldReqs) {
-		return (
-				<div>
-					<p>Enter the column names <span style={fieldReqs.required}>required</span></p>
-					{this.addColumnNameForm()}
-					<p>Number of rows<span style={fieldReqs.required}>required</span></p>
-					<TextField fullWidth={true} onChange={(evt) => this.handleTableChange('rows', parseInt(evt.target.value))}/>
-					<Question addQuestion={this.addQuestion}/>
-				</div>
-		);
-
-	}
-
 	handleTableChange(field, value) {
 		let temp = this.state.currentTable;
 		temp[field] = value;
