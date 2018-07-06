@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import Button from '@material-ui/core/Button/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Table from './Table';
 
 class Question extends Component {
 	constructor(props) {
@@ -31,7 +30,26 @@ class Question extends Component {
 			},
 			currentChoice: '',
 			currentAnswer: '',
-			currentQuestionFormat: 'standAlone'
+			currentQuestionFormat: 'standAlone',
+			currentTable: {
+				colNames: [],
+				data: [],
+				followupPrompt: '',
+				followupQuestions: []
+			},
+			currColName: '',
+			currNumRows: 0
+		}
+	}
+
+	fieldReqs = {
+		required: {
+			float: 'right',
+			color: '#EF5350'
+		},
+		optional: {
+			float: 'right',
+			color: '#4DD0E1'
 		}
 	}
 
@@ -52,7 +70,6 @@ class Question extends Component {
 	};
 
 	componentWillReceiveProps(nextProps) {
-		console.log("in here");
 		let question = {
 					prompt: "",
 					code: "",
@@ -74,10 +91,10 @@ class Question extends Component {
 		});
 	}
 
-	renderFormatForm(fieldReqs) {
+	renderFormatForm() {
 		return(
 				<div>
-					<p>How do you want to format the question? <span style={fieldReqs.required}>required</span></p>
+					<p>How do you want to format the question? <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
 						<RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
 							<FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
@@ -93,10 +110,10 @@ class Question extends Component {
 	 * @param fieldReqs
 	 * @returns {*}
 	 */
-	renderPromptField(fieldReqs) {
+	renderPromptField() {
 		return (
 				<div>
-					<p>Question Prompt <span style={fieldReqs.optional}>optional</span></p>
+					<p>Question Prompt <span style={this.fieldReqs.optional}>optional</span></p>
 					<TextField fullWidth={true} value={this.state.currentQuestion.prompt} onChange={this.handleChange('prompt')}/>
 				</div>
 		);
@@ -106,10 +123,10 @@ class Question extends Component {
 	 *
 	 * @returns {*}
 	 */
-	renderCodeField(fieldReqs) {
+	renderCodeField() {
 		return(
 				<div>
-					<p>Code <span style={fieldReqs.optional}>optional</span></p>
+					<p>Code <span style={this.fieldReqs.optional}>optional</span></p>
 					<textarea style={{display: 'block', width: '100%', height: '10em'}}
 										value={this.state.currentQuestion.code}
 										onChange={this.handleChange('code')} />
@@ -117,10 +134,10 @@ class Question extends Component {
 		);
 	}
 
-	renderDifficultyField(fieldReqs) {
+	renderDifficultyField() {
 		return(
 				<div>
-					<p>Difficulty level <span style={fieldReqs.required}>required</span></p>
+					<p>Difficulty level <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
 						<NativeSelect value={"Select difficulty level"} onChange={this.handleChange('difficulty')}>
 							<option>Select difficulty level</option>
@@ -141,10 +158,10 @@ class Question extends Component {
 	 *
 	 * @returns {*} html div
 	 */
-	renderQuestionTypeDropdown(fieldReqs) {
+	renderQuestionTypeDropdown() {
 		return(
 				<div>
-					<p className={"text-primary"}>Question Type <span style={fieldReqs.required}>required</span></p>
+					<p className={"text-primary"}>Question Type <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl style={{display: 'block'}}
 											 fullWidth={true}>
 						<NativeSelect name={"Question Type"}
@@ -224,11 +241,11 @@ class Question extends Component {
 	/**
 	 * Renders the answer input field
 	 */
-	renderAnswer(reqs) {
+	renderAnswer() {
 		if (this.state.currentQuestion.type === this.QuestionTypes.multipleChoice) {
 			return(
 					<div>
-						<p>Answer <span style={reqs.required}>required</span></p>
+						<p>Answer <span style={this.fieldReqs.required}>required</span></p>
 						<NativeSelect onChange={this.handleChange('answer')}>
 							<option>Select the answer</option>
 							{
@@ -252,7 +269,7 @@ class Question extends Component {
 			// returns a text field for answer
 			return (
 					<div>
-						<p>Answer <span style={reqs.required}>required</span></p>
+						<p>Answer <span style={this.fieldReqs.required}>required</span></p>
 						<TextField fullWidth={true}
 											 value={this.state.currentQuestion.answer}
 											 onChange={this.handleChange('answer')} />
@@ -265,19 +282,19 @@ class Question extends Component {
 	 * Renders the hint input field
 	 * @returns {*}
 	 */
-	renderHintField(fieldReqs) {
+	renderHintField() {
 		return (
 				<div>
-					<p>Hint <span style={fieldReqs.required}>required</span></p>
+					<p>Hint <span style={this.fieldReqs.required}>required</span></p>
 					<TextField fullWidth={true} value={this.state.currentQuestion.hint} onChange={this.handleChange('hint')}/>
 				</div>
 		);
 	}
 
-	renderFeedbackField(fieldReqs) {
+	renderFeedbackField() {
 		return(
 				<div>
-					<p>Feedback <span style={fieldReqs.required}>required</span></p>
+					<p>Feedback <span style={this.fieldReqs.required}>required</span></p>
 					<TextField fullWidth={true} value={this.state.currentQuestion.feedback} onChange={this.handleChange('feedback')}/>
 				</div>
 		);
@@ -291,6 +308,41 @@ class Question extends Component {
 								onClick={() => this.writeQuestion()}
 								>Add Question</Button>
 		);
+	}
+
+	renderStandAloneQuestion() {
+		let followup = {
+			border: 'solid',
+			borderColor: '#9FA8DA'
+		}
+		let card = this.props.isFollowup ? followup : {};
+
+		return(
+				<Card style={card}>
+					<CardActions>
+						<Button>Clear Fields</Button>
+						<Button>Delete</Button>
+					</CardActions>
+					<CardContent>
+						{this.renderFormatForm()}
+						{this.renderPromptField()}
+						{this.renderCodeField()}
+						{this.renderQuestionTypeDropdown()}
+						{this.renderAnswer()}
+						{this.renderDifficultyField()}
+						{this.renderHintField()}
+						{this.renderFeedbackField()}
+						{this.renderQuestionActions()}
+					</CardContent>
+				</Card>
+		);
+	}
+
+	renderQuestionForm() {
+		if (this.state.currentQuestionFormat === 'standAlone') {
+			return this.renderStandAloneQuestion();
+		}
+		return <Table/>;
 	}
 
 	/**
@@ -339,43 +391,9 @@ class Question extends Component {
 	}
 
 	render() {
-		let fieldReqs = {
-			required: {
-				float: 'right',
-				color: '#EF5350'
-			},
-			optional: {
-				float: 'right',
-				color: '#4DD0E1'
-			}
-		}
-
-		let followup = {
-			border: 'solid',
-			borderColor: '#9FA8DA'
-		}
-
-		let card = this.props.isFollowup ? followup : {};
-
 		// TODO: Add a delete function
 		return (
-				<Card style={card}>
-					<CardActions>
-						<Button>Clear Fields</Button>
-						<Button>Delete</Button>
-					</CardActions>
-					<CardContent>
-						{this.renderFormatForm(fieldReqs)}
-						{this.renderPromptField(fieldReqs)}
-						{this.renderCodeField(fieldReqs)}
-						{this.renderQuestionTypeDropdown(fieldReqs)}
-						{this.renderAnswer(fieldReqs)}
-						{this.renderDifficultyField(fieldReqs)}
-						{this.renderHintField(fieldReqs)}
-						{this.renderFeedbackField(fieldReqs)}
-						{this.renderQuestionActions()}
-					</CardContent>
-				</Card>
+				this.renderQuestionForm()
 		);
 	}
 }
