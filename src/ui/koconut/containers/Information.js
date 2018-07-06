@@ -37,9 +37,8 @@ class Information extends Component {
    * Returns JSX for (or not for) the Code container given the current props
    * @returns JSX for the Code container
    */
-  renderCodeView() {
-    return this.props.exercise.questions.map((question, index) => {
-      // split apart so easier to parse
+  renderCodeView(question, index) {
+
       if(Types.isSurvey(question.type) ||
           (question.type === Types.multipleChoice
           &&
@@ -60,8 +59,6 @@ class Information extends Component {
                       toggleCodeTheme={this.props.toggleCodeTheme}
                       />);
       }
-    });
-
 
     // Deprecated below
 
@@ -80,7 +77,7 @@ class Information extends Component {
    * Returns JSX for (or not for) the Response container given the current props
    * @returns JSX for the Response container
    */
-  renderResponseView() {
+  renderResponseView(question, index) {
     // Deprecated below
     //
     // if (this.props.mode === displayType.feedback) {
@@ -92,7 +89,7 @@ class Information extends Component {
     //   />
     // }
 
-    return this.props.exercise.questions.map((question, index) => {
+
       let type = question.type;
 
       return Types.isInlineResponseType(type) ? <div /> :
@@ -109,7 +106,6 @@ class Information extends Component {
             mode={this.props.mode}
             submitHandler={this.props.submitHandler}
             />
-    })
 
     // Deprecated below
 
@@ -127,10 +123,17 @@ class Information extends Component {
 
   render() {
     return (
-        <div className="information">
-          {this.renderCodeView()}
-          {this.renderResponseView()}
+        <div>
+          {
+            this.props.exercise.questions.map((question, index) => {
+              return (<div className="information" key={"information" + index}>
+                {this.renderCodeView(question, index)}
+                {this.renderResponseView(question, index)}
+              </div>);
+            })
+          }
         </div>
+
     );
   }
 }
