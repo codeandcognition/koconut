@@ -31,7 +31,7 @@ class Question extends Component {
 			},
 			currentChoice: '',
 			currentAnswer: '',
-			currentQuestionFormat: 'standAlone'
+			currentQuestionFormat: 'standAlone',
 		}
 	}
 
@@ -52,12 +52,11 @@ class Question extends Component {
 	};
 
 	componentWillReceiveProps(nextProps) {
-		console.log("in here");
 		let question = {
 					prompt: "",
 					code: "",
 					index: 0,
-					difficulty: -1,
+					difficulty: 0,
 					choices: [],
 					type: "",
 					answer: "",
@@ -122,8 +121,7 @@ class Question extends Component {
 				<div>
 					<p>Difficulty level <span style={fieldReqs.required}>required</span></p>
 					<FormControl>
-						<NativeSelect value={"Select difficulty level"} onChange={this.handleChange('difficulty')}>
-							<option>Select difficulty level</option>
+						<NativeSelect value={this.state.currentQuestion.difficulty} onChange={this.handleChange('difficulty')}>
 							{
 								Object.keys(this.Difficulty).map((level, key) => {
 									let value = this.Difficulty[level];
@@ -148,7 +146,7 @@ class Question extends Component {
 					<FormControl style={{display: 'block'}}
 											 fullWidth={true}>
 						<NativeSelect name={"Question Type"}
-													value={"Select Question Type"}
+													value={this.state.currentQuestion.type}
 													onChange={this.handleChange('type')}>
 							<option>Select question type</option>
 							{
@@ -298,11 +296,10 @@ class Question extends Component {
 	 * to the exercise.
 	 */
 	writeQuestion() {
-		if (this.state.currentQuestion.difficulty !== -1 &&
-				this.state.currentQuestion.type !== '' &&
-				this.state.currentQuestion.answer !== '' &&
-				this.state.currentQuestion.hint !== '' &&
-				this.state.currentQuestion.feedback !== '') {
+		if (this.state.currentQuestion.type &&
+				this.state.currentQuestion.answer &&
+				this.state.currentQuestion.hint &&
+				this.state.currentQuestion.feedback) {
 			this.props.addQuestion(this.state.currentQuestion);
 		} else {
 			// TODO: Make this more user friendly!
@@ -359,20 +356,28 @@ class Question extends Component {
 
 		// TODO: Add a delete function
 		return (
-				<Card style={card}>
+				<Card style={card} elevation={7}>
 					<CardActions>
 						<Button>Clear Fields</Button>
 						<Button>Delete</Button>
 					</CardActions>
 					<CardContent>
 						{this.renderFormatForm(fieldReqs)}
+						<br />
 						{this.renderPromptField(fieldReqs)}
+						<br />
 						{this.renderCodeField(fieldReqs)}
+						<br />
 						{this.renderQuestionTypeDropdown(fieldReqs)}
+						<br />
 						{this.renderAnswer(fieldReqs)}
+						<br />
 						{this.renderDifficultyField(fieldReqs)}
+						<br />
 						{this.renderHintField(fieldReqs)}
+						<br />
 						{this.renderFeedbackField(fieldReqs)}
+						<br />
 						{this.renderQuestionActions()}
 					</CardContent>
 				</Card>

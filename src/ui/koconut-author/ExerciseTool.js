@@ -118,7 +118,6 @@ class ExerciseTool extends Component {
 	handleTableChange(field, value) {
 		let temp = this.state.currentTable;
 		temp[field] = value;
-		console.log(temp);
 		this.setState({currenTable: temp});
 	}
 
@@ -152,7 +151,7 @@ class ExerciseTool extends Component {
         if (snapshot.val()) {
           var exerciseKeys = snapshot.val();
           for (var i = 0; i < exerciseKeys.length; i++) {
-            var exerciseKeyRef = firebase.databas().
+            var exerciseKeyRef = firebase.database().
                 ref("Exercises/" + exerciseKeys[i]);
             exerciseKeyRef.once("value", function(snapshot2) {
               if (snapshot2.val()) {
@@ -168,7 +167,7 @@ class ExerciseTool extends Component {
           }
         } else {
         	var exerciseKeys = [pushKey];
-        	conceptRef.set(pushKey);
+        	conceptRef.set(exerciseKeys);
 				}
       });
     });
@@ -183,11 +182,9 @@ class ExerciseTool extends Component {
 	addQuestion(question) {
 		let exercise = this.state.currentExercise;
 		exercise.questions.push(question);
-		console.log(exercise);
 		this.setState({
 			currentExercise: exercise
 		});
-		window.alert("Preview has been updated");
 	}
 
 	// Helper function: returns the average difficulty of given exercise based on
@@ -328,61 +325,73 @@ class ExerciseTool extends Component {
       }
     }
 
+    let formSectionStyle = {
+    	marginBottom: "60px"
+		}
+
 		return (
-				<div>
-          <div>
-            <p>Exercise {" " + this.state.currentExercise.prompt} </p>
+				<div style={{marginTop: "50px"}}>
+          <div style={formSectionStyle}>
+            <p>Exercise: {" " + this.state.currentExercise.prompt} </p>
             <p className={"text-primary"}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
             <TextField style={{display: 'block'}} fullWidth={true}
                        value={this.state.currentExercise.prompt}
                        onChange={this.handleExerciseChange('prompt')}/>
           </div>
-          <div>
+
+          <div style={formSectionStyle}>
             <p className={"text-primary"}>Overarching Code <span style={fieldReqs.optional}>optional</span></p>
             <textarea style={{display: 'block', width: '100%', height: '10em'}}
-                      onChange={this.handleExerciseChange()} />
+                      onChange={this.handleExerciseChange('code')} />
           </div>
 
-          <p>Tag concepts for this exercise <span style={fieldReqs.required}>required</span></p>
-          <FormControl>
-            <NativeSelect onChange={(evt) => this.setState({currentConcept: evt.target.value})}>
-              <option>Select concept</option>
+					<div style={formSectionStyle}>
+						<p>Tag concepts for this exercise <span style={fieldReqs.required}>required</span></p>
+						<FormControl style={{display: "flex", flexDirection: "row", justifyContent: "center", marginBottom: "30px"}}>
+							<NativeSelect onChange={(evt) => {
+											evt.preventDefault();
+											this.setState({currentConcept: evt.target.value});
+											}}
+														style={{width: "30%", marginRight: "15px"}}>
+								<option>Select concept</option>
+								{
+									this.state.conceptList.map((concept, index) => {
+										return <option key={index} value={concept.name}>{concept.name}</option>
+									})
+								}
+							</NativeSelect>
+							<Button variant={'outlined'}
+											style={{width: "30%", marginLeft: "15px"}}
+											color={"secondary"}
+											onClick={(evt) => {
+												evt.preventDefault();
+												if (this.state.currentConcept === '') return;
+												let conceptsCopy = [...this.state.currentExercise.concepts];
+												conceptsCopy.push(this.state.currentConcept);
+												this.updateExercise("concepts", conceptsCopy);
+												this.setState({currentConcept: ''});
+											}}>Add concept</Button>
+						</FormControl>
+            <div style={{display: 'inline'}}>
               {
-                this.state.conceptList.map((concept, index) => {
-                  return <option key={index} value={concept.name}>{concept.name}</option>
+                this.state.currentExercise.concepts.map((concept, key) => {
+                  return <Button
+                      key={key}
+                      style={{backgroundColor: '#ffecb3'}}
+                      onClick={() => {
+                        let index = this.state.currentExercise.concepts.indexOf(concept);
+                        let conceptsCopy = [...this.state.currentExercise.concepts];
+                        conceptsCopy.splice(index, 1);
+                        this.updateExercise('concepts', conceptsCopy);
+                      }
+                      }>{concept}</Button>
                 })
               }
-            </NativeSelect>
-            <Button variant={'outlined'}
-                    color={"secondary"}
-                    onClick={(evt) => {
-                      if (this.state.currentConcept === '') return;
-                      let conceptsCopy = [...this.state.currentExercise.concepts];
-                      conceptsCopy.push(this.state.currentConcept);
-                      this.updateExercise("concepts", conceptsCopy);
-                      this.setState({currentConcept: ''});
-                    }}>Add concept</Button>
-          </FormControl>
-
-          <div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
-            {
-              this.state.currentExercise.concepts.map((concept, key) => {
-                return <Button
-                    key={key}
-                    style={{backgroundColor: '#ffecb3'}}
-                    onClick={() => {
-                      let index = this.state.currentExercise.concepts.indexOf(concept);
-                      let conceptsCopy = [...this.state.currentExercise.concepts];
-                      conceptsCopy.splice(index, 1);
-                      this.updateExercise('concepts', conceptsCopy);
-                    }
-                    }>{concept}</Button>
-              })
-            }
-          </div>
+            </div>
+					</div>
 
           <p>An exercise can have multiple parts, use the following form to add one question at a time!</p>
-          <div>
+          <div style={formSectionStyle}>
             <p>How do you want to format the question? <span style={fieldReqs.required}>required</span></p>
             <FormControl>
               <RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
@@ -392,13 +401,14 @@ class ExerciseTool extends Component {
             </FormControl>
           </div>
 
-          {
+          {/*
             this.state.currentQuestionFormat === 'standAlone' ?
                 this.standAloneQuestion(fieldReqs) : this.formatAsTable(fieldReqs)
-          }
+          */}
 
-
-          <div>
+					{this.renderQuestionCard()}
+					<br />
+          <div style={formSectionStyle}>
             <p><b>Preview</b></p>
             <div style={code}>
               {
@@ -408,66 +418,8 @@ class ExerciseTool extends Component {
                 }, null, 2)
               }
             </div>
+            <Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
           </div>
-          <Button variant={'outlined'}
-                  color={'secondary'}
-									onClick={(evt) => {
-                    if (this.state.currentExercise.prompt !== ''
-                        && this.state.currentAnswer !== ''
-                        && this.state.currentExercise.type !== '') {
-                      this.setState({
-                        exercises: [...this.state.exercises, {
-                          exercise: this.state.currentExercise,
-                          answer: this.state.currentAnswer
-                        }],
-                        currentExercise: {
-                          prompt: '',
-                          code: '',
-                          difficulty: 0,
-                          choices: [],
-                          concepts: [],
-                          type: ''
-                        },
-                        currentAnswer: ''
-                      });
-                    }
-                  }}>
-            Add exercise!
-          </Button>
-          <br /><br/>
-
-          <label className={"text-primary"}>Exercies</label>
-          <div style={{display: 'block', width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
-            {
-              this.state.questions.map((exercise, key) => {
-                return(
-                    <Button className={'bg-warning'}
-                            style={{margin: '0.25%'}}
-                            key={key}
-                            onClick={(evt) => {
-                              let index = this.state.exercises.indexOf(exercise);
-                              let exercisesCopy = [...this.state.exercises];
-                              exercisesCopy.splice(index, 1);
-                              this.setState({exercises: exercisesCopy});
-                            }}>
-                      {/*exercise.exercise.prompt*/}
-                    </Button>
-                );
-              })
-            }
-          </div>
-          <br/>
-
-          <p className={"text-primary"}>JSON Output</p>
-          <div style={code}>
-            {JSON.stringify(this.state.exercises, null, 2)}
-          </div>
-          <div style={code}>
-            {"let variable" + Math.round(Math.random() * 99999).toString() + " = "
-            + JSON.stringify(this.state.exercises) + ";"}
-          </div>
-					{this.renderQuestionCard()}
-					<Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
 				</div>
 		);
 	}
