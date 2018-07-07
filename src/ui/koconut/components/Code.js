@@ -129,7 +129,7 @@ class Code extends Component {
     this.setState({highlighted: selected});
     // this check mitigates a bug caused by spam switching exercises
     if (this.props.updateHandler !== undefined) {
-      this.props.updateHandler(selected); // William summer 2018
+      this.props.updateHandler(selected, this.props.questionIndex); // William summer 2018
     }
   }
 
