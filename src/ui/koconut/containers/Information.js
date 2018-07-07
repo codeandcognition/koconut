@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import Code from '../components/Code';
 import Response from './Response';
 import Types from '../../../data/ExerciseTypes.js';
+import Submit from '../components/Submit';
 import './Information.css';
 
 import type {Exercise} from '../../../data/Exercises';
@@ -50,6 +51,9 @@ class Information extends Component {
                             undefined
                       }
                       toggleCodeTheme={this.props.toggleCodeTheme}
+                      feedback={this.props.feedback[index]}
+                      questionIndex={index}
+                      submitTryAgain={this.props.submitTryAgain}
                       />);
       }
   }
@@ -84,16 +88,23 @@ class Information extends Component {
       item === "correct" ? acc + 1 : acc
     , 0);
     let expectedCorrect = this.props.exercise.questions.length;
+    console.log(this.props.feedback);
     return (
         <div>
           {/* TODO replace learn yourself a good 1*/}
           {correctCount >= expectedCorrect ?
                 <div> wow good joob you learnt yourself a good 1 </div> :
                 this.props.exercise.questions.map((question, index) => {
-              return (<div className="information" key={"information" + index}>
-                {this.renderCodeView(question, index)}
-                {this.renderResponseView(question, index)}
-              </div>);
+                return (
+                    <div key={"information" + index}>
+                    <div className="information">
+                      {this.renderCodeView(question, index)}
+                      {this.renderResponseView(question, index)}
+                    </div>
+                      {!(this.props.feedback[index]) &&
+                      <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index)} />
+                      }
+                    </div>);
             })
           }
         </div>

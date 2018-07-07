@@ -13,6 +13,7 @@ import 'brace/theme/solarized_dark';
 
 // Tool imports
 import Types from '../../../data/ExerciseTypes.js';
+import Feedback from '../components/Feedback';
 
 // Component imports
 import Hint from './Hint.js';
@@ -107,6 +108,8 @@ class Code extends Component {
 
   /**
    * Handles the dark/light checkbox toggle event.
+   *
+   * TODO UNUSED
    */
   handleThemeChange() {
     this.setState({
@@ -213,30 +216,37 @@ class Code extends Component {
 
   render() {
   	// don't render the reset button for a highlightCode exercise
-    let isInlineResponseType = Types.isInlineResponseType(this.props.type) &&
-															this.props.type !== Types.highlightCode;
-    let reset = isInlineResponseType ? <input type="button" value="reset code"
-                                              onClick={this.handleReset}/> : '';
+    let isWriteType = Types.isInlineResponseType(this.props.type);
+    let reset = isWriteType && this.props.type !== Types.highlightCode ?
+        <input type="button" value="reset code" onClick={this.handleReset}/> :
+        '';
 
     let hint = this.state.hint;
     let curLine = this.state.curLine;
 
     return (
-        <div ref="code"
-             className={'code ' + (isInlineResponseType ? 'full' : 'half') +
-             ' ' + this.props.type}>
-          {this.renderAce()}
-          <div className="code-config">
-            <button onClick={this.handleHintRequest}>?</button>
-            <button onClick={this.handleThemeChange}>
-              {this.state.toggle ? 'dark theme' : 'light theme'}
-            </button>
-            {reset}
-          </div>
+        <div className={'code ' + (isWriteType ? 'full' : 'half') +
+        ' ' + this.props.type}>
+          {(isWriteType && this.props.feedback) ?
+            <Feedback
+                feedback={this.props.feedback} // TODO:  modify this so that if correct, try again button dont appear
+                questionIndex={this.props.questionIndex}
+                submitTryAgain={() => this.props.submitTryAgain(this.props.questionIndex)} // TODO also modify submitOk functionality
+            /> :
+              <div ref="code"
+                   className={'code ' + (isWriteType ? 'full' : 'half') +
+                   ' ' + this.props.type}>
+                {this.renderAce()}
+                <div className="code-config">
+                  <button onClick={this.handleHintRequest}>?</button>
+                  {reset}
+                </div>
 
-          {hint ? <Hint content="//TODO: Place hint here."
-                        pos={curLine}
-                        close={() => this.setState({hint: false})}/> : ''}
+                {hint ? <Hint content="//TODO: Place hint here."
+                              pos={curLine}
+                              close={() => this.setState({hint: false})}/> : ''}
+              </div>
+          }
         </div>
     );
   }

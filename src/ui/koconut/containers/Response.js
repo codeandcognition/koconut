@@ -4,7 +4,6 @@ import MultipleChoice from '../components/MultipleChoice';
 import ShortResponse from '../components/ShortResponse';
 import SurveyView from '../components/SurveyView.js';
 import Feedback from '../components/Feedback';
-import Submit from '../components/Submit';
 import './Response.css';
 
 import Types from '../../../data/ExerciseTypes.js';
@@ -68,10 +67,6 @@ class Response extends Component {
     return (
         <div className={'response ' + responseWidth}>
           {this.renderResponse()}
-
-          {!(this.props.feedback) &&
-            <Submit submitHandler={() => this.props.submitHandler(this.props.answer, this.props.questionIndex)} />
-          }
         </div>
     );
   }
