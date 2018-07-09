@@ -242,7 +242,7 @@ class App extends Component {
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
    */
-  submitResponse(answer: string[], questionIndex: number, questionType: string) {
+  submitResponse(answer: any, questionIndex: number, questionType: string) {
     if (answer !== null && answer !== undefined) {
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer[questionIndex], () => {
         this.setState({
