@@ -249,7 +249,7 @@ class App extends Component {
           feedback: this.checkAnswer(answer, questionIndex),
           nextConcepts: this.getConcepts(),
           display: this.state.exercise.type !== 'survey'
-              ? displayType.feedback
+              ? displayType.exercise
               : (this.state.conceptOptions > 1
                   ? displayType.concept
                   : displayType.exercise),
