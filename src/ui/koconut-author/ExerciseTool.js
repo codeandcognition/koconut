@@ -306,6 +306,8 @@ class ExerciseTool extends Component {
 		exerciseRef.set(null);
 	}
 
+	// TODO: Update ordering of exercises in ConceptExerciseMap branch of
+	// database if user changes the difficulties of exercise questions
 	saveEditedExercise() {
 		try {
 			var updatedExercise = JSON.parse(this.state.editedExercise);
