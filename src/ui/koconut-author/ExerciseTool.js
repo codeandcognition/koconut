@@ -55,7 +55,8 @@ class ExerciseTool extends Component {
 			columnNames: [],
 			tabValue: 0,
 			exercises: {},
-			tabValue: 0
+			tabValue: 0,
+      allExercises: {}
     }
 
     // Bind the functions so they can be used in Question.js
@@ -76,7 +77,15 @@ class ExerciseTool extends Component {
 		var list = this.getConcepts();
 		this.setState({
 			conceptList: list
-		})
+		});
+
+		var componentRef = this;
+		var exerciseRef = firebase.database().ref("Exercises");
+		exerciseRef.on("value", function(snapshot) {
+		  componentRef.setState({
+        allExercises: snapshot.val() ? snapshot.val() : {}
+      });
+    });
 	}
 
 	/**
@@ -126,41 +135,36 @@ class ExerciseTool extends Component {
 	// ordered by difficulty
   addExercise() {  // NOT TESTED
 		var pushKey = firebase.database().ref().child("Exercises").push().key;
-		console.log(pushKey);
 		var exerciseRef = firebase.database().ref("Exercises/" + pushKey);
 		exerciseRef.set(this.state.currentExercise);
 
 		var componentRef = this;
 		var difficulty = this.getAverageDifficulty(this.state.currentExercise, 0, 0, 0);
 		this.state.currentExercise.concepts.forEach((concept) => {
-      var conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
-      conceptRef.once("value", function(snapshot) {
-        if (snapshot.val()) {
-          var exerciseKeys = snapshot.val();
-          for (var i = 0; i < exerciseKeys.length; i++) {
-            var exerciseKeyRef = firebase.database().
-                ref("Exercises/" + exerciseKeys[i]);
-            exerciseKeyRef.once("value", function(snapshot2) {
-              if (snapshot2.val()) {
-                var otherExercise = snapshot2.val();
-                var otherDifficulty = componentRef.getAverageDifficulty(
-                    otherExercise, 0, 0, 0);
-                console.log(difficulty);
-                console.log(otherDifficulty);
-                if (otherDifficulty > difficulty) {
-                  exerciseKeys.splice(i, 0, pushKey);
-                }
-              }
-              conceptRef.set(exerciseKeys);
-            });
+		  var conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
+		  conceptRef.once("value", function(snapshot) {
+		    if (snapshot.val()) { // Concepts array exists
+		      var exerciseKeys = snapshot.val();
+		      var didInsertKey = false;
+		      var index = 0;
+		      while (didInsertKey == false) {
+		        var otherDifficulty = componentRef.getAverageDifficulty(componentRef.state.allExercises[exerciseKeys[index]], 0, 0, 0);
+		        if (otherDifficulty > difficulty) {
+		          exerciseKeys.splice(index, 0, pushKey);
+		          didInsertKey = true;
+            } else if (index == exerciseKeys.length) {
+		          exerciseKeys.push(pushKey);
+            }
+            index = index + 1;
           }
-        } else {
-        	var exerciseKeys = [pushKey];
-        	conceptRef.set(exerciseKeys);
-				}
+          conceptRef.set(exerciseKeys);
+        } else { // Concepts array does not exist
+		      conceptRef.set([pushKey]);
+        }
       });
     });
 	}
+
 
   // Helper function: returns the average difficulty of given exercise based on
   // the difficulties of each of its questions
@@ -168,7 +172,7 @@ class ExerciseTool extends Component {
     if (!exercise) {
       return 0;
     } else if (exercise.questions[questionIndex]) {
-      var difficulty = exercise.questions[questionIndex].difficulty;
+      var difficulty = Number(exercise.questions[questionIndex].difficulty);
       var newTotal = total + difficulty;
       return this.getAverageDifficulty(exercise, questionIndex + 1, newTotal, count + 1);
     } else {
@@ -280,17 +284,24 @@ class ExerciseTool extends Component {
 	}
 
 	handleDeleteExercise(exerciseID) {
+		this.state.allExercises[exerciseID].concepts.forEach((concept) => {
+		  var conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
+		  conceptRef.once("value", function(snapshot) {
+		    if (snapshot.val()) {
+		      var exerciseKeys = snapshot.val();
+		      var index = exerciseKeys.indexOf(exerciseID);
+		      if (index > -1) {
+		        exerciseKeys.splice(index, 1);
+          }
+          conceptRef.set(exerciseKeys);
+        }
+      });
+    });
+
+
 		var exerciseRef = firebase.database().ref("Exercises/" + exerciseID);
-		exerciseRef.once("value", function(snapshot) {
-			if (snapshot.val()) {
-				var conceptsList = snapshot.val().concepts;
-				conceptsList.forEach((concept) => {
-					var conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept + "/" + exerciseID);
-					conceptRef.set(null);
-				});
-			}
-			exerciseRef.set(null);
-		});
+		exerciseRef.set(null);
+
 	}
 
 	renderBuildExercise() {
@@ -386,10 +397,7 @@ class ExerciseTool extends Component {
             <p><b>Preview</b></p>
             <div style={code}>
               {
-                JSON.stringify({
-                  exercise: this.state.currentExercise,
-                  answer: this.state.currentAnswer,
-                }, null, 2)
+                JSON.stringify(this.state.currentExercise, null, 2)
               }
             </div>
             <Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
