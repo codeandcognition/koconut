@@ -10,7 +10,7 @@ type Props = {
  * The ShortResponse component renders short response exercise type
  * @class
  */
-class ShortResponse extends Component {
+class  ShortResponse extends Component {
   state: {
     value: string
   };

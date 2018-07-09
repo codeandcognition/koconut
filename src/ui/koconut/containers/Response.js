@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import MultipleChoice from '../components/MultipleChoice';
 import ShortResponse from '../components/ShortResponse';
 import SurveyView from '../components/SurveyView.js';
+import TableView from '../components/TableView';
 import Feedback from '../components/Feedback';
 import './Response.css';
 
@@ -21,7 +22,8 @@ class Response extends Component {
     questionIndex: number,
     feedback?: string[],
     submitHandler: Function,
-    submitTryAgain: Function
+    submitTryAgain: Function,
+    question: any
   };
 
   /**
@@ -57,6 +59,8 @@ class Response extends Component {
         return <ShortResponse inputHandler={update} questionIndex={index}/>;
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
+      case(Types.memoryTable):
+        return <TableView question={this.props.question} inputHandler={update} questionIndex={index}/>;
       default:
         return <div className="BAD">Not a valid EXERCISE type {type}</div>;
     }

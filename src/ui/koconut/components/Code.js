@@ -153,11 +153,13 @@ class Code extends Component {
    * TODO: Fix positioning
    */
   handleHintRequest() {
-    let ace = this.refs.aceEditor.editor;
-    let line = ace.getCursorPosition().row; // Get line of cursor position
+    // TODO: stub function, rework entirely, maybe remove
 
-    this.setState({hint: true});
-    this.setState({curLine: line});
+    // let ace = this.refs.aceEditor.editor;
+    // let line = ace.getCursorPosition().row; // Get line of cursor position
+    //
+    // this.setState({hint: true});
+    // this.setState({curLine: line});
   }
 
   /**

@@ -2102,6 +2102,30 @@ declare module '@material-ui/core/Table/Table' {
   declare module.exports: any;
 }
 
+declare module '@material-ui/core/Table' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/TableBody' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/TableCell' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/TableHead' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/TableRow' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/Paper' {
+  declare module.exports: any;
+}
+
 declare module '@material-ui/core/TableBody/index' {
   declare module.exports: any;
 }

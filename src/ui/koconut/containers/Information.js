@@ -74,6 +74,7 @@ class Information extends Component {
             choices={question.choices}
             answer={this.props.answer}
             questionIndex={index}
+            question={question}
             updateHandler={this.props.updateHandler}
             feedback={this.props.feedback[index]}
             submitOk={this.props.submitOk}
