@@ -56,7 +56,12 @@ class ExerciseTool extends Component {
 			tabValue: 0,
 			exercises: {},
 			tabValue: 0,
-      allExercises: {}
+      allExercises: {},
+			editMode: false,
+			editID: "",
+			editedExercise: "",
+			editError: "",
+			selectedConcept: ""
     }
 
     // Bind the functions so they can be used in Question.js
@@ -79,10 +84,14 @@ class ExerciseTool extends Component {
 			conceptList: list
 		});
 
-		var componentRef = this;
-		var exerciseRef = firebase.database().ref("Exercises");
-		exerciseRef.on("value", function(snapshot) {
-		  componentRef.setState({
+		this.getAllExercises();
+	}
+
+	getAllExercises() {
+    var componentRef = this;
+    var exerciseRef = firebase.database().ref("Exercises");
+    exerciseRef.on("value", function(snapshot) {
+      componentRef.setState({
         allExercises: snapshot.val() ? snapshot.val() : {}
       });
     });
@@ -114,7 +123,7 @@ class ExerciseTool extends Component {
 	handleTableChange(field, value) {
 		let temp = this.state.currentTable;
 		temp[field] = value;
-		this.setState({currenTable: temp});
+		this.setState({currentTable: temp});
 	}
 
 	addColumnNameForm() {
@@ -149,11 +158,12 @@ class ExerciseTool extends Component {
 		      var index = 0;
 		      while (didInsertKey == false) {
 		        var otherDifficulty = componentRef.getAverageDifficulty(componentRef.state.allExercises[exerciseKeys[index]], 0, 0, 0);
-		        if (otherDifficulty > difficulty) {
+		        if (otherDifficulty >= difficulty) {
 		          exerciseKeys.splice(index, 0, pushKey);
 		          didInsertKey = true;
             } else if (index == exerciseKeys.length) {
 		          exerciseKeys.push(pushKey);
+		          didInsertKey = true;
             }
             index = index + 1;
           }
@@ -208,24 +218,19 @@ class ExerciseTool extends Component {
 	getExercisesForConcept(concept) {
 		var componentRef = this;
 		var conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
-    var exerciseList = {};
     this.setState({
-			exercises: exerciseList,
-      currentConcept: concept
+			exercises: {},
+      selectedConcept: concept
     });
 		conceptRef.on("value", function(snapshot) {
 			var exerciseKeys = snapshot.val() ? snapshot.val() : [];
-			exerciseKeys.forEach((key) => {
-				var exerciseRef = firebase.database().ref("Exercises/" + key);
-				exerciseRef.on("value", function(snapshot) {
-					if (snapshot.val()) {
-						exerciseList[key] = snapshot.val();
-					}
-          componentRef.setState({
-            exercises: exerciseList
-          })
-				});
+			var exerciseList = {};
+			exerciseKeys.forEach((id) => {
+        exerciseList[id] = componentRef.state.allExercises[id];
 			});
+			componentRef.setState({
+				exercises: exerciseList
+			})
 		});
 	}
 
@@ -297,11 +302,25 @@ class ExerciseTool extends Component {
         }
       });
     });
-
-
 		var exerciseRef = firebase.database().ref("Exercises/" + exerciseID);
 		exerciseRef.set(null);
+	}
 
+	saveEditedExercise() {
+		try {
+			var updatedExercise = JSON.parse(this.state.editedExercise);
+			var exerciseRef = firebase.database().ref("Exercises/" + this.state.editID);
+			exerciseRef.set(updatedExercise);
+			this.setState({
+				editMode: false,
+				editID: "",
+				editedExercise: ""
+			});
+		} catch (e) {
+			this.setState({
+				editError: "Invalid JSON string. Error message: " + e.message
+			});
+		}
 	}
 
 	renderBuildExercise() {
@@ -406,12 +425,18 @@ class ExerciseTool extends Component {
 		);
 	}
 
-	renderViewExercise() {
+	renderViewExercises() {
 
-		var exerciseCardStyle = {
-			whiteSpace: "pre-wrap",
-			padding: "30px"
+		var editorStyles = {
+			width: "80%",
+			height: "200px",
+			marginTop: "60px"
 		}
+
+		var buttonContainerStyles = {
+      marginTop: "30px",
+			width: "50%",
+    }
 
 		return (
 			<div style={{marginTop: "6%"}}>
@@ -423,19 +448,45 @@ class ExerciseTool extends Component {
               return <option key={index} value={concept.name}>{concept.name}</option>
 					})}
         </NativeSelect>
-				{Object.keys(this.state.exercises).map((id) => {
+
+				{Object.keys(this.state.exercises).map((id, index) => {
+					var exerciseCardStyle = {
+						whiteSpace: "pre-wrap",
+						padding: "30px"
+					}
+					if (id == this.state.editID) {
+						exerciseCardStyle["borderColor"] = "#f1c232";
+						exerciseCardStyle["color"] = "#f1c232";
+					}
 					return (
 						<Card style={exerciseCardStyle} key={id}>
 							<CardContent>
-								<p>{JSON.stringify(this.state.exercises[id], null, 4)}</p>
+								<p style={{float: "right", fontWeight: "bold"}}>{index + 1}</p>
+								<p>{JSON.stringify(this.state.allExercises[id], null, 4)}</p>
 							</CardContent>
-							<CardActions>
-								<Button color={"primary"}>Edit</Button>
-								<Button color={"secondary"} onClick={() => this.handleDeleteExercise(id)}>Delete</Button>
-							</CardActions>
+							{!this.state.editMode &&
+								<CardActions>
+									<Button color={"primary"} onClick={() => this.setState({editMode: true, editID: id})}>Edit</Button>
+									<Button color={"secondary"} onClick={() => this.handleDeleteExercise(id)}>Delete</Button>
+								</CardActions>
+							}
 						</Card>
 					);
 				})}
+
+				{this.state.editMode &&
+					<div>
+						<textarea style={editorStyles} onChange={(e) => this.setState({editedExercise: e.target.value})} defaultValue={JSON.stringify(this.state.allExercises[this.state.editID], null, 2)}></textarea>
+						<div style={buttonContainerStyles}>
+							<Button style={{marginRight: "10px"}} variant={"contained"} color={"secondary"} onClick={() => this.setState({editMode: false, editID: "", editError: ""})}>Cancel</Button>
+							<Button variant={"contained"} color={"primary"} onClick={() => this.saveEditedExercise()}>Save</Button>
+						</div>
+						<br />
+            {this.state.editError &&
+            	<p className={"alert alert-danger"}>{this.state.editError}</p>
+            }
+					</div>
+				}
 			</div>
 		);
 	}
@@ -454,7 +505,7 @@ class ExerciseTool extends Component {
             <Tab label={"View Exercises"} />
           </Tabs>
 					{this.state.tabValue == 0 ?
-						this.renderBuildExercise() : this.renderViewExercise()
+						this.renderBuildExercise() : this.renderViewExercises()
 					}
 				</Paper>
 		);
