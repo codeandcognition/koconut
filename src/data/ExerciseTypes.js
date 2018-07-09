@@ -14,8 +14,7 @@ class ExerciseTypes {
   static isInlineResponseType = function(type: string): boolean {
     return type === this.writeCode ||
         type === this.fillBlank ||
-        type === this.highlightCode ||
-        type === this.memoryTable;
+        type === this.highlightCode;
   };
 
   /**
@@ -43,8 +42,8 @@ ExerciseTypes.fillBlank = 'fillBlank';
 ExerciseTypes.highlightCode = 'highlightCode';
 ExerciseTypes.multipleChoice = 'multipleChoice';
 ExerciseTypes.shortResponse = 'shortResponse';
-ExerciseTypes.memoryTable = 'memoryTable';
+ExerciseTypes.table = 'table';
 ExerciseTypes.selectMultiple = 'selectMultiple';
-ExerciseTypes.readTypes = ["highlightCode", "multipleChoice", "shortResponse"]; // Can probably define this based on the above, but it's fine for now
+ExerciseTypes.readTypes = ["highlightCode", "multipleChoice", "shortResponse", "memoryTable"]; // Can probably define this based on the above, but it's fine for now
 
 export default ExerciseTypes;

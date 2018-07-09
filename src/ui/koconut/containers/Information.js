@@ -33,11 +33,11 @@ class Information extends Component {
    * @returns JSX for the Code container
    */
   renderCodeView(question: any, index: number) {
-      if(Types.isSurvey(question.type) ||
+      if((Types.isSurvey(question.type) ||
           (question.type === Types.multipleChoice
           &&
               ((question.code && question.code === '') || (!question.code))
-          )
+          )) || question.type === Types.table
       ) {
         return '';
       } else {

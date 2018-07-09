@@ -16,7 +16,7 @@ type Props = {
 }
 
 /**
- * The TableView component renders a memory table exercise type
+ * The TableView component renders a table exercise type
  * @class
  */
 class TableView extends Component {
@@ -30,20 +30,45 @@ class TableView extends Component {
   }
 
   generateTableView() {
-    let colNames = this.props.questions[this.props.questionIndex].colNames;
+    if(!this.props.question) {
+      return "";
+    }
+    let colNames = this.props.question.colNames;
+    let allCells = this.props.question.data;
+    let augmentedCells = [];
+    allCells.forEach((d, i) => {
+      let arrayIndexToPushTo = Math.floor(i/colNames.length);
+      if(!augmentedCells[arrayIndexToPushTo]) {
+        augmentedCells[arrayIndexToPushTo] = [];
+      }
+      let subArrayIndex = i % colNames.length;
+      augmentedCells[arrayIndexToPushTo][subArrayIndex] = d;
+    });
+
 
     return (
       <Paper>
         <Table>
           <TableHead>
             <TableRow>
-              {colNames.map((d)=> {
-                return <TableCell>{d}</TableCell>
+              {colNames.map((d, i)=> {
+                return <TableCell key={"table-head" + i}>{d}</TableCell>
               })}
             </TableRow>
           </TableHead>
           <TableBody>
-            {/*WIP*/}
+            {augmentedCells.map((d, i) => {
+              return (
+                  <TableRow key={"row-" + i}>
+                  {
+                    d.map((e, j) => {
+                      return <TableCell key={"cell"+i+j}>
+                        {e.prompt}
+                      </TableCell>
+                    })
+                  }
+                </TableRow> );
+            })}
           </TableBody>
         </Table>
       </Paper>
@@ -53,8 +78,10 @@ class TableView extends Component {
   }
 
   render() {
+    console.log("aa");
     return (
         <div className='table-view'>
+          {this.generateTableView()}
           {/*return <TableView question={this.props.question} inputHandler={update} questionIndex={index}/>;*/}
 
           {/*<h3>Type your response here:</h3>*/}

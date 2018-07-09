@@ -59,7 +59,7 @@ class Response extends Component {
         return <ShortResponse inputHandler={update} questionIndex={index}/>;
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
-      case(Types.memoryTable):
+      case(Types.table):
         return <TableView question={this.props.question} inputHandler={update} questionIndex={index}/>;
       default:
         return <div className="BAD">Not a valid EXERCISE type {type}</div>;
