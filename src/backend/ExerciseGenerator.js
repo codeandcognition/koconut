@@ -39,8 +39,8 @@ class ExerciseGenerator {
     let results = [];
     if(exerciseList && conceptMapGetter) {
       conceptMapGetter[concept].map((exerciseId) => {
-        if ((exerciseType === "READ" && ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type)) ||
-            (exerciseType === "WRITE" && !ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type) )) {
+        if ((exerciseType === "READ" && exerciseList[exerciseId] && ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type)) ||
+            (exerciseType === "WRITE" && exerciseList[exerciseId] && !ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type) )) {
           results.push(exerciseList[exerciseId]);
         }
       })
