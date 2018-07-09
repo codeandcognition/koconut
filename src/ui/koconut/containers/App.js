@@ -227,7 +227,7 @@ class App extends Component {
    * @param {number} questionIndex index of question to check the answer of
    * @return {string[]}
    */
-  checkAnswer(answer: string[], questionIndex: number) {
+  checkAnswer(answer: any, questionIndex: number, questionType: string) {
     let question = this.state.exercise.questions[questionIndex];
     let feedbackTemp = this.state.feedback;
     if(question.answer === answer[questionIndex]) {
@@ -242,11 +242,11 @@ class App extends Component {
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
    */
-  submitResponse(answer: string[], questionIndex: number) {
+  submitResponse(answer: string[], questionIndex: number, questionType: string) {
     if (answer !== null && answer !== undefined) {
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer[questionIndex], () => {
         this.setState({
-          feedback: this.checkAnswer(answer, questionIndex),
+          feedback: this.checkAnswer(answer, questionIndex, questionType),
           nextConcepts: this.getConcepts(),
           display: this.state.exercise.type !== 'survey'
               ? displayType.exercise

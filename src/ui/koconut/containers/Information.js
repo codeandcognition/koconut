@@ -103,7 +103,7 @@ class Information extends Component {
                       {this.renderResponseView(question, index)}
                     </div>
                       {!(this.props.feedback[index]) &&
-                      <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index)} />
+                      <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />
                       }
                     </div>);
             })
