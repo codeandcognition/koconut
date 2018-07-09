@@ -18,9 +18,12 @@ import Feedback from '../components/Feedback';
 // Component imports
 import Hint from './Hint.js';
 
+import ReactMarkdown from 'react-markdown';
+
 // CSS for Code component
 import './Code.css';
 import ExerciseTypes from '../../../data/ExerciseTypes';
+import CodeBlock from './CodeBlock';
 
 // Ace Range datatype
 // const { Range } = ace.acequire('ace/range');
@@ -102,8 +105,11 @@ class Code extends Component {
    * Resets the cursor position to (0, 0)
    */
   resetCursor() {
-    this.refs.aceEditor.editor.moveCursorTo(0, 0);
-    this.refs.aceEditor.editor.clearSelection();
+    if(this.refs.aceEditor) {
+      this.refs.aceEditor.editor.moveCursorTo(0, 0);
+      this.refs.aceEditor.editor.clearSelection();
+
+    }
   }
 
   /**
@@ -214,6 +220,15 @@ class Code extends Component {
     />;
   }
 
+  renderMarkdown() {
+    let code = "```java\n" + this.state.code + "\n```";
+    return <ReactMarkdown className={"flex-grow-1"}
+                          source={code}
+                          renderers={{code: CodeBlock}}
+                          escapeHtml={true}
+    />
+  }
+
   render() {
   	// don't render the reset button for a highlightCode exercise
     let isWriteType = Types.isInlineResponseType(this.props.type);
@@ -236,7 +251,8 @@ class Code extends Component {
               <div ref="code"
                    className={'code ' + (isWriteType ? 'full' : 'half') +
                    ' ' + this.props.type}>
-                {this.renderAce()}
+                {isWriteType && this.renderAce()}
+                {!isWriteType && this.renderMarkdown()}
                 <div className="code-config">
                   <button onClick={this.handleHintRequest}>?</button>
                   {reset}
