@@ -37,7 +37,7 @@ class TableView extends Component {
    * @param row
    * @param col
    */
-  updateAnswer(choice, row, col) {
+  updateAnswer(choice: string, row: number, col: number) {
     console.log(choice, row, col);
     let tempAns = this.state.answer;
 
@@ -50,13 +50,17 @@ class TableView extends Component {
     this.setState({answer: tempAns});
   }
 
+  componentWillMount() {
+    this.setState({answer: this.props.answer});
+  }
+
   /**
    *
    * @param question individual table cell question
    * @param row row of question
    * @param col col of question
    */
-  generateCell(question, row, col) {
+  generateCell(question: any, row: number, col: number) {
     if(question.type === "") {
       return question.prompt;
     }
@@ -76,7 +80,15 @@ class TableView extends Component {
       </div>
     }
 
-    
+    if(question.type === "fillBlank") {
+      return <div>
+        <textarea onChange={(event) => {
+          this.updateAnswer(event.target.value, row, col);
+        }} value={this.state.answer[row] ? this.state.answer[row][col] : ''}>
+        </textarea>
+      </div>
+    }
+
 
   }
 
