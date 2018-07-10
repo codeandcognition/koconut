@@ -89,7 +89,6 @@ class Information extends Component {
       item === "correct" ? acc + 1 : acc
     , 0);
     let expectedCorrect = this.props.exercise.questions.length;
-    console.log(this.props.feedback);
     return (
         <div>
           {/* TODO replace learn yourself a good 1*/}

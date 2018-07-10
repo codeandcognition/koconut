@@ -44,6 +44,7 @@ class Response extends Component {
           feedback={this.props.feedback} // TODO:  modify this so that if correct, try again button dont appear
           questionIndex={this.props.questionIndex}
           submitTryAgain={() => this.props.submitTryAgain(index)} // TODO also modify submitOk functionality
+          type={this.props.question.type}
         />
     }
 
@@ -61,7 +62,6 @@ class Response extends Component {
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.table):
-        return <TableView question={this.props.question} inputHandler={update} questionIndex={index}/>;
       case(Types.checkboxQuestion):
         return <CheckboxQuestion choices={choices} prompt={"prompt" +
         " placeholder"} inputHandler={update} questionIndex={index} />
@@ -71,7 +71,7 @@ class Response extends Component {
   }
 
   render() {
-    let responseWidth = Types.isSurvey(this.props.type) ? 'full' : 'half';
+    let responseWidth = Types.isSurvey(this.props.type) || this.props.question.type === "table" ? 'full' : 'half';
     return (
         <div className={'response ' + responseWidth}>
           {this.renderResponse()}

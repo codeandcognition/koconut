@@ -14,15 +14,28 @@ import './Feedback.css';
 
 class Feedback extends Component {
   render() {
+    let gotCorrect = "correct";
+    if(this.props.type === "table") {
+      this.props.feedback.forEach((d) => {
+        d.forEach((e) => {
+          if(e === "incorrect") {
+            gotCorrect = "incorrect";
+          }
+        })
+      })
+    } else {
+      gotCorrect = this.props.feedback;
+    }
+
     return (
       <div className="feedback">
         <div className="feedback-correctness">
-          <p>Your answer was: {this.props.feedback}</p>
+          <p>Your answer was: {gotCorrect}</p>
         </div>
-        <VisualFeedback feedback={this.props.feedback}/>
+        <VisualFeedback feedback={gotCorrect}/>
         <div className="feedback-ok">
           <button onClick={this.props.submitOk}>OK</button>
-          {this.props.feedback === "incorrect" &&
+          {gotCorrect !== "correct" &&
             <button onClick={this.props.submitTryAgain}>Try Again</button>
           }
         </div>
