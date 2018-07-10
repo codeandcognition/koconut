@@ -235,23 +235,24 @@ class App extends Component {
     // mixed with regular problems
     let stub = ["a", "a", [ ["", "a", "a"], ["", "a", "a"]  ], "a"];
 
-    if(questionType === "table") {
+    if (questionType === "table") {
       let colNames = question.colNames;
       let allCells = question.data;
       let addToFeedback = [];
       allCells.forEach((d, i) => {
-        let arrayIndexToPushTo = Math.floor(i/colNames.length);
-        if(!addToFeedback[arrayIndexToPushTo]) {
+        let arrayIndexToPushTo = Math.floor(i / colNames.length);
+        if (!addToFeedback[arrayIndexToPushTo]) {
           addToFeedback[arrayIndexToPushTo] = [];
         }
         let subArrayIndex = i % colNames.length;
 
         let cellValue = null;
-        if(d.answer === "") {
+        if (d.answer === "") {
           cellValue = null;
           // sorry to whoever has to understand this later :(
           // it's for the greater good and expandability
-        } else if(d.answer === answer[questionIndex][arrayIndexToPushTo][subArrayIndex]) {
+        } else if (d.answer ===
+            answer[questionIndex][arrayIndexToPushTo][subArrayIndex]) {
           cellValue = "correct";
         } else {
           cellValue = "incorrect";
@@ -259,6 +260,19 @@ class App extends Component {
         addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
       });
       feedbackTemp[questionIndex] = addToFeedback;
+    } else if (questionType === "checkboxQuestion") { // Assumes question.answer and answer are both arrays
+      var correct = true;
+      var answerArr = answer[0];
+      if (question.answer.length === answerArr.length) {
+        question.answer.forEach((item) => {
+          if (!answerArr.includes(item)) {
+            correct = false
+          }
+        });
+      } else {
+        correct = false;
+      }
+      feedbackTemp[questionIndex] = correct ? "correct" : "incorrect";
     } else {
       if(question.answer === answer[questionIndex]) {
         feedbackTemp[questionIndex] = "correct";

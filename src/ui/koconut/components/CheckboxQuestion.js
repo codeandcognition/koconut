@@ -8,7 +8,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 class CheckboxQuestion extends Component {
   props: {
     choices: string[],
-    prompt: string
+    prompt: string,
+    inputHandler: Function
   }
 
   constructor(props) {
@@ -37,6 +38,8 @@ class CheckboxQuestion extends Component {
     this.setState({
       checkboxItems: choices,
       selectedItems: selected
+    }, () => {
+      this.props.inputHandler(this.state.selectedItems, this.props.questionIndex);
     });
   }
 

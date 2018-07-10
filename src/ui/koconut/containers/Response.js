@@ -63,7 +63,8 @@ class Response extends Component {
       case(Types.table):
         return <TableView question={this.props.question} inputHandler={update} questionIndex={index}/>;
       case(Types.checkboxQuestion):
-        return <CheckboxQuestion choices={["banana", "apple", "orange"]} prompt={"this is a prompt"} />
+        return <CheckboxQuestion choices={choices} prompt={"prompt" +
+        " placeholder"} inputHandler={update} questionIndex={index} />
       default:
         return <div className="BAD">Not a valid EXERCISE type {type}</div>;
     }
