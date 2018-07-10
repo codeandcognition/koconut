@@ -105,7 +105,7 @@ class ExerciseTool extends Component {
 	handleTableChange(field, value) {
 		let temp = this.state.currentTable;
 		temp[field] = value;
-		this.setState({currenTable: temp});
+		this.setState({currentTable: temp});
 	}
 
 	addColumnNameForm() {
@@ -126,7 +126,6 @@ class ExerciseTool extends Component {
 	// ordered by difficulty
   addExercise() {  // NOT TESTED
 		var pushKey = firebase.database().ref().child("Exercises").push().key;
-		console.log(pushKey);
 		var exerciseRef = firebase.database().ref("Exercises/" + pushKey);
 		exerciseRef.set(this.state.currentExercise);
 
@@ -145,8 +144,6 @@ class ExerciseTool extends Component {
                 var otherExercise = snapshot2.val();
                 var otherDifficulty = componentRef.getAverageDifficulty(
                     otherExercise, 0, 0, 0);
-                console.log(difficulty);
-                console.log(otherDifficulty);
                 if (otherDifficulty > difficulty) {
                   exerciseKeys.splice(i, 0, pushKey);
                 }
@@ -234,7 +231,7 @@ class ExerciseTool extends Component {
   }
 
 	renderQuestionCard() {
-		return <Question addQuestion={this.addQuestion} isFollowup={this.state.isFollowup}/>
+		return <Question addQuestion={this.addQuestion} isFollowup={this.state.isFollowup} insideTable={false}/>
 	}
 
 	/**
@@ -244,11 +241,19 @@ class ExerciseTool extends Component {
 	 * @returns {*}
 	 */
 	renderFollowupPrompt() {
+		let style = {
+			margin: '5px'
+		};
+
 		return (
 				<div>
-					<Button color={'secondary'}
+					<Button style={style}
+									variant={'outlined'}
+									color={'secondary'}
 									onClick={() => this.setState({isFollowup: true})}>Follow-up Question</Button>
-					<Button color={"primary"}
+					<Button style={style}
+									variant={'outlined'}
+									color={"primary"}
 									onClick={() => this.setState({isFollowup: false})}>New Question</Button>
 				</div>
 		);
@@ -382,19 +387,11 @@ class ExerciseTool extends Component {
           <p>An exercise can have multiple parts, use the following form to add one question at a time!</p>
 
 					{this.renderQuestionCard()}
-					<br />
-          <div style={formSectionStyle}>
-            <p><b>Preview</b></p>
-            <div style={code}>
-              {
-                JSON.stringify({
-                  exercise: this.state.currentExercise,
-                  answer: this.state.currentAnswer,
-                }, null, 2)
-              }
-            </div>
-            <Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
-          </div>
+					<br/>
+					{this.renderExercisePreview()}
+					{this.renderFollowupPrompt()}
+					<br/>
+					<Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
 				</div>
 		);
 	}

@@ -14,6 +14,9 @@ import Table from './Table';
 class Question extends Component {
 	constructor(props) {
 		super(props);
+
+		this.renderStandAloneQuestion = this.renderStandAloneQuestion.bind(this);
+
 		this.state = {
 			currentQuestion: {
 				prompt: "",
@@ -91,7 +94,7 @@ class Question extends Component {
 					<FormControl>
 						<RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
 							<FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
-							<FormControlLabel value={"table"} control={<Radio color={"primary"}/>} label={"Format as a table"}/>
+							<FormControlLabel value={"table"} control={<Radio color={"primary"}/>} disabled={this.props.insideTable} label={"Format as a table"}/>
 						</RadioGroup>
 					</FormControl>
 				</div>
@@ -342,7 +345,7 @@ class Question extends Component {
 		if (this.state.currentQuestionFormat === 'standAlone') {
 			return this.renderStandAloneQuestion();
 		}
-		return <Table/>;
+		return <Table renderStandAloneQuestion={this.renderStandAloneQuestion} addQuestion={this.props.addQuestion}/>;
 	}
 
 	/**
