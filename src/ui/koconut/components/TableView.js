@@ -1,6 +1,6 @@
 // @flow
 import React, {Component} from 'react';
-// import './TableView.css'; // TODO: Create this
+import './TableView.css'; // TODO: Create this
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -21,12 +21,33 @@ type Props = {
  */
 class TableView extends Component {
   state: {
+    answer: any
   };
 
   constructor(props: Props) {
     super(props);
     this.state = {
+      answer: []
     };
+  }
+
+  /**
+   *
+   * @param choice
+   * @param row
+   * @param col
+   */
+  updateAnswer(choice, row, col) {
+    console.log(choice, row, col);
+    let tempAns = this.state.answer;
+
+    if(!tempAns[row]) {
+      tempAns[row] = [];
+    }
+
+    tempAns[row][col] = choice;
+    this.props.inputHandler(tempAns, this.props.questionIndex);
+    this.setState({answer: tempAns});
   }
 
   /**
@@ -39,6 +60,24 @@ class TableView extends Component {
     if(question.type === "") {
       return question.prompt;
     }
+
+    if(question.type === "multipleChoice") {
+      let selected = this.state.answer[row] ? this.state.answer[row][col] : null;
+      return <div>
+        {
+          question.choices.map((d,i) => {
+            return <span key={`choice${i}-${row}-${col}`}>
+              <span onClick={() => this.updateAnswer(d, row, col)}
+                  className={"custmc choice " + (selected == d?"answer":"" )}
+              >{d}</span>
+            </span>
+          })
+        }
+      </div>
+    }
+
+    
+
   }
 
   generateTableView() {
@@ -56,9 +95,6 @@ class TableView extends Component {
       let subArrayIndex = i % colNames.length;
       augmentedCells[arrayIndexToPushTo][subArrayIndex] = d;
     });
-
-
-
 
     return (
       <Paper>
