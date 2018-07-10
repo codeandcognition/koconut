@@ -41,6 +41,7 @@ ExerciseTypes.writeCode = 'writeCode';
 ExerciseTypes.fillBlank = 'fillBlank';
 ExerciseTypes.highlightCode = 'highlightCode';
 ExerciseTypes.multipleChoice = 'multipleChoice';
+ExerciseTypes.checkboxQuestion = 'checkboxQuestion';
 ExerciseTypes.shortResponse = 'shortResponse';
 ExerciseTypes.table = 'table';
 ExerciseTypes.selectMultiple = 'selectMultiple';
