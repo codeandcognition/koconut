@@ -230,11 +230,43 @@ class App extends Component {
   checkAnswer(answer: any, questionIndex: number, questionType: string) {
     let question = this.state.exercise.questions[questionIndex];
     let feedbackTemp = this.state.feedback;
-    if(question.answer === answer[questionIndex]) {
-      feedbackTemp[questionIndex] = "correct";
+
+    // basically the answer will come in looking like this for a table type problem
+    // mixed with regular problems
+    let stub = ["a", "a", [ ["", "a", "a"], ["", "a", "a"]  ], "a"];
+
+    if(questionType === "table") {
+      let colNames = question.colNames;
+      let allCells = question.data;
+      let addToFeedback = [];
+      allCells.forEach((d, i) => {
+        let arrayIndexToPushTo = Math.floor(i/colNames.length);
+        if(!addToFeedback[arrayIndexToPushTo]) {
+          addToFeedback[arrayIndexToPushTo] = [];
+        }
+        let subArrayIndex = i % colNames.length;
+
+        let cellValue = null;
+        if(d.answer === "") {
+          cellValue = null;
+          // sorry to whoever has to understand this later :(
+          // it's for the greater good and expandability
+        } else if(d.answer === answer[questionIndex][arrayIndexToPushTo][subArrayIndex]) {
+          cellValue = "correct";
+        } else {
+          cellValue = "incorrect";
+        }
+        addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
+      });
+      feedbackTemp[questionIndex] = addToFeedback;
     } else {
-      feedbackTemp[questionIndex] = "incorrect";
+      if(question.answer === answer[questionIndex]) {
+        feedbackTemp[questionIndex] = "correct";
+      } else {
+        feedbackTemp[questionIndex] = "incorrect";
+      }
     }
+
     return feedbackTemp;
   }
 
@@ -244,9 +276,10 @@ class App extends Component {
    */
   submitResponse(answer: any, questionIndex: number, questionType: string) {
     if (answer !== null && answer !== undefined) {
+      let feedback = this.checkAnswer(answer, questionIndex, questionType)
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer[questionIndex], () => {
         this.setState({
-          feedback: this.checkAnswer(answer, questionIndex, questionType),
+          feedback: feedback,
           nextConcepts: this.getConcepts(),
           display: this.state.exercise.type !== 'survey'
               ? displayType.exercise
@@ -254,7 +287,7 @@ class App extends Component {
                   ? displayType.concept
                   : displayType.exercise),
         });
-      }, questionIndex);
+      }, questionIndex, questionType, feedback);
     }
   }
 

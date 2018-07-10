@@ -15,7 +15,7 @@ import type {Exercise} from '../../../data/Exercises';
 class Information extends Component {
   props: {
     exercise: Exercise,
-    answer: ?string[],  // Maybe type - can be null/void
+    answer: any,  // Maybe type - can be null/void
     updateHandler: Function,
     feedback: string[],
     submitOk: Function,
