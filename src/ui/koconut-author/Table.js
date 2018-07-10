@@ -167,7 +167,7 @@ class Table extends Component {
 									// index to map from 2d table to 1d table since a table is
 									// represented as an array
 									const index = (rows * rowNum) + colNum;
-									row.push(<Cell key={colNum} index={index} addToTable={this.addToTable} />);
+									row.push(<Cell key={colNum} index={index} addToTable={this.addToTable} data={this.state.currentTable.data[index]}/>);
 								});
 								return(
 										<div key={rowNum} style={{display: 'flex', justifyContent: 'center'}}>

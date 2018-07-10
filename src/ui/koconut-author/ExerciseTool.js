@@ -13,23 +13,18 @@
 */
 
 import React, {Component} from 'react';
-import conceptInventory from './ConceptMap';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import Button from '@material-ui/core/Button/Button';
 import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Question from './Question';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
 import firebase from "firebase";
 
 
@@ -120,29 +115,32 @@ class ExerciseTool extends Component {
 		}
 	}
 
+	/**
+	 * TODO: Determine if this is being used anywhere
+	 *
+	 * @param field
+	 * @param value
+	 */
 	handleTableChange(field, value) {
 		let temp = this.state.currentTable;
 		temp[field] = value;
 		this.setState({currentTable: temp});
 	}
 
-	addColumnNameForm() {
-		return(
-				<div>
-					<TextField fullWidth={true}/>
-					<Button variant={'outlined'}
-									color={'secondary'}>Add column name</Button>
-				</div>
-		);
-	}
-
+	/**
+	 * Renders the list of all concepts in the dropdown menu
+	 *
+	 * @returns {T[]}
+	 */
   getConcepts(): ConceptKnowledge[] {
     return MasteryModel.model.filter((concept) => concept.teach && !concept.container);
   }
 
-  // Adds current exercises to the database in Exercises branch and ConceptExerciseMap branch
-	// ordered by difficulty
-  addExercise() {  // NOT TESTED
+	/**
+	 * Adds current exercises to the database in Exercises branch and
+	 * ConceptExerciseMap branch ordered by difficulty
+	 */
+  addExercise() {
 		var pushKey = firebase.database().ref().child("Exercises").push().key;
 		var exerciseRef = firebase.database().ref("Exercises/" + pushKey);
 		exerciseRef.set(this.state.currentExercise);
@@ -173,12 +171,21 @@ class ExerciseTool extends Component {
         }
       });
     });
+		window.alert('Exercise has been added to Firebase!');
+		this.resetExerciseUI();
 	}
 
-
-  // Helper function: returns the average difficulty of given exercise based on
-  // the difficulties of each of its questions
-  getAverageDifficulty(exercise, questionIndex, total, count) { // NOT TESTED
+	/**
+	 * Helper function: returns the average difficulty of given exercise based
+	 * on the difficulties of each of its questions
+	 *
+	 * @param exercise
+	 * @param questionIndex
+	 * @param total
+	 * @param count
+	 * @returns {*}
+	 */
+  getAverageDifficulty(exercise, questionIndex, total, count) {
     if (!exercise) {
       return 0;
     } else if (exercise.questions[questionIndex]) {
@@ -204,17 +211,12 @@ class ExerciseTool extends Component {
 		});
 	}
 
-	// Adds current table data stored in state to the current exercise stored in state
-	addTableData() {
-	  var exercise = this.state.currentExercise;
-	  exercise.tables.push(this.state.currentTableData);
-	  this.setState({
-      currentExercise: exercise
-    });
-  }
-
-	// Retrieves all exercises from the database that are associated with the given concept
-  // and sets state "exercises" to that list
+	/**
+	 * Retrieves all exercises from the database that are associated with the given concept
+	 * and sets state "exercises" to that list
+	 *
+	 * @param concept
+	 */
 	getExercisesForConcept(concept) {
 		var componentRef = this;
 		var conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
@@ -234,16 +236,24 @@ class ExerciseTool extends Component {
 		});
 	}
 
-
-	// Toggles between Build Exercise and View Exercises Tab
+	/**
+	 * Toggles between Build Exercise and View Exercises Tab
+	 *
+	 * @param value
+	 */
 	handleTabChange(value) {
     this.setState({
       tabValue: value
     })
   }
 
+	/**
+	 * Renders a single question card
+	 *
+	 * @returns {*}
+	 */
 	renderQuestionCard() {
-		return <Question addQuestion={this.addQuestion} isFollowup={this.state.isFollowup} insideTable={false}/>
+		return <Question addQuestion={this.addQuestion} isFollowup={this.state.isFollowup} insideTable={false} data={undefined}/>
 	}
 
 	/**
@@ -272,6 +282,7 @@ class ExerciseTool extends Component {
 	}
 
 	/**
+	 * Renders the current exercise preview
 	 *
 	 * @returns {*}
 	 */
@@ -286,7 +297,7 @@ class ExerciseTool extends Component {
 		};
 		return (
 				<div>
-					<p>Preview</p>
+					<p style={{color: '#3F51B5'}}>Preview</p>
 					<div style={code}>
 						{
 							JSON.stringify(this.state.currentExercise, null, 2)
@@ -340,7 +351,8 @@ class ExerciseTool extends Component {
       whiteSpace: 'pre-wrap',
       textAlign: 'left',
       width: '100%',
-      margin: '10px auto'
+			height: '10em',
+			display: 'block'
     };
 
     let fieldReqs = {
@@ -355,27 +367,31 @@ class ExerciseTool extends Component {
     }
 
     let formSectionStyle = {
-    	marginBottom: "60px"
+    	marginBottom: "30px"
+		}
+
+		let sectionHeading = {
+    	color: '#3F51B5'
 		}
 
 		return (
 				<div style={{marginTop: "50px"}}>
           <div style={formSectionStyle}>
             <p>Exercise: {" " + this.state.currentExercise.prompt} </p>
-            <p className={"text-primary"}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
+            <p style={sectionHeading}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
             <TextField style={{display: 'block'}} fullWidth={true}
                        value={this.state.currentExercise.prompt}
                        onChange={this.handleExerciseChange('prompt')}/>
           </div>
 
           <div style={formSectionStyle}>
-            <p className={"text-primary"}>Overarching Code <span style={fieldReqs.optional}>optional</span></p>
-            <textarea style={{display: 'block', width: '100%', height: '10em'}}
+            <p style={sectionHeading}>Overarching Code <span style={fieldReqs.optional}>optional</span></p>
+            <textarea style={code}
                       onChange={this.handleExerciseChange('code')} />
           </div>
 
 					<div style={formSectionStyle}>
-						<p>Tag concepts for this exercise <span style={fieldReqs.required}>required</span></p>
+						<p style={sectionHeading}>Tag concepts for this exercise <span style={fieldReqs.required}>required</span></p>
 						<FormControl style={{display: "flex", flexDirection: "row", justifyContent: "center", marginBottom: "30px"}}>
 							<NativeSelect onChange={(evt) => {
 											evt.preventDefault();
@@ -406,7 +422,7 @@ class ExerciseTool extends Component {
                 this.state.currentExercise.concepts.map((concept, key) => {
                   return <Button
                       key={key}
-                      style={{backgroundColor: '#ffecb3'}}
+                      style={{backgroundColor: '#ffecb3', margin: '3px'}}
                       onClick={() => {
                         let index = this.state.currentExercise.concepts.indexOf(concept);
                         let conceptsCopy = [...this.state.currentExercise.concepts];
@@ -428,6 +444,40 @@ class ExerciseTool extends Component {
 					<Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
 				</div>
 		);
+	}
+
+	/**
+	 * Clear the UI once the exercise has been added
+	 */
+	resetExerciseUI() {
+		// resets the state
+		this.setState({
+			currentExercise: {
+				prompt: "",
+				code: "",
+				labels: {},
+				questions: [],
+				concepts: []
+			},
+			conceptList: [],
+			isFollowup: false,
+			currentChoice: '',
+			currentTable: {
+				colNames: [],
+				rows: 0,
+				data: {}
+			},
+			columnNames: [],
+			tabValue: 0,
+			exercises: {},
+			tabValue: 0,
+			allExercises: {},
+			editMode: false,
+			editID: "",
+			editedExercise: "",
+			editError: "",
+			selectedConcept: ""
+		});
 	}
 
 	renderViewExercises() {
@@ -505,7 +555,10 @@ class ExerciseTool extends Component {
 	render() {
 		return (
 				<Paper style={{padding: "60px"}} className={"container"}>
-          <Tabs indicatorColor={"primary"} value={this.state.tabValue} onChange={(e, value) => this.handleTabChange(value)}>
+          <Tabs fullWidth centered
+								indicatorColor={"primary"}
+								value={this.state.tabValue}
+								onChange={(e, value) => this.handleTabChange(value)}>
             <Tab label={"Build Exercise"} />
             <Tab label={"View Exercises"} />
           </Tabs>

@@ -17,24 +17,30 @@ class Question extends Component {
 
 		this.renderStandAloneQuestion = this.renderStandAloneQuestion.bind(this);
 
+		let question = {
+			prompt: "",
+			code: "",
+			difficulty: 0,
+			choices: [],
+			type: "",
+			answer: "",
+			hint: "",
+			feedback: "",
+			followupPrompt: "",
+			followupQuestions: []
+		};
+
+		// if the question has been added before, use the data prop
+		if (this.props.insideTable && this.props.data !== undefined) {
+			question = this.props.data;
+		}
+
 		this.state = {
-			currentQuestion: {
-				prompt: "",
-				code: "",
-				index: 0,
-				difficulty: -1,
-				choices: [],
-				type: "",
-				answer: "",
-				hint: "",
-				feedback: "",
-				followupPrompt: "",
-				followupQuestions: []
-			},
+			currentQuestion: question,
 			currentChoice: '',
 			currentAnswer: '',
 			currentQuestionFormat: 'standAlone'
-		}
+		};
 	}
 
 	QuestionTypes = {
@@ -64,33 +70,10 @@ class Question extends Component {
 		}
 	}
 
-
-	componentWillReceiveProps(nextProps) {
-		let question = {
-					prompt: "",
-					code: "",
-					index: 0,
-					difficulty: 0,
-					choices: [],
-					type: "",
-					answer: "",
-					hint: "",
-					feedback: "",
-					followupPrompt: "",
-					followupQuestions: []
-				};
-		this.setState({
-			currentQuestion: question,
-			currentChoice: '',
-			currentAnswer: '',
-			currentQuestionFormat: 'standAlone'
-		});
-	}
-
 	renderFormatForm() {
 		return(
 				<div>
-					<p>How do you want to format the question? <span style={this.fieldReqs.required}>required</span></p>
+					<p style={{color: '#3F51B5'}}>How do you want to format the question? <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
 						<RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
 							<FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
@@ -109,7 +92,7 @@ class Question extends Component {
 	renderPromptField() {
 		return (
 				<div>
-					<p>Question Prompt <span style={this.fieldReqs.optional}>optional</span></p>
+					<p style={{color: '#3F51B5'}}>Question Prompt <span style={this.fieldReqs.optional}>optional</span></p>
 					<TextField fullWidth={true} value={this.state.currentQuestion.prompt} onChange={this.handleChange('prompt')}/>
 				</div>
 		);
@@ -122,7 +105,7 @@ class Question extends Component {
 	renderCodeField() {
 		return(
 				<div>
-					<p>Code <span style={this.fieldReqs.optional}>optional</span></p>
+					<p style={{color: '#3F51B5'}}>Code <span style={this.fieldReqs.optional}>optional</span></p>
 					<textarea style={{display: 'block', width: '100%', height: '10em'}}
 										value={this.state.currentQuestion.code}
 										onChange={this.handleChange('code')} />
@@ -133,7 +116,7 @@ class Question extends Component {
 	renderDifficultyField() {
 		return(
 				<div>
-					<p>Difficulty level <span style={this.fieldReqs.required}>required</span></p>
+					<p style={{color: '#3F51B5'}}>Difficulty level <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
 						<NativeSelect value={this.state.currentQuestion.difficulty} onChange={this.handleChange('difficulty')}>
 							{
@@ -156,7 +139,7 @@ class Question extends Component {
 	renderQuestionTypeDropdown() {
 		return(
 				<div>
-					<p className={"text-primary"}>Question Type <span style={this.fieldReqs.required}>required</span></p>
+					<p style={{color: '#3F51B5'}}>Question Type <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl style={{display: 'block'}}
 											 fullWidth={true}>
 						<NativeSelect name={"Question Type"}
@@ -186,12 +169,13 @@ class Question extends Component {
 	renderChoicesInputForm() {
 		return(
 				<div>
-					<label className={"text-primary"}>Choices</label>
+					<p style={{color: '#3F51B5'}}>Choices</p>
 					<TextField fullWidth={true}
 										 style={{display: 'block'}}
 										 onChange={(evt) => this.setState({currentChoice: evt.target.value})}
 										 value={this.state.currentChoice}/>
-					<Button variant={'outlined'}
+					<Button style={{margin: '15px'}}
+									variant={'outlined'}
 									color={'secondary'}
 									onClick={(evt) => {
 										if (this.state.currentChoice === '') return;
@@ -218,7 +202,7 @@ class Question extends Component {
 						this.state.currentQuestion.choices.map((choice, key) => {
 							return <Button key={key}
 														 variant={'flat'}
-														 style={{backgroundColor: '#ffecb3'}}
+														 style={{backgroundColor: '#ffecb3', margin: '3px'}}
 														 onClick={(evt) => {
 															 let index = this.state.currentQuestion.choices.indexOf(evt.target.innerText);
 															 let choicesCopy = [...this.state.currentQuestion.choices];
@@ -240,7 +224,7 @@ class Question extends Component {
 		if (this.state.currentQuestion.type === this.QuestionTypes.multipleChoice) {
 			return(
 					<div>
-						<p>Answer <span style={this.fieldReqs.required}>required</span></p>
+						<p style={{color: '#3F51B5'}}>Answer <span style={this.fieldReqs.required}>required</span></p>
 						<NativeSelect onChange={this.handleChange('answer')}>
 							<option>Select the answer</option>
 							{
@@ -256,15 +240,15 @@ class Question extends Component {
 			// TODO: Implmenent a usable table UI
 			return (
 					<div>
-						<p>Type in a JSON dictionary</p>
-						<textarea></textarea>
+						<p style={{color: '#3F51B5'}}>Type in a JSON dictionary</p>
+						<textarea style={{width: '100%', height: '10em', fontFamily: 'monospace'}}></textarea>
 					</div>
 			);
 		} else {
 			// returns a text field for answer
 			return (
 					<div>
-						<p>Answer <span style={this.fieldReqs.required}>required</span></p>
+						<p style={{color: '#3F51B5'}}>Answer <span style={this.fieldReqs.required}>required</span></p>
 						<TextField fullWidth={true}
 											 value={this.state.currentQuestion.answer}
 											 onChange={this.handleChange('answer')} />
@@ -280,7 +264,7 @@ class Question extends Component {
 	renderHintField() {
 		return (
 				<div>
-					<p>Hint <span style={this.fieldReqs.required}>required</span></p>
+					<p style={{color: '#3F51B5'}}>Hint <span style={this.fieldReqs.required}>required</span></p>
 					<TextField fullWidth={true} value={this.state.currentQuestion.hint} onChange={this.handleChange('hint')}/>
 				</div>
 		);
@@ -289,7 +273,7 @@ class Question extends Component {
 	renderFeedbackField() {
 		return(
 				<div>
-					<p>Feedback <span style={this.fieldReqs.required}>required</span></p>
+					<p style={{color: '#3F51B5'}}>Feedback <span style={this.fieldReqs.required}>required</span></p>
 					<TextField fullWidth={true} value={this.state.currentQuestion.feedback} onChange={this.handleChange('feedback')}/>
 				</div>
 		);

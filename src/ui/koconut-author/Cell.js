@@ -24,7 +24,9 @@ class Cell extends Component {
 			cell: {
 				prompt: '',
 				code: '',
-				questions: [],
+				difficulty: 0,
+				choices: [],
+				type: "",
 				answer: '',
 				hint: '',
 				feedback: '',
@@ -46,13 +48,30 @@ class Cell extends Component {
 	}
 
 	/**
+	 * Sets the state based on the props
+	 *
+	 * @param nextProps
+	 */
+	componentWillReceiveProps(nextProps) {
+		let data = nextProps.data;
+		if (data !== undefined) {
+			let cellFormat = data.answer === '' ? 'prompt' : 'question';
+			let cellInstType = data.prompt === '' ? 'code' : 'prompt';
+			this.setState({
+				currentCellFormat: cellFormat,
+				currentInstType: cellInstType,
+				cell: data
+			});
+		}
+	}
+
+	/**
 	 * Renders the pop over dialog when a cell is clicked
 	 */
 	renderPopOver() {
 		let styles = {
 			margin: '5px'
 		};
-
 		return (
 				<Dialog open={this.state.open}>
 					<DialogTitle>Placeholder</DialogTitle>
@@ -60,7 +79,7 @@ class Cell extends Component {
 						{/* render different UI if the cell content is informational */}
 						{this.renderCellFormatPrompt()}
 						{this.state.currentCellFormat === 'prompt' && this.renderInstructionTypeForm()}
-						{this.state.currentCellFormat === 'question' && <Question addQuestion={this.addQuestionCell} isFollowup={false} insideTable={true}/>}
+						{this.state.currentCellFormat === 'question' && <Question addQuestion={this.addQuestionCell} isFollowup={false} insideTable={true} data={this.state.cell}/>}
 						<br/>
 						<div style={{display: 'flex', justifyContent: 'flex-end'}}>
 							{
@@ -121,7 +140,7 @@ class Cell extends Component {
 		return (
 				<div>
 					<p>Prompt <span style={this.fieldReqs.required}>required</span></p>
-					<TextField fullWidth={true} onChange={this.handleChange('prompt')}/>
+					<TextField fullWidth={true} value={this.state.cell.prompt} onChange={this.handleChange('prompt')}/>
 				</div>
 		);
 	}
@@ -196,13 +215,15 @@ class Cell extends Component {
 	render() {
 		let styles = {
 			pointer: 'cursor',
-			backgroundColor: '#B2DFDB',
 			border: 'solid',
 			borderColor: '#00BCD4',
 			padding: '25px',
 			margin: '5px',
 			display: 'inline-block'
 		};
+
+		// indicates whether or not the cell has been filled in
+		styles["backgroundColor"] = this.props.data === undefined ? '#B2DFDB' : '#FFF59D';
 
 		return(
 				<div>
