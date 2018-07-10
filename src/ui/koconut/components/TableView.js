@@ -29,6 +29,18 @@ class TableView extends Component {
     };
   }
 
+  /**
+   *
+   * @param question individual table cell question
+   * @param row row of question
+   * @param col col of question
+   */
+  generateCell(question, row, col) {
+    if(question.type === "") {
+      return question.prompt;
+    }
+  }
+
   generateTableView() {
     if(!this.props.question) {
       return "";
@@ -44,6 +56,8 @@ class TableView extends Component {
       let subArrayIndex = i % colNames.length;
       augmentedCells[arrayIndexToPushTo][subArrayIndex] = d;
     });
+
+
 
 
     return (
@@ -63,7 +77,7 @@ class TableView extends Component {
                   {
                     d.map((e, j) => {
                       return <TableCell key={"cell"+i+j}>
-                        {e.prompt}
+                        {this.generateCell(e,i,j)}
                       </TableCell>
                     })
                   }

@@ -90,8 +90,11 @@ class ResponseEvaluator {
    * @param answer
    * @param next - callback to be executed after evaluation
    * @param questionIndex - index of question being evaluated
+   * @param questionType - OPTIONAL, for special new types (table and selectMultiple)
+   * @param feedback - OPTIONAL, for special new types (table and selectMultiple)
    */
-  static evaluateAnswer(exercise: Exercise, answer: string, next: Function, questionIndex: number) {
+  static evaluateAnswer(exercise: Exercise, answer: string, next: Function, questionIndex: number,
+                        questionType, feedback) {
     // no one can escape asyncronous programming!!!!
     // >:D
 
@@ -139,7 +142,19 @@ class ResponseEvaluator {
         addResponseAndUpdate(false, exercise); // TODO: remove hardcode
       });
     } else {
-      addResponseAndUpdate(answer === exercise.questions[questionIndex].answer, exercise);
+      let gotCorrect = true;
+      if(questionType === "table") {
+        feedback.forEach((d) => {
+          d.forEach((e) => {
+            if(e === "incorrect") {
+              gotCorrect = false;
+            }
+          })
+        })
+      } else {
+        answer === exercise.questions[questionIndex].answer;
+      }
+      addResponseAndUpdate(gotCorrect, exercise);
     }
   }
 
