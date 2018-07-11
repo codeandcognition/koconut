@@ -72,8 +72,16 @@ class Cell extends Component {
 		let styles = {
 			margin: '5px'
 		};
+
+		let popOverStyles = {};
+
+		if (this.state.currentCellFormat === 'question') {
+			popOverStyles["overflowY"] = "scroll";
+			popOverStyles["paddingTop"] = "60%";
+		}
+
 		return (
-				<Dialog open={this.state.open}>
+				<Dialog style={popOverStyles} open={this.state.open}>
 					<DialogTitle>Placeholder</DialogTitle>
 					<DialogContent>
 						{/* render different UI if the cell content is informational */}
