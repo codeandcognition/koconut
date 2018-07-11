@@ -50,7 +50,8 @@ class Question extends Component {
 		highlightCode: 'highlightCode',
 		multipleChoice: 'multipleChoice',
 		shortResponse: 'shortResponse',
-		memoryTable: 'memoryTable'
+		memoryTable: 'memoryTable',
+		checkboxQuestion: 'checkQuestion'
 	};
 
 	Difficulty = {
@@ -281,6 +282,30 @@ class Question extends Component {
 		}
 	}
 
+	renderCheckboxAnswer() {
+		return(
+				<div>
+					<p>Enter all the possible answers<span>required</span></p>
+					<TextField fullWidth={true}
+										 style={{display: 'block'}}
+										 onChange={(evt) => this.setState({currentAnswer: evt.target.value})}
+										 value={this.state.currentChoice}/>
+					<Button style={{margin: '15px'}}
+									variant={'outlined'}
+									color={'secondary'}
+									onClick={() => {
+										if (this.state.currentChoice === '') return;
+										let choicesCopy = [...this.state.currentQuestion.choices];
+										choicesCopy.push(this.state.currentChoice);
+										this.updateQuestion('choices', choicesCopy);
+										this.setState({currentChoice: ''});
+									}}>
+						Add choice
+					</Button>
+				</div>
+		);
+	}
+
 	/**
 	 * Renders the hint input field
 	 * @returns {*}
@@ -318,9 +343,7 @@ class Question extends Component {
 			border: 'solid',
 			borderColor: '#9FA8DA'
 		};
-
 		let card = this.props.isFollowup ? followup : {};
-
 		return(
 				<Card style={card}>
 					<CardActions>

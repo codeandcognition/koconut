@@ -5,6 +5,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Question from './Question';
 import Cell from './Cell';
 
 class Table extends Component {
@@ -198,7 +199,7 @@ class Table extends Component {
 	render() {
 		return(
 				<div>
-					{this.state.currentQuestionFormat === 'table' ? this.renderTableQuestion() : this.props.renderStandAloneQuestion()}
+					{this.state.currentQuestionFormat === 'table' ? this.renderTableQuestion() : <Question addQuestion={this.props.addQuestion} isFollowup={false} data={undefined}/>}
 				</div>
 		);
 	}
