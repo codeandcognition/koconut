@@ -70,6 +70,29 @@ class Question extends Component {
 		}
 	};
 
+
+	componentWillReceiveProps() {
+		let question = {
+			prompt: "",
+			code: "",
+			difficulty: -1,
+			choices: [],
+			type: "",
+			answer: "",
+			hint: "",
+			feedback: "",
+			followupPrompt: "",
+			followupQuestions: []
+		};
+
+		this.setState({
+			currentQuestion: question,
+			currentChoice: '',
+			currentAnswer: '',
+			currentQuestionFormat: 'standAlone'
+		});
+	}
+
 	renderFormatForm() {
 		return(
 				<div>
