@@ -21,11 +21,13 @@ class CheckboxQuestion extends Component {
     }
   }
 
-  // TESTING
-  componentWillReceiveProps() {
-    this.forceUpdate();
-  }
-
+  /**
+   *
+   * @param e
+   * @param choice
+   *
+   * Allows for toggling of checkboxes
+   */
   handleChange(e, choice) {
     var choices = this.state.checkboxItems;
     choices[choice] = e.target.checked;
@@ -47,12 +49,11 @@ class CheckboxQuestion extends Component {
     var formGroupLabelStyles = {
       margin: "0"
     }
-
     return(
       <FormControl component={"fieldset"}>
         <FormLabel component={"legend"}>{this.props.prompt}</FormLabel>
         <FormGroup>
-          {this.props.choices.map((item, index) => {
+          {this.props.choices && this.props.choices.map((item, index) => {
             return (
                 <FormControlLabel style={formGroupLabelStyles} key={index} control={
                   <Checkbox
