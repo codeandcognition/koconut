@@ -85,10 +85,25 @@ class Information extends Component {
   }
 
   render() {
-    let correctCount = this.props.feedback.reduce((acc, item) =>
-      item === "correct" ? acc + 1 : acc
+    // todo count correct correctly
+    console.log(this.props.feedback);
+    let correctCount = this.props.feedback.reduce((acc, item, index) => {
+          if (this.props.exercise.questions[index].type === "checkboxQuestion" ||
+              this.props.exercise.questions[index].type === "table") {
+            return item && item.toString().indexOf("incorrect") === -1 &&
+            item.toString().indexOf("correct") !== -1 ? acc + 1 : acc;
+          } else {
+            return item === "correct" ? acc + 1 : acc
+          }
+        }
     , 0);
     let expectedCorrect = this.props.exercise.questions.length;
+
+
+    let allCorrect = false;
+    if (this.props.feedback && this.props.feedback.toString().indexOf("incorrect") === -1) {
+      allCorrect = true;
+    }
     return (
         <div>
           {/* TODO replace learn yourself a good 1*/}

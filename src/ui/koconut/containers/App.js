@@ -245,13 +245,13 @@ class App extends Component {
           addToFeedback[arrayIndexToPushTo] = [];
         }
         let subArrayIndex = i % colNames.length;
-
+        //console.log(d.answer, answer[questionIndex][arrayIndexToPushTo][subArrayIndex]);
         let cellValue = null;
         if (d.answer === "") {
           cellValue = null;
           // sorry to whoever has to understand this later :(
           // it's for the greater good and expandability
-        } else if (d.answer ===
+        } else if (answer[questionIndex] && answer[questionIndex][arrayIndexToPushTo] && d.answer ===
             answer[questionIndex][arrayIndexToPushTo][subArrayIndex]) {
           cellValue = "correct";
         } else {
@@ -259,6 +259,7 @@ class App extends Component {
         }
         addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
       });
+      console.log(addToFeedback);
       feedbackTemp[questionIndex] = addToFeedback;
     } else if (questionType === "checkboxQuestion") { // Assumes question.answer and answer are both arrays
       var correct = true;
@@ -290,7 +291,7 @@ class App extends Component {
    */
   submitResponse(answer: any, questionIndex: number, questionType: string) {
     if (answer !== null && answer !== undefined) {
-      let feedback = this.checkAnswer(answer, questionIndex, questionType)
+      let feedback = this.checkAnswer(answer, questionIndex, questionType);
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer[questionIndex], () => {
         this.setState({
           feedback: feedback,

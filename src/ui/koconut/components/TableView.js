@@ -56,7 +56,7 @@ class TableView extends Component {
    * (Feedback window used to replace this window)
    */
   componentWillMount() {
-    this.setState({answer: this.props.answer});
+    this.setState({answer: this.props.answer ? this.props.answer : []});
   }
 
   /**

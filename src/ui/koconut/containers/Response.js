@@ -62,7 +62,7 @@ class Response extends Component {
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.table):
-        return <TableView question={this.props.question} inputHandler={update} questionIndex={index} answer={answer}/>;
+        return <TableView question={this.props.question} inputHandler={update} questionIndex={index} answer={answer[index]}/>;
       case(Types.checkboxQuestion):
         return <CheckboxQuestion choices={choices} prompt={"prompt" +
         " placeholder"} inputHandler={update} questionIndex={index} />

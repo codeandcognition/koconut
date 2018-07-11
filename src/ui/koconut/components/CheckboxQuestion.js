@@ -1,4 +1,3 @@
-//@flow
 import React, {Component} from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -7,7 +6,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 class CheckboxQuestion extends Component {
-  Props: {
+  props: {
     choices: string[],
     prompt: string,
     inputHandler: Function
@@ -18,7 +17,7 @@ class CheckboxQuestion extends Component {
     selectedItems: any
   }
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
 
     this.state = {

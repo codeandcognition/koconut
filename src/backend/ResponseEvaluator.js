@@ -152,7 +152,7 @@ class ResponseEvaluator {
           })
         })
       } else {
-        answer === exercise.questions[questionIndex].answer;
+        answer = exercise.questions[questionIndex].answer;
       }
       addResponseAndUpdate(gotCorrect, exercise);
     }
