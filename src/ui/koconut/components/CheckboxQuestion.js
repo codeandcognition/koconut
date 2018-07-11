@@ -1,3 +1,4 @@
+//@flow
 import React, {Component} from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -6,13 +7,18 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 class CheckboxQuestion extends Component {
-  props: {
+  Props: {
     choices: string[],
     prompt: string,
     inputHandler: Function
+  };
+
+  state: {
+    checkboxItems: any,
+    selectedItems: any
   }
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -22,16 +28,14 @@ class CheckboxQuestion extends Component {
   }
 
   /**
-   *
-   * @param e
-   * @param choice
-   *
    * Allows for toggling of checkboxes
+   * @param {event} e event of the form
+   * @param {string} choice choice from the choices
    */
-  handleChange(e, choice) {
-    var choices = this.state.checkboxItems;
+  handleChange(e: any, choice: string) {
+    let choices = this.state.checkboxItems;
     choices[choice] = e.target.checked;
-    var selected = [];
+    let selected = [];
     Object.keys(choices).forEach((item) => {
       if (choices[item]) {
         selected.push(item);
@@ -46,9 +50,9 @@ class CheckboxQuestion extends Component {
   }
 
   render() {
-    var formGroupLabelStyles = {
+    let formGroupLabelStyles = {
       margin: "0"
-    }
+    };
     return(
       <FormControl component={"fieldset"}>
         <FormLabel component={"legend"}>{this.props.prompt}</FormLabel>

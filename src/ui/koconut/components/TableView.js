@@ -32,10 +32,11 @@ class TableView extends Component {
   }
 
   /**
-   *
-   * @param choice
-   * @param row
-   * @param col
+   * updateAnswer will update the current answer's state and also pass it to
+   * the app to be handled
+   * @param choice answer chosen or typed in (sorry, bad name)
+   * @param row row of question
+   * @param col col of question
    */
   updateAnswer(choice: string, row: number, col: number) {
     let tempAns = this.state.answer;
@@ -49,11 +50,20 @@ class TableView extends Component {
     this.setState({answer: tempAns});
   }
 
+  /**
+   * On mount, make sure the answer is set to the answer props if set
+   * This allows for the question to remember the state if the window ever disappears
+   * (Feedback window used to replace this window)
+   */
   componentWillMount() {
     this.setState({answer: this.props.answer});
   }
 
   /**
+   * generateCell generates a single cell and provides the logic for
+   * updating the answer of the cell
+   *
+   * todo: add cases when necessary
    *
    * @param question individual table cell question
    * @param row row of question
@@ -90,6 +100,11 @@ class TableView extends Component {
 
   }
 
+  /**
+   * generateTableView does the calculations for the contents of each cell
+   * and creates the entire table to render.
+   * @returns {jsx} Table for the entire problem
+   */
   generateTableView() {
     if(!this.props.question) {
       return "";
@@ -133,27 +148,12 @@ class TableView extends Component {
         </Table>
       </Paper>
     );
-
-
   }
 
   render() {
     return (
         <div className='table-view'>
           {this.generateTableView()}
-          {/*return <TableView question={this.props.question} inputHandler={update} questionIndex={index}/>;*/}
-
-          {/*<h3>Type your response here:</h3>*/}
-          {/*{*/}
-            {/*<div className="short-response-value">*/}
-              {/*<textarea onChange={(event) => {*/}
-                {/*this.setState({value: event.target.value});*/}
-                {/*this.props.inputHandler(event.target.value, this.props.questionIndex);*/}
-              {/*}}>*/}
-              {/*</textarea>*/}
-              {/*<p>{this.state.value}</p>*/}
-            {/*</div>*/}
-          {/*}*/}
         </div>
     );
   }
