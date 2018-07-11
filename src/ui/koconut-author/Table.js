@@ -6,7 +6,6 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Cell from './Cell';
-import Question from './Question';
 
 class Table extends Component {
 	constructor(props) {
@@ -36,22 +35,6 @@ class Table extends Component {
 			float: 'right',
 			color: '#4DD0E1'
 		}
-	}
-
-	QuestionTypes = {
-		survey: 'survey',
-		writeCode: 'writeCode',
-		fillBlank: 'fillBlank',
-		highlightCode: 'highlightCode',
-		multipleChoice: 'multipleChoice',
-		shortResponse: 'shortResponse',
-		memoryTable: 'memoryTable'
-	};
-
-	Difficulty = {
-		low: 0,
-		med: 1,
-		high: 2
 	};
 
 	/**
@@ -101,7 +84,7 @@ class Table extends Component {
 									variant={'outlined'}
 									onClick={() => {
 										let temp = this.state.currentTable;
-										temp.colNames.push(this.state.currColName)
+										temp.colNames.push(this.state.currColName);
 										this.setState({currentTable: temp, currColName: ''});
 									}}>
 						Add column name
@@ -154,6 +137,7 @@ class Table extends Component {
 	 */
 	renderTableShape() {
 		let rows = parseInt(this.state.currNumRows);
+		let width = this.state.currentTable.colNames.length;
 		return (
 				<div>
 					<p>Fill in the Table <span style={this.fieldReqs.required}>required</span></p>
@@ -166,7 +150,7 @@ class Table extends Component {
 								this.state.currentTable.colNames.map((colName, colNum) => {
 									// index to map from 2d table to 1d table since a table is
 									// represented as an array
-									const index = (rows * rowNum) + colNum;
+									const index = (rowNum * width) + colNum;
 									row.push(<Cell key={colNum} index={index} addToTable={this.addToTable} data={this.state.currentTable.data[index]}/>);
 								});
 								return(
@@ -188,20 +172,25 @@ class Table extends Component {
 		let data = table.data;
 		data[index] = cell;
 		table['data'] = data;
-		this.setState({currentTable: table});
+		this.setState({
+			currentTable: table,
+			numItems: this.state.numItems + 1
+		});
 	}
 
 	/**
 	 * Writes the current question to the table
 	 */
 	writeQuestion() {
-		let items = this.state.currentTable.colNames.length * this.state.currNumRows;
+		let items = this.state.currentTable.colNames.length * parseInt(this.state.currNumRows);
 		if (this.state.currentTable.colNames.length > 0 &&
-				this.state.currNumRows > 0 &&
+				parseInt(this.state.currNumRows) > 0 &&
 				this.state.currentTable.data.length === items) {
-			console.log("inside Table.js, line 195: ", this.state.currentTable);
 			this.props.addQuestion(this.state.currentTable);
 		} else {
+			console.log("number of columns: ", this.state.currentTable.colNames.length);
+			console.log("number of rows: ", this.state.currNumRows);
+			console.log("number of items: ", this.state.currentTable.data.length);
 			window.alert("Required fields are missing!");
 		}
 	}

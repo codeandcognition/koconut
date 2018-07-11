@@ -24,7 +24,7 @@ class Cell extends Component {
 			cell: {
 				prompt: '',
 				code: '',
-				difficulty: 0,
+				difficulty: -1,
 				choices: [],
 				type: "",
 				answer: '',
@@ -159,7 +159,7 @@ class Cell extends Component {
 		return(
 				<div>
 					<p>Code <span style={this.fieldReqs.required}>required</span></p>
-					<textarea style={style} onChange={this.handleChange('code')}/>
+					<textarea style={style} value={this.state.cell.code} onChange={this.handleChange('code')}/>
 				</div>
 		);
 	}

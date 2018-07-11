@@ -20,7 +20,7 @@ class Question extends Component {
 		let question = {
 			prompt: "",
 			code: "",
-			difficulty: 0,
+			difficulty: -1,
 			choices: [],
 			type: "",
 			answer: "",
@@ -68,7 +68,7 @@ class Question extends Component {
 			float: 'right',
 			color: '#4DD0E1'
 		}
-	}
+	};
 
 	renderFormatForm() {
 		return(
@@ -86,7 +86,7 @@ class Question extends Component {
 
 	/**
 	 * Renders the prompt for the question
-	 * @param fieldReqs
+	 *
 	 * @returns {*}
 	 */
 	renderPromptField() {
@@ -119,6 +119,7 @@ class Question extends Component {
 					<p style={{color: '#3F51B5'}}>Difficulty level <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
 						<NativeSelect value={this.state.currentQuestion.difficulty} onChange={this.handleChange('difficulty')}>
+							<option>Select difficulty level</option>
 							{
 								Object.keys(this.Difficulty).map((level, key) => {
 									let value = this.Difficulty[level];
@@ -177,7 +178,7 @@ class Question extends Component {
 					<Button style={{margin: '15px'}}
 									variant={'outlined'}
 									color={'secondary'}
-									onClick={(evt) => {
+									onClick={() => {
 										if (this.state.currentChoice === '') return;
 										let choicesCopy = [...this.state.currentQuestion.choices];
 										choicesCopy.push(this.state.currentChoice);
@@ -241,7 +242,7 @@ class Question extends Component {
 			return (
 					<div>
 						<p style={{color: '#3F51B5'}}>Type in a JSON dictionary</p>
-						<textarea style={{width: '100%', height: '10em', fontFamily: 'monospace'}}></textarea>
+						<textarea style={{width: '100%', height: '10em', fontFamily: 'monospace'}} />
 					</div>
 			);
 		} else {
@@ -293,7 +294,8 @@ class Question extends Component {
 		let followup = {
 			border: 'solid',
 			borderColor: '#9FA8DA'
-		}
+		};
+
 		let card = this.props.isFollowup ? followup : {};
 
 		return(
@@ -340,7 +342,8 @@ class Question extends Component {
 		if (this.state.currentQuestion.type &&
 				this.state.currentQuestion.answer &&
 				this.state.currentQuestion.hint &&
-				this.state.currentQuestion.feedback) {
+				this.state.currentQuestion.feedback &&
+				this.state.currentQuestion.difficulty !== -1) {
 			this.props.addQuestion(this.state.currentQuestion);
 		} else {
 			// TODO: Make this more user friendly!
