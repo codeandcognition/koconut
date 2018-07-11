@@ -38,7 +38,6 @@ class TableView extends Component {
    * @param col
    */
   updateAnswer(choice: string, row: number, col: number) {
-    console.log(choice, row, col);
     let tempAns = this.state.answer;
 
     if(!tempAns[row]) {
@@ -88,7 +87,6 @@ class TableView extends Component {
         </textarea>
       </div>
     }
-
 
   }
 
@@ -140,7 +138,6 @@ class TableView extends Component {
   }
 
   render() {
-    console.log("aa");
     return (
         <div className='table-view'>
           {this.generateTableView()}

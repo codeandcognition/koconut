@@ -26,7 +26,6 @@ export default class CodeBlock extends Component {
   }
 
   render() {
-    console.log(this.props.value);
     return (
         <pre>
           <code ref="code" className={this.props.language || 'js'}>

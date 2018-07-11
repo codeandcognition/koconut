@@ -60,7 +60,6 @@ class Exercise extends Component {
     let styles = {  // TODO put this in the constructor, unnecessary calculations per render
       marginTop: '10%'
     };
-    console.log(this.state.answer);
     return (
         <div className="exercise-view" style={styles}>
           <Prompt exercise={this.props.exercise} />
