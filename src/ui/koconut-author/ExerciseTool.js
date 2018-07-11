@@ -55,7 +55,8 @@ class ExerciseTool extends Component {
 			editID: "",
 			editedExercise: "",
 			editError: "",
-			selectedConcept: ""
+			selectedConcept: "",
+			dataProp: undefined
     };
 
     // Bind the functions so they can be used in Question.js
@@ -230,7 +231,7 @@ class ExerciseTool extends Component {
 	 * @returns {*}
 	 */
 	renderQuestionCard() {
-		return <Question addQuestion={this.addQuestion} isFollowup={this.state.isFollowup} insideTable={false} data={undefined}/>
+		return <Question addQuestion={this.addQuestion} isFollowup={this.state.isFollowup} insideTable={false} data={this.state.dataProp}/>
 	}
 
 	/**
