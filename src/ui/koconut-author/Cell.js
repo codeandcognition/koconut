@@ -76,7 +76,8 @@ class Cell extends Component {
 		let popOverStyles = {};
 
 		if (this.state.currentCellFormat === 'question') {
-			popOverStyles["overflowY"] = "scroll";
+			popOverStyles["position"] = "fixed";
+			popOverStyles["maxHeight"] = "100%";
 		}
 
 		return (
