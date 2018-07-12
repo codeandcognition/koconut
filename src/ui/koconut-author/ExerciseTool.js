@@ -356,7 +356,7 @@ class ExerciseTool extends Component {
           <div style={formSectionStyle}>
             <p>Exercise: {" " + this.state.currentExercise.prompt} </p>
             <p style={sectionHeading}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
-            <TextField style={{display: 'block'}} fullWidth={true}
+            <TextField style={{display: 'block', whiteSpace: 'pre-wrap'}} fullWidth={true}
                        value={this.state.currentExercise.prompt}
                        onChange={this.handleExerciseChange('prompt')}/>
           </div>

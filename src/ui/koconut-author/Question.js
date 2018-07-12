@@ -9,6 +9,8 @@ import CardActions from '@material-ui/core/CardActions';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import Table from './Table';
 
 class Question extends Component {
@@ -39,7 +41,8 @@ class Question extends Component {
 			currentQuestion: question,
 			currentChoice: '',
 			currentAnswer: '',
-			currentQuestionFormat: 'standAlone'
+			currentQuestionFormat: 'standAlone',
+			checkboxOption: 'choice'
 		};
 	}
 
@@ -71,7 +74,6 @@ class Question extends Component {
 		}
 	};
 
-
 	componentWillReceiveProps() {
 		let question = {
 			prompt: "",
@@ -90,7 +92,8 @@ class Question extends Component {
 			currentQuestion: question,
 			currentChoice: '',
 			currentAnswer: '',
-			currentQuestionFormat: 'standAlone'
+			currentQuestionFormat: 'standAlone',
+			checkboxOption: 'choice'
 		});
 	}
 
@@ -114,10 +117,16 @@ class Question extends Component {
 	 * @returns {*}
 	 */
 	renderPromptField() {
+		let style = {
+			whiteSpace: 'pre-wrap'
+		};
 		return (
 				<div>
 					<p style={{color: '#3F51B5'}}>Question Prompt <span style={this.fieldReqs.optional}>optional</span></p>
-					<TextField fullWidth={true} value={this.state.currentQuestion.prompt} onChange={this.handleChange('prompt')}/>
+					<TextField style={style}
+										 fullWidth={true}
+										 value={this.state.currentQuestion.prompt}
+										 onChange={this.handleChange('prompt')}/>
 				</div>
 		);
 	}
@@ -130,7 +139,7 @@ class Question extends Component {
 		return(
 				<div>
 					<p style={{color: '#3F51B5'}}>Code <span style={this.fieldReqs.optional}>optional</span></p>
-					<textarea style={{display: 'block', width: '100%', height: '10em'}}
+					<textarea style={{display: 'block', width: '100%', height: '10em', whiteSpace: 'pre-wrap'}}
 										value={this.state.currentQuestion.code}
 										onChange={this.handleChange('code')} />
 				</div>
@@ -266,11 +275,12 @@ class Question extends Component {
 			return (
 					<div>
 						<p style={{color: '#3F51B5'}}>Type in a JSON dictionary</p>
-						<textarea style={{width: '100%', height: '10em', fontFamily: 'monospace'}} />
+						<textarea style={{width: '100%', height: '10em', fontFamily: 'monospace', whiteSpace: 'pre-wrap'}}
+											onChange={this.handleChange('answer')}/>
 					</div>
 			);
 		} else if (this.state.currentQuestion.type === this.QuestionTypes.checkboxQuestion) {
-				return this.renderCheckboxAnswer();
+				return this.renderCheckboxAnswerField();
 		} else {
 			// returns a text field for answer
 			return (
@@ -278,7 +288,7 @@ class Question extends Component {
 						<p style={{color: '#3F51B5'}}>Answer <span style={this.fieldReqs.required}>required</span></p>
 						<TextField fullWidth={true}
 											 value={this.state.currentQuestion.answer}
-											 onChange={this.handleChange('answer')} />
+											 onChange={this.handleChange('answer')} style={{whiteSpace: 'pre-wrap'}} />
 					</div>
 			);
 		}
@@ -289,28 +299,41 @@ class Question extends Component {
 	 *
 	 * @returns {*}
 	 */
-	renderCheckboxAnswer() {
+	renderCheckboxAnswerField() {
 		return(
 				<div>
-					<p style={{color: '#3F51B5'}}>Answers (enter one at a time) <span style={this.fieldReqs.required}>required</span></p>
+					<p style={{color: '#3F51B5'}}>Choices (enter one at a time) <span style={this.fieldReqs.required}>required</span></p>
 					<TextField fullWidth={true}
 										 style={{display: 'block'}}
-										 onChange={(evt) => this.setState({currentAnswer: evt.target.value})}
-										 value={this.state.currentAnswer}/>
+										 onChange={(evt) => this.setState({currentChoice: evt.target.value})}
+										 value={this.state.currentChoice}/>
+					<br/>
+
+					<p style={{color: '#3F51B5'}}>Is current choice one of the answers? <span style={this.fieldReqs.required}>required</span></p>
+					<RadioGroup value={this.state.checkboxOption} onChange={(evt) => this.setState({checkboxOption: evt.target.value})}>
+						<FormControlLabel value={'answer'} control={<Radio color={"primary"}/>} label={"Yes"}/>
+						<FormControlLabel value={'choice'} control={<Radio color={"primary"}/>} disabled={this.props.insideTable} label={"No"}/>
+					</RadioGroup>
+
 					<Button style={{margin: '15px'}}
 									variant={'outlined'}
 									color={'secondary'}
 									onClick={() => {
-										if (this.state.currentAnswer === '') return;
-										let answersCopy = [...this.state.currentQuestion.answer];
-										answersCopy.push(this.state.currentAnswer);
-										this.updateQuestion('answer', answersCopy);
-										this.setState({currentAnswer: ''});
+										if (this.state.currentChoice === '') return;
+										let choicesCopy = [...this.state.currentQuestion.choices];
+										choicesCopy.push(this.state.currentChoice);
+										this.updateQuestion('choices', choicesCopy);
+										if (this.state.checkboxOption === 'answer') {
+											let answersCopy = [...this.state.currentQuestion.answer];
+											answersCopy.push(this.state.currentChoice);
+											this.updateQuestion('answer', answersCopy);
+										}
+										this.setState({currentChoice: ''});
 									}}>
-						Add Answer
+						Add Choice
 					</Button>
 
-					{this.state.currentQuestion.answer !== '' && this.renderCheckBoxAnswers()}
+					{this.renderCheckBoxAnswers()}
 				</div>
 		);
 	}
@@ -319,15 +342,32 @@ class Question extends Component {
 		return(
 				<div style={{width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
 					{
-						this.state.currentQuestion.answer.map((choice, key) => {
+						this.state.currentQuestion.choices.map((choice, key) => {
+							let style = {
+								backgroundColor: '#ffecb3',
+								margin: '3px'
+							};
+							if (this.state.currentQuestion.answer.includes(choice)) {
+								style['border'] = 'solid';
+								style['borderColor'] = '#8BC34A';
+							} else {
+								style['border'] = 'none'
+							}
 							return <Button key={key}
 														 variant={'flat'}
-														 style={{backgroundColor: '#ffecb3', margin: '3px'}}
+														 style={style}
 														 onClick={(evt) => {
-															 let index = this.state.currentQuestion.answer.indexOf(evt.target.innerText);
-															 let answersCopy = [...this.state.currentQuestion.answer];
-															 answersCopy.splice(index, 1);
-															 this.updateQuestion('answer', answersCopy);
+														 	 let choiceIndex = this.state.currentQuestion.choices.indexOf(evt.target.innerText);
+														 	 let choicesCopy = [...this.state.currentQuestion.choices];
+														 	 choicesCopy.splice(choiceIndex, 1);
+															 this.updateQuestion('choices', choicesCopy);
+
+															 if (this.state.currentQuestion.answer.includes(choice)) {
+																 let index = this.state.currentQuestion.answer.indexOf(evt.target.innerText);
+																 let answersCopy = [...this.state.currentQuestion.answer];
+																 answersCopy.splice(index, 1);
+																 this.updateQuestion('answer', answersCopy);
+															 }
 														 }}>
 								{choice}
 							</Button>
@@ -417,10 +457,13 @@ class Question extends Component {
 	 */
 	writeQuestion() {
 		if (this.state.currentQuestion.type &&
-				this.state.currentQuestion.answer &&
+				this.state.currentQuestion.answer != '' &&
 				this.state.currentQuestion.hint &&
 				this.state.currentQuestion.feedback &&
 				this.state.currentQuestion.difficulty !== -1) {
+			if (this.state.currentQuestion.type === this.QuestionTypes.memoryTable) {
+				this.updateQuestion('answer', JSON.parse(this.state.currentQuestion.answer));
+			}
 			this.props.addQuestion(this.state.currentQuestion);
 		} else {
 			// TODO: Make this more user friendly!
