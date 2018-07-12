@@ -99,11 +99,6 @@ class Information extends Component {
     , 0);
     let expectedCorrect = this.props.exercise.questions.length;
 
-
-    let allCorrect = false;
-    if (this.props.feedback && this.props.feedback.toString().indexOf("incorrect") === -1) {
-      allCorrect = true;
-    }
     return (
         <div>
           {/* TODO replace learn yourself a good 1*/}
