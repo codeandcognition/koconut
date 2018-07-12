@@ -70,7 +70,10 @@ class Information extends Component {
       let type = question.type;
 
       return Types.isInlineResponseType(type) || (this.props.feedback[index] &&
-            question.type !=="table") ? <div /> :
+            (question.type !=="table" &&
+            question.type !=="multipleChoice" &&
+            question.type !=="selectMultiple")
+            ) ? <div /> :
           <Response
               key={"response"+index}
             type={type}
