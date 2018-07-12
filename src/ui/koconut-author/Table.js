@@ -61,7 +61,7 @@ class Table extends Component {
 	renderFormatForm() {
 		return(
 				<div>
-					<p>How do you want to format the question? <span style={this.fieldReqs.required}>required</span></p>
+					<p style={{color: '#3F51B5'}}>How do you want to format the question? <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
 						<RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
 							<FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
@@ -79,9 +79,10 @@ class Table extends Component {
 	renderColumnNamesForm() {
 		return(
 				<div>
-					<p>Column Names <span style={this.fieldReqs.required}>required</span></p>
+					<p style={{color: '#3F51B5'}}>Column Names <span style={this.fieldReqs.required}>required</span></p>
 					<TextField fullWidth={true} value={this.state.currColName} onChange={evt => this.setState({currColName: evt.target.value})}/>
-					<Button color={'secondary'}
+					<Button style={{margin: '15px'}}
+									color={'secondary'}
 									variant={'outlined'}
 									onClick={() => {
 										let temp = this.state.currentTable;
@@ -93,7 +94,7 @@ class Table extends Component {
 					<div>
 						{
 							this.state.currentTable.colNames.map((colName, key) => {
-								return <Button style={{backgroundColor: '#ffecb3'}}
+								return <Button style={{backgroundColor: '#ffecb3', margin: '3px'}}
 															 key={key}
 															 onClick={(evt) => {
 																 let table = this.state.currentTable;
@@ -118,7 +119,7 @@ class Table extends Component {
 	renderNumRowsForm() {
 		return(
 				<div>
-					<p>Number of Rows <span style={this.fieldReqs.required}>required</span></p>
+					<p style={{color: '#3F51B5'}}>Number of Rows <span style={this.fieldReqs.required}>required</span></p>
 					<TextField fullWidth={true}
 										 value={this.state.currNumRows}
 										 onChange={evt => this.setState({currNumRows: evt.target.value})}/>
@@ -141,9 +142,9 @@ class Table extends Component {
 		let width = this.state.currentTable.colNames.length;
 		return (
 				<div>
-					<p>Fill in the Table <span style={this.fieldReqs.required}>required</span></p>
-					<p><i>Click on a cell to edit its contents</i></p>
-					<p>{this.state.currNumRows} x {this.state.currentTable.colNames.length}</p>
+					<p style={{color: '#3F51B5'}}>Fill in the Table <span style={this.fieldReqs.required}>required</span></p>
+					<p style={{color: '#3F51B5'}}><i>Click on a cell to edit its contents</i></p>
+					<p style={{color: '#3F51B5'}}>{this.state.currNumRows} x {this.state.currentTable.colNames.length}</p>
 					{
 							// Note: React JSX doesn't regular for loops; hence the current outer loop.
 							Array.apply(null, Array(rows)).map((item, rowNum) => {
