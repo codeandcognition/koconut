@@ -97,7 +97,6 @@ class TableView extends Component {
         </textarea>
       </div>
     }
-
   }
 
   /**
@@ -121,6 +120,8 @@ class TableView extends Component {
       augmentedCells[arrayIndexToPushTo][subArrayIndex] = d;
     });
 
+    
+
     return (
       <Paper>
         <Table>
@@ -137,7 +138,17 @@ class TableView extends Component {
                   <TableRow key={"row-" + i}>
                   {
                     d.map((e, j) => {
-                      return <TableCell key={"cell"+i+j}>
+                      let correctness = "";
+                      if (this.props.feedback && this.props.feedback[i]) { 
+                        let temp = this.props.feedback[i][j];
+                        if (temp === "incorrect") {
+                          correctness = "table-wrong";
+                        } else if(temp === "correct") {
+                          correctness = "table-correct";
+                        }
+                      }
+                      console.log(correctness);
+                      return <TableCell key={"cell"+i+j} className={correctness !== "" ? correctness : "reg"}>
                         {this.generateCell(e,i,j)}
                       </TableCell>
                     })
@@ -149,6 +160,8 @@ class TableView extends Component {
       </Paper>
     );
   }
+
+
 
   render() {
     return (
