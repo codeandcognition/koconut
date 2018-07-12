@@ -3,7 +3,6 @@ $choice-color: #cccccc;
 .choice {
   margin: 10px auto; // centering the MC choices
   user-select: none;
-  cursor: pointer;
   padding: 2.5%;
   width: 33%;
   // margin: 10px;
@@ -11,6 +10,7 @@ $choice-color: #cccccc;
   border: 2px solid $choice-color;
   // background-color: $choice-color;
   transition-duration: 50ms;
+  background-color: white;
 }
 
 .choice:active {

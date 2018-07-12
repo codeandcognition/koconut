@@ -73,15 +73,19 @@ class TableView extends Component {
     if(question.type === "") {
       return question.prompt;
     }
-
+  //if thispropsfeedback, set disabled
     if(question.type === "multipleChoice") {
       let selected = this.state.answer[row] ? this.state.answer[row][col] : null;
       return <div>
         {
           question.choices.map((d,i) => {
             return <span key={`choice${i}-${row}-${col}`}>
-              <span onClick={() => this.updateAnswer(d, row, col)}
-                  className={"custmc choice " + (selected == d?"answer":"" )}
+              <span onClick={() => {
+                if(!this.props.feedback) {
+                  this.updateAnswer(d, row, col);
+                }
+              }}
+                  className={"custmc choice " + (selected == d ? "answer":"" ) + " " + (this.props.feedback ? "disabled" : "notdisabled")}
               >{d}</span>
             </span>
           })
@@ -92,8 +96,11 @@ class TableView extends Component {
     if(question.type === "fillBlank") {
       return <div>
         <textarea onChange={(event) => {
-          this.updateAnswer(event.target.value, row, col);
-        }} value={this.state.answer[row] ? this.state.answer[row][col] : ''}>
+          if(!this.props.feedback) {
+            this.updateAnswer(event.target.value, row, col);
+          }
+        }} value={this.state.answer[row] ? this.state.answer[row][col] : ''}
+           disabled={this.props.feedback}>
         </textarea>
       </div>
     }
@@ -160,8 +167,6 @@ class TableView extends Component {
       </Paper>
     );
   }
-
-
 
   render() {
     return (

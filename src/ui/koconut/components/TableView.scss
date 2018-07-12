@@ -3,13 +3,21 @@
 }
 
 .table-wrong {
-  background-color: rgb(250, 185, 185);
+  background-color: rgb(252, 216, 216);
 }
 
 .table-correct {
-  background-color: rgb(154, 207, 154);
+  background-color: rgb(230, 248, 230);
 }
 
 .reg {
   background-color: white;
+}
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.notdisabled {
+  cursor: pointer;
 }

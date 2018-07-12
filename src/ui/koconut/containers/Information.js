@@ -110,7 +110,6 @@ class Information extends Component {
 
   render() {
     // todo count correct correctly
-    console.log(this.props.feedback);
     let correctCount = this.props.feedback.reduce((acc, item, index) => {
           if (this.props.exercise.questions[index].type === "checkboxQuestion" ||
               this.props.exercise.questions[index].type === "table") {
