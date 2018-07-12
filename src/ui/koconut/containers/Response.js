@@ -4,7 +4,6 @@ import MultipleChoice from '../components/MultipleChoice';
 import ShortResponse from '../components/ShortResponse';
 import SurveyView from '../components/SurveyView.js';
 import TableView from '../components/TableView';
-import Feedback from '../components/Feedback';
 import CheckboxQuestion from '../components/CheckboxQuestion';
 import './Response.css';
 
@@ -40,12 +39,7 @@ class Response extends Component {
 
     // if feedback is set, then display feedback instead.
     if(this.props.feedback) {
-      return <Feedback
-          feedback={this.props.feedback} // TODO:  modify this so that if correct, try again button dont appear
-          questionIndex={this.props.questionIndex}
-          submitTryAgain={() => this.props.submitTryAgain(index)} // TODO also modify submitOk functionality
-          type={this.props.question.type}
-        />
+      
     }
 
     switch (type) {

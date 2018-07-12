@@ -259,7 +259,6 @@ class App extends Component {
         }
         addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
       });
-      console.log(addToFeedback);
       feedbackTemp[questionIndex] = addToFeedback;
     } else if (questionType === "checkboxQuestion") { // Assumes question.answer and answer are both arrays
       var correct = true;

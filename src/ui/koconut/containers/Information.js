@@ -4,6 +4,8 @@ import Code from '../components/Code';
 import Response from './Response';
 import Types from '../../../data/ExerciseTypes.js';
 import Submit from '../components/Submit';
+import Feedback from '../components/Feedback';
+
 import './Information.css';
 
 import type {Exercise} from '../../../data/Exercises';
@@ -67,7 +69,8 @@ class Information extends Component {
   renderResponseView(question: any, index: number) {
       let type = question.type;
 
-      return Types.isInlineResponseType(type) ? <div /> :
+      return Types.isInlineResponseType(type) || (this.props.feedback[index] &&
+            question.type !=="table") ? <div /> :
           <Response
               key={"response"+index}
             type={type}
@@ -82,6 +85,24 @@ class Information extends Component {
             mode={this.props.mode}
             submitHandler={this.props.submitHandler}
             />
+  }
+
+  /**
+   * Returns JSX for (or not for) the Feedback container given the current props
+   * @param question question object in Exercise
+   * @param index index of question in Exercise
+   * @returns JSX for the Feedback container
+   */
+  renderFeedback(question: any, index: number) {
+      if(this.props.feedback[index]) {
+        return <Feedback
+        feedback={this.props.feedback[index]}
+        questionIndex={index}
+        submitTryAgain={() => this.props.submitTryAgain(index)}
+        type={question.type}
+        />
+      }
+      return <div />
   }
 
   render() {
@@ -110,6 +131,7 @@ class Information extends Component {
                     <div className="information">
                       {this.renderCodeView(question, index)}
                       {this.renderResponseView(question, index)}
+                      {this.renderFeedback(question, index)}
                     </div>
                       {!(this.props.feedback[index]) &&
                       <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />

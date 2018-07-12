@@ -694,7 +694,7 @@ declare module '@material-ui/core/es/FormControlLabel/FormControlLabel' {
   declare module.exports: any;
 }
 
-declare module '@material-ui/core/es/FormControlLabel' {
+declare module '@material-ui/core/FormControlLabel' {
   declare module.exports: any;
 }
 
@@ -722,7 +722,7 @@ declare module '@material-ui/core/es/FormLabel/FormLabel' {
   declare module.exports: any;
 }
 
-declare module '@material-ui/core/es/FormLabel' {
+declare module '@material-ui/core/FormLabel' {
   declare module.exports: any;
 }
 declare module '@material-ui/core/es/FormLabel/index' {

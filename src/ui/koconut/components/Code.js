@@ -245,11 +245,7 @@ class Code extends Component {
         <div className={'code ' + (isWriteType ? 'full' : 'half') +
         ' ' + this.props.type}>
           {(isWriteType && this.props.feedback) ?
-            <Feedback
-                feedback={this.props.feedback} // TODO:  modify this so that if correct, try again button dont appear
-                questionIndex={this.props.questionIndex}
-                submitTryAgain={() => this.props.submitTryAgain(this.props.questionIndex)} // TODO also modify submitOk functionality
-            /> :
+            '' :
               <div ref="code"
                    className={'code ' + (isWriteType ? 'full' : 'half') +
                    ' ' + this.props.type}>
