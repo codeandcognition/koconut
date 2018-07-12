@@ -50,7 +50,8 @@ class Question extends Component {
 		highlightCode: 'highlightCode',
 		multipleChoice: 'multipleChoice',
 		shortResponse: 'shortResponse',
-		memoryTable: 'memoryTable'
+		memoryTable: 'memoryTable',
+		checkboxQuestion: 'checkboxQuestion'
 	};
 
 	Difficulty = {
@@ -268,6 +269,8 @@ class Question extends Component {
 						<textarea style={{width: '100%', height: '10em', fontFamily: 'monospace'}} />
 					</div>
 			);
+		} else if (this.state.currentQuestion.type === this.QuestionTypes.checkboxQuestion) {
+				return this.renderCheckboxAnswer();
 		} else {
 			// returns a text field for answer
 			return (
@@ -279,6 +282,59 @@ class Question extends Component {
 					</div>
 			);
 		}
+	}
+
+	/**
+	 * Renders the answer form for a checkbox question
+	 *
+	 * @returns {*}
+	 */
+	renderCheckboxAnswer() {
+		return(
+				<div>
+					<p style={{color: '#3F51B5'}}>Answers (enter one at a time) <span style={this.fieldReqs.required}>required</span></p>
+					<TextField fullWidth={true}
+										 style={{display: 'block'}}
+										 onChange={(evt) => this.setState({currentAnswer: evt.target.value})}
+										 value={this.state.currentAnswer}/>
+					<Button style={{margin: '15px'}}
+									variant={'outlined'}
+									color={'secondary'}
+									onClick={() => {
+										if (this.state.currentAnswer === '') return;
+										let answersCopy = [...this.state.currentQuestion.answer];
+										answersCopy.push(this.state.currentAnswer);
+										this.updateQuestion('answer', answersCopy);
+										this.setState({currentAnswer: ''});
+									}}>
+						Add Answer
+					</Button>
+
+					{this.state.currentQuestion.answer !== '' && this.renderCheckBoxAnswers()}
+				</div>
+		);
+	}
+
+	renderCheckBoxAnswers() {
+		return(
+				<div style={{width: '100%', height: '10em', borderStyle: 'solid', borderColor: '#BBDEFB'}}>
+					{
+						this.state.currentQuestion.answer.map((choice, key) => {
+							return <Button key={key}
+														 variant={'flat'}
+														 style={{backgroundColor: '#ffecb3', margin: '3px'}}
+														 onClick={(evt) => {
+															 let index = this.state.currentQuestion.answer.indexOf(evt.target.innerText);
+															 let answersCopy = [...this.state.currentQuestion.answer];
+															 answersCopy.splice(index, 1);
+															 this.updateQuestion('answer', answersCopy);
+														 }}>
+								{choice}
+							</Button>
+						})
+					}
+				</div>
+		);
 	}
 
 	/**
@@ -318,9 +374,7 @@ class Question extends Component {
 			border: 'solid',
 			borderColor: '#9FA8DA'
 		};
-
 		let card = this.props.isFollowup ? followup : {};
-
 		return(
 				<Card style={card}>
 					<CardActions>
