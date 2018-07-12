@@ -73,15 +73,8 @@ class Cell extends Component {
 			margin: '5px'
 		};
 
-		let popOverStyles = {};
-
-		if (this.state.currentCellFormat === 'question') {
-			popOverStyles["position"] = "fixed";
-			popOverStyles["maxHeight"] = "100%";
-		}
-
 		return (
-				<Dialog style={popOverStyles} open={this.state.open}>
+				<Dialog fullScreen={true} open={this.state.open}>
 					<DialogTitle>Placeholder</DialogTitle>
 					<DialogContent>
 						{/* render different UI if the cell content is informational */}
