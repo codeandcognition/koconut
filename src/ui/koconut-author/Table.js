@@ -124,7 +124,7 @@ class Table extends Component {
 										 value={this.state.currNumRows}
 										 onChange={evt => this.setState({currNumRows: evt.target.value})}/>
 
-					{ !isNaN(parseInt(this.state.currNumRows)) &&
+					{ !isNaN(parseInt(this.state.currNumRows, 10)) &&
 							this.state.currentTable.colNames.length > 0 &&
 						this.renderTableShape()
 					}
@@ -138,7 +138,7 @@ class Table extends Component {
 	 * @returns {*}
 	 */
 	renderTableShape() {
-		let rows = parseInt(this.state.currNumRows);
+		let rows = parseInt(this.state.currNumRows, 10);
 		let width = this.state.currentTable.colNames.length;
 		return (
 				<div>
@@ -184,9 +184,9 @@ class Table extends Component {
 	 * Writes the current question to the table
 	 */
 	writeQuestion() {
-		let items = this.state.currentTable.colNames.length * parseInt(this.state.currNumRows);
+		let items = this.state.currentTable.colNames.length * parseInt(this.state.currNumRows, 10);
 		if (this.state.currentTable.colNames.length > 0 &&
-				parseInt(this.state.currNumRows) > 0 &&
+				parseInt(this.state.currNumRows, 10) > 0 &&
 				this.state.currentTable.data.length === items) {
 			this.props.addQuestion(this.state.currentTable);
 		} else {

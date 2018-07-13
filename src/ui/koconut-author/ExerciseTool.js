@@ -119,38 +119,42 @@ class ExerciseTool extends Component {
 	 * ConceptExerciseMap branch ordered by difficulty
 	 */
   addExercise() {
-		let pushKey = firebase.database().ref().child("Exercises").push().key;
-		let exerciseRef = firebase.database().ref("Exercises/" + pushKey);
-		exerciseRef.set(this.state.currentExercise);
+  	if (this.state.currentExercise.concepts.length > 0) {
+			let pushKey = firebase.database().ref().child("Exercises").push().key;
+			let exerciseRef = firebase.database().ref("Exercises/" + pushKey);
+			exerciseRef.set(this.state.currentExercise);
 
-		let componentRef = this;
-		let difficulty = this.getAverageDifficulty(this.state.currentExercise, 0, 0, 0);
-		this.state.currentExercise.concepts.forEach((concept) => {
-			let conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
-		  conceptRef.once("value", function(snapshot) {
-		    if (snapshot.val()) { // Concepts array exists
-		      let exerciseKeys = snapshot.val();
-		      let didInsertKey = false;
-		      let index = 0;
-		      while (didInsertKey === false) {
-		        let otherDifficulty = componentRef.getAverageDifficulty(componentRef.state.allExercises[exerciseKeys[index]], 0, 0, 0);
-		        if (otherDifficulty >= difficulty) {
-		          exerciseKeys.splice(index, 0, pushKey);
-		          didInsertKey = true;
-            } else if (index === exerciseKeys.length) {
-		          exerciseKeys.push(pushKey);
-		          didInsertKey = true;
-            }
-            index = index + 1;
-          }
-          conceptRef.set(exerciseKeys);
-        } else { // Concepts array does not exist
-		      conceptRef.set([pushKey]);
-        }
-      });
-    });
-		window.alert('Exercise has been added to Firebase!');
-		this.resetExerciseUI();
+			let componentRef = this;
+			let difficulty = this.getAverageDifficulty(this.state.currentExercise, 0, 0, 0);
+			this.state.currentExercise.concepts.forEach((concept) => {
+				let conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
+				conceptRef.once("value", function(snapshot) {
+					if (snapshot.val()) { // Concepts array exists
+						let exerciseKeys = snapshot.val();
+						let didInsertKey = false;
+						let index = 0;
+						while (didInsertKey === false) {
+							let otherDifficulty = componentRef.getAverageDifficulty(componentRef.state.allExercises[exerciseKeys[index]], 0, 0, 0);
+							if (otherDifficulty >= difficulty) {
+								exerciseKeys.splice(index, 0, pushKey);
+								didInsertKey = true;
+							} else if (index === exerciseKeys.length) {
+								exerciseKeys.push(pushKey);
+								didInsertKey = true;
+							}
+							index = index + 1;
+						}
+						conceptRef.set(exerciseKeys);
+					} else { // Concepts array does not exist
+						conceptRef.set([pushKey]);
+					}
+				});
+			});
+			window.alert('Exercise has been added to Firebase!');
+			this.resetExerciseUI();
+		} else {
+			window.alert('At least one required field is missing!');
+		}
 	}
 
 	/**

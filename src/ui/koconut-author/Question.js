@@ -5,12 +5,9 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import Button from '@material-ui/core/Button/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import Table from './Table';
 
 class Question extends Component {
@@ -27,7 +24,7 @@ class Question extends Component {
 			type: "",
 			answer: "",
 			hint: "",
-			feedback: "",
+			feedback: {},
 			followupPrompt: "",
 			followupQuestions: []
 		};
@@ -391,10 +388,17 @@ class Question extends Component {
 	}
 
 	renderFeedbackField() {
+		let style = {
+			width: '100%',
+			height: '10em',
+			fontFamily: 'monospace'
+		};
 		return(
 				<div>
 					<p style={{color: '#3F51B5'}}>Feedback <span style={this.fieldReqs.required}>required</span></p>
-					<TextField fullWidth={true} value={this.state.currentQuestion.feedback} onChange={this.handleChange('feedback')}/>
+					<textarea value={this.state.feedback}
+										style={style}
+										onChange={evt => this.setState({feedback: evt.target.value})}/>
 				</div>
 		);
 	}
@@ -417,10 +421,6 @@ class Question extends Component {
 		let card = this.props.isFollowup ? followup : {};
 		return(
 				<Card style={card}>
-					<CardActions>
-						<Button>Clear Fields</Button>
-						<Button>Delete</Button>
-					</CardActions>
 					<CardContent>
 						{this.renderFormatForm()}
 						<br/>
@@ -457,21 +457,22 @@ class Question extends Component {
 	 */
 	writeQuestion() {
 		if (this.state.currentQuestion.type &&
-				this.state.currentQuestion.answer != '' &&
+				this.state.currentQuestion.answer !== '' &&
 				this.state.currentQuestion.hint &&
-				this.state.currentQuestion.feedback &&
+				this.state.feedback &&
 				this.state.currentQuestion.difficulty !== -1) {
 			if (this.state.currentQuestion.type === this.QuestionTypes.memoryTable) {
 				this.updateQuestion('answer', JSON.parse(this.state.currentQuestion.answer));
 			}
+			this.updateQuestion('feedback', JSON.parse(this.state.feedback));
 			this.props.addQuestion(this.state.currentQuestion);
 		} else {
 			// TODO: Make this more user friendly!
-			console.log(this.state.currentQuestion.difficulty);
-			console.log(this.state.currentQuestion.type);
-			console.log(this.state.currentQuestion.answer);
-			console.log(this.state.currentQuestion.hint);
-			console.log(this.state.currentQuestion.feedback);
+			console.log("difficulty: ", this.state.currentQuestion.difficulty);
+			console.log("question type: ", this.state.currentQuestion.type);
+			console.log("answer: ", this.state.currentQuestion.answer);
+			console.log("hint: ", this.state.currentQuestion.hint);
+			console.log("feedback: ", this.state.feedback);
 			window.alert("You are missing at least 1 required field.");
 		}
 	}
@@ -497,6 +498,23 @@ class Question extends Component {
 		let temp = this.state.currentQuestion;
 		temp[field] = value;
 		this.setState({currentQuestion: temp});
+		this.generateFeedbackTemplate();
+	}
+
+	/**
+	 *
+	 */
+	generateFeedbackTemplate() {
+		let template = {};
+		if (this.state.currentQuestion.type === this.QuestionTypes.multipleChoice) {
+			this.state.currentQuestion.choices.map(choice => {
+				template[choice] = "";
+			});
+		} else {
+			template["correct"] = "";
+			template["incorrect"] = "";
+		};
+		this.setState({feedback: JSON.stringify(template, null, 2)});
 	}
 
 	render() {
