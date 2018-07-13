@@ -263,7 +263,7 @@ class App extends Component {
     } else if (questionType === "checkboxQuestion") { // Assumes question.answer and answer are both arrays
       var correct = true;
       var answerArr = answer[0];
-      if (question.answer.length === answerArr.length) {
+      if (answerArr && question.answer.length === answerArr.length) {
         question.answer.forEach((item) => {
           if (!answerArr.includes(item)) {
             correct = false

@@ -37,11 +37,6 @@ class Response extends Component {
     let update = this.props.updateHandler;
     let index = this.props.questionIndex;
 
-    // if feedback is set, then display feedback instead.
-    if(this.props.feedback) {
-      
-    }
-
     switch (type) {
       case(Types.multipleChoice):
         return <MultipleChoice  // want to modify the handle click? be prepared to dig deep in this nest
@@ -59,7 +54,8 @@ class Response extends Component {
         return <TableView feedback={this.props.feedback} question={this.props.question} inputHandler={update} questionIndex={index} answer={answer[index]}/>;
       case(Types.checkboxQuestion):
         return <CheckboxQuestion choices={choices} prompt={"prompt" +
-        " placeholder"} inputHandler={update} questionIndex={index} />
+        " placeholder"} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
+        question={this.props.question} />
       default:
         return <div className="BAD">Not a valid EXERCISE type {type}</div>;
     }

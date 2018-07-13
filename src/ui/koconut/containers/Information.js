@@ -69,11 +69,13 @@ class Information extends Component {
   renderResponseView(question: any, index: number) {
       let type = question.type;
 
-      return Types.isInlineResponseType(type) || (this.props.feedback[index] &&
-            (question.type !=="table" &&
-            question.type !=="multipleChoice" &&
-            question.type !=="selectMultiple")
-            ) ? <div /> :
+      return Types.isInlineResponseType(type) 
+      // || (this.props.feedback[index] &&
+      //       (question.type !=="table" &&
+      //       question.type !=="multipleChoice" &&
+      //       question.type !=="selectMultiple")
+      //       ) 
+            ? <div /> :
           <Response
               key={"response"+index}
             type={type}

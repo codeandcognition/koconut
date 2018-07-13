@@ -10,7 +10,8 @@ type Props = {
     choices: string[],
     prompt: string,
     inputHandler: Function,
-    questionindex: number
+    questionindex: number,
+    feedback: any;
 };
 
 class CheckboxQuestion extends Component {
@@ -54,6 +55,8 @@ class CheckboxQuestion extends Component {
     let formGroupLabelStyles = {
       margin: "0"
     };
+    console.log("aa", this.props.question)
+
     return(
       <FormControl component={"fieldset"}>
         <FormLabel component={"legend"}>{this.props.prompt}</FormLabel>
@@ -63,10 +66,26 @@ class CheckboxQuestion extends Component {
                 <FormControlLabel style={formGroupLabelStyles} key={index} control={
                   <Checkbox
                       checked={this.state.checkboxItems[item]}
-                      onChange={(e) => this.handleChange(e, item)}
+                      disabled={this.props.feedback ? true : false}
+                      onChange={(e) => {
+                          if(!this.props.feedback) {
+                            this.handleChange(e, item)
+                          }
+                        }}
                       value={item}
                   />
-                } label={item} />
+                } label={<div>{item} 
+                  {this.props.feedback && 
+                    <span style={{marginLeft: 5}}>
+                      <svg height={10} width={10}>
+                        <circle cx={5} cy={5} r={5} fill={
+                          (this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) > -1) || 
+                          (!this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) < 0) ? "green" : "red"
+                        }/>
+                      </svg>
+                    </span>
+                  }
+                </div>} />
             );
           })}
         </FormGroup>

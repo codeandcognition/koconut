@@ -45,6 +45,6 @@ ExerciseTypes.checkboxQuestion = 'checkboxQuestion';
 ExerciseTypes.shortResponse = 'shortResponse';
 ExerciseTypes.table = 'table';
 ExerciseTypes.selectMultiple = 'selectMultiple';
-ExerciseTypes.readTypes = ["highlightCode", "multipleChoice", "shortResponse", "memoryTable"]; // Can probably define this based on the above, but it's fine for now
+ExerciseTypes.readTypes = ["highlightCode", "multipleChoice", "shortResponse", "table", "selectMultiple"]; // Can probably define this based on the above, but it's fine for now
 
 export default ExerciseTypes;

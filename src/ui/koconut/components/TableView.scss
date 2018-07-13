@@ -21,3 +21,34 @@
 .notdisabled {
   cursor: pointer;
 }
+
+$choice-color: #cccccc;
+
+.choice {
+  margin: 10px auto; // centering the MC choices
+  user-select: none;
+  padding: 2.5%;
+  width: 33%;
+  // margin: 10px;
+  border-radius: 20px;
+  border: 2px solid $choice-color;
+  // background-color: $choice-color;
+  transition-duration: 50ms;
+  background-color: white;
+}
+
+.choice:active {
+  opacity: .95;
+}
+
+.choice:hover {
+  background-color: darken($choice-color, 10%);
+}
+
+.choice.answer {
+  background-color: darken($choice-color, 15%);
+}
+
+.choice.answer:hover {
+  background-color: darken($choice-color, 20%);
+}
