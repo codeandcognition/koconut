@@ -45,6 +45,7 @@ class Response extends Component {
             answer={answer}
             handleClick={update}
             questionIndex={index}
+            feedback={this.props.feedback}
         />;
       case(Types.shortResponse):
         return <ShortResponse inputHandler={update} questionIndex={index}/>;

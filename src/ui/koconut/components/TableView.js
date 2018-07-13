@@ -1,6 +1,6 @@
 // @flow
 import React, {Component} from 'react';
-import './TableView.css'; // TODO: Create this
+import './TableView.css';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -154,7 +154,6 @@ class TableView extends Component {
                           correctness = "table-correct";
                         }
                       }
-                      console.log(correctness);
                       return <TableCell key={"cell"+i+j} className={correctness !== "" ? correctness : "reg"}>
                         {this.generateCell(e,i,j)}
                       </TableCell>
