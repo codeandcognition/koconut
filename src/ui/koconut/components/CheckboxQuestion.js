@@ -55,7 +55,6 @@ class CheckboxQuestion extends Component {
     let formGroupLabelStyles = {
       margin: "0"
     };
-    console.log("aa", this.props.question)
 
     return(
       <FormControl component={"fieldset"}>
