@@ -131,7 +131,7 @@ class Information extends Component {
                 <div> wow good joob you learnt yourself a good 1 </div> :
                 this.props.exercise.questions.map((question, index) => {
                 return (
-                    <div key={"information" + index}>
+                    <div key={"information" + index} className={"information-with-submit"}>
                     <div className="information">
                       {this.renderCodeView(question, index)}
                       {this.renderResponseView(question, index)}
