@@ -40,7 +40,7 @@ class Question extends Component {
 			currentAnswer: '',
 			currentQuestionFormat: 'standAlone',
 			checkboxOption: 'choice',
-			feedback: question.feedback
+			feedback: JSON.stringify(question.feedback)
 		};
 	}
 
