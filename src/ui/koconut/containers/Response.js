@@ -45,13 +45,18 @@ class Response extends Component {
             answer={answer}
             handleClick={update}
             questionIndex={index}
+            feedback={this.props.feedback}
         />;
       case(Types.shortResponse):
-        return <ShortResponse inputHandler={update} questionIndex={index}/>;
+        return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index}/>;
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.table):
-        return <TableView feedback={this.props.feedback} question={this.props.question} inputHandler={update} questionIndex={index} answer={answer[index]}/>;
+        return <TableView feedback={this.props.feedback} 
+                          question={this.props.question} 
+                          inputHandler={update} 
+                          questionIndex={index} 
+                          answer={answer[index]}/>;
       case(Types.checkboxQuestion):
         return <CheckboxQuestion choices={choices} prompt={"prompt" +
         " placeholder"} inputHandler={update} questionIndex={index} feedback={this.props.feedback}

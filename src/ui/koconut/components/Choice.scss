@@ -28,3 +28,11 @@ $choice-color: #cccccc;
 .choice.answer:hover {
   background-color: darken($choice-color, 20%);
 }
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.notdisabled {
+  cursor: pointer;
+}

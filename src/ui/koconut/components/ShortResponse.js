@@ -28,12 +28,14 @@ class  ShortResponse extends Component {
           <h3>Type your response here:</h3>
           {
             <div className="short-response-value">
-              <textarea onChange={(event) => {
-                this.setState({value: event.target.value});
-                this.props.inputHandler(event.target.value, this.props.questionIndex);
+              <textarea value={this.state.value} disabled={this.props.feedback ? true : false} onChange={(event) => {
+                
+                  this.setState({value: event.target.value});
+                  this.props.inputHandler(event.target.value, this.props.questionIndex);
+                
               }}>
               </textarea>
-              <p>{this.state.value}</p>
+              {/* <p>{this.state.value}</p> */}
             </div>
           }
         </div>

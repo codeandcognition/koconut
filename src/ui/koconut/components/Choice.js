@@ -33,8 +33,12 @@ class Choice extends Component {
   render() {
     return (
         <div
-            className={'choice ' + (this.props.answer ? 'answer' : '')}
-            onClick={() => this.props.handleClick(this.props.choice, this.props.questionIndex)}
+            className={`choice ${this.props.answer ? 'answer' : ''} ${this.props.disabled ? 'disabled' : 'notdisabled'}`}
+            onClick={() => {
+              if(!this.props.disabled) {
+                this.props.handleClick(this.props.choice, this.props.questionIndex);           
+              }
+            }}
             data-tip
             data-for={this.props.content}
         >

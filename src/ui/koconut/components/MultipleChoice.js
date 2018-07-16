@@ -31,7 +31,7 @@ class MultipleChoice extends Component {
                   key={choice}
                   choice={choice}
                   content={labels !== null && labels !== undefined?labels[i]:choice}
-                  answer={choice === this.props.answer[this.props.questionIndex] }
+                  answer={choice === this.props.answer[this.props.questionIndex]}
                   tooltip={
                     this.props.tooltips !== undefined &&
                     this.props.tooltips !== null
@@ -40,6 +40,7 @@ class MultipleChoice extends Component {
                   }
                   handleClick={this.props.handleClick}
                   questionIndex={this.props.questionIndex}
+                  disabled={this.props.feedback ? true : false}
               />) : ''
           )}
         </div>

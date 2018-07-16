@@ -252,13 +252,13 @@ class Code extends Component {
                 {isWriteType && this.renderAce()}
                 {!isWriteType && this.renderMarkdown()}
                 <div className="code-config">
-                  <button onClick={this.handleHintRequest}>?</button>
+                  {/* <button onClick={this.handleHintRequest}>?</button> */}
                   {reset}
                 </div>
 
-                {hint ? <Hint content="//TODO: Place hint here."
+                {/* {hint ? <Hint content="//TODO: Place hint here."
                               pos={curLine}
-                              close={() => this.setState({hint: false})}/> : ''}
+                              close={() => this.setState({hint: false})}/> : ''} */}
               </div>
           }
         </div>

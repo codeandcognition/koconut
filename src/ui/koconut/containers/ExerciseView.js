@@ -79,6 +79,7 @@ class Exercise extends Component {
               codeTheme={this.props.codeTheme}
               toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
               submitHandler={this.props.submitHandler}
+              timesGotQuestionWrong={this.props.timesGotQuestionWrong}
           />
           <ConceptLabel concepts={this.props.exercise.concepts}/>
         </div>

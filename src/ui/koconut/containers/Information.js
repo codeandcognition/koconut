@@ -25,7 +25,8 @@ class Information extends Component {
     mode: string,
     toggleCodeTheme: Function,
     codeTheme: string,
-    submitHandler: Function
+    submitHandler: Function,
+    timesGotQuestionWrong: number[]
   };
 
   /**
@@ -101,12 +102,13 @@ class Information extends Component {
   renderFeedback(question: any, index: number) {
       if(this.props.feedback[index]) {
         return <Feedback
-        feedback={this.props.feedback[index]}
-        questionIndex={index}
-        submitTryAgain={() => this.props.submitTryAgain(index)}
-        type={question.type}
-        answer={this.props.answer}
-        exercise={this.props.exercise}
+          feedback={this.props.feedback[index]}
+          questionIndex={index}
+          submitTryAgain={() => this.props.submitTryAgain(index)}
+          type={question.type}
+          question={this.props.exercise.questions[index]}
+          timesGotSpecificQuestionWrong={this.props.timesGotQuestionWrong[index]}
+          answer={this.props.answer}
         />
       }
       return <div />
@@ -133,14 +135,14 @@ class Information extends Component {
                 <div> wow good joob you learnt yourself a good 1 </div> :
                 this.props.exercise.questions.map((question, index) => {
                 return (
-                    <div key={"information" + index}>
+                    <div key={"information" + index} className={"information-with-submit"}>
                     <div className="information">
                       {this.renderCodeView(question, index)}
                       {this.renderResponseView(question, index)}
                       {this.renderFeedback(question, index)}
                     </div>
                       {!(this.props.feedback[index]) &&
-                      <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />
+                        <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />
                       }
                     </div>);
             })
