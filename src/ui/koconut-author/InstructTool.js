@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from'../koconut/components/CodeBlock';
 import './InstructTool.css';
-import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
+import {ConceptKnowledge, MasteryModel} from './MasteryModel';
 
 
 class InstructTool extends Component {
@@ -165,8 +165,13 @@ class InstructTool extends Component {
 		});
 	}
 
+  /**
+   * Renders the list of all concepts in the dropdown menu
+   *
+   * @returns {T[]}
+   */
   getConcepts(): ConceptKnowledge[] {
-    return MasteryModel.model.filter((concept) => concept.teach && !concept.container);
+    return MasteryModel.model.filter((concept) => concept.teach && concept.container);
   }
 
 	render() {
