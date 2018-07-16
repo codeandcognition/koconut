@@ -440,7 +440,6 @@ class ExerciseTool extends Component {
 				questions: [],
 				concepts: []
 			},
-			conceptList: [],
 			isFollowup: false,
 			currentChoice: '',
 			currentTable: {
