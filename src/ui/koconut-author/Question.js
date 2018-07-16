@@ -40,7 +40,7 @@ class Question extends Component {
 			currentAnswer: '',
 			currentQuestionFormat: 'standAlone',
 			checkboxOption: 'choice',
-			feedback: JSON.stringify(question.feedback)
+			feedback: JSON.stringify(question.feedback, null, 2)
 		};
 	}
 
@@ -81,7 +81,7 @@ class Question extends Component {
 			type: "",
 			answer: "",
 			hint: "",
-			feedback: "",
+			feedback: {},
 			followupPrompt: "",
 			followupQuestions: []
 		};
@@ -91,7 +91,8 @@ class Question extends Component {
 			currentChoice: '',
 			currentAnswer: '',
 			currentQuestionFormat: 'standAlone',
-			checkboxOption: 'choice'
+			checkboxOption: 'choice',
+			feedback: JSON.stringify({}, null, 2)
 		});
 	}
 
@@ -501,7 +502,9 @@ class Question extends Component {
 		let temp = this.state.currentQuestion;
 		temp[field] = value;
 		this.setState({currentQuestion: temp});
-		this.generateFeedbackTemplate();
+		if (field === 'choices') {
+			this.generateFeedbackTemplate();
+		}
 	}
 
 	/**
