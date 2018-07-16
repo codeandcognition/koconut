@@ -18,7 +18,7 @@ import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import Button from '@material-ui/core/Button/Button';
-import {ConceptKnowledge, MasteryModel} from '../../data/MasteryModel';
+import {ConceptKnowledge, MasteryModel} from './MasteryModel';
 import Question from './Question';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -68,8 +68,8 @@ class ExerciseTool extends Component {
 		this.setState({
 			conceptList: list
 		});
-
 		this.getAllExercises();
+
 	}
 
 	getAllExercises() {
@@ -111,7 +111,7 @@ class ExerciseTool extends Component {
 	 * @returns {T[]}
 	 */
   getConcepts(): ConceptKnowledge[] {
-    return MasteryModel.model.filter((concept) => concept.teach && !concept.container);
+    return MasteryModel.model.filter((concept) => concept.teach && concept.container);
   }
 
 	/**

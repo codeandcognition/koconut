@@ -20,349 +20,171 @@ const keyword = { new: "new", true: "true", false: "false", if: "if", else: "els
 	null: "null", this: "this", super: "super",
 };
 
-const identifier = "identifier", expression = "expression", classInstanceExpression = "classInstanceExpression",
-		methodInvocationExpression = "methodInvocationExpression", arrayCreationExpression = "arrayCreationExpression",
-		statement = "statement", ifThenStatement = "ifThenStatement", ifThenElseStatement = "ifThenElseStatement",
-		forStatement = "forStatement", doStatement = "doStatement", whileStatement = "whileStatement",
-		breakStatement = "breakStatement", continueStatement = "continueStatement",
-		returnStatement = "returnStatement", primitiveType = "primitiveType", short = "short",
-		int = "int", long = "long", char = "char", float = "float", boolean = "boolean",
-		literal = "literal", integerLiteral = "integerLiteral", floatingPointLiteral = "floatingPointLiteral",
-		booleanLiteral = "booleanLiteral", characterLiteral = "characterLiteral", stringLiteral = "stringLiteral",
-		nullLiteral = "nullLiteral", variableDeclaration = "variableDeclaration", statementExpression = "statementExpression",
-		assignmentExpression = "assignmentExpression", postIncrementExpression = "postIncrementExpression",
-		postDecrementExpression = "postDecrementExpression", arrayAccessExpression = "arrayAccessExpression",
-		multiplicativeExpression = "multiplicativeExpression", additiveExpression = "additiveExpression",
-		equalityExpression = "equalityExpression", conditionalAndExpression = "conditionalAndExpression",
-		conditionalOrExpression = "conditionalOrExpression", relationalExpression = "relationalExpression",
-		leftHandSide = "leftHandSide", assignmentOperator = "assignmentOperator", string = "string",
-		referenceType = "referenceType", fieldAccess = "fieldAccess", relationalOperator = "relationalOperator"
-;
-/*
- { name: ,
-   dependencies: [],
-   parents: [],
-   should_teach: true,
- },
-*/
-const conceptInventory = [
-	{	name: literal,
-		dependencies: [integerLiteral, floatingPointLiteral, booleanLiteral, characterLiteral, stringLiteral, nullLiteral],
+const g = {
+	howCodeRuns: "howCodeRuns",
+	dataTypes: "dataTypes",
+	printStatements: "printStatements",
+	variables: "variables",
+	arithmeticOperators: "arithmeticOperators",
+	relationalOperators: "relationalOperators",
+	variableSwap: "variableSwap",
+	digitProcessing: "digitProcessing",
+	floatEquality: "floatEquality",
+	conditionals: "conditionals",
+	findMaxMin: "findMaxMin"
+}
+
+const t = {
+	semantic: "semantic",
+	template: "template",
+	onboarding: "onboarding"
+}
+
+
+export const conceptInventory = {
+	[g.howCodeRuns]: {
+		dependencies: [],
+		parents: [g.dataTypes],
+		explanations: {
+			name: "How Code Runs",
+			definition: "this is a test",
+			examples: [],
+			future: []
+		},
+		should_teach: true,
+		container: true,
+		type: t.onboarding
+	},
+	[g.dataTypes]: {
+		dependencies: [g.howCodeRuns],
+		parents: [g.printStatements, g.variables, g.arithmeticOperators, g.relationalOperators],
+		explanations: {
+			name: "Data Types",
+			definition: "",
+			examples: [],
+			future: []
+		},
+		should_teach: true,
+		container: true,
+		type: t.semantic
+	},
+	[g.printStatements]: {
+		dependencies: [g.dataTypes],
 		parents: [],
+		explanations: {
+			name: "Print Statements",
+			definition: "",
+			examples: [],
+			future: []
+		},
 		should_teach: true,
-		container: true
+		container: true,
+		type: t.semantic
 	},
-	{ name: integerLiteral,
-		dependencies: [],
-		parents: [literal],
+	[g.variables]: {
+		dependencies: [g.dataTypes],
+		parents: [g.variableSwap, g.digitProcessing],
+		explanations: {
+			name: "Variables",
+			definition: "",
+			examples: [],
+			future: []
+		},
 		should_teach: true,
-		container: false
+		container: true,
+		type: t.semantic
 	},
-	{ name: floatingPointLiteral,
-		dependencies: [sep.dot],
-		parents: [literal],
+	[g.arithmeticOperators]: {
+		dependencies: [g.dataTypes],
+		parents: [g.digitProcessing, g.floatEquality],
+		explanations: {
+			name: "Arithmetic Operators",
+			definition: "",
+			examples: [],
+			future: []
+		},
 		should_teach: true,
-		container: false
+		container: true,
+		type: t.semantic
 	},
-	{ name: booleanLiteral,
-		dependencies: [keyword.true, keyword.false],
-		parents: [literal],
+	[g.relationalOperators]: {
+		dependencies: [g.dataTypes],
+		parents: [g.floatEquality, g.conditionals],
+		explanations: {
+			name: "Relational Operators",
+			definition: "",
+			examples: [],
+			future: []
+		},
 		should_teach: true,
-		container: false
+		container: true,
+		type: t.semantic
 	},
-	{	name: keyword.true,
-		dependencies: [],
-		parents: [booleanLiteral],
-		should_teach: true,
-		container: false
-	},
-	{ name: keyword.false,
-		dependencies: [],
-		parents: [booleanLiteral],
-		should_teach: true,
-		container: false
-	},
-	{ name: characterLiteral,
-		dependencies: [quote.single],
-		parents: [literal],
-		should_teach: true,
-		container: false
-	},
-	{ name: stringLiteral,
-		dependencies: [quote.double],
-		parents: [literal],
-		should_teach: true,
-		container: false
-	},
-	{ name: nullLiteral,
-		dependencies: [],
-		parents: [literal],
-		should_teach: true,
-		container: false
-	},
-	{ name: keyword.null,
-		dependencies: [],
-		parents: [nullLiteral],
-		should_teach: true,
-		container: false
-	},
-	{ name: primitiveType,
-		dependencies: [short, int, long, char, float, boolean],
+	[g.variableSwap]: {
+		dependencies: [g.variables],
 		parents: [],
+		explanations: {
+			name: "Variable Swap",
+			definition: "",
+			examples: [],
+			future: []
+		},
 		should_teach: true,
-		container: true
+		container: true,
+		type: t.template
 	},
-	{ name: short,
-		dependencies: [integerLiteral],
-		parents: [primitiveType],
-		should_teach: true,
-		container: false
-	},
-	{ name: int,
-		dependencies: [integerLiteral],
-		parents: [primitiveType],
-		should_teach: true,
-		container: false
-	},
-	{ name: long,
-		dependencies: [integerLiteral],
-		parents: [primitiveType],
-		should_teach: true,
-		container: false
-	},
-	{ name: char,
-		dependencies: [characterLiteral],
-		parents: [primitiveType],
-		should_teach: true,
-		container: false
-	},
-	{ name: float,
-		dependencies: [floatingPointLiteral],
-		parents: [primitiveType],
-		should_teach: true,
-		container: false
-	},
-	{ name: boolean,
-		dependencies: [booleanLiteral],
-		parents: [primitiveType],
-		should_teach: true,
-		container: false
-	},
-	{ name: referenceType,
-		dependencies: [string],
+	[g.digitProcessing]: {
+		dependencies: [g.variables, g.arithmeticOperators],
 		parents: [],
+		explanations: {
+			name: "Digit Processing",
+			definition: "",
+			examples: [],
+			future: []
+		},
 		should_teach: true,
-		container: true
+		container: true,
+		type: t.template
 	},
-	{ name: string,
-		dependencies: [],
-		parents: [referenceType],
-		should_teach: true,
-		container: false
-	},
-	{ name: identifier,
-		dependencies: [],
-		parents: [classInstanceExpression, arrayCreationExpression, methodInvocationExpression, postIncrementExpression, postDecrementExpression, arrayAccessExpression, leftHandSide],
-		should_teach: true,
-		container: false
-	},
-	{	name: keyword.new,
-		dependencies: [],
-		parents: [classInstanceExpression, arrayCreationExpression],
-		should_teach: true,
-		container: false
-	},
-	{ name: expression,
-		dependencies: [assignmentExpression, postIncrementExpression, postDecrementExpression, classInstanceExpression, methodInvocationExpression, arrayCreationExpression, arrayAccessExpression],
+	[g.floatEquality]: {
+		dependencies: [g.arithmeticOperators, g.relationalOperators],
 		parents: [],
+		explanations: {
+			name: "Float Equality",
+			definition: "",
+			examples: [],
+			future: []
+		},
 		should_teach: true,
-		container: true
+		container: true,
+		type: t.template
 	},
-	{ name: arrayAccessExpression,
-		dependencies: [identifier, sep.left_sqr, sep.right_sqr, ],
-		parents: [expression],
+	[g.conditionals]: {
+		dependencies: [g.relationalOperators],
+		parents: [g.findMaxMin],
+		explanations: {
+			name: "Conditionals",
+			definition: "",
+			examples: [],
+			future: []
+		},
 		should_teach: true,
-		container: false
+		container: true,
+		type: t.semantic
 	},
-	{ name: leftHandSide,
-		dependencies: [identifier, fieldAccess, arrayAccessExpression],
+	[g.findMaxMin]: {
+		dependencies: [g.conditionals],
 		parents: [],
+		explanations: {
+			name: "Find Max/Min",
+			definition: "",
+			examples: [],
+			future: []
+		},
 		should_teach: true,
-		container: true
+		container: true,
+		type: t.template
 	},
-	{ name: fieldAccess,
-		dependencies: [keyword.this, keyword.super, sep.dot],
-		parents: [leftHandSide],
-		should_teach: true,
-		container: true
-	},
-	{ name: assignmentOperator,
-		dependencies: [op.assign, op.add_assign, op.sub_assign, op.div_assign, op.mult_assign],
-		parents: [],
-		should_teach: true,
-		container: true
-	},
-	{ name: op.assign,
-		dependencies: [],
-		parents: [assignmentOperator],
-		should_teach: true,
-		container: false
-	},
-	{ name: op.add_assign,
-		dependencies: [],
-		parents: [assignmentOperator],
-		should_teach: true,
-		container: false
-	},
-	{ name: op.sub_assign,
-		dependencies: [],
-		parents: [assignmentOperator],
-		should_teach: true,
-		container: false
-	},
-	{ name: op.div_assign,
-		dependencies: [],
-		parents: [assignmentOperator],
-		should_teach: true,
-		container: false
-	},
-	{ name: op.mult_assign,
-		dependencies: [],
-		parents: [assignmentOperator],
-		should_teach: true,
-		container: false
-	},
-	{ name: assignmentExpression,
-		dependencies: [leftHandSide, assignmentOperator, expression],
-		parents: [expression],
-		should_teach: true,
-		container: false
-	},
-	{ name: postIncrementExpression,
-		dependencies: [leftHandSide, op.incr],
-		parents: [expression],
-		should_teach: true,
-		container: false
-	},
-	{ name: postDecrementExpression,
-		dependencies: [leftHandSide, op.decr],
-		parents: [expression],
-		should_teach: true,
-		container: false
-	},
-	{	name: classInstanceExpression,
-		dependencies: [keyword.new, identifier, sep.left_paren, sep.right_paren],
-		parents: [expression],
-		should_teach: true,
-		container: false
-	},
-	{	name: methodInvocationExpression,
-		dependencies: [identifier, sep.left_paren, sep.right_paren],
-		parents: [expression],
-		should_teach: true,
-		container: false
-	},
-	{	name: arrayCreationExpression,
-		dependencies: [keyword.new, primitiveType, identifier, sep.left_sqr, sep.right_sqr],
-		parents: [expression],
-		should_teach: true,
-		container: false
-	},
-	{ name: multiplicativeExpression,
-		dependencies: [leftHandSide, literal, op.mult],
-		parents: [expression],
-		should_teach: true,
-		container: false
-	},
-	{ name: additiveExpression,
-		dependencies: [leftHandSide, literal, op.add],
-		parents: [expression],
-		should_teach: true,
-	},
-	{ name: relationalOperator,
-		dependencies: [op.greater, op.lesser, op.greater_equality, op.lesser_equality],
-		parents: [],
-		should_teach: true,
-		container: true
-	},
-	{ name: relationalExpression,
-		dependencies: [leftHandSide, literal, relationalOperator],
-		parents: [conditionalAndExpression, conditionalOrExpression],
-		should_teach: true,
-		container: false
-	},
-	{ name: equalityExpression,
-		dependencies: [leftHandSide, literal, op.equality],
-		parents: [conditionalAndExpression, conditionalOrExpression],
-		should_teach: true,
-		container: false
-	},
-	{ name: conditionalAndExpression,
-		dependencies: [relationalExpression, equalityExpression, op.and],
-		parents: [expression],
-		should_teach: true,
-		container: false
-	},
-	{ name: conditionalOrExpression,
-		dependencies: [relationalExpression, equalityExpression, op.or],
-		parents: [expression],
-		should_teach: true,
-		container: false
-	},
-	{ name: statement,
-		dependencies: [ifThenStatement, ifThenElseStatement, forStatement, doStatement, whileStatement, breakStatement, continueStatement, returnStatement],
-		parents: [],
-		should_teach: true,
-		container: true
-	},
-	{ name: ifThenStatement,
-		dependencies: [keyword.if, expression, sep.left_curl, sep.right_curl],
-		parents: [],
-		should_teach: true,
-		container: false
-	},
-	{ name: ifThenElseStatement,
-		dependencies: [keyword.if, expression, keyword.else, sep.left_curl, sep.right_curl],
-		parents: [statement],
-		should_teach: true,
-		container: false
-	},
-	{ name: forStatement,
-		dependencies: [keyword.for, sep.left_paren, variableDeclaration, expression, statementExpression, sep.right_paren, sep.semicolon, sep.left_curl, sep.right_curl],
-		parents: [statement],
-		should_teach: true,
-		container: false
-	},
-	{ name: doStatement,
-		dependencies: [keyword.do, keyword.while, sep.left_paren, expression, sep.right_paren, sep.left_curl, sep.right_curl],
-		parents: [statement],
-		should_teach: true,
-		container: false
-	},
-	{ name: whileStatement,
-		dependencies: [keyword.while, sep.left_paren, expression, sep.right_paren, sep.left_curl, sep.right_curl],
-		parents: [statement],
-		should_teach: true,
-		container: false
-	},
-	{ name: breakStatement,
-		dependencies: [keyword.break, sep.semicolon],
-		parents: [statement],
-		should_teach: true,
-		container: false
-	},
-	{ name: continueStatement,
-		dependencies: [keyword.continue, sep.semicolon],
-		parents: [statement],
-		should_teach: true,
-		container: false
-	},
-	{ name: returnStatement,
-		dependencies: [keyword.return, statement, sep.semicolon],
-		parents: [],
-		should_teach: true,
-		container: false
-	},
-];
+};
 
 export default conceptInventory;
