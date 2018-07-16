@@ -44,7 +44,8 @@ class Feedback extends Component {
       gotCorrect = this.props.feedback;
     }
 
-    var feedbackData = this.props.exercise.questions[this.props.questionIndex].feedback;
+    // var feedbackData =
+    // this.props.exercise.questions[this.props.questionIndex].feedback;
 
     return (
       <div style={{width: "60%"}} className="feedback">
