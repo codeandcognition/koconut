@@ -138,7 +138,7 @@ class Information extends Component {
                       {this.renderFeedback(question, index)}
                     </div>
                       {!(this.props.feedback[index]) &&
-                      <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />
+                        <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />
                       }
                     </div>);
             })
