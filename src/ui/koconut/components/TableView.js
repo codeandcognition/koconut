@@ -135,7 +135,7 @@ class TableView extends Component {
           <TableHead>
             <TableRow>
               {colNames.map((d, i)=> {
-                return <TableCell key={"table-head" + i}>{d}</TableCell>
+                return <TableCell key={"table-head" + i} style={{backgroundColor: "white"}}>{d}</TableCell>
               })}
             </TableRow>
           </TableHead>
