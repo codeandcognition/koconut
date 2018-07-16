@@ -124,7 +124,7 @@ class App extends Component {
    */
   generateExercise(concept: string, exerciseType: string) {
 		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
-		if(exercises) {
+		if (exercises) {
       if (exercises.length === 0) {
         this.setState({
           error: true,
@@ -233,7 +233,7 @@ class App extends Component {
 
     // basically the answer will come in looking like this for a table type problem
     // mixed with regular problems
-    let stub = ["a", "a", [ ["", "a", "a"], ["", "a", "a"]  ], "a"];
+    let stub = ["a", "a", [["", "a", "a"], ["", "a", "a"]], "a"];
 
     if (questionType === "table") {
       let colNames = question.colNames;
@@ -251,7 +251,8 @@ class App extends Component {
           cellValue = null;
           // sorry to whoever has to understand this later :(
           // it's for the greater good and expandability
-        } else if (answer[questionIndex] && answer[questionIndex][arrayIndexToPushTo] && d.answer ===
+        } else if (answer[questionIndex] &&
+            answer[questionIndex][arrayIndexToPushTo] && d.answer ===
             answer[questionIndex][arrayIndexToPushTo][subArrayIndex]) {
           cellValue = "correct";
         } else {
@@ -274,7 +275,7 @@ class App extends Component {
       }
       feedbackTemp[questionIndex] = correct ? "correct" : "incorrect";
     } else {
-      if(question.answer === answer[questionIndex]) {
+      if (question.answer === answer[questionIndex]) {
         feedbackTemp[questionIndex] = "correct";
       } else {
         feedbackTemp[questionIndex] = "incorrect";

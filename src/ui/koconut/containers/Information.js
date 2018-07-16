@@ -105,6 +105,8 @@ class Information extends Component {
         questionIndex={index}
         submitTryAgain={() => this.props.submitTryAgain(index)}
         type={question.type}
+        answer={this.props.answer}
+        exercise={this.props.exercise}
         />
       }
       return <div />

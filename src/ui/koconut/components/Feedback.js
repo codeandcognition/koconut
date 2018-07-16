@@ -27,14 +27,24 @@ class Feedback extends Component {
       gotCorrect = this.props.feedback;
     }
 
+    var feedbackData = this.props.exercise.questions[this.props.questionIndex].feedback;
+
     return (
-      <div className="feedback">
+      <div style={{width: "60%"}} className="feedback">
         <div className="feedback-correctness">
-          <p>Your answer was: {gotCorrect}</p>
+          <p>Your response: {String(this.props.answer[this.props.questionIndex])}</p>
         </div>
         <VisualFeedback feedback={gotCorrect}/>
+        <div style={{textAlign: "left"}} className={"feedback-correctness"}>
+          <p>{gotCorrect === "correct" ? "Well done!" : "Not quite!"}</p>
+          {this.props.type === "multipleChoice" ? (
+              <p>{this.props.feedback}</p>
+          ) : (
+              <p>{gotCorrect === "correct" ? feedbackData[0] : feedbackData[1]}</p>
+          )}
+        </div>
         <div className="feedback-ok">
-          <button onClick={this.props.submitOk}>OK</button>
+          <button onClick={this.props.submitOk}>Continue</button>
           {gotCorrect !== "correct" &&
             <button onClick={this.props.submitTryAgain}>Try Again</button>
           }
