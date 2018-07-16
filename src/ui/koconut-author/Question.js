@@ -396,6 +396,8 @@ class Question extends Component {
 		return(
 				<div>
 					<p style={{color: '#3F51B5'}}>Feedback <span style={this.fieldReqs.required}>required</span></p>
+					<p>Fill in the following JSON object</p>
+					<p className={"text-warning"}>Note: For open-ended questions, incorrect field is an array of strings.</p>
 					<textarea value={this.state.feedback}
 										style={style}
 										onChange={evt => this.setState({feedback: evt.target.value})}/>
@@ -512,7 +514,9 @@ class Question extends Component {
 			});
 		} else {
 			template["correct"] = "";
-			template["incorrect"] = "";
+			// feedback for incorrect answers is in the form of an array of strings
+			// so as to display feedback based on the number of tries
+			template["incorrect"] = [];
 		};
 		this.setState({feedback: JSON.stringify(template, null, 2)});
 	}
