@@ -36,7 +36,6 @@ class Response extends Component {
     let answer = this.props.answer;
     let update = this.props.updateHandler;
     let index = this.props.questionIndex;
-    console.log(this.props.answer);
 
     switch (type) {
       case(Types.multipleChoice):

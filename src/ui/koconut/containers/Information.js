@@ -25,7 +25,8 @@ class Information extends Component {
     mode: string,
     toggleCodeTheme: Function,
     codeTheme: string,
-    submitHandler: Function
+    submitHandler: Function,
+    timesGotQuestionWrong: number[]
   };
 
   /**
@@ -101,10 +102,13 @@ class Information extends Component {
   renderFeedback(question: any, index: number) {
       if(this.props.feedback[index]) {
         return <Feedback
-        feedback={this.props.feedback[index]}
-        questionIndex={index}
-        submitTryAgain={() => this.props.submitTryAgain(index)}
-        type={question.type}
+          feedback={this.props.feedback[index]}
+          questionIndex={index}
+          submitTryAgain={() => this.props.submitTryAgain(index)}
+          type={question.type}
+          question={this.props.exercise.questions[index]}
+          timesGotSpecificQuestionWrong={this.props.timesGotQuestionWrong[index]}
+          answer={this.props.answer}
         />
       }
       return <div />

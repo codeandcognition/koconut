@@ -73,7 +73,8 @@ class App extends Component {
 		author: boolean,
     exerciseList: ?Exercise[],
     conceptMapGetter: ?Map<string,number[]>,
-    codeTheme: string
+    codeTheme: string,
+    timesGotQuestionWrong: number[]
   };
 
   constructor() {
@@ -97,7 +98,8 @@ class App extends Component {
 			author: false,
       exerciseList: null,
       conceptMapGetter: null,
-      codeTheme: ''
+      codeTheme: '',
+      timesGotQuestionWrong: [] // times the user has gotten question wrong, indices are question[index]
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -235,6 +237,7 @@ class App extends Component {
     // mixed with regular problems
     let stub = ["a", "a", [ ["", "a", "a"], ["", "a", "a"]  ], "a"];
 
+    let checkerForCorrectness = true;
     if (questionType === "table") {
       let colNames = question.colNames;
       let allCells = question.data;
@@ -256,6 +259,7 @@ class App extends Component {
           cellValue = "correct";
         } else {
           cellValue = "incorrect";
+          checkerForCorrectness = false;
         }
         addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
       });
@@ -266,11 +270,13 @@ class App extends Component {
       if (answerArr && question.answer.length === answerArr.length) {
         question.answer.forEach((item) => {
           if (!answerArr.includes(item)) {
-            correct = false
+            correct = false;
+            checkerForCorrectness = false;
           }
         });
       } else {
         correct = false;
+        checkerForCorrectness = false;
       }
       feedbackTemp[questionIndex] = correct ? "correct" : "incorrect";
     } else {
@@ -278,9 +284,18 @@ class App extends Component {
         feedbackTemp[questionIndex] = "correct";
       } else {
         feedbackTemp[questionIndex] = "incorrect";
+        checkerForCorrectness = false;
       }
     }
 
+    let temp = this.state.timesGotQuestionWrong;
+    if(!temp[questionIndex]) {
+      temp[questionIndex] = 0;
+    }
+    if(!checkerForCorrectness) {
+      temp[questionIndex]++;
+    }
+    this.setState({timesGotQuestionWrong: temp});
     return feedbackTemp;
   }
 
@@ -507,6 +522,7 @@ class App extends Component {
             concept={this.state.currentConcept}
             codeTheme={this.state.codeTheme}
             toggleCodeTheme={(theme) => this.setState({codeTheme: theme})}
+            timesGotQuestionWrong={this.state.timesGotQuestionWrong}
         />
     );
   }
