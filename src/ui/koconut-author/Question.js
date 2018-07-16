@@ -39,7 +39,8 @@ class Question extends Component {
 			currentChoice: '',
 			currentAnswer: '',
 			currentQuestionFormat: 'standAlone',
-			checkboxOption: 'choice'
+			checkboxOption: 'choice',
+			feedback: question.feedback
 		};
 	}
 
