@@ -502,7 +502,7 @@ class Question extends Component {
 		let temp = this.state.currentQuestion;
 		temp[field] = value;
 		this.setState({currentQuestion: temp});
-		if (field === 'choices') {
+		if (field === 'type' || field === 'choices') {
 			this.generateFeedbackTemplate();
 		}
 	}
