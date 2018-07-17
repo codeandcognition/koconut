@@ -99,11 +99,15 @@ class Cell extends Component {
 	 * @returns {*}
 	 */
 	renderCellFormatPrompt() {
-		return(
+		return (
 				<div>
 					<p>Does this cell contain a question? <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
-						<RadioGroup value={this.state.currentCellFormat} onChange={(evt) => this.setState({currentCellFormat: evt.target.value})}>
+						<RadioGroup value={this.state.currentCellFormat} onChange={(evt) => {
+							this.setState({
+								currentCellFormat: evt.target.value
+							});
+						}}>
 							<FormControlLabel value={"question"} control={<Radio color={"primary"}/>} label={"Yes"}/>
 							<FormControlLabel value={"prompt"} control={<Radio color={"primary"}/>} label={"No"}/>
 						</RadioGroup>
@@ -119,7 +123,7 @@ class Cell extends Component {
 	 * @returns {*}
 	 */
 	renderInstructionTypeForm() {
-		return(
+		return (
 				<div>
 					<p>How do you want to format the instruction? <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
@@ -157,7 +161,7 @@ class Cell extends Component {
 			fontFamily: 'monospace'
 		}
 
-		return(
+		return (
 				<div>
 					<p>Code <span style={this.fieldReqs.required}>required</span></p>
 					<textarea style={style} value={this.state.cell.code} onChange={this.handleChange('code')}/>
