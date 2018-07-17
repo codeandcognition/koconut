@@ -61,7 +61,7 @@ class Feedback extends Component {
     } else {
       finalstring = answer;
     }
-    return <div>The answer is <span style={{color: "green"}}>{finalstring}</span></div>
+    return <div><strong>The answer is <span style={{color: "green"}}>{finalstring}</span></strong></div>
   }
 
   render() {
@@ -78,19 +78,21 @@ class Feedback extends Component {
       gotCorrect = this.props.feedback;
     }
 
+    let correctBool = gotCorrect === "correct";
     return (
       <div className="feedback">
         <div className="feedback-correctness">
-          <p>Your answer was: {gotCorrect}</p>
+          <p>{!correctBool && "Not quite!"}{correctBool && "Well done!"}</p>
         </div>
-        <VisualFeedback feedback={gotCorrect}/>
+        {/* <VisualFeedback feedback={gotCorrect}/> */}
         {this.showFeedbackMessage(this.props.type, this.props.timesGotSpecificQuestionWrong, this.props.question.feedback, gotCorrect)}
-        {this.state.gaveUp &&
-          this.showAnswer()
-        }
         <div className="feedback-ok">
-          {(gotCorrect === "correct" || this.state.gaveUp) && <button onClick={this.props.submitOk}>Continue</button>}
-          {gotCorrect !== "correct" && !this.state.gaveUp &&
+          {(correctBool || this.state.gaveUp) && 
+            <div>
+              {this.showAnswer()}
+              <button onClick={this.props.submitOk}>Continue</button>
+            </div>}
+          {!correctBool && !this.state.gaveUp &&
             <div><button onClick={this.props.submitTryAgain}>Try Again</button>
               
                 <button onClick={() => {
