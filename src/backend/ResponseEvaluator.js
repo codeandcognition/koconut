@@ -94,7 +94,7 @@ class ResponseEvaluator {
    * @param feedback - OPTIONAL, for special new types (table and selectMultiple)
    */
   static evaluateAnswer(exercise: Exercise, answer: string, next: Function, questionIndex: number,
-                        questionType, feedback) {
+                        questionType: any, feedback: any) {
     // no one can escape asyncronous programming!!!!
     // >:D
 

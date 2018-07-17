@@ -10,7 +10,8 @@ export type Exercise = {
   concepts: string[],
   prompt?: string,
   questions: any,
-  labels?: Map<string,string>
+  labels?: Map<string,string>,
+  type?: any
 }
 
 const difficulty = {
@@ -530,8 +531,8 @@ export let survey =
       answer: '',
     };
 
-export const exampleExercises = variable17061.concat(survey, variable18916,
-    variable51520, variable60932, variable88688);
+// export const exampleExercises = variable17061.concat(survey, variable18916,
+//     variable51520, variable60932, variable88688);
 
 /*
 export const oldExampleExercises: {exercise: Exercise, answer: ?string}[] = [

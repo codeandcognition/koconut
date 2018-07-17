@@ -16,7 +16,8 @@ class MultipleChoice extends Component {
     tooltips: ?string[],
     answer: string[],
     handleClick: Function,
-    questionIndex: number
+    questionIndex: number,
+    feedback: any
   };
 
   render() {

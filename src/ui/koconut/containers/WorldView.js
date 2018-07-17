@@ -31,7 +31,6 @@ class WorldView extends Component {
    * @param {string} type type to filter by
    */
   getConceptsByType(orderedConcepts: ConceptKnowledge[], type: string) {
-    console.log(orderedConcepts);
     return orderedConcepts.filter(concept => {
       return concept.type === type;
     })
@@ -39,12 +38,6 @@ class WorldView extends Component {
 
   render() {
     let conceptList = this.getOrderedConcepts();
-    let title = {
-      [t.onboarding] : "Intro",
-      [t.semantic] : "Code constructs",
-      [t.template] : "Templates"
-    }
-
     let titleLeft = [
       {name: t.onboarding, title : "Intro"},
       {name: t.semantic, title : "Code constructs"}
@@ -56,17 +49,13 @@ class WorldView extends Component {
 
     return (
         <div className="container" style={{marginTop: '12vh'}}>
-					<h1>Intro</h1>
-					<li>Here you'll learn to code</li>
-					<li>How code runs</li>
-					<h1 style={{marginTop: "5vh"}}>Concepts</h1>
           <div style={{display: "flex"}}>
           <div style={{flexGrow: "6", margin: 10}}>
           {
             titleLeft.map(cTypeVal => {
               let cType = t[cTypeVal.name];
               return <div key={"world-"+cType} style={{marginTop: 10}}>
-                <h2>{cTypeVal.title}</h2>
+                <h1>{cTypeVal.title}</h1>
                 {this.getConceptsByType(conceptList, cType).map((concept, index) => {
                   let name = conceptInventory[concept.name].explanations.name;
 							    return <ConceptCard title={name}
@@ -84,7 +73,7 @@ class WorldView extends Component {
             titleRight.map(cTypeVal => {
               let cType = t[cTypeVal.name];
               return <div key={"world-"+cType} style={{marginTop: 10}}>
-                <h2>{cTypeVal.title}</h2>
+                <h1>{cTypeVal.title}</h1>
                 {this.getConceptsByType(conceptList, cType).map((concept, index) => {
                   let name = conceptInventory[concept.name].explanations.name;
 							    return <ConceptCard title={name}
