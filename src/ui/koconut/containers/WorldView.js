@@ -41,9 +41,18 @@ class WorldView extends Component {
     let conceptList = this.getOrderedConcepts();
     let title = {
       [t.onboarding] : "Intro",
-      [t.template] : "Templates",
-      [t.semantic] : "Code constructs"
+      [t.semantic] : "Code constructs",
+      [t.template] : "Templates"
     }
+
+    let titleLeft = [
+      {name: t.onboarding, title : "Intro"},
+      {name: t.semantic, title : "Code constructs"}
+    ]
+
+    let titleRight = [
+      {name: t.template, title : "Templates"}
+    ]
 
     return (
         <div className="container" style={{marginTop: '12vh'}}>
@@ -51,11 +60,13 @@ class WorldView extends Component {
 					<li>Here you'll learn to code</li>
 					<li>How code runs</li>
 					<h1 style={{marginTop: "5vh"}}>Concepts</h1>
+          <div style={{display: "flex"}}>
+          <div style={{flexGrow: "6", margin: 10}}>
           {
-            Object.keys(t).map(cTypeVal => {
-              let cType = t[cTypeVal];
-              return <div key={"world-"+cType}>
-                <h2>{title[cType]}</h2>
+            titleLeft.map(cTypeVal => {
+              let cType = t[cTypeVal.name];
+              return <div key={"world-"+cType} style={{marginTop: 10}}>
+                <h2>{cTypeVal.title}</h2>
                 {this.getConceptsByType(conceptList, cType).map((concept, index) => {
                   let name = conceptInventory[concept.name].explanations.name;
 							    return <ConceptCard title={name}
@@ -66,8 +77,27 @@ class WorldView extends Component {
                 })}
               </div>
             })
-
           }
+          </div>
+          <div style={{flexGrow: "6", margin: 10}}>
+          {
+            titleRight.map(cTypeVal => {
+              let cType = t[cTypeVal.name];
+              return <div key={"world-"+cType} style={{marginTop: 10}}>
+                <h2>{cTypeVal.title}</h2>
+                {this.getConceptsByType(conceptList, cType).map((concept, index) => {
+                  let name = conceptInventory[concept.name].explanations.name;
+							    return <ConceptCard title={name}
+																	key={index}
+																	concept={concept.name}
+																	generateExercise={this.props.generateExercise}
+																	getInstruction={this.props.getInstruction}/>
+                })}
+              </div>
+            })
+          }
+          </div>
+          </div>
 					{/* {
 						conceptList.map((concept, index) => {
 							let name = conceptInventory[concept.name].explanations.name;
