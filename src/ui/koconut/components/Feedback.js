@@ -80,7 +80,7 @@ class Feedback extends Component {
 
     let correctBool = gotCorrect === "correct";
     return (
-      <div className="feedback">
+      <div style={{width: "60%"}} className="feedback">
         <div className="feedback-correctness">
           <p>{!correctBool && "Not quite!"}{correctBool && "Well done!"}</p>
         </div>
