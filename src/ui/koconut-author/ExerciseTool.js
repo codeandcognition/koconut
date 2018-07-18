@@ -15,11 +15,15 @@
 import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import Button from '@material-ui/core/Button/Button';
 import {ConceptKnowledge, MasteryModel} from './MasteryModel';
 import Question from './Question';
+import Table from './Table';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
@@ -40,14 +44,6 @@ class ExerciseTool extends Component {
         concepts: []
       },
 			conceptList: [],
-			isFollowup: false,
-			currentChoice: '',
-			currentTable: {
-				colNames: [],
-				rows: 0,
-				data: {}
-			},
-			columnNames: [],
 			tabValue: 0,
 			exercises: {},
       allExercises: {},
@@ -56,14 +52,54 @@ class ExerciseTool extends Component {
 			editedExercise: "",
 			editError: "",
 			selectedConcept: "",
-			dataProp: undefined
+
+			isFollowup: false, 														// passed as a prop into the Question component
+			currentQuestion: this.Schemas["standAlone"], 				// this will be updated throughout an authoring session
+			currentQuestionFormat: "standAlone",					// keeps track of the format of the current question
+			currentCellIndex: -1													// needed for dealing with Firebase concurrency issues
     };
 
     // Bind the functions so they can be used in Question.js
 		this.addQuestion = this.addQuestion.bind(this);
+		this.updateCurrentQuestion = this.updateCurrentQuestion.bind(this);
 	}
 
+	Schemas = {
+		standAlone: {
+			prompt: "",
+			code: "",
+			difficulty: -1,
+			choices: [],
+			type: "",
+			answer: "",
+			hint: "",
+			feedback: {},
+			followupPrompt: "",
+			followupQuestions: []
+		},
+		table: {
+			prompt: "",
+			code: "",
+			colNames: [],
+			data: [],
+			followupPrompt: "",
+			followupQuestions: []
+		}
+	}
+
+	fieldReqs = {
+		required: {
+			float: 'right',
+			color: '#EF5350'
+		},
+		optional: {
+			float: 'right',
+			color: '#4DD0E1'
+		}
+	};
+
 	componentDidMount() {
+		// obtain the list of all concepts
 		let list = this.getConcepts();
 		this.setState({
 			conceptList: list
@@ -72,6 +108,22 @@ class ExerciseTool extends Component {
 
 	}
 
+	/**
+	 * Renders the list of all concepts in the dropdown menu
+	 * Note: the list is stored locally. It should be moved to Firebase later
+	 *
+	 * @returns {T[]}
+	 */
+	getConcepts(): ConceptKnowledge[] {
+		return MasteryModel.model.filter((concept) => concept.teach && concept.container);
+	}
+
+
+	/// FIREBASE FUNCTIONS
+
+	/**
+	 * Get all exercises from Firebase so as to have a local copy of exercises
+	 */
 	getAllExercises() {
     let componentRef = this;
     let exerciseRef = firebase.database().ref("Exercises");
@@ -83,36 +135,51 @@ class ExerciseTool extends Component {
 	}
 
 	/**
+	 * Retrieves all exercises from the database that are associated with the given concept
+	 * and sets state "exercises" to that list
 	 *
-	 * @param field
-	 * @param value
+	 * @param concept
 	 */
-	updateExercise(field, value) {
-		let temp = this.state.currentExercise;
-		temp[field] = value;
-		this.setState({currentExercise: temp});
+	getExercisesForConcept(concept) {
+		let componentRef = this;
+		let conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
+		this.setState({
+			exercises: {},
+			selectedConcept: concept
+		});
+		conceptRef.on("value", function(snapshot) {
+			let exerciseKeys = snapshot.val() ? snapshot.val() : [];
+			let exerciseList = {};
+			exerciseKeys.forEach((id) => {
+				exerciseList[id] = componentRef.state.allExercises[id];
+			});
+			componentRef.setState({
+				exercises: exerciseList
+			})
+		});
 	}
 
 	/**
-	 * Handles a change in the exercise
+	 * Helper function: returns the average difficulty of given exercise based
+	 * on the difficulties of each of its questions
 	 *
-	 * @param field
-	 * @returns {Function}
+	 * @param exercise
+	 * @param questionIndex
+	 * @param total
+	 * @param count
+	 * @returns {*}
 	 */
-	handleExerciseChange(field) {
-		return (e) => {
-			this.updateExercise(field, e.target.value);
+	getAverageDifficulty(exercise, questionIndex, total, count) {
+		if (!exercise) {
+			return 0;
+		} else if (exercise.questions[questionIndex]) {
+			let difficulty = Number(exercise.questions[questionIndex].difficulty);
+			let newTotal = total + difficulty;
+			return this.getAverageDifficulty(exercise, questionIndex + 1, newTotal, count + 1);
+		} else {
+			return total / count;
 		}
 	}
-
-	/**
-	 * Renders the list of all concepts in the dropdown menu
-	 *
-	 * @returns {T[]}
-	 */
-  getConcepts(): ConceptKnowledge[] {
-    return MasteryModel.model.filter((concept) => concept.teach && concept.container);
-  }
 
 	/**
 	 * Adds current exercises to the database in Exercises branch and
@@ -158,26 +225,71 @@ class ExerciseTool extends Component {
 	}
 
 	/**
-	 * Helper function: returns the average difficulty of given exercise based
-	 * on the difficulties of each of its questions
+	 * Deletes exercise from Firebase. Takes in an exercise id -- a Firebase push key
 	 *
-	 * @param exercise
-	 * @param questionIndex
-	 * @param total
-	 * @param count
-	 * @returns {*}
+	 * @param exerciseID
 	 */
-  getAverageDifficulty(exercise, questionIndex, total, count) {
-    if (!exercise) {
-      return 0;
-    } else if (exercise.questions[questionIndex]) {
-      let difficulty = Number(exercise.questions[questionIndex].difficulty);
-      let newTotal = total + difficulty;
-      return this.getAverageDifficulty(exercise, questionIndex + 1, newTotal, count + 1);
-    } else {
-      return total / count;
-    }
-  }
+	handleDeleteExercise(exerciseID) {
+		this.state.allExercises[exerciseID].concepts.forEach((concept) => {
+			let conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
+			conceptRef.once("value", function(snapshot) {
+				if (snapshot.val()) {
+					let exerciseKeys = snapshot.val();
+					let index = exerciseKeys.indexOf(exerciseID);
+					if (index > -1) {
+						exerciseKeys.splice(index, 1);
+					}
+					conceptRef.set(exerciseKeys);
+				}
+			});
+		});
+		let exerciseRef = firebase.database().ref("Exercises/" + exerciseID);
+		exerciseRef.set(null);
+	}
+
+	// TODO: Update ordering of exercises in ConceptExerciseMap branch of
+	// database if user changes the difficulties of exercise questions
+	saveEditedExercise() {
+		try {
+			let updatedExercise = JSON.parse(this.state.editedExercise);
+			let exerciseRef = firebase.database().ref("Exercises/" + this.state.editID);
+			exerciseRef.set(updatedExercise);
+			this.setState({
+				editMode: false,
+				editID: "",
+				editedExercise: ""
+			});
+		} catch (e) {
+			this.setState({
+				editError: "Invalid JSON string. Error message: " + e.message
+			});
+		}
+	}
+
+	/// EXERCISE SPECIFIC FUNCTIONS
+
+	/**
+	 * Handles a change in the exercise
+	 *
+	 * @param field
+	 * @returns {Function}
+	 */
+	handleExerciseChange(field) {
+		return (e) => {
+			this.updateExercise(field, e.target.value);
+		}
+	}
+
+	/**
+	 *
+	 * @param field
+	 * @param value
+	 */
+	updateExercise(field, value) {
+		let temp = this.state.currentExercise;
+		temp[field] = value;
+		this.setState({currentExercise: temp});
+	}
 
 	/**
 	 * Adds a question to the exercise. `followup` is a boolean indicating whether
@@ -194,27 +306,43 @@ class ExerciseTool extends Component {
 	}
 
 	/**
-	 * Retrieves all exercises from the database that are associated with the given concept
-	 * and sets state "exercises" to that list
-	 *
-	 * @param concept
+	 * Updates the `currentQuestion` field through out the authoring session
 	 */
-	getExercisesForConcept(concept) {
-		let componentRef = this;
-		let conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
-    this.setState({
+	updateCurrentQuestion(question, currentCell) {
+		// TODO: verify this works
+		this.setState({
+			currentQuestion: question,
+			currentCellIndex: currentCell
+		});
+	}
+
+	/// UI/LAYOUT RELATED FUNCTIONS
+
+	/**
+	 * Clear the UI once the exercise has been added
+	 */
+	resetExerciseUI() {
+		// resets the state
+		this.setState({
+			currentExercise: {
+				prompt: "",
+				code: "",
+				labels: {},
+				questions: [],
+				concepts: []
+			},
+			tabValue: 0,
 			exercises: {},
-      selectedConcept: concept
-    });
-		conceptRef.on("value", function(snapshot) {
-			let exerciseKeys = snapshot.val() ? snapshot.val() : [];
-			let exerciseList = {};
-			exerciseKeys.forEach((id) => {
-        exerciseList[id] = componentRef.state.allExercises[id];
-			});
-			componentRef.setState({
-				exercises: exerciseList
-			})
+			allExercises: {},
+			editMode: false,
+			editID: "",
+			editedExercise: "",
+			editError: "",
+			selectedConcept: "",
+
+			isFollowup: false,
+			currentQuestion: this.QuestionSchema,
+			currentQuestionFormat: "",
 		});
 	}
 
@@ -235,7 +363,46 @@ class ExerciseTool extends Component {
 	 * @returns {*}
 	 */
 	renderQuestionCard() {
-		return <Question addQuestion={this.addQuestion} isFollowup={this.state.isFollowup} insideTable={false} data={this.state.dataProp}/>
+		return <Question addQuestion={this.addQuestion}
+										 isFollowup={this.state.isFollowup}
+										 insideTable={false}
+										 data={this.state.currentQuestion}
+										 updateCurrentQuestion={this.updateCurrentQuestion}/>
+	}
+
+	/**
+	 * Renders a single table question
+	 * @returns {*}
+	 */
+	renderTableQuestion() {
+		return <Table addQuestion={this.addQuestion}
+									updateCurrentQuestion={this.updateCurrentQuestion}
+									data={this.state.currentQuestion}
+									currentlyOpen={this.state.currentCellIndex}/>
+	}
+
+	/**
+	 * Renders the UI to indicate question type
+	 */
+	renderQuestionTypePrompt() {
+		return(
+				<div>
+					<p style={{color: '#3F51B5'}}>How do you want to format the question? <span style={this.fieldReqs.required}>required</span></p>
+					<FormControl>
+						<RadioGroup value={this.state.currentQuestionFormat}
+												onChange={(evt) => {
+													this.setState({
+																currentQuestionFormat: evt.target.value,
+																currentQuestion: this.Schemas[evt.target.value]
+													});
+												}}>
+							<FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
+							<FormControlLabel value={"table"} control={<Radio color={"primary"}/>} label={"Format as a table"}/>
+						</RadioGroup>
+					</FormControl>
+				</div>
+		);
+
 	}
 
 	/**
@@ -288,43 +455,10 @@ class ExerciseTool extends Component {
 		);
 	}
 
-	handleDeleteExercise(exerciseID) {
-		this.state.allExercises[exerciseID].concepts.forEach((concept) => {
-		  let conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
-		  conceptRef.once("value", function(snapshot) {
-		    if (snapshot.val()) {
-		      let exerciseKeys = snapshot.val();
-		      let index = exerciseKeys.indexOf(exerciseID);
-		      if (index > -1) {
-		        exerciseKeys.splice(index, 1);
-          }
-          conceptRef.set(exerciseKeys);
-        }
-      });
-    });
-		let exerciseRef = firebase.database().ref("Exercises/" + exerciseID);
-		exerciseRef.set(null);
-	}
-
-	// TODO: Update ordering of exercises in ConceptExerciseMap branch of
-	// database if user changes the difficulties of exercise questions
-	saveEditedExercise() {
-		try {
-			let updatedExercise = JSON.parse(this.state.editedExercise);
-			let exerciseRef = firebase.database().ref("Exercises/" + this.state.editID);
-			exerciseRef.set(updatedExercise);
-			this.setState({
-				editMode: false,
-				editID: "",
-				editedExercise: ""
-			});
-		} catch (e) {
-			this.setState({
-				editError: "Invalid JSON string. Error message: " + e.message
-			});
-		}
-	}
-
+	/**
+	 * Lays out the Build Exercise view in the authoring tool
+	 * @returns {*}
+	 */
 	renderBuildExercise() {
     let code = {
       border: '1px solid darkgray',
@@ -334,17 +468,6 @@ class ExerciseTool extends Component {
       width: '100%',
 			height: '10em',
 			display: 'block'
-    };
-
-    let fieldReqs = {
-      required: {
-        float: 'right',
-        color: '#EF5350'
-      },
-      optional: {
-        float: 'right',
-        color: '#4DD0E1'
-      }
     };
 
     let formSectionStyle = {
@@ -359,20 +482,20 @@ class ExerciseTool extends Component {
 				<div style={{marginTop: "50px"}}>
           <div style={formSectionStyle}>
             <p>Exercise: {" " + this.state.currentExercise.prompt} </p>
-            <p style={sectionHeading}>Overarching Prompt <span style={fieldReqs.optional}>optional</span></p>
+            <p style={sectionHeading}>Overarching Prompt <span style={this.fieldReqs.optional}>optional</span></p>
             <TextField style={{display: 'block', whiteSpace: 'pre-wrap'}} fullWidth={true}
                        value={this.state.currentExercise.prompt}
                        onChange={this.handleExerciseChange('prompt')}/>
           </div>
 
           <div style={formSectionStyle}>
-            <p style={sectionHeading}>Overarching Code <span style={fieldReqs.optional}>optional</span></p>
+            <p style={sectionHeading}>Overarching Code <span style={this.fieldReqs.optional}>optional</span></p>
             <textarea style={code}
                       onChange={this.handleExerciseChange('code')} />
           </div>
 
 					<div style={formSectionStyle}>
-						<p style={sectionHeading}>Tag concepts for this exercise <span style={fieldReqs.required}>required</span></p>
+						<p style={sectionHeading}>Tag concepts for this exercise <span style={this.fieldReqs.required}>required</span></p>
 						<FormControl style={{display: "flex", flexDirection: "row", justifyContent: "center", marginBottom: "30px"}}>
 							<NativeSelect onChange={(evt) => {
 											evt.preventDefault();
@@ -417,7 +540,9 @@ class ExerciseTool extends Component {
 					</div>
 
           <p>An exercise can have multiple parts, use the following form to add one question at a time!</p>
-					{this.renderQuestionCard()}
+
+					{this.renderQuestionTypePrompt()}
+					{this.state.currentQuestionFormat === "standAlone" ? this.renderQuestionCard() : this.renderTableQuestion()}
 					<br/>
 					{this.renderExercisePreview()}
 					{this.renderFollowupPrompt()}
@@ -428,39 +553,10 @@ class ExerciseTool extends Component {
 	}
 
 	/**
-	 * Clear the UI once the exercise has been added
+	 * Lays out the View Exercises tab in the authoring tool
+	 * @returns {*}
 	 */
-	resetExerciseUI() {
-		// resets the state
-		this.setState({
-			currentExercise: {
-				prompt: "",
-				code: "",
-				labels: {},
-				questions: [],
-				concepts: []
-			},
-			isFollowup: false,
-			currentChoice: '',
-			currentTable: {
-				colNames: [],
-				rows: 0,
-				data: {}
-			},
-			columnNames: [],
-			tabValue: 0,
-			exercises: {},
-			allExercises: {},
-			editMode: false,
-			editID: "",
-			editedExercise: "",
-			editError: "",
-			selectedConcept: ""
-		});
-	}
-
 	renderViewExercises() {
-
 		let editorStyles = {
 			width: "80%",
 			height: "200px",

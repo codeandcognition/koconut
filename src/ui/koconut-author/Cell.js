@@ -18,7 +18,7 @@ class Cell extends Component {
 		this.addQuestionCell = this.addQuestionCell.bind(this);
 
 		this.state = {
-			open: false,
+			open: this.props.open,
 			currentCellFormat: 'prompt',
 			currentInstType: 'prompt',
 			cell: {
@@ -192,7 +192,7 @@ class Cell extends Component {
 	updateCell(field, value) {
 		let temp = this.state.cell;
 		temp[field] = value;
-		this.setState({cell: temp});
+		this.setState({cell: temp}, () => {this.props.addToTable(this.state.cell, this.props.index)});
 	}
 
 	/**

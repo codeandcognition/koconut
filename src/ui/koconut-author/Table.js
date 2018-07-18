@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
 import Button from '@material-ui/core/Button/Button';
 import TextField from '@material-ui/core/TextField';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Question from './Question';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Cell from './Cell';
 
 class Table extends Component {
@@ -14,16 +11,15 @@ class Table extends Component {
 
 		this.addToTable = this.addToTable.bind(this);
 
+		let table  = this.props.data;
+
+		console.log(table);
+
 		this.state = {
-			currentTable: {
-				colNames: [],
-				data: [],
-				followupPrompt: '',
-				followupQuestions: []
-			},
+			currentTable: table,
 			currColName: '',
 			currNumRows: 0,
-			currentQuestionFormat: 'table',
+			currentlyOpen: this.props.currentlyOpen
 		}
 	}
 
@@ -45,29 +41,10 @@ class Table extends Component {
 	renderTableQuestion() {
 		return (
 				<div>
-					{this.renderFormatForm()}
 					{this.renderColumnNamesForm()}
 					{this.renderNumRowsForm()}
 					<br/>
 					<Button variant={'outlined'} onClick={() => this.writeQuestion()}>Add Table</Button>
-				</div>
-		);
-	}
-
-	/**
-	 * Renders the form to indicate the question format
-	 * @returns {*}
-	 */
-	renderFormatForm() {
-		return(
-				<div>
-					<p style={{color: '#3F51B5'}}>How do you want to format the question? <span style={this.fieldReqs.required}>required</span></p>
-					<FormControl>
-						<RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
-							<FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
-							<FormControlLabel value={"table"} control={<Radio color={"primary"}/>} label={"Format as a table"}/>
-						</RadioGroup>
-					</FormControl>
 				</div>
 		);
 	}
@@ -87,7 +64,7 @@ class Table extends Component {
 									onClick={() => {
 										let temp = this.state.currentTable;
 										temp.colNames.push(this.state.currColName);
-										this.setState({currentTable: temp, currColName: ''});
+										this.setState({currentTable: temp, currColName: ''}, () => this.props.updateCurrentQuestion(this.state.currentTable , -1));
 									}}>
 						Add column name
 					</Button>
@@ -102,7 +79,7 @@ class Table extends Component {
 																 let colNamesCopy = [...this.state.currentTable.colNames];
 																 colNamesCopy.splice(index, 1);
 																 table.colNames = colNamesCopy;
-																 this.setState({currentTable: table});
+																 this.setState({currentTable: table}, () => this.props.updateCurrentQuestion(this.state.currentTable, -1));
 															 }}>{colName}
 								</Button>
 							})
@@ -153,7 +130,7 @@ class Table extends Component {
 									// index to map from 2d table to 1d table since a table is
 									// represented as an array
 									const index = (rowNum * width) + colNum;
-									row.push(<Cell key={colNum} index={index} addToTable={this.addToTable} data={this.state.currentTable.data[index]}/>);
+									row.push(<Cell key={colNum} index={index} addToTable={this.addToTable} data={this.state.currentTable.data[index]} open={this.state.currentlyOpen === index}/>);
 								});
 								return(
 										<div key={rowNum} style={{display: 'flex', justifyContent: 'center'}}>
@@ -175,8 +152,9 @@ class Table extends Component {
 		data[index] = cell;
 		table['data'] = data;
 		this.setState({
-			currentTable: table,
-			numItems: this.state.numItems + 1
+			currentTable: table
+		}, () => {
+			this.props.updateCurrentQuestion(this.state.currentTable, index);
 		});
 	}
 
@@ -188,6 +166,7 @@ class Table extends Component {
 		if (this.state.currentTable.colNames.length > 0 &&
 				parseInt(this.state.currNumRows, 10) > 0 &&
 				this.state.currentTable.data.length === items) {
+			this.props.updateCurrentQuestion(this.state.currentTable);
 			this.props.addQuestion(this.state.currentTable);
 		} else {
 			console.log("number of columns: ", this.state.currentTable.colNames.length);
@@ -199,9 +178,11 @@ class Table extends Component {
 
 	render() {
 		return(
-				<div>
-					{this.state.currentQuestionFormat === 'table' ? this.renderTableQuestion() : <Question addQuestion={this.props.addQuestion} isFollowup={false} data={undefined}/>}
-				</div>
+				<Card>
+					<CardContent>
+						{this.renderTableQuestion()}
+					</CardContent>
+				</Card>
 		);
 	}
 }

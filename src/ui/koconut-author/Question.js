@@ -8,38 +8,18 @@ import CardContent from '@material-ui/core/CardContent';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Table from './Table';
 
 class Question extends Component {
 	constructor(props) {
 		super(props);
 
-		this.renderStandAloneQuestion = this.renderStandAloneQuestion.bind(this);
-
-		let question = {
-			prompt: "",
-			code: "",
-			difficulty: -1,
-			choices: [],
-			type: "",
-			answer: "",
-			hint: "",
-			feedback: {},
-			followupPrompt: "",
-			followupQuestions: []
-		};
-
-		// if the question has been added before, use the data prop
-		if (this.props.insideTable && this.props.data !== undefined) {
-			question = this.props.data;
-		}
+		let question = this.props.data;
 
 		this.state = {
 			currentQuestion: question,
 			currentChoice: '',
 			currentAnswer: '',
-			currentQuestionFormat: 'standAlone',
-			checkboxOption: 'choice',
+			checkboxOption: 'choice', // used for a check box type question. not applicable for other question types
 			feedback: JSON.stringify(question.feedback, null, 2)
 		};
 	}
@@ -72,42 +52,14 @@ class Question extends Component {
 		}
 	};
 
-	componentWillReceiveProps() {
-		let question = {
-			prompt: "",
-			code: "",
-			difficulty: -1,
-			choices: [],
-			type: "",
-			answer: "",
-			hint: "",
-			feedback: {},
-			followupPrompt: "",
-			followupQuestions: []
-		};
-
+	componentWillReceiveProps(nextProps) {
 		this.setState({
-			currentQuestion: question,
+			currentQuestion: nextProps.data,
 			currentChoice: '',
 			currentAnswer: '',
-			currentQuestionFormat: 'standAlone',
 			checkboxOption: 'choice',
-			feedback: JSON.stringify({}, null, 2)
+			feedback: JSON.stringify(nextProps.data.feedback, null, 2)
 		});
-	}
-
-	renderFormatForm() {
-		return(
-				<div>
-					<p style={{color: '#3F51B5'}}>How do you want to format the question? <span style={this.fieldReqs.required}>required</span></p>
-					<FormControl>
-						<RadioGroup value={this.state.currentQuestionFormat} onChange={(evt) => this.setState({currentQuestionFormat: evt.target.value})}>
-							<FormControlLabel value={"standAlone"} control={<Radio color={"primary"}/>} label={"Stand alone question"}/>
-							<FormControlLabel value={"table"} control={<Radio color={"primary"}/>} disabled={this.props.insideTable} label={"Format as a table"}/>
-						</RadioGroup>
-					</FormControl>
-				</div>
-		);
 	}
 
 	/**
@@ -403,6 +355,16 @@ class Question extends Component {
 					<textarea value={this.state.feedback}
 										style={style}
 										onChange={evt => this.setState({feedback: evt.target.value})}/>
+					<Button variant={"contained"}
+									onClick={() => {
+										try {
+											let feedback = JSON.parse(this.state.feedback);
+											this.updateQuestion('feedback', feedback);
+										} catch (e) {
+											window.alert("Looks like you've entered bad JSON. Double check the feedback box.")
+										}
+									}}>Save as JSON</Button>
+
 				</div>
 		);
 	}
@@ -426,8 +388,6 @@ class Question extends Component {
 		return(
 				<Card style={card}>
 					<CardContent>
-						{this.renderFormatForm()}
-						<br/>
 						{this.renderPromptField()}
 						<br/>
 						{this.renderCodeField()}
@@ -448,13 +408,6 @@ class Question extends Component {
 		);
 	}
 
-	renderQuestionForm() {
-		if (this.state.currentQuestionFormat === 'standAlone') {
-			return this.renderStandAloneQuestion();
-		}
-		return <Table renderStandAloneQuestion={this.renderStandAloneQuestion} addQuestion={this.props.addQuestion}/>;
-	}
-
 	/**
 	 * Verifies that all of the required fields are present and writes the question
 	 * to the exercise.
@@ -468,7 +421,6 @@ class Question extends Component {
 			if (this.state.currentQuestion.type === this.QuestionTypes.memoryTable) {
 				this.updateQuestion('answer', JSON.parse(this.state.currentQuestion.answer));
 			}
-			this.updateQuestion('feedback', JSON.parse(this.state.feedback));
 			this.props.addQuestion(this.state.currentQuestion);
 		} else {
 			// TODO: Make this more user friendly!
@@ -501,7 +453,9 @@ class Question extends Component {
 	updateQuestion(field, value) {
 		let temp = this.state.currentQuestion;
 		temp[field] = value;
-		this.setState({currentQuestion: temp});
+		this.setState({currentQuestion: temp}, () => {
+			this.props.updateCurrentQuestion(this.state.currentQuestion, -1);
+		});
 		if (field === 'type' || field === 'choices') {
 			this.generateFeedbackTemplate();
 		}
@@ -522,13 +476,18 @@ class Question extends Component {
 			// so as to display feedback based on the number of tries
 			template["incorrect"] = [];
 		};
-		this.setState({feedback: JSON.stringify(template, null, 2)});
+		let currQuestion = this.state.currentQuestion;
+		currQuestion["feedback"] = template;
+		this.setState({
+			feedback: JSON.stringify(template, null, 2),
+			currentQuestion: currQuestion
+		}, () => this.props.updateCurrentQuestion(this.state.currentQuestion, -1));
 	}
 
 	render() {
 		// TODO: Add a delete function
 		return (
-				this.renderQuestionForm()
+				this.renderStandAloneQuestion()
 		);
 	}
 }
