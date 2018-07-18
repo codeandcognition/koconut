@@ -56,7 +56,7 @@ class Cell extends Component {
 		let data = nextProps.data;
 		if (data !== undefined) {
 			let cellFormat = data.answer === '' ? 'prompt' : 'question';
-			let cellInstType = data.prompt === '' ? 'code' : 'prompt';
+			let cellInstType = data.prompt ? 'prompt' : 'code';
 			this.setState({
 				currentCellFormat: cellFormat,
 				currentInstType: cellInstType,
@@ -99,11 +99,15 @@ class Cell extends Component {
 	 * @returns {*}
 	 */
 	renderCellFormatPrompt() {
-		return(
+		return (
 				<div>
 					<p>Does this cell contain a question? <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
-						<RadioGroup value={this.state.currentCellFormat} onChange={(evt) => this.setState({currentCellFormat: evt.target.value})}>
+						<RadioGroup value={this.state.currentCellFormat} onChange={(evt) => {
+							this.setState({
+								currentCellFormat: evt.target.value
+							});
+						}}>
 							<FormControlLabel value={"question"} control={<Radio color={"primary"}/>} label={"Yes"}/>
 							<FormControlLabel value={"prompt"} control={<Radio color={"primary"}/>} label={"No"}/>
 						</RadioGroup>
@@ -119,11 +123,23 @@ class Cell extends Component {
 	 * @returns {*}
 	 */
 	renderInstructionTypeForm() {
-		return(
+		return (
 				<div>
 					<p>How do you want to format the instruction? <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
-						<RadioGroup value={this.state.currentInstType} onChange={(evt) => this.setState({currentInstType: evt.target.value})}>
+						<RadioGroup value={this.state.currentInstType} onChange={(evt) => {
+							var currentCell = this.state.cell;
+							if (evt.target.value === "prompt") {
+								currentCell["code"] = "";
+							}	else {
+								currentCell["prompt"] = "";
+							}
+							this.setState({
+								currentInstType: evt.target.value,
+								cell: currentCell
+							});
+
+						}}>
 							<FormControlLabel value={"prompt"} control={<Radio color={"primary"}/>} label={"Prompt"}/>
 							<FormControlLabel value={"code"} control={<Radio color={"primary"}/>} label={"Code"}/>
 						</RadioGroup>
@@ -157,7 +173,7 @@ class Cell extends Component {
 			fontFamily: 'monospace'
 		}
 
-		return(
+		return (
 				<div>
 					<p>Code <span style={this.fieldReqs.required}>required</span></p>
 					<textarea style={style} value={this.state.cell.code} onChange={this.handleChange('code')}/>

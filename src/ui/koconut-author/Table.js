@@ -13,8 +13,6 @@ class Table extends Component {
 
 		let table  = this.props.data;
 
-		console.log(table);
-
 		this.state = {
 			currentTable: table,
 			currColName: '',
@@ -44,8 +42,55 @@ class Table extends Component {
 					{this.renderColumnNamesForm()}
 					{this.renderNumRowsForm()}
 					<br/>
+					{this.renderTablePromptForm()}
+					<br />
+					{this.renderTableCodeForm()}
+					<br />
 					<Button variant={'outlined'} onClick={() => this.writeQuestion()}>Add Table</Button>
 				</div>
+		);
+	}
+
+  /**
+	 * Renders the form to indicate the table's overarching prompt
+   */
+	renderTablePromptForm() {
+		return(
+				<div>
+          <p style={{color: '#3F51B5'}}>Table Prompt <span style={this.fieldReqs.optional}>optional</span></p>
+					<TextField fullWidth={true} value={this.state.currentTable.currPrompt} onChange={(evt) => {
+						var table = this.state.currentTable;
+						table.prompt = evt.target.value;
+						this.setState({
+							currentTable: table
+						});
+					}} />
+				</div>
+		);
+	}
+
+	renderTableCodeForm() {
+    let code = {
+      border: '1px solid darkgray',
+      fontFamily: 'monospace',
+      whiteSpace: 'pre-wrap',
+      textAlign: 'left',
+      width: '100%',
+      height: '10em',
+      display: 'block'
+    };
+
+		return (
+			<div>
+        <p style={{color: '#3F51B5'}}>Table Code <span style={this.fieldReqs.optional}>optional</span></p>
+        <textarea style={code} onChange={(evt) => {
+        	var table = this.state.currentTable;
+        	table.code = evt.target.value;
+        	this.setState({
+						currentTable: table
+					});
+				}} />
+			</div>
 		);
 	}
 
