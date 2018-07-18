@@ -56,7 +56,7 @@ class Cell extends Component {
 		let data = nextProps.data;
 		if (data !== undefined) {
 			let cellFormat = data.answer === '' ? 'prompt' : 'question';
-			let cellInstType = data.prompt === '' ? 'code' : 'prompt';
+			let cellInstType = data.prompt ? 'prompt' : 'code';
 			this.setState({
 				currentCellFormat: cellFormat,
 				currentInstType: cellInstType,
@@ -127,7 +127,19 @@ class Cell extends Component {
 				<div>
 					<p>How do you want to format the instruction? <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
-						<RadioGroup value={this.state.currentInstType} onChange={(evt) => this.setState({currentInstType: evt.target.value})}>
+						<RadioGroup value={this.state.currentInstType} onChange={(evt) => {
+							var currentCell = this.state.cell;
+							if (evt.target.value === "prompt") {
+								currentCell["code"] = "";
+							}	else {
+								currentCell["prompt"] = "";
+							}
+							this.setState({
+								currentInstType: evt.target.value,
+								cell: currentCell
+							});
+
+						}}>
 							<FormControlLabel value={"prompt"} control={<Radio color={"primary"}/>} label={"Prompt"}/>
 							<FormControlLabel value={"code"} control={<Radio color={"primary"}/>} label={"Code"}/>
 						</RadioGroup>
