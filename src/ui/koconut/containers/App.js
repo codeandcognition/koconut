@@ -19,7 +19,6 @@ import InstructionView from './InstructionView';
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
-import {ResponseLog} from '../../../data/ResponseLog';
 import type {Exercise} from '../../../data/Exercises';
 
 // Display type enum
@@ -235,7 +234,7 @@ class App extends Component {
 
     // basically the answer will come in looking like this for a table type problem
     // mixed with regular problems
-    let stub = ["a", "a", [["", "a", "a"], ["", "a", "a"]], "a"];
+    // let stub = ["a", "a", [["", "a", "a"], ["", "a", "a"]], "a"];
 
     let checkerForCorrectness = true;
     if (questionType === "table") {

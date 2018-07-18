@@ -4,18 +4,18 @@ import './LargeButton.css'
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 
-type LargeButtonTypes = {
-  prev: string,
-  next: string
-}
+// type LargeButtonTypes = {
+//   prev: string,
+//   next: string
+// }
 
-type Props = {
-  types: LargeButtonTypes,
-  type: string,
-  click: Function,
-  instructionIndex: number,
-  maxInstruction: number
-}
+// type Props = {
+//   types: LargeButtonTypes,
+//   type: string,
+//   click: Function,
+//   instructionIndex: number,
+//   maxInstruction: number
+// }
 /**
  * LargeButton is the side buttons for the InstructView.
  * In reality I probably should have named this something else.

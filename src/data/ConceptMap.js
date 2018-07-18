@@ -1,4 +1,4 @@
-import {sep, op, quote, keyword, g, t} from './ConceptAbbreviations';
+import {g, t} from './ConceptAbbreviations';
 
 export const conceptInventory = {
   [g.howCodeRuns]: {

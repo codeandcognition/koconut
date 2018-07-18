@@ -85,7 +85,7 @@ class TableView extends Component {
                   this.updateAnswer(d, row, col);
                 }
               }}
-                  className={"custmc choice " + (selected == d ? "answer":"" ) + " " + (this.props.feedback ? "disabled" : "notdisabled")}
+                  className={"custmc choice " + (selected === d ? "answer":"" ) + " " + (this.props.feedback ? "disabled" : "notdisabled")}
               >{d}</span>
             </span>
           })

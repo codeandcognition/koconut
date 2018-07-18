@@ -1,6 +1,6 @@
 // @flow
 import React, {Component} from 'react';
-import VisualFeedback from './VisualFeedback';
+// import VisualFeedback from './VisualFeedback';
 
 import './Feedback.css';
 

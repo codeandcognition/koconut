@@ -13,16 +13,13 @@ import 'brace/theme/solarized_dark';
 
 // Tool imports
 import Types from '../../../data/ExerciseTypes.js';
-import Feedback from '../components/Feedback';
 
 // Component imports
-import Hint from './Hint.js';
 
 import ReactMarkdown from 'react-markdown';
 
 // CSS for Code component
 import './Code.css';
-import ExerciseTypes from '../../../data/ExerciseTypes';
 import CodeBlock from './CodeBlock';
 
 // Ace Range datatype
@@ -238,8 +235,8 @@ class Code extends Component {
         <input type="button" value="reset code" onClick={this.handleReset}/> :
         '';
 
-    let hint = this.state.hint;
-    let curLine = this.state.curLine;
+    // let hint = this.state.hint;
+    // let curLine = this.state.curLine;
 
     return (
         <div className={'code ' + (isWriteType ? 'full' : 'half') +
