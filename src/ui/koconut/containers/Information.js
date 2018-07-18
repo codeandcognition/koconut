@@ -137,8 +137,10 @@ class Information extends Component {
                 return (
                     <div key={"information" + index} className={"information-with-submit"}>
                     <div className="information">
-                      {this.renderCodeView(question, index)}
-                      {this.renderResponseView(question, index)}
+                      <div style={{width: "70%", display: "flex"}}>
+                        {this.renderCodeView(question, index)}
+                        {this.renderResponseView(question, index)}
+                      </div>
                       {this.renderFeedback(question, index)}
                     </div>
                       {!(this.props.feedback[index]) &&

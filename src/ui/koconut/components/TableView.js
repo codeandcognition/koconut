@@ -130,19 +130,20 @@ class TableView extends Component {
     
 
     return (
-      <Paper>
-        <Table>
-          <TableHead>
-            <TableRow>
+      <div style={{width: "100%"}}>
+      <Paper style={{width: "100%"}}>
+        <Table style={{width: "100%"}}>
+          <TableHead style={{width: "100%"}}>
+            <TableRow style={{width: "100%"}}>
               {colNames.map((d, i)=> {
                 return <TableCell key={"table-head" + i} style={{backgroundColor: "white"}}>{d}</TableCell>
               })}
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody style={{width: "100%"}}>
             {augmentedCells.map((d, i) => {
               return (
-                  <TableRow key={"row-" + i}>
+                  <TableRow key={"row-" + i} style={{width: "100%"}}>
                   {
                     d.map((e, j) => {
                       let correctness = "";
@@ -154,7 +155,7 @@ class TableView extends Component {
                           correctness = "table-correct";
                         }
                       }
-                      return <TableCell key={"cell"+i+j} className={correctness !== "" ? correctness : "reg"}>
+                      return <TableCell style={{width: "100%"}} key={"cell"+i+j} className={correctness !== "" ? correctness : "reg"}>
                         {this.generateCell(e,i,j)}
                       </TableCell>
                     })
@@ -164,6 +165,7 @@ class TableView extends Component {
           </TableBody>
         </Table>
       </Paper>
+      </div>
     );
   }
 
