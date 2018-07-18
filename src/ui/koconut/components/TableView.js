@@ -7,6 +7,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import ReactMarkdown from 'react-markdown';
+import CodeBlock from'./CodeBlock';
 
 
 type Props = {
@@ -71,7 +73,14 @@ class TableView extends Component {
    */
   generateCell(question: any, row: number, col: number) {
     if(question.type === "") {
-      return question.prompt;
+      return <div>
+        <div>{question.prompt}</div>
+        <ReactMarkdown className={"flex-grow-1"}
+                         source={question.code && question.code !== "" ? "```"+question.code+"```" : ''}
+                         renderers={{code: CodeBlock}}
+                         escapeHtml={true}
+                         />
+        </div>;
     }
   //if thispropsfeedback, set disabled
     if(question.type === "multipleChoice") {
