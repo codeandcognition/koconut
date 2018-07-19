@@ -8,6 +8,7 @@ import CheckboxQuestion from '../components/CheckboxQuestion';
 import './Response.css';
 
 import Types from '../../../data/ExerciseTypes.js';
+import CodeEditor from '../components/CodeEditor';
 
 /**
  * The Response component contains the response section in the assessment problem
@@ -55,6 +56,8 @@ class Response extends Component {
         return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index}/>;
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
+      case(Types.writeCode):
+        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code}/>
       case(Types.table):
         return <TableView feedback={this.props.feedback} 
                           question={this.props.question} 
@@ -71,7 +74,8 @@ class Response extends Component {
   }
 
   render() {
-    let responseWidth = Types.isSurvey(this.props.type) || this.props.question.type === "table" ? 'full' : 'half';
+    let responseWidth = (Types.isSurvey(this.props.type) || this.props.type === "table" || this.props.type === Types.writeCode) ? 'full' : 'half';
+    console.log(responseWidth);
     return (
         <div className={'response ' + responseWidth}>
           {this.renderResponse()}

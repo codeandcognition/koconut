@@ -71,13 +71,13 @@ class Information extends Component {
   renderResponseView(question: any, index: number) {
       let type = question.type;
 
-      return Types.isInlineResponseType(type) 
+      return Types.isInlineResponseType(type) && type !== Types.writeCode
       // || (this.props.feedback[index] &&
       //       (question.type !=="table" &&
       //       question.type !=="multipleChoice" &&
       //       question.type !=="selectMultiple")
       //       ) 
-            ? <div /> :
+          ? <div></div> :
           <Response
             key={"response"+index}
             type={type}
@@ -138,11 +138,11 @@ class Information extends Component {
                 return (
                     <Paper elevation={6} style={{padding: "0"}} key={"information" + index} className={"information-with-submit"}>
                       <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
-                          {question.code && this.renderCodeView(question, index)}
+                          {question.code && question.type !== Types.writeCode && this.renderCodeView(question, index)}
                           <div style={{width: "100%", margin: "0", padding: "0"}}>
                             {this.renderResponseView(question, index)}
                             {!(this.props.feedback[index]) &&
-                            <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />
+                              <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />
                             }
                           </div>
                       </div>
