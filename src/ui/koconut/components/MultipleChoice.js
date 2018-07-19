@@ -24,7 +24,7 @@ class MultipleChoice extends Component {
     let labels = this.props.labels;
     return (
         <div className='multiple-choice'>
-          <h3>{this.props.title}</h3>
+          <h5>{this.props.title}</h5>
           {/* Create a choice component for each item in answers */}
           {this.props.answer !== undefined && this.props.questionIndex > -1 && this.props.choices.map((choice, i) =>
               choice.length > 0 ?

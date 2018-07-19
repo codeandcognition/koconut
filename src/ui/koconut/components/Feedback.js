@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react';
+import Button from '@material-ui/core/Button';
 // import VisualFeedback from './VisualFeedback';
 
 import './Feedback.css';
@@ -80,24 +81,26 @@ class Feedback extends Component {
 
     let correctBool = gotCorrect === "correct";
     return (
-      <div style={{width: "60%"}} className="feedback">
+      <div style={{width: "100%", textAlign: "left"}} className="feedback">
         <div className="feedback-correctness">
           <p>{!correctBool && "Not quite!"}{correctBool && "Well done!"}</p>
         </div>
         {/* <VisualFeedback feedback={gotCorrect}/> */}
+        <div style={{width: "100%", textAlign: "left"}}>
         {this.showFeedbackMessage(this.props.type, this.props.timesGotSpecificQuestionWrong, this.props.question.feedback, gotCorrect)}
+        </div>
         <div className="feedback-ok">
           {(correctBool || this.state.gaveUp) && 
             <div>
               {this.showAnswer()}
-              <button onClick={this.props.submitOk}>Continue</button>
+              <Button variant="outlined" onClick={this.props.submitOk}>Continue</Button>
             </div>}
           {!correctBool && !this.state.gaveUp &&
-            <div><button onClick={this.props.submitTryAgain}>Try Again</button>
+            <div style={{display: "flex", justifyContent: "flex-end"}}><Button variant="outlined" onClick={this.props.submitTryAgain}>Try Again</Button>
               
-                <button onClick={() => {
+                <Button style={{marginLeft: "10px"}} variant="outlined" onClick={() => {
                   this.setState({gaveUp: true});
-                }}>Show answer</button>
+                }}>Show answer</Button>
               
             </div>
           }

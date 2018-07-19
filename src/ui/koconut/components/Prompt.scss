@@ -1,11 +1,13 @@
 @import '../containers/App.scss';
+@import url('https://fonts.googleapis.com/css?family=PT+Sans');
 
 .prompt {
   //height: 15vh;
   padding: 0 2.5%;
-  border-bottom: 1px dotted black;
+  /* border-bottom: 1px dotted black; */
   text-align: center;
   background-color: $component-background;
+  font-family: "PT Sans", sans-serif;
 
   p {
     font-size: 1.75em;

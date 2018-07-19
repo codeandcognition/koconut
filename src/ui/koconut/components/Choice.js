@@ -41,9 +41,10 @@ class Choice extends Component {
               }
             }}
             data-tip
-            data-for={this.props.content}
-        >
+            style={{width: "60%"}}
+            data-for={this.props.content}>
           {this.props.content}
+          <br />
           {this.renderTooltip()}
         </div>
     );

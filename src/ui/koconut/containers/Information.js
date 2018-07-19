@@ -5,6 +5,7 @@ import Response from './Response';
 import Types from '../../../data/ExerciseTypes.js';
 import Submit from '../components/Submit';
 import Feedback from '../components/Feedback';
+import Paper from '@material-ui/core/Paper';
 
 import './Information.css';
 
@@ -78,7 +79,7 @@ class Information extends Component {
       //       ) 
             ? <div /> :
           <Response
-              key={"response"+index}
+            key={"response"+index}
             type={type}
             choices={question.choices}
             answer={this.props.answer}
@@ -135,18 +136,18 @@ class Information extends Component {
                 <div> wow good joob you learnt yourself a good 1 </div> :
                 this.props.exercise.questions.map((question, index) => {
                 return (
-                    <div key={"information" + index} className={"information-with-submit"}>
-                    <div className="information">
-                      <div style={{width: "70%", display: "flex"}}>
-                        {this.renderCodeView(question, index)}
-                        {this.renderResponseView(question, index)}
+                    <Paper elevation={6} style={{padding: "0"}} key={"information" + index} className={"information-with-submit"}>
+                      <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
+                          {this.renderCodeView(question, index)}
+                          <div style={{width: "100%", margin: "0", padding: "0"}}>
+                            {this.renderResponseView(question, index)}
+                            {!(this.props.feedback[index]) &&
+                            <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />
+                            }
+                          </div>
                       </div>
                       {this.renderFeedback(question, index)}
-                    </div>
-                      {!(this.props.feedback[index]) &&
-                        <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />
-                      }
-                    </div>);
+                    </Paper>);
             })
           }
         </div>

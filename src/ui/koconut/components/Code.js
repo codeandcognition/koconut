@@ -239,7 +239,7 @@ class Code extends Component {
     // let curLine = this.state.curLine;
 
     return (
-        <div className={'code ' + (isWriteType ? 'full' : 'half') +
+        <div className={'codeContainer ' + (isWriteType ? 'full' : 'half') +
         ' ' + this.props.type}>
           {(isWriteType && this.props.feedback) ?
             '' :
