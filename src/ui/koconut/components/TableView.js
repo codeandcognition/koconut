@@ -7,6 +7,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import CodeBlock from './CodeBlock';
+import ReactMarkdown from 'react-markdown';
 
 
 type Props = {
@@ -70,9 +72,14 @@ class TableView extends Component {
    * @param col col of question
    */
   generateCell(question: any, row: number, col: number) {
-    if(question.type === "") {
+    if(question.type === "" && question.prompt) {
       return question.prompt;
     }
+
+    if (question.code) {
+      return this.renderMarkdown(question.code);
+    }
+
   //if thispropsfeedback, set disabled
     if(question.type === "multipleChoice") {
       let selected = this.state.answer[row] ? this.state.answer[row][col] : null;
@@ -106,6 +113,15 @@ class TableView extends Component {
     }
   }
 
+  renderMarkdown(cellData) {
+    let code = "```java\n" + cellData + "\n```";
+    return <ReactMarkdown className={"flex-grow-1"}
+                          source={code}
+                          renderers={{code: CodeBlock}}
+                          escapeHtml={true}
+    />
+  }
+
   /**
    * generateTableView does the calculations for the contents of each cell
    * and creates the entire table to render.
@@ -132,18 +148,19 @@ class TableView extends Component {
     return (
       <div style={{width: "100%"}}>
       <Paper style={{width: "100%"}}>
-        <Table style={{width: "100%"}}>
-          <TableHead style={{width: "100%"}}>
-            <TableRow style={{width: "100%"}}>
+        <Table>
+          <TableHead>
+            <TableRow>
               {colNames.map((d, i)=> {
                 return <TableCell key={"table-head" + i} style={{backgroundColor: "white"}}>{d}</TableCell>
               })}
             </TableRow>
           </TableHead>
-          <TableBody style={{width: "100%"}}>
+          <TableBody>
             {augmentedCells.map((d, i) => {
+
               return (
-                  <TableRow key={"row-" + i} style={{width: "100%"}}>
+                  <TableRow key={"row-" + i}>
                   {
                     d.map((e, j) => {
                       let correctness = "";
@@ -155,7 +172,8 @@ class TableView extends Component {
                           correctness = "table-correct";
                         }
                       }
-                      return <TableCell style={{width: "100%"}} key={"cell"+i+j} className={correctness !== "" ? correctness : "reg"}>
+                      console.log(e);
+                      return <TableCell key={"cell"+i+j} className={correctness !== "" ? correctness : "reg"}>
                         {this.generateCell(e,i,j)}
                       </TableCell>
                     })
