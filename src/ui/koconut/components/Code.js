@@ -241,6 +241,7 @@ class Code extends Component {
     return (
         <div className={'codeContainer ' + (isWriteType ? 'full' : 'half') +
         ' ' + this.props.type}>
+          <h4 style={{fontWeight: "bold", textAlign: "left"}}>Code</h4>
           {(isWriteType && this.props.feedback) ?
             '' :
               <div ref="code"

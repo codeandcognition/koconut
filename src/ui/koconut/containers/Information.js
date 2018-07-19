@@ -138,7 +138,7 @@ class Information extends Component {
                 return (
                     <Paper elevation={6} style={{padding: "0"}} key={"information" + index} className={"information-with-submit"}>
                       <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
-                          {this.renderCodeView(question, index)}
+                          {question.code && this.renderCodeView(question, index)}
                           <div style={{width: "100%", margin: "0", padding: "0"}}>
                             {this.renderResponseView(question, index)}
                             {!(this.props.feedback[index]) &&

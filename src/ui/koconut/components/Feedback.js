@@ -62,7 +62,7 @@ class Feedback extends Component {
     } else {
       finalstring = answer;
     }
-    return <div><strong>The answer is <span style={{color: "green"}}>{finalstring}</span></strong></div>
+    return <div style={{display: "inline"}}><strong>The correct answer is <span style={{color: "green"}}>{finalstring}</span></strong></div>
   }
 
   render() {
@@ -82,8 +82,9 @@ class Feedback extends Component {
     let correctBool = gotCorrect === "correct";
     return (
       <div style={{width: "100%", textAlign: "left"}} className="feedback">
+        <h4 style={{fontWeight: "bold", textAlign: "left"}}>Feedback</h4>
         <div className="feedback-correctness">
-          <p>{!correctBool && "Not quite!"}{correctBool && "Well done!"}</p>
+          <p>{!correctBool && "Not quite!"}{correctBool && "Well done!"} {this.showAnswer()}.</p>
         </div>
         {/* <VisualFeedback feedback={gotCorrect}/> */}
         <div style={{width: "100%", textAlign: "left"}}>
@@ -92,17 +93,16 @@ class Feedback extends Component {
         <div className="feedback-ok">
           {(correctBool || this.state.gaveUp) && 
             <div>
-              {this.showAnswer()}
               <div style={{display: "flex", justifyContent: "flex-end"}}>
-                <Button variant="outlined" onClick={this.props.submitOk}>Continue</Button>
+                <Button color="primary" variant="outlined" onClick={this.props.submitOk}>Continue</Button>
               </div>
             </div>}
           {!correctBool && !this.state.gaveUp &&
-            <div style={{display: "flex", justifyContent: "flex-end"}}><Button variant="outlined" onClick={this.props.submitTryAgain}>Try Again</Button>
+            <div style={{display: "flex", justifyContent: "flex-end"}}><Button color={"primary"} variant="outlined" onClick={this.props.submitTryAgain}>Try Again</Button>
               
                 <Button style={{marginLeft: "10px"}} variant="outlined" onClick={() => {
                   this.setState({gaveUp: true});
-                }}>Show answer</Button>
+                }} color={"secondary"}>Show answer</Button>
               
             </div>
           }
