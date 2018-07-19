@@ -93,7 +93,9 @@ class Feedback extends Component {
           {(correctBool || this.state.gaveUp) && 
             <div>
               {this.showAnswer()}
-              <Button variant="outlined" onClick={this.props.submitOk}>Continue</Button>
+              <div style={{display: "flex", justifyContent: "flex-end"}}>
+                <Button variant="outlined" onClick={this.props.submitOk}>Continue</Button>
+              </div>
             </div>}
           {!correctBool && !this.state.gaveUp &&
             <div style={{display: "flex", justifyContent: "flex-end"}}><Button variant="outlined" onClick={this.props.submitTryAgain}>Try Again</Button>
