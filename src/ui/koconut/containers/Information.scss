@@ -1,5 +1,10 @@
 .information {
   width: 100%;
   display: flex;
-  border-bottom: 1px dotted black;
+}
+
+.information-with-submit {
+  padding-bottom: 20px;
+  margin-bottom: 50px;
+  /*border-bottom: 1px dotted gray*/
 }

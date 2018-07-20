@@ -1,4 +1,4 @@
-//@flow
+
 const {exec} = require('child_process');
 const fs = require('fs');
 
@@ -8,7 +8,7 @@ const fs = require('fs');
 /**
  * Generates the requested Java code named {req.body.id} from the template
  */
-exports.generate = (req: $Request, res: $Response, next: Function) => {
+exports.generate = (req, res, next) => {
   console.log('attempting to generate code from the following');
   console.log(req.body);
 
@@ -37,7 +37,7 @@ exports.generate = (req: $Request, res: $Response, next: Function) => {
 /**
  * Compiles the requested Java code named {req.body.id}
  */
-exports.compile = (req: $Request, res: $Response, next: Function) => {
+exports.compile = (req, res, next) => {
   console.log('attempting to compile the following');
   console.log(req.body);
 
@@ -60,7 +60,7 @@ exports.compile = (req: $Request, res: $Response, next: Function) => {
 /**
  * Executes the requested Java class named {req.body.id}
  */
-exports.execute = (req: $Request, res: $Response, next: Function) => {
+exports.execute = (req, res, next) => {
   console.log('attempting to execute the following');
   console.log(req.body);
 
@@ -87,7 +87,7 @@ exports.execute = (req: $Request, res: $Response, next: Function) => {
 /**
  * Removes the requested Java program named {req.body.id}
  */
-exports.clean = (req: $Request, res: $Response) => {
+exports.clean = (req, res) => {
   console.log('attempting to clean temporary files');
 
   let callback = (err) => {

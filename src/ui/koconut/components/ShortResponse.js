@@ -10,7 +10,7 @@ type Props = {
  * The ShortResponse component renders short response exercise type
  * @class
  */
-class ShortResponse extends Component {
+class  ShortResponse extends Component {
   state: {
     value: string
   };
@@ -25,15 +25,17 @@ class ShortResponse extends Component {
   render() {
     return (
         <div className='short-response'>
-          <h3>Type your response here:</h3>
+          <h5>Type your response here:</h5>
           {
             <div className="short-response-value">
-              <textarea onChange={(event) => {
-                this.setState({value: event.target.value});
-                this.props.inputHandler(event.target.value);
+              <textarea value={this.state.value} disabled={this.props.feedback ? true : false} onChange={(event) => {
+                
+                  this.setState({value: event.target.value});
+                  this.props.inputHandler(event.target.value, this.props.questionIndex);
+                
               }}>
               </textarea>
-              <p>{this.state.value}</p>
+              {/* <p>{this.state.value}</p> */}
             </div>
           }
         </div>

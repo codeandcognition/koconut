@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 import Prompt from '../components/Prompt';
 import Information from './Information';
-import Submit from '../components/Submit';
 import ConceptLabel from '../components/ConceptLabel';
 
 import './ExerciseView.css';
@@ -16,11 +15,12 @@ type Props = {
     concepts: string[]
   },
   submitHandler: Function,
-  feedback: boolean,
+  feedback?: string[],
   nextConcepts: string[],
   submitOk: Function,
   submitTryAgain: Function,
-  mode: string
+  mode: string,
+  codeTheme: string
 }
 
 /**
@@ -29,13 +29,13 @@ type Props = {
  */
 class Exercise extends Component {
   state: {
-    answer: ?string,
+    answer: string[],
   };
 
   constructor(props: Props) {
     super(props);
     this.state = {
-      answer: null
+      answer: []
     };
   }
 
@@ -44,15 +44,6 @@ class Exercise extends Component {
    */
   componentDidMount() {
     window.scrollTo(0, 0);
-  }
-
-  /**
-   * Updates the Exercise state when receiving a new props object
-   */
-  componentWillReceiveProps() {
-    this.setState({
-      answer: null,
-    });
   }
 
   /**
@@ -66,27 +57,30 @@ class Exercise extends Component {
 
 
   render() {
-    let styles = {
+    let styles = {  // TODO put this in the constructor, unnecessary calculations per render
       marginTop: '10%'
-    }
+    };
+
     return (
         <div className="exercise-view" style={styles}>
-          <Prompt content={this.props.exercise.prompt} type={this.props.exercise.type}/>
+          <Prompt exercise={this.props.exercise} />
           <Information
-              code={this.props.exercise.code}
-              type={this.props.exercise.type}
-              choices={this.props.exercise.choices}
+              exercise={this.props.exercise}
               answer={this.state.answer}
-              concepts={this.props.exercise.concepts}
-              updateHandler={(content) => this.setState({answer: content})}
+              updateHandler={(content, index) => {
+                let temp = this.state.answer;
+                temp[index] = content;
+                this.setState({answer: temp});
+              }}
               feedback={this.props.feedback}
               submitOk={this.props.submitOk}
               submitTryAgain={this.props.submitTryAgain}
               mode={this.props.mode}
               codeTheme={this.props.codeTheme}
               toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
+              submitHandler={this.props.submitHandler}
+              timesGotQuestionWrong={this.props.timesGotQuestionWrong}
           />
-          <Submit click={this.isAnswered()} submitHandler={() => this.props.submitHandler(this.state.answer)}/>
           <ConceptLabel concepts={this.props.exercise.concepts}/>
         </div>
     );

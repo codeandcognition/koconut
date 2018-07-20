@@ -1,5 +1,6 @@
 $app-background: #f8f8f8; // pulled from codemirror lol
 $component-background: #f8f8f8;
+@import url('https://fonts.googleapis.com/css?family=PT+Sans');
 
 html {
   background-color: $app-background;
@@ -13,6 +14,7 @@ html {
   width: 100%;
   min-height: 100%;
   background-color: $component-background;
+  font-family: "PT Sans", sans-serf;
 }
 
 .title {
