@@ -62,7 +62,7 @@ class Feedback extends Component {
     } else {
       finalstring = answer;
     }
-    return <div style={{display: "inline"}}><strong>The correct answer is <span style={{color: "green"}}>{finalstring}</span></strong></div>
+    return <div style={{display: "inline"}}><strong>The correct answer is <span style={{color: "green"}}>{finalstring}.</span></strong></div>
   }
 
   render() {
@@ -84,7 +84,8 @@ class Feedback extends Component {
       <div style={{width: "100%", textAlign: "left"}} className="feedback">
         <h4 style={{fontWeight: "bold", textAlign: "left"}}>Feedback</h4>
         <div className="feedback-correctness">
-          <p>{!correctBool && "Not quite!"}{correctBool && "Well done!"} {this.showAnswer()}.</p>
+          <p>{!correctBool && "Not quite!"}{correctBool && "Well done!"}</p>
+          {(correctBool || this.state.gaveUp) && this.showAnswer()}
         </div>
         {/* <VisualFeedback feedback={gotCorrect}/> */}
         <div style={{width: "100%", textAlign: "left"}}>
