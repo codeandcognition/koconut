@@ -113,7 +113,12 @@ class TableView extends Component {
     }
   }
 
-  renderMarkdown(cellData) {
+  /**
+   * Renders given string as code block markdown
+   * @param cellData
+   * @returns {*}
+   */
+  renderMarkdown(cellData: string) {
     let code = "```java\n" + cellData + "\n```";
     return <ReactMarkdown className={"flex-grow-1"}
                           source={code}
