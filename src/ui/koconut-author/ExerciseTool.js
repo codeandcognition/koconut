@@ -80,6 +80,7 @@ class ExerciseTool extends Component {
 		table: {
 			prompt: "",
 			code: "",
+			type: 'table',
 			colNames: [],
 			data: [],
 			followupPrompt: "",
