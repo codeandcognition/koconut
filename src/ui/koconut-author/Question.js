@@ -13,7 +13,7 @@ class Question extends Component {
 	constructor(props) {
 		super(props);
 
-		let question = this.props.data;
+		let question = Object.assign({}, this.props.data);
 
 		this.state = {
 			currentQuestion: question,
@@ -190,7 +190,7 @@ class Question extends Component {
 														 style={{backgroundColor: '#ffecb3', margin: '3px'}}
 														 onClick={(evt) => {
 															 let index = this.state.currentQuestion.choices.indexOf(evt.target.innerText);
-															 let choicesCopy = [...this.state.currentQuestion.choices];
+															 let choicesCopy = [...Object.assign({}, this.state.currentQuestion.choices)];
 															 choicesCopy.splice(index, 1);
 															 this.updateQuestion('choices', choicesCopy);
 														 }}>
@@ -271,11 +271,11 @@ class Question extends Component {
 									color={'secondary'}
 									onClick={() => {
 										if (this.state.currentChoice === '') return;
-										let choicesCopy = [...this.state.currentQuestion.choices];
+										let choicesCopy = [...Object.assign({}, this.state.currentQuestion).choices];
 										choicesCopy.push(this.state.currentChoice);
 										this.updateQuestion('choices', choicesCopy);
 										if (this.state.checkboxOption === 'answer') {
-											let answersCopy = [...this.state.currentQuestion.answer];
+											let answersCopy = [...Object.assign({}, this.state.currentQuestion.answer)];
 											answersCopy.push(this.state.currentChoice);
 											this.updateQuestion('answer', answersCopy);
 										}
@@ -309,13 +309,13 @@ class Question extends Component {
 														 style={style}
 														 onClick={(evt) => {
 														 	 let choiceIndex = this.state.currentQuestion.choices.indexOf(evt.target.innerText);
-														 	 let choicesCopy = [...this.state.currentQuestion.choices];
+														 	 let choicesCopy = [...Object.assign({}, this.state.currentQuestion)];
 														 	 choicesCopy.splice(choiceIndex, 1);
 															 this.updateQuestion('choices', choicesCopy);
 
 															 if (this.state.currentQuestion.answer.includes(choice)) {
 																 let index = this.state.currentQuestion.answer.indexOf(evt.target.innerText);
-																 let answersCopy = [...this.state.currentQuestion.answer];
+																 let answersCopy = [...Object.assign({}, this.state.currentQuestion.answer)];
 																 answersCopy.splice(index, 1);
 																 this.updateQuestion('answer', answersCopy);
 															 }
@@ -421,7 +421,7 @@ class Question extends Component {
 			if (this.state.currentQuestion.type === this.QuestionTypes.memoryTable) {
 				this.updateQuestion('answer', JSON.parse(this.state.currentQuestion.answer));
 			}
-			this.props.addQuestion(this.state.currentQuestion);
+			this.props.addQuestion(Object.assign({}, this.state.currentQuestion));
 		} else {
 			// TODO: Make this more user friendly!
 			console.log("difficulty: ", this.state.currentQuestion.difficulty);
@@ -451,14 +451,15 @@ class Question extends Component {
 	 * @param value
 	 */
 	updateQuestion(field, value) {
-		let temp = this.state.currentQuestion;
+		let temp = Object.assign({}, this.state.currentQuestion);
 		temp[field] = value;
 		this.setState({currentQuestion: temp}, () => {
-			this.props.updateCurrentQuestion(this.state.currentQuestion, -1);
+			if (field === 'type' || field === 'choices') {
+				this.generateFeedbackTemplate();
+			} else {
+				this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), -1);
+			}
 		});
-		if (field === 'type' || field === 'choices') {
-			this.generateFeedbackTemplate();
-		}
 	}
 
 	/**
@@ -476,12 +477,12 @@ class Question extends Component {
 			// so as to display feedback based on the number of tries
 			template["incorrect"] = [];
 		};
-		let currQuestion = this.state.currentQuestion;
+		let currQuestion = Object.assign({}, this.state.currentQuestion);
 		currQuestion["feedback"] = template;
 		this.setState({
 			feedback: JSON.stringify(template, null, 2),
 			currentQuestion: currQuestion
-		}, () => this.props.updateCurrentQuestion(this.state.currentQuestion, -1));
+		}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), -1));
 	}
 
 	render() {

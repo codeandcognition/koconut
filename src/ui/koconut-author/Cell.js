@@ -80,7 +80,11 @@ class Cell extends Component {
 						{/* render different UI if the cell content is informational */}
 						{this.renderCellFormatPrompt()}
 						{this.state.currentCellFormat === 'prompt' && this.renderInstructionTypeForm()}
-						{this.state.currentCellFormat === 'question' && <Question addQuestion={this.addQuestionCell} isFollowup={false} insideTable={true} data={this.state.cell}/>}
+						{this.state.currentCellFormat === 'question' && <Question
+								addQuestion={this.addQuestionCell}
+								isFollowup={false}
+								insideTable={true} data={this.state.cell}
+								updateCurrentQuestion={this.props.updateCurrentQuestion}/>}
 						<br/>
 						<div style={{display: 'flex', justifyContent: 'flex-end'}}>
 							{
@@ -128,7 +132,7 @@ class Cell extends Component {
 					<p>How do you want to format the instruction? <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
 						<RadioGroup value={this.state.currentInstType} onChange={(evt) => {
-							var currentCell = this.state.cell;
+							var currentCell = Object.assign({}, this.state.cell);
 							if (evt.target.value === "prompt") {
 								currentCell["code"] = "";
 							}	else {
@@ -138,7 +142,6 @@ class Cell extends Component {
 								currentInstType: evt.target.value,
 								cell: currentCell
 							});
-
 						}}>
 							<FormControlLabel value={"prompt"} control={<Radio color={"primary"}/>} label={"Prompt"}/>
 							<FormControlLabel value={"code"} control={<Radio color={"primary"}/>} label={"Code"}/>
@@ -206,9 +209,9 @@ class Cell extends Component {
 	 * @param value
 	 */
 	updateCell(field, value) {
-		let temp = this.state.cell;
+		let temp = Object.assign({}, this.state.cell);
 		temp[field] = value;
-		this.setState({cell: temp}, () => {this.props.addToTable(this.state.cell, this.props.index)});
+		this.setState({cell: temp}, () => {this.props.addToTable(Object.assign({}, this.state.cell), this.props.index)});
 	}
 
 	/**
@@ -218,7 +221,7 @@ class Cell extends Component {
 	 */
 	addContent() {
 		this.handleClose();
-		this.props.addToTable(this.state.cell, this.props.index);
+		this.props.addToTable(Object.assign({}, this.state.cell), this.props.index);
 	}
 
 	/**

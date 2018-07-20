@@ -11,7 +11,7 @@ class Table extends Component {
 
 		this.addToTable = this.addToTable.bind(this);
 
-		let table  = this.props.data;
+		let table  = Object.assign({}, this.props.data);
 
 		this.state = {
 			currentTable: table,
@@ -59,7 +59,7 @@ class Table extends Component {
 				<div>
           <p style={{color: '#3F51B5'}}>Table Prompt <span style={this.fieldReqs.optional}>optional</span></p>
 					<TextField fullWidth={true} value={this.state.currentTable.currPrompt} onChange={(evt) => {
-						var table = this.state.currentTable;
+						var table = Object.assign({}, this.state.currentTable);
 						table.prompt = evt.target.value;
 						this.setState({
 							currentTable: table
@@ -84,7 +84,7 @@ class Table extends Component {
 			<div>
         <p style={{color: '#3F51B5'}}>Table Code <span style={this.fieldReqs.optional}>optional</span></p>
         <textarea style={code} onChange={(evt) => {
-        	var table = this.state.currentTable;
+        	let table = Object.assign({}, this.state.currentTable);
         	table.code = evt.target.value;
         	this.setState({
 						currentTable: table
@@ -107,7 +107,7 @@ class Table extends Component {
 									color={'secondary'}
 									variant={'outlined'}
 									onClick={() => {
-										let temp = this.state.currentTable;
+										let temp = Object.assign({}, this.state.currentTable);
 										temp.colNames.push(this.state.currColName);
 										this.setState({currentTable: temp, currColName: ''}, () => this.props.updateCurrentQuestion(this.state.currentTable , -1));
 									}}>
@@ -119,12 +119,12 @@ class Table extends Component {
 								return <Button style={{backgroundColor: '#ffecb3', margin: '3px'}}
 															 key={key}
 															 onClick={(evt) => {
-																 let table = this.state.currentTable;
+																 let table = Object.assign({}, this.state.currentTable);
 																 let index = table.colNames.indexOf(evt.target.value);
-																 let colNamesCopy = [...this.state.currentTable.colNames];
+																 let colNamesCopy = [...Object.assign({}, this.state.currentTable.colNames)];
 																 colNamesCopy.splice(index, 1);
 																 table.colNames = colNamesCopy;
-																 this.setState({currentTable: table}, () => this.props.updateCurrentQuestion(this.state.currentTable, -1));
+																 this.setState({currentTable: table}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable), -1));
 															 }}>{colName}
 								</Button>
 							})
@@ -175,7 +175,12 @@ class Table extends Component {
 									// index to map from 2d table to 1d table since a table is
 									// represented as an array
 									const index = (rowNum * width) + colNum;
-									row.push(<Cell key={colNum} index={index} addToTable={this.addToTable} data={this.state.currentTable.data[index]} open={this.state.currentlyOpen === index}/>);
+									row.push(<Cell key={colNum}
+																 index={index}
+																 addToTable={this.addToTable}
+																 data={this.state.currentTable.data[index]}
+																 open={this.state.currentlyOpen === index}
+																 updateCurrentQuestion={this.props.updateCurrentQuestion}/>);
 								});
 								return(
 										<div key={rowNum} style={{display: 'flex', justifyContent: 'center'}}>
@@ -192,14 +197,14 @@ class Table extends Component {
 	 * Invoked in Cell.js to add a cell's content to the table
 	 */
 	addToTable(cell, index) {
-		let table = this.state.currentTable;
+		let table = Object.assign({}, this.state.currentTable);
 		let data = table.data;
 		data[index] = cell;
 		table['data'] = data;
 		this.setState({
 			currentTable: table
 		}, () => {
-			this.props.updateCurrentQuestion(this.state.currentTable, index);
+			this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable), index);
 		});
 	}
 
@@ -211,8 +216,8 @@ class Table extends Component {
 		if (this.state.currentTable.colNames.length > 0 &&
 				parseInt(this.state.currNumRows, 10) > 0 &&
 				this.state.currentTable.data.length === items) {
-			this.props.updateCurrentQuestion(this.state.currentTable);
-			this.props.addQuestion(this.state.currentTable);
+			this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable));
+			this.props.addQuestion(Object.assign({}, this.state.currentTable));
 		} else {
 			console.log("number of columns: ", this.state.currentTable.colNames.length);
 			console.log("number of rows: ", this.state.currNumRows);

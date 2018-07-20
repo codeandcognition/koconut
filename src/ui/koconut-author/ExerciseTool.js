@@ -56,7 +56,8 @@ class ExerciseTool extends Component {
 			isFollowup: false, 														// passed as a prop into the Question component
 			currentQuestion: this.Schemas["standAlone"], 				// this will be updated throughout an authoring session
 			currentQuestionFormat: "standAlone",					// keeps track of the format of the current question
-			currentCellIndex: -1													// needed for dealing with Firebase concurrency issues
+			currentCellIndex: -1,													// needed for dealing with Firebase concurrency issues
+			followupTo: -1
     };
 
     // Bind the functions so they can be used in Question.js
@@ -287,7 +288,8 @@ class ExerciseTool extends Component {
 	 * @param value
 	 */
 	updateExercise(field, value) {
-		let temp = this.state.currentExercise;
+		// deep copy instead of shallow copy
+		let temp = Object.assign({}, this.state.currentExercise);
 		temp[field] = value;
 		this.setState({currentExercise: temp});
 	}
@@ -299,7 +301,8 @@ class ExerciseTool extends Component {
 	 * @param
 	 */
 	addQuestion(question) {
-		let exercise = this.state.currentExercise;
+		let exercise = Object.assign({}, this.state.currentExercise);
+		console.log(this.state.isFollowup);
 		exercise.questions.push(question);
 		this.setState({
 			currentExercise: exercise
@@ -310,7 +313,6 @@ class ExerciseTool extends Component {
 	 * Updates the `currentQuestion` field through out the authoring session
 	 */
 	updateCurrentQuestion(question, currentCell) {
-		// TODO: verify this works
 		this.setState({
 			currentQuestion: question,
 			currentCellIndex: currentCell
@@ -344,6 +346,7 @@ class ExerciseTool extends Component {
 			isFollowup: false,
 			currentQuestion: this.QuestionSchema,
 			currentQuestionFormat: "",
+			followupTo: -1
 		});
 	}
 
@@ -367,7 +370,7 @@ class ExerciseTool extends Component {
 		return <Question addQuestion={this.addQuestion}
 										 isFollowup={this.state.isFollowup}
 										 insideTable={false}
-										 data={this.state.currentQuestion}
+										 data={Object.assign({}, this.state.currentQuestion)}
 										 updateCurrentQuestion={this.updateCurrentQuestion}/>
 	}
 
@@ -378,7 +381,7 @@ class ExerciseTool extends Component {
 	renderTableQuestion() {
 		return <Table addQuestion={this.addQuestion}
 									updateCurrentQuestion={this.updateCurrentQuestion}
-									data={this.state.currentQuestion}
+									data={Object.assign({}, this.state.currentQuestion)}
 									currentlyOpen={this.state.currentCellIndex}/>
 	}
 
