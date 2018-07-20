@@ -114,6 +114,7 @@ class App extends Component {
     this.switchToWorldView = this.switchToWorldView.bind(this);
     this.loadDisplay = this.loadDisplay.bind(this);
     this.switchToAuthorView = this.switchToAuthorView.bind(this);
+    this.nextQuestion = this.nextQuestion.bind(this);
   }
 
   /**
@@ -141,8 +142,9 @@ class App extends Component {
       } else {
         this.setState({
           display: displayType.exercise,
-          exercise: exercises[this.state.counter],//this.generator.getStubExercise(), // exercises[this.state.counter].exercise, // TODO: convert this for testing
+          exercise: exercises[exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter],//this.generator.getStubExercise(), // exercises[this.state.counter].exercise, // TODO: convert this for testing
           currentConcept: concept,
+          counter: exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter,
           exerciseType: exerciseType,
           error: false // resets the error message
         });
@@ -344,6 +346,15 @@ class App extends Component {
     });
   }
 
+  /**
+   * nextQuestion will set the state of the exercise to be the next question.
+   */
+  nextQuestion() {
+    this.setState({counter: this.state.counter + 1, feedback: []}, () => {
+      this.generateExercise(this.state.currentConcept, this.state.exerciseType);
+    });
+  }
+
   // TODO William rewrite this to make it clear feedback instead of
   // just changing displaytype
   submitTryAgain(questionIndex: number) {
@@ -523,6 +534,7 @@ class App extends Component {
             codeTheme={this.state.codeTheme}
             toggleCodeTheme={(theme) => this.setState({codeTheme: theme})}
             timesGotQuestionWrong={this.state.timesGotQuestionWrong}
+            nextQuestion={this.nextQuestion}
         />
     );
   }

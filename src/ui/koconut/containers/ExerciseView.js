@@ -37,6 +37,7 @@ class Exercise extends Component {
     this.state = {
       answer: []
     };
+    this.resetAnswer = this.resetAnswer.bind(this);
   }
 
   /**
@@ -53,6 +54,11 @@ class Exercise extends Component {
   isAnswered() {
     let _a = this.state.answer;
     return _a !== undefined && _a !== null;
+  }
+
+
+  resetAnswer() {
+    this.setState({answer: []});
   }
 
 
@@ -80,6 +86,8 @@ class Exercise extends Component {
               toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
               submitHandler={this.props.submitHandler}
               timesGotQuestionWrong={this.props.timesGotQuestionWrong}
+              nextQuestion={this.props.nextQuestion}
+              resetAnswer={this.resetAnswer}
           />
           <ConceptLabel concepts={this.props.exercise.concepts}/>
         </div>
