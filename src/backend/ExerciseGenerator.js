@@ -1,15 +1,14 @@
 // @flow
-import {exampleExercises, stubExercise} from '../data/Exercises.js';
+import {stubExercise} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
-import ExercisePool from '../data/ExercisePool';
 import conceptInventory from '../data/ConceptMap';
+
+import type {Exercise} from '../data/Exercises.js';
 
 // import typeof doesn't agree with Flow for some reason:
 //   https://flow.org/en/docs/types/modules/
 // So, we import all of ConceptKnowledge
 import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
-
-var exercises = require('../data/Exercises');
 
 /**
  * Generates exercises associated with concepts
@@ -26,24 +25,26 @@ class ExerciseGenerator {
    * Returns and array of exercises for the given exercise type and concept
    * @param exerciseType - String ("READ" or "WRITE")
    * @param concept - String (Camel Cased)
+   * @param exerciseList - List of exercises coming from firebase
+   * @param conceptMapGetter - List of concept mappings coming from firebase
+   * @return {Exercise[]} Array of exercises for the given exercise type and concept
    */
-  getExercisesByTypeAndConcept(exerciseType: string, concept: string) {
-    var exerciseInventory = [exercises.variable17061, exercises.variable18916, exercises.variable51520,
-      exercises.variable60932, exercises.variable88688]; // Add variable to this array as exercise inventory grows
-    var exerciseList = [];
-    for (var i = 0; i < exerciseInventory.length; i++) {
-      exerciseList = exerciseList.concat(exerciseInventory[i]);
-    }
-    var results = [];
-    var readTypes = ["highlightCode", "multipleChoice", "shortResponse"];
-    exerciseList.forEach((item) => {
-      if (item.exercise.concepts.includes(concept)) {
-        if ((exerciseType === "READ" && readTypes.includes(item.exercise.type)) ||
-            (exerciseType === "WRITE" && !readTypes.includes(item.exercise.type))) {
-            results.push(item);
+  getExercisesByTypeAndConcept(exerciseType: string,
+                               concept: string,
+                               exerciseList: any, // calm down flow jeez
+                               conceptMapGetter: any): ?Exercise[]{ // made conceptMapGetter an any type to stop flow's anger
+    // TODO: Address the isReadType issue, can the type just be brought out?
+    // what happens if there are more than 1 type?
+
+    let results = [];
+    if(exerciseList && conceptMapGetter) {
+      conceptMapGetter[concept].forEach((exerciseId) => {
+        if ((exerciseType === "READ" && exerciseList[exerciseId] && ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type)) ||
+            (exerciseType === "WRITE" && exerciseList[exerciseId] && !ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type) )) {
+          results.push(exerciseList[exerciseId]);
         }
-      }
-    });
+      })
+    }
     return results;
   }
 
@@ -70,9 +71,17 @@ class ExerciseGenerator {
    * @returns {Array.<*>}
    */
   getOrderedConcepts(): ConceptKnowledge[] {
-    return MasteryModel.model.filter((concept) => concept.teach).sort(
+    return MasteryModel.model.filter((concept) => concept.should_teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
         a.dependencyKnowledge / a.knowledge));
+  }
+
+  /**
+   * Get a stub exercise defined in Exercises.js
+   * @returns {Exercise} stub exercise
+   */
+  getStubExercise() : Exercise {
+    return stubExercise;
   }
 
   /**
@@ -136,12 +145,16 @@ class ExerciseGenerator {
     return types[Math.floor(Math.random() * types.length)];
   }
 
+
   /**
+   * D E P R E C A T E D - Deprecated, keeping in here because we may want
+   * to use similar functionality in the future
+   *
    * Returns a generated Exercise
    * @param concept - specifies a concept type if provided
    * @returns a generated Exercise
    */
-  generateExercise(concept: ?string) {
+  /*generateExercise(concept: ?string) {
     //First exercise to pass is initial survey
     // TODO: This is probably bad architecture
     if(this.counter === 0) {
@@ -179,20 +192,22 @@ class ExerciseGenerator {
     this.counter += 1;
     ExercisePool.addExercise(exercise.exercise, exercise.answer);
     return exercise.exercise;
-  }
+  }*/
+
 
   /**
+   * Deprecated
    * Gets a specific exercise from the example exercises
    * For DEBUG eyes only 👀
    * @param index - the exercise index to retrieve
    * @private
    * @returns the exercise at the given index (wraps around if index > size)
    */
-  _generateExercise(index: number) {
-    let exercise = exampleExercises[index % exampleExercises.length];
-    ExercisePool.addExercise(exercise.exercise, exercise.answer);
-    return exercise.exercise;
-  }
+  // _generateExercise(index: number) {
+  //   let exercise = exampleExercises[index % exampleExercises.length];
+  //   ExercisePool.addExercise(exercise.exercise, exercise.answer);
+  //   return exercise.exercise;
+  // }
 
 }
 

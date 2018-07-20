@@ -1,6 +1,7 @@
 // @flow
 import React, {Component} from 'react';
-import VisualFeedback from './VisualFeedback';
+import Button from '@material-ui/core/Button';
+// import VisualFeedback from './VisualFeedback';
 
 import './Feedback.css';
 
@@ -13,21 +14,99 @@ import './Feedback.css';
 // type Props = {feedback: boolean, submitHandler: Function};
 
 class Feedback extends Component {
-
-  // constructor(props: Props) {
-  //   super(props);
-  // }
+  constructor() {
+    super();
+    this.state = {
+      gaveUp: false
+    }
+  }
+  showFeedbackMessage(type: string, timeswrong: any, feedback: any, gotCorrect: string) {
+    if(type === "multipleChoice") {
+      let answer = this.props.answer[this.props.questionIndex];
+      return <div>{feedback[answer]}</div>
+    } else {
+      if(gotCorrect === "correct") {
+        return <div>{feedback ? feedback.correct : ''}</div>
+      } else {
+        if(feedback && feedback.incorrect && timeswrong > feedback.incorrect.length) {
+          return <div>{feedback.incorrect[feedback.incorrect.length - 1]}</div>
+        } else {
+          return <div>{feedback && feedback.incorrect && feedback.incorrect[timeswrong-1]}</div>
+        }
+      }
+    }
+  }
+  
+  showAnswer() {
+    let finalstring = "";
+    let answer = this.props.question.answer;
+    if (this.props.type === "checkboxQuestion") {
+      for(let i = 0; i < answer.length; i++) {
+        if(i < answer.length - 1) {
+          finalstring = finalstring + answer[i] + ", ";
+        } else {
+          finalstring = finalstring + answer[i];
+        }
+      }
+    } else if(this.props.type === "table") {
+      let cells = this.props.question.data;
+      for(let i = 0; i < cells.length; i++) {
+        if(cells[i].answer !== "") {
+          if(i < cells.length - 1) {
+            finalstring = finalstring + cells[i].answer + ", ";
+          } else {
+            finalstring = finalstring + cells[i].answer;
+          }
+        }
+      }
+    } else {
+      finalstring = answer;
+    }
+    return <div style={{display: "inline"}}><strong>The correct answer is <span style={{color: "green"}}>{finalstring}</span></strong></div>
+  }
 
   render() {
+    let gotCorrect = "correct";
+    if(this.props.type === "table") {
+      this.props.feedback.forEach((d) => {
+        d.forEach((e) => {
+          if(e === "incorrect") {
+            gotCorrect = "incorrect";
+          }
+        })
+      })
+    } else {
+      gotCorrect = this.props.feedback;
+    }
+
+    let correctBool = gotCorrect === "correct";
     return (
-      <div className="feedback">
+      <div style={{width: "100%", textAlign: "left"}} className="feedback">
+        <h4 style={{fontWeight: "bold", textAlign: "left"}}>Feedback</h4>
         <div className="feedback-correctness">
-          <p>Your answer was: {this.props.feedback}</p>
+          <p>{!correctBool && "Not quite!"}{correctBool && "Well done!"} {this.showAnswer()}.</p>
         </div>
-        <VisualFeedback feedback={this.props.feedback}/>
+        {/* <VisualFeedback feedback={gotCorrect}/> */}
+        <div style={{width: "100%", textAlign: "left"}}>
+        {this.showFeedbackMessage(this.props.type, this.props.timesGotSpecificQuestionWrong, this.props.question.feedback, gotCorrect)}
+        </div>
         <div className="feedback-ok">
-          <button onClick={this.props.submitOk}>OK</button>
-          <button onClick={this.props.submitTryAgain}>Try Again</button>
+          {(correctBool || this.state.gaveUp) && 
+            <div>
+              <div style={{display: "flex", justifyContent: "flex-end"}}>
+                <Button color="primary" variant="outlined" onClick={this.props.submitOk}>Continue</Button>
+              </div>
+            </div>}
+          {!correctBool && !this.state.gaveUp &&
+            <div style={{display: "flex", justifyContent: "flex-end"}}><Button color={"primary"} variant="outlined" onClick={this.props.submitTryAgain}>Try Again</Button>
+              
+                <Button style={{marginLeft: "10px"}} variant="outlined" onClick={() => {
+                  this.setState({gaveUp: true});
+                }} color={"secondary"}>Show answer</Button>
+              
+            </div>
+          }
+          
         </div>
       </div>
     )

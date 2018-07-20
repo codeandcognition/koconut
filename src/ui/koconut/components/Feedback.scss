@@ -3,8 +3,10 @@
 .feedback {
   margin: 0;
   padding: 1em;
-  border-left: 1px dotted darkslategray;
+  /*border-left: 1px dotted darkslategray;*/
   text-align: center;
-  background-color: $component-background;
+  background-color: white;
   position: relative;
+  width: 30%;
+  border-top: 1px solid #9FA8DA;
 }

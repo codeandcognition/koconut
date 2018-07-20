@@ -35,7 +35,7 @@ export const keyword = { new: "new", true: "true", false: "false", if: "if", els
   null: "null", this: "this", super: "super"};
 
 //All grammar labels
-export const g = {identifier: "identifier", expression: "expression", classInstanceExpression: "classInstanceExpression",
+/*export const g = {identifier: "identifier", expression: "expression", classInstanceExpression: "classInstanceExpression",
   methodInvocationExpression: "methodInvocationExpression", arrayCreationExpression: "arrayCreationExpression",
   statement: "statement", ifThenStatement: "ifThenStatement", ifThenElseStatement: "ifThenElseStatement",
   forStatement: "forStatement", doStatement: "doStatement", whileStatement: "whileStatement",
@@ -51,6 +51,26 @@ export const g = {identifier: "identifier", expression: "expression", classInsta
   equalityExpression: "equalityExpression", conditionalAndExpression: "conditionalAndExpression",
   conditionalOrExpression: "conditionalOrExpression", relationalExpression: "relationalExpression",
   leftHandSide: "leftHandSide", assignmentOperator: "assignmentOperator", string: "string",
-  referenceType: "referenceType", fieldAccess: "fieldAccess", relationalOperator: "relationalOperator"};
+  referenceType: "referenceType", fieldAccess: "fieldAccess", relationalOperator: "relationalOperator"};*/
+
+export const g = {
+  howCodeRuns: "howCodeRuns",
+  dataTypes: "dataTypes",
+  printStatements: "printStatements",
+  variables: "variables",
+  arithmeticOperators: "arithmeticOperators",
+  relationalOperators: "relationalOperators",
+  variableSwap: "variableSwap",
+  digitProcessing: "digitProcessing",
+  floatEquality: "floatEquality",
+  conditionals: "conditionals",
+  findMaxMin: "findMaxMin"
+}
+
+export const t = {
+  semantic: "semantic",
+  template: "template",
+  onboarding: "onboarding"
+}
 
 export default g;

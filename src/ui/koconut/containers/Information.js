@@ -2,16 +2,14 @@
 import React, {Component} from 'react';
 import Code from '../components/Code';
 import Response from './Response';
-import Feedback from '../components/Feedback';
 import Types from '../../../data/ExerciseTypes.js';
+import Submit from '../components/Submit';
+import Feedback from '../components/Feedback';
+import Paper from '@material-ui/core/Paper';
+
 import './Information.css';
 
-// Display type enum
-const displayType = {
-  exercise: 'EXERCISE',
-  feedback: 'FEEDBACK',
-  concept: 'CONCEPT',
-};
+import type {Exercise} from '../../../data/Exercises';
 
 /**
  * The Information container contains Code or both Code and Response.
@@ -19,68 +17,141 @@ const displayType = {
  */
 class Information extends Component {
   props: {
-    code: string,
-    type: string,
-    choices?: string[], // Optional type - can be omitted (use undefined)
-    answer: ?string,  // Maybe type - can be null/void
+    exercise: Exercise,
+    answer: any,  // Maybe type - can be null/void
     updateHandler: Function,
-    feedback: string,
+    feedback: string[],
     submitOk: Function,
     submitTryAgain: Function,
     mode: string,
     toggleCodeTheme: Function,
-    codeTheme: string
+    codeTheme: string,
+    submitHandler: Function,
+    timesGotQuestionWrong: number[]
   };
 
   /**
    * Returns JSX for (or not for) the Code container given the current props
+   * @param question question object in Exercise
+   * @param index index of question in Exercise
    * @returns JSX for the Code container
    */
-  renderCodeView() {
-    return (Types.isSurvey(this.props.type) ||
-        (this.props.type === Types.multipleChoice && this.props.code === '')) ? '' :
-        (<Code
-            type={this.props.type}
-            code={this.props.code}
-            codeTheme={this.props.codeTheme}
-            toggleCodeTheme={(theme) => this.props.toggleCodeTheme(theme)}
-            updateHandler={Types.isInlineResponseType(this.props.type)
-                ? this.props.updateHandler
-                : undefined}
-        />);
+  renderCodeView(question: any, index: number) {
+      if((Types.isSurvey(question.type) ||
+          (question.type === Types.multipleChoice
+          &&
+              ((question.code && question.code === '') || (!question.code))
+          )) || question.type === Types.table
+      ) {
+        return '';
+      } else {
+        return (<Code
+                      key={"code" + index}
+                      type={question.type}
+                      code={question.code}
+                      updateHandler={
+                        Types.isInlineResponseType(question.type) ?
+                            this.props.updateHandler :
+                            undefined
+                      }
+                      toggleCodeTheme={this.props.toggleCodeTheme}
+                      feedback={this.props.feedback[index]}
+                      questionIndex={index}
+                      submitTryAgain={this.props.submitTryAgain}
+                      />);
+      }
   }
 
   /**
    * Returns JSX for (or not for) the Response container given the current props
+   * @param question question object in Exercise
+   * @param index index of question in Exercise
    * @returns JSX for the Response container
    */
-  renderResponseView() {
-    let type = this.props.type;
-    if (this.props.mode === displayType.feedback) {
-      return <Feedback
-          feedback={this.props.feedback}
-          submitOk={this.props.submitOk}
-          submitTryAgain={this.props.submitTryAgain}
-      />
-    }
-    return Types.isInlineResponseType(type) ? <div/>
-        : <Response
+  renderResponseView(question: any, index: number) {
+      let type = question.type;
+
+      return Types.isInlineResponseType(type) && type !== Types.writeCode
+      // || (this.props.feedback[index] &&
+      //       (question.type !=="table" &&
+      //       question.type !=="multipleChoice" &&
+      //       question.type !=="selectMultiple")
+      //       ) 
+          ? <div></div> :
+          <Response
+            key={"response"+index}
             type={type}
-            choices={this.props.choices}
+            choices={question.choices}
             answer={this.props.answer}
+            questionIndex={index}
+            question={question}
             updateHandler={this.props.updateHandler}
-            feedback={this.props.feedback}
+            feedback={this.props.feedback[index]}
             submitOk={this.props.submitOk}
+            submitTryAgain={this.props.submitTryAgain}
             mode={this.props.mode}
-        />;
+            submitHandler={this.props.submitHandler}
+            />
+  }
+
+  /**
+   * Returns JSX for (or not for) the Feedback container given the current props
+   * @param question question object in Exercise
+   * @param index index of question in Exercise
+   * @returns JSX for the Feedback container
+   */
+  renderFeedback(question: any, index: number) {
+      if(this.props.feedback[index]) {
+        return <Feedback
+          feedback={this.props.feedback[index]}
+          questionIndex={index}
+          submitTryAgain={() => this.props.submitTryAgain(index)}
+          type={question.type}
+          question={this.props.exercise.questions[index]}
+          timesGotSpecificQuestionWrong={this.props.timesGotQuestionWrong[index]}
+          answer={this.props.answer}
+        />
+      }
+      return <div />
   }
 
   render() {
+    // todo count correct correctly
+    let correctCount = this.props.feedback.reduce((acc, item, index) => {
+          if (this.props.exercise.questions[index].type === "checkboxQuestion" ||
+              this.props.exercise.questions[index].type === "table") {
+            return item && item.toString().indexOf("incorrect") === -1 &&
+            item.toString().indexOf("correct") !== -1 ? acc + 1 : acc;
+          } else {
+            return item === "correct" ? acc + 1 : acc
+          }
+        }
+    , 0);
+    let expectedCorrect = this.props.exercise.questions.length;
+
     return (
-        <div className="information">
-          {this.renderCodeView()}
-          {this.renderResponseView()}
+        <div>
+          {/* TODO replace learn yourself a good 1*/}
+          {correctCount >= expectedCorrect ?
+                <div> wow good joob you learnt yourself a good 1 </div> :
+                this.props.exercise.questions.map((question, index) => {
+                return (
+                    <Paper elevation={6} style={{padding: "0"}} key={"information" + index} className={"information-with-submit"}>
+                      <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
+                          {question.code && question.type !== Types.writeCode && this.renderCodeView(question, index)}
+                          <div style={{width: "100%", margin: "0", padding: "0"}}>
+                            {this.renderResponseView(question, index)}
+                            {!(this.props.feedback[index]) &&
+                              <Submit submitHandler={() => this.props.submitHandler(this.props.answer, index, question.type)} />
+                            }
+                          </div>
+                      </div>
+                      {this.renderFeedback(question, index)}
+                    </Paper>);
+            })
+          }
         </div>
+
     );
   }
 }

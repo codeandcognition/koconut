@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import * as hljs from 'highlight.js';
 import './CodeBlock.css'
 
-type Props = {
-  literal: string,
-  value: string
-};
+// type Props = {
+//   literal: string,
+//   value: string
+// };
 
 /**
  * CodeBlock is boilerplate code provided by the React-Markdown to support
@@ -26,7 +26,6 @@ export default class CodeBlock extends Component {
   }
 
   render() {
-    console.log(this.props.value);
     return (
         <pre>
           <code ref="code" className={this.props.language || 'js'}>

@@ -13,7 +13,9 @@ class Choice extends Component {
     content: string,
     answer: boolean,
     tooltip: ?string,
-    handleClick: Function
+    handleClick: Function,
+    questionIndex: number,
+    disabled: boolean
   };
 
   renderTooltip() {
@@ -32,12 +34,17 @@ class Choice extends Component {
   render() {
     return (
         <div
-            className={'choice ' + (this.props.answer ? 'answer' : '')}
-            onClick={() => this.props.handleClick(this.props.choice)}
+            className={`choice ${this.props.answer ? 'answer' : ''} ${this.props.disabled ? 'disabled' : 'notdisabled'}`}
+            onClick={() => {
+              if(!this.props.disabled) {
+                this.props.handleClick(this.props.choice, this.props.questionIndex);           
+              }
+            }}
             data-tip
-            data-for={this.props.content}
-        >
+            style={{width: "60%"}}
+            data-for={this.props.content}>
           {this.props.content}
+          <br />
           {this.renderTooltip()}
         </div>
     );

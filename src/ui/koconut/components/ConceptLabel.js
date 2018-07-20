@@ -37,12 +37,17 @@ class ConceptLabel extends Component {
     return this.props.concepts.length > 0 ?
         <div className="concept-label">
           concepts: {concepts.map((concept, i) => {
-            let curr = explanations[i].explanations;
-            return (
-              <div key={i} className="concept" data-tip data-for={concept}>
-                {concept}
-                {this.renderTooltip(concept, curr.name, curr.examples[0], curr.definition)}
-              </div>);
+            if(explanations[i]) { // double check in case concept does not exist.
+              let curr = explanations[i].explanations;
+              return (
+                  <div key={i} className="concept" data-tip data-for={concept}>
+                    {concept}
+                    {this.renderTooltip(concept, curr.name, curr.examples[0], curr.definition)}
+                  </div>);
+            } else {
+              return '';
+            }
+
           })}</div>
         :
         <div></div>

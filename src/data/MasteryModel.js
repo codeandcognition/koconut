@@ -9,18 +9,20 @@ import _ from 'lodash';
  */
 class ConceptKnowledge {
   name: string;
-  teach: boolean;
   container: boolean;
 
   dependencies: ConceptKnowledge[];
   parents: ConceptKnowledge[];
+  explanations: any;
+  should_teach: boolean;
+  type: string;
 
   knowledge: number; //p(cognitive mastery) [0,1]
   dependencyKnowledge: number; //p(support cognitive mastery) [0,1]
 
-  constructor(name: string, teach: boolean, container: boolean) {
+  constructor(name: string, teach: boolean, container: boolean, type: string) {
     this.name = name;
-    this.teach = teach;
+    this.should_teach = teach;
     this.container = container;
 
     this.dependencies = [];
@@ -30,6 +32,7 @@ class ConceptKnowledge {
     this.dependencyKnowledge = 1; // Avg of dependencies' K values
                                   // default is 1 because having no dependencies
                                   // means full knowledge
+    this.type = type;
   }
 
   /**
@@ -133,7 +136,7 @@ class MasteryModelClass {
   _populate() {
     // Create ConceptKnowledge objects for each concept
     _.forEach(conceptInventory, (c, name) => this.model.push(
-        new ConceptKnowledge(name, c.should_teach, c.container)));
+        new ConceptKnowledge(name, c.should_teach, c.container, c.type)));
 
     // Create a mapping of strings to ConceptKnowledge objects
     let map = this.modelMap;

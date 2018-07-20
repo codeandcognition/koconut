@@ -19,7 +19,6 @@ import InstructionView from './InstructionView';
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
-import {ResponseLog} from '../../../data/ResponseLog';
 import type {Exercise} from '../../../data/Exercises';
 
 // Display type enum
@@ -61,7 +60,7 @@ class App extends Component {
     exercise: Exercise,
 		exerciseType: string,
 		instructionType: string,
-    feedback: string,
+    feedback: any, // flow pls
     nextConcepts: string[],
     counter: number,
     display: string, // the current display state
@@ -71,7 +70,10 @@ class App extends Component {
 		error: boolean,
 		errorMessage: string,
 		author: boolean,
-    codeTheme: string
+    exerciseList: ?Exercise[],
+    conceptMapGetter: ?Map<string,number[]>,
+    codeTheme: string,
+    timesGotQuestionWrong: number[]
   };
 
   constructor() {
@@ -80,10 +82,10 @@ class App extends Component {
     this.theme = createMuiTheme();
 
     this.state = {
-      exercise: this.generator.generateExercise(),
+      exercise: this.generator.getStubExercise(),
 			exerciseType: '', // yet to be defined
 			instructionType: '',
-      feedback: '',
+      feedback: [],
       nextConcepts: [],
       counter: 0, // Changed this from 1 to 0 -- cuz 0-based indexing
       display: displayType.load,
@@ -93,7 +95,10 @@ class App extends Component {
 			error: false,
 			errorMessage: '', // none
 			author: false,
-      codeTheme: 'eclipse'
+      exerciseList: null,
+      conceptMapGetter: null,
+      codeTheme: '',
+      timesGotQuestionWrong: [] // times the user has gotten question wrong, indices are question[index]
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -116,30 +121,33 @@ class App extends Component {
    * When invoked in concept card, it generates an exercise of the given
    * concept and type
    *
+   * TODO: add user data on firebase for progress tracking
    */
   generateExercise(concept: string, exerciseType: string) {
-		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept);
-		if (exercises.length === 0) {
-			this.setState({
-				error: true,
-				errorMessage: 'Sorry, there are no exercises available for this concept right now.'
-			});
-		} else if (this.state.counter === exercises.length) { // reached the end of the list
-  			// go back to the world view
-				this.switchToWorldView();
-				this.setState({
-					error: true,
-					errorMessage: 'Looks like we ran out of questions for this concept, stay-tuned for more!'
-				});
-		} else {
-			this.setState({
-				display: displayType.exercise,
-				exercise: exercises[this.state.counter].exercise,
-				currentConcept: concept,
-				exerciseType: exerciseType,
-				error: false // resets the error message
-			});
-		}
+		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
+		if (exercises) {
+      if (exercises.length === 0) {
+        this.setState({
+          error: true,
+          errorMessage: 'Sorry, there are no exercises available for this concept right now.'
+        });
+      } else if (this.state.counter === exercises.length) { // reached the end of the list
+        // go back to the world view
+        this.switchToWorldView();
+        this.setState({
+          error: true,
+          errorMessage: 'Looks like we ran out of questions for this concept, stay-tuned for more!'
+        });
+      } else {
+        this.setState({
+          display: displayType.exercise,
+          exercise: exercises[this.state.counter],//this.generator.getStubExercise(), // exercises[this.state.counter].exercise, // TODO: convert this for testing
+          currentConcept: concept,
+          exerciseType: exerciseType,
+          error: false // resets the error message
+        });
+      }
+    }
   }
 
 	/**
@@ -180,16 +188,6 @@ class App extends Component {
 	}
 
   /**
-   * Returns a generated exercise by index
-   * For DEBUG eyes only eyes 👀😭
-   * @private
-   * @returns the example exercise at the given index
-   */
-  _getExercise(): Exercise {
-    return this.generator._generateExercise(this.state.counter);
-  }
-
-  /**
    * Set up a firebase authentication listener when component mounts
    * Will set the state of firebaseUser to be the current logged in user
    * or null if no user is logged in.
@@ -224,22 +222,101 @@ class App extends Component {
   }
 
   /**
+   * checkAnswer will check the answers client side to provide the feedback
+   * to the Response.js object later on
+   * @param {string[]} answer string array of answers for each question
+   * @param {number} questionIndex index of question to check the answer of
+   * @return {string[]}
+   */
+  checkAnswer(answer: any, questionIndex: number, questionType: string) {
+    let question = this.state.exercise.questions[questionIndex];
+    let feedbackTemp = this.state.feedback;
+
+    // basically the answer will come in looking like this for a table type problem
+    // mixed with regular problems
+    // let stub = ["a", "a", [["", "a", "a"], ["", "a", "a"]], "a"];
+
+    let checkerForCorrectness = true;
+    if (questionType === "table") {
+      let colNames = question.colNames;
+      let allCells = question.data;
+      let addToFeedback = [];
+      allCells.forEach((d, i) => {
+        let arrayIndexToPushTo = Math.floor(i / colNames.length);
+        if (!addToFeedback[arrayIndexToPushTo]) {
+          addToFeedback[arrayIndexToPushTo] = [];
+        }
+        let subArrayIndex = i % colNames.length;
+        //console.log(d.answer, answer[questionIndex][arrayIndexToPushTo][subArrayIndex]);
+        let cellValue = null;
+        if (d.answer === "") {
+          cellValue = null;
+          // sorry to whoever has to understand this later :(
+          // it's for the greater good and expandability
+        } else if (answer[questionIndex] &&
+            answer[questionIndex][arrayIndexToPushTo] && d.answer ===
+            answer[questionIndex][arrayIndexToPushTo][subArrayIndex]) {
+          cellValue = "correct";
+        } else {
+          cellValue = "incorrect";
+          checkerForCorrectness = false;
+        }
+        addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
+      });
+      feedbackTemp[questionIndex] = addToFeedback;
+    } else if (questionType === "checkboxQuestion") { // Assumes question.answer and answer are both arrays
+      var correct = true;
+      var answerArr = answer[0];
+      if (answerArr && question.answer.length === answerArr.length) {
+        question.answer.forEach((item) => {
+          if (!answerArr.includes(item)) {
+            correct = false;
+            checkerForCorrectness = false;
+          }
+        });
+      } else {
+        correct = false;
+        checkerForCorrectness = false;
+      }
+      feedbackTemp[questionIndex] = correct ? "correct" : "incorrect";
+    } else {
+      if (question.answer === answer[questionIndex]) {
+        feedbackTemp[questionIndex] = "correct";
+      } else {
+        feedbackTemp[questionIndex] = "incorrect";
+        checkerForCorrectness = false;
+      }
+    }
+
+    let temp = this.state.timesGotQuestionWrong;
+    if(!temp[questionIndex]) {
+      temp[questionIndex] = 0;
+    }
+    if(!checkerForCorrectness) {
+      temp[questionIndex]++;
+    }
+    this.setState({timesGotQuestionWrong: temp});
+    return feedbackTemp;
+  }
+
+  /**
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
    */
-  submitResponse(answer: string) {
+  submitResponse(answer: any, questionIndex: number, questionType: string) {
     if (answer !== null && answer !== undefined) {
-      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => {
+      let feedback = this.checkAnswer(answer, questionIndex, questionType);
+      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer[questionIndex], () => {
         this.setState({
-          feedback: ResponseLog.getFeedback(),
+          feedback: feedback,
           nextConcepts: this.getConcepts(),
           display: this.state.exercise.type !== 'survey'
-              ? displayType.feedback
+              ? displayType.exercise
               : (this.state.conceptOptions > 1
                   ? displayType.concept
                   : displayType.exercise),
         });
-      });
+      }, questionIndex, questionType, feedback);
     }
   }
 
@@ -267,9 +344,14 @@ class App extends Component {
     });
   }
 
-  submitTryAgain() {
+  // TODO William rewrite this to make it clear feedback instead of
+  // just changing displaytype
+  submitTryAgain(questionIndex: number) {
+    let tempFeedback = this.state.feedback;
+    tempFeedback[questionIndex] = null;
     this.setState({
       display: displayType.exercise,
+      feedback: tempFeedback
     });
   }
 
@@ -302,6 +384,14 @@ class App extends Component {
 					} else {
         	  this.setState({display: displayType.welcome});
           }
+        });
+        this.exerciseGetter = firebase.database().ref('Exercises');
+        this.exerciseGetter.on('value', (snap) => {
+          this.setState({exerciseList:snap.val()});
+        });
+        this.conceptMapGetter = firebase.database().ref('ConceptExerciseMap');
+        this.conceptMapGetter.on('value', (snap) => {
+          this.setState({conceptMapGetter: snap.val()});
         });
       } else {
       	this.setState({display: displayType.signin});
@@ -432,6 +522,7 @@ class App extends Component {
             concept={this.state.currentConcept}
             codeTheme={this.state.codeTheme}
             toggleCodeTheme={(theme) => this.setState({codeTheme: theme})}
+            timesGotQuestionWrong={this.state.timesGotQuestionWrong}
         />
     );
   }

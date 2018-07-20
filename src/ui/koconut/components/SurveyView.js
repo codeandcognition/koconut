@@ -6,6 +6,7 @@ import './SurveyView.css';
 type Props = {
   choices: string[],
   inputHandler: Function,
+  questionIndex: number
 }
 
 /**
@@ -43,7 +44,7 @@ class SurveyView extends Component {
     this.setState({surveys: temp});
     if(temp.filter((s) => s === 0).length === 0) {
       this.setState({filled: true});
-      this.props.inputHandler(temp);
+      this.props.inputHandler(temp,this.props.questionIndex);
     }
   }
 
@@ -54,7 +55,7 @@ class SurveyView extends Component {
     let temp = this.state.surveys.slice().map((c) =>
       Math.floor(Math.random() * 5) + 1);
     this.setState({surveys: temp, filled: true});
-    this.props.inputHandler(temp);
+    this.props.inputHandler(temp,this.props.questionIndex);
   }
 
   /**
@@ -63,7 +64,7 @@ class SurveyView extends Component {
   fillAllUniform(ind: number, val: number) {
     let temp = this.state.surveys.slice().map((c) => val);
     this.setState({surveys: temp});
-    this.props.inputHandler(temp);
+    this.props.inputHandler(temp,this.props.questionIndex);
   }
 
   /**

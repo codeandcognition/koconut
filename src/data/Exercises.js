@@ -4,13 +4,14 @@ import {conceptInventory} from './ConceptMap';
 // import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
 import _ from 'lodash';
 
+
 export type Exercise = {
-  prompt: string,
-  code: string,
-  choices?: string[],
-  difficulty: number,
-  type: string,
-  concepts: string[]
+  code?: string,
+  concepts: string[],
+  prompt?: string,
+  questions: any,
+  labels?: Map<string,string>,
+  type?: any
 }
 
 const difficulty = {
@@ -19,16 +20,47 @@ const difficulty = {
   high: 2,
 };
 
-export const stubExercise: { exercise: Exercise, answer: ?string } = {
-  exercise: {
-    prompt: 'this is a stub exercise',
-    code: 'the right answer is abc',
-    choices: ['abc'],
-    difficulty: -1,
-    type: ExerciseTypes.multipleChoice,
-    concepts: [],
+export const stubExercise: Exercise =
+    {
+  "code": "",
+    "prompt": "This is a stub exercise",
+    "concepts": [
+  "dataTypes"
+  ],
+    "questions": [
+  {
+    "answer": "integer",
+    "choices": [
+      "integer",
+      "float",
+      "string",
+      "boolean"
+    ],
+    "code": "123",
+    "difficulty": 0,
+    "feedback": "",
+    "followupPrompt": "",
+    "hint": "",
+    "prompt": "Value",
+    "type": "multipleChoice"
   },
-  answer: 'abc',
+  {
+    "answer": "string",
+    "choices": [
+      "integer",
+      "float",
+      "string",
+      "boolean"
+    ],
+    "code": "\"123\"",
+    "difficulty": 0,
+    "feedback": "",
+    "followupPrompt": "",
+    "hint": "",
+    "prompt": "Value",
+    "type": "multipleChoice"
+  }
+  ]
 };
 
 export let variable17061 = [
@@ -499,8 +531,8 @@ export let survey =
       answer: '',
     };
 
-export const exampleExercises = variable17061.concat(survey, variable18916,
-    variable51520, variable60932, variable88688);
+// export const exampleExercises = variable17061.concat(survey, variable18916,
+//     variable51520, variable60932, variable88688);
 
 /*
 export const oldExampleExercises: {exercise: Exercise, answer: ?string}[] = [

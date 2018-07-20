@@ -1,3 +1,27 @@
+.custmc {
+  margin: 2px;
+}
+
+.table-wrong {
+  background-color: rgb(252, 216, 216);
+}
+
+.table-correct {
+  background-color: rgb(230, 248, 230);
+}
+
+.reg {
+  background-color: white;
+}
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.notdisabled {
+  cursor: pointer;
+}
+
 $choice-color: #cccccc;
 
 .choice {
@@ -27,12 +51,4 @@ $choice-color: #cccccc;
 
 .choice.answer:hover {
   background-color: darken($choice-color, 20%);
-}
-
-.disabled {
-  cursor: not-allowed;
-}
-
-.notdisabled {
-  cursor: pointer;
 }
