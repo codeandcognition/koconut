@@ -171,7 +171,7 @@ class Code extends Component {
       this.setState({code: value});
       if (this.props.updateHandler !== undefined) { // wow such type safety
         // submit code or highlighted code
-        this.props.updateHandler(value); // William Summer 2018 // shift-ctrl-f note in case fix doesn't work
+        this.props.updateHandler(value, this.props.questionIndex); // William Summer 2018 // shift-ctrl-f note in case fix doesn't work
       }
     } else {
       this.setState({code: this.state.code});

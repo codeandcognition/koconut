@@ -493,7 +493,7 @@ class App extends Component {
    * to the the navigationbar.
    */
 	switchToWorldView() {
-	  this.setState({display: displayType.world});
+	  this.setState({display: displayType.world, counter: 0, feedback: []});
   }
 
 	/**
