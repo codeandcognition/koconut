@@ -117,6 +117,7 @@ class Code extends Component {
     let selected = this.refs.aceEditor.editor.session.getTextRange(
         e.getRange());
     this.setState({highlighted: selected});
+    console.log(selected);
     // this check mitigates a bug caused by spam switching exercises
     if (this.props.updateHandler !== undefined) {
       this.props.updateHandler(selected, this.props.questionIndex); // William summer 2018

@@ -6,6 +6,7 @@ import Types from '../../../data/ExerciseTypes.js';
 import Submit from '../components/Submit';
 import Feedback from '../components/Feedback';
 import Paper from '@material-ui/core/Paper';
+import ReactMarkdown from 'react-markdown';
 
 import './Information.css';
 
@@ -161,6 +162,11 @@ class Information extends Component {
                       <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
                           {question.code && question.type !== Types.writeCode && this.renderCodeView(question, index)}
                           <div style={{width: "100%", margin: "0", padding: "0"}}>
+                            <div style={{textAlign: "left", margin: "20px"}}>
+                              <ReactMarkdown source={question.prompt || ""}>
+                                {/* for debugging */}
+                              </ReactMarkdown>
+                            </div>
                             {this.renderResponseView(question, index)}
                             {!(this.state.feedback[index]) &&
                               <Submit submitHandler={() => this.props.submitHandler(this.state.answer, index, question.type)} />

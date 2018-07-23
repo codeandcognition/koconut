@@ -27,7 +27,7 @@ class Prompt extends Component {
           <ReactMarkdown source={this.props.exercise.prompt ? this.props.exercise.prompt : ""}>
             {/* for debugging */}
           </ReactMarkdown>
-          <span className="exercise-type">({exTypes})</span>
+          {/*<span className="exercise-type">({exTypes})</span>*/}
         </div>
     );
   }

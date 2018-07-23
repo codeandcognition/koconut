@@ -91,6 +91,7 @@ class CodeEditor extends Component {
   handleSelect(e: any /* need to make Flow play nicely */) {
     let selected = this.refs.aceEditor.editor.session.getTextRange(
         e.getRange());
+    console.log(selected);
     this.setState({highlighted: selected});
     // this check mitigates a bug caused by spam switching exercises
     if (this.props.updateHandler !== undefined) {
