@@ -16,7 +16,7 @@ import type {Exercise} from '../../../data/Exercises';
  * @class
  */
 class Information extends Component {
-  props: {
+  Props: {
     exercise: Exercise,
     answer: any,  // Maybe type - can be null/void
     updateHandler: Function,
@@ -27,10 +27,12 @@ class Information extends Component {
     toggleCodeTheme: Function,
     codeTheme: string,
     submitHandler: Function,
-    timesGotQuestionWrong: number[]
+    timesGotQuestionWrong: number[],
+    nextQuestion: Function,
+    resetAnswer: Function
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       exercise: null,
@@ -42,7 +44,7 @@ class Information extends Component {
     this.setState({exercise: this.props.exercise, feedback: this.props.feedback, answer: this.props.answer});
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: any) {
     this.setState({exercise: nextProps.exercise, feedback: nextProps.feedback, answer: nextProps.answer});
   }
 

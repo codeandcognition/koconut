@@ -28,6 +28,7 @@ type Props = {
  * @class
  */
 class Exercise extends Component {
+  resetAnswer: Function;
   state: {
     answer: string[],
   };

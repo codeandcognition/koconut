@@ -55,6 +55,7 @@ class App extends Component {
   generator: ExerciseGenerator;
   theme: mixed;
   updateWaiverStatus: Function;
+  nextQuestion: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: Exercise,
