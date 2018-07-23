@@ -7,12 +7,19 @@ import "./CodeEditor.css";
 class CodeEditor extends Component {
   handleSelect: Function;
   handleChange: Function;
+  handleThemeChange: Function;
+  handleSelect: Function;
+  handleReset: Function;
+  handleHintRequest: Function;
+  handleChange: Function;
   code: Object;
+  toggle: boolean;
 
   state: {
     code: string,
     mode: string,
-    theme: string
+    theme: string,
+    toggle: false
   };
 
   constructor(props) {
@@ -28,6 +35,35 @@ class CodeEditor extends Component {
     this.handleSelect = this.handleSelect.bind(this);
   }
 
+
+  /**
+   * Handles the dark/light checkbox toggle event.
+   *
+   * TODO UNUSED
+   */
+  handleThemeChange() {
+    this.setState({
+      toggle: !this.state.toggle,
+      theme: (this.state.toggle ? 'solarized_dark' : 'eclipse'),
+    }, () => {
+      this.props.toggleCodeTheme(this.state.theme);
+    });
+  }
+
+
+  /**
+   * Sets hint position to the line of the last cursor position within Ace.
+   * TODO: Fix positioning
+   */
+  handleHintRequest() {
+    // TODO: stub function, rework entirely, maybe remove
+
+    // let ace = this.refs.aceEditor.editor;
+    // let line = ace.getCursorPosition().row; // Get line of cursor position
+    //
+    // this.setState({hint: true});
+    // this.setState({curLine: line});
+  }
 
   /**
    * Updates state based on editor changes

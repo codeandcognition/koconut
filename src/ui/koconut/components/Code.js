@@ -37,11 +37,6 @@ type Props = {
  */
 class Code extends Component {
   // Binding: https://github.com/facebook/flow/issues/1397
-  handleThemeChange: Function;
-  handleSelect: Function;
-  handleReset: Function;
-  handleHintRequest: Function;
-  handleChange: Function;
   code: Object;
 
   state: {
@@ -67,20 +62,12 @@ class Code extends Component {
       hint: false,
       curLine: 0,
     };
-
-    this.handleThemeChange = this.handleThemeChange.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
-    this.handleReset = this.handleReset.bind(this);
-    this.handleHintRequest = this.handleHintRequest.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   /**
    * When component renders, set cursor to (0, 0)
    */
   componentDidMount() {
-    this.resetCursor();
-
     if (this.props.updateHandler !== undefined)
       this.props.updateHandler(this.state.code);
   }
@@ -178,47 +165,6 @@ class Code extends Component {
     }
   }
 
-  /**
-   *  Renders Ace with preferred options.
-   *  Handles editable/non-editable state for code view.
-   */
-  renderAce() {
-    return <AceEditor
-        ref="aceEditor"
-        width="100%"
-        height="20em"
-        value={this.state.code}
-        readOnly={this.props.type !== Types.fillBlank &&
-        this.props.type !== Types.writeCode}
-        mode={this.state.mode}
-        theme={this.state.theme}
-        highlightActiveLine={true}
-        onChange={this.handleChange}
-        onSelectionChange={this.props.type === Types.highlightCode
-            ? this.handleSelect
-            : undefined}
-        setOptions={{
-          showLineNumbers: true,
-          tabSize: 2,
-        }}
-        minLines={6}
-        editorProps={{
-          $blockScrolling: Infinity,
-        }}
-        markers={[//TODO: Remove me :O
-          {
-            startRow: 0,
-            startCol: 0,
-            endRow: 100,
-            endCol: 100,
-            className: 'box',
-            type: 'background'
-          }
-        ]}
-        /* https://github.com/securingsincity/react-ace/issues/29#issuecomment-296398653 */
-    />;
-  }
-
   renderMarkdown() {
     let code = "```java\n" + this.state.code + "\n```";
     return <ReactMarkdown className={"flex-grow-1"}
@@ -247,7 +193,6 @@ class Code extends Component {
               <div ref="code"
                    className={'code ' + (isWriteType ? 'full' : 'half') +
                    ' ' + this.props.type}>
-                {isWriteType && this.renderAce()}
                 {!isWriteType && this.renderMarkdown()}
                 <div className="code-config">
                   {/* <button onClick={this.handleHintRequest}>?</button> */}
