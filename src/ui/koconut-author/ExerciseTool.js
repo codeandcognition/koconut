@@ -302,11 +302,19 @@ class ExerciseTool extends Component {
 	 */
 	addQuestion(question) {
 		let exercise = Object.assign({}, this.state.currentExercise);
-		console.log(this.state.isFollowup);
-		exercise.questions.push(question);
-		this.setState({
-			currentExercise: exercise
-		});
+		if (this.state.isFollowup) {
+			let parent = Object.assign({}, exercise.questions[this.state.followupTo]);
+			let followupQuestions = Object.assign([], parent.followupQuestions);
+			followupQuestions.push(question);
+			parent.followupQuestions = followupQuestions;
+			exercise.questions[this.state.followupTo] = parent;
+			this.setState({currentExercise: exercise, isFollowup: false});
+		} else {
+			exercise.questions.push(question);
+			this.setState({
+				currentExercise: exercise
+			});
+		}
 	}
 
 	/**
@@ -424,11 +432,11 @@ class ExerciseTool extends Component {
 					<Button style={style}
 									variant={'outlined'}
 									color={'secondary'}
-									onClick={() => this.setState({isFollowup: true})}>Follow-up Question</Button>
+									onClick={() => this.setState({isFollowup: true, followupTo: this.state.currentExercise.questions.length - 1})}>Follow-up Question</Button>
 					<Button style={style}
 									variant={'outlined'}
 									color={"primary"}
-									onClick={() => this.setState({isFollowup: false})}>New Question</Button>
+									onClick={() => this.setState({isFollowup: false, followupTo: -1})}>New Question</Button>
 				</div>
 		);
 	}
