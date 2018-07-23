@@ -177,7 +177,6 @@ class TableView extends Component {
                           correctness = "table-correct";
                         }
                       }
-                      console.log(e);
                       return <TableCell key={"cell"+i+j} className={correctness !== "" ? correctness : "reg"}>
                         {this.generateCell(e,i,j)}
                       </TableCell>

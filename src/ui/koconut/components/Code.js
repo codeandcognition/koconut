@@ -81,6 +81,87 @@ class Code extends Component {
       this.setState({
         code: nextProps.code,
       });
+      this.resetCursor();
+    }
+  }
+
+  /**
+   * Resets the cursor position to (0, 0)
+   */
+  resetCursor() {
+    if(this.refs.aceEditor) {
+      this.refs.aceEditor.editor.moveCursorTo(0, 0);
+      this.refs.aceEditor.editor.clearSelection();
+
+    }
+  }
+
+  /**
+   * Handles the dark/light checkbox toggle event.
+   *
+   * TODO UNUSED
+   */
+  handleThemeChange() {
+    this.setState({
+      toggle: !this.state.toggle,
+      theme: (this.state.toggle ? 'solarized_dark' : 'eclipse'),
+    }, () => {
+      this.props.toggleCodeTheme(this.state.theme);
+    });
+  }
+
+  /**
+   * Stores highlighted text from text area in component state: highlighted.
+   */
+  handleSelect(e: any /* need to make Flow play nicely */) {
+    let selected = this.refs.aceEditor.editor.session.getTextRange(
+        e.getRange());
+    this.setState({highlighted: selected});
+    // this check mitigates a bug caused by spam switching exercises
+    if (this.props.updateHandler !== undefined) {
+      this.props.updateHandler(selected, this.props.questionIndex); // William summer 2018
+    }
+  }
+
+  /**
+   *  Resets both the code state and answer state.
+   */
+  handleReset() {
+    this.setState({code: this.props.code});
+    this.props.updateHandler(this.props.code);
+    this.resetCursor();
+  }
+
+  /**
+   * Sets hint position to the line of the last cursor position within Ace.
+   * TODO: Fix positioning
+   */
+  handleHintRequest() {
+    // TODO: stub function, rework entirely, maybe remove
+
+    // let ace = this.refs.aceEditor.editor;
+    // let line = ace.getCursorPosition().row; // Get line of cursor position
+    //
+    // this.setState({hint: true});
+    // this.setState({curLine: line});
+  }
+
+  /**
+   * Updates state based on editor changes
+   * @param value - the post-change content
+   * @param event - an Ace change event
+   */
+  handleChange(value: string, event: Object) {
+    // TODO: Actually prevent rows
+    // TODO: Also, newlines and deletion isn't safe
+    if(event.start.row !== -1) {
+      this.setState({code: value});
+      if (this.props.updateHandler !== undefined) { // wow such type safety
+        // submit code or highlighted code
+        this.props.updateHandler(value, this.props.questionIndex); // William Summer 2018 // shift-ctrl-f note in case fix doesn't work
+      }
+    } else {
+      this.setState({code: this.state.code});
     }
   }
 

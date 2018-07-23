@@ -40,7 +40,7 @@ export default class LargeButton extends Component {
         <div className={`buttonPart ${greyed?"greyed":""}`}
           onClick={this.props.click}>
           {type===prevType &&
-          <div><ChevronLeft className={"chevron"}/> <span className={"textPart"}>go back</span></div>
+          <div><ChevronLeft className={"chevron"}/> <span className={"textPart"}>previous</span></div>
           }
           {type===nextType &&
           <div><span className={"textPart"}>next</span> <ChevronRight className={"chevron"}/></div>

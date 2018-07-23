@@ -15,8 +15,8 @@ import type {Exercise} from '../../../data/Exercises';
  * The Information container contains Code or both Code and Response.
  * @class
  */
-class Information extends Component {
-  props: {
+
+type Props = {
     exercise: Exercise,
     answer: any,  // Maybe type - can be null/void
     updateHandler: Function,
@@ -27,10 +27,12 @@ class Information extends Component {
     toggleCodeTheme: Function,
     codeTheme: string,
     submitHandler: Function,
-    timesGotQuestionWrong: number[]
-  };
-
-  constructor(props) {
+    timesGotQuestionWrong: number[],
+    nextQuestion: Function,
+    resetAnswer: Function
+};
+class Information extends Component {
+  constructor(props: Props) {
     super(props);
     this.state = {
       exercise: null,
@@ -42,7 +44,7 @@ class Information extends Component {
     this.setState({exercise: this.props.exercise, feedback: this.props.feedback, answer: this.props.answer});
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: any) {
     this.setState({exercise: nextProps.exercise, feedback: nextProps.feedback, answer: nextProps.answer});
   }
 

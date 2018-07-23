@@ -55,6 +55,7 @@ class App extends Component {
   generator: ExerciseGenerator;
   theme: mixed;
   updateWaiverStatus: Function;
+  nextQuestion: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: Exercise,
@@ -493,7 +494,7 @@ class App extends Component {
    * to the the navigationbar.
    */
 	switchToWorldView() {
-	  this.setState({display: displayType.world});
+	  this.setState({display: displayType.world, counter: 0, feedback: []});
   }
 
 	/**
