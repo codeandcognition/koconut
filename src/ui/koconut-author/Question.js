@@ -462,6 +462,7 @@ class Question extends Component {
 	 * @param value
 	 */
 	updateQuestion(field, value) {
+		console.log(field, value);
 		let temp = Object.assign({}, this.state.currentQuestion);
 		temp[field] = value;
 		this.setState({currentQuestion: temp}, () => {
@@ -497,6 +498,7 @@ class Question extends Component {
 	}
 
 	render() {
+		console.log(this.state);
 		// TODO: Add a delete function
 		return (
 				this.renderStandAloneQuestion()
