@@ -15,8 +15,8 @@ import type {Exercise} from '../../../data/Exercises';
  * The Information container contains Code or both Code and Response.
  * @class
  */
-class Information extends Component {
-  Props: {
+
+type Props = {
     exercise: Exercise,
     answer: any,  // Maybe type - can be null/void
     updateHandler: Function,
@@ -30,8 +30,8 @@ class Information extends Component {
     timesGotQuestionWrong: number[],
     nextQuestion: Function,
     resetAnswer: Function
-  };
-
+};
+class Information extends Component {
   constructor(props: Props) {
     super(props);
     this.state = {
