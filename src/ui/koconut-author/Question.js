@@ -69,15 +69,19 @@ class Question extends Component {
 	 */
 	renderPromptField() {
 		let style = {
-			whiteSpace: 'pre-wrap'
+			whiteSpace: 'pre-wrap',
+      textAlign: 'left',
+      width: '100%',
+      height: '10em',
+      display: 'block',
+      border: '1px solid darkgray',
 		};
 		return (
 				<div>
 					<p style={{color: '#3F51B5'}}>Question Prompt <span style={this.fieldReqs.optional}>optional</span></p>
-					<TextField style={style}
-										 fullWidth={true}
+					<textarea style={style}
 										 value={this.state.currentQuestion.prompt}
-										 onChange={this.handleChange('prompt')}/>
+										onChange={this.handleChange('prompt')}></textarea>
 				</div>
 		);
 	}

@@ -4,6 +4,8 @@ import Button from '@material-ui/core/Button/Button';
 // import VisualFeedback from './VisualFeedback';
 
 import './Feedback.css';
+import CodeBlock from './CodeBlock';
+import ReactMarkdown from 'react-markdown';
 
 
 /**
@@ -36,33 +38,44 @@ class Feedback extends Component {
       }
     }
   }
+
+  renderMarkdown(codeData) {
+    let code = "```python\n" + codeData + "\n```";
+    return <ReactMarkdown className={"flex-grow-1"}
+                          source={code}
+                          renderers={{code: CodeBlock}}
+                          escapeHtml={true}
+    />
+  }
   
   showAnswer() {
-    let finalstring = "";
+    let finalString = "";
     let answer = this.props.question.answer;
     if (this.props.type === "checkboxQuestion") {
       for(let i = 0; i < answer.length; i++) {
         if(i < answer.length - 1) {
-          finalstring = finalstring + answer[i] + ", ";
+          finalString = finalString + answer[i] + ", ";
         } else {
-          finalstring = finalstring + answer[i];
+          finalString = finalString + answer[i];
         }
       }
     } else if(this.props.type === "table") {
       let cells = this.props.question.data;
-      for(let i = 0; i < cells.length; i++) {
-        if(cells[i].answer !== "") {
-          if(i < cells.length - 1) {
-            finalstring = finalstring + cells[i].answer + ", ";
+      for (let i = 0; i < cells.length; i++) {
+        if (cells[i].answer !== "") {
+          if (i < cells.length - 1) {
+            finalString = finalString + cells[i].answer + ", ";
           } else {
-            finalstring = finalstring + cells[i].answer;
+            finalString = finalString + cells[i].answer;
           }
         }
       }
+    } else if (this.props.type === "writeCode") {
+      finalString = this.renderMarkdown(answer);
     } else {
-      finalstring = answer;
+      finalString = answer;
     }
-    return <div style={{display: "inline"}}><strong>The correct answer is <span style={{color: "green"}}>{finalstring}.</span></strong></div>
+    return <div style={{display: "inline"}}><strong>The correct answer is <span style={{color: "green"}}>{finalString}</span>{this.props.type !== "writeCode" && "."}</strong></div>
   }
 
   render() {

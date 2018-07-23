@@ -472,7 +472,7 @@ class ExerciseTool extends Component {
 	 * @returns {*}
 	 */
 	renderBuildExercise() {
-    let code = {
+    let textareaStyle = {
       border: '1px solid darkgray',
       fontFamily: 'monospace',
       whiteSpace: 'pre-wrap',
@@ -495,14 +495,14 @@ class ExerciseTool extends Component {
           <div style={formSectionStyle}>
             <p>Exercise: {" " + this.state.currentExercise.prompt} </p>
             <p style={sectionHeading}>Overarching Prompt <span style={this.fieldReqs.optional}>optional</span></p>
-            <TextField style={{display: 'block', whiteSpace: 'pre-wrap'}} fullWidth={true}
+            <textarea style={textareaStyle}
                        value={this.state.currentExercise.prompt}
-                       onChange={this.handleExerciseChange('prompt')}/>
+											onChange={this.handleExerciseChange('prompt')}></textarea>
           </div>
 
           <div style={formSectionStyle}>
             <p style={sectionHeading}>Overarching Code <span style={this.fieldReqs.optional}>optional</span></p>
-            <textarea style={code}
+            <textarea style={textareaStyle}
                       onChange={this.handleExerciseChange('code')} />
           </div>
 
