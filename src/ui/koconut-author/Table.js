@@ -146,7 +146,7 @@ class Table extends Component {
 										 onChange={evt => this.setState({currNumRows: evt.target.value})}/>
 
 					{ !isNaN(parseInt(this.state.currNumRows, 10)) &&
-							this.state.currentTable.colNames.length > 0 &&
+						(this.state.currentTable.colNames && this.state.currentTable.colNames.length > 0) &&
 						this.renderTableShape()
 					}
 
