@@ -68,7 +68,6 @@ class Feedback extends Component {
   render() {
     let gotCorrect = "correct";
     if(this.props.type === "table") {
-      console.log(this.props.feedback);
       this.props.feedback.forEach((d) => {
         d.forEach((e) => {
           if(e === "incorrect") {
