@@ -114,7 +114,7 @@ class Table extends Component {
 						Add column name
 					</Button>
 					<div>
-						{this.state.currentTable && this.state.currentTable.colNames.map((colName, key) => {
+						{this.state.currentTable.colNames && this.state.currentTable.colNames.map((colName, key) => {
 								return <Button style={{backgroundColor: '#ffecb3', margin: '3px'}}
 															 key={key}
 															 onClick={(evt) => {

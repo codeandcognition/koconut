@@ -233,10 +233,15 @@ class Question extends Component {
 		} else if (this.state.currentQuestion.type === this.QuestionTypes.checkboxQuestion) {
       return this.renderCheckboxAnswerField();
     } else if (this.state.currentQuestion.type === this.QuestionTypes.writeCode) {
-			return <textarea style={{display: 'block', width: '100%', height: '10em', whiteSpace: 'pre-wrap'}}
+			return (
+				<div>
+          <p style={{color: '#3F51B5'}}>Answer <span style={this.fieldReqs.required}>required</span></p>
+					<textarea style={{display: 'block', width: '100%', height: '10em', whiteSpace: 'pre-wrap'}}
 											 onChange={this.handleChange('answer')}
 											 value={this.state.currentQuestion.answer}>
-							</textarea>
+					</textarea>
+				</div>
+			);
 		} else {
 			// returns a text field for answer
 			return (
