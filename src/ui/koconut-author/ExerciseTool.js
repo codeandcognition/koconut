@@ -57,7 +57,13 @@ class ExerciseTool extends Component {
 			currentQuestion: this.Schemas["standAlone"], 				// this will be updated throughout an authoring session
 			currentQuestionFormat: "standAlone",					// keeps track of the format of the current question
 			currentCellIndex: -1,													// needed for dealing with Firebase concurrency issues
-			followupTo: -1
+			followupTo: -1,
+
+			currentCell: {
+      	currentCellIndex: -1,
+				format: 'prompt',
+				instructionType: 'prompt'
+			}
     };
 
     // Bind the functions so they can be used in Question.js
@@ -323,7 +329,7 @@ class ExerciseTool extends Component {
 	updateCurrentQuestion(question, currentCell) {
 		this.setState({
 			currentQuestion: question,
-			currentCellIndex: currentCell
+			currentCell: currentCell
 		});
 	}
 
@@ -390,7 +396,9 @@ class ExerciseTool extends Component {
 		return <Table addQuestion={this.addQuestion}
 									updateCurrentQuestion={this.updateCurrentQuestion}
 									data={Object.assign({}, this.state.currentQuestion)}
-									currentlyOpen={this.state.currentCellIndex}/>
+									currentlyOpen={this.state.currentCellIndex}
+									cellFormat={this.state.currentCell.format}
+									cellInstructionType={this.state.currentCell.instructionType}/>
 	}
 
 	/**
@@ -497,7 +505,7 @@ class ExerciseTool extends Component {
             <p style={sectionHeading}>Overarching Prompt <span style={this.fieldReqs.optional}>optional</span></p>
             <textarea style={textareaStyle}
                        value={this.state.currentExercise.prompt}
-											onChange={this.handleExerciseChange('prompt')}></textarea>
+											onChange={this.handleExerciseChange('prompt')}/>
           </div>
 
           <div style={formSectionStyle}>

@@ -20,7 +20,8 @@ class Question extends Component {
 			currentChoice: '',
 			currentAnswer: '',
 			checkboxOption: 'choice', // used for a check box type question. not applicable for other question types
-			feedback: JSON.stringify(question.feedback, null, 2)
+			feedback: JSON.stringify(question.feedback, null, 2),
+			currentlyOpen: this.props.currentlyOpen
 		};
 	}
 
@@ -58,7 +59,8 @@ class Question extends Component {
 			currentChoice: '',
 			currentAnswer: '',
 			checkboxOption: 'choice',
-			feedback: JSON.stringify(nextProps.data.feedback, null, 2)
+			feedback: JSON.stringify(nextProps.data.feedback, null, 2),
+			currentlyOpen: nextProps.currentlyOpen
 		});
 	}
 
@@ -81,7 +83,7 @@ class Question extends Component {
 					<p style={{color: '#3F51B5'}}>Question Prompt <span style={this.fieldReqs.optional}>optional</span></p>
 					<textarea style={style}
 										 value={this.state.currentQuestion.prompt}
-										onChange={this.handleChange('prompt')}></textarea>
+										onChange={this.handleChange('prompt')} />
 				</div>
 		);
 	}
@@ -466,14 +468,13 @@ class Question extends Component {
 	 * @param value
 	 */
 	updateQuestion(field, value) {
-		console.log(field, value);
 		let temp = Object.assign({}, this.state.currentQuestion);
 		temp[field] = value;
 		this.setState({currentQuestion: temp}, () => {
 			if (field === 'type' || field === 'choices') {
 				this.generateFeedbackTemplate();
 			} else {
-				this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), -1);
+				this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentlyOpen);
 			}
 		});
 	}
@@ -498,11 +499,11 @@ class Question extends Component {
 		this.setState({
 			feedback: JSON.stringify(template, null, 2),
 			currentQuestion: currQuestion
-		}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), -1));
+		}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentlyOpen));
 	}
 
 	render() {
-		console.log(this.state);
+
 		// TODO: Add a delete function
 		return (
 				this.renderStandAloneQuestion()

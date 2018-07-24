@@ -10,6 +10,7 @@ class Table extends Component {
 		super(props);
 
 		this.addToTable = this.addToTable.bind(this);
+		this.updateCurrentCell = this.updateCurrentCell.bind(this);
 
 		let table  = Object.assign({}, this.props.data);
 
@@ -17,7 +18,11 @@ class Table extends Component {
 			currentTable: table,
 			currColName: '',
 			currNumRows: 0,
-			currentlyOpen: this.props.currentlyOpen
+			currentCell: {
+				index: this.props.currentlyOpen,
+				format: this.props.cellFormat,
+				instructionType: this.props.cellInstructionType
+			}
 		}
 	}
 
@@ -31,6 +36,20 @@ class Table extends Component {
 			color: '#4DD0E1'
 		}
 	};
+
+	componentWillReceiveProps(nextProps) {
+		console.log(nextProps.cellFormat);
+		let cell = {
+			index: nextProps.currentlyOpen,
+			format: nextProps.cellFormat,
+			instructionType: nextProps.cellInstructionType
+		}
+		console.log(cell);
+		this.setState({
+			currentTable: nextProps.data,
+			currentCell: cell
+		})
+	}
 
 	/**
 	 * Renders a table question
@@ -58,8 +77,8 @@ class Table extends Component {
 		return(
 				<div>
           <p style={{color: '#3F51B5'}}>Table Prompt <span style={this.fieldReqs.optional}>optional</span></p>
-					<TextField fullWidth={true} value={this.state.currentTable.currPrompt} onChange={(evt) => {
-						var table = Object.assign({}, this.state.currentTable);
+					<TextField fullWidth={true} value={this.state.currentTable.prompt} onChange={(evt) => {
+						let table = Object.assign({}, this.state.currentTable);
 						table.prompt = evt.target.value;
 						this.setState({
 							currentTable: table
@@ -109,7 +128,9 @@ class Table extends Component {
 									onClick={() => {
 										let temp = Object.assign({}, this.state.currentTable);
 										temp.colNames.push(this.state.currColName);
-										this.setState({currentTable: temp, currColName: ''}, () => this.props.updateCurrentQuestion(this.state.currentTable , -1));
+										this.setState({
+													currentTable: temp, currColName: ''},
+												() => this.props.updateCurrentQuestion(this.state.currentTable , this.state.currentCell));
 									}}>
 						Add column name
 					</Button>
@@ -123,7 +144,7 @@ class Table extends Component {
 																 let colNamesCopy = [...Object.assign({}, this.state.currentTable.colNames)];
 																 colNamesCopy.splice(index, 1);
 																 table.colNames = colNamesCopy;
-																 this.setState({currentTable: table}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable), -1));
+																 this.setState({currentTable: table}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable), this.state.currentCell));
 															 }}>{colName}
 								</Button>
 							})
@@ -143,7 +164,9 @@ class Table extends Component {
 					<p style={{color: '#3F51B5'}}>Number of Rows <span style={this.fieldReqs.required}>required</span></p>
 					<TextField fullWidth={true}
 										 value={this.state.currNumRows}
-										 onChange={evt => this.setState({currNumRows: evt.target.value})}/>
+										 onChange={evt => {
+										 	this.setState({currNumRows: evt.target.value}, () => {this.props.updateCurrentQuestion(this.state.currentTable, this.state.currentCell)})
+										 }}/>
 
 					{ !isNaN(parseInt(this.state.currNumRows, 10)) &&
 						(this.state.currentTable.colNames && this.state.currentTable.colNames.length > 0) &&
@@ -179,7 +202,9 @@ class Table extends Component {
 																 addToTable={this.addToTable}
 																 data={this.state.currentTable.data[index]}
 																 open={this.state.currentlyOpen === index}
-																 updateCurrentQuestion={this.props.updateCurrentQuestion}/>);
+																 updateCurrentCell={this.updateCurrentCell} // extend the functionality
+																 cellFormat={this.state.currentCell.format}
+																 cellInstructionType={this.state.currentCell.instructionType}/>);
 								});
 								return(
 										<div key={rowNum} style={{display: 'flex', justifyContent: 'center'}}>
@@ -203,7 +228,7 @@ class Table extends Component {
 		this.setState({
 			currentTable: table
 		}, () => {
-			this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable), index);
+			this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable), this.state.currentCell);
 		});
 	}
 
@@ -215,7 +240,7 @@ class Table extends Component {
 		if (this.state.currentTable.colNames.length > 0 &&
 				parseInt(this.state.currNumRows, 10) > 0 &&
 				this.state.currentTable.data.length === items) {
-			this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable));
+			this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable), this.state.currentCell);
 			this.props.addQuestion(Object.assign({}, this.state.currentTable));
 		} else {
 			console.log("number of columns: ", this.state.currentTable.colNames.length);
@@ -223,6 +248,17 @@ class Table extends Component {
 			console.log("number of items: ", this.state.currentTable.data.length);
 			window.alert("Required fields are missing!");
 		}
+	}
+
+	updateCurrentCell(index, format, instructionType) {
+		let cell = {
+			currentlyOpen: index,
+			cellFormat: format,
+			instructionType: instructionType
+		};
+		this.setState({currentCell: cell}, () => {
+			this.props.updateCurrentQuestion(this.state.currentTable, this.state.currentCell);
+		});
 	}
 
 	render() {

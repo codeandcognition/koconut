@@ -19,8 +19,8 @@ class Cell extends Component {
 
 		this.state = {
 			open: this.props.open,
-			currentCellFormat: 'prompt',
-			currentInstType: 'prompt',
+			currentCellFormat: this.props.cellFormat,
+			currentInstType: this.props.cellInstructionType,
 			cell: {
 				prompt: '',
 				code: '',
@@ -55,11 +55,9 @@ class Cell extends Component {
 	componentWillReceiveProps(nextProps) {
 		let data = nextProps.data;
 		if (data !== undefined) {
-			let cellFormat = data.answer === '' ? 'prompt' : 'question';
-			let cellInstType = data.prompt ? 'prompt' : 'code';
 			this.setState({
-				currentCellFormat: cellFormat,
-				currentInstType: cellInstType,
+				currentCellFormat: this.props.cellFormat,
+				currentInstType: this.props.cellInstructionType,
 				cell: data
 			});
 		}
@@ -79,12 +77,16 @@ class Cell extends Component {
 					<DialogContent>
 						{/* render different UI if the cell content is informational */}
 						{this.renderCellFormatPrompt()}
-						{this.state.currentCellFormat === 'prompt' && this.renderInstructionTypeForm()}
-						{this.state.currentCellFormat === 'question' && <Question
-								addQuestion={this.addQuestionCell}
-								isFollowup={false}
-								insideTable={true} data={this.state.cell}
-								updateCurrentQuestion={this.props.updateCurrentQuestion}/>}
+						{this.state.currentCellFormat === 'prompt' ?
+								this.renderInstructionTypeForm() :
+								<Question
+									addQuestion={this.addQuestionCell}
+									isFollowup={false}
+									insideTable={true}
+									data={this.state.cell}
+									updateCurrentQuestion={this.props.addToTable}
+									currentlyOpen={this.props.index}/>
+						}
 						<br/>
 						<div style={{display: 'flex', justifyContent: 'flex-end'}}>
 							{
@@ -110,6 +112,9 @@ class Cell extends Component {
 						<RadioGroup value={this.state.currentCellFormat} onChange={(evt) => {
 							this.setState({
 								currentCellFormat: evt.target.value
+							}, () => {
+								this.props.addToTable(this.state.cell, this.props.index);
+								this.props.updateCurrentCell(this.props.index, this.state.currentCellFormat, this.state.currentInstType);
 							});
 						}}>
 							<FormControlLabel value={"question"} control={<Radio color={"primary"}/>} label={"Yes"}/>
@@ -132,7 +137,7 @@ class Cell extends Component {
 					<p>How do you want to format the instruction? <span style={this.fieldReqs.required}>required</span></p>
 					<FormControl>
 						<RadioGroup value={this.state.currentInstType} onChange={(evt) => {
-							var currentCell = Object.assign({}, this.state.cell);
+							let currentCell = Object.assign({}, this.state.cell);
 							if (evt.target.value === "prompt") {
 								currentCell["code"] = "";
 							}	else {
@@ -141,6 +146,9 @@ class Cell extends Component {
 							this.setState({
 								currentInstType: evt.target.value,
 								cell: currentCell
+							}, () => {
+								this.props.addToTable(this.state.cell, this.props.index);
+								this.props.updateCurrentCell(this.props.index, this.state.currentCellFormat, this.state.currentInstType);
 							});
 						}}>
 							<FormControlLabel value={"prompt"} control={<Radio color={"primary"}/>} label={"Prompt"}/>
@@ -203,6 +211,13 @@ class Cell extends Component {
 	}
 
 	/**
+	 * Opens the cell popover and stores the index
+	 */
+	handleOpen() {
+		this.setState({open: true});
+	}
+
+	/**
 	 * Updates the current cell in the state with the latest values
 	 *
 	 * @param field
@@ -247,7 +262,7 @@ class Cell extends Component {
 
 		return(
 				<div>
-					<div style={styles} onClick={() => this.setState({open: true})}></div>
+					<div style={styles} onClick={() => this.handleOpen()}/>
 					{this.state.open && this.renderPopOver()}
 				</div>
 
