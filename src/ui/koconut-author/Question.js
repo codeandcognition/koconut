@@ -21,7 +21,7 @@ class Question extends Component {
 			currentAnswer: '',
 			checkboxOption: 'choice', // used for a check box type question. not applicable for other question types
 			feedback: JSON.stringify(question.feedback, null, 2),
-			currentlyOpen: this.props.currentlyOpen
+			currentCell: this.props.currentCell
 		};
 	}
 
@@ -60,7 +60,7 @@ class Question extends Component {
 			currentAnswer: '',
 			checkboxOption: 'choice',
 			feedback: JSON.stringify(nextProps.data.feedback, null, 2),
-			currentlyOpen: nextProps.currentlyOpen
+			currentCell: nextProps.currentCell
 		});
 	}
 
@@ -474,7 +474,7 @@ class Question extends Component {
 			if (field === 'type' || field === 'choices') {
 				this.generateFeedbackTemplate();
 			} else {
-				this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentlyOpen);
+				this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentCell);
 			}
 		});
 	}
@@ -499,7 +499,7 @@ class Question extends Component {
 		this.setState({
 			feedback: JSON.stringify(template, null, 2),
 			currentQuestion: currQuestion
-		}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentlyOpen));
+		}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentCell));
 	}
 
 	render() {

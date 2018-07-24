@@ -56,8 +56,8 @@ class Cell extends Component {
 		let data = nextProps.data;
 		if (data !== undefined) {
 			this.setState({
-				currentCellFormat: this.props.cellFormat,
-				currentInstType: this.props.cellInstructionType,
+				currentCellFormat: nextProps.cellFormat,
+				currentInstType: nextProps.cellInstructionType,
 				cell: data
 			});
 		}
@@ -69,6 +69,12 @@ class Cell extends Component {
 	renderPopOver() {
 		let styles = {
 			margin: '5px'
+		};
+
+		let cell = {
+			currentCellIndex: this.props.index,
+			format: this.state.currentCellFormat,
+			instructionType: this.state.currentInstType
 		};
 
 		return (
@@ -85,7 +91,7 @@ class Cell extends Component {
 									insideTable={true}
 									data={this.state.cell}
 									updateCurrentQuestion={this.props.addToTable}
-									currentlyOpen={this.props.index}/>
+									currentCell={cell}/>
 						}
 						<br/>
 						<div style={{display: 'flex', justifyContent: 'flex-end'}}>

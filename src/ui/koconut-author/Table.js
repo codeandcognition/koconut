@@ -38,13 +38,11 @@ class Table extends Component {
 	};
 
 	componentWillReceiveProps(nextProps) {
-		console.log(nextProps.cellFormat);
 		let cell = {
 			index: nextProps.currentlyOpen,
 			format: nextProps.cellFormat,
 			instructionType: nextProps.cellInstructionType
 		}
-		console.log(cell);
 		this.setState({
 			currentTable: nextProps.data,
 			currentCell: cell
@@ -220,15 +218,15 @@ class Table extends Component {
 	/**
 	 * Invoked in Cell.js to add a cell's content to the table
 	 */
-	addToTable(cell, index) {
+	addToTable(cell, cellProps) {
 		let table = Object.assign({}, this.state.currentTable);
 		let data = table.data;
-		data[index] = cell;
+		data[cellProps.currentCellIndex] = cell;
 		table['data'] = data;
 		this.setState({
 			currentTable: table
 		}, () => {
-			this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable), this.state.currentCell);
+			this.props.updateCurrentQuestion(Object.assign({}, this.state.currentTable), cellProps);
 		});
 	}
 
