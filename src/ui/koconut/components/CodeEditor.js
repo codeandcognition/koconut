@@ -71,14 +71,13 @@ class CodeEditor extends Component {
    * @param event - an Ace change event
    */
   handleChange(value: string, event: Object) {
-    console.log(this.state.code);
     // TODO: Actually prevent rows
     // TODO: Also, newlines and deletion isn't safe
     if (event.start.row !== -1) {
       this.setState({code: value});
-      if (this.props.updateHandler !== undefined) { // wow such type safety
+      if (this.props.inputHandler !== undefined) { // wow such type safety
         // submit code or highlighted code
-        this.props.updateHandler(value); // William Summer 2018 // shift-ctrl-f note in case fix doesn't work
+        this.props.inputHandler(value, this.props.questionIndex); // William Summer 2018 // shift-ctrl-f note in case fix doesn't work
       }
     } else {
       this.setState({code: this.state.code});
@@ -91,11 +90,10 @@ class CodeEditor extends Component {
   handleSelect(e: any /* need to make Flow play nicely */) {
     let selected = this.refs.aceEditor.editor.session.getTextRange(
         e.getRange());
-    console.log(selected);
     this.setState({highlighted: selected});
     // this check mitigates a bug caused by spam switching exercises
-    if (this.props.updateHandler !== undefined) {
-      this.props.updateHandler(selected, this.props.questionIndex); // William summer 2018
+    if (this.props.inputHandler !== undefined) {
+      this.props.inputHandler(selected, this.props.questionIndex); // William summer 2018
     }
   }
 
