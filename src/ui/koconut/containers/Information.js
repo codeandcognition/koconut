@@ -30,10 +30,11 @@ type Props = {
     submitHandler: Function,
     timesGotQuestionWrong: number[],
     nextQuestion: Function,
-    resetAnswer: Function,
-    addGaveUp: Function
+    resetAnswer: Function
 };
 class Information extends Component {
+  addGaveUp: Function
+  
   constructor(props: Props) {
     super(props);
     this.state = {
