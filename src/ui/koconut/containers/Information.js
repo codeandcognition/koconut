@@ -33,12 +33,16 @@ type Props = {
     resetAnswer: Function
 };
 class Information extends Component {
+  addGaveUp: Function
+  
   constructor(props: Props) {
     super(props);
     this.state = {
       exercise: null,
-      feedback: null
+      feedback: null,
+      gaveUpCount: 0
     };
+    this.addGaveUp = this.addGaveUp.bind(this);
   }
 
   componentWillMount() {
@@ -129,9 +133,14 @@ class Information extends Component {
           question={this.state.exercise.questions[index]}
           timesGotSpecificQuestionWrong={this.props.timesGotQuestionWrong[index]}
           answer={this.state.answer}
+          addGaveUp={this.addGaveUp}
         />
       }
       return <div />
+  }
+
+  addGaveUp() {
+    this.setState({gaveUpCount: this.state.gaveUpCount + 1});
   }
 
   render() {
@@ -146,16 +155,20 @@ class Information extends Component {
           }
         }
     , 0);
+    console.log(this.state.gaveUpCount);
+    correctCount = correctCount + this.state.gaveUpCount;
     let expectedCorrect = this.state.exercise.questions.length;
 
     return (
         <div>
           {/* TODO replace learn yourself a good 1*/}
-          {correctCount >= expectedCorrect ?
+          {correctCount >= expectedCorrect &&
                 <div><button onClick={() => {
                   this.props.nextQuestion();
                   this.props.resetAnswer();
-                }}>go to next question</button> </div> :
+                  this.setState({gaveUpCount: 0});
+                }}>go to next question</button> </div>}
+              {
                 this.state.exercise.questions.map((question, index) => {
                 return (
                     <Paper elevation={6} style={{padding: "0"}} key={"information" + index} className={"information-with-submit"}>

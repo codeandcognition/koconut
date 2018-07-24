@@ -309,6 +309,7 @@ class App extends Component {
   submitResponse(answer: any, questionIndex: number, questionType: string) {
     if (answer !== null && answer !== undefined) {
       let feedback = this.checkAnswer(answer, questionIndex, questionType);
+      console.log(answer);
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer[questionIndex], () => {
         this.setState({
           feedback: feedback,
