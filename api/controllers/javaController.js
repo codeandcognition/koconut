@@ -20,9 +20,9 @@ exports.generate = (req, res, next) => {
     let code = data.toString();
     code = code.replace('%%ID%%', req.body.id)
                .replace('%%CONTENT%%', req.body.content || '');
-    console.log(code);
 
     // Writes the Java code to a file
+    console.log(code);
     fs.writeFile(`api/java/tmp/${req.body.id}.java`, code, (err) => {
       if (err) throw err;
 
@@ -34,7 +34,7 @@ exports.generate = (req, res, next) => {
   // TODO: Un-hardcode template
 };
 
-/**
+/** 
  * Compiles the requested Java code named {req.body.id}
  */
 exports.compile = (req, res, next) => {
