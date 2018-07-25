@@ -316,6 +316,7 @@ class ExerciseTool extends Component {
 			exercise.questions[this.state.followupTo] = parent;
 			this.setState({currentExercise: exercise, isFollowup: false});
 		} else {
+			console.log(this.state.currentCell);
 			exercise.questions.push(question);
 			this.setState({
 				currentExercise: exercise
@@ -385,7 +386,8 @@ class ExerciseTool extends Component {
 										 isFollowup={this.state.isFollowup}
 										 insideTable={false}
 										 data={Object.assign({}, this.state.currentQuestion)}
-										 updateCurrentQuestion={this.updateCurrentQuestion}/>
+										 updateCurrentQuestion={this.updateCurrentQuestion}
+										 currentCell={this.state.currentCell}/>
 	}
 
 	/**
