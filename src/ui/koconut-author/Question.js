@@ -20,7 +20,8 @@ class Question extends Component {
 			currentChoice: '',
 			currentAnswer: '',
 			checkboxOption: 'choice', // used for a check box type question. not applicable for other question types
-			feedback: JSON.stringify(question.feedback, null, 2)
+			feedback: JSON.stringify(question.feedback, null, 2),
+			currentCell: this.props.currentCell
 		};
 	}
 
@@ -58,7 +59,8 @@ class Question extends Component {
 			currentChoice: '',
 			currentAnswer: '',
 			checkboxOption: 'choice',
-			feedback: JSON.stringify(nextProps.data.feedback, null, 2)
+			feedback: JSON.stringify(nextProps.data.feedback, null, 2),
+			currentCell: nextProps.currentCell
 		});
 	}
 
@@ -81,7 +83,7 @@ class Question extends Component {
 					<p style={{color: '#3F51B5'}}>Question Prompt <span style={this.fieldReqs.optional}>optional</span></p>
 					<textarea style={style}
 										 value={this.state.currentQuestion.prompt}
-										onChange={this.handleChange('prompt')}></textarea>
+										onChange={this.handleChange('prompt')} />
 				</div>
 		);
 	}
@@ -472,7 +474,7 @@ class Question extends Component {
 			if (field === 'type' || field === 'choices') {
 				this.generateFeedbackTemplate();
 			} else {
-				this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), -1);
+				this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentCell);
 			}
 		});
 	}
@@ -497,10 +499,11 @@ class Question extends Component {
 		this.setState({
 			feedback: JSON.stringify(template, null, 2),
 			currentQuestion: currQuestion
-		}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), -1));
+		}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentCell));
 	}
 
 	render() {
+
 		// TODO: Add a delete function
 		return (
 				this.renderStandAloneQuestion()
