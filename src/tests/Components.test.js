@@ -24,10 +24,23 @@ describe('<WorldView /> component', () => {
       getInstruction={getInstruction}/>
   );
 
-  test('getOrderedConcepts contains only concepts in ConceptAbbreviations', () => {
+  it('getOrderedConcepts contains only concepts in ConceptAbbreviations', () => {
     const concepts = wrapper.instance().getOrderedConcepts();
     concepts.forEach((concept) => {
       expect(g[concept.name] !== undefined).toBe(true);
     });
   });
+
+  it('getConceptsByType filters correctly', () => {
+    const orderedConcepts = [{type: "a"}, {type: "b"}, {type: "c"},
+                            {type: "a"}, {type: "b"}, {type: "c"},
+                            {type: "a"}, {type: "b"}, {type: "c"},
+                                         {type: "b"}, {type: "c"},
+                                         {type: "b"}, {type: "c"},
+                                                      {type: "c"}];
+    const getConceptsByType = wrapper.instance().getConceptsByType;
+    expect(getConceptsByType(orderedConcepts, "a").length).toBe(3);
+    expect(getConceptsByType(orderedConcepts, "b").length).toBe(5);
+    expect(getConceptsByType(orderedConcepts, "c").length).toBe(6);
+  })
 });
