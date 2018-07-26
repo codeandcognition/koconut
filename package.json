@@ -6,6 +6,8 @@
     "babel-cli": "^6.26.0",
     "babel-preset-flow": "^6.23.0",
     "documentation": "^5.5.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "flow-bin": "^0.49.1",
     "flow-scripts": "^0.3.0",
     "flow-typed": "^2.4.0",
