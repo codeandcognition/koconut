@@ -128,21 +128,29 @@ class Information extends Component {
    * @returns JSX for the Feedback container
    */
   renderFeedback(question: any, index: number, fIndex: number) {
-      let feedback = (this.state.followupFeedback[index] && fIndex !== -1) ? this.state.followupFeedback[index][fIndex] : this.state.feedback[index];
-      if (feedback) {
-        return <Feedback
-          feedback={feedback}
-          questionIndex={index}
-          submitTryAgain={() => this.props.submitTryAgain(index, fIndex)}
-          type={question.type}
-          question={(fIndex === -1) ? this.state.exercise.questions[index] : this.state.exercise.questions[index].followupQuestions[fIndex]}
-          timesGotSpecificQuestionWrong={this.props.timesGotQuestionWrong[index]}
-          answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
-          addGaveUp={this.addGaveUp}
-          fIndex={fIndex}
-        />
-      }
-      return <div />
+    console.log(index + ", " + fIndex);
+    // console.log((this.state.followupFeedback[index] && fIndex !== -1) ?
+    // "followup renders" : "parent/sibling renders");
+    // console.log("followFeedback[index]", this.state.followupFeedback);
+
+    let parentFeedback = this.state.feedback[index];
+    let followupFeedback = (this.state.followupFeedback
+                            && this.state.followupFeedback[index]) ? this.state.followupFeedback[index][fIndex] : this.state.followupFeedback[index];
+    let feedback = fIndex === -1 ? parentFeedback : followupFeedback;
+    if (feedback) {
+      return <Feedback
+        feedback={feedback}
+        questionIndex={index}
+        submitTryAgain={() => this.props.submitTryAgain(index, fIndex)}
+        type={question.type}
+        question={(fIndex === -1) ? this.state.exercise.questions[index] : this.state.exercise.questions[index].followupQuestions[fIndex]}
+        timesGotSpecificQuestionWrong={this.props.timesGotQuestionWrong[index]}
+        answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
+        addGaveUp={this.addGaveUp}
+        fIndex={fIndex}
+      />
+    }
+    return <div />
   }
 
   addGaveUp() {
@@ -150,6 +158,7 @@ class Information extends Component {
   }
 
   render() {
+
     // todo count correct correctly
     let correctCount = this.state.feedback.reduce((acc, item, index) => {
           if (this.state.exercise.questions[index].type === "checkboxQuestion" ||

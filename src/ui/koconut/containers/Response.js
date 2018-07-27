@@ -54,7 +54,7 @@ class Response extends Component {
             fIndex={this.props.fIndex}
         />;
       case(Types.shortResponse):
-        return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index}/>;
+        return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index} fIndex={this.props.fIndex}/>;
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):
