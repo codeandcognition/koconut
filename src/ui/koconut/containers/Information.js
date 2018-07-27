@@ -23,6 +23,7 @@ type Props = {
     answer: any,  // Maybe type - can be null/void
     updateHandler: Function,
     feedback: string[],
+    followupFeedback: any[],
     submitOk: Function,
     submitTryAgain: Function,
     mode: string,
@@ -40,17 +41,20 @@ class Information extends Component {
     this.state = {
       exercise: null,
       feedback: null,
+      followupFeedback: null,
+      answer: null,
+      followupAnswers: null,
       gaveUpCount: 0
     };
     this.addGaveUp = this.addGaveUp.bind(this);
   }
 
   componentWillMount() {
-    this.setState({exercise: this.props.exercise, feedback: this.props.feedback, answer: this.props.answer});
+    this.setState({exercise: this.props.exercise, feedback: this.props.feedback, followupFeedback: this.props.followupFeedback, answer: this.props.answer, followupAnswers: this.props.followupAnswers});
   }
 
   componentWillReceiveProps(nextProps: any) {
-    this.setState({exercise: nextProps.exercise, feedback: nextProps.feedback, answer: nextProps.answer});
+    this.setState({exercise: nextProps.exercise, feedback: nextProps.feedback, followupFeedback: this.props.followupFeedback, answer: nextProps.answer, followupAnswers: this.props.followupAnswers});
   }
 
   /**
@@ -91,9 +95,8 @@ class Information extends Component {
    * @param index index of question in Exercise
    * @returns JSX for the Response container
    */
-  renderResponseView(question: any, index: number) {
+  renderResponseView(question: any, index: number, fIndex: number) {
       let type = question.type;
-
       return Types.isInlineResponseType(type) && type !== Types.writeCode
       // || (this.props.feedback[index] &&
       //       (question.type !=="table" &&
@@ -105,7 +108,7 @@ class Information extends Component {
             key={"response"+index}
             type={type}
             choices={question.choices}
-            answer={this.state.answer}
+            answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
             questionIndex={index}
             question={question}
             updateHandler={this.props.updateHandler}
@@ -114,6 +117,7 @@ class Information extends Component {
             submitTryAgain={this.props.submitTryAgain}
             mode={this.props.mode}
             submitHandler={this.props.submitHandler}
+            fIndex={fIndex}
             />
   }
 
@@ -123,17 +127,19 @@ class Information extends Component {
    * @param index index of question in Exercise
    * @returns JSX for the Feedback container
    */
-  renderFeedback(question: any, index: number) {
-      if(this.state.feedback[index]) {
+  renderFeedback(question: any, index: number, fIndex: number) {
+      let feedback = (this.state.followupFeedback[index] && fIndex !== -1) ? this.state.followupFeedback[index][fIndex] : this.state.feedback[index];
+      if (feedback) {
         return <Feedback
-          feedback={this.state.feedback[index]}
+          feedback={feedback}
           questionIndex={index}
-          submitTryAgain={() => this.props.submitTryAgain(index)}
+          submitTryAgain={() => this.props.submitTryAgain(index, fIndex)}
           type={question.type}
-          question={this.state.exercise.questions[index]}
+          question={(fIndex === -1) ? this.state.exercise.questions[index] : this.state.exercise.questions[index].followupQuestions[fIndex]}
           timesGotSpecificQuestionWrong={this.props.timesGotQuestionWrong[index]}
-          answer={this.state.answer}
+          answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
           addGaveUp={this.addGaveUp}
+          fIndex={fIndex}
         />
       }
       return <div />
@@ -155,7 +161,6 @@ class Information extends Component {
           }
         }
     , 0);
-    console.log(this.state.gaveUpCount);
     correctCount = correctCount + this.state.gaveUpCount;
     let expectedCorrect = this.state.exercise.questions.length;
 
@@ -168,20 +173,37 @@ class Information extends Component {
                   this.props.resetAnswer();
                   this.setState({gaveUpCount: 0});
                 }}>go to next question</button> </div>}
-              {
-                this.state.exercise.questions.map((question, index) => {
+              {this.state.exercise.questions.map((question, index) => {
                 return (
                   <Paper elevation={6} style={{padding: "0"}} key={"information" + index} className={"information-with-submit"}>
                     <ExerciseQuestion
+                      key={index}
                       question={question}
                       index={index}
                       feedback={this.state.feedback[index]}
                       answer={this.state.answer}
                       renderCodeView={this.renderCodeView(question, index)}
-                      renderResponseView={this.renderResponseView(question, index)}
-                      renderFeedback={this.renderFeedback(question, index)}
+                      renderResponseView={this.renderResponseView(question, index, -1)}
+                      renderFeedback={this.renderFeedback(question, index, -1)}
                       submitHandler={this.props.submitHandler}
+                      fIndex={-1}
                     />
+                    {question.followupQuestions && question.followupQuestions.map((fQuestion, fIndex) => {
+                      return (
+                        <ExerciseQuestion
+                            key={fIndex}
+                            question={fQuestion}
+                            index={index}
+                            feedback={this.state.followupFeedback[index] ? this.state.followupFeedback[index][fIndex] : null}
+                            answer={this.state.followupAnswers}
+                            renderCodeView={this.renderCodeView(fQuestion, index, fIndex)}
+                            renderResponseView={this.renderResponseView(fQuestion, index, fIndex)}
+                            renderFeedback={this.renderFeedback(fQuestion, index, fIndex)}
+                            submitHandler={this.props.submitHandler}
+                            fIndex={fIndex}
+                        />
+                      );
+                    })}
                   </Paper>
                 );
             })

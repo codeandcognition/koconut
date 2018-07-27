@@ -62,6 +62,7 @@ class App extends Component {
 		exerciseType: string,
 		instructionType: string,
     feedback: any, // flow pls
+    followupFeedback: any,
     nextConcepts: string[],
     counter: number,
     display: string, // the current display state
@@ -87,6 +88,7 @@ class App extends Component {
 			exerciseType: '', // yet to be defined
 			instructionType: '',
       feedback: [],
+      followupFeedback: [],
       nextConcepts: [],
       counter: 0, // Changed this from 1 to 0 -- cuz 0-based indexing
       display: displayType.load,
@@ -231,17 +233,17 @@ class App extends Component {
    * @param {number} questionIndex index of question to check the answer of
    * @return {string[]}
    */
-  checkAnswer(answer: any, questionIndex: number, questionType: string) {
-    let question = this.state.exercise.questions[questionIndex];
-    let feedbackTemp = this.state.feedback;
+  checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
+    let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
+    let feedbackTemp = (fIndex === -1) ? this.state.feedback : this.state.followupFeedback;
 
     // basically the answer will come in looking like this for a table type problem
     // mixed with regular problems
     // let stub = ["a", "a", [["", "a", "a"], ["", "a", "a"]], "a"];
 
-    let checkerForCorrectness = true;
+    // let checkerForCorrectness = true;
     if (questionType === "table") {
-      let colNames = question.colNames;
+      /*let colNames = question.colNames;
       let allCells = question.data;
       let addToFeedback = [];
       allCells.forEach((d, i) => {
@@ -266,9 +268,9 @@ class App extends Component {
         }
         addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
       });
-      feedbackTemp[questionIndex] = addToFeedback;
+      feedbackTemp[questionIndex] = addToFeedback;*/
     } else if (questionType === "checkboxQuestion") { // Assumes question.answer and answer are both arrays
-      var correct = true;
+      /*var correct = true;
       var answerArr = answer[0];
       if (answerArr && question.answer.length === answerArr.length) {
         question.answer.forEach((item) => {
@@ -281,24 +283,39 @@ class App extends Component {
         correct = false;
         checkerForCorrectness = false;
       }
-      feedbackTemp[questionIndex] = correct ? "correct" : "incorrect";
+      feedbackTemp[questionIndex] = correct ? "correct" : "incorrect";*/
     } else {
-      if (question.answer === answer[questionIndex]) {
-        feedbackTemp[questionIndex] = "correct";
+      if (fIndex !== -1) {
+        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+      }
+      let index = (fIndex === -1) ? questionIndex : fIndex;
+      let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
+
+      let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
+
+      if (question.answer === learnerAnswer) {
+        temp[index] = "correct";
       } else {
-        feedbackTemp[questionIndex] = "incorrect";
-        checkerForCorrectness = false;
+        temp[index] = "incorrect";
+        // checkerForCorrectness = false;
+      }
+      if (fIndex === -1) {
+        feedbackTemp = temp;
+      } else {
+        feedbackTemp[questionIndex] = temp;
       }
     }
 
-    let temp = this.state.timesGotQuestionWrong;
+
+
+    /*let temp = this.state.timesGotQuestionWrong;
     if(!temp[questionIndex]) {
       temp[questionIndex] = 0;
     }
     if(!checkerForCorrectness) {
       temp[questionIndex]++;
     }
-    this.setState({timesGotQuestionWrong: temp});
+    this.setState({timesGotQuestionWrong: temp});*/
     return feedbackTemp;
   }
 
@@ -306,12 +323,13 @@ class App extends Component {
    * Submits the give answer to current exercise
    * @param answer - the answer being submitted
    */
-  submitResponse(answer: any, questionIndex: number, questionType: string) {
+  submitResponse(answer: any, questionIndex: number, questionType: string, fIndex: number) {
     if (answer !== null && answer !== undefined) {
-      let feedback = this.checkAnswer(answer, questionIndex, questionType);
-      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer[questionIndex], () => {
+      let feedback = this.checkAnswer(answer, questionIndex, questionType, fIndex);
+      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => { // TODO: Reconfigure for followup question answer structure
         this.setState({
-          feedback: feedback,
+          feedback: (fIndex === -1) ? feedback : this.state.feedback,
+          followupFeedback: (fIndex === -1) ? this.state.followupFeedback : feedback,
           nextConcepts: this.getConcepts(),
           display: this.state.exercise.type !== 'survey'
               ? displayType.exercise
@@ -358,12 +376,13 @@ class App extends Component {
 
   // TODO William rewrite this to make it clear feedback instead of
   // just changing displaytype
-  submitTryAgain(questionIndex: number) {
-    let tempFeedback = this.state.feedback;
+  submitTryAgain(questionIndex: number, followupIndex: number) {
+    let tempFeedback = (followupIndex === -1) ? this.state.feedback : this.state.followupFeedback;
     tempFeedback[questionIndex] = null;
     this.setState({
       display: displayType.exercise,
-      feedback: tempFeedback
+      feedback: (followupIndex === -1) ? tempFeedback : this.state.feedback,
+      followupQuestions: (followupIndex === -1) ? this.state.followupFeedback : tempFeedback
     });
   }
 
@@ -527,6 +546,7 @@ class App extends Component {
             exercise={this.state.exercise}
             submitHandler={this.submitResponse}
             feedback={this.state.feedback}
+            followupFeedback={this.state.followupFeedback}
             nextConcepts={this.state.nextConcepts}
             submitOk={this.submitOk}
             submitTryAgain={this.submitTryAgain}

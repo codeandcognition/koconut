@@ -22,6 +22,7 @@ class MultipleChoice extends Component {
 
   render() {
     let labels = this.props.labels;
+
     return (
         <div className='multiple-choice'>
           <h5>{this.props.title}</h5>
@@ -31,8 +32,9 @@ class MultipleChoice extends Component {
               (<Choice
                   key={choice}
                   choice={choice}
-                  content={labels !== null && labels !== undefined?labels[i]:choice}
-                  answer={choice === this.props.answer[this.props.questionIndex]}
+                  fIndex={this.props.fIndex}
+                  content={labels !== null && labels !== undefined ? labels[i] : choice}
+                  answer={(this.props.answer[this.props.questionIndex] && this.props.fIndex !== -1) ? choice === this.props.answer[this.props.questionIndex][this.props.fIndex] : choice === this.props.answer[this.props.questionIndex]}
                   tooltip={
                     this.props.tooltips !== undefined &&
                     this.props.tooltips !== null

@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import ReactMarkdown from 'react-markdown';
-import Paper from '@material-ui/core/Paper';
 import Types from '../../../data/ExerciseTypes.js';
 import Submit from './Submit';
 
 class ExerciseQuestion extends Component {
 
   render() {
-    console.log(this.props);
     return (
       <div>
         <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
@@ -18,7 +16,7 @@ class ExerciseQuestion extends Component {
             </div>
             {this.props.renderResponseView}
             {!(this.props.feedback) &&
-            <Submit submitHandler={() => this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type)} />
+            <Submit submitHandler={() => this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex)} />
             }
           </div>
         </div>

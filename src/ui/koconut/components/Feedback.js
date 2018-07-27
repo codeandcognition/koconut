@@ -22,6 +22,16 @@ class Feedback extends Component {
       gaveUp: false
     }
   }
+
+  renderMarkdown(codeData) {
+    let code = "```python\n" + codeData + "\n```";
+    return <ReactMarkdown className={"flex-grow-1"}
+                          source={code}
+                          renderers={{code: CodeBlock}}
+                          escapeHtml={true}
+    />
+  }
+
   showFeedbackMessage(type: string, timeswrong: any, feedback: any, gotCorrect: string) {
     if(type === "multipleChoice") {
       let answer = this.props.answer[this.props.questionIndex];
@@ -37,15 +47,6 @@ class Feedback extends Component {
         }
       }
     }
-  }
-
-  renderMarkdown(codeData) {
-    let code = "```python\n" + codeData + "\n```";
-    return <ReactMarkdown className={"flex-grow-1"}
-                          source={code}
-                          renderers={{code: CodeBlock}}
-                          escapeHtml={true}
-    />
   }
   
   showAnswer() {

@@ -108,9 +108,9 @@ class ResponseEvaluator {
       );
 
       //Debug for demo
-      console.groupCollapsed("Response Log");
+      /*console.groupCollapsed("Response Log");
       console.log(ResponseLog.log);
-      console.groupEnd();
+      console.groupEnd();*/
 
       if (ExerciseTypes.isSurvey(exercise.questions[questionIndex].type)) {
         MasteryModel.surveyUpdateModel(Array.from(answer).map(x =>
@@ -123,7 +123,7 @@ class ResponseEvaluator {
         );
       }
 
-      this.printImportantStuff(); //Debug/demo
+      // this.printImportantStuff(); //Debug/demo
       next();
     };
 
