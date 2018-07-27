@@ -10,7 +10,7 @@ import ConceptCard from '../../ui/koconut/components/ConceptCard';
 Enzyme.configure({ adapter: new Adapter() });
 
 // WorldView component tests
-describe('<WorldView /> component', () => {
+describe('<WorldView /> container', () => {
   const generateExercise = () => {
     return 2;
   }
