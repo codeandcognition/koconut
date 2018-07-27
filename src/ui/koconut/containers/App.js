@@ -387,7 +387,7 @@ class App extends Component {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
         		if (waiverStatus) {
-              this.setState({display: displayType.world});
+              this.setState({display: displayType.author}); // TODO: Change this back to world
             } else {
         			this.setState({display: displayType.welcome});
 						}
