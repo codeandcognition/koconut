@@ -117,6 +117,10 @@ class App extends Component {
     this.nextQuestion = this.nextQuestion.bind(this);
   }
 
+  returnDisplayTypes() {
+    return displayType;
+  }
+
   /**
    * Passed in as a prop to WorldView -> ConceptCard
    * When invoked in concept card, it generates an exercise of the given
