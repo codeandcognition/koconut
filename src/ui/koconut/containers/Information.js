@@ -54,6 +54,7 @@ class Information extends Component {
   }
 
   componentWillReceiveProps(nextProps: any) {
+
     this.setState({exercise: nextProps.exercise, feedback: nextProps.feedback, followupFeedback: this.props.followupFeedback, answer: nextProps.answer, followupAnswers: this.props.followupAnswers});
   }
 
@@ -97,6 +98,12 @@ class Information extends Component {
    */
   renderResponseView(question: any, index: number, fIndex: number) {
       let type = question.type;
+
+    let parentFeedback = this.state.feedback[index];
+    let followupFeedback = (this.state.followupFeedback
+        && this.state.followupFeedback[index]) ? this.state.followupFeedback[index][fIndex] : this.state.followupFeedback[index];
+    let feedback = fIndex === -1 ? parentFeedback : followupFeedback;
+
       return Types.isInlineResponseType(type) && type !== Types.writeCode
       // || (this.props.feedback[index] &&
       //       (question.type !=="table" &&
@@ -112,7 +119,7 @@ class Information extends Component {
             questionIndex={index}
             question={question}
             updateHandler={this.props.updateHandler}
-            feedback={this.state.feedback[index]}
+            feedback={feedback}
             submitOk={this.props.submitOk}
             submitTryAgain={this.props.submitTryAgain}
             mode={this.props.mode}
@@ -128,11 +135,6 @@ class Information extends Component {
    * @returns JSX for the Feedback container
    */
   renderFeedback(question: any, index: number, fIndex: number) {
-    console.log(index + ", " + fIndex);
-    // console.log((this.state.followupFeedback[index] && fIndex !== -1) ?
-    // "followup renders" : "parent/sibling renders");
-    // console.log("followFeedback[index]", this.state.followupFeedback);
-
     let parentFeedback = this.state.feedback[index];
     let followupFeedback = (this.state.followupFeedback
                             && this.state.followupFeedback[index]) ? this.state.followupFeedback[index][fIndex] : this.state.followupFeedback[index];
@@ -199,8 +201,8 @@ class Information extends Component {
                     />
                     {question.followupQuestions && question.followupQuestions.map((fQuestion, fIndex) => {
                       return (
-                        <ExerciseQuestion
-                            key={fIndex}
+                        <div key={fIndex}>
+                          {this.state.feedback[index] === "correct" && <ExerciseQuestion
                             question={fQuestion}
                             index={index}
                             feedback={this.state.followupFeedback[index] ? this.state.followupFeedback[index][fIndex] : null}
@@ -210,7 +212,8 @@ class Information extends Component {
                             renderFeedback={this.renderFeedback(fQuestion, index, fIndex)}
                             submitHandler={this.props.submitHandler}
                             fIndex={fIndex}
-                        />
+                          />}
+                        </div>
                       );
                     })}
                   </Paper>

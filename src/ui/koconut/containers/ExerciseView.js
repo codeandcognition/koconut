@@ -50,6 +50,12 @@ class Exercise extends Component {
     window.scrollTo(0, 0);
   }
 
+  componentWillUnmount() {
+    console.log("Exercise component has unmounted");
+    this.resetAnswer();
+    this.props.resetFeedback();
+  }
+
   /**
    * Returns whether the answer is defined and non-null or not.
    * @returns {boolean}

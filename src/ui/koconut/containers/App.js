@@ -118,6 +118,7 @@ class App extends Component {
     this.loadDisplay = this.loadDisplay.bind(this);
     this.switchToAuthorView = this.switchToAuthorView.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
+    this.resetFeedback = this.resetFeedback.bind(this);
   }
 
   /**
@@ -341,6 +342,13 @@ class App extends Component {
     }
   }
 
+  resetFeedback() {
+    this.setState({
+      feedback: [],
+      followupFeedback: []
+    });
+  }
+
   /**
    * Submits the given concept
    * @param concept - the concept being submit
@@ -556,6 +564,7 @@ class App extends Component {
             toggleCodeTheme={(theme) => this.setState({codeTheme: theme})}
             timesGotQuestionWrong={this.state.timesGotQuestionWrong}
             nextQuestion={this.nextQuestion}
+            resetFeedback={this.resetFeedback}
         />
     );
   }
