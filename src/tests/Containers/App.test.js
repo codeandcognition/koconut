@@ -40,7 +40,7 @@ describe('<App /> container', () => {
     expect(stopWatchingAuthCallback.mock.calls.length).toBe(1); 
   });
 
-  it('display state at beginning is on LOAD', () => {
+  it('display state at beginning is LOAD', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
     expect(wrapper.state('display')).toBe('LOAD');
     wrapper.unmount();
@@ -94,6 +94,30 @@ describe('<App /> container', () => {
     wrapper.unmount();
   });
 
+  it('getInstruction sets state correctly', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+
+    const concept = "abc";
+    const instructionType = "READ";
+    const displayType = wrapper.instance().returnDisplayTypes();
+
+    wrapper.instance().getInstruction(concept, instructionType);
+    expect(wrapper.state().currentConcept).toBe(concept);
+    expect(wrapper.state().instructionType).toBe(instructionType);
+    expect(wrapper.state().display).toBe(displayType.instruct);
+    expect(wrapper.state().error).toBe(false);
+
+    const concept2 = "xyz";
+    const instructionType2 = "WRITE";
+
+    wrapper.instance().getInstruction(concept2, instructionType);
+    expect(wrapper.state().currentConcept).toBe(concept2);
+    expect(wrapper.state().instructionType).toBe(instructionType);
+    expect(wrapper.state().display).toBe(displayType.instruct);
+    expect(wrapper.state().error).toBe(false);
+
+    wrapper.unmount();
+  });
 
   it('stub test', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
