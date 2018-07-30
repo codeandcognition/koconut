@@ -335,7 +335,8 @@ class App extends Component {
   submitResponse(answer: any, questionIndex: number, questionType: string, fIndex: number) {
     if (answer !== null && answer !== undefined) {
       let feedback = this.checkAnswer(answer, questionIndex, questionType, fIndex);
-      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer, () => { // TODO: Reconfigure for followup question answer structure
+      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer
+          , () => { // TODO: Reconfigure for followup question answer structure
         this.setState({
           feedback: (fIndex === -1) ? feedback : this.state.feedback,
           followupFeedback: (fIndex === -1) ? this.state.followupFeedback : feedback,
@@ -421,7 +422,7 @@ class App extends Component {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
         		if (waiverStatus) {
-              this.setState({display: displayType.author}); // TODO: Change this back to world
+              this.setState({display: displayType.world});
             } else {
         			this.setState({display: displayType.welcome});
 						}
