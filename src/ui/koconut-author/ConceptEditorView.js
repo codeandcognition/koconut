@@ -126,6 +126,20 @@ class ConceptEditorView extends Component {
 		Object.keys(ConceptInventory).forEach((key, index) => {
 			concepts.push( <option key={index}>{key}</option>);
 		});
+
+		let buttons = [];
+		this.state.concept.parents.forEach((item, index) => {
+			buttons.push(<Button key={index}
+													 variant={'flat'}
+													 style={{backgroundColor: '#ffecb3', margin: '3px'}}
+													 onClick={(evt) => {
+														 let index = this.state.concept.parents.indexOf(evt.target.innerText);
+														 let concepts = [...Object.assign({}, this.state.concept.parents)];
+														 concepts.splice(index, 1);
+														 this.updateConcept('parents', concepts);
+													 }}>{item}</Button>)
+		});
+
 		return(
 				<div>
 					<p>Add all parents <span style={this.fieldReqs.required}>required</span></p>
@@ -146,7 +160,7 @@ class ConceptEditorView extends Component {
 							Add parent
 						</Button>
 					</div>
-					<div>TODO: display current parents</div>
+					<div>{buttons}</div>
 				</div>
 		);
 	}
@@ -158,6 +172,19 @@ class ConceptEditorView extends Component {
 		let concepts = [];
 		Object.keys(ConceptInventory).forEach((key, index) => {
 			concepts.push( <option key={index}>{key}</option>);
+		});
+
+		let buttons = [];
+		this.state.concept.dependencies.forEach((item, index) => {
+			buttons.push(<Button key={index}
+													 variant={'flat'}
+													 style={{backgroundColor: '#ffecb3', margin: '3px'}}
+													 onClick={(evt) => {
+														let index = this.state.concept.dependencies.indexOf(evt.target.innerText);
+														let concepts = [...Object.assign({}, this.state.concept.dependencies)];
+														concepts.splice(index, 1);
+														this.updateConcept('dependencies', concepts)}
+													 }>{item}</Button>)
 		});
 
 		return (
@@ -181,7 +208,7 @@ class ConceptEditorView extends Component {
 							Add dependency
 						</Button>
 					</div>
-					<div>TODO: display current dependencies</div>
+					<div>{buttons}</div>
 				</div>
 		);
 	}
@@ -279,7 +306,7 @@ class ConceptEditorView extends Component {
 
 		return (
 				<div>
-					<p>Preview</p>
+					<p style={this.fieldReqs.title}>Preview</p>
 					<textarea style={code} value={JSON.stringify(this.state.concept, null, 2)} disabled={true} />
 				</div>
 		);
@@ -349,6 +376,9 @@ class ConceptEditorView extends Component {
 		});
 	}
 
+	/**
+	 * Function to check if all the required fields are filled in
+	 */
 	verifyCompletion() {
 		if (this.state.concept.type !== ''
 				&& this.state.concept.explanations.name !== ''
@@ -359,6 +389,9 @@ class ConceptEditorView extends Component {
 		}
 	}
 
+	/**
+	 * Add new concept to the concept inventory and produce the JSON
+	 */
 	addConcept() {
 		let conceptInventory = JSON.stringify(Object.assign({}, ConceptInventory));
 		let concept = JSON.stringify(Object.assign({}, this.state.concept));
@@ -400,6 +433,10 @@ class ConceptEditorView extends Component {
 		});
 	}
 
+	/**
+	 * Display preview of the concept inventory
+	 * @returns {*}
+	 */
 	previewConceptInventory() {
 		let output = {
 			fontFamily: 'Monospace',
@@ -410,7 +447,7 @@ class ConceptEditorView extends Component {
 		if (this.state.activeOutput) {
 			return (
 					<div>
-						<p>Concept Inventory Preview</p>
+						<p style={this.fieldReqs.title}>Concept Inventory Preview</p>
 						<p>Set this equal to conceptInventory in ConceptMap.js</p>
 						<textarea style={output} value={this.state.output} disabled={true}/>
 						<p>Set this equal to g in ConceptMap.js</p>
@@ -420,6 +457,10 @@ class ConceptEditorView extends Component {
 		}
 	}
 
+	/**
+	 * Helper function for addConcept()
+	 * @param conceptConstants
+	 */
 	reverseConceptConstants(conceptConstants) {
 		let result = {};
 		Object.keys(conceptConstants).forEach((key) => {
@@ -428,6 +469,10 @@ class ConceptEditorView extends Component {
 		return result;
 	}
 
+	/**
+	 * Helper function for addConcept()
+	 * @param conceptConstants
+	 */
 	reverseConceptTypes() {
 		let result = {};
 		Object.keys(this.Types).forEach(key => {
