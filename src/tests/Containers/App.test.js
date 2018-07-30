@@ -119,6 +119,18 @@ describe('<App /> container', () => {
     wrapper.unmount();
   });
 
+  it('generateExercise sets the correct `no excercise` errors', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+
+    wrapper.unmount();
+  });
+
+  it('generateExercise runs as expected', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+
+    wrapper.unmount();
+  });
+
   it('stub test', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
 
