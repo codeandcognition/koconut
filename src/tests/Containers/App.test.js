@@ -170,8 +170,6 @@ describe('<App /> container', () => {
     expect(wrapper.state().exerciseType).toBe(exerciseType);
     expect(wrapper.state().counter).toBe(0);
     
-
-
     wrapper.unmount();
   });
 
