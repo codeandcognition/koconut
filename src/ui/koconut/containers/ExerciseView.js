@@ -74,6 +74,23 @@ class Exercise extends Component {
     });
   }
 
+  updateAnswers(content, index, fIndex) {
+    if (fIndex === -1) {
+      let temp = this.state.answer;
+      temp[index] = content;
+      this.setState({
+        answer: temp
+      });
+    } else {
+      let temp = this.state.followupAnswers;
+      temp[index] = [];
+      temp[index][fIndex] = content;
+      this.setState({
+        followupAnswers: temp
+      });
+    }
+  }
+
 
   render() {
     let styles = {  // TODO put this in the constructor, unnecessary calculations per render
@@ -87,22 +104,7 @@ class Exercise extends Component {
               exercise={this.props.exercise}
               answer={this.state.answer}
               followupAnswers={this.state.followupAnswers}
-              updateHandler={(content, index, fIndex) => {
-                if (fIndex === -1) {
-                  let temp = this.state.answer;
-                  temp[index] = content;
-                  this.setState({
-                    answer: temp
-                  });
-                } else {
-                  let temp = this.state.followupAnswers;
-                  temp[index] = [];
-                  temp[index][fIndex] = content;
-                  this.setState({
-                    followupAnswers: temp
-                  });
-                }
-              }}
+              updateHandler={(content, index, fIndex) => this.updateAnswers(content, index, fIndex)}
               feedback={this.props.feedback}
               followupFeedback={this.props.followupFeedback}
               submitOk={this.props.submitOk}

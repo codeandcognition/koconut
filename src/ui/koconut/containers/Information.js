@@ -175,7 +175,6 @@ class Information extends Component {
     , 0);
     correctCount = correctCount + this.state.gaveUpCount;
     let expectedCorrect = this.state.exercise.questions.length;
-
     return (
         <div>
           {/* TODO replace learn yourself a good 1*/}
@@ -201,9 +200,19 @@ class Information extends Component {
                       fIndex={-1}
                     />
                     {question.followupQuestions && question.followupQuestions.map((fQuestion, fIndex) => {
+                      var correctTable = true;
+                      if (question.type === Types.table && this.state.feedback[index]) {
+                        this.state.feedback[index].forEach((row) => {
+                          row.forEach((cellItem) => {
+                            if (cellItem === "incorrect") {
+                              correctTable = false;
+                            }
+                          });
+                        });
+                      }
                       return (
                         <div key={fIndex}>
-                          {this.state.feedback[index] === "correct" && <ExerciseQuestion
+                          {this.state.feedback[index] === "correct" || (Types.table === question.type && correctTable) && <ExerciseQuestion
                             question={fQuestion}
                             index={index}
                             feedback={this.state.followupFeedback[index] ? this.state.followupFeedback[index][fIndex] : null}

@@ -64,8 +64,10 @@ class Response extends Component {
         return <TableView feedback={this.props.feedback} 
                           question={this.props.question} 
                           inputHandler={update} 
-                          questionIndex={index} 
-                          answer={answer[index]}/>;
+                          questionIndex={index}
+                          fIndex={this.props.fIndex}
+                          answer={answer[index]}
+                />;
       case(Types.checkboxQuestion):
         return <CheckboxQuestion choices={choices} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
         question={this.props.question} fIndex={this.props.fIndex}/>

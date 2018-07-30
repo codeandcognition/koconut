@@ -248,8 +248,9 @@ class App extends Component {
 
     // let checkerForCorrectness = true;
     if (questionType === "table") {
-      /*let colNames = question.colNames;
+      let colNames = question.colNames;
       let allCells = question.data;
+      let answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
       let addToFeedback = [];
       allCells.forEach((d, i) => {
         let arrayIndexToPushTo = Math.floor(i / colNames.length);
@@ -263,17 +264,23 @@ class App extends Component {
           cellValue = null;
           // sorry to whoever has to understand this later :(
           // it's for the greater good and expandability
-        } else if (answer[questionIndex] &&
-            answer[questionIndex][arrayIndexToPushTo] && d.answer ===
-            answer[questionIndex][arrayIndexToPushTo][subArrayIndex]) {
+        } else if (answerArr &&
+            answerArr[arrayIndexToPushTo] && d.answer ===
+            answerArr[arrayIndexToPushTo][subArrayIndex]) {
           cellValue = "correct";
         } else {
           cellValue = "incorrect";
-          checkerForCorrectness = false;
+          // checkerForCorrectness = false;
         }
         addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
       });
-      feedbackTemp[questionIndex] = addToFeedback;*/
+      // console.log("answer", answer);
+      if (fIndex === -1) {
+        feedbackTemp[questionIndex] = addToFeedback;
+      } else {
+        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+        feedbackTemp[questionIndex][fIndex] = addToFeedback;
+      }
     } else if (questionType === "checkboxQuestion") { // Assumes question.answer and answer are both arrays
       var isCorrect = true;
       var answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
