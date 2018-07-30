@@ -148,8 +148,6 @@ class TableView extends Component {
       augmentedCells[arrayIndexToPushTo][subArrayIndex] = d;
     });
 
-    
-
     return (
       <div style={{width: "100%"}}>
       <Paper style={{width: "100%"}}>

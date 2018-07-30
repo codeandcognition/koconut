@@ -119,8 +119,13 @@ class Cell extends Component {
 							this.setState({
 								currentCellFormat: evt.target.value
 							}, () => {
-								this.props.addToTable(this.state.cell, this.props.index);
+								let cellProps =  {
+									currentCellIndex: this.props.index,
+									format: this.state.currentCellFormat,
+									instructionType: this.state.currentInstType
+								};
 								this.props.updateCurrentCell(this.props.index, this.state.currentCellFormat, this.state.currentInstType);
+								this.props.addToTable(this.state.cell, cellProps);
 							});
 						}}>
 							<FormControlLabel value={"question"} control={<Radio color={"primary"}/>} label={"Yes"}/>
@@ -153,8 +158,13 @@ class Cell extends Component {
 								currentInstType: evt.target.value,
 								cell: currentCell
 							}, () => {
-								this.props.addToTable(this.state.cell, this.props.index);
+								let cellProps =  {
+									currentCellIndex: this.props.index,
+									format: this.state.currentCellFormat,
+									instructionType: this.state.currentInstType
+								};
 								this.props.updateCurrentCell(this.props.index, this.state.currentCellFormat, this.state.currentInstType);
+								this.props.addToTable(this.state.cell, cellProps);
 							});
 						}}>
 							<FormControlLabel value={"prompt"} control={<Radio color={"primary"}/>} label={"Prompt"}/>
@@ -232,7 +242,14 @@ class Cell extends Component {
 	updateCell(field, value) {
 		let temp = Object.assign({}, this.state.cell);
 		temp[field] = value;
-		this.setState({cell: temp}, () => {this.props.addToTable(Object.assign({}, this.state.cell), this.props.index)});
+		this.setState({cell: temp}, () => {
+			let cellProps =  {
+				currentCellIndex: this.props.index,
+				format: this.state.currentCellFormat,
+				instructionType: this.state.currentInstType
+			};
+			this.props.addToTable(Object.assign({}, this.state.cell), cellProps)
+		});
 	}
 
 	/**
@@ -241,16 +258,28 @@ class Cell extends Component {
 	 *
 	 */
 	addContent() {
+		let cellProps =  {
+			currentCellIndex: this.props.index,
+			format: this.state.currentCellFormat,
+			instructionType: this.state.currentInstType
+		};
+
 		this.handleClose();
-		this.props.addToTable(Object.assign({}, this.state.cell), this.props.index);
+		this.props.addToTable(Object.assign({}, this.state.cell), cellProps);
 	}
 
 	/**
 	 * Invoked in Question.js
 	 */
 	addQuestionCell(cell) {
+		let cellProps =  {
+			currentCellIndex: this.props.index,
+			format: this.state.currentCellFormat,
+			instructionType: this.state.currentInstType
+		};
+
 		this.handleClose();
-		this.props.addToTable(cell, this.props.index);
+		this.props.addToTable(cell, cellProps);
 	}
 
 	render() {
