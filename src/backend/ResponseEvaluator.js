@@ -72,13 +72,13 @@ class ResponseEvaluator {
    * @param code - the Java code to compile and execute
    */
   static executeJava(code: string): Promise<Object> {
-    return fetch('/api/java', {
+    return fetch('/api/python', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        id: 'replacemelater', // TODO: Actually get an id
+        id: 'Replacemelater', // TODO: Actually get an id
         content: code,
       })
     });

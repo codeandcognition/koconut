@@ -50,53 +50,43 @@ class WorldView extends Component {
     return (
         <div className="container" style={{marginTop: '12vh'}}>
           <div style={{display: "flex"}}>
-          <div style={{flexGrow: "6", margin: 10}}>
-          {
-            titleLeft.map(cTypeVal => {
-              let cType = t[cTypeVal.name];
-              return <div key={"world-"+cType} style={{marginTop: 10}}>
-                <h1>{cTypeVal.title}</h1>
-                {this.getConceptsByType(conceptList, cType).map((concept, index) => {
-                  let name = conceptInventory[concept.name].explanations.name;
-							    return <ConceptCard title={name}
-																	key={index}
-																	concept={concept.name}
-																	generateExercise={this.props.generateExercise}
-																	getInstruction={this.props.getInstruction}/>
-                })}
-              </div>
-            })
-          }
+            <div style={{flexGrow: 3, margin: 10}}>
+            {
+              titleLeft.map(cTypeVal => {
+                let cType = t[cTypeVal.name];
+                return <div key={"world-"+cType} style={{marginTop: 10}}>
+                  <h1>{cTypeVal.title}</h1>
+                  {this.getConceptsByType(conceptList, cType).map((concept, index) => {
+                    let name = conceptInventory[concept.name].explanations.name;
+                    return <ConceptCard title={name}
+                                    key={index}
+                                    concept={concept.name}
+                                    generateExercise={this.props.generateExercise}
+                                    getInstruction={this.props.getInstruction}/>
+                  })}
+                </div>
+              })
+            }
+            </div>
+            <div style={{flexGrow: 5, margin: 10}}>
+            {
+              titleRight.map(cTypeVal => {
+                let cType = t[cTypeVal.name];
+                return <div key={"world-"+cType} style={{marginTop: 10}}>
+                  <h1>{cTypeVal.title}</h1>
+                  {this.getConceptsByType(conceptList, cType).map((concept, index) => {
+                    let name = conceptInventory[concept.name].explanations.name;
+                    return <ConceptCard title={name}
+                                    key={index}
+                                    concept={concept.name}
+                                    generateExercise={this.props.generateExercise}
+                                    getInstruction={this.props.getInstruction}/>
+                  })}
+                </div>
+              })
+            }
+            </div>
           </div>
-          <div style={{flexGrow: "6", margin: 10}}>
-          {
-            titleRight.map(cTypeVal => {
-              let cType = t[cTypeVal.name];
-              return <div key={"world-"+cType} style={{marginTop: 10}}>
-                <h1>{cTypeVal.title}</h1>
-                {this.getConceptsByType(conceptList, cType).map((concept, index) => {
-                  let name = conceptInventory[concept.name].explanations.name;
-							    return <ConceptCard title={name}
-																	key={index}
-																	concept={concept.name}
-																	generateExercise={this.props.generateExercise}
-																	getInstruction={this.props.getInstruction}/>
-                })}
-              </div>
-            })
-          }
-          </div>
-          </div>
-					{/* {
-						conceptList.map((concept, index) => {
-							let name = conceptInventory[concept.name].explanations.name;
-							return <ConceptCard title={name}
-																	key={index}
-																	concept={concept.name}
-																	generateExercise={this.props.generateExercise}
-																	getInstruction={this.props.getInstruction}/>
-						})
-					} */}
 				</div>
 		);
 	}

@@ -15,7 +15,8 @@ class Choice extends Component {
     tooltip: ?string,
     handleClick: Function,
     questionIndex: number,
-    disabled: boolean
+    disabled: boolean,
+    fIndex: number
   };
 
   renderTooltip() {

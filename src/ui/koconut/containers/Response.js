@@ -24,7 +24,8 @@ class Response extends Component {
     feedback?: string[],
     submitHandler: Function,
     submitTryAgain: Function,
-    question: any
+    question: any,
+    fIndex: number
   };
 
   /**

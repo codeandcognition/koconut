@@ -1,6 +1,5 @@
 // @flow
 import React, {Component} from 'react';
-import firebase from 'firebase/app';
 import 'firebase/auth';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import './App.css';
@@ -121,6 +120,10 @@ class App extends Component {
     this.resetFeedback = this.resetFeedback.bind(this);
   }
 
+  returnDisplayTypes() {
+    return displayType;
+  }
+
   /**
    * Passed in as a prop to WorldView -> ConceptCard
    * When invoked in concept card, it generates an exercise of the given
@@ -203,7 +206,7 @@ class App extends Component {
    * Un app un-mount, stop watching authentication
    */
   componentWillUnmount() {
-    this.stopWatchingAuth = firebase.auth().onAuthStateChanged((fbUser) => {
+    this.stopWatchingAuth = this.props.firebase.auth().onAuthStateChanged((fbUser) => {
       fbUser ?
           this.setState({firebaseUser: fbUser}) :
           this.setState({firebaseUser: null, display: displayType.signin});
@@ -409,16 +412,16 @@ class App extends Component {
 	 *
 	 */
 	loadDisplay() {
-    firebase.auth().onAuthStateChanged((fbUser) => {
+    this.props.firebase.auth().onAuthStateChanged((fbUser) => {
     	this.setState({firebaseUser: fbUser});
       if (fbUser) {
-        let databaseRef = firebase.database().ref("Users/" + fbUser.uid);
+        let databaseRef = this.props.firebase.database().ref("Users/" + fbUser.uid);
         databaseRef.once("value", (snapshot) => {
         	if (snapshot !== null && snapshot.val() !== null) {
         		let waiverStatus = snapshot.val().waiverStatus;
         		let author = snapshot.val().permission === 'author';
         		if (waiverStatus) {
-              this.setState({display: displayType.world});
+              this.setState({display: displayType.author}); // TODO: Change this back to world
             } else {
         			this.setState({display: displayType.welcome});
 						}
@@ -429,11 +432,11 @@ class App extends Component {
         	  this.setState({display: displayType.welcome});
           }
         });
-        this.exerciseGetter = firebase.database().ref('Exercises');
+        this.exerciseGetter = this.props.firebase.database().ref('Exercises');
         this.exerciseGetter.on('value', (snap) => {
           this.setState({exerciseList:snap.val()});
         });
-        this.conceptMapGetter = firebase.database().ref('ConceptExerciseMap');
+        this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
         this.conceptMapGetter.on('value', (snap) => {
           this.setState({conceptMapGetter: snap.val()});
         });
@@ -449,7 +452,7 @@ class App extends Component {
 	updateWaiverStatus() {
     if (this.state.firebaseUser) {
       this.setState({display: displayType.world});
-      let databaseRef = firebase.database()
+      let databaseRef = this.props.firebase.database()
 				.ref("Users/" + this.state.firebaseUser.uid +
               "/waiverStatus");
       databaseRef.set(true);

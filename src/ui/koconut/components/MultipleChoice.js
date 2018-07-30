@@ -17,7 +17,8 @@ class MultipleChoice extends Component {
     answer: string[],
     handleClick: Function,
     questionIndex: number,
-    feedback: any
+    feedback: any,
+    fIndex: number
   };
 
   render() {
