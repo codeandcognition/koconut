@@ -11,7 +11,7 @@ class AuthorView extends Component {
 		super(props);
 
 		this.state = {
-			activeTab: 2 // TODO: Change this to 0
+			activeTab: 0
 		}
 	}
 
