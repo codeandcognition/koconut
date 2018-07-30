@@ -1,13 +1,23 @@
 import React, {Component} from 'react';
 import Graph from 'react-graph-vis';
 import ConceptInventory from './ConceptMap';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
 class ConceptNetwork extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			inventory: this.props.inventory
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({inventory: nextProps.inventory});
+	}
+
 	render() {
 		// make a copy of the concept inventory
-		let conceptGraph = Object.assign({}, ConceptInventory);
+		let conceptGraph = Object.assign({}, this.state.inventory); // Object.assign({}, ConceptInventory);
 
 		// build the graph to visualize concept network
 		let nodes = [];
@@ -55,12 +65,12 @@ class ConceptNetwork extends Component {
 		};
 
 		return(
-				<Card style={{border: 'solid 1px #0000ff'}}>
+				<div>
 					<CardContent>
 						<p>Concept Map</p>
 						<Graph graph={graph} options={options} events={events}/>
 					</CardContent>
-				</Card>
+				</div>
 		)
 	}
 }
