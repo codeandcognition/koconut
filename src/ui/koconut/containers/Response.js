@@ -66,9 +66,8 @@ class Response extends Component {
                           questionIndex={index} 
                           answer={answer[index]}/>;
       case(Types.checkboxQuestion):
-        return <CheckboxQuestion choices={choices} prompt={"prompt" +
-        " placeholder"} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
-        question={this.props.question} />
+        return <CheckboxQuestion choices={choices} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
+        question={this.props.question} fIndex={this.props.fIndex}/>
       default:
         return <div className="BAD">Not a valid EXERCISE type {type}</div>;
     }

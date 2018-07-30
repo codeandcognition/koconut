@@ -23,6 +23,8 @@ type Props = {
   codeTheme: string
 }
 
+var b = {"hello":"world","cat":"dog"}
+
 /**
  * The Exercise container contains all components of an assessment problem.
  * @class
@@ -51,7 +53,6 @@ class Exercise extends Component {
   }
 
   componentWillUnmount() {
-    console.log("Exercise component has unmounted");
     this.resetAnswer();
     this.props.resetFeedback();
   }

@@ -238,6 +238,7 @@ class App extends Component {
     let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
     let feedbackTemp = (fIndex === -1) ? this.state.feedback : this.state.followupFeedback;
 
+
     // basically the answer will come in looking like this for a table type problem
     // mixed with regular problems
     // let stub = ["a", "a", [["", "a", "a"], ["", "a", "a"]], "a"];
@@ -271,29 +272,32 @@ class App extends Component {
       });
       feedbackTemp[questionIndex] = addToFeedback;*/
     } else if (questionType === "checkboxQuestion") { // Assumes question.answer and answer are both arrays
-      /*var correct = true;
-      var answerArr = answer[0];
+      var isCorrect = true;
+      var answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
       if (answerArr && question.answer.length === answerArr.length) {
         question.answer.forEach((item) => {
           if (!answerArr.includes(item)) {
-            correct = false;
-            checkerForCorrectness = false;
+            isCorrect = false;
+            //checkerForCorrectness = false;
           }
-        });
+        })
       } else {
-        correct = false;
-        checkerForCorrectness = false;
+        isCorrect = false;
+        // checkerForCorrectness = false;
       }
-      feedbackTemp[questionIndex] = correct ? "correct" : "incorrect";*/
+      if (fIndex === -1) {
+        feedbackTemp[questionIndex] = isCorrect ? "correct" : "incorrect";
+      } else {
+        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+        feedbackTemp[questionIndex][fIndex] = isCorrect ? "correct" : "incorrect";
+      }
     } else {
       if (fIndex !== -1) {
         feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
       }
       let index = (fIndex === -1) ? questionIndex : fIndex;
       let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
-
       let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
-
       if (question.answer === learnerAnswer) {
         temp[index] = "correct";
       } else {
@@ -303,6 +307,7 @@ class App extends Component {
       if (fIndex === -1) {
         feedbackTemp = temp;
       } else {
+        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
         feedbackTemp[questionIndex] = temp;
       }
     }

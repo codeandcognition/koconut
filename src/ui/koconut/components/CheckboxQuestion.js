@@ -47,7 +47,7 @@ class CheckboxQuestion extends Component {
       checkboxItems: choices,
       selectedItems: selected
     }, () => {
-      this.props.inputHandler(this.state.selectedItems, this.props.questionIndex);
+      this.props.inputHandler(this.state.selectedItems, this.props.questionIndex, this.props.fIndex);
     });
   }
 
@@ -58,7 +58,6 @@ class CheckboxQuestion extends Component {
 
     return(
       <FormControl component={"fieldset"}>
-        <FormLabel component={"legend"}>{this.props.prompt}</FormLabel>
         <FormGroup>
           {this.props.choices && this.props.choices.map((item, index) => {
             return (
