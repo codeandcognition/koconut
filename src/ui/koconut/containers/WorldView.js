@@ -87,16 +87,6 @@ class WorldView extends Component {
             }
             </div>
           </div>
-					{/* {
-						conceptList.map((concept, index) => {
-							let name = conceptInventory[concept.name].explanations.name;
-							return <ConceptCard title={name}
-																	key={index}
-																	concept={concept.name}
-																	generateExercise={this.props.generateExercise}
-																	getInstruction={this.props.getInstruction}/>
-						})
-					} */}
 				</div>
 		);
 	}

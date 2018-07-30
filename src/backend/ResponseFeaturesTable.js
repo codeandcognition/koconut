@@ -9,6 +9,14 @@ import _ from 'lodash';
 //  now this class has been cursed by JavaScript black magic. You're going to need
 //  to add binds for things to work in the future.
 //  🔥🌑🔥
+// A note from William:
+//  Don't worry kiddos, .bind(this) is pretty common nowadays in the future and 
+//  is a very important thing to learn how to do with JavaScript ES6 syntax. A way
+//  to probably avoid .bind(this) is to probably make the functions in the format 
+//  of `const xxx = () => {}` instead of `static xxx() {}`. Arrow function syntax
+//  applies the .bind(this) functionality automatically. 
+//  I won't be changing this code, but I'm fairly sure we can change that if we don't
+//  want to use .bind(this) anymore.
 
 /**
  * Defines response features used for Bayesian Knowledge Tracing.
