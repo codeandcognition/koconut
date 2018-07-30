@@ -119,7 +119,7 @@ describe('<App /> container', () => {
     wrapper.unmount();
   });
 
-  it('generateExercise sets the correct `no excercise` errors', () => {
+  it('generateExercise sets the correct `no excercise` errors and runs as expected', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
 
     const generatorEmpty = {
@@ -169,20 +169,113 @@ describe('<App /> container', () => {
     expect(wrapper.state().currentConcept).toBe(concept);
     expect(wrapper.state().exerciseType).toBe(exerciseType);
     expect(wrapper.state().counter).toBe(0);
+
+    wrapper.unmount();
+  });
+
+  it('getInstruction sets state correctly', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    const getInstruction = jest.spyOn(wrapper.instance(), 'getInstruction');
+    expect(getInstruction).toHaveBeenCalledTimes(0);
+
+    const displayType = wrapper.instance().returnDisplayTypes();
+
+    const concept = "abc";
+    const instructionType = "def";
+    wrapper.instance().getInstruction(concept, instructionType);
+    expect(getInstruction).toHaveBeenCalledTimes(1);
+
+    expect(wrapper.state().currentConcept).toBe(concept);
+    expect(wrapper.state().instructionType).toBe(instructionType);
+    expect(wrapper.state().display).toBe(displayType.instruct);
+    expect(wrapper.state().error).toBe(false);
     
     wrapper.unmount();
   });
 
-  it('generateExercise runs as expected', () => {
+  it('setInstructionViewError executes intended behavior', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
+    const switchToWorldView = jest.spyOn(wrapper.instance(), 'switchToWorldView');
+    expect(switchToWorldView).toHaveBeenCalledTimes(0);
+    const setInstructionViewError = jest.spyOn(wrapper.instance(), 'setInstructionViewError');
+    expect(setInstructionViewError).toHaveBeenCalledTimes(0);
+
+    wrapper.instance().setInstructionViewError();
+    expect(setInstructionViewError).toHaveBeenCalledTimes(1);
+    expect(switchToWorldView).toHaveBeenCalledTimes(1);
+    expect(wrapper.state().error).toBe(true);
+    expect(wrapper.state().errorMessage).toBe('Looks like there are no instructions on this concept right now. Please come back later!');
+		
 
     wrapper.unmount();
   });
 
+  it('resetError resets error', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    wrapper.setState({error: true});
+    expect(wrapper.state().error).toBe(true);
+    const resetError = jest.spyOn(wrapper.instance(), 'resetError');
+    expect(resetError).toHaveBeenCalledTimes(0);
+    wrapper.instance().resetError();
+    expect(resetError).toHaveBeenCalledTimes(1);
+    expect(wrapper.state().error).toBe(false);
+    wrapper.instance().resetError();
+    expect(resetError).toHaveBeenCalledTimes(2);
+    expect(wrapper.state().error).toBe(false);
+    wrapper.unmount();
+  });
+
+  it('getConcepts executes intended behavior', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    const getConcepts = jest.spyOn(wrapper.instance(), 'getConcepts');
+    expect(getConcepts).toHaveBeenCalledTimes(0);
+    wrapper.setState({conceptOptions: 6, currentConcept: 'abc'});
+    expect(wrapper.state().conceptOptions).toBe(6);
+    expect(wrapper.state().currentConcept).toBe('abc');
+
+    const generator = {
+      getConceptsRelativeTo: (c) => get1(c),
+      getConcepts: (c) => get2(c)
+    }
+    let get1 = jest.fn().mockImplementation((c) => {
+      return c;
+    });
+    let get2 = jest.fn().mockImplementation((c) => {
+      return c;
+    });
+
+    const call1 = wrapper.instance().getConcepts(generator);
+    expect(call1).toBe('abc');
+    expect(get1).toHaveBeenCalledTimes(1);
+    expect(get2).toHaveBeenCalledTimes(0);
+
+    wrapper.setState({currentConcept: null});
+    const call2 = wrapper.instance().getConcepts(generator);
+    expect(call2).toBe(6);
+    expect(get1).toHaveBeenCalledTimes(1);
+    expect(get2).toHaveBeenCalledTimes(1);
+
+    wrapper.setState({currentConcept: undefined});
+    const call3 = wrapper.instance().getConcepts(generator);
+    expect(call3).toBe(6);
+    expect(get1).toHaveBeenCalledTimes(1);
+    expect(get2).toHaveBeenCalledTimes(2);
+
+    wrapper.unmount();
+  });
   it('stub test', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
 
     wrapper.unmount();
   });
+  it('stub test', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
 
+    wrapper.unmount();
+  });
+  it('stub test', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+
+    wrapper.unmount();
+  });
 });
