@@ -122,6 +122,56 @@ describe('<App /> container', () => {
   it('generateExercise sets the correct `no excercise` errors', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
 
+    const generatorEmpty = {
+      getExercisesByTypeAndConcept: () => getEx1()
+    }
+    let getEx1 = jest.fn().mockImplementation(() => {
+      return [];
+    });
+
+    const generatorFilled = {
+      getExercisesByTypeAndConcept: () => getEx2()
+    }
+    let getEx2 = jest.fn().mockImplementation(() => {
+      return [1,2,3];
+    });
+
+    const displayType = wrapper.instance().returnDisplayTypes();
+
+    expect(wrapper.state().counter).toBe(0);
+    expect(wrapper.state().exerciseType).toBe('');
+    expect(wrapper.state().currentConcept).toBe(null);
+    expect(wrapper.state().errorMessage).toBe('');
+    const generateExercise = jest.spyOn(wrapper.instance(), 'generateExercise');
+    expect(generateExercise).toHaveBeenCalledTimes(0);
+    const switchToWorldView = jest.spyOn(wrapper.instance(), 'switchToWorldView');
+    expect(switchToWorldView).toHaveBeenCalledTimes(0);
+
+
+    const concept = "abc";
+    const exerciseType = "def";
+    wrapper.instance().generateExercise(concept, exerciseType, generatorEmpty);
+    expect(generateExercise).toHaveBeenCalledTimes(1);
+    expect(wrapper.state().error).toBe(true);
+    expect(wrapper.state().errorMessage).toBe('Sorry, there are no exercises available for this concept right now.');
+    wrapper.setState({counter: 3});
+    wrapper.instance().generateExercise(concept, exerciseType, generatorFilled);
+    expect(generateExercise).toHaveBeenCalledTimes(2);
+    expect(switchToWorldView).toHaveBeenCalledTimes(1);
+    expect(wrapper.state().error).toBe(true);
+    expect(wrapper.state().errorMessage).toBe('Looks like we ran out of questions for this concept, stay-tuned for more!');
+    wrapper.setState({counter: 2});
+    wrapper.instance().generateExercise(concept, exerciseType, generatorFilled);
+    expect(generateExercise).toHaveBeenCalledTimes(3);
+    expect(wrapper.state().error).toBe(false);
+    expect(wrapper.state().display).toBe(displayType.exercise);
+    expect(wrapper.state().exercise).toBe(1);
+    expect(wrapper.state().currentConcept).toBe(concept);
+    expect(wrapper.state().exerciseType).toBe(exerciseType);
+    expect(wrapper.state().counter).toBe(0);
+    
+
+
     wrapper.unmount();
   });
 
