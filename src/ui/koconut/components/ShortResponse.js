@@ -31,7 +31,7 @@ class  ShortResponse extends Component {
               <textarea value={this.state.value} disabled={this.props.feedback ? true : false} onChange={(event) => {
                 
                   this.setState({value: event.target.value});
-                  this.props.inputHandler(event.target.value, this.props.questionIndex);
+                  this.props.inputHandler(event.target.value, this.props.questionIndex, this.props.fIndex);
                 
               }}>
               </textarea>
