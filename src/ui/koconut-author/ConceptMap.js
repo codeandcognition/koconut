@@ -41,7 +41,8 @@ const t = {
 }
 
 
-export const conceptInventory = {
+export const conceptInventory =
+ {
 	[g.howCodeRuns]: {
 		dependencies: [],
 		parents: [g.dataTypes],
