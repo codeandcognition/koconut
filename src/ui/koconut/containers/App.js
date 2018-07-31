@@ -322,8 +322,6 @@ class App extends Component {
       }
     }
 
-
-
     /*let temp = this.state.timesGotQuestionWrong;
     if(!temp[questionIndex]) {
       temp[questionIndex] = 0;
