@@ -264,14 +264,10 @@ describe('<App /> container', () => {
     wrapper.unmount();
   });
 
-  it('checkAnswer works for a few questions', () => {
+  it('checkAnswer works for a few regular questions and sets state correctly', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
-    // console.log(wrapper.state().timesGotQuestionWrong);
-    // console.log(wrapper.state().feedback);
-    // console.log(wrapper.state().exercise);
-    
-    const checkAnswer = jest.spyOn(wrapper.instance(), 'checkAnswer');
-    expect(checkAnswer).toHaveBeenCalledTimes(0);
+    const cString = 'correct';
+    const icString = 'incorrect';
 
     const exercise = {
       questions: [
@@ -292,42 +288,208 @@ describe('<App /> container', () => {
     let questionType = "reg";
     wrapper.setState({exercise})
     let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
-    expect(returns).toEqual(['correct']);
+    expect(returns).toEqual([cString]);
+    expect(wrapper.state().timesGotQuestionWrong).toEqual([0]);
     
     answer = ["b", null, "a"];
     returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
-    expect(returns).toEqual(['incorrect']);
+    expect(returns).toEqual([icString]);
+    expect(wrapper.state().timesGotQuestionWrong).toEqual([1]);
 
     questionIndex = 2;
     returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
-    expect(returns).toEqual(['incorrect', null || undefined, 'incorrect']);
+    expect(returns).toEqual([icString, null || undefined, icString]);
+    expect(wrapper.state().timesGotQuestionWrong).toEqual([1,null || undefined, 1]);
 
     questionIndex = 1;
     returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
-    expect(returns).toEqual(['incorrect', 'incorrect', 'incorrect']);
+    expect(returns).toEqual([icString, icString, icString]);
 
     answer = ["a", "b", "b"];
     returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
-    expect(returns).toEqual(['incorrect', 'correct', 'incorrect']);
+    expect(returns).toEqual([icString, cString, icString]);
 
     questionIndex = 0;
     returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
-    expect(returns).toEqual(['correct', 'correct', 'incorrect']);
+    expect(returns).toEqual([cString, cString, icString]);
 
     questionIndex = 2;
     returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
-    expect(returns).toEqual(['correct', 'correct', 'incorrect']);
+    expect(returns).toEqual([cString, cString, icString]);
 
     answer = ["a", "b", "c"];
     returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
-    expect(returns).toEqual(['correct', 'correct', 'correct']);
+    expect(returns).toEqual([cString, cString, cString]);
 
     wrapper.unmount();
   });
 
+  it('checkAnswer test regular type question with table typing', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    const exercise = {
+      questions: [
+        {
+          answer: "a"
+        },
+        {
+          answer: "b"
+        },
+        {
+          answer: "c"
+        }
+      ]
+    };
+    
+    let answer = ["a"];
+    let questionIndex = 0;
+    let questionType = "table";
+    wrapper.setState({exercise});
+    try {
+      let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    } catch(e) {
+      // do nothing, expected behavior
+    }
 
+    wrapper.unmount();
+  });
 
-  it('stub test', () => {
+  it('checkAnswer works for table types basic', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    const cString = 'correct';
+    const icString = 'incorrect';
+    const exercise = {
+      questions: [
+        {
+          colNames: [ "Code", "Data Type (choose one)", "Result", "Result 2" ],
+          data: [
+            {
+                "answer": "", "prompt": "5.0 + 2", "type": ""
+            },
+            {
+                "answer": "integer", "choices": [ "integer", "float" ],
+                "type": "multipleChoice"
+            },
+            {
+                "answer": "abc", "type": "fillBlank"
+            },
+            {
+                "answer": "abc", "type": "fillBlank"
+            },
+            {
+                "answer": "", "prompt": "5.0 + 2", "type": ""
+            },
+            {
+                "answer": "aaa",  "choices": [ "aaa", "bbb", "ccc", "ddd" ],
+                "type": "multipleChoice"
+            },
+            {
+                "answer": "fdsa", "type": "fillBlank"
+            },
+            {
+                "answer": "fdsa", "type": "fillBlank"
+            }
+          ]
+        }
+      ]
+    };
+
+    let answer = [[[null, "float", "ab", "abc"], [null, "aaa", "fds", "fdsa"]]];
+    let questionIndex = 0;
+    let questionType = "table";
+    wrapper.setState({exercise});
+    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    expect(returns).toEqual([[[null, icString, icString, cString],
+                              [null, cString, icString, cString]]]);
+    answer = [[[null, "integer", "abc", "abc"], [null, "aaa", "fdsa", "fdsa"]]];
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    expect(returns).toEqual([[[null, cString, cString, cString],
+                              [null, cString, cString, cString]]]);
+    wrapper.unmount();
+  });
+
+  it('checkAnswer works for large (5x11) table', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    const cString = 'correct';
+    const icString = 'incorrect';
+    let exercise = {
+      questions: [{
+        colNames: [],
+        data: []
+      }]
+    };
+
+    for (let i = 0; i < 55; i++) {
+      if(i < 11) {
+        exercise.questions[0].colNames.push(i + "");
+      }
+      if(i%11 == 0) {
+        let obj = {
+          answer: "", prompt: i + "", type: ""
+        }
+        exercise.questions[0].data.push(obj);
+      } else {
+        let obj = {
+          answer: i + "", type: "fillBlank"
+        }
+        exercise.questions[0].data.push(obj);
+      }
+    }
+
+    let answer = [[]];
+    let tempAnswer = [];
+    let feedback = [[]];
+    let tempFeedback = [];
+    for(let i = 0; i < 55; i++) {
+      if(i%11 == 0) {
+        if(tempAnswer.length !== 0 && tempFeedback.length !== 0) {
+          answer[0].push(tempAnswer);
+          tempAnswer = [];
+          feedback[0].push(tempFeedback);
+          tempFeedback = [];
+        }
+        tempAnswer.push(null);
+        tempFeedback.push(null);
+      } else {
+        tempAnswer.push(i + "");
+        tempFeedback.push(cString);
+      }
+    }
+    answer[0].push(tempAnswer);
+    feedback[0].push(tempFeedback);
+    let questionIndex = 0;
+    let questionType = "table";
+    wrapper.setState({exercise});
+    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    expect(returns).toEqual(feedback);
+    wrapper.unmount();
+  });
+
+  it('checkAnswer works for checkboxQuestions basic', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    const exercise = {
+      questions: [
+        {
+          answer: ["a", "b"],
+          choices: ["a", "b", "c", "d", "e"]
+        }
+      ]
+    };
+
+    const cString = 'correct';
+    const icString = 'incorrect';
+    let answer = [["a", "b", "c"]];
+    let questionIndex = 0;
+    let questionType = "checkboxQuestion";
+    wrapper.setState({exercise});
+    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    expect(returns).toEqual([icString]);
+    answer = [["a", "b"]];
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    expect(returns).toEqual([cString]);
+    wrapper.unmount();
+  });
+
+  it('', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
 
     wrapper.unmount();
@@ -342,14 +504,14 @@ describe('<App /> container', () => {
 
     wrapper.unmount();
   });
+  it('stub test', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
 
+    wrapper.unmount();
+  });
+  it('stub test', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
 
-  // checkanswer works for table types
-  // checkanswer works for checkboxquestions
-  // checkanswer works for else
-  // checkanswer works for massive amounts of table problems
-  // checkanswer works for massive amounts of checkbox questions
-  // checkanswer works for massive amounts of other problems
-  // checkanswer works for massive amounts of multiple problems
-
+    wrapper.unmount();
+  });
 });
