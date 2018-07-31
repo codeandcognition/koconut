@@ -264,7 +264,7 @@ describe('<App /> container', () => {
     wrapper.unmount();
   });
 
-  it('checkAnswer works for a few regular questions and sets state correctly', () => {
+  it('checkAnswer works for a few regular questions and sets timesGotQuestionWrong state correctly', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
     const cString = 'correct';
     const icString = 'incorrect';
@@ -287,38 +287,38 @@ describe('<App /> container', () => {
     let questionIndex = 0;
     let questionType = "reg";
     wrapper.setState({exercise})
-    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([cString]);
     expect(wrapper.state().timesGotQuestionWrong).toEqual([0]);
     
     answer = ["b", null, "a"];
-    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([icString]);
     expect(wrapper.state().timesGotQuestionWrong).toEqual([1]);
 
     questionIndex = 2;
-    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([icString, null || undefined, icString]);
     expect(wrapper.state().timesGotQuestionWrong).toEqual([1,null || undefined, 1]);
 
     questionIndex = 1;
-    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([icString, icString, icString]);
 
     answer = ["a", "b", "b"];
-    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([icString, cString, icString]);
 
     questionIndex = 0;
-    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([cString, cString, icString]);
 
     questionIndex = 2;
-    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([cString, cString, icString]);
 
     answer = ["a", "b", "c"];
-    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([cString, cString, cString]);
 
     wrapper.unmount();
@@ -345,7 +345,7 @@ describe('<App /> container', () => {
     let questionType = "table";
     wrapper.setState({exercise});
     try {
-      let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+      let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     } catch(e) {
       // do nothing, expected behavior
     }
@@ -397,11 +397,11 @@ describe('<App /> container', () => {
     let questionIndex = 0;
     let questionType = "table";
     wrapper.setState({exercise});
-    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([[[null, icString, icString, cString],
                               [null, cString, icString, cString]]]);
     answer = [[[null, "integer", "abc", "abc"], [null, "aaa", "fdsa", "fdsa"]]];
-    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([[[null, cString, cString, cString],
                               [null, cString, cString, cString]]]);
     wrapper.unmount();
@@ -459,7 +459,7 @@ describe('<App /> container', () => {
     let questionIndex = 0;
     let questionType = "table";
     wrapper.setState({exercise});
-    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual(feedback);
     wrapper.unmount();
   });
@@ -481,10 +481,10 @@ describe('<App /> container', () => {
     let questionIndex = 0;
     let questionType = "checkboxQuestion";
     wrapper.setState({exercise});
-    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    let returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([icString]);
     answer = [["a", "b"]];
-    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType);
+    returns = wrapper.instance().checkAnswer(answer, questionIndex, questionType, -1);
     expect(returns).toEqual([cString]);
     wrapper.unmount();
   });
