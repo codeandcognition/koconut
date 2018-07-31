@@ -131,8 +131,8 @@ class App extends Component {
    *
    * TODO: add user data on firebase for progress tracking
    */
-  generateExercise(concept: string, exerciseType: string) {
-		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
+  generateExercise(concept: string, exerciseType: string, generator: any = this.generator) {
+		let exercises = generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
 		if (exercises) {
       if (exercises.length === 0) {
         this.setState({
@@ -218,14 +218,14 @@ class App extends Component {
 	 * Returns a list of concepts relevant to the current concept
 	 * @returns {*}
 	 */
-  getConcepts() {
+  getConcepts(generator: any = this.generator) {
     let size = this.state.conceptOptions;
     let concept = this.state.currentConcept;
     let ret;
     if (concept !== null && concept !== undefined) {
-      ret = this.generator.getConceptsRelativeTo(concept);
+      ret = generator.getConceptsRelativeTo(concept);
     } else {
-      ret = this.generator.getConcepts(size);
+      ret = generator.getConcepts(size);
     }
     return ret;
   }
