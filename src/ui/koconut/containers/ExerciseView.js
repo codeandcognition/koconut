@@ -23,6 +23,8 @@ type Props = {
   codeTheme: string
 }
 
+var b = {"hello":"world","cat":"dog"}
+
 /**
  * The Exercise container contains all components of an assessment problem.
  * @class
@@ -31,12 +33,14 @@ class Exercise extends Component {
   resetAnswer: Function;
   state: {
     answer: string[],
+    followupAnswers: any[]
   };
 
   constructor(props: Props) {
     super(props);
     this.state = {
-      answer: []
+      answer: [],
+      followupAnswers: []
     };
     this.resetAnswer = this.resetAnswer.bind(this);
   }
@@ -46,6 +50,11 @@ class Exercise extends Component {
    */
   componentDidMount() {
     window.scrollTo(0, 0);
+  }
+
+  componentWillUnmount() {
+    this.resetAnswer();
+    this.props.resetFeedback();
   }
 
   /**
@@ -59,7 +68,27 @@ class Exercise extends Component {
 
 
   resetAnswer() {
-    this.setState({answer: []});
+    this.setState({
+      answer: [],
+      followupAnswers: []
+    });
+  }
+
+  updateAnswers(content, index, fIndex) {
+    if (fIndex === -1) {
+      let temp = this.state.answer;
+      temp[index] = content;
+      this.setState({
+        answer: temp
+      });
+    } else {
+      let temp = this.state.followupAnswers;
+      temp[index] = [];
+      temp[index][fIndex] = content;
+      this.setState({
+        followupAnswers: temp
+      });
+    }
   }
 
 
@@ -74,12 +103,10 @@ class Exercise extends Component {
           <Information
               exercise={this.props.exercise}
               answer={this.state.answer}
-              updateHandler={(content, index) => {
-                let temp = this.state.answer;
-                temp[index] = content;
-                this.setState({answer: temp});
-              }}
+              followupAnswers={this.state.followupAnswers}
+              updateHandler={(content, index, fIndex) => this.updateAnswers(content, index, fIndex)}
               feedback={this.props.feedback}
+              followupFeedback={this.props.followupFeedback}
               submitOk={this.props.submitOk}
               submitTryAgain={this.props.submitTryAgain}
               mode={this.props.mode}

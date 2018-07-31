@@ -24,7 +24,8 @@ class Response extends Component {
     feedback?: string[],
     submitHandler: Function,
     submitTryAgain: Function,
-    question: any
+    question: any,
+    fIndex: number
   };
 
   /**
@@ -51,9 +52,10 @@ class Response extends Component {
             handleClick={update}
             questionIndex={index}
             feedback={this.props.feedback}
+            fIndex={this.props.fIndex}
         />;
       case(Types.shortResponse):
-        return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index}/>;
+        return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index} fIndex={this.props.fIndex}/>;
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):
@@ -62,12 +64,13 @@ class Response extends Component {
         return <TableView feedback={this.props.feedback} 
                           question={this.props.question} 
                           inputHandler={update} 
-                          questionIndex={index} 
-                          answer={answer[index]}/>;
+                          questionIndex={index}
+                          fIndex={this.props.fIndex}
+                          answer={answer[index]}
+                />;
       case(Types.checkboxQuestion):
-        return <CheckboxQuestion choices={choices} prompt={"prompt" +
-        " placeholder"} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
-        question={this.props.question} />
+        return <CheckboxQuestion choices={choices} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
+        question={this.props.question} fIndex={this.props.fIndex}/>
       default:
         return <div className="BAD">Not a valid EXERCISE type {type}</div>;
     }

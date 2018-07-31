@@ -14,7 +14,8 @@ import ReactMarkdown from 'react-markdown';
 type Props = {
   inputHandler: Function,
   questionIndex: number,
-  question: any
+  question: any,
+  fIndex: number
 }
 
 /**
@@ -48,7 +49,7 @@ class TableView extends Component {
     }
 
     tempAns[row][col] = choice;
-    this.props.inputHandler(tempAns, this.props.questionIndex);
+    this.props.inputHandler(tempAns, this.props.questionIndex, this.props.fIndex);
     this.setState({answer: tempAns});
   }
 
@@ -84,8 +85,7 @@ class TableView extends Component {
     if(question.type === "multipleChoice") {
       let selected = this.state.answer[row] ? this.state.answer[row][col] : null;
       return <div>
-        {
-          question.choices.map((d,i) => {
+        {question.choices.map((d,i) => {
             return <span key={`choice${i}-${row}-${col}`}>
               <span onClick={() => {
                 if(!this.props.feedback) {
@@ -147,7 +147,6 @@ class TableView extends Component {
       let subArrayIndex = i % colNames.length;
       augmentedCells[arrayIndexToPushTo][subArrayIndex] = d;
     });
-
     return (
       <div style={{width: "100%"}}>
       <Paper style={{width: "100%"}}>
@@ -190,6 +189,7 @@ class TableView extends Component {
   }
 
   render() {
+
     return (
         <div className='table-view'>
           {this.generateTableView()}
