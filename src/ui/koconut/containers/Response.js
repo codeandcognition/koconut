@@ -43,10 +43,12 @@ class Response extends Component {
       type = "table";
     }
 
+    console.log();
+
     switch (type) {
       case(Types.multipleChoice):
         return <MultipleChoice  // want to modify the handle click? be prepared to dig deep in this nest
-            title='Select the correct answer:'
+            title={this.props.question.prompt ? this.props.question.prompt : "Select the correct answer"}
             choices={choices}
             answer={answer}
             handleClick={update}
