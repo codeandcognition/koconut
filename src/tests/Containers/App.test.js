@@ -489,7 +489,7 @@ describe('<App /> container', () => {
     wrapper.unmount();
   });
 
-  it('', () => {
+  it('stub test -> APP NEEDS MORE TESTS WRITTEN', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
 
     wrapper.unmount();
