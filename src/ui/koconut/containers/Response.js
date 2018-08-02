@@ -43,8 +43,6 @@ class Response extends Component {
       type = "table";
     }
 
-    console.log();
-
     switch (type) {
       case(Types.multipleChoice):
         return <MultipleChoice  // want to modify the handle click? be prepared to dig deep in this nest
@@ -62,6 +60,8 @@ class Response extends Component {
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):
         return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code}/>
+      case(Types.highlightCode):
+				return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code}/>
       case(Types.table):
         return <TableView feedback={this.props.feedback} 
                           question={this.props.question} 

@@ -164,7 +164,7 @@ class CodeEditor extends Component {
           {this.renderAce()}
           <div className={"button-container"}>
             <Button variant={"contained"} color={"secondary"} onClick={() => this.handleReset()}><i
-                className="fas fa-sync-alt"></i></Button>
+                className="fas fa-sync-alt" /></Button>
           </div>
         </div>
     );
