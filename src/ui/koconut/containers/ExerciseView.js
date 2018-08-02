@@ -52,6 +52,7 @@ class Exercise extends Component {
     window.scrollTo(0, 0);
   }
 
+  // debug comment: never reaching componentWillUnmount
   componentWillUnmount() {
     this.resetAnswer();
     this.props.resetFeedback();

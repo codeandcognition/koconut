@@ -62,6 +62,17 @@ class TableView extends Component {
     this.setState({answer: this.props.answer ? this.props.answer : []});
   }
 
+	/**
+	 * The TableView is only being constructed once. When switching between different
+	 * questions, the props are being updated. We need this method to update
+	 * some table props (such as answer).
+	 *
+	 * @param nextProps
+	 */
+  componentWillReceiveProps(nextProps : Props) {
+		this.setState({answer: nextProps.answer ? nextProps.answer : []});
+	}
+
   /**
    * generateCell generates a single cell and provides the logic for
    * updating the answer of the cell
@@ -81,7 +92,7 @@ class TableView extends Component {
       return this.renderMarkdown(question.code);
     }
 
-  //if thispropsfeedback, set disabled
+    //if thispropsfeedback, set disabled
     if(question.type === "multipleChoice") {
       let selected = this.state.answer[row] ? this.state.answer[row][col] : null;
       return <div>

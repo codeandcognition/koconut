@@ -202,7 +202,6 @@ class Information extends Component {
                     {question.followupQuestions && question.followupQuestions.map((fQuestion, fIndex) => {
                       var correctTable = true;
                       if (question.type === Types.table && this.state.feedback[index]) {
-                        console.log("in here");
                         this.state.feedback[index].forEach((row) => {
                           row.forEach((cellItem) => {
                             if (cellItem === "incorrect") {
