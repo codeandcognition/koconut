@@ -65,7 +65,7 @@ class Information extends Component {
    * @param index index of question in Exercise
    * @returns JSX for the Code container
    */
-  renderCodeView(question: any, index: number) {
+  renderCodeView(question: any, index: number, fIndex: number) {
       if((Types.isSurvey(question.type) ||
           (question.type === Types.multipleChoice
           &&
@@ -87,6 +87,7 @@ class Information extends Component {
                       feedback={this.state.feedback[index]}
                       questionIndex={index}
                       submitTryAgain={this.props.submitTryAgain}
+                      fIndex={fIndex}
                       />);
       }
   }
@@ -147,7 +148,7 @@ class Information extends Component {
         submitTryAgain={() => this.props.submitTryAgain(index, fIndex)}
         type={question.type}
         question={(fIndex === -1) ? this.state.exercise.questions[index] : this.state.exercise.questions[index].followupQuestions[fIndex]}
-        timesGotSpecificQuestionWrong={this.props.timesGotQuestionWrong[index]}
+        timesGotSpecificQuestionWrong={(fIndex === -1) ? this.props.timesGotQuestionWrong[index] : this.props.followupTimesGotQuestionWrong[index][fIndex]}
         answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
         addGaveUp={this.addGaveUp}
         fIndex={fIndex}
@@ -175,6 +176,8 @@ class Information extends Component {
     , 0);
     correctCount = correctCount + this.state.gaveUpCount;
     let expectedCorrect = this.state.exercise.questions.length;
+
+
     return (
         <div>
           {/* TODO replace learn yourself a good 1*/}
@@ -193,7 +196,7 @@ class Information extends Component {
                       index={index}
                       feedback={this.state.feedback[index]}
                       answer={this.state.answer}
-                      renderCodeView={this.renderCodeView(question, index)}
+                      renderCodeView={this.renderCodeView(question, index, -1)}
                       renderResponseView={this.renderResponseView(question, index, -1)}
                       renderFeedback={this.renderFeedback(question, index, -1)}
                       submitHandler={this.props.submitHandler}
@@ -212,9 +215,10 @@ class Information extends Component {
                       } else {
                         correctTable = false;
                       }
+
                       return (
                         <div key={fIndex}>
-                          {this.state.feedback[index] === "correct" || (Types.table === question.type && correctTable) && <ExerciseQuestion
+                          {(this.state.feedback[index] === "correct" || (Types.table === question.type && correctTable)) && <ExerciseQuestion
                             question={fQuestion}
                             index={index}
                             feedback={this.state.followupFeedback[index] ? this.state.followupFeedback[index][fIndex] : null}

@@ -20,7 +20,10 @@ type Props = {
   submitOk: Function,
   submitTryAgain: Function,
   mode: string,
-  codeTheme: string
+  codeTheme: string,
+  timesGotQuestionWrong: [],
+  followupTimesGotQuestionWrong: [],
+  resetFeedback: Function
 }
 
 var b = {"hello":"world","cat":"dog"}
@@ -75,7 +78,7 @@ class Exercise extends Component {
     });
   }
 
-  updateAnswers(content, index, fIndex) {
+  updateAnswers(content: any, index: number, fIndex: number) {
     if (fIndex === -1) {
       let temp = this.state.answer;
       temp[index] = content;
@@ -115,6 +118,7 @@ class Exercise extends Component {
               toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
               submitHandler={this.props.submitHandler}
               timesGotQuestionWrong={this.props.timesGotQuestionWrong}
+              followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
               nextQuestion={this.props.nextQuestion}
               resetAnswer={this.resetAnswer}
           />

@@ -48,6 +48,7 @@ class App extends Component {
   getInstruction: Function;
   setInstructionViewError: Function;
   resetError: Function;
+  resetfeedback: Function;
   switchToWorldView: Function;
   switchToAuthorView: Function;
   loadDisplay: Function;
@@ -74,7 +75,8 @@ class App extends Component {
     exerciseList: ?Exercise[],
     conceptMapGetter: ?Map<string,number[]>,
     codeTheme: string,
-    timesGotQuestionWrong: number[]
+    timesGotQuestionWrong: number[],
+    followupTimesGotQuestionWrong: number[]
   };
 
   constructor() {
@@ -100,7 +102,9 @@ class App extends Component {
       exerciseList: null,
       conceptMapGetter: null,
       codeTheme: '',
-      timesGotQuestionWrong: [] // times the user has gotten question wrong, indices are question[index]
+      timesGotQuestionWrong: [], // times the user has gotten question wrong,
+      // indices are question index
+      followupTimesGotQuestionWrong: []
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -246,7 +250,7 @@ class App extends Component {
     // mixed with regular problems
     // let stub = ["a", "a", [["", "a", "a"], ["", "a", "a"]], "a"];
 
-    // let checkerForCorrectness = true;
+    let checkerForCorrectness = true;
     if (questionType === "table") {
       let colNames = question.colNames;
       let allCells = question.data;
@@ -270,11 +274,10 @@ class App extends Component {
           cellValue = "correct";
         } else {
           cellValue = "incorrect";
-          // checkerForCorrectness = false;
+          checkerForCorrectness = false;
         }
         addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
       });
-      // console.log("answer", answer);
       if (fIndex === -1) {
         feedbackTemp[questionIndex] = addToFeedback;
       } else {
@@ -288,12 +291,12 @@ class App extends Component {
         question.answer.forEach((item) => {
           if (!answerArr.includes(item)) {
             isCorrect = false;
-            //checkerForCorrectness = false;
+            checkerForCorrectness = false;
           }
         })
       } else {
         isCorrect = false;
-        // checkerForCorrectness = false;
+        checkerForCorrectness = false;
       }
       if (fIndex === -1) {
         feedbackTemp[questionIndex] = isCorrect ? "correct" : "incorrect";
@@ -312,7 +315,7 @@ class App extends Component {
         temp[index] = "correct";
       } else {
         temp[index] = "incorrect";
-        // checkerForCorrectness = false;
+        checkerForCorrectness = false;
       }
       if (fIndex === -1) {
         feedbackTemp = temp;
@@ -321,16 +324,36 @@ class App extends Component {
         feedbackTemp[questionIndex] = temp;
       }
     }
-
-    /*let temp = this.state.timesGotQuestionWrong;
-    if(!temp[questionIndex]) {
-      temp[questionIndex] = 0;
-    }
-    if(!checkerForCorrectness) {
-      temp[questionIndex]++;
-    }
-    this.setState({timesGotQuestionWrong: temp});*/
+    this.updateWrongAnswersCount(checkerForCorrectness, questionIndex, fIndex);
     return feedbackTemp;
+  }
+
+  updateWrongAnswersCount(checkerForCorrectness, questionIndex, fIndex) {
+    var temp;
+    if (fIndex === -1) {
+      temp = this.state.timesGotQuestionWrong;
+      if (!temp[questionIndex]) {
+        temp[questionIndex] = 0;
+      }
+      if (!checkerForCorrectness) {
+        temp[questionIndex]++;
+      }
+      // console.log("wrong count", temp);
+    } else {
+      temp = this.state.followupTimesGotQuestionWrong;
+      temp[questionIndex] = temp[questionIndex] ? temp[questionIndex] : [];
+      if (!temp[questionIndex][fIndex]) {
+        temp[questionIndex][fIndex] = 0;
+      }
+      if (!checkerForCorrectness) {
+        temp[questionIndex][fIndex]++;
+      }
+      // console.log("followup wrong count", temp);
+    }
+    this.setState({
+      timesGotQuestionWrong: (fIndex === -1) ? temp : this.state.timesGotQuestionWrong,
+      followupTimesGotQuestionWrong: (fIndex === -1) ? this.state.followupTimesGotQuestionWrong : temp
+    });
   }
 
   /**
@@ -359,7 +382,9 @@ class App extends Component {
   resetFeedback() {
     this.setState({
       feedback: [],
-      followupFeedback: []
+      followupFeedback: [],
+      timesGotQuestionWrong: [],
+      followupTimesGotQuestionWrong: []
     });
   }
 
@@ -391,7 +416,13 @@ class App extends Component {
    * nextQuestion will set the state of the exercise to be the next question.
    */
   nextQuestion() {
-    this.setState({counter: this.state.counter + 1, feedback: []}, () => {
+    this.setState({
+        counter: this.state.counter + 1,
+        feedback: [],
+        followupFeedback: [],
+        timesGotQuestionWrong: [],
+        followupTimesGotQuestionWrong: []
+    }, () => {
       this.generateExercise(this.state.currentConcept, this.state.exerciseType);
     });
   }
@@ -577,6 +608,7 @@ class App extends Component {
             codeTheme={this.state.codeTheme}
             toggleCodeTheme={(theme) => this.setState({codeTheme: theme})}
             timesGotQuestionWrong={this.state.timesGotQuestionWrong}
+            followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
             nextQuestion={this.nextQuestion}
             resetFeedback={this.resetFeedback}
         />
