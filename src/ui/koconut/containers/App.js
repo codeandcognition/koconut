@@ -117,7 +117,7 @@ class App extends Component {
     this.loadDisplay = this.loadDisplay.bind(this);
     this.switchToAuthorView = this.switchToAuthorView.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
-    this.resetFeedback = this.resetFeedback.bind(this);
+    // this.resetFeedback = this.resetFeedback.bind(this);
   }
 
   returnDisplayTypes() {

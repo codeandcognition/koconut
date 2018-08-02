@@ -74,7 +74,7 @@ class Exercise extends Component {
     });
   }
 
-  updateAnswers(content, index, fIndex) {
+  updateAnswers(content: any, index: number, fIndex: number) {
     if (fIndex === -1) {
       let temp = this.state.answer;
       temp[index] = content;

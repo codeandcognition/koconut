@@ -65,7 +65,7 @@ class Information extends Component {
    * @param index index of question in Exercise
    * @returns JSX for the Code container
    */
-  renderCodeView(question: any, index: number) {
+  renderCodeView(question: any, index: number, fIndex: number) {
       if((Types.isSurvey(question.type) ||
           (question.type === Types.multipleChoice
           &&
@@ -87,6 +87,7 @@ class Information extends Component {
                       feedback={this.state.feedback[index]}
                       questionIndex={index}
                       submitTryAgain={this.props.submitTryAgain}
+                      fIndex={fIndex}
                       />);
       }
   }
@@ -193,7 +194,7 @@ class Information extends Component {
                       index={index}
                       feedback={this.state.feedback[index]}
                       answer={this.state.answer}
-                      renderCodeView={this.renderCodeView(question, index)}
+                      renderCodeView={this.renderCodeView(question, index, -1)}
                       renderResponseView={this.renderResponseView(question, index, -1)}
                       renderFeedback={this.renderFeedback(question, index, -1)}
                       submitHandler={this.props.submitHandler}
@@ -202,7 +203,6 @@ class Information extends Component {
                     {question.followupQuestions && question.followupQuestions.map((fQuestion, fIndex) => {
                       var correctTable = true;
                       if (question.type === Types.table && this.state.feedback[index]) {
-                        console.log("in here");
                         this.state.feedback[index].forEach((row) => {
                           row.forEach((cellItem) => {
                             if (cellItem === "incorrect") {

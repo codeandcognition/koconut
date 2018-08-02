@@ -23,7 +23,7 @@ class Feedback extends Component {
     }
   }
 
-  renderMarkdown(codeData) {
+  renderMarkdown(codeData: string) {
     let code = "```python\n" + codeData + "\n```";
     return <ReactMarkdown className={"flex-grow-1"}
                           source={code}
