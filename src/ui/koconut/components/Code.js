@@ -167,7 +167,7 @@ class Code extends Component {
   }
 
   renderMarkdown() {
-    let code = "```java\n" + this.state.code + "\n```";
+    let code = "```python\n" + this.state.code + "\n```";
     return <ReactMarkdown className={"flex-grow-1"}
                           source={code}
                           renderers={{code: CodeBlock}}

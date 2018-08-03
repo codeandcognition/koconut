@@ -86,21 +86,29 @@ class Information extends Component {
 		if(Types.isSurvey(question.type) || absentCode) {
 			return '';
 		} else {
-			return (<Code
-										key={"code" + index}
-										type={question.type}
-										code={question.code}
-										updateHandler={
-											Types.isInlineResponseType(question.type) ?
-													this.props.updateHandler :
-													undefined
-										}
-										toggleCodeTheme={this.props.toggleCodeTheme}
-										feedback={this.state.feedback[index]}
-										questionIndex={index}
-										submitTryAgain={this.props.submitTryAgain}
-										fIndex={fIndex}
-										/>);
+			return (
+					<div style={{display: 'flex', justifyContent: 'space-between', backgroundColor: '#f7f7f7'}}>
+						<Code
+								key={"code" + index}
+								type={question.type}
+								code={question.code}
+								updateHandler={
+									Types.isInlineResponseType(question.type) ?
+											this.props.updateHandler :
+											undefined
+								}
+								toggleCodeTheme={this.props.toggleCodeTheme}
+								feedback={this.state.feedback[index]}
+								questionIndex={index}
+								submitTryAgain={this.props.submitTryAgain}
+								fIndex={fIndex}
+						/>
+						<div style={{margin: '2%'}}>
+							<h5>Scratch Pad</h5>
+							<textarea style={{width: '15vw', height: '80%', backgroundColor: '#FFF9C4'}}/>
+						</div>
+					</div>
+			);
 		}
   }
 
