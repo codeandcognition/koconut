@@ -68,9 +68,8 @@ class Information extends Component {
   renderCodeView(question: any, index: number, fIndex: number) {
       if((Types.isSurvey(question.type) ||
           (question.type === Types.multipleChoice
-          &&
-              ((question.code && question.code === '') || (!question.code))
-          )) || question.type === Types.table
+          && ((question.code && question.code === '') || (!question.code))
+          )) || question.type === Types.table || question.type === Types.highlightCode
       ) {
         return '';
       } else {

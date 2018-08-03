@@ -13,8 +13,8 @@ class ExerciseTypes {
    */
   static isInlineResponseType = function(type: string): boolean {
     return type === this.writeCode ||
-        type === this.fillBlank ||
-        type === this.highlightCode;
+        type === this.fillBlank; //||
+        // type === this.highlightCode;
   };
 
   /**

@@ -60,6 +60,8 @@ class Response extends Component {
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):
         return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code}/>
+      case(Types.highlightCode):
+        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code}/>
       case(Types.table):
         return <TableView feedback={this.props.feedback} 
                           question={this.props.question} 
@@ -77,6 +79,7 @@ class Response extends Component {
   }
 
   render() {
+    console.log(this.props.question.type);
     let responseWidth = (Types.isSurvey(this.props.type) || this.props.type === "table" || this.props.type === Types.writeCode) ? 'full' : 'half';
     return (
         <div className={'response ' + responseWidth}>
