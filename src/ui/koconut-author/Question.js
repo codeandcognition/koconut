@@ -334,14 +334,10 @@ class Question extends Component {
 														 variant={'flat'}
 														 style={style}
 														 onClick={(evt) => {
-														 	 console.log("choice text", choice);
 														 	 let choiceIndex = this.state.currentQuestion.choices.indexOf(choice);
-														 	 console.log("choice index", choiceIndex);
 														 	 let choicesCopy = [...Object.assign({}, this.state.currentQuestion).choices];
-
 														 	 choicesCopy.splice(choiceIndex, 1);
 															 this.updateQuestion('choices', choicesCopy);
-
 															 if (this.state.currentQuestion.answer.includes(choice)) {
 																 let index = this.state.currentQuestion.answer.indexOf(evt.target.innerText);
 																 let answersCopy = [...Object.assign({}, this.state.currentQuestion.answer)];
