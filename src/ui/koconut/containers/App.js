@@ -239,6 +239,8 @@ class App extends Component {
    * to the Response.js object later on
    * @param {string[]} answer string array of answers for each question
    * @param {number} questionIndex index of question to check the answer of
+   * @param {string} questionType type of question
+   * @param {number} fIndex followup question index
    * @return {string[]}
    */
   checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
@@ -328,7 +330,13 @@ class App extends Component {
     return feedbackTemp;
   }
 
-  updateWrongAnswersCount(checkerForCorrectness, questionIndex, fIndex) {
+  /**
+   * updateWrongAnswersCount updates the count for wrong answers
+   * @param {boolean} checkerForCorrectness correctness false or true
+   * @param {number} questionIndex question index
+   * @param {number} fIndex followup question index
+   */
+  updateWrongAnswersCount(checkerForCorrectness: boolean, questionIndex: number, fIndex: number) {
     var temp;
     if (fIndex === -1) {
       temp = this.state.timesGotQuestionWrong;
