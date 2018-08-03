@@ -489,19 +489,55 @@ describe('<App /> container', () => {
     wrapper.unmount();
   });
 
-  it('stub test -> APP NEEDS MORE TESTS WRITTEN', () => {
+  it('resetFeedback sets state correctly', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
+    
+    expect(wrapper.state().feedback).toEqual([]);
+    expect(wrapper.state().followupFeedback).toEqual([]);
+    expect(wrapper.state().timesGotQuestionWrong).toEqual([]);
+    expect(wrapper.state().followupTimesGotQuestionWrong).toEqual([]);
+    let initState = wrapper.state();
 
+    const feedback = ["a"];
+    const followupFeedback = ["a"];
+    const timesGotQuestionWrong = ["a"];
+    const followupTimesGotQuestionWrong = ["a"];
+    wrapper.setState({
+      feedback, followupFeedback, timesGotQuestionWrong, followupTimesGotQuestionWrong
+    });
+
+    expect(wrapper.state().feedback).toEqual(feedback);
+    expect(wrapper.state().followupFeedback).toEqual(followupFeedback);
+    expect(wrapper.state().timesGotQuestionWrong).toEqual(timesGotQuestionWrong);
+    expect(wrapper.state().followupTimesGotQuestionWrong).toEqual(followupTimesGotQuestionWrong);
+    expect(wrapper.state()).not.toEqual(initState);
+
+    wrapper.instance().resetFeedback();
+    expect(wrapper.state().feedback).toEqual([]);
+    expect(wrapper.state().followupFeedback).toEqual([]);
+    expect(wrapper.state().timesGotQuestionWrong).toEqual([]);
+    expect(wrapper.state().followupTimesGotQuestionWrong).toEqual([]);
+    expect(wrapper.state()).toEqual(initState);
     wrapper.unmount();
   });
-  it('stub test', () => {
-    const wrapper = shallow(<App firebase={firebase}/>);
 
+  it('submitConcept updates state', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    wrapper.instance().submitConcept("abc");
+    expect(wrapper.state().concept).toBe("abc");
+    expect(wrapper.state().counter).toBe(0);
     wrapper.unmount();
   });
-  it('stub test', () => {
-    const wrapper = shallow(<App firebase={firebase}/>);
 
+  it('submitConcept generates exercise as well', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    const generateExercise = jest.spyOn(wrapper.instance(), 'generateExercise');
+    wrapper.instance().submitConcept("abc");
+    expect(wrapper.state().concept).toBe("abc");
+    expect(wrapper.state().counter).toBe(0);
+    expect(generateExercise).toHaveBeenCalledTimes(1);
+    expect(generateExercise.mock.calls[0][0]).toBe('abc');
+    expect(generateExercise.mock.calls[0][1]).toBe('');
     wrapper.unmount();
   });
   it('stub test', () => {
