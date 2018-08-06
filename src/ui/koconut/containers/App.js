@@ -48,7 +48,7 @@ class App extends Component {
   getInstruction: Function;
   setInstructionViewError: Function;
   resetError: Function;
-  resetfeedback: Function;
+  resetFeedback: Function;
   switchToWorldView: Function;
   switchToAuthorView: Function;
   loadDisplay: Function;
@@ -76,7 +76,7 @@ class App extends Component {
     conceptMapGetter: ?Map<string,number[]>,
     codeTheme: string,
     timesGotQuestionWrong: number[],
-    followupTimesGotQuestionWrong: number[]
+    followupTimesGotQuestionWrong: any[]
   };
 
   constructor() {
