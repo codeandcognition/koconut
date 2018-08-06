@@ -159,7 +159,7 @@ export default class InstructionView extends Component {
 											readOrWrite={this.props.readOrWrite}
 											chosenInstruction={chosenInstruction}
 									/>
-									{this.state.instructionList &&
+									{this.state.instructionList && chosenInstruction &&
                   <div className={"content-container"}>
                     <button className={"nav-arrow-btn"} onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1)}><i className="fas fa-chevron-left"></i></button>
                     <div className={"instruct-content-container"}>
