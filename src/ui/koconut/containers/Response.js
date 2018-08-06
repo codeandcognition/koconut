@@ -5,6 +5,7 @@ import ShortResponse from '../components/ShortResponse';
 import SurveyView from '../components/SurveyView.js';
 import TableView from '../components/TableView';
 import CheckboxQuestion from '../components/CheckboxQuestion';
+import MemoryTableQuestion from '../components/MemoryTableQuestion';
 import './Response.css';
 
 import Types from '../../../data/ExerciseTypes.js';
@@ -75,7 +76,7 @@ class Response extends Component {
         return <CheckboxQuestion choices={choices} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
         question={this.props.question} fIndex={this.props.fIndex}/>
       default:
-        return <div className="BAD">Not a valid EXERCISE type {type}</div>;
+        return <MemoryTableQuestion type={type} question={this.props.question} questionIndex={index} fIndex={this.props.fIndex} update={update}/>
     }
   }
 

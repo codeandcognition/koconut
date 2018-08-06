@@ -234,6 +234,8 @@ class App extends Component {
     return ret;
   }
 
+  // TODO: Refactor this into smaller methods
+	// TODO: Avoid string comparision for question types
   /**
    * checkAnswer will check the answers client side to provide the feedback
    * to the Response.js object later on
@@ -306,7 +308,24 @@ class App extends Component {
         feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
         feedbackTemp[questionIndex][fIndex] = isCorrect ? "correct" : "incorrect";
       }
-    } else {
+    } else if (questionType === 'memoryTable') {
+    	let response = answer[questionIndex];
+    	feedbackTemp[questionIndex] = "correct";
+    	Object.keys(response).forEach((variable) => {
+    		if (feedbackTemp[questionIndex] === "correct") {
+					if(question.answer.hasOwnProperty(variable)) {
+						let values = response[variable];
+						let valuesKey = question.answer[variable];
+						let equal = this.arrayEquals(values, valuesKey);
+						console.log(values);
+						feedbackTemp[questionIndex] = equal ? "correct" : "incorrect";
+					} else {
+						feedbackTemp[questionIndex] = "incorrect";
+					}
+				}
+			});
+    	checkerForCorrectness = feedbackTemp[questionIndex] === "correct" ? true : false;
+		} else {
       if (fIndex !== -1) {
         feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
       }
@@ -326,9 +345,30 @@ class App extends Component {
         feedbackTemp[questionIndex] = temp;
       }
     }
+		console.log(feedbackTemp);
     this.updateWrongAnswersCount(checkerForCorrectness, questionIndex, fIndex);
     return feedbackTemp;
   }
+
+	/**
+	 * helper function to check answer for memory table questions
+	 * @param answerKey
+	 * @param userInput
+	 * @returns {boolean}
+	 */
+  arrayEquals(answerKey: string[], userInput: string[]) {
+  	if (answerKey.length !== userInput.length) {
+  		return false;
+		}
+		let equals = true;
+		for (let i = 0; i < answerKey.length; i++) {
+			if (answerKey[i] != userInput[i]) {
+				return false;
+			}
+		}
+		return equals;
+	}
+
 
   /**
    * updateWrongAnswersCount updates the count for wrong answers
@@ -369,7 +409,7 @@ class App extends Component {
    * @param answer - the answer being submitted
    */
   submitResponse(answer: any, questionIndex: number, questionType: string, fIndex: number) {
-    if (answer !== null && answer !== undefined) {
+  	if (answer !== null && answer !== undefined) {
       let feedback = this.checkAnswer(answer, questionIndex, questionType, fIndex);
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer
           , () => { // TODO: Reconfigure for followup question answer structure

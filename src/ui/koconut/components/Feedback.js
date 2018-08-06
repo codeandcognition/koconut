@@ -76,7 +76,18 @@ class Feedback extends Component {
     } else {
       finalString = answer;
     }
-    return <div style={{display: "inline"}}><strong>The correct answer is <span style={{color: "green"}}>{finalString}</span>{this.props.type !== "writeCode" && "."}</strong></div>
+    return (
+      <div style={{display: "inline"}}>
+        <strong>The correct answer is
+            <span style={{color: "green"}}>
+              {
+                typeof(finalString) === "object" ? JSON.stringify(finalString, null, 2) : finalString
+              }
+            </span>
+            {this.props.type !== "writeCode" && "."}
+            </strong>
+      </div>
+    );
   }
 
   render() {
