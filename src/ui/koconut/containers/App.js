@@ -309,22 +309,19 @@ class App extends Component {
         feedbackTemp[questionIndex][fIndex] = isCorrect ? "correct" : "incorrect";
       }
     } else if (questionType === 'memoryTable') {
-    	let response = answer[questionIndex];
-    	feedbackTemp[questionIndex] = "correct";
-    	Object.keys(response).forEach((variable) => {
-    		if (feedbackTemp[questionIndex] === "correct") {
-					if(question.answer.hasOwnProperty(variable)) {
-						let values = response[variable];
-						let valuesKey = question.answer[variable];
-						let equal = this.arrayEquals(values, valuesKey);
-						console.log(values);
-						feedbackTemp[questionIndex] = equal ? "correct" : "incorrect";
-					} else {
-						feedbackTemp[questionIndex] = "incorrect";
-					}
-				}
-			});
-    	checkerForCorrectness = feedbackTemp[questionIndex] === "correct" ? true : false;
+    	if (fIndex === -1) {
+				let response = answer[questionIndex];
+				feedbackTemp[questionIndex] = "correct";
+				this.verifyMemoryTable(question, questionIndex, response, feedbackTemp);
+				checkerForCorrectness = feedbackTemp[questionIndex] === "correct";
+			} else {
+    		let response = !answer[questionIndex] && [];
+    		feedbackTemp[questionIndex] = !feedbackTemp[questionIndex] && [];
+    		response = answer[questionIndex][fIndex];
+    		feedbackTemp[questionIndex][fIndex] = "correct";
+				this.verifyMemoryTable(question, fIndex, response, feedbackTemp[questionIndex]);
+				checkerForCorrectness = feedbackTemp[questionIndex][fIndex] === "correct";
+			}
 		} else {
       if (fIndex !== -1) {
         feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
@@ -345,7 +342,6 @@ class App extends Component {
         feedbackTemp[questionIndex] = temp;
       }
     }
-		console.log(feedbackTemp);
     this.updateWrongAnswersCount(checkerForCorrectness, questionIndex, fIndex);
     return feedbackTemp;
   }
@@ -369,6 +365,24 @@ class App extends Component {
 		return equals;
 	}
 
+	verifyMemoryTable(question: any, questionIndex : number, response: any, feedback : string[]) {
+  	let answer = question.answer;
+  	if (typeof(answer) === "string") {
+  		answer = JSON.parse(answer);
+		}
+		Object.keys(response).forEach((variable) => {
+			if (feedback[questionIndex] === "correct") {
+				if(answer.hasOwnProperty(variable)) {
+					let values = response[variable];
+					let valuesKey = answer[variable];
+					let equal = this.arrayEquals(values, valuesKey);
+					feedback[questionIndex] = equal ? "correct" : "incorrect";
+				} else {
+					feedback[questionIndex] = "incorrect";
+				}
+			}
+		});
+	}
 
   /**
    * updateWrongAnswersCount updates the count for wrong answers

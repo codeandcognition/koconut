@@ -106,9 +106,13 @@ class MemoryTableQuestion extends Component {
 	}
 
 	render () {
+		let size = Object.keys(this.props.question.answer).length;
+		if (this.props.fIndex !== -1) {
+			size = Object.keys(JSON.parse(this.props.question.answer)).length;
+		}
 		// determine the number of rows in the memory table
 		let rows = [];
-		for (let i = 0; i < Object.keys(this.props.question.answer).length; i++) {
+		for (let i = 0; i < size; i++) {
 			let row = (
 					<TableRow key={i}>
 						<TableCell><TextField fullWidth onChange={this.handleChange('variableName', i)}/></TableCell>
