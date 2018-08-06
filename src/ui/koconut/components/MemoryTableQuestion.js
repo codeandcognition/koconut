@@ -12,7 +12,8 @@ type Props = {
 	question: any,
 	fIndex: number,
 	questionIndex: number,
-	update: Function
+	update: Function,
+	feedback: string
 }
 
 class MemoryTableQuestion extends Component {
@@ -113,10 +114,15 @@ class MemoryTableQuestion extends Component {
 		// determine the number of rows in the memory table
 		let rows = [];
 		for (let i = 0; i < size; i++) {
+			let disabled = this.props.feedback === "correct" || this.props.feedback === "incorrect";
 			let row = (
 					<TableRow key={i}>
-						<TableCell><TextField fullWidth onChange={this.handleChange('variableName', i)}/></TableCell>
-						<TableCell><TextField fullWidth onChange={this.handleChange('history', i)}/></TableCell>
+						<TableCell><TextField fullWidth
+																	onChange={this.handleChange('variableName', i)}
+																	disabled={disabled}/></TableCell>
+						<TableCell><TextField fullWidth
+																	onChange={this.handleChange('history', i)}
+																	disabled={disabled}/></TableCell>
 					</TableRow>
 			);
 			rows.push(row);

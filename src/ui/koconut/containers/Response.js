@@ -76,7 +76,7 @@ class Response extends Component {
         return <CheckboxQuestion choices={choices} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
         question={this.props.question} fIndex={this.props.fIndex}/>
       default:
-        return <MemoryTableQuestion type={type} question={this.props.question} questionIndex={index} fIndex={this.props.fIndex} update={update}/>
+        return <MemoryTableQuestion type={type} question={this.props.question} questionIndex={index} fIndex={this.props.fIndex} update={update} feedback={this.props.feedback}/>
     }
   }
 
