@@ -84,14 +84,24 @@ export default class InstructionView extends Component {
    */
   componentDidMount() {
     this.mounted = true;
-    this.firebaseListener = firebase.database()
-      .ref(`Instructions/${this.props.conceptType}/${this.props.readOrWrite}`);
+    this.firebaseListener = firebase.database().
+        ref(`Instructions/${this.props.conceptType}/${this.props.readOrWrite}`);
     this.firebaseListener.on('value', (snap) => {
-      if(this.mounted) {
+      if (this.mounted) {
         this.setState({instructionList: snap.val()});
       }
     });
+    document.addEventListener("keydown", (e: any) => this.handleKeyPress(e.key));
   }
+
+  handleKeyPress(key: string) {
+    if (key === "ArrowRight") {
+      this.nextInstruction();
+    } else if (key === "ArrowLeft") {
+      this.prevInstruction();
+    }
+  }
+
 
 	/**
 	 * Called immediately after the component updates. It checks if the
@@ -127,15 +137,21 @@ export default class InstructionView extends Component {
     this.mounted = false;
   }
 
+  navigateToPage(index: number) {
+    this.setState({
+      currInstructionIndex: index
+    });
+  }
+
   render() {
     let chosenInstruction = null;
-    if(this.state.instructionList) {
+    if (this.state.instructionList) {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
     return (
-				<div>
+				<div ref={"instructionView"}>
 					{
-						this.state.instructionList === null ? <LoadingView loadDisplay={() => {return}}/>
+						this.state.instructionList === null && chosenInstruction ? <LoadingView loadDisplay={() => {return}}/>
 								:
 								<div className={"overallView"}>
 									<BreadCrumbs
@@ -144,20 +160,37 @@ export default class InstructionView extends Component {
 											chosenInstruction={chosenInstruction}
 									/>
 									{this.state.instructionList &&
-									<div>
-										<InstructionTitle
-												instruction={chosenInstruction}/>
-										<InstructionContent
-												maxInstruction={this.state.instructionList.length}
-												instruction={chosenInstruction}
-												currentInstructionIndex={this.state.currInstructionIndex}
-												prev={this.prevInstruction}
-												next={this.nextInstruction}
-										/>
-									</div>
+                  <div className={"content-container"}>
+                    <button className={"nav-arrow-btn"} onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1)}><i className="fas fa-chevron-left"></i></button>
+                    <div className={"instruct-content-container"}>
+                      <InstructionTitle
+                          instruction={chosenInstruction}/>
+                      <InstructionContent
+                          maxInstruction={this.state.instructionList.length}
+                          instruction={chosenInstruction}
+                          currentInstructionIndex={this.state.currInstructionIndex}
+                          prev={this.prevInstruction}
+                          next={this.nextInstruction}
+                      />
+                    </div>
+                    <button className={"nav-arrow-btn"} onClick={() => this.navigateToPage(this.state.currInstructionIndex + 1)}><i className="fas fa-chevron-right"></i></button>
+                  </div>
 									}
 								</div>
 					}
+          <ul className={"dot-navigation"}>
+            {this.state.instructionList && this.state.instructionList.map((item, index) => {
+              var selectedStyle = {};
+              if (index === this.state.currInstructionIndex) {
+                selectedStyle = {
+                  color: "#3f51b5"
+                }
+              }
+              return (
+                  <li key={index} title={item.title} style={selectedStyle} onClick={() => this.navigateToPage(index)}><i className="fas fa-circle"></i></li>
+              );
+            })}
+          </ul>
 				</div>
     )
   }
