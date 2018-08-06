@@ -19,12 +19,12 @@ export default class InstructionContent extends Component {
   render() {
     return (
         <div className={"d-flex totalContent"}>
-          <LargeButton click={this.props.prev}
+          {/*<LargeButton click={this.props.prev}
                        type={largeButtonTypes.prev}
                        types={largeButtonTypes}
                        instructionIndex={this.props.currentInstructionIndex}
                        maxInstruction={this.props.maxInstruction}
-                        className={"p-2"}/>
+                        className={"p-2"}/>*/}
           <div className={"markdownContent"}>
           <ReactMarkdown className={"flex-grow-1"}
                          source={this.props.instruction.content}
@@ -32,12 +32,12 @@ export default class InstructionContent extends Component {
                          escapeHtml={true}
                          />
           </div>
-          <LargeButton click={this.props.next}
+          {/*<LargeButton click={this.props.next}
                        type={largeButtonTypes.next}
                        types={largeButtonTypes}
                        className={"p-2"}
                        instructionIndex={this.props.currentInstructionIndex}
-                       maxInstruction={this.props.maxInstruction}/>
+                       maxInstruction={this.props.maxInstruction}/>*/}
         </div>
     )
   }

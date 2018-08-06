@@ -172,7 +172,7 @@ class Code extends Component {
                           source={code}
                           renderers={{code: CodeBlock}}
                           escapeHtml={true}
-    />
+          />
   }
 
   render() {

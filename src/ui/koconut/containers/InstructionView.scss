@@ -5,3 +5,46 @@
   padding-left: 5%;
   padding-right: 5%;
 }
+
+.content-container {
+  display: flex;
+  width: 100%;
+}
+
+.instruct-content-container {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 100%;
+}
+
+.nav-arrow-btn {
+  border: none;
+  background: none;
+  font-size: 20px;
+  color: #3f51b5;
+  height: 50px;
+  align-self: center;
+}
+
+.nav-arrow-btn:hover {
+  cursor: pointer;
+}
+
+.nav-arrow-btn:focus {
+  outline: none;
+}
+
+.dot-navigation {
+  list-style: none;
+  color: lightgray;
+  display: flex;
+  justify-content: space-around;
+  font-size: 24px;
+  width: 18%;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.dot-navigation:hover {
+  cursor: pointer;
+}
