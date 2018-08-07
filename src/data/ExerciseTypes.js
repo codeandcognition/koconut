@@ -43,6 +43,7 @@ ExerciseTypes.checkboxQuestion = 'checkboxQuestion';
 ExerciseTypes.shortResponse = 'shortResponse';
 ExerciseTypes.table = 'table';
 ExerciseTypes.selectMultiple = 'selectMultiple';
+ExerciseTypes.memoryTable = 'memoryTable'; // TODO: decide if this is of type read or write
 ExerciseTypes.readTypes = ["highlightCode", "multipleChoice", "shortResponse", "table", "selectMultiple"]; // Can probably define this based on the above, but it's fine for now
 
 export default ExerciseTypes;
