@@ -4,10 +4,10 @@
   height: 100%;
   padding-left: 5%;
   padding-right: 5%;
+  padding-bottom: 10%;
 }
 
 .content-container {
-  display: flex;
   width: 100%;
 }
 
@@ -23,7 +23,16 @@
   font-size: 20px;
   color: #3f51b5;
   height: 50px;
-  align-self: center;
+  position: fixed;
+  top: 50vh;
+}
+
+.left-arrow {
+  left: 20px;
+}
+
+.right-arrow {
+  right: 20px;
 }
 
 .nav-arrow-btn:hover {
@@ -34,15 +43,31 @@
   outline: none;
 }
 
+.dot-navigation-container {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  padding-bottom: 30px;
+
+}
+
+.dot-navigation-container2 {
+  margin: auto;
+  width: 30%;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 0;
+}
+
 .dot-navigation {
   list-style: none;
   color: lightgray;
   display: flex;
   justify-content: space-around;
   font-size: 24px;
-  width: 18%;
+  width: 100%;
   margin: auto;
-  margin-top: 30px;
+  padding: 10px;
 }
 
 .dot-navigation:hover {
