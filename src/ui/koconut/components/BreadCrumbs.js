@@ -142,7 +142,14 @@ export default class BreadCrumbs extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <a href={"#"} aria-owns={conceptAnchorEl ? "concept-menu" : null} aria-haspopup={"true"} onClick={this.handleMenuOpen}>{this.state.concept}</a>
-              <Menu id={"concept-menu"} anchorEl={conceptAnchorEl} open={Boolean(conceptAnchorEl)} onClose={this.handleMenuClose}>
+              <Menu id={"concept-menu"}
+                    anchorEl={conceptAnchorEl}
+                    transformOrigin={{
+                      vertical: -45,
+                      horizontal: 20,
+                    }}
+                    open={Boolean(conceptAnchorEl)}
+                    onClose={this.handleMenuClose}>
                 {conceptMenu.map((item, index) => {
                   return (
                     <MenuItem key={index}>{item}</MenuItem>
