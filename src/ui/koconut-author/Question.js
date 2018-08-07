@@ -253,10 +253,9 @@ class Question extends Component {
 			return (
 					<div>
 						<p style={{color: '#3F51B5'}}>Answer <span style={this.fieldReqs.required}>required</span></p>
-						<TextField fullWidth={true}
-											 value={this.state.currentQuestion.answer}
+						<textarea  value={this.state.currentQuestion.answer}
 											 onChange={this.handleChange('answer')}
-											 style={{whiteSpace: 'pre-wrap'}} />
+											 style={{whiteSpace: 'pre-wrap', width: '100%'}} />
 					</div>
 			);
 		}
