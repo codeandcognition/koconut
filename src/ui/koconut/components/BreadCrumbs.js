@@ -2,7 +2,10 @@
 import React, {Component} from 'react';
 import {t} from '../../../data/ConceptAbbreviations';
 import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
-import {conceptInventory} from '../../../data/ConceptMap.js';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import './BreadCrumbs.css';
+import Grow from '@material-ui/core/Grow';
 
 type Props = {
   conceptType: string,
@@ -20,8 +23,12 @@ export default class BreadCrumbs extends Component {
       orderedConcepts: null,
       semanticConcepts: null,
       templateConcepts: null,
-      onboardingConcepts: null
+      onboardingConcepts: null,
+      conceptAnchorEl: null
     }
+
+    this.handleMenuOpen = this.handleMenuOpen.bind(this);
+    this.handleMenuClose = this.handleMenuClose.bind(this);
   }
 
   componentWillMount() {
@@ -98,6 +105,18 @@ export default class BreadCrumbs extends Component {
     })
   }
 
+  handleMenuClose() {
+    this.setState({
+      conceptAnchorEl: null
+    });
+  }
+
+  handleMenuOpen(e) {
+    this.setState({
+      conceptAnchorEl: e.currentTarget
+    });
+  }
+
   render() {
     let readOrWrite = "";
     if (this.props.readOrWrite === "READ") {
@@ -115,13 +134,22 @@ export default class BreadCrumbs extends Component {
       conceptMenu = this.state.onboardingConcepts;
     }
 
-    console.log(conceptMenu);
+    var conceptAnchorEl = this.state.conceptAnchorEl;
 
     return (
       <div>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item"><a href="#">{this.state.concept}</a></li>
+            <li className="breadcrumb-item">
+              <a href={"#"} aria-owns={conceptAnchorEl ? "concept-menu" : null} aria-haspopup={"true"} onClick={this.handleMenuOpen}>{this.state.concept}</a>
+              <Menu id={"concept-menu"} anchorEl={conceptAnchorEl} open={Boolean(conceptAnchorEl)} onClose={this.handleMenuClose}>
+                {conceptMenu.map((item, index) => {
+                  return (
+                    <MenuItem key={index}>{item}</MenuItem>
+                  );
+                })}
+              </Menu>
+            </li>
             <li className="breadcrumb-item"><a href="#">{readOrWrite}</a></li>
             <li className="breadcrumb-item active" aria-current="page">{this.props.chosenInstruction ? this.props.chosenInstruction.title : ""}</li>
           </ol>
