@@ -99,11 +99,18 @@ class Exercise extends Component {
 
 	renderOverarchingCode() {
 		let code = "```python\n" + this.props.exercise.code + "\n```";
-		return <ReactMarkdown className={"flex-grow-1"}
-													source={code}
-													renderers={{code: CodeBlock}}
-													escapeHtml={true}
-		/>
+		return (
+        <div style={{display: 'flex', justifyContent: 'space-evenly', backgroundColor: '#f7f7f7'}}>
+					<ReactMarkdown className={"flex-grow-1"}
+												 source={code}
+												 renderers={{code: CodeBlock}}
+												 escapeHtml={true}
+					/>
+					<div>
+            <textarea style={{width: '30vw', height: '90%', backgroundColor: '#FFF9C4', fontFamily: 'Monospace'}} defaultValue={'# scratch pad'}/>
+					</div>
+        </div>
+    );
 	}
 
   render() {

@@ -76,7 +76,31 @@ class Feedback extends Component {
     } else {
       finalString = answer;
     }
-    return <div style={{display: "inline"}}><strong>The correct answer is <span style={{color: "green"}}>{finalString}</span>{this.props.type !== "writeCode" && "."}</strong></div>
+    return (
+      <div style={{display: "inline"}}>
+        <strong>The correct answer is
+            <span style={{color: "green"}}>
+              {
+                typeof(finalString) === "object" ? this.displayMemoryTableOutput(finalString) : finalString
+              }
+            </span>
+            {(this.props.type !== "writeCode" && this.props.type !== 'memoryTable') && "."}
+            </strong>
+      </div>
+    );
+  }
+
+  displayMemoryTableOutput(finalString: {}) {
+    let list = [];
+    Object.keys(finalString).forEach((variable, index) => {
+      let values = finalString[variable];
+      let output = variable + ":";
+      values.forEach(val => {
+        output += "\t" + val;
+      });
+      list.push(<p key={index}>{output}</p>)
+    });
+    return (<div>{list}</div>);
   }
 
   render() {

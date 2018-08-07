@@ -87,7 +87,7 @@ class Information extends Component {
 			return '';
 		} else {
 			return (
-					<div style={{display: 'flex', justifyContent: 'space-between', backgroundColor: '#f7f7f7'}}>
+					<div style={{display: 'flex', justifyContent: 'space-evenly', backgroundColor: '#f7f7f7'}}>
 						<Code
 								key={"code" + index}
 								type={question.type}
@@ -105,7 +105,7 @@ class Information extends Component {
 						/>
 						<div style={{margin: '2%'}}>
 							<h5>Scratch Pad</h5>
-							<textarea style={{width: '15vw', height: '80%', backgroundColor: '#FFF9C4'}}/>
+							<textarea style={{width: '12em', height: '20em', backgroundColor: '#FFF9C4'}}/>
 						</div>
 					</div>
 			);
