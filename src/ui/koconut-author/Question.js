@@ -287,16 +287,25 @@ class Question extends Component {
 									variant={'outlined'}
 									color={'secondary'}
 									onClick={() => {
-										if (this.state.currentChoice === '') return;
+										if (this.state.currentChoice === '') {
+											return;
+                    }
 										let choicesCopy = [...Object.assign({}, this.state.currentQuestion).choices];
+                    let answersCopy = [...Object.assign({}, this.state.currentQuestion).answer];
 										choicesCopy.push(this.state.currentChoice);
-										this.updateQuestion('choices', choicesCopy);
 										if (this.state.checkboxOption === 'answer') {
-											let answersCopy = [...Object.assign({}, this.state.currentQuestion.answer)];
 											answersCopy.push(this.state.currentChoice);
-											this.updateQuestion('answer', answersCopy);
 										}
-										this.setState({currentChoice: ''});
+
+										let temp = Object.assign({}, this.state.currentQuestion);
+										temp['choices'] = choicesCopy;
+										temp['answer'] = answersCopy;
+										this.setState({
+											currentChoice: '',
+											currentQuestion: temp
+										}, () => {
+											this.updateQuestionHelper('choices');
+										});
 									}}>
 						Add Choice
 					</Button>
@@ -325,11 +334,10 @@ class Question extends Component {
 														 variant={'flat'}
 														 style={style}
 														 onClick={(evt) => {
-														 	 let choiceIndex = this.state.currentQuestion.choices.indexOf(evt.target.innerText);
-														 	 let choicesCopy = [...Object.assign({}, this.state.currentQuestion)];
+														 	 let choiceIndex = this.state.currentQuestion.choices.indexOf(choice);
+														 	 let choicesCopy = [...Object.assign({}, this.state.currentQuestion).choices];
 														 	 choicesCopy.splice(choiceIndex, 1);
 															 this.updateQuestion('choices', choicesCopy);
-
 															 if (this.state.currentQuestion.answer.includes(choice)) {
 																 let index = this.state.currentQuestion.answer.indexOf(evt.target.innerText);
 																 let answersCopy = [...Object.assign({}, this.state.currentQuestion.answer)];
@@ -344,6 +352,50 @@ class Question extends Component {
 				</div>
 		);
 	}
+
+  /**
+   * Updates the questions array in the current exercise
+   * @param field
+   * @param value
+   */
+  updateQuestion(field, value) {
+    let temp = Object.assign({}, this.state.currentQuestion);
+    temp[field] = value;
+    this.setState({currentQuestion: temp}, () => {
+    	this.updateQuestionHelper(field);
+    });
+  }
+
+  updateQuestionHelper(field) {
+    if (field === 'type' || field === 'choices') {
+      this.generateFeedbackTemplate();
+    } else {
+      this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentCell);
+    }
+	}
+
+  /**
+   *
+   */
+  generateFeedbackTemplate() {
+    let template = {};
+    if (this.state.currentQuestion.type === this.QuestionTypes.multipleChoice) {
+      this.state.currentQuestion.choices.map(choice => {
+        template[choice] = "";
+      });
+    } else {
+      template["correct"] = "";
+      // feedback for incorrect answers is in the form of an array of strings
+      // so as to display feedback based on the number of tries
+      template["incorrect"] = [];
+    };
+    let currQuestion = Object.assign({}, this.state.currentQuestion);
+    currQuestion["feedback"] = template;
+    this.setState({
+      feedback: JSON.stringify(template, null, 2),
+      currentQuestion: currQuestion
+    }, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentCell));
+  }
 
 	/**
 	 * Renders the hint input field
@@ -460,46 +512,6 @@ class Question extends Component {
 		return (e) => {
 			this.updateQuestion(field, e.target.value);
 		}
-	}
-
-	/**
-	 * Updates the questions array in the current exercise
-	 * @param field
-	 * @param value
-	 */
-	updateQuestion(field, value) {
-		let temp = Object.assign({}, this.state.currentQuestion);
-		temp[field] = value;
-		this.setState({currentQuestion: temp}, () => {
-			if (field === 'type' || field === 'choices') {
-				this.generateFeedbackTemplate();
-			} else {
-				this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentCell);
-			}
-		});
-	}
-
-	/**
-	 *
-	 */
-	generateFeedbackTemplate() {
-		let template = {};
-		if (this.state.currentQuestion.type === this.QuestionTypes.multipleChoice) {
-			this.state.currentQuestion.choices.map(choice => {
-				template[choice] = "";
-			});
-		} else {
-			template["correct"] = "";
-			// feedback for incorrect answers is in the form of an array of strings
-			// so as to display feedback based on the number of tries
-			template["incorrect"] = [];
-		};
-		let currQuestion = Object.assign({}, this.state.currentQuestion);
-		currQuestion["feedback"] = template;
-		this.setState({
-			feedback: JSON.stringify(template, null, 2),
-			currentQuestion: currQuestion
-		}, () => this.props.updateCurrentQuestion(Object.assign({}, this.state.currentQuestion), this.state.currentCell));
 	}
 
 	render() {

@@ -12,7 +12,7 @@ class ExerciseTypes {
    * @returns whether or not the exercise type requires inline responding
    */
   static isInlineResponseType = function(type: string): boolean {
-    return type === this.writeCode || type === this.fillBlank
+    return type === this.writeCode || type === this.fillBlank;
   };
 
   /**
