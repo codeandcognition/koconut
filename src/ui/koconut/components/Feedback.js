@@ -81,13 +81,26 @@ class Feedback extends Component {
         <strong>The correct answer is
             <span style={{color: "green"}}>
               {
-                typeof(finalString) === "object" ? JSON.stringify(finalString, null, 2) : finalString
+                typeof(finalString) === "object" ? this.displayMemoryTableOutput(finalString) : finalString
               }
             </span>
-            {this.props.type !== "writeCode" && "."}
+            {(this.props.type !== "writeCode" && this.props.type !== 'memoryTable') && "."}
             </strong>
       </div>
     );
+  }
+
+  displayMemoryTableOutput(finalString: {}) {
+    let list = [];
+    Object.keys(finalString).forEach((variable, index) => {
+      let values = finalString[variable];
+      let output = variable + ":";
+      values.forEach(val => {
+        output += "\t" + val;
+      });
+      list.push(<p key={index}>{output}</p>)
+    });
+    return (<div>{list}</div>);
   }
 
   render() {
