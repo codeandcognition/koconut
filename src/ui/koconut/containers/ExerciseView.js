@@ -1,10 +1,12 @@
 // @flow
 import React, {Component} from 'react';
+import ReactMarkdown from 'react-markdown';
 import Prompt from '../components/Prompt';
 import Information from './Information';
 import ConceptLabel from '../components/ConceptLabel';
 
 import './ExerciseView.css';
+import CodeBlock from '../components/CodeBlock';
 
 type Props = {
   exercise: {
@@ -55,6 +57,7 @@ class Exercise extends Component {
     window.scrollTo(0, 0);
   }
 
+  // debug comment: never reaching componentWillUnmount
   componentWillUnmount() {
     this.resetAnswer();
     this.props.resetFeedback();
@@ -94,6 +97,21 @@ class Exercise extends Component {
     }
   }
 
+	renderOverarchingCode() {
+		let code = "```python\n" + this.props.exercise.code + "\n```";
+		return (
+        <div style={{display: 'flex', justifyContent: 'space-evenly', backgroundColor: '#f7f7f7'}}>
+					<ReactMarkdown className={"flex-grow-1"}
+												 source={code}
+												 renderers={{code: CodeBlock}}
+												 escapeHtml={true}
+					/>
+					<div>
+            <textarea style={{width: '30vw', height: '90%', backgroundColor: '#FFF9C4', fontFamily: 'Monospace'}} defaultValue={'# scratch pad'}/>
+					</div>
+        </div>
+    );
+	}
 
   render() {
     let styles = {  // TODO put this in the constructor, unnecessary calculations per render
@@ -103,6 +121,7 @@ class Exercise extends Component {
     return (
         <div className="exercise-view" style={styles}>
           <Prompt exercise={this.props.exercise} />
+					{this.props.exercise.code && this.renderOverarchingCode()}
           <Information
               exercise={this.props.exercise}
               answer={this.state.answer}

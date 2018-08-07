@@ -5,6 +5,7 @@ import ShortResponse from '../components/ShortResponse';
 import SurveyView from '../components/SurveyView.js';
 import TableView from '../components/TableView';
 import CheckboxQuestion from '../components/CheckboxQuestion';
+import MemoryTableQuestion from '../components/MemoryTableQuestion';
 import './Response.css';
 
 import Types from '../../../data/ExerciseTypes.js';
@@ -38,6 +39,7 @@ class Response extends Component {
     let answer = this.props.answer;
     let update = this.props.updateHandler;
     let index = this.props.questionIndex;
+    let submit = this.props.submitHandler;
 
     if(this.props.question.data) {
       type = "table";
@@ -46,7 +48,7 @@ class Response extends Component {
     switch (type) {
       case(Types.multipleChoice):
         return <MultipleChoice  // want to modify the handle click? be prepared to dig deep in this nest
-            title='Select the correct answer:'
+            title={this.props.question.prompt ? this.props.question.prompt : "Select the correct answer"}
             choices={choices}
             answer={answer}
             handleClick={update}
@@ -59,7 +61,9 @@ class Response extends Component {
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):
-        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code}/>
+        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex}/>
+      case(Types.highlightCode):
+				return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex}/>
       case(Types.table):
         return <TableView feedback={this.props.feedback} 
                           question={this.props.question} 
@@ -71,12 +75,15 @@ class Response extends Component {
       case(Types.checkboxQuestion):
         return <CheckboxQuestion choices={choices} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
         question={this.props.question} fIndex={this.props.fIndex}/>
+      case(Types.memoryTable):
+				return <MemoryTableQuestion type={type} question={this.props.question} questionIndex={index} fIndex={this.props.fIndex} update={update} feedback={this.props.feedback}/>
       default:
-        return <div className="BAD">Not a valid EXERCISE type {type}</div>;
+        return <div>ERROR: This is not a valid exercise type!</div>
     }
   }
 
   render() {
+    console.log(this.props.question.type);
     let responseWidth = (Types.isSurvey(this.props.type) || this.props.type === "table" || this.props.type === Types.writeCode) ? 'full' : 'half';
     return (
         <div className={'response ' + responseWidth}>

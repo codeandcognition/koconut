@@ -12,9 +12,7 @@ class ExerciseTypes {
    * @returns whether or not the exercise type requires inline responding
    */
   static isInlineResponseType = function(type: string): boolean {
-    return type === this.writeCode ||
-        type === this.fillBlank ||
-        type === this.highlightCode;
+    return type === this.writeCode || type === this.fillBlank;
   };
 
   /**
@@ -45,6 +43,7 @@ ExerciseTypes.checkboxQuestion = 'checkboxQuestion';
 ExerciseTypes.shortResponse = 'shortResponse';
 ExerciseTypes.table = 'table';
 ExerciseTypes.selectMultiple = 'selectMultiple';
+ExerciseTypes.memoryTable = 'memoryTable'; // TODO: decide if this is of type read or write
 ExerciseTypes.readTypes = ["highlightCode", "multipleChoice", "shortResponse", "table", "selectMultiple"]; // Can probably define this based on the above, but it's fine for now
 
 export default ExerciseTypes;

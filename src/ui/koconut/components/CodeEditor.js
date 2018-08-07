@@ -26,8 +26,8 @@ class CodeEditor extends Component {
     super(props);
 
     this.state = {
-      mode: 'java',
-      theme: 'eclipse',
+      mode: 'python',
+      theme: 'textmate',
       code: this.props.code
     }
 
@@ -74,11 +74,12 @@ class CodeEditor extends Component {
     // TODO: Actually prevent rows
     // TODO: Also, newlines and deletion isn't safe
     if (event.start.row !== -1) {
-      this.setState({code: value});
-      if (this.props.inputHandler !== undefined) { // wow such type safety
-        // submit code or highlighted code
-        this.props.inputHandler(value, this.props.questionIndex); // William Summer 2018 // shift-ctrl-f note in case fix doesn't work
-      }
+      this.setState({code: value}, () => {
+				if (this.props.inputHandler !== undefined) { // wow such type safety
+					// submit code or highlighted code
+					this.props.inputHandler(value, this.props.questionIndex, this.props.fIndex); // William Summer 2018 // shift-ctrl-f note in case fix doesn't work
+				}
+      });
     } else {
       this.setState({code: this.state.code});
     }
@@ -90,11 +91,14 @@ class CodeEditor extends Component {
   handleSelect(e: any /* need to make Flow play nicely */) {
     let selected = this.refs.aceEditor.editor.session.getTextRange(
         e.getRange());
-    this.setState({highlighted: selected});
-    // this check mitigates a bug caused by spam switching exercises
-    if (this.props.inputHandler !== undefined) {
-      this.props.inputHandler(selected, this.props.questionIndex); // William summer 2018
-    }
+    selected = selected.trimEnd();
+    selected = selected.trimStart();
+    this.setState({highlighted: selected}, () => {
+			// this check mitigates a bug caused by spam switching exercises
+			if (this.props.inputHandler !== undefined) {
+				this.props.inputHandler(selected, this.props.questionIndex, this.props.fIndex); // William summer 2018
+			}
+    });
   }
 
   /**
@@ -108,7 +112,7 @@ class CodeEditor extends Component {
         height="20em"
         value={this.state.code}
         readOnly={this.props.type !== Types.fillBlank &&
-        this.props.type !== Types.writeCode}
+        this.props.type !== Types.writeCode && this.props.type !== Types.highlightCode}
         mode={this.state.mode}
         theme={this.state.theme}
         highlightActiveLine={true}
@@ -164,7 +168,7 @@ class CodeEditor extends Component {
           {this.renderAce()}
           <div className={"button-container"}>
             <Button variant={"contained"} color={"secondary"} onClick={() => this.handleReset()}><i
-                className="fas fa-sync-alt"></i></Button>
+                className="fas fa-sync-alt" /></Button>
           </div>
         </div>
     );
