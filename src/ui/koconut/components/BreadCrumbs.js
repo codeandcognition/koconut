@@ -24,7 +24,8 @@ export default class BreadCrumbs extends Component {
       semanticConcepts: null,
       templateConcepts: null,
       onboardingConcepts: null,
-      conceptAnchorEl: null
+      conceptAnchorEl: null,
+      typeAnchorEl: null
     }
 
     this.handleMenuOpen = this.handleMenuOpen.bind(this);
@@ -42,15 +43,18 @@ export default class BreadCrumbs extends Component {
       var onboarding = [];
 
       this.getConceptsByType(this.state.orderedConcepts, t.semantic).map((item) => {
-        semantic.push(item.name);
+        var concept = this.formatCamelCasedString(item.name);
+        semantic.push(concept);
       });
 
       this.getConceptsByType(this.state.orderedConcepts, t.template).map((item) => {
-        template.push(item.name);
+        var concept = this.formatCamelCasedString(item.name);
+        template.push(concept);
       });
 
       this.getConceptsByType(this.state.orderedConcepts, t.onboarding).map((item) => {
-        onboarding.push(item.name);
+        var concept = this.formatCamelCasedString(item.name);
+        onboarding.push(concept);
       });
 
       this.setState({
@@ -107,13 +111,15 @@ export default class BreadCrumbs extends Component {
 
   handleMenuClose() {
     this.setState({
-      conceptAnchorEl: null
+      conceptAnchorEl: null,
+      typeAnchorEl: null
     });
   }
 
-  handleMenuOpen(e) {
+  handleMenuOpen(e, isConceptMenu) {
     this.setState({
-      conceptAnchorEl: e.currentTarget
+      conceptAnchorEl: isConceptMenu ? e.currentTarget : null,
+      typeAnchorEl: isConceptMenu ? null : e.currentTarget
     });
   }
 
@@ -126,22 +132,23 @@ export default class BreadCrumbs extends Component {
     }
 
     var conceptMenu = [];
-    if (this.state.semanticConcepts && this.state.semanticConcepts.includes(this.props.conceptType)) {
+    if (this.state.semanticConcepts && this.state.semanticConcepts.includes(this.state.concept)) {
       conceptMenu = this.state.semanticConcepts;
-    } else if (this.state.templateConcepts && this.state.templateConcepts.includes(this.props.conceptType)) {
+    } else if (this.state.templateConcepts && this.state.templateConcepts.includes(this.state.concept)) {
       conceptMenu = this.state.templateConcepts;
-    } else if (this.state.onboardingConcepts && this.state.onboardingConcepts.includes(this.props.conceptType)) {
+    } else if (this.state.onboardingConcepts && this.state.onboardingConcepts.includes(this.state.concept)) {
       conceptMenu = this.state.onboardingConcepts;
     }
 
     var conceptAnchorEl = this.state.conceptAnchorEl;
+    var typeAnchorEl = this.state.typeAnchorEl;
 
     return (
       <div>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href={"#"} aria-owns={conceptAnchorEl ? "concept-menu" : null} aria-haspopup={"true"} onClick={this.handleMenuOpen}>{this.state.concept}</a>
+              <a href={"#"} aria-owns={conceptAnchorEl ? "concept-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, true)}>{this.state.concept}</a>
               <Menu id={"concept-menu"}
                     anchorEl={conceptAnchorEl}
                     transformOrigin={{
@@ -157,7 +164,22 @@ export default class BreadCrumbs extends Component {
                 })}
               </Menu>
             </li>
-            <li className="breadcrumb-item"><a href="#">{readOrWrite}</a></li>
+            <li className="breadcrumb-item">
+              <a href="#" aria-owns={typeAnchorEl ? "type-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, false)}>{readOrWrite}</a>
+              <Menu id={"type-menu"}
+                    anchorEl={typeAnchorEl}
+                    transformOrigin={{
+                      vertical: -45,
+                      horizontal: 20,
+                    }}
+                    open={Boolean(typeAnchorEl)}
+                    onClose={this.handleMenuClose}>
+                <MenuItem>Learn to Read Code</MenuItem>
+                <MenuItem>Practice Reading Code</MenuItem>
+                <MenuItem>Learn to Write Code</MenuItem>
+                <MenuItem>Practice Writing Code</MenuItem>
+              </Menu>
+            </li>
             <li className="breadcrumb-item active" aria-current="page">{this.props.chosenInstruction ? this.props.chosenInstruction.title : ""}</li>
           </ol>
         </nav>
