@@ -112,7 +112,7 @@ class CodeEditor extends Component {
         height="20em"
         value={this.state.code}
         readOnly={this.props.type !== Types.fillBlank &&
-        this.props.type !== Types.writeCode}
+        this.props.type !== Types.writeCode && this.props.type !== Types.highlightCode}
         mode={this.state.mode}
         theme={this.state.theme}
         highlightActiveLine={true}

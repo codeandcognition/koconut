@@ -14,6 +14,7 @@ import AuthorView from './../../koconut-author/AuthorView';
 import PopOverMessage from './PopoverMessage';
 import LoadingView from '../components/LoadingView';
 import InstructionView from './InstructionView';
+import Types from '../../../data/ExerciseTypes.js';
 
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
@@ -48,7 +49,7 @@ class App extends Component {
   getInstruction: Function;
   setInstructionViewError: Function;
   resetError: Function;
-  resetfeedback: Function;
+  resetFeedback: Function;
   switchToWorldView: Function;
   switchToAuthorView: Function;
   loadDisplay: Function;
@@ -76,7 +77,7 @@ class App extends Component {
     conceptMapGetter: ?Map<string,number[]>,
     codeTheme: string,
     timesGotQuestionWrong: number[],
-    followupTimesGotQuestionWrong: number[]
+    followupTimesGotQuestionWrong: any[]
   };
 
   constructor() {
@@ -233,7 +234,7 @@ class App extends Component {
     }
     return ret;
   }
-
+  
   /**
    * checkAnswer will check the answers client side to provide the feedback
    * to the Response.js object later on
@@ -246,89 +247,171 @@ class App extends Component {
   checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
     let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
     let feedbackTemp = (fIndex === -1) ? this.state.feedback : this.state.followupFeedback;
-
-
-    // basically the answer will come in looking like this for a table type problem
-    // mixed with regular problems
-    // let stub = ["a", "a", [["", "a", "a"], ["", "a", "a"]], "a"];
-
     let checkerForCorrectness = true;
-    if (questionType === "table") {
-      let colNames = question.colNames;
-      let allCells = question.data;
-      let answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
-      let addToFeedback = [];
-      allCells.forEach((d, i) => {
-        let arrayIndexToPushTo = Math.floor(i / colNames.length);
-        if (!addToFeedback[arrayIndexToPushTo]) {
-          addToFeedback[arrayIndexToPushTo] = [];
-        }
-        let subArrayIndex = i % colNames.length;
-        //console.log(d.answer, answer[questionIndex][arrayIndexToPushTo][subArrayIndex]);
-        let cellValue = null;
-        if (d.answer === "") {
-          cellValue = null;
-          // sorry to whoever has to understand this later :(
-          // it's for the greater good and expandability
-        } else if (answerArr &&
-            answerArr[arrayIndexToPushTo] && d.answer ===
-            answerArr[arrayIndexToPushTo][subArrayIndex]) {
-          cellValue = "correct";
-        } else {
-          cellValue = "incorrect";
-          checkerForCorrectness = false;
-        }
-        addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
-      });
-      if (fIndex === -1) {
-        feedbackTemp[questionIndex] = addToFeedback;
-      } else {
-        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-        feedbackTemp[questionIndex][fIndex] = addToFeedback;
-      }
-    } else if (questionType === "checkboxQuestion") { // Assumes question.answer and answer are both arrays
-      var isCorrect = true;
-      var answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
-      if (answerArr && question.answer.length === answerArr.length) {
-        question.answer.forEach((item) => {
-          if (!answerArr.includes(item)) {
-            isCorrect = false;
-            checkerForCorrectness = false;
-          }
-        })
-      } else {
-        isCorrect = false;
-        checkerForCorrectness = false;
-      }
-      if (fIndex === -1) {
-        feedbackTemp[questionIndex] = isCorrect ? "correct" : "incorrect";
-      } else {
-        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-        feedbackTemp[questionIndex][fIndex] = isCorrect ? "correct" : "incorrect";
-      }
-    } else {
-      if (fIndex !== -1) {
-        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-      }
-      let index = (fIndex === -1) ? questionIndex : fIndex;
-      let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
-      let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
-      if (question.answer === learnerAnswer) {
-        temp[index] = "correct";
-      } else {
-        temp[index] = "incorrect";
-        checkerForCorrectness = false;
-      }
-      if (fIndex === -1) {
-        feedbackTemp = temp;
-      } else {
-        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-        feedbackTemp[questionIndex] = temp;
-      }
-    }
-    this.updateWrongAnswersCount(checkerForCorrectness, questionIndex, fIndex);
-    return feedbackTemp;
+    if (questionType === Types.table) {
+    	checkerForCorrectness = this.verifyTableQuestion(question, questionIndex, fIndex, answer, feedbackTemp);
+    } else if (questionType === Types.checkboxQuestion) { // Assumes question.answer and answer are both arrays
+      checkerForCorrectness = this.verifyCheckboxQuestion(question, questionIndex, answer, fIndex, feedbackTemp);
+    } else if (questionType === Types.memoryTable) {
+    	checkerForCorrectness = this.verifyMemoryTable(question, questionIndex, answer, fIndex, feedbackTemp);
+		} else {
+			checkerForCorrectness = this.verifyOtherQuestions(question, questionIndex, answer, fIndex, feedbackTemp);
+		}
+		this.updateWrongAnswersCount(checkerForCorrectness, questionIndex, fIndex);
+		return feedbackTemp;
   }
+
+	/**
+	 * checks user input for a table question
+	 *
+	 * @param question
+	 * @param questionIndex
+	 * @param fIndex
+	 * @param answer
+	 * @param feedbackTemp
+	 * @returns {boolean}
+	 */
+  verifyTableQuestion(question: any, questionIndex: number, fIndex : number, answer: [], feedbackTemp: any) {
+		// basically the answer will come in looking like this for a table type problem
+		// mixed with regular problems
+		// let stub = ["a", "a", [["", "a", "a"], ["", "a", "a"]], "a"];
+		let checkerForCorrectness = true;
+		let colNames = question.colNames;
+		let allCells = question.data;
+		let answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
+		let addToFeedback = [];
+		allCells.forEach((d, i) => {
+			let arrayIndexToPushTo = Math.floor(i / colNames.length);
+			if (!addToFeedback[arrayIndexToPushTo]) {
+				addToFeedback[arrayIndexToPushTo] = [];
+			}
+			let subArrayIndex = i % colNames.length;
+			let cellValue = null;
+			if (d.answer === "") {
+				cellValue = null;
+				// sorry to whoever has to understand this later :(
+				// it's for the greater good and expandability
+			} else if (answerArr &&
+					answerArr[arrayIndexToPushTo] && d.answer ===
+					answerArr[arrayIndexToPushTo][subArrayIndex]) {
+				cellValue = "correct";
+			} else {
+				cellValue = "incorrect";
+				checkerForCorrectness = false;
+			}
+			addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
+		});
+		if (fIndex === -1) {
+			feedbackTemp[questionIndex] = addToFeedback;
+		} else {
+			feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+			feedbackTemp[questionIndex][fIndex] = addToFeedback;
+		}
+		return checkerForCorrectness;
+	}
+
+	verifyCheckboxQuestion(question: any, questionIndex: number, answer: any, fIndex: number, feedbackTemp: any) {
+		let isCorrect = true;
+		let answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
+		let checkerForCorrectness = true;
+		if (answerArr && question.answer.length === answerArr.length) {
+			question.answer.forEach((item) => {
+				if (!answerArr.includes(item)) {
+					isCorrect = false;
+					checkerForCorrectness = false;
+				}
+			})
+		} else {
+			isCorrect = false;
+			checkerForCorrectness = false;
+		}
+		if (fIndex === -1) {
+			feedbackTemp[questionIndex] = isCorrect ? "correct" : "incorrect";
+		} else {
+			feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+			feedbackTemp[questionIndex][fIndex] = isCorrect ? "correct" : "incorrect";
+		}
+		return checkerForCorrectness;
+	}
+
+	/**
+	 * helper function to check answer for memory table questions
+	 * @param answerKey
+	 * @param userInput
+	 * @returns {boolean}
+	 */
+  arrayEquals(answerKey: string[], userInput: string[]) {
+  	if (!userInput || answerKey.length !== userInput.length) {
+  		return false;
+		}
+		let equals = true;
+		for (let i = 0; i < answerKey.length; i++) {
+			if (answerKey[i] != userInput[i]) {
+				return false;
+			}
+		}
+		return equals;
+	}
+
+	verifyMemoryTable(question: any, questionIndex : number, answer: any, fIndex: number, feedbackTemp : any) {
+  	let checkerForCorrectness = true;
+		if (fIndex === -1) {
+			let response = answer[questionIndex];
+			feedbackTemp[questionIndex] = "correct";
+			this.handleMemoryTable(question, questionIndex, response, feedbackTemp);
+			checkerForCorrectness = feedbackTemp[questionIndex] === "correct";
+		} else {
+			let response = !answer[questionIndex] && [];
+			feedbackTemp[questionIndex] = !feedbackTemp[questionIndex] && [];
+			response = answer[questionIndex][fIndex];
+			feedbackTemp[questionIndex][fIndex] = "correct";
+			this.handleMemoryTable(question, fIndex, response, feedbackTemp[questionIndex]);
+			checkerForCorrectness = feedbackTemp[questionIndex][fIndex] === "correct";
+		}
+		return checkerForCorrectness;
+	}
+
+	handleMemoryTable(question: any, questionIndex : number, response: any, feedback : any) {
+		let answer = question.answer;
+		if (typeof(answer) === "string") {
+			answer = JSON.parse(answer);
+		}
+		Object.keys(response).forEach((variable) => {
+			if (feedback[questionIndex] === "correct") {
+				if(response.hasOwnProperty(variable)) {
+					let values = response[variable];
+					let valuesKey = answer[variable];
+					let equal = this.arrayEquals(values, valuesKey);
+					feedback[questionIndex] = equal ? "correct" : "incorrect";
+				} else {
+					feedback[questionIndex] = "incorrect";
+				}
+			}
+		});
+	}
+
+	verifyOtherQuestions(question: any, questionIndex: number, answer: any, fIndex: number, feedbackTemp: any) {
+  	let checkerForCorrectness = true;
+		if (fIndex !== -1) {
+			feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+		}
+		let index = (fIndex === -1) ? questionIndex : fIndex;
+		let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
+		let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
+		if (question.answer === learnerAnswer) {
+			temp[index] = "correct";
+		} else {
+			temp[index] = "incorrect";
+			checkerForCorrectness = false;
+		}
+		if (fIndex === -1) {
+			feedbackTemp = temp;
+		} else {
+			feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+			feedbackTemp[questionIndex] = temp;
+		}
+		return checkerForCorrectness;
+	}
 
   /**
    * updateWrongAnswersCount updates the count for wrong answers
@@ -369,7 +452,7 @@ class App extends Component {
    * @param answer - the answer being submitted
    */
   submitResponse(answer: any, questionIndex: number, questionType: string, fIndex: number) {
-    if (answer !== null && answer !== undefined) {
+  	if (answer !== null && answer !== undefined) {
       let feedback = this.checkAnswer(answer, questionIndex, questionType, fIndex);
       ResponseEvaluator.evaluateAnswer(this.state.exercise, answer
           , () => { // TODO: Reconfigure for followup question answer structure

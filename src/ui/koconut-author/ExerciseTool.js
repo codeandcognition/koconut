@@ -314,14 +314,17 @@ class ExerciseTool extends Component {
 			followupQuestions.push(question);
 			parent.followupQuestions = followupQuestions;
 			exercise.questions[this.state.followupTo] = parent;
-			this.setState({currentExercise: exercise, isFollowup: false});
 		} else {
-			console.log(this.state.currentCell);
 			exercise.questions.push(question);
-			this.setState({
-				currentExercise: exercise
-			});
 		}
+		this.setState({
+			currentExercise: exercise,
+			isFollowup: false,
+			currentQuestion: this.Schemas.standAlone,
+			currentQuestionFormat: "standAlone"
+		}, () => {
+			window.alert("Exercise preview has been updated. \n\nClick on 'Add Exercise' to save to Firebase\n\nOr continue adding questions to the exercise.")
+		});
 	}
 
 	/**
@@ -442,11 +445,26 @@ class ExerciseTool extends Component {
 					<Button style={style}
 									variant={'outlined'}
 									color={'secondary'}
-									onClick={() => this.setState({isFollowup: true, followupTo: this.state.currentExercise.questions.length - 1})}>Follow-up Question</Button>
+									onClick={() =>
+											this.setState({
+												isFollowup: true,
+												followupTo: this.state.currentExercise.questions.length - 1,
+												currentQuestion: this.Schemas.standAlone,
+												currentQuestionFormat: "standAlone"
+											})}>
+						Follow-up Question
+					</Button>
 					<Button style={style}
 									variant={'outlined'}
 									color={"primary"}
-									onClick={() => this.setState({isFollowup: false, followupTo: -1})}>New Question</Button>
+									onClick={() =>
+											this.setState({
+												isFollowup: false,
+												followupTo: -1,
+												currentQuestion: this.Schemas.standAlone,
+												currentQuestionFormat: "standAlone"})}>
+						New Question
+					</Button>
 				</div>
 		);
 	}

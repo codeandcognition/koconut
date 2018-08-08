@@ -8,15 +8,18 @@ import './Submit.css';
  */
 class Submit extends Component {
   props: {
-    submitHandler: Function
+    submitHandler: Function,
+    disabled: boolean
   };
 
   render() {
     return (
         <div className="submit-container">
-          <div className={"btn btn-submit click"} onClick={this.props.submitHandler}>
+          <button disabled={this.props.disabled}
+                  className={"btn btn-submit click"}
+                  onClick={this.props.submitHandler}>
             Submit
-          </div>
+          </button>
         </div>
     );
   }
