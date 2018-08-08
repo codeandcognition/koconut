@@ -16,6 +16,8 @@ import LoadingView from '../components/LoadingView';
 import InstructionView from './InstructionView';
 import Types from '../../../data/ExerciseTypes.js';
 
+import {HashRouter as Router, Switch, Redirect, Route} from 'react-router-dom';
+
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
@@ -777,36 +779,6 @@ class App extends Component {
                     display={this.state.display}
 										author={this.state.author}/>
             <div className="main">
-              <h1 className="title">
-								{/*
-                {this.state.display !== displayType.welcome ?
-										<Button
-												style={{marginTop: '5%'}}
-												variant="outlined"
-												color="secondary"
-												onClick={() => this.setState(
-														{
-															display: displayType.exercise,
-															exercise: this._getExercise(),
-															feedback: '',
-															counter: this.state.counter + 1,
-														})}
-										>Next Exercise</Button>
-										: null
-								}
-								*/}
-              </h1>
-							{/*this.state.error &&
-							<div className="alert alert-warning alert-dismissible fade show" role="alert" style={{marginTop: '5%'}}>
-								<div>{this.state.errorMessage}</div>
-								<button type="button"
-												className="close"
-												aria-label="Close"
-												onClick={() => this.setState({error: false})}>
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							*/}
               {this.renderDisplay()}
 							{this.state.error && this.renderErrorMessage()}
             </div>
