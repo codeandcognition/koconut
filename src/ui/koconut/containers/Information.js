@@ -51,12 +51,23 @@ class Information extends Component {
   }
 
   componentWillMount() {
-    this.setState({exercise: this.props.exercise, feedback: this.props.feedback, followupFeedback: this.props.followupFeedback, answer: this.props.answer, followupAnswers: this.props.followupAnswers});
+    this.setState({
+      exercise: this.props.exercise,
+      feedback: this.props.feedback,
+      followupFeedback: this.props.followupFeedback,
+      answer: this.props.answer,
+      followupAnswers: this.props.followupAnswers
+    });
   }
 
-  componentWillReceiveProps(nextProps: any) {
-
-    this.setState({exercise: nextProps.exercise, feedback: nextProps.feedback, followupFeedback: this.props.followupFeedback, answer: nextProps.answer, followupAnswers: this.props.followupAnswers});
+  componentWillReceiveProps(nextProps: Props) {
+    this.setState({
+      exercise: nextProps.exercise,
+      feedback: nextProps.feedback,
+      followupFeedback: this.props.followupFeedback,
+      answer: nextProps.answer,
+      followupAnswers: this.props.followupAnswers
+    });
   }
 
   /**
@@ -66,30 +77,39 @@ class Information extends Component {
    * @returns JSX for the Code container
    */
   renderCodeView(question: any, index: number, fIndex: number) {
-      if((Types.isSurvey(question.type) ||
-          (question.type === Types.multipleChoice
-          &&
-              ((question.code && question.code === '') || (!question.code))
-          )) || question.type === Types.table
-      ) {
-        return '';
-      } else {
-        return (<Code
-                      key={"code" + index}
-                      type={question.type}
-                      code={question.code}
-                      updateHandler={
-                        Types.isInlineResponseType(question.type) ?
-                            this.props.updateHandler :
-                            undefined
-                      }
-                      toggleCodeTheme={this.props.toggleCodeTheme}
-                      feedback={this.state.feedback[index]}
-                      questionIndex={index}
-                      submitTryAgain={this.props.submitTryAgain}
-                      fIndex={fIndex}
-                      />);
-      }
+  	// questions of type multiple choice but code is undefined
+  	let absentCode = question.type === Types.multipleChoice && !question.code;
+  	// or if it is a table question
+  	absentCode = absentCode || question.type == Types.table;
+  	// or if it is a highlight code question
+  	absentCode = absentCode || question.type === Types.highlightCode;
+		if(Types.isSurvey(question.type) || absentCode) {
+			return '';
+		} else {
+			return (
+					<div style={{display: 'flex', justifyContent: 'space-between', backgroundColor: '#f7f7f7'}}>
+						<Code
+								key={"code" + index}
+								type={question.type}
+								code={question.code}
+								updateHandler={
+									Types.isInlineResponseType(question.type) ?
+											this.props.updateHandler :
+											undefined
+								}
+								toggleCodeTheme={this.props.toggleCodeTheme}
+								feedback={this.state.feedback[index]}
+								questionIndex={index}
+								submitTryAgain={this.props.submitTryAgain}
+								fIndex={fIndex}
+						/>
+						<div style={{margin: '2%'}}>
+							<h5>Scratch Pad</h5>
+							<textarea style={{width: '15vw', height: '80%', backgroundColor: '#FFF9C4'}}/>
+						</div>
+					</div>
+			);
+		}
   }
 
   /**
@@ -99,7 +119,7 @@ class Information extends Component {
    * @returns JSX for the Response container
    */
   renderResponseView(question: any, index: number, fIndex: number) {
-      let type = question.type;
+    let type = question.type;
 
     let parentFeedback = this.state.feedback[index];
     let followupFeedback = (this.state.followupFeedback
@@ -176,7 +196,6 @@ class Information extends Component {
     , 0);
     correctCount = correctCount + this.state.gaveUpCount;
     let expectedCorrect = this.state.exercise.questions.length;
-
 
     return (
         <div>

@@ -38,6 +38,7 @@ class Response extends Component {
     let answer = this.props.answer;
     let update = this.props.updateHandler;
     let index = this.props.questionIndex;
+    let submit = this.props.submitHandler;
 
     if(this.props.question.data) {
       type = "table";
@@ -46,7 +47,7 @@ class Response extends Component {
     switch (type) {
       case(Types.multipleChoice):
         return <MultipleChoice  // want to modify the handle click? be prepared to dig deep in this nest
-            title='Select the correct answer:'
+            title={this.props.question.prompt ? this.props.question.prompt : "Select the correct answer"}
             choices={choices}
             answer={answer}
             handleClick={update}
@@ -59,7 +60,9 @@ class Response extends Component {
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):
-        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code}/>
+        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex}/>
+      case(Types.highlightCode):
+				return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex}/>
       case(Types.table):
         return <TableView feedback={this.props.feedback} 
                           question={this.props.question} 
