@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {Component} from 'react';
+import { Link, withRouter} from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import firebase from 'firebase';
@@ -6,8 +7,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Routes from './../../../Routes';
 
-class SignIn extends React.Component {
+class SignIn extends Component {
 
   constructor(props) {
     super(props);
@@ -23,12 +25,46 @@ class SignIn extends React.Component {
     }
   }
 
+  componentDidMount() {
+		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+			this.setState({ currentUser: user });
+			user && this.props.history.push(Routes.worldview);
+		});
+	}
+
+	componentWillUnmount() {
+  	this.authUnsub();
+	}
+
   // Signs user into their account via Firebase authentication
   signInUser() {
     firebase.auth().signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
-        .catch((error) => {
-          this.setState({errorMessage: error.message});
-        });
+    	.then(() => {
+    		if (this.state.currentUser !== null) {
+					let databaseRef = firebase.database().ref("Users/" + this.state.currentUser.uid);
+					databaseRef.once("value", (snapshot) => {
+						console.log(snapshot);
+						if (snapshot !== null && snapshot.val() !== null) {
+							let waiverStatus = snapshot.val().waiverStatus;
+							let author = snapshot.val().permission === 'author';
+							console.log(author);
+							if (waiverStatus) {
+								this.props.history.push(Routes.worldview);
+							} else {
+								this.props.history.push(Routes.welcome);
+							}
+							if (author) {
+								this.props.history.push(Routes.author);
+							}
+						} else {
+							this.props.history.push(Routes.welcome);
+						}
+					});
+				}
+			}).catch((error) => {
+				console.log("Error:", error.message);
+      	this.setState({errorMessage: error.message});
+    	});
     }
 
   // Closes and opens window allowing user to reset their password
@@ -93,8 +129,7 @@ class SignIn extends React.Component {
       <br />
       <Button style={buttonStyle} variant={"outlined"} onClick={() => this.signInUser()}>Sign In</Button>
       <br />
-      <p onClick={() => this.props.toSignup()}
-         style={{fontSize: '14px', color: '#e91363', cursor: 'pointer'}}>Create Account</p>
+      <Link to={Routes.signup}><p style={{fontSize: '14px', color: '#e91363', cursor: 'pointer'}}>Create Account</p></Link>
       <p onClick={(e) => this.togglePasswordResetView(true)}
          style={{marginBottom: "15px", fontSize: '14px', color: '#00BCD4', cursor: 'pointer'}}>Forgot Password</p>
       <Dialog open={this.state.showPasswordResetView}
@@ -124,4 +159,4 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+export default withRouter(SignIn);

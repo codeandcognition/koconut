@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react';
+import { Link } from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -69,6 +70,7 @@ class Navbar extends Component {
 							<Typography style={{flexGrow: 1, color: "#FAFAFA"}} variant={"title"}>
 								Koconut
 							</Typography>
+              {console.log(this.props.firebaseUser)}
               {this.props.firebaseUser &&
               (<div>
                   <Button
@@ -95,7 +97,7 @@ class Navbar extends Component {
                         getContentAnchorEl={null}
                         style={{paddingRight: 0}}
                       >
-										{this.props.author && <MenuItem onClick={() => {this.handleMenuClose(); this.props.switchToAuthorView()}}>Author</MenuItem>}
+                    {this.props.author && <Link to={this.props.switchToAuthorView()}><MenuItem>Author</MenuItem></Link>}
                     <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
                     <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
                     <MenuItem onClick={() => {

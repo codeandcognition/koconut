@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import  FormGroup from '@material-ui/core/FormGroup';
+import { Link } from "react-router-dom";
+import Routes from './../../../Routes';
+import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import firebase from 'firebase/app';
@@ -89,8 +91,7 @@ class Signup extends Component {
 								variant="outlined"
 								onClick={(evt) => this.handleSubmit(evt)}>Create account</Button>
 						{/* Sign in link is styled to go along with Material UI's styles */}
-						<p style={{cursor: 'pointer', color: '#E91E63', textAlign: 'center'}}
-							 onClick={() => this.props.toSignin()}>Sign in instead</p>
+						<Link to={Routes.signin}><p style={{cursor: 'pointer', color: '#E91E63', textAlign: 'center'}}>Sign in instead</p></Link>
 					</FormGroup>
 				</form>
 		);

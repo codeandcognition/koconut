@@ -16,7 +16,9 @@ import LoadingView from '../components/LoadingView';
 import InstructionView from './InstructionView';
 import Types from '../../../data/ExerciseTypes.js';
 
-import {HashRouter as Router, Switch, Redirect, Route} from 'react-router-dom';
+import Routes from './../../../Routes';
+
+import {BrowserRouter as Router, Switch, Redirect, Route} from 'react-router-dom';
 
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
@@ -121,7 +123,7 @@ class App extends Component {
     this.setInstructionViewError = this.setInstructionViewError.bind(this);
     this.resetError = this.resetError.bind(this);
     this.switchToWorldView = this.switchToWorldView.bind(this);
-    this.loadDisplay = this.loadDisplay.bind(this);
+    // this.loadDisplay = this.loadDisplay.bind(this); TODO: Uncomment this
     this.switchToAuthorView = this.switchToAuthorView.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
     this.resetFeedback = this.resetFeedback.bind(this);
@@ -540,7 +542,7 @@ class App extends Component {
 	 * Checks whether the user is signed in, their waiver status, their
 	 * permissions and changes the display type accordingly
 	 *
-	 */
+
 	loadDisplay() {
     this.props.firebase.auth().onAuthStateChanged((fbUser) => {
     	this.setState({firebaseUser: fbUser});
@@ -575,6 +577,7 @@ class App extends Component {
 			}
     });
   }
+	 */
 
 	/**
 	 * Updates the user's waiver status upon signing up for an account
@@ -744,6 +747,21 @@ class App extends Component {
 	 * Renders the display based on display state
 	 */
 	renderDisplay() {
+		// TODO: Add routes for exercise view and instruction view
+		return (
+				<Router>
+					<Switch>
+						<Route exact path={Routes.home} component={() => this.renderSignin()}/>
+						<Route exact path={Routes.signin} component={() => this.renderSignin()}/>
+						<Route exact path={Routes.signup} component={() => this.renderSignup()}/>
+						<Route exact path={Routes.welcome} component={() => this.renderWelcome()}/>
+						<Route exact path={Routes.worldview} component={() => this.renderWorldView()}/>
+						<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
+						<Redirect to={Routes.home} />
+					</Switch>
+				</Router>
+		);
+		/*
 		switch (this.state.display) {
 			case displayType.signin:
 				return this.renderSignin();
@@ -766,7 +784,7 @@ class App extends Component {
 				return this.renderAuthorView();
 			default:
 				break;
-		}
+		*/
 	}
 
   render() {
