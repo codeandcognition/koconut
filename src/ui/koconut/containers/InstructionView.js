@@ -161,7 +161,7 @@ export default class InstructionView extends Component {
 									/>
 									{this.state.instructionList && chosenInstruction &&
                   <div className={"content-container"}>
-                    <button className={"nav-arrow-btn left-arrow"} onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1)}><i className="fas fa-chevron-left"></i></button>
+                    <button className={"nav-arrow-btn left-arrow"} onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left"></i></button>
                     <div className={"instruct-content-container"}>
                       <InstructionTitle
                           instruction={chosenInstruction}/>
@@ -173,7 +173,7 @@ export default class InstructionView extends Component {
                           next={this.nextInstruction}
                       />
                     </div>
-                    <button className={"nav-arrow-btn right-arrow"} onClick={() => this.navigateToPage(this.state.currInstructionIndex + 1)}><i className="fas fa-chevron-right"></i></button>
+                    <button className={"nav-arrow-btn right-arrow"} onClick={() => this.navigateToPage(this.state.currInstructionIndex + 1 < this.state.instructionList.length ? this.state.currInstructionIndex + 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-right"></i></button>
                   </div>
 									}
 								</div>
