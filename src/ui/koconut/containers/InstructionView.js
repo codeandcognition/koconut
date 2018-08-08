@@ -189,7 +189,7 @@ export default class InstructionView extends Component {
                     }
                   }
                   return (
-                      <li key={index} style={selectedStyle} onClick={() => this.navigateToPage(index)}><i className="fas fa-circle"></i></li>
+                      <li className="dot" key={index} style={selectedStyle} onClick={() => this.navigateToPage(index)}><i className="fas fa-circle"></i></li>
                   );
                 })}
             </ul>

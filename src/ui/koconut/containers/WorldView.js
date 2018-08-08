@@ -51,8 +51,7 @@ class WorldView extends Component {
         <div className="container" style={{marginTop: '12vh'}}>
           <div style={{display: "flex"}}>
             <div style={{flexGrow: 3, margin: 10}}>
-            {
-              titleLeft.map(cTypeVal => {
+            {titleLeft.map(cTypeVal => {
                 let cType = t[cTypeVal.name];
                 return <div key={"world-"+cType} style={{marginTop: 10}}>
                   <h1>{cTypeVal.title}</h1>
