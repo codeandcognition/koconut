@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Routes from './../../../Routes';
 import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
@@ -21,6 +21,19 @@ class Signup extends Component {
 		}; // need this declaration here, render crashes otherwise
 	}
 
+	componentDidMount() {
+		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+			this.setState({ currentUser: user }, () => {
+				this.props.history.push(Routes.signin);
+			});
+		});
+
+	}
+
+	componentWillUnmount() {
+		this.authUnsub();
+	}
+
 	/**
 	 * Creates a Firebase user account if user info is acceptable,
 	 * displays a warning otherwise
@@ -34,6 +47,7 @@ class Signup extends Component {
 			.then(user => {
 				return user.updateProfile({displayName: this.state.displayName});
 			})
+			.then(this.state.currentUser ? () => this.props.history.push(Routes.signin) : null)
 			.catch((error) => {
 				this.setState({
 					errorMessage: error.message,
@@ -98,4 +112,4 @@ class Signup extends Component {
 	}
 }
 
-export default Signup;
+export default withRouter(Signup);

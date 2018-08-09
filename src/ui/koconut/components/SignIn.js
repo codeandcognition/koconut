@@ -27,8 +27,8 @@ class SignIn extends Component {
 
   componentDidMount() {
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-			this.setState({ currentUser: user });
-			user && this.props.history.push(Routes.worldview);
+			this.setState({currentUser: user});
+			this.routeUser();
 		});
 	}
 
@@ -41,31 +41,39 @@ class SignIn extends Component {
     firebase.auth().signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
     	.then(() => {
     		if (this.state.currentUser !== null) {
-					let databaseRef = firebase.database().ref("Users/" + this.state.currentUser.uid);
-					databaseRef.once("value", (snapshot) => {
-						console.log(snapshot);
-						if (snapshot !== null && snapshot.val() !== null) {
-							let waiverStatus = snapshot.val().waiverStatus;
-							let author = snapshot.val().permission === 'author';
-							console.log(author);
-							if (waiverStatus) {
-								this.props.history.push(Routes.worldview);
-							} else {
-								this.props.history.push(Routes.welcome);
-							}
-							if (author) {
-								this.props.history.push(Routes.author);
-							}
-						} else {
-							this.props.history.push(Routes.welcome);
-						}
-					});
+					this.routeUser();
 				}
 			}).catch((error) => {
 				console.log("Error:", error.message);
       	this.setState({errorMessage: error.message});
     	});
-    }
+  }
+
+	/**
+	 * routes user to the world view or the welcome view depending on their waiver
+	 * status
+	 *
+	 */
+	routeUser() {
+		let databaseRef = firebase.database().
+				ref("Users/" + this.state.currentUser.uid);
+		databaseRef.once("value", (snapshot) => {
+			console.log(snapshot);
+			if (snapshot !== null && snapshot.val() !== null) {
+				let snap = snapshot.val();
+				let waiverStatus = snap.waiverStatus;
+				let author = snap.permission === 'author';
+				// TODO: Implement logic for handling authors
+				if (waiverStatus) {
+					this.props.history.push(Routes.worldview);
+				} else {
+					this.props.history.push(Routes.welcome);
+				}
+			} else {
+				this.props.history.push(Routes.welcome);
+			}
+		});
+	}
 
   // Closes and opens window allowing user to reset their password
   togglePasswordResetView(openView) {
