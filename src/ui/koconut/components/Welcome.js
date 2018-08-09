@@ -1,8 +1,10 @@
 //@flow
 import React, {Component} from 'react';
+import { withRouter } from "react-router-dom";
 import './Welcome.css';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import Routes from './../../../Routes';
 
 const strings = {
   welcome: "Welcome to Koconut!",
@@ -33,14 +35,29 @@ class Welcome extends Component {
   // TODO: Maybe this should be a ReactMarkdown component
 
   componentWillMount() {
-    var databaseRef = firebase.database().ref("Users/" + this.props.firebaseUser.uid + "/waiverStatus");
-    databaseRef.once("value", (snapshot) => {
-      if (snapshot != null && snapshot.val()) {
-        this.props.app.setState({display: "WORLD"});
-      }
-    })
+  	this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+			let databaseRef = firebase.database().ref("Users/" + user.uid + "/waiverStatus");
+			databaseRef.once("value", (snapshot) => {
+				if (snapshot != null && snapshot.val()) {
+					this.props.history.push(Routes.worldview);
+				}
+			})
+		});
   }
 
+  componentWillUnmount() {
+  	this.authUnsub();
+	}
+
+	/**
+	 * update waiver status on firebase
+	 */
+	updateWaiverStatus() {
+		let databaseRef = firebase.database().
+				ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
+		databaseRef.set(true);
+		this.props.history.push(Routes.worldview);
+	}
 
   render() {
 
@@ -62,9 +79,9 @@ class Welcome extends Component {
         {strings.language.example_code.map((c, i) => <div key={i}><code>{c}</code></div>)}
         <h4><i>{strings.nsf}</i></h4>
         <p>{strings.agreement}</p>
-        <button onClick={() => this.props.callBack()}>{strings.iagree}</button>
+        <button onClick={() => this.updateWaiverStatus()}>{strings.iagree}</button>
       </div>)
   }
 }
 
-export default Welcome;
+export default withRouter(Welcome);

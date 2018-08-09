@@ -70,7 +70,7 @@ class Navbar extends Component {
 							<Typography style={{flexGrow: 1, color: "#FAFAFA"}} variant={"title"}>
 								Koconut
 							</Typography>
-              {console.log(this.props.firebaseUser)}
+              {/* console.log(this.props.firebaseUser) */}
               {this.props.firebaseUser &&
               (<div>
                   <Button

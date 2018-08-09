@@ -579,19 +579,6 @@ class App extends Component {
   }
 	 */
 
-	/**
-	 * Updates the user's waiver status upon signing up for an account
-	 */
-	updateWaiverStatus() {
-    if (this.state.firebaseUser) {
-      this.setState({display: displayType.world});
-      let databaseRef = this.props.firebase.database()
-				.ref("Users/" + this.state.firebaseUser.uid +
-              "/waiverStatus");
-      databaseRef.set(true);
-    }
-  }
-
   /**
    * Renders the sign up view
    */
@@ -679,10 +666,7 @@ class App extends Component {
 	 */
   renderWelcome() {
     return (
-        <Welcome
-        callBack={() => this.updateWaiverStatus()}
-        firebaseUser={this.state.firebaseUser}
-        app={this}/>
+        <Welcome app={this}/>
     );
   }
 
@@ -761,30 +745,6 @@ class App extends Component {
 					</Switch>
 				</Router>
 		);
-		/*
-		switch (this.state.display) {
-			case displayType.signin:
-				return this.renderSignin();
-			case displayType.signup:
-				return this.renderSignup();
-			case displayType.welcome:
-				return this.renderWelcome();
-			case displayType.exercise:
-			case displayType.feedback:
-				return this.renderExercise();
-			case displayType.concept:
-				return this.renderConceptSelection();
-      case displayType.world:
-        return this.renderWorldView();
-      case displayType.load:
-        return this.renderLoadView();
-      case displayType.instruct:
-        return this._renderInstructionView();
-			case displayType.author:
-				return this.renderAuthorView();
-			default:
-				break;
-		*/
 	}
 
   render() {
