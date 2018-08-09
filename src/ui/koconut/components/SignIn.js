@@ -44,7 +44,6 @@ class SignIn extends Component {
 					this.routeUser();
 				}
 			}).catch((error) => {
-				console.log("Error:", error.message);
       	this.setState({errorMessage: error.message});
     	});
   }
@@ -58,7 +57,6 @@ class SignIn extends Component {
 		let databaseRef = firebase.database().
 				ref("Users/" + this.state.currentUser.uid);
 		databaseRef.once("value", (snapshot) => {
-			console.log(snapshot);
 			if (snapshot !== null && snapshot.val() !== null) {
 				let snap = snapshot.val();
 				let waiverStatus = snap.waiverStatus;

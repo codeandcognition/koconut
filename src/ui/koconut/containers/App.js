@@ -589,7 +589,9 @@ class App extends Component {
       });
     } else {
       return(
-          <Signup toSignin={this.switchToSignin}/>
+					<div>
+						<Signup toSignin={this.switchToSignin}/>
+					</div>
       );
     }
   }
@@ -613,7 +615,12 @@ class App extends Component {
 	 * Remders the author view
 	 */
 	renderAuthorView() {
-		return (<AuthorView></AuthorView>);
+		return (
+				<div>
+					{this.renderNavBar()}
+					<AuthorView/>
+				</div>
+		);
 	}
 
 	/**
@@ -653,11 +660,12 @@ class App extends Component {
   }
 
 	/**
+	 * TODO: update comments
 	 * Sets the display state to 'AUTHOR'. This function is passed as a prop to
 	 * to the NavBar
 	 */
 	switchToAuthorView() {
-		this.setState({display: displayType.author});
+		this.props.history.push(Routes.author);
 	}
 
 	/**
@@ -711,7 +719,10 @@ class App extends Component {
    */
   renderWorldView() {
     return(
-        <WorldView generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
+				<div>
+					{this.renderNavBar()}
+					<WorldView generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
+				</div>
     )
   }
 
@@ -747,15 +758,25 @@ class App extends Component {
 		);
 	}
 
+	/**
+	 * renders the nav bar component for the app
+	 * @returns {*}
+	 */
+	renderNavBar() {
+		// TODO: Remove unnecessary props
+		return (
+				<Navbar firebaseUser={this.state.firebaseUser}
+								switchToWorldView={this.switchToWorldView}
+								switchToAuthorView={this.switchToAuthorView}
+								display={this.state.display}
+								author={this.state.author}/>
+		);
+	}
+
   render() {
     return (
         <div className="App">
           <MuiThemeProvider theme={this.theme}>
-            <Navbar firebaseUser={this.state.firebaseUser}
-                    switchToWorldView={this.switchToWorldView}
-										switchToAuthorView={this.switchToAuthorView}
-                    display={this.state.display}
-										author={this.state.author}/>
             <div className="main">
               {this.renderDisplay()}
 							{this.state.error && this.renderErrorMessage()}

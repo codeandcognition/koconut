@@ -1,6 +1,6 @@
 // @flow
 import React, {Component} from 'react';
-import { Link } from "react-router-dom";
+import { Link, withRouter, Route} from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -11,6 +11,7 @@ import typeof FirebaseUser from 'firebase';
 import Menu from '@material-ui/core/Menu/Menu';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import BackButton from '@material-ui/icons/ChevronLeft';
+import Routes from './../../../Routes';
 
 /**
  * Navbar adds a navigation bar to the app
@@ -34,6 +35,29 @@ class Navbar extends Component {
     }
     this.handleMenuClose = this.handleMenuClose.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
+  }
+
+  componentWillMount() {
+    this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+      this.setState({currentUser: user}, () => {
+        this.checkAuthorStatus();
+      });
+    })
+  }
+
+  checkAuthorStatus() {
+		let databaseRef = firebase.database().
+				ref("Users/" + this.state.currentUser.uid);
+		databaseRef.once("value", snapshot => {
+      if (snapshot && snapshot.val()) {
+        let snap = snapshot.val();
+        this.setState({isAuthor: snap.permission === "author"});
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.authUnsub();
   }
 
   // Opens the hamburger menu when it is clicked
@@ -70,8 +94,7 @@ class Navbar extends Component {
 							<Typography style={{flexGrow: 1, color: "#FAFAFA"}} variant={"title"}>
 								Koconut
 							</Typography>
-              {/* console.log(this.props.firebaseUser) */}
-              {this.props.firebaseUser &&
+              {this.state.currentUser &&
               (<div>
                   <Button
                           onClick={(e) => this.handleMenuClick(e)}
@@ -97,7 +120,7 @@ class Navbar extends Component {
                         getContentAnchorEl={null}
                         style={{paddingRight: 0}}
                       >
-                    {this.props.author && <Link to={this.props.switchToAuthorView()}><MenuItem>Author</MenuItem></Link>}
+                    {this.state.isAuthor ? <Link to={Routes.author}><MenuItem>Author</MenuItem></Link> : null}
                     <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
                     <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
                     <MenuItem onClick={() => {
@@ -114,4 +137,4 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+export default withRouter(Navbar);
