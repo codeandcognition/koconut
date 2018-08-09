@@ -5,6 +5,7 @@ import './Welcome.css';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import Routes from './../../../Routes';
+import LoadingView from './LoadingView';
 
 const strings = {
   welcome: "Welcome to Koconut!",
@@ -33,15 +34,25 @@ const strings = {
 
 class Welcome extends Component {
   // TODO: Maybe this should be a ReactMarkdown component
+	constructor(props) {
+		super(props);
+		this.state = {
+			loading: true
+		}
+	}
 
   componentWillMount() {
   	this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-			let databaseRef = firebase.database().ref("Users/" + user.uid + "/waiverStatus");
-			databaseRef.once("value", (snapshot) => {
-				if (snapshot != null && snapshot.val()) {
-					this.props.history.push(Routes.worldview);
-				}
-			})
+  		if (user) {
+				let databaseRef = firebase.database().ref("Users/" + user.uid + "/waiverStatus");
+				databaseRef.once("value", (snapshot) => {
+					if (snapshot != null && snapshot.val()) {
+						this.props.history.push(Routes.worldview);
+					}
+				})
+			} else {
+				this.props.history.push(Routes.signin);
+			}
 		});
   }
 
@@ -60,27 +71,32 @@ class Welcome extends Component {
 	}
 
   render() {
-
-    var welcomeStyle = {
+    let welcomeStyle = {
       marginTop: "15vh"
     }
-
     return (
-      <div style={welcomeStyle} className="welcome-page">
-        <h2>{strings.welcome}</h2>
-        <p>{strings.intro}</p>
-        <h4>{strings.use_cases.title}</h4>
-        <ul>{strings.use_cases.cases.map((c, i) => <li key={i}>{c}</li>)}</ul>
-        <h4>{strings.user_modes.title}</h4>
-        <ol>{strings.user_modes.modes.map((m, i) => <li key={i}>{m}</li>)}</ol>
-        <h4>{strings.language.desc}</h4>
-        <p>{strings.language.rationale}</p>
-        <h4>{strings.language.example_desc}</h4>
-        {strings.language.example_code.map((c, i) => <div key={i}><code>{c}</code></div>)}
-        <h4><i>{strings.nsf}</i></h4>
-        <p>{strings.agreement}</p>
-        <button onClick={() => this.updateWaiverStatus()}>{strings.iagree}</button>
-      </div>)
+				<div>
+					{
+						this.state.loading ?
+								<LoadingView/> :
+								<div style={welcomeStyle} className="welcome-page">
+									<h2>{strings.welcome}</h2>
+									<p>{strings.intro}</p>
+									<h4>{strings.use_cases.title}</h4>
+									<ul>{strings.use_cases.cases.map((c, i) => <li key={i}>{c}</li>)}</ul>
+									<h4>{strings.user_modes.title}</h4>
+									<ol>{strings.user_modes.modes.map((m, i) => <li key={i}>{m}</li>)}</ol>
+									<h4>{strings.language.desc}</h4>
+									<p>{strings.language.rationale}</p>
+									<h4>{strings.language.example_desc}</h4>
+									{strings.language.example_code.map((c, i) => <div key={i}><code>{c}</code></div>)}
+									<h4><i>{strings.nsf}</i></h4>
+									<p>{strings.agreement}</p>
+									<button onClick={() => this.updateWaiverStatus()}>{strings.iagree}</button>
+								</div>
+					}
+				</div>
+		)
   }
 }
 

@@ -8,6 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Routes from './../../../Routes';
+import LoadingView from '../components/LoadingView';
 
 class SignIn extends Component {
 
@@ -15,6 +16,7 @@ class SignIn extends Component {
     super(props);
     // noinspection JSAnnotator
     this.state = {
+    	loading: true,
       errorMessage: "",
       emailAddress: "",
       password: "",
@@ -27,8 +29,12 @@ class SignIn extends Component {
 
   componentDidMount() {
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-			this.setState({currentUser: user});
-			this.routeUser();
+			this.setState({currentUser: user, loading: false});
+			if (user) {
+				this.setState({loading: false}, () => {
+					this.routeUser();
+				});
+			}
 		});
 	}
 
@@ -63,7 +69,7 @@ class SignIn extends Component {
 				let author = snap.permission === 'author';
 				// TODO: Implement logic for handling authors
 				if (waiverStatus) {
-					this.props.history.push(Routes.worldview);
+					this.setState({loading: false}, () => this.props.history.push(Routes.worldview));
 				} else {
 					this.props.history.push(Routes.welcome);
 				}
@@ -100,68 +106,87 @@ class SignIn extends Component {
   }
 
 
+  renderForm() {
+		let buttonStyle = {
+			margin: "2px",
+			marginBottom: "15px"
+		};
+		let textFieldStyle = {
+			marginBottom: "10px",
+			width: "12vw"
+		};
+
+		return (
+				<div
+						style={{textAlign: "center", padding: "10vw"}} className="container">
+					<h1>Koconut</h1>
+					<img style={{width: "10vh" }}
+							 src={"https://i.pinimg.com/originals/bd/87/87/bd8787a601af7682d857f6c365d4421b.png"}
+							 alt={"cocount"} />
+					<h3>a tutor to help you learn</h3>
+					<form>
+						<TextField style={textFieldStyle}
+											 onInput={(e) => this.setState({emailAddress: e.target.value})}
+											 label={"Email Address"}
+											 placeholder={"Enter your email address"}
+											 type={"email"} />
+						<br />
+						<TextField style={textFieldStyle}
+											 onInput={(e) => this.setState({password: e.target.value})}
+											 label={"Password"} placeholder={"Enter your password"}
+											 type="password" />
+					</form>
+					<br />
+					{this.state.errorMessage &&
+					<p style={{textAlign: "left", marginBottom: "0"}}
+						 className={"alert alert-danger"}>{this.state.errorMessage}</p>
+					}
+					<br />
+					<Button style={buttonStyle}
+									variant={"outlined"}
+									onClick={() => this.signInUser()}>Sign In</Button>
+					<br />
+					<Link to={Routes.signup}>
+						<p
+								style={{fontSize: '14px', color: '#e91363', cursor: 'pointer'}}>
+							Create Account
+						</p>
+					</Link>
+					<p onClick={(e) => this.togglePasswordResetView(true)}
+						 style={{marginBottom: "15px", fontSize: '14px', color: '#00BCD4', cursor: 'pointer'}}>Forgot Password</p>
+					<Dialog open={this.state.showPasswordResetView}
+									title={"Reset Password"}
+									primary={true}
+									aria-labelledby="form-dialog-title">
+						<DialogTitle id="form-dialog-title">Reset Password</DialogTitle>
+						<DialogContent>
+							<label style={{marginTop: '2%'}}>Email Address</label>
+							<br />
+							<TextField hintText="Enter your email address"
+												 style={{ width: '100%', marginBottom: "10px" }}
+												 onInput={e => this.setState({ forgotPasswordEmail: e.target.value })}
+												 type={"email"}/>
+							{this.state.passwordResetError ?
+									<p className={"alert alert-danger"}>{this.state.passwordResetMessage}</p> :
+									<p>{this.state.passwordResetMessage}</p>
+							}
+						</DialogContent>
+						<DialogActions>
+							<Button onClick={() => this.sendPasswordResetEmail()}>Submit</Button>,
+							<Button onClick={() => this.togglePasswordResetView(false)}>Cancel</Button>
+						</DialogActions>
+					</Dialog>
+				</div>
+
+		);
+	}
+
   render() {
-
-    var buttonStyle = {
-      margin: "2px",
-      marginBottom: "15px"
-    }
-
-    var textFieldStyle = {
-      marginBottom: "10px",
-      width: "12vw"
-    }
-
-    return <div style={{textAlign: "center", padding: "10vw"}} className="container">
-      <h1>Koconut</h1>
-      <img style={{width: "10vh" }} src={"https://i.pinimg.com/originals/bd/87/87/bd8787a601af7682d857f6c365d4421b.png"} alt={"cocount"} />
-      <h3>a tutor to help you learn</h3>
-      <form>
-        <TextField style={textFieldStyle}
-                   onInput={(e) => this.setState({emailAddress: e.target.value})}
-                   label={"Email Address"}
-                   placeholder={"Enter your email address"}
-                   type={"email"} />
-        <br />
-        <TextField style={textFieldStyle}
-                   onInput={(e) => this.setState({password: e.target.value})}
-                   label={"Password"} placeholder={"Enter your password"}
-                   type="password" />
-      </form>
-      <br />
-      {this.state.errorMessage &&
-        <p style={{textAlign: "left", marginBottom: "0"}} className={"alert alert-danger"}>{this.state.errorMessage}</p>
-      }
-      <br />
-      <Button style={buttonStyle} variant={"outlined"} onClick={() => this.signInUser()}>Sign In</Button>
-      <br />
-      <Link to={Routes.signup}><p style={{fontSize: '14px', color: '#e91363', cursor: 'pointer'}}>Create Account</p></Link>
-      <p onClick={(e) => this.togglePasswordResetView(true)}
-         style={{marginBottom: "15px", fontSize: '14px', color: '#00BCD4', cursor: 'pointer'}}>Forgot Password</p>
-      <Dialog open={this.state.showPasswordResetView}
-              title={"Reset Password"}
-              primary={true}
-              aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Reset Password</DialogTitle>
-        <DialogContent>
-        <label style={{marginTop: '2%'}}>Email Address</label>
-        <br />
-        <TextField hintText="Enter your email address"
-                   style={{ width: '100%', marginBottom: "10px" }}
-                   onInput={e => this.setState({ forgotPasswordEmail: e.target.value })}
-                   type={"email"}/>
-          {this.state.passwordResetError ?
-          <p className={"alert alert-danger"}>{this.state.passwordResetMessage}</p> :
-          <p>{this.state.passwordResetMessage}</p>
-          }
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => this.sendPasswordResetEmail()}>Submit</Button>,
-          <Button onClick={() => this.togglePasswordResetView(false)}>Cancel</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-
+    return (
+				<div>
+					{this.state.loading ? <LoadingView/> : this.renderForm()}
+				</div>
+		);
   }
 }
 

@@ -40,7 +40,9 @@ class Navbar extends Component {
   componentWillMount() {
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
       this.setState({currentUser: user}, () => {
-        this.checkAuthorStatus();
+        if (user) {
+					this.checkAuthorStatus();
+        }
       });
     })
   }
@@ -72,6 +74,11 @@ class Navbar extends Component {
     this.setState({
       menuAnchor: null
     });
+  }
+
+  handleLogout() {
+		this.handleMenuClose();
+		firebase.auth().signOut().then(this.props.history.push(Routes.signin));
   }
 
   render() {
@@ -123,10 +130,7 @@ class Navbar extends Component {
                     {this.state.isAuthor ? <Link to={Routes.author}><MenuItem>Author</MenuItem></Link> : null}
                     <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
                     <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
-                    <MenuItem onClick={() => {
-                      this.handleMenuClose();
-                      firebase.auth().signOut();
-                    }}>Logout</MenuItem>
+                    <MenuItem onClick={() => this.handleLogout()}>Logout</MenuItem>
                   </Menu>
                 </div>)
               }
