@@ -1,6 +1,6 @@
 // @flow
 import React, {Component} from 'react';
-import { Link, withRouter, Route} from "react-router-dom";
+import { Link, withRouter} from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -42,7 +42,9 @@ class Navbar extends Component {
       this.setState({currentUser: user}, () => {
         if (user) {
 					this.checkAuthorStatus();
-        }
+        } else {
+        	this.props.history.push(Routes.signin);
+				}
       });
     })
   }
@@ -86,15 +88,17 @@ class Navbar extends Component {
         <div>
           <AppBar>
             <Toolbar>
-							{this.props.display === "EXERCISE" || this.props.display === "AUTHOR" || this.props.display === 'INSTRUCT' ?
+							{this.props.history.location.pathname === Routes.author  ?
 									<div style={{marginRight: 5}}>
-										<BackButton onClick={this.props.switchToWorldView}
-																aria-owns='menu'
-																aria-haspopup="true"
-																id="menu-button"
-																style={{color: '#fff', cursor: 'pointer'}}>
-											Back to World View
-										</BackButton>
+										<Link to={Routes.worldview}>
+											<BackButton
+													aria-owns='menu'
+													aria-haspopup="true"
+													id="menu-button"
+													style={{color: '#fff', cursor: 'pointer'}}>
+												Back to World View
+											</BackButton>
+										</Link>
 									</div> : <div></div>
 							}
 							{/* color imported from Material UI */}

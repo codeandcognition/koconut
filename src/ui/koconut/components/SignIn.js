@@ -29,11 +29,13 @@ class SignIn extends Component {
 
   componentDidMount() {
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-			this.setState({currentUser: user, loading: false});
+			this.setState({currentUser: user});
 			if (user) {
+				this.routeUser();
+			} else {
 				this.setState({loading: false}, () => {
-					this.routeUser();
-				});
+					this.props.history.push(Routes.signin);
+				})
 			}
 		});
 	}
@@ -47,7 +49,9 @@ class SignIn extends Component {
     firebase.auth().signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
     	.then(() => {
     		if (this.state.currentUser !== null) {
-					this.routeUser();
+    			this.setState({loading: false}, () => {
+						this.routeUser();
+					});
 				}
 			}).catch((error) => {
       	this.setState({errorMessage: error.message});
@@ -71,10 +75,10 @@ class SignIn extends Component {
 				if (waiverStatus) {
 					this.setState({loading: false}, () => this.props.history.push(Routes.worldview));
 				} else {
-					this.props.history.push(Routes.welcome);
+					this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
 				}
 			} else {
-				this.props.history.push(Routes.welcome);
+				this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
 			}
 		});
 	}
