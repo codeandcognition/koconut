@@ -12,7 +12,6 @@ import SignIn from '../components/SignIn';
 import WorldView from './WorldView';
 import AuthorView from './../../koconut-author/AuthorView';
 import PopOverMessage from './PopoverMessage';
-import LoadingView from '../components/LoadingView';
 import InstructionView from './InstructionView';
 import Types from '../../../data/ExerciseTypes.js';
 
@@ -47,19 +46,14 @@ class App extends Component {
   submitConcept: Function;
   submitOk: Function;
   submitTryAgain: Function;
-  switchToSignin: Function;
-  switchToSignup: Function;
   generateExercise: Function;
   getInstruction: Function;
   setInstructionViewError: Function;
   resetError: Function;
   resetFeedback: Function;
   switchToWorldView: Function;
-  switchToAuthorView: Function;
-  loadDisplay: Function;
   generator: ExerciseGenerator;
   theme: mixed;
-  updateWaiverStatus: Function;
   nextQuestion: Function;
   // updater: ResponseEvaluator;
   state: {
@@ -116,21 +110,13 @@ class App extends Component {
     this.submitConcept = this.submitConcept.bind(this);
     this.submitOk = this.submitOk.bind(this);
     this.submitTryAgain = this.submitTryAgain.bind(this);
-    this.switchToSignin = this.switchToSignin.bind(this);
-    this.switchToSignup = this.switchToSignup.bind(this);
     this.generateExercise = this.generateExercise.bind(this);
     this.getInstruction = this.getInstruction.bind(this);
     this.setInstructionViewError = this.setInstructionViewError.bind(this);
     this.resetError = this.resetError.bind(this);
     this.switchToWorldView = this.switchToWorldView.bind(this);
-    // this.loadDisplay = this.loadDisplay.bind(this); TODO: Uncomment this
-    this.switchToAuthorView = this.switchToAuthorView.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
     this.resetFeedback = this.resetFeedback.bind(this);
-  }
-
-  returnDisplayTypes() {
-    return displayType;
   }
 
   /**
@@ -199,7 +185,7 @@ class App extends Component {
 	}
 
 	/**
-	 *
+	 * sets error state to false
 	 */
 	resetError() {
 		this.setState({error: false});
@@ -266,7 +252,7 @@ class App extends Component {
   }
 
 	/**
-	 * checks user input for a table question
+	 * verifies the correctness of user input for table questions
 	 *
 	 * @param question
 	 * @param questionIndex
@@ -314,6 +300,15 @@ class App extends Component {
 		return checkerForCorrectness;
 	}
 
+	/**
+	 * Verifies the correctness of a checkbox question
+	 * @param question
+	 * @param questionIndex
+	 * @param answer
+	 * @param fIndex
+	 * @param feedbackTemp
+	 * @returns {boolean}
+	 */
 	verifyCheckboxQuestion(question: any, questionIndex: number, answer: any, fIndex: number, feedbackTemp: any) {
 		let isCorrect = true;
 		let answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
@@ -357,25 +352,44 @@ class App extends Component {
 		return equals;
 	}
 
+	/**
+	 * Function to check correctness of user input for memory table questions
+	 * Process the parameters before passing them to a helper method to handle the
+	 * case where the question is a follow up question
+	 *
+	 * @param question
+	 * @param questionIndex
+	 * @param answer
+	 * @param fIndex
+	 * @param feedbackTemp
+	 * @returns {boolean}
+	 */
 	verifyMemoryTable(question: any, questionIndex : number, answer: any, fIndex: number, feedbackTemp : any) {
   	let checkerForCorrectness = true;
 		if (fIndex === -1) {
 			let response = answer[questionIndex];
 			feedbackTemp[questionIndex] = "correct";
-			this.handleMemoryTable(question, questionIndex, response, feedbackTemp);
+			this.verifyMemoryTableHelper(question, questionIndex, response, feedbackTemp);
 			checkerForCorrectness = feedbackTemp[questionIndex] === "correct";
 		} else {
 			let response = !answer[questionIndex] && [];
 			feedbackTemp[questionIndex] = !feedbackTemp[questionIndex] && [];
 			response = answer[questionIndex][fIndex];
 			feedbackTemp[questionIndex][fIndex] = "correct";
-			this.handleMemoryTable(question, fIndex, response, feedbackTemp[questionIndex]);
+			this.verifyMemoryTableHelper(question, fIndex, response, feedbackTemp[questionIndex]);
 			checkerForCorrectness = feedbackTemp[questionIndex][fIndex] === "correct";
 		}
 		return checkerForCorrectness;
 	}
 
-	handleMemoryTable(question: any, questionIndex : number, response: any, feedback : any) {
+	/**
+	 * Compares user input with the correct answer for a memory table question
+	 * @param question
+	 * @param questionIndex
+	 * @param response
+	 * @param feedback
+	 */
+	verifyMemoryTableHelper(question: any, questionIndex : number, response: any, feedback : any) {
 		let answer = question.answer;
 		if (typeof(answer) === "string") {
 			answer = JSON.parse(answer);
@@ -394,6 +408,15 @@ class App extends Component {
 		});
 	}
 
+	/**
+	 *
+	 * @param question
+	 * @param questionIndex
+	 * @param answer
+	 * @param fIndex
+	 * @param feedbackTemp
+	 * @returns {boolean}
+	 */
 	verifyOtherQuestions(question: any, questionIndex: number, answer: any, fIndex: number, feedbackTemp: any) {
   	let checkerForCorrectness = true;
 		if (fIndex !== -1) {
@@ -534,81 +557,22 @@ class App extends Component {
     });
   }
 
-  renderLoadView() {
-    return <LoadingView loadDisplay={() => this.loadDisplay()}/>
-  }
-
-	/**
-	 * Checks whether the user is signed in, their waiver status, their
-	 * permissions and changes the display type accordingly
-	 *
-
-	loadDisplay() {
-    this.props.firebase.auth().onAuthStateChanged((fbUser) => {
-    	this.setState({firebaseUser: fbUser});
-      if (fbUser) {
-        let databaseRef = this.props.firebase.database().ref("Users/" + fbUser.uid);
-        databaseRef.once("value", (snapshot) => {
-        	if (snapshot !== null && snapshot.val() !== null) {
-        		let waiverStatus = snapshot.val().waiverStatus;
-        		let author = snapshot.val().permission === 'author';
-        		if (waiverStatus) {
-              this.setState({display: displayType.world});
-            } else {
-        			this.setState({display: displayType.welcome});
-						}
-            if (author) {
-        			this.setState({author: author});
-						}
-					} else {
-        	  this.setState({display: displayType.welcome});
-          }
-        });
-        this.exerciseGetter = this.props.firebase.database().ref('Exercises');
-        this.exerciseGetter.on('value', (snap) => {
-          this.setState({exerciseList:snap.val()});
-        });
-        this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
-        this.conceptMapGetter.on('value', (snap) => {
-          this.setState({conceptMapGetter: snap.val()});
-        });
-      } else {
-      	this.setState({display: displayType.signin});
-			}
-    });
-  }
-	 */
-
   /**
-   * Renders the sign up view
+   * renders the sign up view
    */
   renderSignup() {
-    if (this.state.firebaseUser) {
-      this.setState({
-        display: displayType.load
-      });
-    } else {
-      return(
-					<div>
-						<Signup toSignin={this.switchToSignin}/>
-					</div>
-      );
-    }
+  	return (
+				<div>
+					<Signup/>
+				</div>
+		);
   }
 
 	/**
-	 * Renders the sign in view
+	 * renders the sign in view
 	 */
 	renderSignin() {
-		if (this.state.firebaseUser) {
-			this.setState({
-				display: displayType.load
-			});
-		} else {
-			return(
-					<SignIn toSignup={this.switchToSignup} />
-			);
-		}
+		return (<SignIn/>);
 	}
 
 	/**
@@ -636,14 +600,6 @@ class App extends Component {
 	}
 
 	/**
-	 * Sets the display state to 'signin'. This function is passed as a prop
-	 * to the Sign up view.
-	 */
-	switchToSignin() {
-		this.setState({display: displayType.signin});
-	}
-
-	/**
 	 * Sets the display state to 'signup'. This function is passed as a prop
 	 * to the Sign in view
 	 */
@@ -659,14 +615,6 @@ class App extends Component {
 	  this.setState({display: displayType.world, counter: 0, feedback: []});
   }
 
-	/**
-	 * TODO: update comments
-	 * Sets the display state to 'AUTHOR'. This function is passed as a prop to
-	 * to the NavBar
-	 */
-	switchToAuthorView() {
-		this.props.history.push(Routes.author);
-	}
 
 	/**
 	 * Renders the welcome view
@@ -739,7 +687,7 @@ class App extends Component {
   }
 
 	/**
-	 * Renders the display based on display state
+	 * predefined routes within koconut
 	 */
 	renderDisplay() {
 		// TODO: Add routes for exercise view and instruction view
@@ -763,14 +711,7 @@ class App extends Component {
 	 * @returns {*}
 	 */
 	renderNavBar() {
-		// TODO: Remove unnecessary props
-		return (
-				<Navbar firebaseUser={this.state.firebaseUser}
-								switchToWorldView={this.switchToWorldView}
-								switchToAuthorView={this.switchToAuthorView}
-								display={this.state.display}
-								author={this.state.author}/>
-		);
+		return (<Navbar/>);
 	}
 
   render() {

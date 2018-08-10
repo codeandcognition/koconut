@@ -18,12 +18,6 @@ import Routes from './../../../Routes';
  * @class
  */
 
-type Props = {
-  firebaseUser: ?FirebaseUser,
-  display: string,
-  switchToWorldView: Function
-}
-
 class Navbar extends Component {
   handleMenuClose: Function;
   handleMenuClick: Function;
@@ -32,7 +26,7 @@ class Navbar extends Component {
     super(props);
     this.state = {
       menuAnchor: null
-    }
+    };
     this.handleMenuClose = this.handleMenuClose.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
   }
@@ -49,6 +43,10 @@ class Navbar extends Component {
     })
   }
 
+  /**
+	 * function to check if current firebase user is an author to determine
+	 * whether or not they should see the link in the nav bar
+	 */
   checkAuthorStatus() {
 		let databaseRef = firebase.database().
 				ref("Users/" + this.state.currentUser.uid);
@@ -64,20 +62,27 @@ class Navbar extends Component {
     this.authUnsub();
   }
 
-  // Opens the hamburger menu when it is clicked
+  /**
+	 * opens the hamburger menu when it is clicked
+	 */
   handleMenuClick(e: Event) {
     this.setState({
       menuAnchor: e.currentTarget
     });
   }
 
-  // Closes hamburger menu
+	/**
+	 * closes hamburger menu
+	 */
   handleMenuClose() {
     this.setState({
       menuAnchor: null
     });
   }
 
+	/**
+	 * handle logging out of koconut
+	 */
   handleLogout() {
 		this.handleMenuClose();
 		firebase.auth().signOut().then(this.props.history.push(Routes.signin));

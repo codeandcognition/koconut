@@ -55,6 +55,7 @@ class WorldView extends Component {
 	}
 
 	componentWillUnmount() {
+  	// unlisten for auth changes
 		this.authUnsub();
 	}
 

@@ -41,10 +41,13 @@ class SignIn extends Component {
 	}
 
 	componentWillUnmount() {
+  	// stop the auth listener
   	this.authUnsub();
 	}
 
-  // Signs user into their account via Firebase authentication
+	/**
+	 * Signs user into their account via Firebase authentication
+	 */
   signInUser() {
     firebase.auth().signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
     	.then(() => {
@@ -61,7 +64,6 @@ class SignIn extends Component {
 	/**
 	 * routes user to the world view or the welcome view depending on their waiver
 	 * status
-	 *
 	 */
 	routeUser() {
 		let databaseRef = firebase.database().
@@ -70,8 +72,6 @@ class SignIn extends Component {
 			if (snapshot !== null && snapshot.val() !== null) {
 				let snap = snapshot.val();
 				let waiverStatus = snap.waiverStatus;
-				let author = snap.permission === 'author';
-				// TODO: Implement logic for handling authors
 				if (waiverStatus) {
 					this.setState({loading: false}, () => this.props.history.push(Routes.worldview));
 				} else {
@@ -83,7 +83,11 @@ class SignIn extends Component {
 		});
 	}
 
-  // Closes and opens window allowing user to reset their password
+	/**
+	 * closes and opens window allowing user to reset their password
+	 *
+	 * @param openView
+	 */
   togglePasswordResetView(openView) {
     this.setState({
       showPasswordResetView: openView,
@@ -93,8 +97,10 @@ class SignIn extends Component {
     });
   }
 
-  // Sends a password reset email to the provided email address if it is valid
-  sendPasswordResetEmail() {
+	/**
+	 *  sends a password reset email to the provided email address if it is valid
+	 */
+	sendPasswordResetEmail() {
     firebase.auth().sendPasswordResetEmail(this.state.forgotPasswordEmail).then(() => {
       this.setState({
         passwordResetMessage: "A password reset email has been sent.",
@@ -109,7 +115,10 @@ class SignIn extends Component {
     });
   }
 
-
+	/**
+	 * returns a div that contains the sign in form
+	 * @returns {*}
+	 */
   renderForm() {
 		let buttonStyle = {
 			margin: "2px",
