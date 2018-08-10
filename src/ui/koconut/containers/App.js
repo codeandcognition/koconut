@@ -15,6 +15,7 @@ import PopOverMessage from './PopoverMessage';
 import LoadingView from '../components/LoadingView';
 import InstructionView from './InstructionView';
 import Types from '../../../data/ExerciseTypes.js';
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';

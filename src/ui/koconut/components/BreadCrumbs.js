@@ -159,7 +159,7 @@ export default class BreadCrumbs extends Component {
                     onClose={this.handleMenuClose}>
                 {conceptMenu.map((item, index) => {
                   return (
-                    <MenuItem key={index}>{item}</MenuItem>
+                    <MenuItem key={index} onClick={this.handleMenuClose}>{item}</MenuItem>
                   );
                 })}
               </Menu>
@@ -174,10 +174,10 @@ export default class BreadCrumbs extends Component {
                     }}
                     open={Boolean(typeAnchorEl)}
                     onClose={this.handleMenuClose}>
-                <MenuItem>Learn to Read Code</MenuItem>
-                <MenuItem>Practice Reading Code</MenuItem>
-                <MenuItem>Learn to Write Code</MenuItem>
-                <MenuItem>Practice Writing Code</MenuItem>
+                <MenuItem onClick={this.handleMenuClose}>Learn to Read Code</MenuItem>
+                <MenuItem onClick={this.handleMenuClose}>Practice Reading Code</MenuItem>
+                <MenuItem onClick={this.handleMenuClose}>Learn to Write Code</MenuItem>
+                <MenuItem onClick={this.handleMenuClose}>Practice Writing Code</MenuItem>
               </Menu>
             </li>
             <li className="breadcrumb-item active" aria-current="page">{this.props.chosenInstruction ? this.props.chosenInstruction.title : ""}</li>

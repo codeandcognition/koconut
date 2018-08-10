@@ -95,9 +95,11 @@ class Feedback extends Component {
     Object.keys(finalString).forEach((variable, index) => {
       let values = finalString[variable];
       let output = variable + ":";
-      values.forEach(val => {
-        output += "\t" + val;
-      });
+      if (values) {
+        values.forEach(val => {
+          output += "\t" + val;
+        });
+      }
       list.push(<p key={index}>{output}</p>)
     });
     return (<div>{list}</div>);
