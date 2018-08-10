@@ -1,11 +1,13 @@
 // @flow
 import React, {Component} from 'react';
+import { Link, withRouter} from "react-router-dom";
 import firebase from 'firebase';
 import BreadCrumbs from '../components/BreadCrumbs';
 import InstructionTitle from '../components/InstructionTitle';
 import InstructionContent from '../components/InstructionContent';
 import LoadingView from '../components/LoadingView';
 import './InstructionView.css';
+import Routes from './../../../Routes';
 
 type Props = {
   conceptType: string,
@@ -17,7 +19,7 @@ type Props = {
  * to the user.
  * @class
  */
-export default class InstructionView extends Component {
+class InstructionView extends Component {
   state: {
     currInstructionIndex: number,
     instructionList: any // will always be an instruction object from firebase
@@ -84,14 +86,9 @@ export default class InstructionView extends Component {
    */
   componentDidMount() {
     this.mounted = true;
-    this.firebaseListener = firebase.database().
-        ref(`Instructions/${this.props.conceptType}/${this.props.readOrWrite}`);
-    this.firebaseListener.on('value', (snap) => {
-      if (this.mounted) {
-        this.setState({instructionList: snap.val()});
-      }
-    });
-    document.addEventListener("keydown", (e: any) => this.handleKeyPress(e.key));
+    // set the instruction list in state
+		this.updateInstructions();
+		document.addEventListener("keydown", (e: any) => this.handleKeyPress(e.key));
   }
 
   handleKeyPress(key: string) {
@@ -102,18 +99,6 @@ export default class InstructionView extends Component {
     }
   }
 
-
-	/**
-	 * Called immediately after the component updates. It checks if the
-	 * instructionList is null and invokes the setError function in App.js
-	 *
-	 * Invoking this here (rather than in render) prevents the app
-	 * from throwing a console warning.
-	 */
-	componentDidUpdate() {
-  	this.state.instructionList === null && this.props.setError();
-	}
-
   /**
    * Reset the firebaseListener to be instructions from the new props.
    * I don't think the way our program is structured will ever require this to
@@ -121,12 +106,7 @@ export default class InstructionView extends Component {
    * @param nextProps- the new prop object being received
    */
   componentWillReceiveProps(nextProps: Props) {
-    this.firebaseListener = firebase.database().ref(`Instructions/${nextProps.conceptType}/${nextProps.readOrWrite}`);
-    this.firebaseListener.on('value', (snap) => {
-      if(this.mounted) {
-        this.setState({instructionList: snap.val()});
-      }
-    });
+  	this.updateInstructions();
   }
 
   /**
@@ -142,6 +122,19 @@ export default class InstructionView extends Component {
       currInstructionIndex: index
     });
   }
+
+  updateInstructions() {
+		let pathComponents = this.props.history.location.pathname.split("/");
+		let conceptType = pathComponents[2];
+		let readOrWrite = pathComponents[3].includes("read") ? "READ" : "WRITE";
+		this.firebaseListener = firebase.database().
+				ref(`Instructions/${conceptType}/${readOrWrite}`);
+		this.firebaseListener.on('value', (snap) => {
+			if (this.mounted) {
+				this.setState({instructionList: snap.val()});
+			}
+		});
+	}
 
   render() {
     let chosenInstruction = null;
@@ -199,3 +192,5 @@ export default class InstructionView extends Component {
     )
   }
 }
+
+export default withRouter(InstructionView);

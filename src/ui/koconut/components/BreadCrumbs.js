@@ -5,14 +5,16 @@ import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import './BreadCrumbs.css';
+import { Link, withRouter} from "react-router-dom";
 import Grow from '@material-ui/core/Grow';
+import Routes from './../../../Routes';
 
 type Props = {
   conceptType: string,
   chosenInstruction: any
 }
 
-export default class BreadCrumbs extends Component {
+class BreadCrumbs extends Component {
 
 
   constructor(props: Props) {
@@ -73,7 +75,7 @@ export default class BreadCrumbs extends Component {
    */
   formatCamelCasedString(camelString: string) {
     var result = "";
-    if (camelString.length !== 0) {
+    if (camelString && camelString.length !== 0) {
       result = result + camelString.charAt(0).toUpperCase();
       for (var i = 1; i < camelString.length; i++) {
         if (camelString.charAt(i) === camelString.charAt(i).toUpperCase()) {
@@ -131,24 +133,29 @@ export default class BreadCrumbs extends Component {
       readOrWrite = "Learn to Write Code";
     }
 
-    var conceptMenu = [];
-    if (this.state.semanticConcepts && this.state.semanticConcepts.includes(this.state.concept)) {
+    // to handle loss of state upon refresh
+		let pathComponents = this.props.history.location.pathname.split("/");
+		let conceptCode = pathComponents[2];
+		let conceptName = this.formatCamelCasedString(conceptCode);
+
+    let conceptMenu = [];
+    if (this.state.semanticConcepts && this.state.semanticConcepts.includes(conceptName)) {
       conceptMenu = this.state.semanticConcepts;
-    } else if (this.state.templateConcepts && this.state.templateConcepts.includes(this.state.concept)) {
+    } else if (this.state.templateConcepts && this.state.templateConcepts.includes(conceptName)) {
       conceptMenu = this.state.templateConcepts;
-    } else if (this.state.onboardingConcepts && this.state.onboardingConcepts.includes(this.state.concept)) {
+    } else if (this.state.onboardingConcepts && this.state.onboardingConcepts.includes(conceptName)) {
       conceptMenu = this.state.onboardingConcepts;
     }
 
-    var conceptAnchorEl = this.state.conceptAnchorEl;
-    var typeAnchorEl = this.state.typeAnchorEl;
+    let conceptAnchorEl = this.state.conceptAnchorEl;
+    let typeAnchorEl = this.state.typeAnchorEl;
 
     return (
       <div>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href={"#"} aria-owns={conceptAnchorEl ? "concept-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, true)}>{this.state.concept}</a>
+              <a href={"#"} aria-owns={conceptAnchorEl ? "concept-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, true)}>{conceptName}</a>
               <Menu id={"concept-menu"}
                     anchorEl={conceptAnchorEl}
                     transformOrigin={{
@@ -159,7 +166,7 @@ export default class BreadCrumbs extends Component {
                     onClose={this.handleMenuClose}>
                 {conceptMenu.map((item, index) => {
                   return (
-                    <MenuItem key={index}>{item}</MenuItem>
+                      <MenuItem key={index}>{item}</MenuItem>
                   );
                 })}
               </Menu>
@@ -174,7 +181,7 @@ export default class BreadCrumbs extends Component {
                     }}
                     open={Boolean(typeAnchorEl)}
                     onClose={this.handleMenuClose}>
-                <MenuItem>Learn to Read Code</MenuItem>
+								<MenuItem>Learn to Read Code</MenuItem>
                 <MenuItem>Practice Reading Code</MenuItem>
                 <MenuItem>Learn to Write Code</MenuItem>
                 <MenuItem>Practice Writing Code</MenuItem>
@@ -188,3 +195,4 @@ export default class BreadCrumbs extends Component {
   }
 }
 
+export default withRouter(BreadCrumbs);

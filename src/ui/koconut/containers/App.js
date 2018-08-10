@@ -680,10 +680,14 @@ class App extends Component {
    */
   _renderInstructionView() {
     return(
-        <InstructionView conceptType={this.state.currentConcept}
-												 readOrWrite={this.state.instructionType}
-												 setError={this.setInstructionViewError}/>
-    )
+    		<div>
+					{this.renderNavBar()}
+					<InstructionView conceptType={this.state.currentConcept}
+													 readOrWrite={this.state.instructionType}
+													 setError={this.setInstructionViewError}/>
+					)
+				</div>
+		);
   }
 
 	/**
@@ -700,6 +704,7 @@ class App extends Component {
 						<Route exact path={Routes.welcome} component={() => this.renderWelcome()}/>
 						<Route exact path={Routes.worldview} component={() => this.renderWorldView()}/>
 						<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
+						<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
 						<Redirect to={Routes.home} />
 					</Switch>
 				</Router>

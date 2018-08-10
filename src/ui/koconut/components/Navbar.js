@@ -22,7 +22,7 @@ class Navbar extends Component {
   handleMenuClose: Function;
   handleMenuClick: Function;
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props);
     this.state = {
       menuAnchor: null
@@ -93,7 +93,9 @@ class Navbar extends Component {
         <div>
           <AppBar>
             <Toolbar>
-							{this.props.history.location.pathname === Routes.author  ?
+							{(this.props.history.location.pathname === Routes.author ||
+									this.props.history.location.pathname.includes("instruction") ||
+									this.props.history.location.pathname.includes("exercise"))  ?
 									<div style={{marginRight: 5}}>
 										<Link to={Routes.worldview}>
 											<BackButton

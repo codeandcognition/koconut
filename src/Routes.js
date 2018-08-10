@@ -4,7 +4,8 @@ const routes = {
 	signup: '/signup',
 	worldview: '/worldview',
 	author: '/author',
-	welcome: '/welcome'
+	welcome: '/welcome',
+	instruction: '/instruction/:concept/:type',
 }
 
 export default routes;

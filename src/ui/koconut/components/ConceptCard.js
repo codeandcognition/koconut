@@ -1,9 +1,11 @@
 
 import React, {Component} from 'react';
+import { Link, withRouter} from "react-router-dom";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ExpandMoreIcon from '@material-ui/icons/ChevronRight';
 import ExpandedIcon from '@material-ui/icons/KeyboardArrowDown';
+import Routes from './../../../Routes';
 
 type Props = {
 	title: String,
@@ -64,16 +66,20 @@ class ConceptCard extends Component {
 						{this.state.expand &&
 								<div style={{paddingLeft: "5%", display: 'flex'}}>
 									<div>
-										<p style={linkStyle}
-											 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.read)}>Learn to read code</p>
+										<Link to={`/instruction/${this.props.concept}/learn-to-read-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.read)}>Learn to read code</p>
+										</Link>
 										<br />
 										<p style={linkStyle}
 											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>Practice reading code</p>
 										<br />
 									</div>
 									<div>
-										<p style={linkStyle}
-											 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.write)}>Learn to write code</p>
+										<Link to={`/instruction/${this.props.concept}/learn-to-write-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.write)}>Learn to write code</p>
+										</Link>
 										<br />
 										<p style={linkStyle}
 											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>Practice writing code</p>
