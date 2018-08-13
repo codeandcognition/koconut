@@ -66,8 +66,8 @@ class SignIn extends Component {
 	 * status
 	 */
 	routeUser() {
-		let databaseRef = firebase.database().
-				ref("Users/" + this.state.currentUser.uid);
+		let databaseRef = firebase.database()
+			.ref("Users/" + this.state.currentUser.uid);
 		databaseRef.once("value", (snapshot) => {
 			if (snapshot !== null && snapshot.val() !== null) {
 				let snap = snapshot.val();

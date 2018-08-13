@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Button from '@material-ui/core/Button/Button';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import typeof FirebaseUser from 'firebase';
 import Menu from '@material-ui/core/Menu/Menu';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import BackButton from '@material-ui/icons/ChevronLeft';
@@ -48,8 +47,8 @@ class Navbar extends Component {
 	 * whether or not they should see the link in the nav bar
 	 */
   checkAuthorStatus() {
-		let databaseRef = firebase.database().
-				ref("Users/" + this.state.currentUser.uid);
+		let databaseRef = firebase.database()
+		.ref("Users/" + this.state.currentUser.uid);
 		databaseRef.once("value", snapshot => {
       if (snapshot && snapshot.val()) {
         let snap = snapshot.val();

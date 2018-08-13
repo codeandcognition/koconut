@@ -39,30 +39,35 @@ class BreadCrumbs extends Component {
       concept: this.formatCamelCasedString(this.props.conceptType),
       orderedConcepts: this.getOrderedConcepts()
     }, () => {
+      let conceptNames = {};
+      this.state.orderedConcepts.forEach((concept) => {
+        conceptNames[concept.name] = this.formatCamelCasedString(concept.name);
+      });
 
-      var semantic = [];
-      var template = [];
-      var onboarding = [];
+      let semantic = [];
+      let template = [];
+      let onboarding = [];
 
       this.getConceptsByType(this.state.orderedConcepts, t.semantic).map((item) => {
-        var concept = this.formatCamelCasedString(item.name);
+        let concept = item.name;
         semantic.push(concept);
       });
 
       this.getConceptsByType(this.state.orderedConcepts, t.template).map((item) => {
-        var concept = this.formatCamelCasedString(item.name);
+        let concept = item.name
         template.push(concept);
       });
 
       this.getConceptsByType(this.state.orderedConcepts, t.onboarding).map((item) => {
-        var concept = this.formatCamelCasedString(item.name);
+        let concept = item.name;
         onboarding.push(concept);
       });
 
       this.setState({
         semanticConcepts: semantic,
         templateConcepts: template,
-        onboardingConcepts: onboarding
+        onboardingConcepts: onboarding,
+        conceptNames: conceptNames
       });
     });
   }
@@ -127,10 +132,10 @@ class BreadCrumbs extends Component {
 
   render() {
     let readOrWrite = "";
-    if (this.props.readOrWrite === "READ") {
-      readOrWrite = "Learn to Read Code";
+    if (this.props.readOrWrite) {
+      readOrWrite = this.props.readOrWrite === "READ" ? "Learn to Read Code" : "Learn to Write Code";
     } else {
-      readOrWrite = "Learn to Write Code";
+      readOrWrite = "Learn to Read Code"
     }
 
     // to handle loss of state upon refresh
@@ -139,11 +144,11 @@ class BreadCrumbs extends Component {
 		let conceptName = this.formatCamelCasedString(conceptCode);
 
     let conceptMenu = [];
-    if (this.state.semanticConcepts && this.state.semanticConcepts.includes(conceptName)) {
+    if (this.state.semanticConcepts && this.state.semanticConcepts.includes(conceptCode)) {
       conceptMenu = this.state.semanticConcepts;
-    } else if (this.state.templateConcepts && this.state.templateConcepts.includes(conceptName)) {
+    } else if (this.state.templateConcepts && this.state.templateConcepts.includes(conceptCode)) {
       conceptMenu = this.state.templateConcepts;
-    } else if (this.state.onboardingConcepts && this.state.onboardingConcepts.includes(conceptName)) {
+    } else if (this.state.onboardingConcepts && this.state.onboardingConcepts.includes(conceptCode)) {
       conceptMenu = this.state.onboardingConcepts;
     }
 
@@ -166,7 +171,7 @@ class BreadCrumbs extends Component {
                     onClose={this.handleMenuClose}>
                 {conceptMenu.map((item, index) => {
                   return (
-                      <MenuItem key={index}>{item}</MenuItem>
+                      <Link to={`/instruction/${item}/learn-to-read-code`} key={index}><MenuItem>{this.state.conceptNames && this.state.conceptNames[item]}</MenuItem></Link>
                   );
                 })}
               </Menu>
@@ -181,9 +186,9 @@ class BreadCrumbs extends Component {
                     }}
                     open={Boolean(typeAnchorEl)}
                     onClose={this.handleMenuClose}>
-								<MenuItem>Learn to Read Code</MenuItem>
+                <Link to={`/instruction/${conceptCode}/learn-to-read-code`}><MenuItem>Learn to Read Code</MenuItem></Link>
                 <MenuItem>Practice Reading Code</MenuItem>
-                <MenuItem>Learn to Write Code</MenuItem>
+                <Link to={`/instruction/${conceptCode}/learn-to-write-code`}><MenuItem>Learn to Write Code</MenuItem></Link>
                 <MenuItem>Practice Writing Code</MenuItem>
               </Menu>
             </li>

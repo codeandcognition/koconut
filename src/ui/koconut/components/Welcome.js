@@ -64,8 +64,8 @@ class Welcome extends Component {
 	 * update waiver status on firebase
 	 */
 	updateWaiverStatus() {
-		let databaseRef = firebase.database().
-				ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
+		let databaseRef = firebase.database()
+		.ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
 		databaseRef.set(true);
 		this.props.history.push(Routes.worldview);
 	}
@@ -73,7 +73,8 @@ class Welcome extends Component {
   render() {
     let welcomeStyle = {
       marginTop: "15vh"
-    }
+    };
+
     return (
 				<div>
 					{
