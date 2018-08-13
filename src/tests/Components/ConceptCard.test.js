@@ -102,7 +102,7 @@ describe('<ConceptCard /> component', () => {
     expect(wrapper.find('div').length).toBe(2);
     wrapper.find('div').at(1).simulate('click');
     expect(wrapper.find('div').length).toBe(5);
-    expect(wrapper.find('div').at(2).find('p').length).toBe(4);
+    expect(wrapper.find('div').at(2).find('a').length).toBe(4);
     wrapper.unmount();
   });
 
@@ -118,7 +118,7 @@ describe('<ConceptCard /> component', () => {
     expect(wrapper.find('div').length).toBe(2);
     wrapper.find('div').at(1).simulate('click');
     expect(wrapper.find('div').length).toBe(5);
-    const instructButtons = wrapper.find('div').at(2).find('p');
+    const instructButtons = wrapper.find('div').at(2).find('a');
     expect(instructButtons.length).toBe(4);
 
     instructButtons.forEach(d => {

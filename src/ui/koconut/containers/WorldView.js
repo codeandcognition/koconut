@@ -58,7 +58,7 @@ class WorldView extends Component {
                   {this.getConceptsByType(conceptList, cType).map((concept, index) => {
                     let name = conceptInventory[concept.name].explanations.name;
                     return <ConceptCard title={name}
-                                    key={index}
+                                    key={"l"+index}
                                     concept={concept.name}
                                     generateExercise={this.props.generateExercise}
                                     getInstruction={this.props.getInstruction}/>
@@ -76,7 +76,7 @@ class WorldView extends Component {
                   {this.getConceptsByType(conceptList, cType).map((concept, index) => {
                     let name = conceptInventory[concept.name].explanations.name;
                     return <ConceptCard title={name}
-                                    key={index}
+                                    key={"r"+index}
                                     concept={concept.name}
                                     generateExercise={this.props.generateExercise}
                                     getInstruction={this.props.getInstruction}/>

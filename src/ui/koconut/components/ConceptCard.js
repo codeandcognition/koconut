@@ -52,31 +52,31 @@ class ConceptCard extends Component {
 
 		return(
 				<Card style={{margin: '2%'}}>
-					<CardContent>
+					<CardContent aria-expanded={this.state.expand}>
 						<div>
-						<div style={{display: 'flex', cursor: "pointer"}} onClick={this.handleExpandClick}>
+						<div style={{display: 'flex', cursor: "pointer"}} onClick={this.handleExpandClick}><a>
 							{this.state.expand ?
 							<ExpandedIcon /> :
               <ExpandMoreIcon />
-							}
+							}</a>
 							<p style={titleStyle}>{this.props.title}</p>
 						</div>
 						{this.state.expand &&
 								<div style={{paddingLeft: "5%", display: 'flex'}}>
 									<div>
-										<p style={linkStyle}
-											 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.read)}>Learn to read code</p>
+										<a style={linkStyle}
+											 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.read)}>Learn to read code</a>
 										<br />
-										<p style={linkStyle}
-											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>Practice reading code</p>
+										<a style={linkStyle}
+											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>Practice reading code</a>
 										<br />
 									</div>
 									<div>
-										<p style={linkStyle}
-											 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.write)}>Learn to write code</p>
+										<a style={linkStyle}
+											 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.write)}>Learn to write code</a>
 										<br />
-										<p style={linkStyle}
-											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>Practice writing code</p>
+										<a style={linkStyle}
+											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>Practice writing code</a>
 									</div>
 								</div>
 						}
