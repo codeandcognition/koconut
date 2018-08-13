@@ -106,7 +106,7 @@ class InstructionView extends Component {
    * @param nextProps- the new prop object being received
    */
   componentWillReceiveProps(nextProps: Props) {
-  	this.updateInstructions();
+		this.updateInstructions();
   }
 
   /**
@@ -124,16 +124,18 @@ class InstructionView extends Component {
   }
 
   updateInstructions() {
-		let pathComponents = this.props.history.location.pathname.split("/");
-		let conceptType = pathComponents[2];
-		let readOrWrite = pathComponents[3].includes("read") ? "READ" : "WRITE";
-		this.firebaseListener = firebase.database().
-				ref(`Instructions/${conceptType}/${readOrWrite}`);
-		this.firebaseListener.on('value', (snap) => {
-			if (this.mounted) {
-				this.setState({instructionList: snap.val()});
-			}
-		});
+  	if (this.mounted) {
+			let pathComponents = this.props.history.location.pathname.split("/");
+			let conceptType = pathComponents[2];
+			let readOrWrite = pathComponents[3].includes("read") ? "READ" : "WRITE";
+			this.firebaseListener = firebase.database().
+					ref(`Instructions/${conceptType}/${readOrWrite}`);
+			this.firebaseListener.on('value', (snap) => {
+				if (this.mounted) {
+					this.setState({instructionList: snap.val()});
+				}
+			});
+		}
 	}
 
   render() {
