@@ -71,8 +71,10 @@ class ConceptCard extends Component {
 												 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.read)}>Learn to read code</p>
 										</Link>
 										<br />
-										<p style={linkStyle}
-											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>Practice reading code</p>
+										<Link to={`/practice/${this.props.concept}/practice-reading-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>Practice reading code</p>
+										</Link>
 										<br />
 									</div>
 									<div>
@@ -81,8 +83,10 @@ class ConceptCard extends Component {
 												 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.write)}>Learn to write code</p>
 										</Link>
 										<br />
-										<p style={linkStyle}
-											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>Practice writing code</p>
+										<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>Practice writing code</p>
+										</Link>
 									</div>
 								</div>
 						}

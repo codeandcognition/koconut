@@ -30,16 +30,19 @@ class Navbar extends Component {
     this.handleMenuClick = this.handleMenuClick.bind(this);
   }
 
-  componentWillMount() {
-    this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-      this.setState({currentUser: user}, () => {
-        if (user) {
-					this.checkAuthorStatus();
-        } else {
-        	this.props.history.push(Routes.signin);
-				}
-      });
-    })
+  componentDidMount() {
+  	this.mounted = true;
+		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+			if (this.mounted) {
+				this.setState({currentUser: user}, () => {
+					if (user) {
+						this.checkAuthorStatus();
+					} else {
+						this.props.history.push(Routes.signin);
+					}
+				});
+			}
+		});
   }
 
   /**
@@ -50,14 +53,17 @@ class Navbar extends Component {
 		let databaseRef = firebase.database()
 		.ref("Users/" + this.state.currentUser.uid);
 		databaseRef.once("value", snapshot => {
-      if (snapshot && snapshot.val()) {
-        let snap = snapshot.val();
-        this.setState({isAuthor: snap.permission === "author"});
-      }
-    });
+			if (snapshot && snapshot.val()) {
+				let snap = snapshot.val();
+				if (this.mounted) {
+					this.setState({isAuthor: snap.permission === "author"});
+				}
+			}
+		});
   }
 
   componentWillUnmount() {
+  	this.mounted = false
     this.authUnsub();
   }
 
@@ -94,7 +100,7 @@ class Navbar extends Component {
             <Toolbar>
 							{(this.props.history.location.pathname === Routes.author ||
 									this.props.history.location.pathname.includes("instruction") ||
-									this.props.history.location.pathname.includes("exercise"))  ?
+									this.props.history.location.pathname.includes("practice"))  ?
 									<div style={{marginRight: 5}}>
 										<Link to={Routes.worldview}>
 											<BackButton

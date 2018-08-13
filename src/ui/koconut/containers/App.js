@@ -119,6 +119,21 @@ class App extends Component {
     this.resetFeedback = this.resetFeedback.bind(this);
   }
 
+  componentDidMount() {
+  	this.authUnsub = this.props.firebase.auth().onAuthStateChanged(user => {
+  		if (user) {
+				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
+				this.exerciseGetter.on('value', (snap) => {
+					this.setState({exerciseList:snap.val()});
+				});
+				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
+				this.conceptMapGetter.on('value', (snap) => {
+					this.setState({conceptMapGetter: snap.val()});
+				});
+			}
+		})
+	}
+
   /**
    * Passed in as a prop to WorldView -> ConceptCard
    * When invoked in concept card, it generates an exercise of the given
@@ -201,12 +216,7 @@ class App extends Component {
    * Un app un-mount, stop watching authentication
    */
   componentWillUnmount() {
-    this.stopWatchingAuth = this.props.firebase.auth().onAuthStateChanged((fbUser) => {
-      fbUser ?
-          this.setState({firebaseUser: fbUser}) :
-          this.setState({firebaseUser: null, display: displayType.signin});
-    });
-    this.stopWatchingAuth();
+  	this.authUnsub();
   }
 
 	/**
@@ -632,23 +642,26 @@ class App extends Component {
    */
   renderExercise() {
     return (
-        <ExerciseView
-            exercise={this.state.exercise}
-            submitHandler={this.submitResponse}
-            feedback={this.state.feedback}
-            followupFeedback={this.state.followupFeedback}
-            nextConcepts={this.state.nextConcepts}
-            submitOk={this.submitOk}
-            submitTryAgain={this.submitTryAgain}
-            mode={this.state.display}
-            concept={this.state.currentConcept}
-            codeTheme={this.state.codeTheme}
-            toggleCodeTheme={(theme) => this.setState({codeTheme: theme})}
-            timesGotQuestionWrong={this.state.timesGotQuestionWrong}
-            followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
-            nextQuestion={this.nextQuestion}
-            resetFeedback={this.resetFeedback}
-        />
+				<div>
+					{this.renderNavBar()}
+					<ExerciseView
+							exercise={this.state.exercise}
+							submitHandler={this.submitResponse}
+							feedback={this.state.feedback}
+							followupFeedback={this.state.followupFeedback}
+							nextConcepts={this.state.nextConcepts}
+							submitOk={this.submitOk}
+							submitTryAgain={this.submitTryAgain}
+							mode={this.state.display}
+							concept={this.state.currentConcept}
+							codeTheme={this.state.codeTheme}
+							toggleCodeTheme={(theme) => this.setState({codeTheme: theme})}
+							timesGotQuestionWrong={this.state.timesGotQuestionWrong}
+							followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
+							nextQuestion={this.nextQuestion}
+							resetFeedback={this.resetFeedback}
+					/>
+				</div>
     );
   }
   /**
@@ -706,6 +719,7 @@ class App extends Component {
 						<Route exact path={Routes.worldview} component={() => this.renderWorldView()}/>
 						<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
 						<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
+						<Route exact path={Routes.practice} component={() => this.renderExercise()}/>
 						<Redirect to={Routes.home} />
 					</Switch>
 				</Router>

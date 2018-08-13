@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import Prompt from '../components/Prompt';
 import Information from './Information';
 import ConceptLabel from '../components/ConceptLabel';
+import BreadCrumbs from '../components/BreadCrumbs';
 
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
@@ -120,6 +121,7 @@ class Exercise extends Component {
 
     return (
         <div className="exercise-view" style={styles}>
+					<BreadCrumbs conceptType={this.props.concept}/>
           <Prompt exercise={this.props.exercise} />
 					{this.props.exercise.code && this.renderOverarchingCode()}
           <Information

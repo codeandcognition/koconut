@@ -46,17 +46,21 @@ class WorldView extends Component {
     })
   }
 
-  componentWillMount() {
+  componentDidMount() {
+  	this.mounted = true
   	this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-  		this.setState({loading: false}, () => {
-				!user && this.props.history.push(Routes.signin);
-			});
+  		if (this.mounted) {
+				this.setState({loading: false}, () => {
+					!user && this.props.history.push(Routes.signin);
+				});
+			}
 		})
 	}
 
 	componentWillUnmount() {
   	// unlisten for auth changes
 		this.authUnsub();
+		this.mounted = false;
 	}
 
 	renderWorld() {

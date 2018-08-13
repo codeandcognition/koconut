@@ -6,6 +6,7 @@ const routes = {
 	author: '/author',
 	welcome: '/welcome',
 	instruction: '/instruction/:concept/:type',
+	practice: '/practice/:concept/:type'
 }
 
 export default routes;

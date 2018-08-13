@@ -83,7 +83,6 @@ class Response extends Component {
   }
 
   render() {
-    console.log(this.props.question.type);
     let responseWidth = (Types.isSurvey(this.props.type) || this.props.type === "table" || this.props.type === Types.writeCode) ? 'full' : 'half';
     return (
         <div className={'response ' + responseWidth}>
