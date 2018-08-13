@@ -686,6 +686,7 @@ class App extends Component {
    * Renders the exercise view
    */
   renderExercise() {
+  	console.log(this.state.currentConcept);
     return (
         <ExerciseView
             exercise={this.state.exercise}

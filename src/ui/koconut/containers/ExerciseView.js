@@ -7,6 +7,7 @@ import ConceptLabel from '../components/ConceptLabel';
 
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
+import BreadCrumbs from '../components/BreadCrumbs';
 
 type Props = {
   exercise: {
@@ -120,8 +121,9 @@ class Exercise extends Component {
 
     return (
         <div className="exercise-view" style={styles}>
+          <BreadCrumbs conceptType={this.props.concept}/>
           <Prompt exercise={this.props.exercise} />
-					{this.props.exercise.code && this.renderOverarchingCode()}
+          {this.props.exercise.code && this.renderOverarchingCode()}
           <Information
               exercise={this.props.exercise}
               answer={this.state.answer}
