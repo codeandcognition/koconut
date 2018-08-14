@@ -85,7 +85,7 @@ class App extends Component {
     this.generator = new ExerciseGenerator();
     this.theme = createMuiTheme();
     this.state = {
-      exercise: null, // needs to be a falsy value
+      exercise: {},
 			exerciseType: '', // yet to be defined
 			instructionType: '',
       feedback: [],
@@ -144,8 +144,8 @@ class App extends Component {
    *
    * TODO: add user data on firebase for progress tracking
    */
-  generateExercise(concept: string, exerciseType: string, generator: any = this.generator) {
-		let exercises = generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
+  generateExercise(concept: string, exerciseType: string) {
+		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
 		if (exercises) {
       if (exercises.length === 0) {
         this.setState({
@@ -176,9 +176,7 @@ class App extends Component {
 	/**
 	 * Stores user's current state on Koconut to Firebase
 	 *
-	 * TODO: might have to refactor for instruction view
-	 *
-	 * @param mode (instruction mode or practice mode)
+	 * @param mode
 	 */
 	storeState(mode: string) {
 		let state = {
@@ -210,7 +208,7 @@ class App extends Component {
 							currentConcept: state.concept,
 							counter: state.counter,
 							exerciseType: state.type,
-							exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : null
+							exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : {}
 						});
 					}
 				}
@@ -751,8 +749,8 @@ class App extends Component {
 					{this.renderNavBar()}
 					<InstructionView conceptType={this.state.currentConcept}
 													 readOrWrite={this.state.instructionType}
-													 setError={this.setInstructionViewError}/>
-					)
+													 setError={this.setInstructionViewError}
+													 generateExercise={this.props.generateExercise}/>
 				</div>
 		);
   }

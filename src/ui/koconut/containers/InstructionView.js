@@ -11,7 +11,8 @@ import Routes from './../../../Routes';
 
 type Props = {
   conceptType: string,
-  readOrWrite: string
+  readOrWrite: string,
+	generateExercise: Function
 }
 
 /**
@@ -21,8 +22,10 @@ type Props = {
  */
 class InstructionView extends Component {
   state: {
+		readOrWrite: string;
     currInstructionIndex: number,
-    instructionList: any // will always be an instruction object from firebase
+    instructionList: any, // will always be an instruction object from firebase
+		conceptType: string
   };
   mounted: boolean;
   prevInstruction: Function;
@@ -32,7 +35,8 @@ class InstructionView extends Component {
     super(props);
     this.state = {
       currInstructionIndex: 0,
-      instructionList: null
+      instructionList: null,
+			readOrWrite: ""
     };
     this.prevInstruction = this.prevInstruction.bind(this);
     this.nextInstruction = this.nextInstruction.bind(this);
@@ -43,11 +47,16 @@ class InstructionView extends Component {
    * and to 0 if 0 or less.
    */
   prevInstruction() {
-    let index = this.state.currInstructionIndex;
-    this.setState({currInstructionIndex:
-      index <= 0 ?
-          0 :
-          index - 1});
+  	if (this.mounted) {
+			let index = this.state.currInstructionIndex;
+			this.setState({currInstructionIndex:
+						index <= 0 ?
+								0 :
+								index - 1}, () => {
+				// store user location on firebase
+				this.storeUserState("instruction");
+			});
+		}
   }
 
   /**
@@ -63,10 +72,15 @@ class InstructionView extends Component {
     // InstructionList should always exist when this function is called,
     // so it's just to be safe (and possibly make flow not complain.
     if(this.state.instructionList) {
-      this.setState({currInstructionIndex:
-        index >= this.state.instructionList.length-1  ?
-            this.state.instructionList.length-1 :
-            index + 1});
+    	if (this.mounted) {
+				this.setState({currInstructionIndex:
+							index >= this.state.instructionList.length-1  ?
+									this.state.instructionList.length-1 :
+									index + 1}, () => {
+					// store user location on firebase
+					this.storeUserState("instruction");
+				});
+			}
     }
   }
 
@@ -86,8 +100,14 @@ class InstructionView extends Component {
    */
   componentDidMount() {
     this.mounted = true;
-    // set the instruction list in state
-		this.updateInstructions();
+    this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+    	if (user && this.mounted) {
+    		this.setState({conceptType: this.props.conceptType, readOrWrite: this.props.readOrWrite}, () => {
+					// set the instruction list in state
+					this.getUserState();
+				})
+			}
+		});
 		document.addEventListener("keydown", (e: any) => this.handleKeyPress(e.key));
   }
 
@@ -118,24 +138,65 @@ class InstructionView extends Component {
   }
 
   navigateToPage(index: number) {
-    this.setState({
-      currInstructionIndex: index
-    });
+  	if (this.mounted) {
+			this.setState({
+				currInstructionIndex: index
+			}, () => {
+				// store user location on firebase
+				this.storeUserState("instruction");
+			});
+		}
   }
 
-  updateInstructions() {
-  	if (this.mounted) {
-			let pathComponents = this.props.history.location.pathname.split("/");
-			let conceptType = pathComponents[2];
-			let readOrWrite = pathComponents[3].includes("read") ? "READ" : "WRITE";
-			this.firebaseListener = firebase.database().
-					ref(`Instructions/${conceptType}/${readOrWrite}`);
-			this.firebaseListener.on('value', (snap) => {
-				if (this.mounted) {
-					this.setState({instructionList: snap.val()});
+	/**
+	 * retrieve instruction data from firebase
+	 */
+	updateInstructions() {
+		this.firebaseListener = firebase.database().
+				ref(`Instructions/${this.state.conceptType}/${this.state.readOrWrite}`);
+		this.firebaseListener.on('value', (snap) => {
+			if (this.mounted) {
+				this.setState({instructionList: snap.val()});
+			}
+		});
+	}
+
+	/**
+	 * retrieve user's location on the instruction view
+	 */
+	getUserState() {
+		if (firebase.auth().currentUser) {
+			let userId = firebase.auth().currentUser.uid;
+			let userRef = firebase.database().ref('Users/' + userId + '/state');
+			let state = {};
+			userRef.on('value', snap => {
+				if (snap !== null) {
+					state = snap.val();
+					if (this.mounted) {
+						this.setState({
+							conceptType: state.concept,
+							currInstructionIndex: state.counter,
+							readOrWrite: state.type
+						}, () => {
+							this.updateInstructions();
+						});
+					}
 				}
 			});
 		}
+	}
+
+	// store user's current location on the instruction view to firebase
+	storeUserState(mode: string) {
+		let state = {
+			mode: mode,
+			type: this.state.readOrWrite,
+			concept: this.state.conceptType,
+			counter: this.state.currInstructionIndex
+		}
+		let userId = firebase.auth().currentUser.uid;
+		let userRef = firebase.database().ref('Users/' + userId + '/state');
+		userRef.set(state);
 	}
 
   render() {
@@ -154,6 +215,7 @@ class InstructionView extends Component {
 											readOrWrite={this.props.readOrWrite}
 											chosenInstruction={chosenInstruction}
 											instructionOrPractice={"INSTRUCTION"}
+											generateExercise={this.props.generateExercise}
 									/>
 									{this.state.instructionList && chosenInstruction &&
                   <div className={"content-container"}>

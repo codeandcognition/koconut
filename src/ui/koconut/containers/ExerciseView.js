@@ -162,7 +162,7 @@ class Exercise extends Component {
     return (
         <div className="exercise-view" style={styles}>
 					<BreadCrumbs conceptType={this.props.concept} readOrWrite={this.props.readOrWrite} instructionOrPractice={"PRACTICE"} generateExercise={this.props.generateExercise}/>
-					{this.props.exercise == {} ? <LoadingView/> : this.renderQuestion()}
+					{Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderQuestion()}
         </div>
     );
   }
