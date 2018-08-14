@@ -196,9 +196,9 @@ class BreadCrumbs extends Component {
                     open={Boolean(typeAnchorEl)}
                     onClose={this.handleMenuClose}>
                 <Link to={`/instruction/${conceptCode}/learn-to-read-code`}><MenuItem>Learn to Read Code</MenuItem></Link>
-								<Link to={`/practice/${conceptCode}/practice-reading-code`}><MenuItem onClick={() => this.props.generateExercise(conceptCode, "READ")}>Practice Reading Code</MenuItem></Link>
+								<Link to={`/practice/${conceptCode}/practice-reading-code`}><MenuItem>Practice Reading Code</MenuItem></Link>
                 <Link to={`/instruction/${conceptCode}/learn-to-write-code`}><MenuItem>Learn to Write Code</MenuItem></Link>
-								<Link to={`/practice/${conceptCode}/practice-writing-code`}><MenuItem onClick={() => this.props.generateExercise(conceptCode, "WRITE")}>Practice Writing Code</MenuItem></Link>
+								<Link to={`/practice/${conceptCode}/practice-writing-code`}><MenuItem>Practice Writing Code</MenuItem></Link>
               </Menu>
             </li>
             <li className="breadcrumb-item active" aria-current="page">{this.props.chosenInstruction ? this.props.chosenInstruction.title : ""}</li>

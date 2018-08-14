@@ -192,7 +192,6 @@ class App extends Component {
 
 	/**
 	 * Retrieves current user's most recent state on the app from Firebase
-	 * TODO: currently only handles practice view
 	 */
 	updateUserState() {
 		if (firebase.auth().currentUser) {
@@ -204,12 +203,18 @@ class App extends Component {
 					state = snap.val();
 					if (this.state.conceptMapGetter) {
 						let exercises = this.generator.getExercisesByTypeAndConcept(state.type, state.concept, this.state.exerciseList, this.state.conceptMapGetter);
-						this.setState({
-							currentConcept: state.concept,
-							counter: state.counter,
-							exerciseType: state.type,
-							exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : {}
-						});
+						if (state.mode === "exercise") {
+							this.setState({
+								currentConcept: state.concept,
+								counter: state.counter,
+								exerciseType: state.type,
+								exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : {}
+							});
+						} else {
+							this.setState({
+								counter: 0
+							});
+						}
 					}
 				}
 			});

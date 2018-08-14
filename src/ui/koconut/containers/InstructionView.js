@@ -36,7 +36,8 @@ class InstructionView extends Component {
     this.state = {
       currInstructionIndex: 0,
       instructionList: null,
-			readOrWrite: ""
+			readOrWrite: "",
+			conceptType: ""
     };
     this.prevInstruction = this.prevInstruction.bind(this);
     this.nextInstruction = this.nextInstruction.bind(this);
@@ -135,6 +136,7 @@ class InstructionView extends Component {
    */
   componentWillUnmount() {
     this.mounted = false;
+    this.authUnsub();
   }
 
   navigateToPage(index: number) {
