@@ -85,7 +85,7 @@ class Feedback extends Component {
               }
             </span>
             {(this.props.type !== "writeCode" && this.props.type !== 'memoryTable') && "."}
-            </strong>
+        </strong>
       </div>
     );
   }
