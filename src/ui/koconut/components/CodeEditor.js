@@ -169,7 +169,7 @@ class CodeEditor extends Component {
     return(
         <div>
           {this.renderAce()}
-          <p className={"answer-preview"}>Your answer: {this.state.highlighted}</p>
+          {this.props.type === Types.highlightCode && <p className={"answer-preview"}>Your answer: {this.state.highlighted}</p>}
           <div className={"button-container"}>
             <Button variant={"contained"} color={"secondary"} onClick={() => this.handleReset()}><i
                 className="fas fa-sync-alt" /></Button>
