@@ -153,6 +153,7 @@ class InstructionView extends Component {
 											conceptType={this.props.conceptType}
 											readOrWrite={this.props.readOrWrite}
 											chosenInstruction={chosenInstruction}
+											instructionOrPractice={"INSTRUCTION"}
 									/>
 									{this.state.instructionList && chosenInstruction &&
                   <div className={"content-container"}>

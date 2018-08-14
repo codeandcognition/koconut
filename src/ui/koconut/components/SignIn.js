@@ -28,14 +28,19 @@ class SignIn extends Component {
   }
 
   componentDidMount() {
+  	this.mounted = true;
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-			this.setState({currentUser: user});
+			if (this.mounted) {
+				this.setState({currentUser: user});
+			}
 			if (user) {
 				this.routeUser();
 			} else {
-				this.setState({loading: false}, () => {
-					this.props.history.push(Routes.signin);
-				})
+				if (this.mounted) {
+					this.setState({loading: false}, () => {
+						this.props.history.push(Routes.signin);
+					});
+				}
 			}
 		});
 	}
@@ -43,6 +48,7 @@ class SignIn extends Component {
 	componentWillUnmount() {
   	// stop the auth listener
   	this.authUnsub();
+  	this.mounted = false;
 	}
 
 	/**

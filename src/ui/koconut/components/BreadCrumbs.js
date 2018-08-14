@@ -6,8 +6,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import './BreadCrumbs.css';
 import { Link, withRouter} from "react-router-dom";
-import Grow from '@material-ui/core/Grow';
-import Routes from './../../../Routes';
 
 type Props = {
   conceptType: string,
@@ -54,7 +52,7 @@ class BreadCrumbs extends Component {
       });
 
       this.getConceptsByType(this.state.orderedConcepts, t.template).map((item) => {
-        let concept = item.name
+        let concept = item.name;
         template.push(concept);
       });
 
@@ -79,10 +77,10 @@ class BreadCrumbs extends Component {
    * @returns {string}
    */
   formatCamelCasedString(camelString: string) {
-    var result = "";
+    let result = "";
     if (camelString && camelString.length !== 0) {
       result = result + camelString.charAt(0).toUpperCase();
-      for (var i = 1; i < camelString.length; i++) {
+      for (let i = 1; i < camelString.length; i++) {
         if (camelString.charAt(i) === camelString.charAt(i).toUpperCase()) {
           result = result + " "
         }
@@ -131,17 +129,28 @@ class BreadCrumbs extends Component {
   }
 
   render() {
-    let readOrWrite = "";
-    if (this.props.readOrWrite) {
-      readOrWrite = this.props.readOrWrite === "READ" ? "Learn to Read Code" : "Learn to Write Code";
-    } else {
-      readOrWrite = "Learn to Read Code"
-    }
-
-    // to handle loss of state upon refresh
+    // to handle loss of props upon refresh
 		let pathComponents = this.props.history.location.pathname.split("/");
 		let conceptCode = pathComponents[2];
 		let conceptName = this.formatCamelCasedString(conceptCode);
+		let instructionOrPractice = pathComponents[1].toUpperCase();
+		let readOrWriteProp = pathComponents[3].includes("read") ? "READ" : "WRITE";
+
+		let readOrWrite = "";
+		// TODO: replace strings with constants
+		if (instructionOrPractice === "INSTRUCTION") {
+			if (readOrWriteProp === "READ") {
+				readOrWrite = "Learn to read code";
+			} else if (readOrWriteProp === "WRITE") {
+				readOrWrite = "Learn to write code";
+			}
+		} else if (instructionOrPractice === "PRACTICE") {
+			if (readOrWriteProp === "READ") {
+				readOrWrite = "Practice reading code";
+			} else if (readOrWriteProp === "WRITE") {
+				readOrWrite = "Practice writing code";
+			}
+		}
 
     let conceptMenu = [];
     if (this.state.semanticConcepts && this.state.semanticConcepts.includes(conceptCode)) {
@@ -187,9 +196,9 @@ class BreadCrumbs extends Component {
                     open={Boolean(typeAnchorEl)}
                     onClose={this.handleMenuClose}>
                 <Link to={`/instruction/${conceptCode}/learn-to-read-code`}><MenuItem>Learn to Read Code</MenuItem></Link>
-                <MenuItem>Practice Reading Code</MenuItem>
+								<Link to={`/practice/${conceptCode}/practice-reading-code`}><MenuItem onClick={() => this.props.generateExercise(conceptCode, "READ")}>Practice Reading Code</MenuItem></Link>
                 <Link to={`/instruction/${conceptCode}/learn-to-write-code`}><MenuItem>Learn to Write Code</MenuItem></Link>
-                <MenuItem>Practice Writing Code</MenuItem>
+								<Link to={`/practice/${conceptCode}/practice-writing-code`}><MenuItem onClick={() => this.props.generateExercise(conceptCode, "WRITE")}>Practice Writing Code</MenuItem></Link>
               </Menu>
             </li>
             <li className="breadcrumb-item active" aria-current="page">{this.props.chosenInstruction ? this.props.chosenInstruction.title : ""}</li>

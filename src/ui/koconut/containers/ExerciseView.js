@@ -5,7 +5,8 @@ import Prompt from '../components/Prompt';
 import Information from './Information';
 import ConceptLabel from '../components/ConceptLabel';
 import BreadCrumbs from '../components/BreadCrumbs';
-
+import firebase from 'firebase';
+import LoadingView from './../components/LoadingView';
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
 
@@ -17,6 +18,8 @@ type Props = {
     choices?: string[],
     concepts: string[]
   },
+	updateUserState: Function,
+  readOrWrite: string,
   submitHandler: Function,
   feedback?: string[],
   nextConcepts: string[],
@@ -26,7 +29,8 @@ type Props = {
   codeTheme: string,
   timesGotQuestionWrong: [],
   followupTimesGotQuestionWrong: [],
-  resetFeedback: Function
+  resetFeedback: Function,
+	generateExercise: Function
 }
 
 var b = {"hello":"world","cat":"dog"}
@@ -55,13 +59,21 @@ class Exercise extends Component {
    * Moves the Exercise view to the top
    */
   componentDidMount() {
+    this.mounted = true;
+		// invoke a function in App.js
+    // that retrieves the current exercise from Firebase and updates its state
+    // this will in turn change the props being passed to ExerciseView.js
+		this.props.updateUserState();
     window.scrollTo(0, 0);
   }
 
   // debug comment: never reaching componentWillUnmount
   componentWillUnmount() {
-    this.resetAnswer();
-    this.props.resetFeedback();
+		this.mounted = false;
+		if (this.mounted) {
+			this.resetAnswer();
+			this.props.resetFeedback();
+    }
   }
 
   /**
@@ -75,10 +87,10 @@ class Exercise extends Component {
 
 
   resetAnswer() {
-    this.setState({
-      answer: [],
-      followupAnswers: []
-    });
+		this.setState({
+			answer: [],
+			followupAnswers: []
+		});
   }
 
   updateAnswers(content: any, index: number, fIndex: number) {
@@ -114,6 +126,34 @@ class Exercise extends Component {
     );
 	}
 
+	renderQuestion() {
+  	return(
+  			<div>
+					<Prompt exercise={this.props.exercise} />
+					{(this.props.exercise && this.props.exercise.code) && this.renderOverarchingCode()}
+					<Information
+							exercise={this.props.exercise}
+							answer={this.state.answer}
+							followupAnswers={this.state.followupAnswers}
+							updateHandler={(content, index, fIndex) => this.updateAnswers(content, index, fIndex)}
+							feedback={this.props.feedback}
+							followupFeedback={this.props.followupFeedback}
+							submitOk={this.props.submitOk}
+							submitTryAgain={this.props.submitTryAgain}
+							mode={this.props.mode}
+							codeTheme={this.props.codeTheme}
+							toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
+							submitHandler={this.props.submitHandler}
+							timesGotQuestionWrong={this.props.timesGotQuestionWrong}
+							followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
+							nextQuestion={this.props.nextQuestion}
+							resetAnswer={this.resetAnswer}
+					/>
+					<ConceptLabel concepts={this.props.exercise && this.props.exercise.concepts}/>
+				</div>
+		);
+	}
+
   render() {
     let styles = {  // TODO put this in the constructor, unnecessary calculations per render
       marginTop: '10%'
@@ -121,28 +161,8 @@ class Exercise extends Component {
 
     return (
         <div className="exercise-view" style={styles}>
-					<BreadCrumbs conceptType={this.props.concept}/>
-          <Prompt exercise={this.props.exercise} />
-					{this.props.exercise.code && this.renderOverarchingCode()}
-          <Information
-              exercise={this.props.exercise}
-              answer={this.state.answer}
-              followupAnswers={this.state.followupAnswers}
-              updateHandler={(content, index, fIndex) => this.updateAnswers(content, index, fIndex)}
-              feedback={this.props.feedback}
-              followupFeedback={this.props.followupFeedback}
-              submitOk={this.props.submitOk}
-              submitTryAgain={this.props.submitTryAgain}
-              mode={this.props.mode}
-              codeTheme={this.props.codeTheme}
-              toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
-              submitHandler={this.props.submitHandler}
-              timesGotQuestionWrong={this.props.timesGotQuestionWrong}
-              followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
-              nextQuestion={this.props.nextQuestion}
-              resetAnswer={this.resetAnswer}
-          />
-          <ConceptLabel concepts={this.props.exercise.concepts}/>
+					<BreadCrumbs conceptType={this.props.concept} readOrWrite={this.props.readOrWrite} instructionOrPractice={"PRACTICE"} generateExercise={this.props.generateExercise}/>
+					{this.props.exercise == {} ? <LoadingView/> : this.renderQuestion()}
         </div>
     );
   }

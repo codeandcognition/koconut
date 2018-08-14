@@ -14,6 +14,7 @@ import AuthorView from './../../koconut-author/AuthorView';
 import PopOverMessage from './PopoverMessage';
 import InstructionView from './InstructionView';
 import Types from '../../../data/ExerciseTypes.js';
+import firebase from 'firebase';
 
 import Routes from './../../../Routes';
 
@@ -55,6 +56,7 @@ class App extends Component {
   generator: ExerciseGenerator;
   theme: mixed;
   nextQuestion: Function;
+  updateUserState: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: Exercise,
@@ -82,9 +84,8 @@ class App extends Component {
     super();
     this.generator = new ExerciseGenerator();
     this.theme = createMuiTheme();
-
     this.state = {
-      exercise: this.generator.getStubExercise(),
+      exercise: null, // needs to be a falsy value
 			exerciseType: '', // yet to be defined
 			instructionType: '',
       feedback: [],
@@ -117,10 +118,12 @@ class App extends Component {
     this.switchToWorldView = this.switchToWorldView.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
     this.resetFeedback = this.resetFeedback.bind(this);
+    this.updateUserState = this.updateUserState.bind(this);
   }
 
   componentDidMount() {
-  	this.authUnsub = this.props.firebase.auth().onAuthStateChanged(user => {
+  	this.mounted = true;
+  	firebase.auth().onAuthStateChanged(user => {
   		if (user) {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
 				this.exerciseGetter.on('value', (snap) => {
@@ -128,10 +131,10 @@ class App extends Component {
 				});
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
 				this.conceptMapGetter.on('value', (snap) => {
-					this.setState({conceptMapGetter: snap.val()});
+					this.setState({conceptMapGetter: snap.val()}, () => {this.updateUserState()});
 				});
 			}
-		})
+		});
 	}
 
   /**
@@ -164,10 +167,56 @@ class App extends Component {
           counter: exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter,
           exerciseType: exerciseType,
           error: false // resets the error message
-        });
+        }, () => this.storeState("exercise"));
+        // write current state to Firebase
       }
     }
   }
+
+	/**
+	 * Stores user's current state on Koconut to Firebase
+	 *
+	 * TODO: might have to refactor for instruction view
+	 *
+	 * @param mode (instruction mode or practice mode)
+	 */
+	storeState(mode: string) {
+		let state = {
+			mode: mode,
+			type: this.state.exerciseType,
+			concept: this.state.currentConcept,
+			counter: this.state.counter
+		}
+		let userId = firebase.auth().currentUser.uid;
+		let userRef = firebase.database().ref('Users/' + userId + '/state');
+		userRef.set(state);
+	}
+
+	/**
+	 * Retrieves current user's most recent state on the app from Firebase
+	 * TODO: currently only handles practice view
+	 */
+	updateUserState() {
+		if (firebase.auth().currentUser) {
+			let userId = firebase.auth().currentUser.uid;
+			let userRef = firebase.database().ref('Users/' + userId + '/state');
+			let state = {};
+			userRef.on('value', snap => {
+				if (snap !== null) {
+					state = snap.val();
+					if (this.state.conceptMapGetter) {
+						let exercises = this.generator.getExercisesByTypeAndConcept(state.type, state.concept, this.state.exerciseList, this.state.conceptMapGetter);
+						this.setState({
+							currentConcept: state.concept,
+							counter: state.counter,
+							exerciseType: state.type,
+							exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : null
+						});
+					}
+				}
+			});
+		}
+	}
 
 	/**
 	 * Passed in as a prop to WorldView -> ConceptCard
@@ -216,7 +265,8 @@ class App extends Component {
    * Un app un-mount, stop watching authentication
    */
   componentWillUnmount() {
-  	this.authUnsub();
+  	this.mounted = false;
+  	// this.authUnsub();
   }
 
 	/**
@@ -645,7 +695,9 @@ class App extends Component {
 				<div>
 					{this.renderNavBar()}
 					<ExerciseView
+							updateUserState={this.updateUserState}
 							exercise={this.state.exercise}
+							readOrWrite={this.state.exerciseType}
 							submitHandler={this.submitResponse}
 							feedback={this.state.feedback}
 							followupFeedback={this.state.followupFeedback}
@@ -660,6 +712,7 @@ class App extends Component {
 							followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
 							nextQuestion={this.nextQuestion}
 							resetFeedback={this.resetFeedback}
+							generateExercise={this.generateExercise} // passed in as a prop to breadcrumbs
 					/>
 				</div>
     );
@@ -719,7 +772,7 @@ class App extends Component {
 						<Route exact path={Routes.worldview} component={() => this.renderWorldView()}/>
 						<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
 						<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
-						<Route exact path={Routes.practice} component={() => this.renderExercise()}/>
+						<Route exact path={Routes.practice} render={() => this.renderExercise()}/>
 						<Redirect to={Routes.home} />
 					</Switch>
 				</Router>
