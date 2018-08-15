@@ -12,7 +12,8 @@ import Routes from './../../../Routes';
 type Props = {
   conceptType: string,
   readOrWrite: string,
-	generateExercise: Function
+	generateExercise: Function,
+	storeUserState: Function
 }
 
 /**
@@ -218,6 +219,7 @@ class InstructionView extends Component {
 											chosenInstruction={chosenInstruction}
 											instructionOrPractice={"INSTRUCTION"}
 											generateExercise={this.props.generateExercise}
+											storeUserState={this.props.storeUserState}
 									/>
 									{this.state.instructionList && chosenInstruction &&
                   <div className={"content-container"}>

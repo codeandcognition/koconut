@@ -57,6 +57,7 @@ class App extends Component {
   theme: mixed;
   nextQuestion: Function;
   updateUserState: Function;
+  storeState: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: Exercise,
@@ -119,6 +120,7 @@ class App extends Component {
     this.nextQuestion = this.nextQuestion.bind(this);
     this.resetFeedback = this.resetFeedback.bind(this);
     this.updateUserState = this.updateUserState.bind(this);
+    this.storeState = this.storeState.bind(this);
   }
 
   componentDidMount() {
@@ -167,7 +169,7 @@ class App extends Component {
           counter: exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter,
           exerciseType: exerciseType,
           error: false // resets the error message
-        }, () => this.storeState("exercise"));
+        }, () => this.storeState("exercise", this.state.counter, this.state.exerciseType, concept));
         // write current state to Firebase
       }
     }
@@ -178,12 +180,12 @@ class App extends Component {
 	 *
 	 * @param mode
 	 */
-	storeState(mode: string) {
+	storeState(mode: string, counter: number, type: string, concept: string) {
 		let state = {
 			mode: mode,
-			type: this.state.exerciseType,
-			concept: this.state.currentConcept,
-			counter: this.state.counter
+			type: type,
+			concept: concept,
+			counter: counter
 		}
 		let userId = firebase.auth().currentUser.uid;
 		let userRef = firebase.database().ref('Users/' + userId + '/state');
@@ -235,7 +237,10 @@ class App extends Component {
 			instructionType: instructionType,
 			display: displayType.instruct,
 			error: false // resets error state
-  	});
+  	}, () => {
+  		// update state on firebase
+			this.storeState("instruction", 0, this.state.instructionType, concept);
+		});
 	}
 
 	/**
@@ -755,7 +760,8 @@ class App extends Component {
 					<InstructionView conceptType={this.state.currentConcept}
 													 readOrWrite={this.state.instructionType}
 													 setError={this.setInstructionViewError}
-													 generateExercise={this.props.generateExercise}/>
+													 generateExercise={this.props.generateExercise}
+													 storeUserState={this.storeState}/>
 				</div>
 		);
   }

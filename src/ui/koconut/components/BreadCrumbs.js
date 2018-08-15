@@ -6,10 +6,12 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import './BreadCrumbs.css';
 import { Link, withRouter} from "react-router-dom";
+import firebase from 'firebase';
 
 type Props = {
   conceptType: string,
-  chosenInstruction: any
+  chosenInstruction: any,
+	generateExercise: Function
 }
 
 class BreadCrumbs extends Component {
@@ -70,6 +72,20 @@ class BreadCrumbs extends Component {
     });
   }
 
+  componentDidMount() {
+  	this.mounted = true;
+		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+			if (user && this.mounted) {
+				this.getUserState();
+			}
+		})
+	}
+
+	componentWillUnmount() {
+  	this.mounted = false;
+  	this.authUnsub();
+	}
+
   /**
    * This function takes in a camel cased string and converts it to normal
    * text with the first letter of every word being capitalized.
@@ -128,64 +144,67 @@ class BreadCrumbs extends Component {
     });
   }
 
-  render() {
-    // to handle loss of props upon refresh
-		let pathComponents = this.props.history.location.pathname.split("/");
-		let conceptCode = pathComponents[2];
-		let conceptName = this.formatCamelCasedString(conceptCode);
-		let instructionOrPractice = pathComponents[1].toUpperCase();
-		let readOrWriteProp = pathComponents[3].includes("read") ? "READ" : "WRITE";
+  getUserState() {
+		if (firebase.auth().currentUser) {
+			let userId = firebase.auth().currentUser.uid;
+			let userRef = firebase.database().ref('Users/' + userId + '/state');
+			let state = {};
+			userRef.on('value', snap => {
+				if (snap !== null) {
+					state = snap.val();
+					if (this.mounted) {
+						this.setState({
+							concept: state.concept,
+							readOrWrite: state.type,
+							mode: state.mode
+						});
+					}
+				}
+			});
+		}
+	}
 
+	/**
+	 * Stores user's current state on Koconut to Firebase
+	 *
+	 * @param mode
+	 */
+	storeState(mode: string, counter: number, type: string, concept: string) {
+		let state = {
+			mode: mode,
+			type: type,
+			concept: concept,
+			counter: counter
+		}
+		let userId = firebase.auth().currentUser.uid;
+		let userRef = firebase.database().ref('Users/' + userId + '/state');
+		userRef.set(state);
+	}
+
+  render() {
+		let conceptName = this.formatCamelCasedString(this.state.concept);
 		let readOrWrite = "";
-		// TODO: replace strings with constants
-		if (instructionOrPractice === "INSTRUCTION") {
-			if (readOrWriteProp === "READ") {
+
+		if (this.state.mode === "instruction") {
+			if (this.state.readOrWrite === "READ") {
 				readOrWrite = "Learn to read code";
-			} else if (readOrWriteProp === "WRITE") {
+			} else if (this.state.readOrWrite === "WRITE") {
 				readOrWrite = "Learn to write code";
 			}
-		} else if (instructionOrPractice === "PRACTICE") {
-			if (readOrWriteProp === "READ") {
+		} else if (this.state.mode === "exercise") {
+			if (this.state.readOrWrite === "READ") {
 				readOrWrite = "Practice reading code";
-			} else if (readOrWriteProp === "WRITE") {
+			} else if (this.state.readOrWrite === "WRITE") {
 				readOrWrite = "Practice writing code";
 			}
 		}
-
-    let conceptMenu = [];
-    if (this.state.semanticConcepts && this.state.semanticConcepts.includes(conceptCode)) {
-      conceptMenu = this.state.semanticConcepts;
-    } else if (this.state.templateConcepts && this.state.templateConcepts.includes(conceptCode)) {
-      conceptMenu = this.state.templateConcepts;
-    } else if (this.state.onboardingConcepts && this.state.onboardingConcepts.includes(conceptCode)) {
-      conceptMenu = this.state.onboardingConcepts;
-    }
-
-    let conceptAnchorEl = this.state.conceptAnchorEl;
     let typeAnchorEl = this.state.typeAnchorEl;
-
     return (
       <div>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href={"#"} aria-owns={conceptAnchorEl ? "concept-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, true)}>{conceptName}</a>
-              <Menu id={"concept-menu"}
-                    anchorEl={conceptAnchorEl}
-                    transformOrigin={{
-                      vertical: -45,
-                      horizontal: 20,
-                    }}
-                    open={Boolean(conceptAnchorEl)}
-                    onClose={this.handleMenuClose}>
-                {conceptMenu.map((item, index) => {
-                  return (
-                      <Link to={`/instruction/${item}/learn-to-read-code`} key={index}><MenuItem>{this.state.conceptNames && this.state.conceptNames[item]}</MenuItem></Link>
-                  );
-                })}
-              </Menu>
-            </li>
-            <li className="breadcrumb-item">
+            <li className="breadcrumb-item active">{conceptName}</li>
+            <li className="breadcrumb-item active">
               <a href="#" aria-owns={typeAnchorEl ? "type-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, false)}>{readOrWrite}</a>
               <Menu id={"type-menu"}
                     anchorEl={typeAnchorEl}
@@ -195,10 +214,10 @@ class BreadCrumbs extends Component {
                     }}
                     open={Boolean(typeAnchorEl)}
                     onClose={this.handleMenuClose}>
-                <Link to={`/instruction/${conceptCode}/learn-to-read-code`}><MenuItem>Learn to Read Code</MenuItem></Link>
-								<Link to={`/practice/${conceptCode}/practice-reading-code`}><MenuItem>Practice Reading Code</MenuItem></Link>
-                <Link to={`/instruction/${conceptCode}/learn-to-write-code`}><MenuItem>Learn to Write Code</MenuItem></Link>
-								<Link to={`/practice/${conceptCode}/practice-writing-code`}><MenuItem>Practice Writing Code</MenuItem></Link>
+                <Link to={`/instruction/${this.state.concept}/learn-to-read-code`}><MenuItem onClick={() => {this.storeState("instruction", 0, "READ", this.state.concept)}}>Learn to Read Code</MenuItem></Link>
+								<Link to={`/practice/${this.state.concept}/practice-reading-code`}><MenuItem onClick={() => {this.storeState("exercise", 0, "READ", this.state.concept)}}>Practice Reading Code</MenuItem></Link>
+                <Link to={`/instruction/${this.state.concept}/learn-to-write-code`}><MenuItem onClick={() => {this.storeState("instruction", 0, "WRITE", this.state.concept)}}>Learn to Write Code</MenuItem></Link>
+								<Link to={`/practice/${this.state.concept}/practice-writing-code`}><MenuItem onClick={() => {this.storeState("exercise", 0, "WRITE", this.state.concept)}}>Practice Writing Code</MenuItem></Link>
               </Menu>
             </li>
             <li className="breadcrumb-item active" aria-current="page">{this.props.chosenInstruction ? this.props.chosenInstruction.title : ""}</li>

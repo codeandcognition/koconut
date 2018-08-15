@@ -60,10 +60,6 @@ class Exercise extends Component {
    */
   componentDidMount() {
     this.mounted = true;
-		// invoke a function in App.js
-    // that retrieves the current exercise from Firebase and updates its state
-    // this will in turn change the props being passed to ExerciseView.js
-		this.props.updateUserState();
     window.scrollTo(0, 0);
   }
 
