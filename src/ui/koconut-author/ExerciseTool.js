@@ -30,6 +30,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import firebase from "firebase";
+import "./ExerciseTool.css";
 
 
 class ExerciseTool extends Component {
@@ -52,6 +53,8 @@ class ExerciseTool extends Component {
 			editedExercise: "",
 			editError: "",
 			selectedConcept: "",
+			currentQuestionIndex: 0,
+			currentFIndex: 0,
 
 			isFollowup: false, 														// passed as a prop into the Question component
 			currentQuestion: this.Schemas["standAlone"], 				// this will be updated throughout an authoring session
@@ -385,12 +388,33 @@ class ExerciseTool extends Component {
 	 * @returns {*}
 	 */
 	renderQuestionCard() {
-		return <Question addQuestion={this.addQuestion}
-										 isFollowup={this.state.isFollowup}
-										 insideTable={false}
-										 data={Object.assign({}, this.state.currentQuestion)}
-										 updateCurrentQuestion={this.updateCurrentQuestion}
-										 currentCell={this.state.currentCell}/>
+		var currentIndex = this.state.isFollowup ? this.state.currentFIndex : this.state.currentQuestionIndex;
+		var totalIndex = this.state.isFollowup ? this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length : this.state.currentExercise.questions.length;
+		return (
+			<div>
+				<p className={"question-tracker"}>Question {totalIndex == 0 ? currentIndex : currentIndex + 1} of {totalIndex}</p>
+				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalIndex == 0 ? currentIndex : currentIndex + 1} of {totalIndex}</p>}
+				<div className={"question-container"}>
+					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(currentIndex - 1, totalIndex, "LEFT")}><i className="fa fa-chevron-left" aria-hidden="true"></i></button>
+					<Question addQuestion={this.addQuestion}
+										isFollowup={this.state.isFollowup}
+										insideTable={false}
+										data={Object.assign({}, this.state.currentQuestion)}
+										updateCurrentQuestion={this.updateCurrentQuestion}
+										currentCell={this.state.currentCell} />
+					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(currentIndex + 1, totalIndex, "RIGHT")}><i className="fa fa-chevron-right" aria-hidden="true"></i></button>
+				</div>
+			</div>
+		);
+	}
+
+	navigateToQuestion(index: number, maxIndex: number, direction: string) {
+		if (index >= 0 && index < maxIndex) {
+			this.setState({
+				currentQuestionIndex: index,
+				currentQuestion: this.state.currentExercise.questions[index]
+			});
+		}
 	}
 
 	/**
@@ -494,6 +518,28 @@ class ExerciseTool extends Component {
 				</div>
 		);
 	}
+
+  /**
+   * This function brings the user to the build exercise view and populates
+   * it with exercise information to be edited.
+   *
+   */
+  enterEditMode(id: string) {
+    var editExercise = this.state.exercises[id];
+    var currentExercise = this.state.currentExercise;
+    currentExercise["prompt"] = editExercise.prompt;
+    currentExercise["code"] = editExercise.code;
+    currentExercise["labels"] = editExercise.labels;
+    currentExercise["concepts"] = editExercise.concepts;
+    currentExercise["questions"] = editExercise.questions;
+    this.setState({
+      editMode: true,
+      editID: id,
+      tabValue: 0,
+      currentExercise: currentExercise,
+      currentQuestion: editExercise.questions[0]
+    }, () => window.scrollTo(0, 0));
+  }
 
 	/**
 	 * Lays out the Build Exercise view in the authoring tool
@@ -636,7 +682,7 @@ class ExerciseTool extends Component {
 							</CardContent>
 							{!this.state.editMode &&
 								<CardActions>
-									<Button color={"primary"} onClick={() => this.setState({editMode: true, editID: id})}>Edit</Button>
+									<Button color={"primary"} onClick={() => this.enterEditMode(id)}>Edit</Button>
 									<Button color={"secondary"} onClick={() => this.handleDeleteExercise(id)}>Delete</Button>
 								</CardActions>
 							}
@@ -668,8 +714,16 @@ class ExerciseTool extends Component {
 	}
 
 	render() {
+		var containerStyle = {
+			padding: "60px"
+		}
+
+		if (this.state.editMode) {
+			containerStyle["border"] = "4px solid #f1c232";
+		}
+
 		return (
-				<Paper style={{padding: "60px"}} className={"container"}>
+				<Paper style={containerStyle} className={"container"}>
           <Tabs fullWidth centered
 								indicatorColor={"primary"}
 								value={this.state.tabValue}
