@@ -15,7 +15,15 @@ type Props = {
 }
 
 class BreadCrumbs extends Component {
+	LearnerMode = {
+		instruction: "instruction",
+		practice: "exercise"
+	};
 
+	Type = {
+		read: "READ",
+		write: "WRITE"
+	};
 
   constructor(props: Props) {
     super(props);
@@ -183,21 +191,23 @@ class BreadCrumbs extends Component {
 
   render() {
 		let conceptName = this.formatCamelCasedString(this.state.concept);
-		let readOrWrite = "";
 
-		if (this.state.mode === "instruction") {
-			if (this.state.readOrWrite === "READ") {
-				readOrWrite = "Learn to read code";
-			} else if (this.state.readOrWrite === "WRITE") {
-				readOrWrite = "Learn to write code";
+		let link = "";
+		// learner centric link
+		if (this.state.mode === this.LearnerMode.instruction) {
+			if (this.state.readOrWrite === this.Type.read) {
+				link = "Learn to read code";
+			} else if (this.state.readOrWrite === this.Type.write) {
+				link = "Learn to write code";
 			}
-		} else if (this.state.mode === "exercise") {
-			if (this.state.readOrWrite === "READ") {
-				readOrWrite = "Practice reading code";
-			} else if (this.state.readOrWrite === "WRITE") {
-				readOrWrite = "Practice writing code";
+		} else if (this.state.mode === this.LearnerMode.practice) {
+			if (this.state.readOrWrite === this.Type.read) {
+				link = "Practice reading code";
+			} else if (this.state.readOrWrite === this.Type.write) {
+				link = "Practice writing code";
 			}
 		}
+
     let typeAnchorEl = this.state.typeAnchorEl;
     return (
       <div>
@@ -205,7 +215,7 @@ class BreadCrumbs extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item active">{conceptName}</li>
             <li className="breadcrumb-item active">
-              <a href="#" aria-owns={typeAnchorEl ? "type-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, false)}>{readOrWrite}</a>
+              <a href="#" aria-owns={typeAnchorEl ? "type-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, false)}>{link}</a>
               <Menu id={"type-menu"}
                     anchorEl={typeAnchorEl}
                     transformOrigin={{
