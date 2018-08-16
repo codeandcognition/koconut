@@ -39,10 +39,7 @@
     "react-dom": "^16.3.0",
     "react-graph-vis": "^1.0.2",
     "react-markdown": "^3.3.4",
-<<<<<<< HEAD
     "react-router": "^4.3.1",
-=======
->>>>>>> summer2018-master
     "react-router-dom": "^4.3.1",
     "react-tooltip": "^3.6.1",
     "skulpt": "^0.11.1",
