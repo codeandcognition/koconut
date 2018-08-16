@@ -53,13 +53,13 @@ class ConceptCard extends Component {
 
 		return(
 				<Card style={{margin: '2%'}}>
-					<CardContent>
+					<CardContent aria-expanded={this.state.expand}>
 						<div>
-						<div style={{display: 'flex', cursor: "pointer"}} onClick={this.handleExpandClick}>
+						<div style={{display: 'flex', cursor: "pointer"}} onClick={this.handleExpandClick}><a>
 							{this.state.expand ?
 							<ExpandedIcon /> :
               <ExpandMoreIcon />
-							}
+							}</a>
 							<p style={titleStyle}>{this.props.title}</p>
 						</div>
 						{this.state.expand &&

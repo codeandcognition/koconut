@@ -9,6 +9,10 @@ import ExerciseTypes from '../data/ExerciseTypes';
 import {BayesKT} from './BKT.js';
 import type {Exercise} from '../data/Exercises';
 
+//
+
+const Sk = require('skulpt');
+
 /**
  * Evaluates and calculates correctness of a student response, and the
  * probability that their response indicates knowing a concept
@@ -68,20 +72,27 @@ class ResponseEvaluator {
   }
 
   /**
-   * Send a POST request to the API to compile and execute the given Java code
-   * @param code - the Java code to compile and execute
+   * runCode will run the code provided in a python interpreter (Skulpt)
+   * Most of this code comes from Skulpt's examples. Documentation for this
+   * will be in the docs folder.
+   * @param code input python code as a string
+   * @returns {string} python std output as a string
    */
-  static executeJava(code: string): Promise<Object> {
-    return fetch('/api/python', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        id: 'Replacemelater', // TODO: Actually get an id
-        content: code,
-      })
-    });
+  static runCode(code: string): string {
+    console.log(code);
+    function builtinRead(x) {
+      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+          throw "File not found: '" + x + "'";
+      return Sk.builtinFiles["files"][x];
+    }
+    let output = [];
+    Sk.configure({output: d => output.push(d), read: builtinRead});
+    try {
+      Sk.importMainWithBody("<stdin>", false, code);
+    } catch(e) {
+      return e.toString();
+    }
+    return output.join("").trim();
   }
 
   /**
@@ -97,7 +108,6 @@ class ResponseEvaluator {
                         questionType: any, feedback: any) {
     // no one can escape asyncronous programming!!!!
     // >:D
-
     // wrap it in a function for async
     let addResponseAndUpdate = (isCorrect, exercise) => {
       ResponseLog.addResponse( // TODO: replace '123' with a real ID
@@ -131,16 +141,8 @@ class ResponseEvaluator {
     // it's backwards, I know :(
     if(exercise.questions[questionIndex].type === ExerciseTypes.writeCode ||
        exercise.questions[questionIndex].type === ExerciseTypes.fillBlank) {
-      this.executeJava(answer)//ExercisePool.getAnswer(exercise);
-      .then((res) => {
-        return res.json();
-      }).then((json) => {
-        console.log(json);
-        addResponseAndUpdate(json.stdout === exercise.questions[questionIndex].answer, exercise);
-      }).catch((err) => {
-        console.log(err);
-        addResponseAndUpdate(false, exercise); // TODO: remove hardcode
-      });
+      let executedAnswer = this.runCode(answer[questionIndex]);
+      addResponseAndUpdate(executedAnswer === exercise.questions[questionIndex].answer, exercise);
     } else {
       let gotCorrect = true;
       if(questionType === "table") {

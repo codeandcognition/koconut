@@ -19,7 +19,8 @@ class CodeEditor extends Component {
     code: string,
     mode: string,
     theme: string,
-    toggle: false
+    toggle: false,
+    highlighted: string
   };
 
   constructor(props) {
@@ -28,7 +29,8 @@ class CodeEditor extends Component {
     this.state = {
       mode: 'python',
       theme: 'textmate',
-      code: this.props.code
+      code: this.props.code,
+      highlighted: ''
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -108,6 +110,7 @@ class CodeEditor extends Component {
   renderAce() {
     return <AceEditor
         ref="aceEditor"
+        className={"ace-editor"}
         width="100%"
         height="20em"
         value={this.state.code}
@@ -166,6 +169,7 @@ class CodeEditor extends Component {
     return(
         <div>
           {this.renderAce()}
+          {this.props.type === Types.highlightCode && <p className={"answer-preview"}>Your answer: {this.state.highlighted}</p>}
           <div className={"button-container"}>
             <Button variant={"contained"} color={"secondary"} onClick={() => this.handleReset()}><i
                 className="fas fa-sync-alt" /></Button>

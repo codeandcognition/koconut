@@ -15,9 +15,7 @@ import PopOverMessage from './PopoverMessage';
 import InstructionView from './InstructionView';
 import Types from '../../../data/ExerciseTypes.js';
 import firebase from 'firebase';
-
 import Routes from './../../../Routes';
-
 import {BrowserRouter as Router, Switch, Redirect, Route} from 'react-router-dom';
 
 // Fake AJAX
@@ -698,6 +696,7 @@ class App extends Component {
    * Renders the exercise view
    */
   renderExercise() {
+  	console.log(this.state.currentConcept);
     return (
 				<div>
 					{this.renderNavBar()}

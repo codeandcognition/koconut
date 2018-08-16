@@ -9,6 +9,7 @@ import firebase from 'firebase';
 import LoadingView from './../components/LoadingView';
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
+import BreadCrumbs from '../components/BreadCrumbs';
 
 type Props = {
   exercise: {

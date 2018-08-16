@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactMarkdown from 'react-markdown';
 import Types from '../../../data/ExerciseTypes.js';
 import Submit from './Submit';
+import BreadCrumbs from './BreadCrumbs';
 
 class ExerciseQuestion extends Component {
 
