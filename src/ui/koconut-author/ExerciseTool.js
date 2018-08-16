@@ -388,22 +388,27 @@ class ExerciseTool extends Component {
 	 * @returns {*}
 	 */
 	renderQuestionCard() {
-		var currentIndex = this.state.isFollowup ? this.state.currentFIndex : this.state.currentQuestionIndex;
-		var questionMax = this.state.currentExercise.questions.length === 0 ? 0 : this.state.currentExercise.questions.length - 1;
-		var fMax = this.state.isFollowup ? (this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length === 0 ? 0 : this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length + 1) : 0;
+		var currentIndex = this.state.currentQuestionIndex;
+		var currentFIndex = this.state.isFollowup ? 0 : this.state.currentFIndex;
+		var totalQuestions = this.state.currentExercise.questions.length;
+		var totalFQuestions = this.state.isFollowup ? this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length : 0;
 		return (
 			<div>
-				<p className={"question-tracker"}>Question {questionMax == 0 ? currentIndex : currentIndex + 1} of {questionMax}</p>
-				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {fMax == 0 ? currentIndex : currentIndex + 1} of {fMax}</p>}
+				<p className={"question-tracker"}>Question {totalQuestions == 0 ? currentIndex : currentIndex + 1} of {totalQuestions}</p>
+				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalFQuestions == 0 ? currentFIndex : currentFIndex + 1} of {totalFQuestions}</p>}
 				<div className={"question-container"}>
-					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(currentIndex - 1, this.state.isFollowup ? fMax : questionMax, "LEFT")}><i className="fa fa-chevron-left" aria-hidden="true"></i></button>
+					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex - 1 : currentIndex - 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "LEFT")}>
+						<i className="fa fa-chevron-left" aria-hidden="true"></i>
+					</button>
 					<Question addQuestion={this.addQuestion}
 										isFollowup={this.state.isFollowup}
 										insideTable={false}
 										data={Object.assign({}, this.state.currentQuestion)}
 										updateCurrentQuestion={this.updateCurrentQuestion}
 										currentCell={this.state.currentCell} />
-					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(currentIndex + 1, this.state.isFollowup ? fMax : questionMax, "RIGHT")}><i className="fa fa-chevron-right" aria-hidden="true"></i></button>
+					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex + 1 : currentIndex + 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "RIGHT")}>
+						<i className="fa fa-chevron-right" aria-hidden="true"></i>
+					</button>
 				</div>
 			</div>
 		);
@@ -418,6 +423,40 @@ class ExerciseTool extends Component {
    */
 	navigateToQuestion(index: number, maxIndex: number, direction: string) {
 		if (index >= 0 || this.state.isFollowup) {
+    	if (this.state.isFollowup) {
+				if (index > maxIndex || index < 0) { // Follow-up to Question
+					let increase = direction === "LEFT" ? 0 : 1;
+					if (this.state.currentQuestionIndex + increase < this.state.currentExercise.questions.length) {
+            this.setState({
+              isFollowup: false,
+              currentQuestionIndex: this.state.currentQuestionIndex + increase,
+              currentQuestion: this.state.currentExercise.questions[this.state.currentQuestionIndex + increase]
+            });
+					}
+				} else {
+					this.setState({ // Follow-up to Follow-up
+						currentFIndex: index,
+						currentQuestion: this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions[index]
+					})
+				}
+			} else {
+    		if (direction === "RIGHT" && this.state.currentQuestion.followupQuestions) { // Question to Follow-up
+					this.setState({
+						isFollowup: true,
+						currentFIndex: 0,
+						currentQuestion: this.state.currentQuestion.followupQuestions[0]
+					});
+				} else { // Question to Question
+    			this.setState({
+						currentQuestionIndex: index,
+						currentQuestion: this.state.currentExercise.questions[index]
+					});
+				}
+			}
+		}
+
+
+		/*if (index >= 0 || this.state.isFollowup) {
 			if (this.state.isFollowup) {
 				if (index >= maxIndex || index < 0) { // Follow-up to Question
 					var increase = direction === "LEFT" ? -1 : 1;
@@ -452,16 +491,8 @@ class ExerciseTool extends Component {
 						currentQuestion: this.state.currentExercise.questions[index > maxIndex ? index - 1 : index]
 					});
 				}
-			}
+			}*/
 		}
-
-		/*if (index >= 0 && index < maxIndex) {
-			this.setState({
-				currentQuestionIndex: index,
-				currentQuestion: this.state.currentExercise.questions[index]
-			});
-		}*/
-	}
 
 	/**
 	 * Renders a single table question
@@ -587,6 +618,11 @@ class ExerciseTool extends Component {
     }, () => window.scrollTo(0, 0));
   }
 
+  saveEdits() {
+  	let databaseRef = firebase.database().ref("Exercises/" + this.state.editID);
+  	databaseRef.set(this.state.currentExercise);
+	}
+
 	/**
 	 * Lays out the Build Exercise view in the authoring tool
 	 * @returns {*}
@@ -679,7 +715,14 @@ class ExerciseTool extends Component {
 					{this.renderExercisePreview()}
 					{this.renderFollowupPrompt()}
 					<br/>
-					<Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
+					{this.state.editMode ?
+							<div>
+								<Button style={{marginRight: "30px"}}variant={"contained"} color={"primary"}>Save Changes</Button>
+								<Button variant={"contained"} color={"secondary"}>Cancel</Button>
+							</div> :
+              <Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
+
+					}
 				</div>
 		);
 	}
@@ -736,7 +779,7 @@ class ExerciseTool extends Component {
 					);
 				})}
 
-				{this.state.editMode &&
+				{/*this.state.editMode &&
 					<div>
 						<textarea style={editorStyles}
 											onChange={(e) => this.setState({editedExercise: e.target.value})}
@@ -754,7 +797,7 @@ class ExerciseTool extends Component {
             	<p className={"alert alert-danger"}>{this.state.editError}</p>
             }
 					</div>
-				}
+				*/}
 			</div>
 		);
 	}
