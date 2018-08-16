@@ -11,7 +11,6 @@ import firebase from 'firebase';
 type Props = {
   conceptType: string,
   chosenInstruction: any,
-	generateExercise: Function
 }
 
 class BreadCrumbs extends Component {
@@ -152,7 +151,10 @@ class BreadCrumbs extends Component {
     });
   }
 
-  getUserState() {
+	/**
+	 * Retrieve user's location on the app from Firebase
+	 */
+	getUserState() {
 		if (firebase.auth().currentUser) {
 			let userId = firebase.auth().currentUser.uid;
 			let userRef = firebase.database().ref('Users/' + userId + '/state');

@@ -29,8 +29,7 @@ type Props = {
   codeTheme: string,
   timesGotQuestionWrong: [],
   followupTimesGotQuestionWrong: [],
-  resetFeedback: Function,
-	generateExercise: Function
+  resetFeedback: Function
 }
 
 var b = {"hello":"world","cat":"dog"}
@@ -157,7 +156,7 @@ class Exercise extends Component {
 
     return (
         <div className="exercise-view" style={styles}>
-					<BreadCrumbs conceptType={this.props.concept} readOrWrite={this.props.readOrWrite} instructionOrPractice={"PRACTICE"} generateExercise={this.props.generateExercise}/>
+					<BreadCrumbs conceptType={this.props.concept} readOrWrite={this.props.readOrWrite} instructionOrPractice={"PRACTICE"}/>
 					{!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderQuestion()}
         </div>
     );

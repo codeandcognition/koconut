@@ -201,7 +201,7 @@ class App extends Component {
 			let userRef = firebase.database().ref('Users/' + userId + '/state');
 			let state = {};
 			userRef.on('value', snap => {
-				if (snap !== null) {
+				if (snap.val() !== null) {
 					state = snap.val();
 					if (this.state.conceptMapGetter) {
 						let exercises = this.generator.getExercisesByTypeAndConcept(state.type, state.concept, this.state.exerciseList, this.state.conceptMapGetter);
@@ -274,7 +274,6 @@ class App extends Component {
    */
   componentWillUnmount() {
   	this.mounted = false;
-  	// this.authUnsub();
   }
 
 	/**
@@ -720,7 +719,6 @@ class App extends Component {
 							followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
 							nextQuestion={this.nextQuestion}
 							resetFeedback={this.resetFeedback}
-							generateExercise={this.generateExercise} // passed in as a prop to breadcrumbs
 					/>
 				</div>
     );
@@ -770,7 +768,6 @@ class App extends Component {
 	 * predefined routes within koconut
 	 */
 	renderDisplay() {
-		// TODO: Add routes for exercise view and instruction view
 		return (
 				<Router>
 					<Switch>
