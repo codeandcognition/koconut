@@ -81,7 +81,7 @@ class Feedback extends Component {
         <strong>The correct answer is
             <span style={{color: "green"}}>
               {
-                typeof(finalString) === "object" ? this.displayMemoryTableOutput(finalString) : finalString
+                this.props.type === "memoryTable" ? this.displayMemoryTableOutput(finalString) : finalString
               }
             </span>
             {(this.props.type !== "writeCode" && this.props.type !== 'memoryTable') && "."}
