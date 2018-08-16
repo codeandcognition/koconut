@@ -389,32 +389,78 @@ class ExerciseTool extends Component {
 	 */
 	renderQuestionCard() {
 		var currentIndex = this.state.isFollowup ? this.state.currentFIndex : this.state.currentQuestionIndex;
-		var totalIndex = this.state.isFollowup ? this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length : this.state.currentExercise.questions.length;
+		var questionMax = this.state.currentExercise.questions.length === 0 ? 0 : this.state.currentExercise.questions.length - 1;
+		var fMax = this.state.isFollowup ? (this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length === 0 ? 0 : this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length + 1) : 0;
 		return (
 			<div>
-				<p className={"question-tracker"}>Question {totalIndex == 0 ? currentIndex : currentIndex + 1} of {totalIndex}</p>
-				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalIndex == 0 ? currentIndex : currentIndex + 1} of {totalIndex}</p>}
+				<p className={"question-tracker"}>Question {questionMax == 0 ? currentIndex : currentIndex + 1} of {questionMax}</p>
+				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {fMax == 0 ? currentIndex : currentIndex + 1} of {fMax}</p>}
 				<div className={"question-container"}>
-					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(currentIndex - 1, totalIndex, "LEFT")}><i className="fa fa-chevron-left" aria-hidden="true"></i></button>
+					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(currentIndex - 1, this.state.isFollowup ? fMax : questionMax, "LEFT")}><i className="fa fa-chevron-left" aria-hidden="true"></i></button>
 					<Question addQuestion={this.addQuestion}
 										isFollowup={this.state.isFollowup}
 										insideTable={false}
 										data={Object.assign({}, this.state.currentQuestion)}
 										updateCurrentQuestion={this.updateCurrentQuestion}
 										currentCell={this.state.currentCell} />
-					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(currentIndex + 1, totalIndex, "RIGHT")}><i className="fa fa-chevron-right" aria-hidden="true"></i></button>
+					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(currentIndex + 1, this.state.isFollowup ? fMax : questionMax, "RIGHT")}><i className="fa fa-chevron-right" aria-hidden="true"></i></button>
 				</div>
 			</div>
 		);
 	}
 
+  /**
+	 * This function navigates through the questions of an exercise on the
+	 * exercise builder
+   * @param index
+   * @param maxIndex
+   * @param direction
+   */
 	navigateToQuestion(index: number, maxIndex: number, direction: string) {
-		if (index >= 0 && index < maxIndex) {
+		if (index >= 0 || this.state.isFollowup) {
+			if (this.state.isFollowup) {
+				if (index >= maxIndex || index < 0) { // Follow-up to Question
+					var increase = direction === "LEFT" ? -1 : 1;
+					this.setState({
+						isFollowup: false,
+						currentQuestionIndex: this.state.currentQuestionIndex + increase,
+						currentQuestion: this.state.currentExercise.questions[this.state.currentQuestionIndex + increase]
+					});
+				} else {
+					this.setState({ // Follow-up to Follow-up
+						currentFIndex: index,
+						currentQuestion: this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions[index]
+					});
+				}
+			} else {
+				var prevQuestion = this.state.currentExercise.questions[index] ? this.state.currentExercise.questions[index].followupQuestions : null;
+				if (direction === "RIGHT" && this.state.currentQuestion.followupQuestions && this.state.currentQuestion.followupQuestions.length > 0) { // Question to Follow-up
+          this.setState({
+            isFollowup: true,
+            currentFIndex: 0,
+            currentQuestion: this.state.currentQuestion.followupQuestions[0]
+          });
+        } else if (direction === "LEFT" && prevQuestion && prevQuestion.length > 0) {
+						this.setState({
+							isFollowup: true,
+							currentFIndex: prevQuestion.length - 1,
+							currentQuestion: prevQuestion[prevQuestion.length - 1]
+						});
+				} else {
+					this.setState({ // Question to Question
+						currentQuestionIndex: index > maxIndex ? index - 1 : index,
+						currentQuestion: this.state.currentExercise.questions[index > maxIndex ? index - 1 : index]
+					});
+				}
+			}
+		}
+
+		/*if (index >= 0 && index < maxIndex) {
 			this.setState({
 				currentQuestionIndex: index,
 				currentQuestion: this.state.currentExercise.questions[index]
 			});
-		}
+		}*/
 	}
 
 	/**
