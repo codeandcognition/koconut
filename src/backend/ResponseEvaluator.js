@@ -71,6 +71,13 @@ class ResponseEvaluator {
     return this.calculateCertainty(response, this.BKT);
   }
 
+  /**
+   * runCode will run the code provided in a python interpreter (Skulpt)
+   * Most of this code comes from Skulpt's examples. Documentation for this
+   * will be in the docs folder.
+   * @param code input python code as a string
+   * @returns {string} python std output as a string
+   */
   static runCode(code: string): string {
     console.log(code);
     function builtinRead(x) {
