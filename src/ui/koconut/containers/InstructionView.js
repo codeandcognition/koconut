@@ -137,6 +137,7 @@ class InstructionView extends Component {
    */
   componentWillUnmount() {
     this.mounted = false;
+		window.removeEventListener('scroll', this.handleScroll);
     this.authUnsub();
   }
 
@@ -243,22 +244,22 @@ class InstructionView extends Component {
 								</div>
 					}
 					<div className={"dot-navigation-container"}>
-            <div className={"dot-navigation-container2"}>
-              <ul className={"dot-navigation"}>
-                {this.state.instructionList && this.state.instructionList.map((item, index) => {
-                  var selectedStyle = {};
-                  if (index === this.state.currInstructionIndex) {
-                    selectedStyle = {
-                      color: "#3f51b5"
-                    }
-                  }
-                  return (
-                      <li className="dot" key={index} style={selectedStyle} onClick={() => this.navigateToPage(index)}><i className="fas fa-circle"></i></li>
-                  );
-                })}
-            </ul>
-            </div>
-          </div>
+						<div className={"dot-navigation-container2"}>
+							<ul className={"dot-navigation"}>
+								{this.state.instructionList && this.state.instructionList.map((item, index) => {
+									var selectedStyle = {};
+									if (index === this.state.currInstructionIndex) {
+										selectedStyle = {
+											color: "#3f51b5"
+										}
+									}
+									return (
+											<li className="dot" key={index} style={selectedStyle} onClick={() => this.navigateToPage(index)}><i className="fas fa-circle"></i></li>
+									);
+								})}
+							</ul>
+						</div>
+					</div>
 				</div>
     )
   }
