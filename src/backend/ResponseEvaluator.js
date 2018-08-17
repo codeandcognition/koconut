@@ -79,7 +79,6 @@ class ResponseEvaluator {
    * @returns {string} python std output as a string
    */
   static runCode(code: string): string {
-    console.log(code);
     function builtinRead(x) {
       if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
           throw "File not found: '" + x + "'";
