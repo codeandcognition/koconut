@@ -220,10 +220,12 @@ class InstructionView extends Component {
 											instructionOrPractice={"INSTRUCTION"}
 											generateExercise={this.props.generateExercise}
 											storeUserState={this.props.storeUserState}
+											progress={(this.state.currInstructionIndex + 1) + " out of " + (this.state.instructionList && this.state.instructionList.length)}
 									/>
 									{this.state.instructionList && chosenInstruction &&
                   <div className={"content-container"}>
-                    <button className={"nav-arrow-btn left-arrow"} onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left"></i></button>
+                    <button className={"nav-arrow-btn left-arrow"}
+														onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left"></i></button>
                     <div className={"instruct-content-container"}>
                       <InstructionTitle
                           instruction={chosenInstruction}/>

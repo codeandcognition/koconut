@@ -232,7 +232,14 @@ class BreadCrumbs extends Component {
 								<Link to={`/practice/${this.state.concept}/practice-writing-code`}><MenuItem onClick={() => {this.storeState("exercise", 0, "WRITE", this.state.concept)}}>Practice Writing Code</MenuItem></Link>
               </Menu>
             </li>
-            <li className="breadcrumb-item active" aria-current="page">{this.props.chosenInstruction ? this.props.chosenInstruction.title : ""}</li>
+						<li className="breadcrumb-item active" aria-current="page">{
+							this.props.chosenInstruction ?
+								<p style={{display: 'inline'}}>
+									{this.props.chosenInstruction.title} <span style={{color: "#7986CB"}}>{" (" + this.props.progress + ")" }</span>
+								</p>
+									:
+								""}
+						</li>
           </ol>
         </nav>
       </div>
