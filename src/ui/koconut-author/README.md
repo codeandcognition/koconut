@@ -10,7 +10,7 @@ After creating a learner account on Koconut, navigate to the `Authentication` ta
 corresponding your user uid. On the `Database` tab, expand the `Users` root and find the branch that corresponds to your
 user uid.
 
-It should look like the following image:
+It should look like the following image: <br/>
 ![Firebase User branch](https://i.imgur.com/Zinhkha.png)
 
 Click on the plus sign to create a new branch under your user id (hover over user id to find the plus sign). Fill in the
