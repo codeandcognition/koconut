@@ -952,6 +952,20 @@ declare module '@material-ui/core/es/ListSubheader/ListSubheader' {
 declare module '@material-ui/core/es/Menu/index' {
   declare module.exports: any;
 }
+declare module '@material-ui/core/es/Menu' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/Menu' {
+  declare module.exports: any;
+}
+declare module '@material-ui/core/MenuItem' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/es/MenuItem' {
+  declare module.exports: any;
+}
 
 declare module '@material-ui/core/es/Menu/Menu' {
   declare module.exports: any;
@@ -1594,6 +1608,10 @@ declare module '@material-ui/core/GridListTileBar/GridListTileBar' {
 }
 
 declare module '@material-ui/core/GridListTileBar/index' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/Grow' {
   declare module.exports: any;
 }
 
@@ -2257,6 +2275,9 @@ declare module '@material-ui/core/test-utils/unwrap' {
   declare module.exports: any;
 }
 
+declare module '@material-ui/core/TextField' {
+  declare module.exports: any;
+}
 declare module '@material-ui/core/TextField/index' {
   declare module.exports: any;
 }
