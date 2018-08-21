@@ -75,6 +75,7 @@ class ExerciseTool extends Component {
 
 		this.handleDeleteQuestion = this.handleDeleteQuestion.bind(this);
 		this.saveQuestionEditsLocally = this.saveQuestionEditsLocally.bind(this);
+		this.saveChanges = this.saveChanges.bind(this);
 	}
 
 	Schemas = {
@@ -644,6 +645,14 @@ class ExerciseTool extends Component {
 		});
 	}
 
+	saveChanges() {
+		let databaseRef = firebase.database().ref("Exercises/" + this.state.editID);
+		databaseRef.set(this.state.currentExercise, () => {
+			window.alert("Your changes have been saved.");
+			this.resetExerciseUI();
+		});
+	}
+
 	/**
 	 * Lays out the Build Exercise view in the authoring tool
 	 * @returns {*}
@@ -738,7 +747,7 @@ class ExerciseTool extends Component {
 					<br/>
 					{this.state.editMode ?
 							<div>
-								<Button style={{marginRight: "30px"}}variant={"contained"} color={"primary"}>Save Changes</Button>
+								<Button style={{marginRight: "30px"}} variant={"contained"} color={"primary"} onClick={this.saveChanges}>Save Changes</Button>
 								<Button variant={"contained"} color={"secondary"} onClick={this.resetForm}>Cancel</Button>
 							</div> :
               <Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
