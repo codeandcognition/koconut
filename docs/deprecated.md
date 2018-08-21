@@ -46,3 +46,7 @@ Next, install the Floobits plugin in WebStorm (or your preferred editor). To do 
 To join the Floobits project, go to `Tools -> Floobits -> Join Workspace by URL` and enter the following URL: `https://floobits.com/leannehwa/koconut/`. This will create a *new* WebStorm project that is separate from your normal local copy. You may either open a new project window or replace your current one with the new Floobits window.
 
 To minimize the number of files that need to communicate between developers, you will need to `npm install` all the project dependencies.
+
+#### William edit:
+
+Floobits seems similar to VS Code Live Share plugin. It is in beta and is maintained by Microsoft. I saw it recently in a video and thought it looked fantastic. It's a very similar to Google Docs experience, and you even have console access. If you really want to edit stuff with more than one computer, use this. Though, you'll have to set up the flow environment (which is not as supported in VS Code than in Webstorm)

@@ -30,8 +30,7 @@ Currently, _koconut_ is built using the following stack:
 
 #### Backend
 - [Node.js](https://nodejs.org/en/): a JavaScript runtime
-- [Express](http://expressjs.com/): a web framework
-- _TODO: unknown database_
+- [Firebase](https://firebase.google.com/): an easy-to-use storage and authentication system
 
 ### Tools
 
@@ -137,6 +136,11 @@ Jest tests can be quickly run using `yarn test`.
 ### WebStorm
 
 [WebStorm](https://www.jetbrains.com/webstorm/) is a JavaScript (and more!) IDE that can assist with development. WebStorm (and all JetBrains software) is free to use for students through a yearly license which can be obtained [**here**](https://www.jetbrains.com/student/).
+
+#### Note from William
+You can use Visual Studio Code instead of Webstorm, but you will find that it is harder to use Flow with. I set up the flow file on my computer similar to Webstorm's setup, with a different add on. Visual Studio's add on for Flow is a lot slower and feels a bit buggier, whereas Webstorm's feels very smooth. 
+
+If you're just getting started, I highly suggest using Webstorm. Once you get more familiar with the code base, then you can choose to switch to Visual Studio Code. I switched over after halfway through my time here, mostly because I just liked VSCode better.
 
 #### Using the Google Style Guide in WebStorm
 

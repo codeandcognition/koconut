@@ -13,7 +13,8 @@ type Props = {
 }
 
 export default class BreadCrumbs extends Component {
-
+  handleMenuOpen: Function;
+  handleMenuClose: Function;
 
   constructor(props: Props) {
     super(props);
@@ -116,7 +117,7 @@ export default class BreadCrumbs extends Component {
     });
   }
 
-  handleMenuOpen(e, isConceptMenu) {
+  handleMenuOpen(e: any, isConceptMenu : boolean) {
     this.setState({
       conceptAnchorEl: isConceptMenu ? e.currentTarget : null,
       typeAnchorEl: isConceptMenu ? null : e.currentTarget

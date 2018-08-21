@@ -25,7 +25,7 @@
         └── containers  // React components that hold logic to display components within them
 ```
 
-### Backend
+### Backend (deprecated for now, as of August 2018)
 
 ```
 .
