@@ -40,7 +40,6 @@ class ExerciseTool extends Component {
       currentExercise: {
         prompt: "",
         code: "",
-        labels: {},
         questions: [],
         concepts: []
       },
@@ -75,6 +74,7 @@ class ExerciseTool extends Component {
 		this.resetForm = this.resetForm.bind(this);
 
 		this.handleDeleteQuestion = this.handleDeleteQuestion.bind(this);
+		this.saveQuestionEditsLocally = this.saveQuestionEditsLocally.bind(this);
 	}
 
 	Schemas = {
@@ -354,7 +354,6 @@ class ExerciseTool extends Component {
 			currentExercise: {
 				prompt: "",
 				code: "",
-				labels: {},
 				questions: [],
 				concepts: []
 			},
@@ -391,13 +390,16 @@ class ExerciseTool extends Component {
 	 * @returns {*}
 	 */
 	renderQuestionCard() {
-		var currentIndex = this.state.currentQuestionIndex;
-		var currentFIndex = this.state.isFollowup ? 0 : this.state.currentFIndex;
-		var totalQuestions = this.state.currentExercise.questions.length;
-		var totalFQuestions = this.state.isFollowup ? this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length : 0;
+		let currentIndex = this.state.currentQuestionIndex;
+		let currentFIndex = this.state.isFollowup ? 0 : this.state.currentFIndex;
+		let totalQuestions = this.state.currentExercise.questions.length;
+		let totalFQuestions = this.state.isFollowup ? this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length : 0;
+
+
 		return (
 			<div>
 				<p className={"question-tracker"}>Question {totalQuestions == 0 ? currentIndex : currentIndex + 1} of {totalQuestions}</p>
+				{!this.state.isFollowup && this.state.currentQuestion.followupQuestions !== null && <p className={"question-tracker"}>{this.state.currentQuestion.followupQuestions.length} Follow-up Question{this.state.currentQuestion.followupQuestions.length !== 1 && 's'}</p>}
 				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalFQuestions == 0 ? currentFIndex : currentFIndex + 1} of {totalFQuestions}</p>}
 				<div className={"question-container"}>
 					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex - 1 : currentIndex - 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "LEFT")}>
@@ -410,6 +412,7 @@ class ExerciseTool extends Component {
 										data={Object.assign({}, this.state.currentQuestion)}
 										updateCurrentQuestion={this.updateCurrentQuestion}
 										handleDeleteQuestion={this.handleDeleteQuestion}
+										handleUpdateQuestion={this.saveQuestionEditsLocally}
 										currentCell={this.state.currentCell} />
 					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex + 1 : currentIndex + 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "RIGHT")}>
 						<i className="fa fa-chevron-right" aria-hidden="true"></i>
@@ -573,7 +576,6 @@ class ExerciseTool extends Component {
     var currentExercise = this.state.currentExercise;
     currentExercise["prompt"] = editExercise.prompt;
     currentExercise["code"] = editExercise.code;
-    currentExercise["labels"] = editExercise.labels;
     currentExercise["concepts"] = editExercise.concepts;
     currentExercise["questions"] = editExercise.questions;
     this.setState({
@@ -585,9 +587,12 @@ class ExerciseTool extends Component {
     }, () => window.scrollTo(0, 0));
   }
 
-  saveEdits() {
-  	let databaseRef = firebase.database().ref("Exercises/" + this.state.editID);
-  	databaseRef.set(this.state.currentExercise);
+  saveQuestionEditsLocally() {
+		let exercise = this.state.currentExercise;
+		exercise.questions[this.state.currentQuestionIndex] = this.state.currentQuestion;
+		this.setState({
+			currentExercise: exercise
+		});
 	}
 
   /**
@@ -631,7 +636,6 @@ class ExerciseTool extends Component {
 			currentExercise: {
         prompt: "",
         code: "",
-        labels: {},
         questions: [],
         concepts: []
       },
@@ -773,9 +777,10 @@ class ExerciseTool extends Component {
 				{Object.keys(this.state.exercises).map((id, index) => {
 					let exerciseCardStyle = {
 						whiteSpace: "pre-wrap",
-						padding: "30px"
+						padding: "30px",
+						color: "#000000"
 					};
-					if (id === this.state.editID) {
+					if (this.state.editMode && id === this.state.editID) {
 						exerciseCardStyle["borderColor"] = "#f1c232";
 						exerciseCardStyle["color"] = "#f1c232";
 					}
@@ -794,26 +799,6 @@ class ExerciseTool extends Component {
 						</Card>
 					);
 				})}
-
-				{/*this.state.editMode &&
-					<div>
-						<textarea style={editorStyles}
-											onChange={(e) => this.setState({editedExercise: e.target.value})}
-											defaultValue={JSON.stringify(this.state.allExercises[this.state.editID], null, 2)}/>
-						<div style={buttonContainerStyles}>
-							<Button style={{marginRight: "10px"}}
-											variant={"contained"}
-											color={"secondary"}
-											onClick={() => this.setState({editMode: false, editID: "", editError: ""})}>Cancel
-							</Button>
-							<Button variant={"contained"} color={"primary"} onClick={() => this.saveEditedExercise()}>Save</Button>
-						</div>
-						<br />
-            {this.state.editError &&
-            	<p className={"alert alert-danger"}>{this.state.editError}</p>
-            }
-					</div>
-				*/}
 			</div>
 		);
 	}

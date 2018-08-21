@@ -441,7 +441,7 @@ class Question extends Component {
 		return(
 			<div>
 				<Button variant={'outlined'} onClick={() => this.writeQuestion()} style={{marginRight: "30px"}}>Add Question</Button>
-				{this.props.editMode && <Button variant={"outlined"} color={"primary"} style={{marginRight: "30px"}}>Update Question</Button>}
+				{this.props.editMode && <Button variant={"outlined"} color={"primary"} style={{marginRight: "30px"}} onClick={this.props.handleUpdateQuestion}>Update Question</Button>}
 				{this.props.editMode && <Button variant={"outlined"} color={"secondary"} onClick={this.props.handleDeleteQuestion}>Delete Question</Button>}
 			</div>
 		);
