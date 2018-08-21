@@ -61,7 +61,8 @@ Required fields
 #### Stand alone questions
 Required fields
 * `difficulty`: can be 0, 1, or 2
-* `answer`: string in most cases (memory table questions being the exception where `answer` is a JSON object)
+* `answer`: String in most cases. For memory table questions `answer` is a JSON object where the key value pairs are
+variable names and an array of the variable values.
 * `feedback`: JSON object for multiple choice questions where each key value pair corresponds to a choice and the 
 feedback associated with the choice. For other question types, feedback is an array of strings.
 
