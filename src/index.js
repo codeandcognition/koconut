@@ -15,5 +15,20 @@ var config = {
   };
 firebase.initializeApp(config);
 
+
+window.addEventListener('beforeunload', e => {
+  e.preventDefault();
+  let user = firebase.auth().currentUser;
+  let uid = user?user.uid:null
+  console.log(user, uid)
+  if(uid) {
+    firebase.database().ref(`/Users/${uid}/Data/SessionEvents`).push({
+      type: "end",
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    });
+    console.log('test')
+  }
+})
+
 ReactDOM.render(<App firebase={firebase}/>, document.getElementById('root'));
 registerServiceWorker();
