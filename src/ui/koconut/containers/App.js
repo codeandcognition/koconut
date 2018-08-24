@@ -128,7 +128,24 @@ class App extends Component {
     this.resetFeedback = this.resetFeedback.bind(this);
   }
 
-  
+  sendExerciseViewDataToFirebase(exerciseId:string) {
+    let uid = this.state.firebaseUser.uid;
+    let pageType = 'exercise'
+    this.props.firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
+      pageType,
+      exerciseId,
+      timestamp: this.props.firebase.database.ServerValue.TIMESTAMP
+    });
+  }
+
+  sendWorldViewDataToFirebase() {
+    let uid = this.state.firebaseUser.uid;
+    let pageType = 'worldview';
+    this.props.firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
+      pageType,
+      timestamp: this.props.firebase.database.ServerValue.TIMESTAMP
+    });
+  }
 
   returnDisplayTypes() {
     return displayType;
@@ -167,7 +184,7 @@ class App extends Component {
           counter: exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter,
           exerciseType: exerciseType,
           error: false // resets the error message
-        });
+        }, () => {this.sendExerciseViewDataToFirebase(this.state.exerciseId)});
       }
     }
   }
@@ -473,7 +490,7 @@ class App extends Component {
               : (this.state.conceptOptions > 1
                   ? displayType.concept
                   : displayType.exercise),
-        });
+        },() => {this.sendExerciseViewDataToFirebase(this.state.exerciseId)});
       }, questionIndex, questionType, feedback, this.state.exerciseId);
     }
   }
@@ -535,7 +552,7 @@ class App extends Component {
       display: displayType.exercise,
       feedback: (followupIndex === -1) ? tempFeedback : this.state.feedback,
       followupQuestions: (followupIndex === -1) ? this.state.followupFeedback : tempFeedback
-    });
+    },() => {this.sendExerciseViewDataToFirebase(this.state.exerciseId)});
   }
 
   renderLoadView() {
@@ -665,7 +682,7 @@ class App extends Component {
    * to the the navigationbar.
    */
 	switchToWorldView() {
-	  this.setState({display: displayType.world, counter: 0, feedback: []});
+	  this.setState({display: displayType.world, counter: 0, feedback: []}, () => {this.sendWorldViewDataToFirebase()});
   }
 
 	/**
