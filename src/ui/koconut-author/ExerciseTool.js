@@ -653,7 +653,10 @@ class ExerciseTool extends Component {
 		});
 	}
 
-
+	addNewQuestion(isFollowup: boolean) {
+		let question = this.Schemas["standAlone"];
+		console.log(question);
+	}
 
 	/**
 	 * Lays out the Build Exercise view in the authoring tool
@@ -746,8 +749,8 @@ class ExerciseTool extends Component {
 					<br />
           {this.state.editMode &&
 							<div className={"add-btn-container"}>
-                <Button style={{marginRight: "20px"}} variant={"outlined"}>Add New Question</Button>
-								<Button variant={"outlined"}>Add New Follow-up</Button>
+                <Button style={{marginRight: "20px"}} variant={"outlined"} onClick={() => this.addNewQuestion(false)}>Add New Question</Button>
+								<Button variant={"outlined"} onClick={() => this.addNewQuestion(true)}>Add New Follow-up</Button>
 							</div>
 					}
 					<br/>
