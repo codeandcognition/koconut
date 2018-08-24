@@ -472,7 +472,7 @@ class App extends Component {
                   ? displayType.concept
                   : displayType.exercise),
         });
-      }, questionIndex, questionType, feedback, exerciseId);
+      }, questionIndex, questionType, feedback, this.state.exerciseId);
     }
   }
 
