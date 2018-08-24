@@ -653,6 +653,8 @@ class ExerciseTool extends Component {
 		});
 	}
 
+
+
 	/**
 	 * Lays out the Build Exercise view in the authoring tool
 	 * @returns {*}
@@ -741,6 +743,13 @@ class ExerciseTool extends Component {
 
 					{this.renderQuestionTypePrompt()}
 					{this.state.currentQuestionFormat === "standAlone" ? this.renderQuestionCard() : this.renderTableQuestion()}
+					<br />
+          {this.state.editMode &&
+							<div className={"add-btn-container"}>
+                <Button style={{marginRight: "20px"}} variant={"outlined"}>Add New Question</Button>
+								<Button variant={"outlined"}>Add New Follow-up</Button>
+							</div>
+					}
 					<br/>
 					{this.renderExercisePreview()}
 					{this.renderFollowupPrompt()}
