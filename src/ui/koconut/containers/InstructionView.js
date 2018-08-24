@@ -1,11 +1,14 @@
 // @flow
 import React, {Component} from 'react';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import BreadCrumbs from '../components/BreadCrumbs';
 import InstructionTitle from '../components/InstructionTitle';
 import InstructionContent from '../components/InstructionContent';
 import LoadingView from '../components/LoadingView';
 import './InstructionView.css';
+
+import 'firebase/auth';
+import 'firebase/database';
 
 type Props = {
   conceptType: string,
@@ -36,6 +39,35 @@ export default class InstructionView extends Component {
     this.nextInstruction = this.nextInstruction.bind(this);
   }
 
+
+  /**
+   * sendInstructViewLogDataToFirebase does exactly what it sounds like it does.
+   * It takes in a page, concept, and if it's readorwrite. You can get these values
+   * from the props/state. Page might be 0, so you'll find in the mount/newprops that
+   * it pushes 0. 
+   *
+   * TODO: Fix spam abuse (person can hit left and right super fast and store immense amounts of data if they wanted)
+   * To fix this, we can probably add some server side security.
+   * 
+   * @param {number} page What page number of the instruction is being read
+   * @param {string} concept concept being instructed
+   * @param {string} readOrWrite if the concept is read or write
+   */
+  sendInstructViewLogDataToFirebase(page:number, concept:string, readOrWrite:string) {
+    let uid = firebase.auth().currentUser;
+    if(uid) {
+      uid = uid.uid;
+    }
+    let pageType = 'instruction'
+    firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
+      pageType,
+      concept,
+      readOrWrite,
+      page,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    });
+  }
+
   /**
    * prevInstruction sets the currentInstructionIndex state to 1 less
    * and to 0 if 0 or less.
@@ -45,7 +77,7 @@ export default class InstructionView extends Component {
     this.setState({currInstructionIndex:
       index <= 0 ?
           0 :
-          index - 1});
+          index - 1}, () => this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite));
   }
 
   /**
@@ -64,7 +96,7 @@ export default class InstructionView extends Component {
       this.setState({currInstructionIndex:
         index >= this.state.instructionList.length-1  ?
             this.state.instructionList.length-1 :
-            index + 1});
+            index + 1}, () => this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite));
     }
   }
 
@@ -91,6 +123,7 @@ export default class InstructionView extends Component {
         this.setState({instructionList: snap.val()});
       }
     });
+    this.sendInstructViewLogDataToFirebase(0, this.props.conceptType, this.props.readOrWrite);
     document.addEventListener("keydown", (e: any) => this.handleKeyPress(e.key));
   }
 
@@ -127,6 +160,7 @@ export default class InstructionView extends Component {
         this.setState({instructionList: snap.val()});
       }
     });
+    this.sendInstructViewLogDataToFirebase(0, nextProps.conceptType, nextProps.readOrWrite)
   }
 
   /**
@@ -161,7 +195,7 @@ export default class InstructionView extends Component {
 									/>
 									{this.state.instructionList && chosenInstruction &&
                   <div className={"content-container"}>
-                    <button className={"nav-arrow-btn left-arrow"} onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left"></i></button>
+                    <button className={"nav-arrow-btn left-arrow"} onClick={() => this.prevInstruction()}><i className="fas fa-chevron-left"></i></button>
                     <div className={"instruct-content-container"}>
                       <InstructionTitle
                           instruction={chosenInstruction}/>
@@ -173,7 +207,7 @@ export default class InstructionView extends Component {
                           next={this.nextInstruction}
                       />
                     </div>
-                    <button className={"nav-arrow-btn right-arrow"} onClick={() => this.navigateToPage(this.state.currInstructionIndex + 1 < this.state.instructionList.length ? this.state.currInstructionIndex + 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-right"></i></button>
+                    <button className={"nav-arrow-btn right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right"></i></button>
                   </div>
 									}
 								</div>

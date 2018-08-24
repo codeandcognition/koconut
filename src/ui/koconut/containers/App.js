@@ -128,6 +128,8 @@ class App extends Component {
     this.resetFeedback = this.resetFeedback.bind(this);
   }
 
+  
+
   returnDisplayTypes() {
     return displayType;
   }
