@@ -168,6 +168,7 @@ class CodeEditor extends Component {
   render() {
     return(
         <div>
+          <p style={{textAlign: "left"}}>{this.props.prompt}</p>
           {this.renderAce()}
           {this.props.type === Types.highlightCode && <p className={"answer-preview"}>Your answer: {this.state.highlighted}</p>}
           <div className={"button-container"}>

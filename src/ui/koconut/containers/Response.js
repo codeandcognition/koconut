@@ -61,7 +61,7 @@ class Response extends Component {
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):
-        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex}/>
+        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex} prompt={this.props.question.prompt}/>
       case(Types.highlightCode):
 				return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex}/>
       case(Types.table):
