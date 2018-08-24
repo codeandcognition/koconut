@@ -32,20 +32,22 @@ class ExerciseGenerator {
   getExercisesByTypeAndConcept(exerciseType: string,
                                concept: string,
                                exerciseList: any, // calm down flow jeez
-                               conceptMapGetter: any): ?Exercise[]{ // made conceptMapGetter an any type to stop flow's anger
+                               conceptMapGetter: any): any { // made conceptMapGetter an any type to stop flow's anger
     // TODO: Address the isReadType issue, can the type just be brought out?
     // what happens if there are more than 1 type?
 
     let results = [];
+    let exerciseIds = [];
     if(exerciseList && conceptMapGetter) {
       conceptMapGetter[concept].forEach((exerciseId) => {
         if ((exerciseType === "READ" && exerciseList[exerciseId] && ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type)) ||
             (exerciseType === "WRITE" && exerciseList[exerciseId] && !ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type) )) {
           results.push(exerciseList[exerciseId]);
+          exerciseIds.push(exerciseId);
         }
       })
     }
-    return results;
+    return {results,exerciseIds};
   }
 
 

@@ -102,9 +102,10 @@ class ResponseEvaluator {
    * @param questionIndex - index of question being evaluated
    * @param questionType - OPTIONAL, for special new types (table and selectMultiple)
    * @param feedback - OPTIONAL, for special new types (table and selectMultiple)
+   * @param exerciseId - OPTIONAL, exercise Id, for firebase logging
    */
   static evaluateAnswer(exercise: Exercise, answer: string, next: Function, questionIndex: number,
-                        questionType: any, feedback: any) {
+                        questionType: any, feedback: any, exerciseId: any) {
     // no one can escape asyncronous programming!!!!
     // >:D
     // wrap it in a function for async
