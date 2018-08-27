@@ -58,8 +58,8 @@ class Welcome extends Component {
 
   componentDidMount() {
 		this.mounted = true;
-		if (this.mounted) {
-			this.setState({loading: false});
+		if (this.mounted && firebase.auth().currentUser) {
+			this.setState({loading: false, firebaseUser: firebase.auth().currentUser});
 		}
 	}
 
