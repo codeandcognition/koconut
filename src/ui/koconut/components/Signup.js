@@ -30,6 +30,13 @@ class Signup extends Component {
 		if (!mismatch) {
 			firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
 			.then(user => {
+        let uid = user.user.uid;
+        if(uid) {
+          firebase.database().ref(`/Users/${uid}/Data/SessionEvents`).push({
+            type: "start",
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+          });
+        }
 				return user.updateProfile({displayName: this.state.displayName});
 			})
 			.catch((error) => {

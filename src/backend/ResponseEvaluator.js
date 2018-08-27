@@ -8,7 +8,9 @@ import {MasteryModel} from '../data/MasteryModel';
 import ExerciseTypes from '../data/ExerciseTypes';
 import {BayesKT} from './BKT.js';
 import type {Exercise} from '../data/Exercises';
-
+import firebase from 'firebase/app';
+import 'firebase/database';
+import 'firebase/auth';
 //
 
 const Sk = require('skulpt');
@@ -102,12 +104,14 @@ class ResponseEvaluator {
    * @param questionIndex - index of question being evaluated
    * @param questionType - OPTIONAL, for special new types (table and selectMultiple)
    * @param feedback - OPTIONAL, for special new types (table and selectMultiple)
+   * @param exerciseId - OPTIONAL, exercise Id, for firebase logging
    */
   static evaluateAnswer(exercise: Exercise, answer: string, next: Function, questionIndex: number,
-                        questionType: any, feedback: any) {
+                        questionType: any, feedback: any, exerciseId: any) {
     // no one can escape asyncronous programming!!!!
     // >:D
     // wrap it in a function for async
+
     let addResponseAndUpdate = (isCorrect, exercise) => {
       ResponseLog.addResponse( // TODO: replace '123' with a real ID
           '123', exercise.concepts,
@@ -131,6 +135,21 @@ class ResponseEvaluator {
             ResponseEvaluator.analyzeLog(ResponseLog.getLastElement()),
         );
       }
+
+      let dataToPush = {
+        exerciseId,
+        questionIndex,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        answer: answer[questionIndex],
+        correctness: isCorrect
+      };
+      let uid = firebase.auth().currentUser;
+      if (uid) {
+        uid = uid.uid; // makes flow happier, don't wanna worry about it right now
+      }
+
+      firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
+
 
       // this.printImportantStuff(); //Debug/demo
       next();
