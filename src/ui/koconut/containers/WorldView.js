@@ -1,9 +1,13 @@
 // @flow
 import React, {Component} from 'react';
+import { Link, withRouter} from "react-router-dom";
 import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import {conceptInventory} from '../../../data/ConceptMap.js';
 import ConceptCard from './../components/ConceptCard';
 import {t} from '../../../data/ConceptAbbreviations';
+import firebase from 'firebase';
+import Routes from './../../../Routes';
+import LoadingView from './../components/LoadingView';
 
 /**
  * WorldView is the world view for the app, where the user can see all the
@@ -11,6 +15,12 @@ import {t} from '../../../data/ConceptAbbreviations';
  * @class
  */
 class WorldView extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			loading: true
+		}
+	}
 
 	/**
 	 * Returns sorted concepts list sorted by relevance to the user.
@@ -36,59 +46,85 @@ class WorldView extends Component {
     })
   }
 
-  render() {
-    let conceptList = this.getOrderedConcepts();
-    let titleLeft = [
-      {name: t.onboarding, title : "Intro"},
-      {name: t.semantic, title : "Code constructs"}
-    ]
+  componentDidMount() {
+  	this.mounted = true
+  	this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+  		if (this.mounted) {
+				this.setState({loading: false}, () => {
+					!user && this.props.history.push(Routes.signin);
+				});
+			}
+		})
+	}
 
-    let titleRight = [
-      {name: t.template, title : "Templates"}
-    ]
+	componentWillUnmount() {
+  	// unlisten for auth changes
+		this.authUnsub();
+		this.mounted = false;
+	}
 
-    return (
-        <div className="container" style={{marginTop: '12vh'}}>
-          <div style={{display: "flex"}}>
-            <div style={{flexGrow: 3, margin: 10}}>
-            {titleLeft.map(cTypeVal => {
-                let cType = t[cTypeVal.name];
-                return <div key={"world-"+cType} style={{marginTop: 10}}>
-                  <h1>{cTypeVal.title}</h1>
-                  {this.getConceptsByType(conceptList, cType).map((concept, index) => {
-                    let name = conceptInventory[concept.name].explanations.name;
-                    return <ConceptCard title={name}
-                                    key={"l"+index}
-                                    concept={concept.name}
-                                    generateExercise={this.props.generateExercise}
-                                    getInstruction={this.props.getInstruction}/>
-                  })}
-                </div>
-              })
-            }
-            </div>
-            <div style={{flexGrow: 5, margin: 10}}>
-            {
-              titleRight.map(cTypeVal => {
-                let cType = t[cTypeVal.name];
-                return <div key={"world-"+cType} style={{marginTop: 10}}>
-                  <h1>{cTypeVal.title}</h1>
-                  {this.getConceptsByType(conceptList, cType).map((concept, index) => {
-                    let name = conceptInventory[concept.name].explanations.name;
-                    return <ConceptCard title={name}
-                                    key={"r"+index}
-                                    concept={concept.name}
-                                    generateExercise={this.props.generateExercise}
-                                    getInstruction={this.props.getInstruction}/>
-                  })}
-                </div>
-              })
-            }
-            </div>
-          </div>
+	renderWorld() {
+		let conceptList = this.getOrderedConcepts();
+		let titleLeft = [
+			{name: t.onboarding, title : "Intro"},
+			{name: t.semantic, title : "Code constructs"}
+		];
+		let titleRight = [
+			{name: t.template, title : "Templates"}
+		];
+		return (
+				<div className="container" style={{marginTop: '12vh'}}>
+					<div style={{display: "flex"}}>
+						<div style={{flexGrow: 3, margin: 10}}>
+							{titleLeft.map(cTypeVal => {
+								let cType = t[cTypeVal.name];
+								return <div key={"world-"+cType} style={{marginTop: 10}}>
+									<h1>{cTypeVal.title}</h1>
+									{this.getConceptsByType(conceptList, cType).map((concept, index) => {
+										let name = conceptInventory[concept.name].explanations.name;
+										return <ConceptCard title={name}
+																				key={index}
+																				concept={concept.name}
+																				generateExercise={this.props.generateExercise}
+																				getInstruction={this.props.getInstruction}/>
+									})}
+								</div>
+							})
+							}
+						</div>
+						<div style={{flexGrow: 5, margin: 10}}>
+							{
+								titleRight.map(cTypeVal => {
+									let cType = t[cTypeVal.name];
+									return <div key={"world-"+cType} style={{marginTop: 10}}>
+										<h1>{cTypeVal.title}</h1>
+										{this.getConceptsByType(conceptList, cType).map((concept, index) => {
+											let name = conceptInventory[concept.name].explanations.name;
+											return <ConceptCard title={name}
+																					key={index}
+																					concept={concept.name}
+																					generateExercise={this.props.generateExercise}
+																					getInstruction={this.props.getInstruction}/>
+										})}
+									</div>
+								})
+							}
+						</div>
+					</div>
 				</div>
+		);
+	}
+
+  render() {
+    return (
+			<div>
+				{this.state.loading ?
+						<LoadingView/> :
+						this.renderWorld()
+				}
+			</div>
 		);
 	}
 }
 
-export default WorldView;
+export default withRouter(WorldView);

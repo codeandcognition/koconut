@@ -1,5 +1,6 @@
 
 import React, {Component} from 'react';
+import { Link} from "react-router-dom";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ExpandMoreIcon from '@material-ui/icons/ChevronRight';
@@ -64,19 +65,27 @@ class ConceptCard extends Component {
 						{this.state.expand &&
 								<div style={{paddingLeft: "5%", display: 'flex'}}>
 									<div>
-										<a style={linkStyle}
-											 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.read)}>Learn to read code</a>
+										<Link to={`/instruction/${this.props.concept}/learn-to-read-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.read)}>Learn to read code</p>
+										</Link>
 										<br />
-										<a style={linkStyle}
-											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>Practice reading code</a>
+										<Link to={`/practice/${this.props.concept}/practice-reading-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>Practice reading code</p>
+										</Link>
 										<br />
 									</div>
 									<div>
-										<a style={linkStyle}
-											 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.write)}>Learn to write code</a>
+										<Link to={`/instruction/${this.props.concept}/learn-to-write-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.write)}>Learn to write code</p>
+										</Link>
 										<br />
-										<a style={linkStyle}
-											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>Practice writing code</a>
+										<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>Practice writing code</p>
+										</Link>
 									</div>
 								</div>
 						}

@@ -12,6 +12,7 @@
                  === The following code is super-not documented!!! ===
 */
 
+// @flow
 import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -31,8 +32,12 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import firebase from "firebase";
 
-
+/// UI and Logic for exercise creation on koconut
 class ExerciseTool extends Component {
+	addQuestion: Function;
+	updateCurrentQuestion: Function;
+
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -71,6 +76,7 @@ class ExerciseTool extends Component {
 		this.updateCurrentQuestion = this.updateCurrentQuestion.bind(this);
 	}
 
+	// Question schemas
 	Schemas = {
 		standAlone: {
 			prompt: "",
@@ -93,8 +99,9 @@ class ExerciseTool extends Component {
 			followupPrompt: "",
 			followupQuestions: []
 		}
-	}
+	};
 
+	// CSS for required/optional fields
 	fieldReqs = {
 		required: {
 			float: 'right',
@@ -148,7 +155,7 @@ class ExerciseTool extends Component {
 	 *
 	 * @param concept
 	 */
-	getExercisesForConcept(concept) {
+	getExercisesForConcept(concept: string) {
 		let componentRef = this;
 		let conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
 		this.setState({
@@ -177,7 +184,7 @@ class ExerciseTool extends Component {
 	 * @param count
 	 * @returns {*}
 	 */
-	getAverageDifficulty(exercise, questionIndex, total, count) {
+	getAverageDifficulty(exercise: any, questionIndex: number, total: number, count: number) {
 		if (!exercise) {
 			return 0;
 		} else if (exercise.questions[questionIndex]) {
@@ -237,7 +244,7 @@ class ExerciseTool extends Component {
 	 *
 	 * @param exerciseID
 	 */
-	handleDeleteExercise(exerciseID) {
+	handleDeleteExercise(exerciseID: string) {
 		this.state.allExercises[exerciseID].concepts.forEach((concept) => {
 			let conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
 			conceptRef.once("value", function(snapshot) {
@@ -282,8 +289,8 @@ class ExerciseTool extends Component {
 	 * @param field
 	 * @returns {Function}
 	 */
-	handleExerciseChange(field) {
-		return (e) => {
+	handleExerciseChange(field: string) {
+		return (e: any) => {
 			this.updateExercise(field, e.target.value);
 		}
 	}
@@ -293,7 +300,7 @@ class ExerciseTool extends Component {
 	 * @param field
 	 * @param value
 	 */
-	updateExercise(field, value) {
+	updateExercise(field: string, value: any) {
 		// deep copy instead of shallow copy
 		let temp = Object.assign({}, this.state.currentExercise);
 		temp[field] = value;
@@ -304,17 +311,20 @@ class ExerciseTool extends Component {
 	 * Adds a question to the exercise. `followup` is a boolean indicating whether
 	 * this question has a followup
 	 *
-	 * @param
+	 * @param any
 	 */
-	addQuestion(question) {
+	addQuestion(question: any) {
 		let exercise = Object.assign({}, this.state.currentExercise);
 		if (this.state.isFollowup) {
-			let parent = Object.assign({}, exercise.questions[this.state.followupTo]);
-			let followupQuestions = Object.assign([], parent.followupQuestions);
-			followupQuestions.push(question);
-			parent.followupQuestions = followupQuestions;
-			exercise.questions[this.state.followupTo] = parent;
+			// retrieve the parent question, append the followup to the parent question
+			// update the state
+			let parent = Object.assign({}, exercise.questions[this.state.followupTo]); // retrieve the parent question
+			let followupQuestions = Object.assign([], parent.followupQuestions);			 // retrieve the parent question's followup questions
+			followupQuestions.push(question); 																				 // append the new followup question
+			parent.followupQuestions = followupQuestions;															 // update parent
+			exercise.questions[this.state.followupTo] = parent;												 // update exercise
 		} else {
+			// add to the end of the list if the current question is not a followup
 			exercise.questions.push(question);
 		}
 		this.setState({
@@ -330,7 +340,7 @@ class ExerciseTool extends Component {
 	/**
 	 * Updates the `currentQuestion` field through out the authoring session
 	 */
-	updateCurrentQuestion(question, currentCell) {
+	updateCurrentQuestion(question: any, currentCell: number) {
 		this.setState({
 			currentQuestion: question,
 			currentCell: currentCell
@@ -373,7 +383,7 @@ class ExerciseTool extends Component {
 	 *
 	 * @param value
 	 */
-	handleTabChange(value) {
+	handleTabChange(value: any) {
     this.setState({
       tabValue: value
     })

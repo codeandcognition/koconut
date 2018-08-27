@@ -9,8 +9,27 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
+type Props = {
+	data: any,
+	currentCell: number,
+	insideTable: boolean,
+	isFollowup: boolean,
+	addQuestion: Function,
+	updateCurrentQuestion: Function,
+};
+
+/// Implements UI for populating question fields
 class Question extends Component {
-	constructor(props) {
+	state: {
+		currentQuestion: any,
+		currentChoice: string,
+		currentAnswer: any, // can be a string, a list, or a JSON object
+		checkboxOption: string,
+		feedback: string,
+		currentCell: any
+	};
+
+	constructor(props: Props) {
 		super(props);
 
 		let question = Object.assign({}, this.props.data);
@@ -53,7 +72,7 @@ class Question extends Component {
 		}
 	};
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Props) {
 		this.setState({
 			currentQuestion: nextProps.data,
 			currentChoice: '',
