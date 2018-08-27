@@ -31,6 +31,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import firebase from "firebase";
+import "./ExerciseTool.css";
 
 /// UI and Logic for exercise creation on koconut
 class ExerciseTool extends Component {
@@ -44,7 +45,6 @@ class ExerciseTool extends Component {
       currentExercise: {
         prompt: "",
         code: "",
-        labels: {},
         questions: [],
         concepts: []
       },
@@ -57,6 +57,8 @@ class ExerciseTool extends Component {
 			editedExercise: "",
 			editError: "",
 			selectedConcept: "",
+			currentQuestionIndex: 0,
+			currentFIndex: 0,
 
 			isFollowup: false, 														// passed as a prop into the Question component
 			currentQuestion: this.Schemas["standAlone"], 				// this will be updated throughout an authoring session
@@ -74,6 +76,11 @@ class ExerciseTool extends Component {
     // Bind the functions so they can be used in Question.js
 		this.addQuestion = this.addQuestion.bind(this);
 		this.updateCurrentQuestion = this.updateCurrentQuestion.bind(this);
+		this.resetForm = this.resetForm.bind(this);
+
+		this.handleDeleteQuestion = this.handleDeleteQuestion.bind(this);
+		this.saveQuestionEditsLocally = this.saveQuestionEditsLocally.bind(this);
+		this.saveChanges = this.saveChanges.bind(this);
 	}
 
 	// Question schemas
@@ -358,7 +365,6 @@ class ExerciseTool extends Component {
 			currentExercise: {
 				prompt: "",
 				code: "",
-				labels: {},
 				questions: [],
 				concepts: []
 			},
@@ -395,12 +401,78 @@ class ExerciseTool extends Component {
 	 * @returns {*}
 	 */
 	renderQuestionCard() {
-		return <Question addQuestion={this.addQuestion}
-										 isFollowup={this.state.isFollowup}
-										 insideTable={false}
-										 data={Object.assign({}, this.state.currentQuestion)}
-										 updateCurrentQuestion={this.updateCurrentQuestion}
-										 currentCell={this.state.currentCell}/>
+		let currentIndex = this.state.currentQuestionIndex;
+		let currentFIndex = this.state.isFollowup ? 0 : this.state.currentFIndex;
+		let totalQuestions = this.state.currentExercise.questions.length;
+		let totalFQuestions = this.state.isFollowup ? this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length : 0;
+
+
+		return (
+			<div>
+				<p className={"question-tracker"}>Question {totalQuestions == 0 ? currentIndex : currentIndex + 1} of {totalQuestions}</p>
+				{!this.state.isFollowup && this.state.currentQuestion.followupQuestions !== null && <p className={"question-tracker"}>{this.state.currentQuestion.followupQuestions.length} Follow-up Question{this.state.currentQuestion.followupQuestions.length !== 1 && 's'}</p>}
+				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalFQuestions == 0 ? currentFIndex : currentFIndex + 1} of {totalFQuestions}</p>}
+				<div className={"question-container"}>
+					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex - 1 : currentIndex - 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "LEFT")}>
+						<i className="fa fa-chevron-left" aria-hidden="true"></i>
+					</button>
+					<Question addQuestion={this.addQuestion}
+										editMode={this.state.editMode}
+										isFollowup={this.state.isFollowup}
+										insideTable={false}
+										data={Object.assign({}, this.state.currentQuestion)}
+										updateCurrentQuestion={this.updateCurrentQuestion}
+										handleDeleteQuestion={this.handleDeleteQuestion}
+										handleUpdateQuestion={this.saveQuestionEditsLocally}
+										currentCell={this.state.currentCell} />
+					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex + 1 : currentIndex + 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "RIGHT")}>
+						<i className="fa fa-chevron-right" aria-hidden="true"></i>
+					</button>
+				</div>
+			</div>
+		);
+	}
+
+  /**
+	 * This function navigates through the questions of an exercise on the
+	 * exercise builder
+   * @param index
+   * @param maxIndex
+   * @param direction
+   */
+	navigateToQuestion(index: number, maxIndex: number, direction: string) {
+		if (index >= 0 || this.state.isFollowup) {
+    	if (this.state.isFollowup) {
+				if (index > maxIndex || index < 0) { // Follow-up to Question
+					let increase = direction === "LEFT" ? 0 : 1;
+					if (this.state.currentQuestionIndex + increase < this.state.currentExercise.questions.length) {
+            this.setState({
+              isFollowup: false,
+              currentQuestionIndex: this.state.currentQuestionIndex + increase,
+              currentQuestion: this.state.currentExercise.questions[this.state.currentQuestionIndex + increase]
+            });
+					}
+				} else {
+					this.setState({ // Follow-up to Follow-up
+						currentFIndex: index,
+						currentQuestion: this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions[index]
+					})
+				}
+			} else {
+    		if (direction === "RIGHT" && this.state.currentQuestion.followupQuestions != null && this.state.currentQuestion.followupQuestions.length > 0) { // Question to Follow-up
+					this.setState({
+						isFollowup: true,
+						currentFIndex: 0,
+						currentQuestion: this.state.currentQuestion.followupQuestions[0]
+					});
+				} else { // Question to Question
+    			this.setState({
+						currentQuestionIndex: index,
+						currentQuestion: this.state.currentExercise.questions[index]
+					});
+				}
+			}
+		}
 	}
 
 	/**
@@ -505,6 +577,97 @@ class ExerciseTool extends Component {
 		);
 	}
 
+  /**
+   * This function brings the user to the build exercise view and populates
+   * it with exercise information to be edited.
+   *
+   */
+  enterEditMode(id: string) {
+    var editExercise = this.state.exercises[id];
+    var currentExercise = this.state.currentExercise;
+    currentExercise["prompt"] = editExercise.prompt;
+    currentExercise["code"] = editExercise.code;
+    currentExercise["concepts"] = editExercise.concepts;
+    currentExercise["questions"] = editExercise.questions;
+    this.setState({
+      editMode: true,
+      editID: id,
+      tabValue: 0,
+      currentExercise: currentExercise,
+      currentQuestion: editExercise.questions[0]
+    }, () => window.scrollTo(0, 0));
+  }
+
+  saveQuestionEditsLocally() {
+		let exercise = this.state.currentExercise;
+		exercise.questions[this.state.currentQuestionIndex] = this.state.currentQuestion;
+		this.setState({
+			currentExercise: exercise
+		});
+	}
+
+  /**
+	 * Deletes questions on edit mode
+   */
+	handleDeleteQuestion() {
+  	if (this.state.isFollowup) {
+      let fQuestions = this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions;
+      fQuestions.splice(this.state.currentFIndex, 1);
+      let question = this.state.currentExercise.questions[this.state.currentQuestionIndex];
+      question["followupQuestions"] = fQuestions;
+      let exercise = this.state.currentExercise
+			exercise.questions[this.state.currentQuestionIndex] = question;
+      let newIndex = this.state.currentFIndex >= fQuestions.length ? this.state.currentFIndex - 1 : this.state.currentFIndex;
+      newIndex = newIndex < 0 ? 0 : newIndex;
+      this.setState({
+				currentQuestion: question.followupQuestions[newIndex] ? question.followupQuestions[newIndex] : question,
+				currentFIndex: newIndex,
+				isFollowup: question.followupQuestions[newIndex] ? true : false,
+				currentExercise: exercise
+			});
+		} else {
+  		let questions = this.state.currentExercise.questions;
+  		questions.splice(this.state.currentQuestionIndex, 1);
+  		let exercise = this.state.currentExercise;
+  		exercise.questions = questions;
+
+  		let newIndex = this.state.currentQuestionIndex >= questions.length ? this.state.currentQuestionIndex - 1 : this.state.currentQuestionIndex;
+
+  		this.setState({
+				currentExercise: exercise,
+				currentQuestionIndex: newIndex,
+				currentQuestion: questions[newIndex] ? questions[newIndex] : this.Schemas["standAlone"]
+			});
+		}
+	}
+
+	resetForm() {
+  	this.setState({
+			isFollowup: false,
+			currentExercise: {
+        prompt: "",
+        code: "",
+        questions: [],
+        concepts: []
+      },
+			currentQuestion: this.Schemas["standAlone"],
+			editMode: false
+		});
+	}
+
+	saveChanges() {
+		let databaseRef = firebase.database().ref("Exercises/" + this.state.editID);
+		databaseRef.set(this.state.currentExercise, () => {
+			window.alert("Your changes have been saved.");
+			this.resetExerciseUI();
+		});
+	}
+
+	addNewQuestion(isFollowup: boolean) {
+		let question = this.Schemas["standAlone"];
+		console.log(question);
+	}
+
 	/**
 	 * Lays out the Build Exercise view in the authoring tool
 	 * @returns {*}
@@ -593,11 +756,24 @@ class ExerciseTool extends Component {
 
 					{this.renderQuestionTypePrompt()}
 					{this.state.currentQuestionFormat === "standAlone" ? this.renderQuestionCard() : this.renderTableQuestion()}
+					<br />
+          {/*this.state.editMode &&
+							<div className={"add-btn-container"}>
+                <Button style={{marginRight: "20px"}} variant={"outlined"} onClick={() => this.addNewQuestion(false)}>Add New Question</Button>
+								<Button variant={"outlined"} onClick={() => this.addNewQuestion(true)}>Add New Follow-up</Button>
+							</div>
+					*/}
 					<br/>
 					{this.renderExercisePreview()}
 					{this.renderFollowupPrompt()}
 					<br/>
-					<Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
+					{this.state.editMode ?
+							<div>
+								<Button style={{marginRight: "30px"}} variant={"contained"} color={"primary"} onClick={this.saveChanges}>Save Changes</Button>
+								<Button variant={"contained"} color={"secondary"} onClick={this.resetForm}>Cancel</Button>
+							</div> :
+              <Button variant={"contained"} color={"primary"} onClick={() => this.addExercise()}>Add Exercise</Button>
+					}
 				</div>
 		);
 	}
@@ -632,9 +808,10 @@ class ExerciseTool extends Component {
 				{Object.keys(this.state.exercises).map((id, index) => {
 					let exerciseCardStyle = {
 						whiteSpace: "pre-wrap",
-						padding: "30px"
+						padding: "30px",
+						color: "#000000"
 					};
-					if (id === this.state.editID) {
+					if (this.state.editMode && id === this.state.editID) {
 						exerciseCardStyle["borderColor"] = "#f1c232";
 						exerciseCardStyle["color"] = "#f1c232";
 					}
@@ -646,40 +823,28 @@ class ExerciseTool extends Component {
 							</CardContent>
 							{!this.state.editMode &&
 								<CardActions>
-									<Button color={"primary"} onClick={() => this.setState({editMode: true, editID: id})}>Edit</Button>
+									<Button color={"primary"} onClick={() => this.enterEditMode(id)}>Edit</Button>
 									<Button color={"secondary"} onClick={() => this.handleDeleteExercise(id)}>Delete</Button>
 								</CardActions>
 							}
 						</Card>
 					);
 				})}
-
-				{this.state.editMode &&
-					<div>
-						<textarea style={editorStyles}
-											onChange={(e) => this.setState({editedExercise: e.target.value})}
-											defaultValue={JSON.stringify(this.state.allExercises[this.state.editID], null, 2)}/>
-						<div style={buttonContainerStyles}>
-							<Button style={{marginRight: "10px"}}
-											variant={"contained"}
-											color={"secondary"}
-											onClick={() => this.setState({editMode: false, editID: "", editError: ""})}>Cancel
-							</Button>
-							<Button variant={"contained"} color={"primary"} onClick={() => this.saveEditedExercise()}>Save</Button>
-						</div>
-						<br />
-            {this.state.editError &&
-            	<p className={"alert alert-danger"}>{this.state.editError}</p>
-            }
-					</div>
-				}
 			</div>
 		);
 	}
 
 	render() {
+		var containerStyle = {
+			padding: "60px"
+		}
+
+		if (this.state.editMode) {
+			containerStyle["border"] = "4px solid #f1c232";
+		}
+
 		return (
-				<Paper style={{padding: "60px"}} className={"container"}>
+				<Paper style={containerStyle} className={"container"}>
           <Tabs fullWidth centered
 								indicatorColor={"primary"}
 								value={this.state.tabValue}
