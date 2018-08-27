@@ -58,9 +58,12 @@ class Signup extends Component {
             timestamp: firebase.database.ServerValue.TIMESTAMP
           });
         }
+        this.setState({currentUser: user});
 				return user.updateProfile({displayName: this.state.displayName});
 			})
-			.then(this.state.currentUser ? () => this.props.history.push(Routes.signin) : null)
+			.then(this.state.currentUser ? () => this.setState({loading: false}, () => {
+				this.props.history.push(Routes.signin)
+			}) : null)
 			.catch((error) => {
 				this.setState({
 					errorMessage: error.message,

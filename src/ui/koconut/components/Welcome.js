@@ -56,8 +56,16 @@ class Welcome extends Component {
 		});
   }
 
+  componentDidMount() {
+		this.mounted = true;
+		if (this.mounted) {
+			this.setState({loading: false});
+		}
+	}
+
   componentWillUnmount() {
   	this.authUnsub();
+  	this.mounted = false;
 	}
 
 	/**
