@@ -193,8 +193,8 @@ class InstructionView extends Component {
 	 * retrieve instruction data from firebase
 	 */
 	updateInstructions() {
-		this.firebaseListener = firebase.database().
-				ref(`Instructions/${this.state.conceptType}/${this.state.readOrWrite}`);
+		this.firebaseListener = firebase.database()
+      .ref(`Instructions/${this.state.conceptType}/${this.state.readOrWrite}`);
 		this.firebaseListener.on('value', (snap) => {
 			if (this.mounted) {
 				this.setState({instructionList: snap.val()});

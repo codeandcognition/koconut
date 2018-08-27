@@ -54,24 +54,9 @@ class BreadCrumbs extends Component {
         conceptNames[concept.name] = this.formatCamelCasedString(concept.name);
       });
 
-      let semantic = [];
-      let template = [];
-      let onboarding = [];
-
-      this.getConceptsByType(this.state.orderedConcepts, t.semantic).map((item) => {
-        let concept = item.name;
-        semantic.push(concept);
-      });
-
-      this.getConceptsByType(this.state.orderedConcepts, t.template).map((item) => {
-        let concept = item.name;
-        template.push(concept);
-      });
-
-      this.getConceptsByType(this.state.orderedConcepts, t.onboarding).map((item) => {
-        let concept = item.name;
-        onboarding.push(concept);
-      });
+      let semantic = this.getConceptsByType(this.state.orderedConcepts, t.semantic).map(i => i.name);
+      let template = this.getConceptsByType(this.state.orderedConcepts, t.template).map(i => i.name);
+      let onboarding = this.getConceptsByType(this.state.orderedConcepts, t.onboarding).map(i => i.name);
 
       this.setState({
         semanticConcepts: semantic,

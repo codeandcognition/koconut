@@ -440,7 +440,7 @@ class App extends Component {
 		let equals = true;
 		for (let i = 0; i < answerKey.length; i++) {
 			// intended comparision (types are different)
-			if (answerKey[i] != userInput[i]) {
+			if (answerKey[i] !== userInput[i]) {
 				return false;
 			}
 		}

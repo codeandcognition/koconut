@@ -1,7 +1,7 @@
 // @flow
 
 import React, {Component} from 'react';
-import AceEditor from 'react-ace';
+import ace from 'react-ace';
 //import ace from 'brace';
 
 // Ace language support

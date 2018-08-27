@@ -1,6 +1,6 @@
 // @flow
 import React, {Component} from 'react';
-import { Link, withRouter} from "react-router-dom";
+import { withRouter} from "react-router-dom";
 import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import {conceptInventory} from '../../../data/ConceptMap.js';
 import ConceptCard from './../components/ConceptCard';

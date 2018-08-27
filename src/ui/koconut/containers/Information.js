@@ -3,10 +3,8 @@ import React, {Component} from 'react';
 import Code from '../components/Code';
 import Response from './Response';
 import Types from '../../../data/ExerciseTypes.js';
-import Submit from '../components/Submit';
 import Feedback from '../components/Feedback';
 import Paper from '@material-ui/core/Paper';
-import ReactMarkdown from 'react-markdown';
 import ExerciseQuestion from '../components/ExerciseQuestion';
 
 import './Information.css';
@@ -80,7 +78,7 @@ class Information extends Component {
   	// questions of type multiple choice but code is undefined
   	let absentCode = question.type === Types.multipleChoice && !question.code;
   	// or if it is a table question
-  	absentCode = absentCode || question.type == Types.table;
+  	absentCode = absentCode || question.type === Types.table;
   	// or if it is a highlight code question
   	absentCode = absentCode || question.type === Types.highlightCode;
 		if(Types.isSurvey(question.type) || absentCode) {

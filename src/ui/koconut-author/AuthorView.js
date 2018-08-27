@@ -38,8 +38,7 @@ class AuthorView extends Component {
 	 * checks if the current firebase user is permitted to view the authoring page
 	 */
 	checkAuthorStatus() {
-		let databaseRef = firebase.database().
-				ref("Users/" + this.state.currentUser.uid);
+		let databaseRef = firebase.database().ref("Users/" + this.state.currentUser.uid);
 		databaseRef.once("value", snapshot => {
 			if (snapshot && snapshot.val()) {
 				let snap = snapshot.val();

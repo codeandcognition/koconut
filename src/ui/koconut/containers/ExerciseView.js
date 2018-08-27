@@ -5,7 +5,6 @@ import Prompt from '../components/Prompt';
 import Information from './Information';
 import ConceptLabel from '../components/ConceptLabel';
 import BreadCrumbs from '../components/BreadCrumbs';
-import firebase from 'firebase';
 import LoadingView from './../components/LoadingView';
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
@@ -31,8 +30,6 @@ type Props = {
   followupTimesGotQuestionWrong: [],
   resetFeedback: Function
 }
-
-var b = {"hello":"world","cat":"dog"}
 
 /**
  * The Exercise container contains all components of an assessment problem.

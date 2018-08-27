@@ -83,7 +83,7 @@ class ResponseEvaluator {
   static runCode(code: string): string {
     function builtinRead(x) {
       if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-          throw "File not found: '" + x + "'";
+          throw new Error("File not found: '" + x + "'");
       return Sk.builtinFiles["files"][x];
     }
     let output = [];

@@ -39,7 +39,6 @@ class Response extends Component {
     let answer = this.props.answer;
     let update = this.props.updateHandler;
     let index = this.props.questionIndex;
-    let submit = this.props.submitHandler;
 
     if(this.props.question.data) {
       type = "table";

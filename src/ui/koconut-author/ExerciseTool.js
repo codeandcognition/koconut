@@ -14,7 +14,6 @@
 
 // @flow
 import React, {Component} from 'react';
-import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -409,9 +408,9 @@ class ExerciseTool extends Component {
 
 		return (
 			<div>
-				<p className={"question-tracker"}>Question {totalQuestions == 0 ? currentIndex : currentIndex + 1} of {totalQuestions}</p>
+				<p className={"question-tracker"}>Question {totalQuestions === 0 ? currentIndex : currentIndex + 1} of {totalQuestions}</p>
 				{!this.state.isFollowup && this.state.currentQuestion.followupQuestions !== null && <p className={"question-tracker"}>{this.state.currentQuestion.followupQuestions.length} Follow-up Question{this.state.currentQuestion.followupQuestions.length !== 1 && 's'}</p>}
-				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalFQuestions == 0 ? currentFIndex : currentFIndex + 1} of {totalFQuestions}</p>}
+				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalFQuestions === 0 ? currentFIndex : currentFIndex + 1} of {totalFQuestions}</p>}
 				<div className={"question-container"}>
 					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex - 1 : currentIndex - 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "LEFT")}>
 						<i className="fa fa-chevron-left" aria-hidden="true"></i>
@@ -783,16 +782,16 @@ class ExerciseTool extends Component {
 	 * @returns {*}
 	 */
 	renderViewExercises() {
-		let editorStyles = {
-			width: "80%",
-			height: "200px",
-			marginTop: "60px"
-		};
+		// let editorStyles = {
+		// 	width: "80%",
+		// 	height: "200px",
+		// 	marginTop: "60px"
+		// };
 
-		let buttonContainerStyles = {
-      marginTop: "30px",
-			width: "50%",
-    };
+		// let buttonContainerStyles = {
+    //   marginTop: "30px",
+		// 	width: "50%",
+    // };
 
 		return (
 			<div style={{marginTop: "6%"}}>
