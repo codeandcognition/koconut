@@ -369,7 +369,7 @@ class ExerciseTool extends Component {
 			editedExercise: "",
 			editError: "",
 			selectedConcept: "",
-
+			currentConcept: "",
 			isFollowup: false,
 			currentQuestion: this.QuestionSchema,
 			currentQuestionFormat: "",
@@ -395,15 +395,13 @@ class ExerciseTool extends Component {
 	 */
 	renderQuestionCard() {
 		let currentIndex = this.state.currentQuestionIndex;
-		let currentFIndex = this.state.isFollowup ? 0 : this.state.currentFIndex;
+		let currentFIndex = this.state.isFollowup ? this.state.currentFIndex : 0;
 		let totalQuestions = this.state.currentExercise.questions.length;
 		let totalFQuestions = this.state.isFollowup ? this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length : 0;
-
-
 		return (
 			<div>
 				<p className={"question-tracker"}>Question {totalQuestions == 0 ? currentIndex : currentIndex + 1} of {totalQuestions}</p>
-				{!this.state.isFollowup && this.state.currentQuestion.followupQuestions !== null && <p className={"question-tracker"}>{this.state.currentQuestion.followupQuestions.length} Follow-up Question{this.state.currentQuestion.followupQuestions.length !== 1 && 's'}</p>}
+				{!this.state.isFollowup && this.state.currentQuestion.followupQuestions && <p className={"question-tracker"}>{this.state.currentQuestion.followupQuestions.length} Follow-up Question{this.state.currentQuestion.followupQuestions.length !== 1 && 's'}</p>}
 				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalFQuestions == 0 ? currentFIndex : currentFIndex + 1} of {totalFQuestions}</p>}
 				<div className={"question-container"}>
 					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex - 1 : currentIndex - 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "LEFT")}>
@@ -449,10 +447,10 @@ class ExerciseTool extends Component {
 					this.setState({ // Follow-up to Follow-up
 						currentFIndex: index,
 						currentQuestion: this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions[index]
-					})
+					});
 				}
 			} else {
-    		if (direction === "RIGHT" && this.state.currentQuestion.followupQuestions != null && this.state.currentQuestion.followupQuestions.length > 0) { // Question to Follow-up
+    		if (direction === "RIGHT" && this.state.currentQuestion.followupQuestions !== null && this.state.currentQuestion.followupQuestions.length > 0) { // Question to Follow-up
 					this.setState({
 						isFollowup: true,
 						currentFIndex: 0,
@@ -460,8 +458,8 @@ class ExerciseTool extends Component {
 					});
 				} else { // Question to Question
     			this.setState({
-						currentQuestionIndex: index,
-						currentQuestion: this.state.currentExercise.questions[index]
+						currentQuestionIndex: index > maxIndex ? maxIndex : index,
+						currentQuestion: this.state.currentExercise.questions[index > maxIndex ? maxIndex : index]
 					});
 				}
 			}
@@ -510,7 +508,7 @@ class ExerciseTool extends Component {
 	 *
 	 * @returns {*}
 	 */
-	renderFollowupPrompt() {
+	/*renderFollowupPrompt() {
 		let style = {
 			margin: '5px'
 		};
@@ -542,7 +540,7 @@ class ExerciseTool extends Component {
 					</Button>
 				</div>
 		);
-	}
+	}*/
 
 	/**
 	 * Renders the current exercise preview
@@ -657,9 +655,37 @@ class ExerciseTool extends Component {
 		});
 	}
 
-	addNewQuestion(isFollowup: boolean) {
+	addNewQuestion() {
 		let question = this.Schemas["standAlone"];
-		console.log(question);
+		let exercise = this.state.currentExercise;
+		let currentQuestions = this.state.currentExercise.questions;
+		currentQuestions.push(question);
+		exercise.questions = currentQuestions;
+
+		this.setState({
+			currentExercise: exercise,
+			currentQuestionIndex: exercise.questions.length - 1,
+			currentQuestion: exercise.questions[exercise.questions.length - 1],
+			isFollowup: false
+		});
+	}
+
+	addNewFollowup() {
+		let newFollowup = this.Schemas["standAlone"];
+    let exercise = Object.assign({}, this.state.currentExercise);
+		let question = Object.assign({}, exercise.questions[this.state.currentQuestionIndex]);
+		let currentQuestions = Object.assign([], question.followupQuestions);
+		currentQuestions.push(newFollowup);
+		question.followupQuestions = currentQuestions;
+		exercise.questions[this.state.currentQuestionIndex] = question;
+		let fLength = question.followupQuestions.length;
+
+		this.setState({
+			currentExercise: exercise,
+			currentQuestion: this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions[fLength - 1],
+			currentFIndex: fLength - 1,
+			isFollowup: true
+		});
 	}
 
 	/**
@@ -755,15 +781,13 @@ class ExerciseTool extends Component {
 					{this.renderQuestionTypePrompt()}
 					{this.state.currentQuestionFormat === "standAlone" ? this.renderQuestionCard() : this.renderTableQuestion()}
 					<br />
-          {/*this.state.editMode &&
-							<div className={"add-btn-container"}>
-                <Button style={{marginRight: "20px"}} variant={"outlined"} onClick={() => this.addNewQuestion(false)}>Add New Question</Button>
-								<Button variant={"outlined"} onClick={() => this.addNewQuestion(true)}>Add New Follow-up</Button>
-							</div>
-					*/}
+          <div className={"add-btn-container"}>
+						{this.state.editMode && <Button style={{marginRight: "20px"}} variant={"outlined"} onClick={() => this.addNewQuestion()}>Add New Question</Button>}
+            <Button variant={"outlined"} onClick={() => this.addNewFollowup()}>Add New Follow-up</Button>
+					</div>
 					<br/>
 					{this.renderExercisePreview()}
-					{this.renderFollowupPrompt()}
+					{/*this.renderFollowupPrompt()*/}
 					<br/>
 					{this.state.editMode ?
 							<div>
