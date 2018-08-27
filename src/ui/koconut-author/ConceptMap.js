@@ -2,23 +2,23 @@
 Currently standalone file. Must confirm the mapping before using
  */
 
-const sep = { left_paren: "(", right_paren: ")", left_curl: "{", right_curl: "}",
-	left_sqr: "[", right_sqr: "]", semicolon: ";", comma: ",", dot: ".",
-	triple_dot: "...", at: "@", double_colon: "::"
-};
+// const sep = { left_paren: "(", right_paren: ")", left_curl: "{", right_curl: "}",
+// 	left_sqr: "[", right_sqr: "]", semicolon: ";", comma: ",", dot: ".",
+// 	triple_dot: "...", at: "@", double_colon: "::"
+// };
 
-const op = { assign: "=", greater: ">", lesser: "<", not: "!", equality: "==",
-	greater_equality: ">=", lesser_equality: ">=", not_equal: "!=", and: "&&",
-	or: "||", incr: "++", decr: "--", add: "+", sub: "-", mult: "*", div: "/",
-	add_assign: "+=", sub_assign: "-=", mult_assign: "*=", div_assign: "/="
-};
+// const op = { assign: "=", greater: ">", lesser: "<", not: "!", equality: "==",
+// 	greater_equality: ">=", lesser_equality: ">=", not_equal: "!=", and: "&&",
+// 	or: "||", incr: "++", decr: "--", add: "+", sub: "-", mult: "*", div: "/",
+// 	add_assign: "+=", sub_assign: "-=", mult_assign: "*=", div_assign: "/="
+// };
 
-const quote = { single: "'", double: "\"" };
+// const quote = { single: "'", double: "\"" };
 
-const keyword = { new: "new", true: "true", false: "false", if: "if", else: "else",
-	for: "for", do: "do", while: "while", continue: "continue", return: "return",
-	null: "null", this: "this", super: "super",
-};
+// const keyword = { new: "new", true: "true", false: "false", if: "if", else: "else",
+// 	for: "for", do: "do", while: "while", continue: "continue", return: "return",
+// 	null: "null", this: "this", super: "super",
+// };
 
 const g = {
 	howCodeRuns: "howCodeRuns",

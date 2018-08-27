@@ -1,7 +1,9 @@
 // @flow
 import React, {Component} from 'react';
 import { withRouter} from "react-router-dom";
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 import BreadCrumbs from '../components/BreadCrumbs';
 import InstructionTitle from '../components/InstructionTitle';
 import InstructionContent from '../components/InstructionContent';
