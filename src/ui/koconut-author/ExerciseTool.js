@@ -54,6 +54,7 @@ class ExerciseTool extends Component {
 			selectedConcept: "",
 			currentQuestionIndex: 0,
 			currentFIndex: 0,
+			currentConcept: "",
 
 			isFollowup: false, 														// passed as a prop into the Question component
 			currentQuestion: this.Schemas["standAlone"], 				// this will be updated throughout an authoring session
@@ -65,7 +66,9 @@ class ExerciseTool extends Component {
       	currentCellIndex: -1,
 				format: 'prompt',
 				instructionType: 'prompt'
-			}
+			},
+
+			viewConceptVal: ""
     };
 
     // Bind the functions so they can be used in Question.js
@@ -584,7 +587,8 @@ class ExerciseTool extends Component {
       editID: id,
       tabValue: 0,
       currentExercise: currentExercise,
-      currentQuestion: editExercise.questions[0]
+      currentQuestion: editExercise.questions[0],
+			currentConcept: ""
     }, () => window.scrollTo(0, 0));
   }
 
@@ -701,10 +705,12 @@ class ExerciseTool extends Component {
 						<p style={sectionHeading}>Tag concepts for this exercise <span style={this.fieldReqs.required}>required</span></p>
 						<FormControl style={{display: "flex", flexDirection: "row", justifyContent: "center", marginBottom: "30px"}}>
 							<NativeSelect onChange={(evt) => {
-											evt.preventDefault();
-											this.setState({currentConcept: evt.target.value});
+												evt.preventDefault();
+												this.setState({currentConcept: evt.target.value});
 											}}
-														style={{width: "30%", marginRight: "15px"}}>
+											style={{width: "30%", marginRight: "15px"}}
+											disabled={this.state.editMode}
+											value={this.state.currentConcept}>
 								<option>Select concept</option>
 								{
 									this.state.conceptList.map((concept, index) => {
@@ -715,6 +721,7 @@ class ExerciseTool extends Component {
 							<Button variant={'outlined'}
 											style={{width: "30%", marginLeft: "15px"}}
 											color={"secondary"}
+											disabled={this.state.editMode}
 											onClick={(evt) => {
 												evt.preventDefault();
 												if (this.state.currentConcept === '') return;
@@ -729,6 +736,7 @@ class ExerciseTool extends Component {
                 this.state.currentExercise.concepts.map((concept, key) => {
                   return <Button
                       key={key}
+											disabled={this.state.editMode}
                       style={{backgroundColor: '#ffecb3', margin: '3px'}}
                       onClick={() => {
                         let index = this.state.currentExercise.concepts.indexOf(concept);
@@ -786,9 +794,10 @@ class ExerciseTool extends Component {
 
 		return (
 			<div style={{marginTop: "6%"}}>
-        <NativeSelect onChange={(evt) => {
+        <NativeSelect disabled={this.state.editMode} onChange={(evt) => {
         	this.getExercisesForConcept(evt.target.value);
-        }} style={{marginBottom: "50px"}}>
+					this.setState({viewConceptVal: evt.target.value});
+        }} style={{marginBottom: "50px"}} value={this.state.viewConceptVal}>
           <option>Select concept</option>
           {this.state.conceptList.map((concept, index) => {
               return <option key={index} value={concept.name}>{concept.name}</option>
