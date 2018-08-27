@@ -57,37 +57,40 @@ class CheckboxQuestion extends Component {
     };
 
     return(
-      <FormControl component={"fieldset"}>
-        <FormGroup>
-          {this.props.choices && this.props.choices.map((item, index) => {
-            return (
-                <FormControlLabel style={formGroupLabelStyles} key={index} control={
-                  <Checkbox
-                      checked={this.state.checkboxItems[item]}
-                      disabled={this.props.feedback ? true : false}
-                      onChange={(e) => {
-                          if(!this.props.feedback) {
-                            this.handleChange(e, item)
-                          }
-                        }}
-                      value={item}
-                  />
-                } label={<div>{item} 
-                  {this.props.feedback && 
-                    <span style={{marginLeft: 5}}>
-                      <svg height={10} width={10}>
-                        <circle cx={5} cy={5} r={5} fill={
-                          (this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) > -1) || 
-                          (!this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) < 0) ? "green" : "red"
-                        }/>
-                      </svg>
-                    </span>
-                  }
-                </div>} />
-            );
-          })}
-        </FormGroup>
-      </FormControl>
+      <div>
+        <p>{this.props.question.prompt}</p>
+        <FormControl component={"fieldset"}>
+          <FormGroup>
+            {this.props.choices && this.props.choices.map((item, index) => {
+              return (
+                  <FormControlLabel style={formGroupLabelStyles} key={index} control={
+                    <Checkbox
+                        checked={this.state.checkboxItems[item]}
+                        disabled={this.props.feedback ? true : false}
+                        onChange={(e) => {
+                            if(!this.props.feedback) {
+                              this.handleChange(e, item)
+                            }
+                          }}
+                        value={item}
+                    />
+                  } label={<div>{item}
+                    {this.props.feedback &&
+                      <span style={{marginLeft: 5}}>
+                        <svg height={10} width={10}>
+                          <circle cx={5} cy={5} r={5} fill={
+                            (this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) > -1) ||
+                            (!this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) < 0) ? "green" : "red"
+                          }/>
+                        </svg>
+                      </span>
+                    }
+                  </div>} />
+              );
+            })}
+          </FormGroup>
+        </FormControl>
+      </div>
     );
   }
 }

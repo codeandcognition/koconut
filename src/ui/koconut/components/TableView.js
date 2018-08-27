@@ -203,6 +203,7 @@ class TableView extends Component {
 
     return (
         <div className='table-view'>
+          <p style={{textAlign: "left"}}>{this.props.question.prompt}</p>
           {this.generateTableView()}
         </div>
     );
