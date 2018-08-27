@@ -10,6 +10,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Routes from './../../../Routes';
 import LoadingView from '../components/LoadingView';
 
+type Props = {
+	setFirebaseUser: Function
+}
+
 class SignIn extends Component {
 
   constructor(props) {
@@ -59,13 +63,13 @@ class SignIn extends Component {
         .then(user => {
           let uid = user.user.uid;
           if(uid) {
-						this.setState({loading: false}, () => {
-							this.routeUser();
-						});
             firebase.database().ref(`/Users/${uid}/Data/SessionEvents`).push({
               type: "start",
               timestamp: firebase.database.ServerValue.TIMESTAMP
             });
+						this.setState({loading: false}, () => {
+							this.routeUser();
+						});
           }
           return user.updateProfile({displayName: this.state.displayName});
         })

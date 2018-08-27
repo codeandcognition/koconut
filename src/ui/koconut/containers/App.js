@@ -124,22 +124,26 @@ class App extends Component {
   }
 
   sendExerciseViewDataToFirebase(exerciseId:string) {
-    let uid = this.state.firebaseUser.uid;
-    let pageType = 'exercise';
-    this.props.firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
-      pageType,
-      exerciseId,
-      timestamp: this.props.firebase.database.ServerValue.TIMESTAMP
-    });
+  	if (this.state.firebaseUser) {
+			let uid = this.state.firebaseUser.uid;
+			let pageType = 'exercise';
+			this.props.firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
+				pageType,
+				exerciseId,
+				timestamp: this.props.firebase.database.ServerValue.TIMESTAMP
+			});
+		}
   }
 
   sendWorldViewDataToFirebase() {
-    let uid = this.state.firebaseUser.uid;
-    let pageType = 'worldview';
-    this.props.firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
-      pageType,
-      timestamp: this.props.firebase.database.ServerValue.TIMESTAMP
-    });
+  	if (this.state.firebaseUser) {
+			let uid = this.state.firebaseUser.uid;
+			let pageType = 'worldview';
+			this.props.firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
+				pageType,
+				timestamp: this.props.firebase.database.ServerValue.TIMESTAMP
+			});
+		}
   }
 
   returnDisplayTypes() {
@@ -152,7 +156,10 @@ class App extends Component {
   		if (user) {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
 				this.exerciseGetter.on('value', (snap) => {
-					this.setState({exerciseList:snap.val()});
+					this.setState({
+						exerciseList:snap.val(),
+						firebaseUser: user
+					});
 				});
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
 				this.conceptMapGetter.on('value', (snap) => {
@@ -170,7 +177,7 @@ class App extends Component {
    * TODO: add user data on firebase for progress tracking
    */
   generateExercise(concept: string, exerciseType: string) {
-		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
+		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).results;
 		let exerciseIds = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).exerciseIds;
 		if (exercises) {
       if (exercises.length === 0) {
@@ -231,7 +238,7 @@ class App extends Component {
 				if (snap.val() !== null) {
 					state = snap.val();
 					if (this.state.conceptMapGetter) {
-						let exercises = this.generator.getExercisesByTypeAndConcept(state.type, state.concept, this.state.exerciseList, this.state.conceptMapGetter);
+						let exercises = this.generator.getExercisesByTypeAndConcept(state.type, state.concept, this.state.exerciseList, this.state.conceptMapGetter).results;
 						if (state.mode === "exercise") {
 							this.setState({
 								currentConcept: state.concept,
@@ -658,7 +665,7 @@ class App extends Component {
   renderSignup() {
   	return (
 				<div>
-					<Signup/>
+					<Signup setFirebaseUser={this.setFirebaseUser}/>
 				</div>
 		);
   }
@@ -667,7 +674,7 @@ class App extends Component {
 	 * renders the sign in view
 	 */
 	renderSignin() {
-		return (<SignIn/>);
+		return (<SignIn setFirebaseUser={this.setFirebaseUser}/>);
 	}
 
 	/**
@@ -769,7 +776,7 @@ class App extends Component {
     return(
 				<div>
 					{this.renderNavBar()}
-					<WorldView generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
+					<WorldView generateExercise={this.generateExercise} getInstruction={this.getInstruction} setFirebaseUser={this.setFirebaseUser}/>
 				</div>
     )
   }

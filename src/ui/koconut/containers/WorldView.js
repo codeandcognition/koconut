@@ -9,6 +9,12 @@ import firebase from 'firebase';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
 
+type Props = {
+	setFirebaseUser: Function,
+	generateExercise: Function,
+	getInstruction: Function
+};
+
 /**
  * WorldView is the world view for the app, where the user can see all the
  * exercises they can do and are suggested to do
@@ -51,7 +57,9 @@ class WorldView extends Component {
   	this.authUnsub = firebase.auth().onAuthStateChanged(user => {
   		if (this.mounted) {
 				this.setState({loading: false}, () => {
-					!user && this.props.history.push(Routes.signin);
+					if (!user) {
+						this.props.history.push(Routes.signin);
+					}
 				});
 			}
 		})
