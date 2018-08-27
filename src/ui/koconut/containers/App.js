@@ -14,7 +14,9 @@ import AuthorView from './../../koconut-author/AuthorView';
 import PopOverMessage from './PopoverMessage';
 import InstructionView from './InstructionView';
 import Types from '../../../data/ExerciseTypes.js';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 import Routes from './../../../Routes';
 import {BrowserRouter as Router, Switch, Redirect, Route} from 'react-router-dom';
 

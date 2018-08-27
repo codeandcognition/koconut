@@ -7,7 +7,9 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import LoadingView from './../koconut/components/LoadingView';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 import Routes from './../../Routes';
 
 class AuthorView extends Component {

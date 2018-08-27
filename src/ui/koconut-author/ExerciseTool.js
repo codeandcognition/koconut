@@ -29,7 +29,8 @@ import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import firebase from "firebase";
+import firebase from "firebase/app";
+import 'firebase/database';
 import "./ExerciseTool.css";
 
 /// UI and Logic for exercise creation on koconut
