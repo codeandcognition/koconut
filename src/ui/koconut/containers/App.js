@@ -78,7 +78,8 @@ class App extends Component {
     conceptMapGetter: ?Map<string,number[]>,
     codeTheme: string,
     timesGotQuestionWrong: number[],
-    followupTimesGotQuestionWrong: any[]
+    followupTimesGotQuestionWrong: any[],
+    exerciseId: string
   };
 
   constructor() {
@@ -106,7 +107,8 @@ class App extends Component {
       codeTheme: '',
       timesGotQuestionWrong: [], // times the user has gotten question wrong,
       // indices are question index
-      followupTimesGotQuestionWrong: []
+      followupTimesGotQuestionWrong: [],
+      exerciseId: ''
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -126,6 +128,25 @@ class App extends Component {
     this.resetFeedback = this.resetFeedback.bind(this);
   }
 
+  sendExerciseViewDataToFirebase(exerciseId:string) {
+    let uid = this.state.firebaseUser.uid;
+    let pageType = 'exercise'
+    this.props.firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
+      pageType,
+      exerciseId,
+      timestamp: this.props.firebase.database.ServerValue.TIMESTAMP
+    });
+  }
+
+  sendWorldViewDataToFirebase() {
+    let uid = this.state.firebaseUser.uid;
+    let pageType = 'worldview';
+    this.props.firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
+      pageType,
+      timestamp: this.props.firebase.database.ServerValue.TIMESTAMP
+    });
+  }
+
   returnDisplayTypes() {
     return displayType;
   }
@@ -138,8 +159,10 @@ class App extends Component {
    * TODO: add user data on firebase for progress tracking
    */
   generateExercise(concept: string, exerciseType: string, generator: any = this.generator) {
-		let exercises = generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter);
-		if (exercises) {
+		let exercises = generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).results;
+		let exerciseIds = generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).exerciseIds;
+    console.log(exerciseIds)
+    if (exercises) {
       if (exercises.length === 0) {
         this.setState({
           error: true,
@@ -156,11 +179,12 @@ class App extends Component {
         this.setState({
           display: displayType.exercise,
           exercise: exercises[exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter],//this.generator.getStubExercise(), // exercises[this.state.counter].exercise, // TODO: convert this for testing
+          exerciseId: exerciseIds[exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter],
           currentConcept: concept,
           counter: exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter,
           exerciseType: exerciseType,
           error: false // resets the error message
-        });
+        }, () => {this.sendExerciseViewDataToFirebase(this.state.exerciseId)});
       }
     }
   }
@@ -466,8 +490,8 @@ class App extends Component {
               : (this.state.conceptOptions > 1
                   ? displayType.concept
                   : displayType.exercise),
-        });
-      }, questionIndex, questionType, feedback);
+        },() => {this.sendExerciseViewDataToFirebase(this.state.exerciseId)});
+      }, questionIndex, questionType, feedback, this.state.exerciseId);
     }
   }
 
@@ -528,7 +552,7 @@ class App extends Component {
       display: displayType.exercise,
       feedback: (followupIndex === -1) ? tempFeedback : this.state.feedback,
       followupQuestions: (followupIndex === -1) ? this.state.followupFeedback : tempFeedback
-    });
+    },() => {this.sendExerciseViewDataToFirebase(this.state.exerciseId)});
   }
 
   renderLoadView() {
@@ -658,7 +682,7 @@ class App extends Component {
    * to the the navigationbar.
    */
 	switchToWorldView() {
-	  this.setState({display: displayType.world, counter: 0, feedback: []});
+	  this.setState({display: displayType.world, counter: 0, feedback: []}, () => {this.sendWorldViewDataToFirebase()});
   }
 
 	/**

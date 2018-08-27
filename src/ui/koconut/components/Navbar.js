@@ -100,6 +100,14 @@ class Navbar extends Component {
                     <MenuItem onClick={this.handleMenuClose}>Settings</MenuItem>
                     <MenuItem onClick={() => {
                       this.handleMenuClose();
+                      let user = firebase.auth().currentUser;
+                      let uid = user?user.uid:null
+                      if(uid) {
+                        firebase.database().ref(`/Users/${uid}/Data/SessionEvents`).push({
+                          type: "end",
+                          timestamp: firebase.database.ServerValue.TIMESTAMP
+                        });
+                      }
                       firebase.auth().signOut();
                     }}>Logout</MenuItem>
                   </Menu>
