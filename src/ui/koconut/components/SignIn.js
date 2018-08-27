@@ -34,11 +34,11 @@ class SignIn extends Component {
   componentDidMount() {
   	this.mounted = true;
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-			if (this.mounted) {
-				this.setState({currentUser: user});
-			}
 			if (user) {
-				this.routeUser();
+				if (this.mounted) {
+					this.setState({currentUser: user});
+					this.routeUser();
+				}
 			} else {
 				if (this.mounted) {
 					this.setState({loading: false}, () => {
@@ -90,12 +90,12 @@ class SignIn extends Component {
 				let snap = snapshot.val();
 				let waiverStatus = snap.waiverStatus;
 				if (waiverStatus) {
-					this.setState({loading: false}, () => this.props.history.push(Routes.worldview));
+					this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.worldview));
 				} else {
-					this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
+					this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
 				}
 			} else {
-				this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
+				this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
 			}
 		});
 	}
