@@ -12,10 +12,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Routes from './../../../Routes';
 import LoadingView from '../components/LoadingView';
 
-type Props = {
-	setFirebaseUser: Function
-}
-
 class SignIn extends Component {
 
   constructor(props) {
@@ -69,7 +65,7 @@ class SignIn extends Component {
               type: "start",
               timestamp: firebase.database.ServerValue.TIMESTAMP
             });
-						this.setState({loading: false}, () => {
+						this.setState({loading: false, currentUser: user}, () => {
 							this.routeUser();
 						});
           }

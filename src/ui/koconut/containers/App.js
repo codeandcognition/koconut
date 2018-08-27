@@ -667,7 +667,7 @@ class App extends Component {
   renderSignup() {
   	return (
 				<div>
-					<Signup setFirebaseUser={this.setFirebaseUser}/>
+					<Signup/>
 				</div>
 		);
   }
@@ -676,7 +676,7 @@ class App extends Component {
 	 * renders the sign in view
 	 */
 	renderSignin() {
-		return (<SignIn setFirebaseUser={this.setFirebaseUser}/>);
+		return (<SignIn/>);
 	}
 
 	/**
@@ -778,7 +778,7 @@ class App extends Component {
     return(
 				<div>
 					{this.renderNavBar()}
-					<WorldView generateExercise={this.generateExercise} getInstruction={this.getInstruction} setFirebaseUser={this.setFirebaseUser}/>
+					<WorldView generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
 				</div>
     )
   }

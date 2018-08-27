@@ -22,7 +22,7 @@ type Props = {
  * @class
  */
 class WorldView extends Component {
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			loading: true
@@ -54,7 +54,7 @@ class WorldView extends Component {
   }
 
   componentDidMount() {
-  	this.mounted = true
+  	this.mounted = true;
   	this.authUnsub = firebase.auth().onAuthStateChanged(user => {
   		if (this.mounted) {
 				this.setState({loading: false}, () => {

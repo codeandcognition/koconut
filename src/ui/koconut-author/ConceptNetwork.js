@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Graph from 'react-graph-vis';
-import ConceptInventory from './ConceptMap';
 import CardContent from '@material-ui/core/CardContent';
 
 class ConceptNetwork extends Component {
@@ -59,9 +58,6 @@ class ConceptNetwork extends Component {
 
 		// graph events
 		let events = {
-			select: (event) => {
-				let {nodes, edges} = event;
-			}
 		};
 
 		return(
