@@ -438,23 +438,25 @@ class Question extends Component {
 	}
 
 	renderQuestionActions() {
-		// TODO: on click invoke a function in Exercise tool
 		return(
-				<Button variant={'outlined'}
-								color={'secondary'}
-								onClick={() => this.writeQuestion()}
-								>Add Question</Button>
+			<div>
+				{!this.props.editMode && <Button variant={'outlined'} onClick={() => this.writeQuestion()} style={{marginRight: "30px"}}>Add Question</Button>}
+				{this.props.editMode && <Button variant={"outlined"} color={"primary"} style={{marginRight: "30px"}} onClick={this.props.handleUpdateQuestion}>Update Question</Button>}
+				{this.props.editMode && <Button variant={"outlined"} color={"secondary"} onClick={this.props.handleDeleteQuestion}>Delete Question</Button>}
+			</div>
 		);
 	}
 
 	renderStandAloneQuestion() {
-		let followup = {
-			border: 'solid',
-			borderColor: '#9FA8DA'
-		};
-		let card = this.props.isFollowup ? followup : {};
+		let cardStyle = {
+			width: "100%"
+		}
+		if (this.props.isFollowup) {
+			cardStyle["border"] = "solid";
+			cardStyle["borderColor"] = "#9FA8DA";
+		}
 		return(
-				<Card style={card}>
+				<Card style={cardStyle}>
 					<CardContent>
 						{this.renderPromptField()}
 						<br/>
