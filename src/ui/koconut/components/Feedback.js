@@ -90,7 +90,7 @@ class Feedback extends Component {
     );
   }
 
-  displayMemoryTableOutput(finalString: {}) {
+  displayMemoryTableOutput(finalString: any) {
     let list = [];
     Object.keys(finalString).forEach((variable, index) => {
       let values = finalString[variable];

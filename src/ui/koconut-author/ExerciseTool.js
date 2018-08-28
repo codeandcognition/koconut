@@ -37,9 +37,12 @@ import "./ExerciseTool.css";
 class ExerciseTool extends Component {
 	addQuestion: Function;
 	updateCurrentQuestion: Function;
+  resetForm: Function;
+  handleDeleteQuestion: Function;
+  saveQuestionEditsLocally: Function;
+  saveChanges: Function;  
 
-
-	constructor(props) {
+	constructor(props: any) {
 		super(props);
 		this.state = {
       currentExercise: {
@@ -809,11 +812,12 @@ class ExerciseTool extends Component {
 					let exerciseCardStyle = {
 						whiteSpace: "pre-wrap",
 						padding: "30px",
-						color: "#000000"
+						color: "#000000",
+            borderColor: '#000000'
 					};
 					if (this.state.editMode && id === this.state.editID) {
-						exerciseCardStyle["borderColor"] = "#f1c232";
-						exerciseCardStyle["color"] = "#f1c232";
+						exerciseCardStyle.borderColor = "#f1c232";
+						exerciseCardStyle.color = "#f1c232";
 					}
 					return (
 						<Card style={exerciseCardStyle} key={id}>
