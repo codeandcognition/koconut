@@ -25,6 +25,9 @@ import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
 import type {Exercise} from '../../../data/Exercises';
 
+const Sk = require('skulpt');
+
+
 // Display type enum
 const displayType = {
 	signup: 'SIGNUP',
@@ -348,7 +351,7 @@ class App extends Component {
     } else if (questionType === Types.memoryTable) {
     	checkerForCorrectness = this.verifyMemoryTable(question, questionIndex, answer, fIndex, feedbackTemp);
 		} else {
-			checkerForCorrectness = this.verifyOtherQuestions(question, questionIndex, answer, fIndex, feedbackTemp);
+			checkerForCorrectness = this.verifyOtherQuestions(question, questionIndex, answer, fIndex, feedbackTemp, questionType);
 		}
 		this.updateWrongAnswersCount(checkerForCorrectness, questionIndex, fIndex);
 		return feedbackTemp;
@@ -521,28 +524,80 @@ class App extends Component {
 	 * @param feedbackTemp
 	 * @returns {boolean}
 	 */
-	verifyOtherQuestions(question: any, questionIndex: number, answer: any, fIndex: number, feedbackTemp: any) {
+	verifyOtherQuestions(question: any, questionIndex: number, answer: any, fIndex: number, feedbackTemp: any, questionType: any) {
   	let checkerForCorrectness = true;
-		if (fIndex !== -1) {
-			feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-		}
-		let index = (fIndex === -1) ? questionIndex : fIndex;
-		let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
-		let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
-		if (question.answer === learnerAnswer) {
-			temp[index] = "correct";
-		} else {
-			temp[index] = "incorrect";
-			checkerForCorrectness = false;
-		}
-		if (fIndex === -1) {
-			feedbackTemp = temp;
-		} else {
-			feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-			feedbackTemp[questionIndex] = temp;
-		}
+
+    if(questionType === Types.writeCode || questionType === Types.fillBlank) {
+      if (fIndex !== -1) {
+        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+      }
+      let index = (fIndex === -1) ? questionIndex: fIndex;
+      let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
+      let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
+      let executedAnswer = this.runCode(learnerAnswer);
+      let expectedAnswer = this.runCode(question.answer);
+      console.log(executedAnswer);
+      console.log(expectedAnswer);
+      console.log(executedAnswer === expectedAnswer);
+      if (executedAnswer === expectedAnswer) {
+        temp[index] = 'correct';
+      } else {
+        temp[index] = 'incorrect';
+        checkerForCorrectness = false;
+      }
+      if (fIndex === -1) {
+        feedbackTemp = temp;
+      } else {
+        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+        feedbackTemp[questionIndex] = temp;
+      }
+    } else {
+      if (fIndex !== -1) {
+        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+      }
+      let index = (fIndex === -1) ? questionIndex : fIndex;
+      let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
+      let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
+      if (question.answer === learnerAnswer) {
+        temp[index] = "correct";
+      } else {
+        temp[index] = "incorrect";
+        checkerForCorrectness = false;
+      }
+      if (fIndex === -1) {
+        feedbackTemp = temp;
+      } else {
+        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+        feedbackTemp[questionIndex] = temp;
+      }
+    }
+
+		
 		return checkerForCorrectness;
 	}
+
+    /**
+   * runCode will run the code provided in a python interpreter (Skulpt)
+   * Most of this code comes from Skulpt's examples. Documentation for this
+   * will be in the docs folder.
+   * @param code input python code as a string
+   * @returns {string} python std output as a string
+   */
+  runCode(code: string): string {
+    function builtinRead(x) {
+      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+          throw new Error("File not found: '" + x + "'");
+      return Sk.builtinFiles["files"][x];
+    }
+    let output = [];
+    Sk.configure({output: d => output.push(d), read: builtinRead});
+    try {
+      Sk.importMainWithBody("<stdin>", false, code);
+    } catch(e) {
+      return e.toString();
+    }
+    return output.join("").trim();
+  }
 
   /**
    * updateWrongAnswersCount updates the count for wrong answers

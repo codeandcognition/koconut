@@ -13,7 +13,6 @@ import 'firebase/database';
 import 'firebase/auth';
 //
 
-const Sk = require('skulpt');
 
 /**
  * Evaluates and calculates correctness of a student response, and the
@@ -73,28 +72,7 @@ class ResponseEvaluator {
     return this.calculateCertainty(response, this.BKT);
   }
 
-  /**
-   * runCode will run the code provided in a python interpreter (Skulpt)
-   * Most of this code comes from Skulpt's examples. Documentation for this
-   * will be in the docs folder.
-   * @param code input python code as a string
-   * @returns {string} python std output as a string
-   */
-  static runCode(code: string): string {
-    function builtinRead(x) {
-      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-          throw new Error("File not found: '" + x + "'");
-      return Sk.builtinFiles["files"][x];
-    }
-    let output = [];
-    Sk.configure({output: d => output.push(d), read: builtinRead});
-    try {
-      Sk.importMainWithBody("<stdin>", false, code);
-    } catch(e) {
-      return e.toString();
-    }
-    return output.join("").trim();
-  }
+
 
   /**
    * Takes in an exercise and student response to update log and mastery model.
@@ -157,26 +135,22 @@ class ResponseEvaluator {
 
     // actual logic
     // it's backwards, I know :(
-    if(exercise.questions[questionIndex].type === ExerciseTypes.writeCode ||
-       exercise.questions[questionIndex].type === ExerciseTypes.fillBlank) {
-      let executedAnswer = this.runCode(answer[questionIndex]);
-      addResponseAndUpdate(executedAnswer === exercise.questions[questionIndex].answer, exercise);
-    } else {
-      let gotCorrect = true;
-      if(questionType === "table") {
-        feedback[questionIndex].forEach((d) => {
-          // console.log(d);
-          d && d.forEach((e) => {
-            if(e === "incorrect") {
-              gotCorrect = false;
-            }
-          })
+    let gotCorrect = true;
+    
+    if(questionType === "table") {
+      feedback[questionIndex].forEach((d) => {
+        // console.log(d);
+        d && d.forEach((e) => {
+          if(e === "incorrect") {
+            gotCorrect = false;
+          }
         })
-      } else {
-        answer = exercise.questions[questionIndex].answer;
-      }
-      addResponseAndUpdate(gotCorrect, exercise);
+      })
+    } else {
+      gotCorrect = feedback[questionIndex].indexOf('incorrect') === -1
     }
+    addResponseAndUpdate(gotCorrect, exercise);
+    
   }
 
   /**
