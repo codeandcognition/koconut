@@ -136,7 +136,6 @@ class ResponseEvaluator {
     // actual logic
     // it's backwards, I know :(
     let gotCorrect = true;
-    
     if(questionType === "table") {
       feedback[questionIndex].forEach((d) => {
         // console.log(d);

@@ -527,7 +527,8 @@ class App extends Component {
 	verifyOtherQuestions(question: any, questionIndex: number, answer: any, fIndex: number, feedbackTemp: any, questionType: any) {
   	let checkerForCorrectness = true;
 
-    if(questionType === Types.writeCode || questionType === Types.fillBlank) {
+    // For writecode. // TODO refactor reused code
+    if(questionType === Types.writeCode) {
       if (fIndex !== -1) {
         feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
       }
@@ -536,9 +537,6 @@ class App extends Component {
       let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
       let executedAnswer = this.runCode(learnerAnswer);
       let expectedAnswer = this.runCode(question.answer);
-      console.log(executedAnswer);
-      console.log(expectedAnswer);
-      console.log(executedAnswer === expectedAnswer);
       if (executedAnswer === expectedAnswer) {
         temp[index] = 'correct';
       } else {
