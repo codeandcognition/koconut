@@ -61,6 +61,7 @@ class App extends Component {
   nextQuestion: Function;
   updateUserState: Function;
   storeState: Function;
+  clearCounterAndFeedback: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: Exercise,
@@ -126,6 +127,7 @@ class App extends Component {
     this.resetFeedback = this.resetFeedback.bind(this);
     this.updateUserState = this.updateUserState.bind(this);
     this.storeState = this.storeState.bind(this);
+    this.clearCounterAndFeedback = this.clearCounterAndFeedback.bind(this);
   }
 
   sendExerciseViewDataToFirebase(exerciseId:string) {
@@ -772,6 +774,10 @@ class App extends Component {
 	  this.setState({display: displayType.world, counter: 0, feedback: []}, () => {this.sendWorldViewDataToFirebase()});
   }
 
+  clearCounterAndFeedback() {
+    this.setState({counter: 0, feedback: []});
+  }
+
 
 	/**
 	 * Renders the welcome view
@@ -808,6 +814,7 @@ class App extends Component {
 							followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
 							nextQuestion={this.nextQuestion}
 							resetFeedback={this.resetFeedback}
+              clearCounterAndFeedback={this.clearCounterAndFeedback}
 					/>
 				</div>
     );
@@ -848,7 +855,8 @@ class App extends Component {
 													 readOrWrite={this.state.instructionType}
 													 setError={this.setInstructionViewError}
 													 generateExercise={this.props.generateExercise}
-													 storeUserState={this.storeState}/>
+													 storeUserState={this.storeState}
+                           clearCounterAndFeedback={this.clearCounterAndFeedback}/>
 				</div>
 		);
   }

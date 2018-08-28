@@ -260,6 +260,7 @@ class InstructionView extends Component {
 											instructionOrPractice={"INSTRUCTION"}
 											generateExercise={this.props.generateExercise}
 											storeUserState={this.props.storeUserState}
+                      clearCounterAndFeedback={this.props.clearCounterAndFeedback}
 											progress={(this.state.currInstructionIndex + 1) + " out of " + (this.state.instructionList && this.state.instructionList.length)}
 									/>
 									{this.state.instructionList && chosenInstruction &&

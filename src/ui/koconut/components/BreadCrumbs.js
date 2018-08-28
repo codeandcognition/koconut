@@ -216,10 +216,22 @@ class BreadCrumbs extends Component {
                     }}
                     open={Boolean(typeAnchorEl)}
                     onClose={this.handleMenuClose}>
-                <Link to={`/instruction/${this.state.concept}/learn-to-read-code`}><MenuItem onClick={() => {this.storeState("instruction", 0, "READ", this.state.concept)}}>Learn to Read Code</MenuItem></Link>
-								<Link to={`/practice/${this.state.concept}/practice-reading-code`}><MenuItem onClick={() => {this.storeState("exercise", 0, "READ", this.state.concept)}}>Practice Reading Code</MenuItem></Link>
-                <Link to={`/instruction/${this.state.concept}/learn-to-write-code`}><MenuItem onClick={() => {this.storeState("instruction", 0, "WRITE", this.state.concept)}}>Learn to Write Code</MenuItem></Link>
-								<Link to={`/practice/${this.state.concept}/practice-writing-code`}><MenuItem onClick={() => {this.storeState("exercise", 0, "WRITE", this.state.concept)}}>Practice Writing Code</MenuItem></Link>
+                <Link to={`/instruction/${this.state.concept}/learn-to-read-code`}><MenuItem onClick={() => {
+                  this.props.clearCounterAndFeedback();
+                  this.storeState("instruction", 0, "READ", this.state.concept);
+                }}>Learn to Read Code</MenuItem></Link>
+								<Link to={`/practice/${this.state.concept}/practice-reading-code`}><MenuItem onClick={() => {
+                  this.props.clearCounterAndFeedback();
+                  this.storeState("exercise", 0, "READ", this.state.concept);
+                }}>Practice Reading Code</MenuItem></Link>
+                <Link to={`/instruction/${this.state.concept}/learn-to-write-code`}><MenuItem onClick={() => {
+                  this.props.clearCounterAndFeedback();
+                  this.storeState("instruction", 0, "WRITE", this.state.concept);
+                }}>Learn to Write Code</MenuItem></Link>
+								<Link to={`/practice/${this.state.concept}/practice-writing-code`}><MenuItem onClick={() => {
+                  this.props.clearCounterAndFeedback();
+                  this.storeState("exercise", 0, "WRITE", this.state.concept);
+                }}>Practice Writing Code</MenuItem></Link>
               </Menu>
             </li>
 						<li className="breadcrumb-item active">{
