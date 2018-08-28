@@ -831,7 +831,7 @@ class App extends Component {
     return(
 				<div>
 					{this.renderNavBar()}
-					<WorldView generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
+					<WorldView switchToWorldView={this.switchToWorldView} generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
 				</div>
     )
   }
@@ -879,7 +879,7 @@ class App extends Component {
 	 * @returns {*}
 	 */
 	renderNavBar() {
-		return (<Navbar/>);
+		return (<Navbar switchToWorldView={this.switchToWorldView}/>);
 	}
 
   render() {

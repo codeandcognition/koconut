@@ -111,7 +111,7 @@ class Navbar extends Component {
 									this.props.history.location.pathname.includes("instruction") ||
 									this.props.history.location.pathname.includes("practice"))  ?
 									<div style={{marginRight: 5}}>
-										<Link to={Routes.worldview}>
+										<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
 											<BackButton
 													aria-owns='menu'
 													aria-haspopup="true"
