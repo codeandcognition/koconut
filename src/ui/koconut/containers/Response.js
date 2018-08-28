@@ -8,6 +8,7 @@ import CheckboxQuestion from '../components/CheckboxQuestion';
 import MemoryTableQuestion from '../components/MemoryTableQuestion';
 import './Response.css';
 
+
 import Types from '../../../data/ExerciseTypes.js';
 import CodeEditor from '../components/CodeEditor';
 
@@ -56,7 +57,7 @@ class Response extends Component {
             fIndex={this.props.fIndex}
         />;
       case(Types.shortResponse):
-        return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index} fIndex={this.props.fIndex}/>;
+        return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index} fIndex={this.props.fIndex} prompt={this.props.question.prompt}/>;
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):

@@ -3,6 +3,8 @@ import Types from '../../../data/ExerciseTypes';
 import AceEditor from 'react-ace';
 import Button from '@material-ui/core/Button';
 import "./CodeEditor.css";
+import ReactMarkdown from 'react-markdown';
+import CodeBlock from'./CodeBlock';
 
 class CodeEditor extends Component {
   handleSelect: Function;
@@ -167,8 +169,10 @@ class CodeEditor extends Component {
 
   render() {
     return(
-        <div>
-          <p style={{textAlign: "left"}}>{this.props.prompt}</p>
+        <div style={{textAlign: "left"}}>
+          <ReactMarkdown className={"flex-grow-1"}
+                         source={this.props.prompt}
+                         renderers={{CodeBlock: CodeBlock}}/>
           {this.renderAce()}
           {this.props.type === Types.highlightCode && <p className={"answer-preview"}>Your answer: {this.state.highlighted}</p>}
           <div className={"button-container"}>

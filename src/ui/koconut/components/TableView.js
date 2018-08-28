@@ -202,8 +202,10 @@ class TableView extends Component {
   render() {
 
     return (
-        <div className='table-view'>
-          <p style={{textAlign: "left"}}>{this.props.question.prompt}</p>
+        <div className='table-view' style={{textAlign: "left"}}>
+          <ReactMarkdown className={"flex-grow-1"}
+                         source={this.props.prompt}
+                         renderers={{CodeBlock: CodeBlock}}/>
           {this.generateTableView()}
         </div>
     );
