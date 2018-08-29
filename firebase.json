@@ -11,7 +11,7 @@
     ],
     "redirects": [
       {
-        "source": "/index.html",
+        "source": "/signin",
         "destination": "/",
         "type": 301
       }
