@@ -1,7 +1,7 @@
 //@flow
 import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import ExerciseTypes from '../data/ExerciseTypes';
-import _ from 'lodash';
+import _ from 'lodash/core';
 
 // A note from Harrison:
 //  I tried to make this file better by putting things in a class, but that ended

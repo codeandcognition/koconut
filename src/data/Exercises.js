@@ -2,7 +2,7 @@
 import ExerciseTypes from './ExerciseTypes.js';
 import {conceptInventory} from './ConceptMap';
 // import {sep, op, quote, keyword, g} from './ConceptAbbreviations';
-import _ from 'lodash';
+import _ from 'lodash/core';
 
 
 export type Exercise = {

@@ -1,7 +1,7 @@
 // To test
 import conceptInventory from '../data/ConceptMap';
 import {sep, op, quote, keyword, g} from '../data/ConceptAbbreviations';
-import _ from 'lodash';
+import _ from 'lodash/core';
 
 function toCheck(c) {
   return Object.values(g).includes(c) || Object.values(op).includes(c);
