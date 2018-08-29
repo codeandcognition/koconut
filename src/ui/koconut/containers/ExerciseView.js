@@ -57,6 +57,7 @@ class Exercise extends Component {
   componentDidMount() {
     this.mounted = true;
     window.scrollTo(0, 0);
+    this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
   }
 
   // debug comment: never reaching componentWillUnmount
@@ -156,7 +157,8 @@ class Exercise extends Component {
 					<BreadCrumbs conceptType={this.props.concept} 
           readOrWrite={this.props.readOrWrite} 
           instructionOrPractice={"PRACTICE"}
-          clearCounterAndFeedback={this.props.clearCounterAndFeedback}/>
+          clearCounterAndFeedback={this.props.clearCounterAndFeedback}
+          />
 					{!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderQuestion()}
         </div>
     );
