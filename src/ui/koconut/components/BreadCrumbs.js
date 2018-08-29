@@ -9,10 +9,13 @@ import { Link, withRouter} from "react-router-dom";
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import { PropTypes } from 'react';
 
 type Props = {
   conceptType: string,
   chosenInstruction: any,
+  sendExerciseViewDataToFirebase: Function,
+  exerciseId: string
 }
 
 class BreadCrumbs extends Component {
@@ -70,6 +73,7 @@ class BreadCrumbs extends Component {
   }
 
   componentDidMount() {
+    console.log("props", this.props);
   	this.mounted = true;
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
 			if (user && this.mounted) {
@@ -226,10 +230,12 @@ class BreadCrumbs extends Component {
                 }}>Practice Reading Code</MenuItem></Link>
                 <Link to={`/instruction/${this.state.concept}/learn-to-write-code`}><MenuItem onClick={() => {
                   this.props.clearCounterAndFeedback();
+                  this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
                   this.storeState("instruction", 0, "WRITE", this.state.concept);
                 }}>Learn to Write Code</MenuItem></Link>
 								<Link to={`/practice/${this.state.concept}/practice-writing-code`}><MenuItem onClick={() => {
                   this.props.clearCounterAndFeedback();
+                  this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
                   this.storeState("exercise", 0, "WRITE", this.state.concept);
                 }}>Practice Writing Code</MenuItem></Link>
               </Menu>
