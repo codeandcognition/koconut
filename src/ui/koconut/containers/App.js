@@ -1,24 +1,13 @@
 // @flow
 import React, {Component} from 'react';
-import 'firebase/auth';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import './App.css';
-import Navbar from '../components/Navbar';
-import ExerciseView from './ExerciseView';
-import ConceptSelection from '../components/ConceptSelection';
-import Welcome from '../components/Welcome';
-import Signup from '../components/Signup';
-import SignIn from '../components/SignIn';
-import WorldView from './WorldView';
-import AuthorView from './../../koconut-author/AuthorView';
 import PopOverMessage from './PopoverMessage';
-import InstructionView from './InstructionView';
 import Types from '../../../data/ExerciseTypes.js';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
 import Routes from './../../../Routes';
 import {BrowserRouter as Router, Switch, Redirect, Route} from 'react-router-dom';
+import Loadable from 'react-loadable';
+
 
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
@@ -26,6 +15,45 @@ import ResponseEvaluator from '../../../backend/ResponseEvaluator';
 import type {Exercise} from '../../../data/Exercises';
 
 const Sk = require('skulpt');
+
+
+const Loading = () => <div>Loading content...</div>;
+const Navbar = Loadable({
+    loader: () => import('../components/Navbar'),
+    loading: Loading,
+});
+const ConceptSelection = Loadable({
+    loader: () => import('../components/ConceptSelection'),
+    loading: Loading,
+});
+const WorldView = Loadable({
+    loader: () => import('./WorldView'),
+    loading: Loading,
+});
+const ExerciseView = Loadable({
+    loader: () => import('./ExerciseView'),
+    loading: Loading,
+});
+const Welcome = Loadable({
+    loader: () => import('../components/Welcome'),
+    loading: Loading,
+});
+const Signup = Loadable({
+    loader: () => import('../components/Signup'),
+    loading: Loading,
+});
+const SignIn = Loadable({
+    loader: () => import('../components/SignIn'),
+    loading: Loading,
+});
+const AuthorView = Loadable({
+    loader: () => import('./../../koconut-author/AuthorView'),
+    loading: Loading,
+});
+const InstructionView = Loadable({
+    loader: () => import('./InstructionView'),
+    loading: Loading,
+});
 
 
 // Display type enum
@@ -161,7 +189,7 @@ class App extends Component {
 
   componentDidMount() {
   	this.mounted = true;
-  	firebase.auth().onAuthStateChanged(user => {
+  	this.props.firebase.auth().onAuthStateChanged(user => {
   		if (user) {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
 				this.exerciseGetter.on('value', (snap) => {
@@ -229,8 +257,8 @@ class App extends Component {
 			concept: concept,
 			counter: counter
 		}
-		let userId = firebase.auth().currentUser.uid;
-		let userRef = firebase.database().ref('Users/' + userId + '/state');
+		let userId = this.props.firebase.auth().currentUser.uid;
+		let userRef = this.props.firebase.database().ref('Users/' + userId + '/state');
 		userRef.set(state);
 	}
 
@@ -238,9 +266,9 @@ class App extends Component {
 	 * Retrieves current user's most recent state on the app from Firebase
 	 */
 	updateUserState() {
-		if (firebase.auth().currentUser) {
-			let userId = firebase.auth().currentUser.uid;
-			let userRef = firebase.database().ref('Users/' + userId + '/state');
+		if (this.props.firebase.auth().currentUser) {
+			let userId = this.props.firebase.auth().currentUser.uid;
+			let userRef = this.props.firebase.database().ref('Users/' + userId + '/state');
 			let state = {};
 			userRef.on('value', snap => {
 				if (snap.val() !== null) {
