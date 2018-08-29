@@ -14,7 +14,7 @@ import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
 import type {Exercise} from '../../../data/Exercises';
 
-const Sk = require('skulpt');
+// const Sk = require('skulpt');
 
 
 const Loading = () => <div>Loading content...</div>;
@@ -158,6 +158,8 @@ class App extends Component {
     this.storeState = this.storeState.bind(this);
     this.clearCounterAndFeedback = this.clearCounterAndFeedback.bind(this);
     this.sendExerciseViewDataToFirebase = this.sendExerciseViewDataToFirebase.bind(this);
+
+    import('skulpt').then(Sk => this.setState({Sk}))
   }
 
   sendExerciseViewDataToFirebase(exerciseId:string) {
@@ -616,14 +618,14 @@ class App extends Component {
    */
   runCode(code: string): string {
     function builtinRead(x) {
-      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+      if (this.state.Sk.builtinFiles === undefined || this.state.Sk.builtinFiles["files"][x] === undefined)
           throw new Error("File not found: '" + x + "'");
-      return Sk.builtinFiles["files"][x];
+      return this.state.Sk.builtinFiles["files"][x];
     }
     let output = [];
-    Sk.configure({output: d => output.push(d), read: builtinRead});
+    this.state.Sk.configure({output: d => output.push(d), read: builtinRead});
     try {
-      Sk.importMainWithBody("<stdin>", false, code);
+      this.state.Sk.importMainWithBody("<stdin>", false, code);
     } catch(e) {
       return e.toString();
     }
