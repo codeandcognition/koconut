@@ -557,7 +557,7 @@ class App extends Component {
       }
       let index = (fIndex === -1) ? questionIndex : fIndex;
       let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
-      let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
+      let learnerAnswer = (fIndex === -1) ? answer[questionIndex].trim() : answer[questionIndex][fIndex].trim();
       if (question.answer === learnerAnswer) {
         temp[index] = "correct";
       } else {
