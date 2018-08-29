@@ -62,6 +62,7 @@ class App extends Component {
   updateUserState: Function;
   storeState: Function;
   clearCounterAndFeedback: Function;
+  sendExerciseViewDataToFirebase: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: Exercise,
@@ -128,6 +129,7 @@ class App extends Component {
     this.updateUserState = this.updateUserState.bind(this);
     this.storeState = this.storeState.bind(this);
     this.clearCounterAndFeedback = this.clearCounterAndFeedback.bind(this);
+    this.sendExerciseViewDataToFirebase = this.sendExerciseViewDataToFirebase.bind(this);
   }
 
   sendExerciseViewDataToFirebase(exerciseId:string) {
@@ -209,7 +211,6 @@ class App extends Component {
           exerciseType: exerciseType,
           error: false // resets the error message
         }, () => {
-						this.sendExerciseViewDataToFirebase(this.state.exerciseId);
 						this.storeState("exercise", this.state.counter, this.state.exerciseType, concept);
         });
       }
@@ -454,7 +455,7 @@ class App extends Component {
 		let equals = true;
 		for (let i = 0; i < answerKey.length; i++) {
 			// intended comparision (types are different)
-			if (answerKey[i] !== userInput[i]) {
+			if (answerKey[i].toString() !== userInput[i].toString()) {
 				return false;
 			}
 		}
@@ -500,6 +501,8 @@ class App extends Component {
 	 */
 	verifyMemoryTableHelper(question: any, questionIndex : number, response: any, feedback : any) {
 		let answer = question.answer;
+    console.log(answer)
+    console.log(response)
 		if (typeof(answer) === "string") {
 			answer = JSON.parse(answer);
 		}
@@ -651,7 +654,7 @@ class App extends Component {
               : (this.state.conceptOptions > 1
                   ? displayType.concept
                   : displayType.exercise),
-        },() => {this.sendExerciseViewDataToFirebase(this.state.exerciseId)});
+        });
       }, questionIndex, questionType, feedback, this.state.exerciseId);
     }
   }
@@ -713,7 +716,7 @@ class App extends Component {
       display: displayType.exercise,
       feedback: (followupIndex === -1) ? tempFeedback : this.state.feedback,
       followupQuestions: (followupIndex === -1) ? this.state.followupFeedback : tempFeedback
-    },() => {this.sendExerciseViewDataToFirebase(this.state.exerciseId)});
+    });
   }
 
   /**
@@ -815,6 +818,8 @@ class App extends Component {
 							nextQuestion={this.nextQuestion}
 							resetFeedback={this.resetFeedback}
               clearCounterAndFeedback={this.clearCounterAndFeedback}
+              sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
+              exerciseId={this.state.exerciseId}
 					/>
 				</div>
     );
