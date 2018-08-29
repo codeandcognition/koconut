@@ -211,7 +211,7 @@ class BreadCrumbs extends Component {
           <ol className="breadcrumb">
             <li className="breadcrumb-item active">{conceptName}</li>
             <li className="breadcrumb-item active">
-              <a href="#" aria-owns={typeAnchorEl ? "type-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, false)}>{link}</a>
+              <a href="#_" aria-owns={typeAnchorEl ? "type-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, false)}>{link}</a>
               <Menu id={"type-menu"}
                     anchorEl={typeAnchorEl}
                     transformOrigin={{

@@ -5,6 +5,8 @@ import App from './ui/koconut/containers/App';
 import registerServiceWorker from './registerServiceWorker';
 import firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/auth';
+
 
 var config = {
     apiKey: "AIzaSyBjPZISUiRSL2npF06gg1ZQbWOaOOHpQSY",
