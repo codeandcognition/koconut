@@ -73,7 +73,6 @@ class BreadCrumbs extends Component {
   }
 
   componentDidMount() {
-    console.log("props", this.props);
   	this.mounted = true;
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
 			if (user && this.mounted) {

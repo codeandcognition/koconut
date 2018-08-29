@@ -160,7 +160,6 @@ class App extends Component {
   }
 
   sendExerciseViewDataToFirebase(exerciseId: string) {
-  	console.log("exerciseId", exerciseId);
   	if (this.state.firebaseUser) {
 			let uid = this.state.firebaseUser.uid;
 			let pageType = 'exercise';
@@ -529,8 +528,6 @@ class App extends Component {
 	 */
 	verifyMemoryTableHelper(question: any, questionIndex : number, response: any, feedback : any) {
 		let answer = question.answer;
-    console.log(answer)
-    console.log(response)
 		if (typeof(answer) === "string") {
 			answer = JSON.parse(answer);
 		}
