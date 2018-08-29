@@ -734,7 +734,7 @@ class App extends Component {
 	 * renders the sign in view
 	 */
 	renderSignin() {
-		return (<SignIn/>);
+		return (<SignIn />);
 	}
 
 	/**

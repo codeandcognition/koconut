@@ -34,8 +34,7 @@ class SignIn extends Component {
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
 			if (user) {
 				if (this.mounted) {
-					this.setState({currentUser: user});
-					this.routeUser();
+					this.setState({currentUser: user}, () => this.routeUser());
 				}
 			} else {
 				if (this.mounted) {
@@ -83,7 +82,7 @@ class SignIn extends Component {
 	routeUser() {
 		let databaseRef = firebase.database()
 			.ref("Users/" + this.state.currentUser.uid);
-		databaseRef.once("value", (snapshot) => {
+		databaseRef.once("value").then((snapshot) => {
 			if (snapshot !== null && snapshot.val() !== null) {
 				let snap = snapshot.val();
 				let waiverStatus = snap.waiverStatus;
