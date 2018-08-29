@@ -78,7 +78,7 @@ class Feedback extends Component {
     }
     return (
       <div style={{display: "inline"}}>
-        <strong>The correct answer is
+        <strong>The correct answer is:&nbsp;
             <span style={{color: "green"}}>
               {
                 this.props.type === "memoryTable" ? this.displayMemoryTableOutput(finalString) : finalString
