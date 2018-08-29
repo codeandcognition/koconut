@@ -261,6 +261,8 @@ class InstructionView extends Component {
 											generateExercise={this.props.generateExercise}
 											storeUserState={this.props.storeUserState}
                       clearCounterAndFeedback={this.props.clearCounterAndFeedback}
+											sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
+											exerciseId={this.props.exerciseId}
 											progress={(this.state.currInstructionIndex + 1) + " out of " + (this.state.instructionList && this.state.instructionList.length)}
 									/>
 									{this.state.instructionList && chosenInstruction &&

@@ -159,7 +159,8 @@ class App extends Component {
     this.sendExerciseViewDataToFirebase = this.sendExerciseViewDataToFirebase.bind(this);
   }
 
-  sendExerciseViewDataToFirebase(exerciseId:string) {
+  sendExerciseViewDataToFirebase(exerciseId: string) {
+  	console.log("exerciseId", exerciseId);
   	if (this.state.firebaseUser) {
 			let uid = this.state.firebaseUser.uid;
 			let pageType = 'exercise';
@@ -888,6 +889,8 @@ class App extends Component {
 													 setError={this.setInstructionViewError}
 													 generateExercise={this.props.generateExercise}
 													 storeUserState={this.storeState}
+													 sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
+													 exerciseId={this.state.exerciseId}
                            clearCounterAndFeedback={this.clearCounterAndFeedback}/>
 				</div>
 		);

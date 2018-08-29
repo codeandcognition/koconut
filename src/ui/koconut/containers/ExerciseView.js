@@ -8,6 +8,7 @@ import BreadCrumbs from '../components/BreadCrumbs';
 import LoadingView from './../components/LoadingView';
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
+import { PropTypes } from 'react';
 
 type Props = {
   exercise: {
@@ -28,7 +29,8 @@ type Props = {
   codeTheme: string,
   timesGotQuestionWrong: [],
   followupTimesGotQuestionWrong: [],
-  resetFeedback: Function
+  resetFeedback: Function,
+  sendExerciseViewDataToFirebase: Function
 }
 
 /**
@@ -154,10 +156,12 @@ class Exercise extends Component {
 
     return (
         <div className="exercise-view" style={styles}>
-					<BreadCrumbs conceptType={this.props.concept} 
-          readOrWrite={this.props.readOrWrite} 
-          instructionOrPractice={"PRACTICE"}
-          clearCounterAndFeedback={this.props.clearCounterAndFeedback}
+					<BreadCrumbs conceptType={this.props.concept}
+            sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
+            exerciseId={this.props.exerciseId}
+            readOrWrite={this.props.readOrWrite}
+            instructionOrPractice={"PRACTICE"}
+            clearCounterAndFeedback={this.props.clearCounterAndFeedback}
           />
 					{!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderQuestion()}
         </div>
