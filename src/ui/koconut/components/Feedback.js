@@ -136,7 +136,7 @@ class Feedback extends Component {
             <div style={{display: "flex", justifyContent: "flex-end"}}><Button color={"primary"} variant="outlined" onClick={this.props.submitTryAgain}>Try Again</Button>
               
                 <Button style={{marginLeft: "10px"}} variant="outlined" onClick={() => {
-                  this.props.addGaveUp();
+                  this.props.addGaveUp(this.props.questionIndex, this.props.fIndex);
                   this.setState({gaveUp: true});
                 }} color={"secondary"}>Show answer</Button>
               

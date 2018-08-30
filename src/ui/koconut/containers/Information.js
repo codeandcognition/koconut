@@ -44,7 +44,8 @@ class Information extends Component {
       followupFeedback: null,
       answer: null,
       followupAnswers: null,
-      gaveUpCount: 0
+      gaveUpCount: 0,
+      gaveUpArr: []
     };
     this.addGaveUp = this.addGaveUp.bind(this);
   }
@@ -176,8 +177,13 @@ class Information extends Component {
     return <div />
   }
 
-  addGaveUp() {
-    this.setState({gaveUpCount: this.state.gaveUpCount + 1});
+  addGaveUp(questionIndex, fIndex) {
+    let gaveUpArr = [];
+    gaveUpArr[questionIndex] = true;
+    this.setState({
+      gaveUpCount: this.state.gaveUpCount + 1,
+      gaveUpArr: fIndex === -1 ? gaveUpArr : this.state.gaveUpArr
+    });
   }
 
   scrollToBottom() {
@@ -206,7 +212,7 @@ class Information extends Component {
     , 0);
 
     this.state.followupFeedback.forEach((feedback) => {
-      let count = feedback.reduce((acc, item, index) => {
+      let count = feedback && feedback.reduce((acc, item, index) => {
         if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
             this.state.exercise.questions[index].type === "table") {
           return (item && item.toString().indexOf("incorrect") === -1 &&
@@ -226,7 +232,6 @@ class Information extends Component {
         expectedCorrect = expectedCorrect + item.followupQuestions.length;
       }
     });
-    console.log("correct", correctCount + " / " + expectedCorrect);
 
     return (
         <div ref={"information"}>
@@ -258,20 +263,21 @@ class Information extends Component {
                   } else {
                     correctTable = false;
                   }
-
                   return (
                     <div key={fIndex}>
-                      {(this.state.feedback[index] === "correct" || (Types.table === question.type && correctTable)) && <ExerciseQuestion
-                        question={fQuestion}
-                        index={index}
-                        feedback={this.state.followupFeedback[index] ? this.state.followupFeedback[index][fIndex] : null}
-                        answer={this.state.followupAnswers}
-                        renderCodeView={this.renderCodeView(fQuestion, index, fIndex)}
-                        renderResponseView={this.renderResponseView(fQuestion, index, fIndex)}
-                        renderFeedback={this.renderFeedback(fQuestion, index, fIndex)}
-                        submitHandler={this.props.submitHandler}
-                        fIndex={fIndex}
-                      />}
+                      {(this.state.feedback[index] === "correct" || this.state.gaveUpArr[index] === true || (Types.table === question.type && correctTable)) &&
+                        <ExerciseQuestion
+                          question={fQuestion}
+                          index={index}
+                          feedback={this.state.followupFeedback[index] ? this.state.followupFeedback[index][fIndex] : null}
+                          answer={this.state.followupAnswers}
+                          renderCodeView={this.renderCodeView(fQuestion, index, fIndex)}
+                          renderResponseView={this.renderResponseView(fQuestion, index, fIndex)}
+                          renderFeedback={this.renderFeedback(fQuestion, index, fIndex)}
+                          submitHandler={this.props.submitHandler}
+                          fIndex={fIndex}
+                        />
+                      }
                     </div>
                   );
                 })}

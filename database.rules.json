@@ -10,16 +10,14 @@
     },
     "Users" : {
       "$uid" : {
+        ".read" : "auth != null && auth.uid == $uid",
         "waiverStatus" : {
-          ".read" : "auth != null && auth.uid == $uid",
           ".write" : "auth != null && auth.uid == $uid"
         },
         "permission" : {
-          ".read" : "auth != null && auth.uid == $uid",
           ".write" : "false"
         },
         "state" : {
-          ".read" : "auth != null && auth.uid == $uid",
           ".write" : "auth != null && auth.uid == $uid"
         },
         "Data": {
