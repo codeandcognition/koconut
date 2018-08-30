@@ -180,6 +180,17 @@ class Information extends Component {
     this.setState({gaveUpCount: this.state.gaveUpCount + 1});
   }
 
+  scrollToBottom() {
+    window.setTimeout(() => {
+      window.scroll({
+        top: window.innerHeight,
+        left: 0,
+        behavior: "smooth"
+      });
+    }, 500);
+    return true;
+  }
+
   render() {
 
     // todo count correct correctly
@@ -197,7 +208,7 @@ class Information extends Component {
     let expectedCorrect = this.state.exercise.questions.length;
 
     return (
-        <div>
+        <div ref={"information"}>
           {this.state.exercise.questions.map((question, index) => {
             return (
               <Paper elevation={6} style={{padding: "0"}} key={"information" + index} className={"information-with-submit"}>
@@ -247,13 +258,15 @@ class Information extends Component {
             );
             })
           }
-          {correctCount >= expectedCorrect && <div className={"cont-btn-container"}>
-            <Button variant={"outlined"} color={"primary"} onClick={() => {
-              this.props.nextQuestion();
-              this.props.resetAnswer();
-              this.setState({gaveUpCount: 0});
-            }}>Continue</Button>
-          </div>}
+          {correctCount >= expectedCorrect && this.scrollToBottom() &&
+            <div className={"cont-btn-container"} >
+              <Button variant={"outlined"} color={"primary"} onClick={() => {
+                this.props.nextQuestion();
+                this.props.resetAnswer();
+                this.setState({gaveUpCount: 0});
+              }}>Continue</Button>
+            </div>
+          }
         </div>
 
     );
