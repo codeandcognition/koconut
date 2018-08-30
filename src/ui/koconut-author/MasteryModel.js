@@ -1,6 +1,6 @@
 // @flow
 import conceptInventory from './ConceptMap.js';
-import _ from 'lodash';
+import _forEach from 'lodash/forEach';
 
 /**
  * ConceptKnowledge object is a node containing a concept, with a boolean
@@ -132,7 +132,7 @@ class MasteryModelClass {
    */
   _populate() {
     // Create ConceptKnowledge objects for each concept
-    _.forEach(conceptInventory, (c, name) => this.model.push(
+    _forEach(conceptInventory, (c, name) => this.model.push(
         new ConceptKnowledge(name, c.should_teach, c.container)));
 
     // Create a mapping of strings to ConceptKnowledge objects
@@ -140,7 +140,7 @@ class MasteryModelClass {
     this.model.forEach((m) => map.set(m.name, m));
 
     // Fill ConceptKnowledge objects with references parents/dependencies
-    _.forEach(conceptInventory, (c, name) => {
+    _forEach(conceptInventory, (c, name) => {
       // Ensure that map gets a valid ConceptKnowledge object
       let obj_ = map.get(name); // Weird type coercion nonsense
       let obj: ConceptKnowledge;
