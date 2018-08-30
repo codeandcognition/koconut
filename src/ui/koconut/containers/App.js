@@ -790,17 +790,14 @@ class App extends Component {
 														resetError={this.resetError}/>);
 	}
 
-	/**
-	 * Sets the display state to 'signup'. This function is passed as a prop
-	 * to the Sign in view
-	 */
-	switchToSignup() {
-		this.setState({display: displayType.signup});
-	}
-
   /**
    * Sets the display state to 'WORLD". This function is passed as a prop
    * to the the navigationbar.
+   * 
+   * NOTE: This function does not actually set the state to world view. Because
+   * React router has been implemented, all this does is set an internal state
+   * to be set to displayType.world. This is still an important function because
+   * it calls the firebase database and sends log data!
    */
 	switchToWorldView() {
 	  this.setState({display: displayType.world, counter: 0, feedback: []}, () => {this.sendWorldViewDataToFirebase()});
