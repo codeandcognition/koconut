@@ -3,13 +3,10 @@ import React, {Component} from 'react';
 import ReactMarkdown from 'react-markdown';
 import Prompt from '../components/Prompt';
 import Information from './Information';
-import ConceptLabel from '../components/ConceptLabel';
 import BreadCrumbs from '../components/BreadCrumbs';
 import LoadingView from './../components/LoadingView';
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
-import { PropTypes } from 'react';
-import Button from '@material-ui/core/Button/Button';
 
 type Props = {
   exercise: {

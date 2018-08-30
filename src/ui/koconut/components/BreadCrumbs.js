@@ -9,7 +9,6 @@ import { Link, withRouter} from "react-router-dom";
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import { PropTypes } from 'react';
 
 type Props = {
   conceptType: string,
