@@ -398,7 +398,7 @@ class Question extends Component {
   generateFeedbackTemplate() {
     let template = {};
     if (this.state.currentQuestion.type === this.QuestionTypes.multipleChoice) {
-      this.state.currentQuestion.choices.map(choice => {
+      this.state.currentQuestion.choices.forEach(choice => {
         template[choice] = "";
       });
     } else {

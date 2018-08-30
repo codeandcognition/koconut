@@ -191,7 +191,7 @@ class Table extends Component {
 							// Note: React JSX doesn't regular for loops; hence the current outer loop.
 							Array.apply(null, Array(rows)).map((item, rowNum) => {
 								let row = [];
-								this.state.currentTable.colNames.map((colName, colNum) => {
+								this.state.currentTable.colNames.forEach((colName, colNum) => {
 									// index to map from 2d table to 1d table since a table is
 									// represented as an array
 									const index = (rowNum * width) + colNum;
