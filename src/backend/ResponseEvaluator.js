@@ -114,11 +114,12 @@ class ResponseEvaluator {
         );
       }
 
+      let answerRegex = /[\.#\$\/\[\]]/;
       let dataToPush = {
         exerciseId,
         questionIndex,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
-        answer: answer[questionIndex],
+        answer: (!answerRegex.test(answer[questionIndex]) && answer[questionIndex] !== "") ? answer[questionIndex] : null,
         correctness: isCorrect
       };
       let uid = firebase.auth().currentUser;
