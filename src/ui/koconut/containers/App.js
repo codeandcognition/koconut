@@ -14,8 +14,7 @@ import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
 import type {Exercise} from '../../../data/Exercises';
 
-// const Sk = require('skulpt');
-
+const Sk = require('skulpt');
 
 const Loading = () => <div>Loading content...</div>;
 const Navbar = Loadable({
@@ -158,12 +157,9 @@ class App extends Component {
     this.storeState = this.storeState.bind(this);
     this.clearCounterAndFeedback = this.clearCounterAndFeedback.bind(this);
     this.sendExerciseViewDataToFirebase = this.sendExerciseViewDataToFirebase.bind(this);
-
-    import('skulpt').then(Sk => this.setState({Sk}))
   }
 
   sendExerciseViewDataToFirebase(exerciseId: string) {
-  	console.log("exerciseId", exerciseId);
   	if (this.state.firebaseUser) {
 			let uid = this.state.firebaseUser.uid;
 			let pageType = 'exercise';
@@ -532,8 +528,6 @@ class App extends Component {
 	 */
 	verifyMemoryTableHelper(question: any, questionIndex : number, response: any, feedback : any) {
 		let answer = question.answer;
-    console.log(answer)
-    console.log(response)
 		if (typeof(answer) === "string") {
 			answer = JSON.parse(answer);
 		}
@@ -619,14 +613,14 @@ class App extends Component {
    */
   runCode(code: string): string {
     function builtinRead(x) {
-      if (this.state.Sk.builtinFiles === undefined || this.state.Sk.builtinFiles["files"][x] === undefined)
+      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
           throw new Error("File not found: '" + x + "'");
-      return this.state.Sk.builtinFiles["files"][x];
+      return Sk.builtinFiles["files"][x];
     }
     let output = [];
-    this.state.Sk.configure({output: d => output.push(d), read: builtinRead});
+    Sk.configure({output: d => output.push(d), read: builtinRead});
     try {
-      this.state.Sk.importMainWithBody("<stdin>", false, code);
+      Sk.importMainWithBody("<stdin>", false, code);
     } catch(e) {
       return e.toString();
     }

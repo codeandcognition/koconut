@@ -5,10 +5,10 @@ import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import {conceptInventory} from '../../../data/ConceptMap.js';
 import ConceptCard from './../components/ConceptCard';
 import {t} from '../../../data/ConceptAbbreviations';
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 type Props = {
 	setFirebaseUser: Function,
