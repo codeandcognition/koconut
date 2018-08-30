@@ -183,7 +183,7 @@ class Information extends Component {
   scrollToBottom() {
     window.setTimeout(() => {
       window.scroll({
-        top: window.innerHeight,
+        top: 5000,
         left: 0,
         behavior: "smooth"
       });
@@ -197,15 +197,36 @@ class Information extends Component {
     let correctCount = this.state.feedback.reduce((acc, item, index) => {
           if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
               this.state.exercise.questions[index].type === "table") {
-            return item && item.toString().indexOf("incorrect") === -1 &&
-            item.toString().indexOf("correct") !== -1 ? acc + 1 : acc;
+            return (item && item.toString().indexOf("incorrect") === -1 &&
+            item.toString().indexOf("correct") !== -1) ? acc + 1 : acc;
           } else {
-            return item === "correct" ? acc + 1 : acc
+            return item === "correct" ? acc + 1 : acc;
           }
         }
     , 0);
+
+    this.state.followupFeedback.forEach((feedback) => {
+      let count = feedback.reduce((acc, item, index) => {
+        if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
+            this.state.exercise.questions[index].type === "table") {
+          return (item && item.toString().indexOf("incorrect") === -1 &&
+              item.toString().indexOf("correct") !== -1) ? acc + 1 : acc;
+        } else {
+          return item === "correct" ? acc + 1 : acc;
+        }
+      }, 0);
+      correctCount = correctCount + count;
+    });
+
     correctCount = correctCount + this.state.gaveUpCount;
+
     let expectedCorrect = this.state.exercise.questions.length;
+    this.state.exercise.questions.forEach((item) => {
+      if (item.followupQuestions) {
+        expectedCorrect = expectedCorrect + item.followupQuestions.length;
+      }
+    });
+    console.log("correct", correctCount + " / " + expectedCorrect);
 
     return (
         <div ref={"information"}>
