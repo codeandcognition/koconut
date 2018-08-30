@@ -9,6 +9,7 @@ import LoadingView from './../components/LoadingView';
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
 import { PropTypes } from 'react';
+import Button from '@material-ui/core/Button/Button';
 
 type Props = {
   exercise: {
@@ -144,7 +145,8 @@ class Exercise extends Component {
 							nextQuestion={this.props.nextQuestion}
 							resetAnswer={this.resetAnswer}
 					/>
-					<ConceptLabel concepts={this.props.exercise && this.props.exercise.concepts}/>
+          {/*<ConceptLabel concepts={this.props.exercise &&
+           this.props.exercise.concepts}/>*/}
 				</div>
 		);
 	}

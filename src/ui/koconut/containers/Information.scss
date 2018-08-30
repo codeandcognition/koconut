@@ -5,6 +5,13 @@
 
 .information-with-submit {
   padding-bottom: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   /*border-bottom: 1px dotted gray*/
+}
+
+.cont-btn-container {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: flex-end;
 }

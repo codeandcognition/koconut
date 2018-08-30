@@ -132,12 +132,6 @@ class Feedback extends Component {
         {this.showFeedbackMessage(this.props.type, this.props.timesGotSpecificQuestionWrong, this.props.question.feedback, gotCorrect)}
         </div>
         <div className="feedback-ok">
-          {(correctBool || this.state.gaveUp) && 
-            <div>
-              <div style={{display: "flex", justifyContent: "flex-end"}}>
-                <Button color="primary" variant="outlined" onClick={this.props.submitOk}>Continue</Button>
-              </div>
-            </div>}
           {!correctBool && !this.state.gaveUp &&
             <div style={{display: "flex", justifyContent: "flex-end"}}><Button color={"primary"} variant="outlined" onClick={this.props.submitTryAgain}>Try Again</Button>
               
