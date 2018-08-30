@@ -1,6 +1,6 @@
 // @flow
 import ace from 'brace';
-import _ from 'lodash/core';
+import _ from 'lodash';
 
 const {Range} = ace.acequire('ace/range'); // Ace has a built-in range datatype
 
