@@ -21,6 +21,10 @@ const Navbar = Loadable({
     loader: () => import('../components/Navbar'),
     loading: Loading,
 });
+// const PopOverMessage = Loadable({
+//     loader: () => import('./PopoverMessage'),
+//     loading: Loading,
+// });
 const ConceptSelection = Loadable({
     loader: () => import('../components/ConceptSelection'),
     loading: Loading,
