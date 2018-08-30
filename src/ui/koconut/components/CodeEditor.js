@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import "./CodeEditor.css";
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from'./CodeBlock';
+import 'brace/mode/python';
 
 class CodeEditor extends Component {
   handleSelect: Function;
