@@ -115,7 +115,8 @@ class InstructionView extends Component {
 									index + 1}, () => {
 					// store user location on firebase
 					this.storeUserState("instruction");
-					this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite)
+					this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite);
+          this.storeUserState("instruction");
 				});
 			}
     }

@@ -139,7 +139,6 @@ class ResponseEvaluator {
     let gotCorrect = true;
     if(questionType === "table") {
       feedback[questionIndex].forEach((d) => {
-        // console.log(d);
         d && d.forEach((e) => {
           if(e === "incorrect") {
             gotCorrect = false;
