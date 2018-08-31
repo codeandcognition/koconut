@@ -567,8 +567,10 @@ class App extends Component {
       let index = (fIndex === -1) ? questionIndex: fIndex;
       let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
       let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
-      let executedAnswer = this.runCode(learnerAnswer);
-      let expectedAnswer = this.runCode(question.answer);
+      let preCondition = question.preCondition ? "\n"+question.preCondition+"\n" : "";
+      let postCondition = question.postCondition ? "\n"+question.postCondition+"\n" : "";
+      let executedAnswer = this.runCode(preCondition + learnerAnswer + postCondition);
+      let expectedAnswer = this.runCode(preCondition + question.answer + postCondition);
       if (executedAnswer === expectedAnswer) {
         temp[index] = 'correct';
       } else {
