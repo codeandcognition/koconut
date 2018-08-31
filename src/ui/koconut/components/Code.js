@@ -1,15 +1,6 @@
 // @flow
 
 import React, {Component} from 'react';
-import AceEditor from 'react-ace';
-//import ace from 'brace';
-
-// Ace language support
-import 'brace/mode/java';
-
-// Ace themes
-import 'brace/theme/eclipse';
-import 'brace/theme/solarized_dark';
 
 // Tool imports
 import Types from '../../../data/ExerciseTypes.js';
@@ -21,9 +12,6 @@ import ReactMarkdown from 'react-markdown';
 // CSS for Code component
 import './Code.css';
 import CodeBlock from './CodeBlock';
-
-// Ace Range datatype
-// const { Range } = ace.acequire('ace/range');
 
 type Props = {
   type: string,

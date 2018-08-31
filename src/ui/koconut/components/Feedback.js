@@ -78,19 +78,19 @@ class Feedback extends Component {
     }
     return (
       <div style={{display: "inline"}}>
-        <strong>The correct answer is
+        <strong>The correct answer is:&nbsp;
             <span style={{color: "green"}}>
               {
-                typeof(finalString) === "object" ? this.displayMemoryTableOutput(finalString) : finalString
+                this.props.type === "memoryTable" ? this.displayMemoryTableOutput(finalString) : finalString
               }
             </span>
             {(this.props.type !== "writeCode" && this.props.type !== 'memoryTable') && "."}
-            </strong>
+        </strong>
       </div>
     );
   }
 
-  displayMemoryTableOutput(finalString: {}) {
+  displayMemoryTableOutput(finalString: any) {
     let list = [];
     Object.keys(finalString).forEach((variable, index) => {
       let values = finalString[variable];
@@ -132,17 +132,11 @@ class Feedback extends Component {
         {this.showFeedbackMessage(this.props.type, this.props.timesGotSpecificQuestionWrong, this.props.question.feedback, gotCorrect)}
         </div>
         <div className="feedback-ok">
-          {(correctBool || this.state.gaveUp) && 
-            <div>
-              <div style={{display: "flex", justifyContent: "flex-end"}}>
-                <Button color="primary" variant="outlined" onClick={this.props.submitOk}>Continue</Button>
-              </div>
-            </div>}
           {!correctBool && !this.state.gaveUp &&
             <div style={{display: "flex", justifyContent: "flex-end"}}><Button color={"primary"} variant="outlined" onClick={this.props.submitTryAgain}>Try Again</Button>
               
                 <Button style={{marginLeft: "10px"}} variant="outlined" onClick={() => {
-                  this.props.addGaveUp();
+                  this.props.addGaveUp(this.props.questionIndex, this.props.fIndex);
                   this.setState({gaveUp: true});
                 }} color={"secondary"}>Show answer</Button>
               

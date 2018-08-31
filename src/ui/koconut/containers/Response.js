@@ -8,6 +8,7 @@ import CheckboxQuestion from '../components/CheckboxQuestion';
 import MemoryTableQuestion from '../components/MemoryTableQuestion';
 import './Response.css';
 
+
 import Types from '../../../data/ExerciseTypes.js';
 import CodeEditor from '../components/CodeEditor';
 
@@ -39,7 +40,6 @@ class Response extends Component {
     let answer = this.props.answer;
     let update = this.props.updateHandler;
     let index = this.props.questionIndex;
-    let submit = this.props.submitHandler;
 
     if(this.props.question.data) {
       type = "table";
@@ -57,11 +57,11 @@ class Response extends Component {
             fIndex={this.props.fIndex}
         />;
       case(Types.shortResponse):
-        return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index} fIndex={this.props.fIndex}/>;
+        return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index} fIndex={this.props.fIndex} prompt={this.props.question.prompt}/>;
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):
-        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex}/>
+        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex} prompt={this.props.question.prompt}/>
       case(Types.highlightCode):
 				return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex}/>
       case(Types.table):

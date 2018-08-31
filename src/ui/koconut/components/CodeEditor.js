@@ -3,6 +3,9 @@ import Types from '../../../data/ExerciseTypes';
 import AceEditor from 'react-ace';
 import Button from '@material-ui/core/Button';
 import "./CodeEditor.css";
+import ReactMarkdown from 'react-markdown';
+import CodeBlock from'./CodeBlock';
+import 'brace/mode/python';
 
 class CodeEditor extends Component {
   handleSelect: Function;
@@ -19,7 +22,8 @@ class CodeEditor extends Component {
     code: string,
     mode: string,
     theme: string,
-    toggle: false
+    toggle: false,
+    highlighted: string
   };
 
   constructor(props) {
@@ -28,7 +32,8 @@ class CodeEditor extends Component {
     this.state = {
       mode: 'python',
       theme: 'textmate',
-      code: this.props.code
+      code: this.props.code,
+      highlighted: ''
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -108,6 +113,7 @@ class CodeEditor extends Component {
   renderAce() {
     return <AceEditor
         ref="aceEditor"
+        className={"ace-editor"}
         width="100%"
         height="20em"
         value={this.state.code}
@@ -164,8 +170,12 @@ class CodeEditor extends Component {
 
   render() {
     return(
-        <div>
+        <div style={{textAlign: "left"}}>
+          <ReactMarkdown className={"flex-grow-1"}
+                         source={this.props.prompt}
+                         renderers={{CodeBlock: CodeBlock}}/>
           {this.renderAce()}
+          {this.props.type === Types.highlightCode && <p className={"answer-preview"}>Your answer: {this.state.highlighted}</p>}
           <div className={"button-container"}>
             <Button variant={"contained"} color={"secondary"} onClick={() => this.handleReset()}><i
                 className="fas fa-sync-alt" /></Button>

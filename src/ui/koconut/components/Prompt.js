@@ -15,13 +15,13 @@ class Prompt extends Component {
   };
 
   render() {
-    let exTypes = this.props.exercise.questions.reduce((accumulator, curr, currIndex) => {
-      if(this.props.exercise.questions.length-1 === currIndex) {
-        return accumulator + curr.type;
-      } else {
-        return accumulator + curr.type + ", ";
-      }
-    }, "");
+    // let exTypes = this.props.exercise.questions.reduce((accumulator, curr, currIndex) => {
+    //   if(this.props.exercise.questions.length-1 === currIndex) {
+    //     return accumulator + curr.type;
+    //   } else {
+    //     return accumulator + curr.type + ", ";
+    //   }
+    // }, "");
     return (
         <div className="prompt">
           <ReactMarkdown source={this.props.exercise.prompt ? this.props.exercise.prompt : ""}>

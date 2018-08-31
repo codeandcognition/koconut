@@ -1,5 +1,6 @@
 
 import React, {Component} from 'react';
+import { Link} from "react-router-dom";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ExpandMoreIcon from '@material-ui/icons/ChevronRight';
@@ -52,31 +53,39 @@ class ConceptCard extends Component {
 
 		return(
 				<Card style={{margin: '2%'}}>
-					<CardContent>
+					<CardContent aria-expanded={this.state.expand}>
 						<div>
-						<div style={{display: 'flex', cursor: "pointer"}} onClick={this.handleExpandClick}>
+						<div style={{display: 'flex', cursor: "pointer"}} onClick={this.handleExpandClick}><a>
 							{this.state.expand ?
 							<ExpandedIcon /> :
               <ExpandMoreIcon />
-							}
+							}</a>
 							<p style={titleStyle}>{this.props.title}</p>
 						</div>
 						{this.state.expand &&
 								<div style={{paddingLeft: "5%", display: 'flex'}}>
 									<div>
-										<p style={linkStyle}
-											 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.read)}>Learn to read code</p>
+										<Link to={`/instruction/${this.props.concept}/learn-to-read-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.read)}>Learn to read code</p>
+										</Link>
 										<br />
-										<p style={linkStyle}
-											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>Practice reading code</p>
+										<Link to={`/practice/${this.props.concept}/practice-reading-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.read)}>Practice reading code</p>
+										</Link>
 										<br />
 									</div>
 									<div>
-										<p style={linkStyle}
-											 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.write)}>Learn to write code</p>
+										<Link to={`/instruction/${this.props.concept}/learn-to-write-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.getInstruction(this.props.concept, exerciseType.write)}>Learn to write code</p>
+										</Link>
 										<br />
-										<p style={linkStyle}
-											 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>Practice writing code</p>
+										<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
+											<p style={linkStyle}
+												 onClick={() => this.props.generateExercise(this.props.concept, exerciseType.write)}>Practice writing code</p>
+										</Link>
 									</div>
 								</div>
 						}

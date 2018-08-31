@@ -12,8 +12,8 @@
                  === The following code is super-not documented!!! ===
 */
 
+// @flow
 import React, {Component} from 'react';
-import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -29,12 +29,20 @@ import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import firebase from "firebase";
+import firebase from "firebase/app";
+import 'firebase/database';
 import "./ExerciseTool.css";
 
-
+/// UI and Logic for exercise creation on koconut
 class ExerciseTool extends Component {
-	constructor(props) {
+	addQuestion: Function;
+	updateCurrentQuestion: Function;
+  resetForm: Function;
+  handleDeleteQuestion: Function;
+  saveQuestionEditsLocally: Function;
+  saveChanges: Function;  
+
+	constructor(props: any) {
 		super(props);
 		this.state = {
       currentExercise: {
@@ -81,6 +89,7 @@ class ExerciseTool extends Component {
 		this.saveChanges = this.saveChanges.bind(this);
 	}
 
+	// Question schemas
 	Schemas = {
 		standAlone: {
 			prompt: "",
@@ -103,8 +112,9 @@ class ExerciseTool extends Component {
 			followupPrompt: "",
 			followupQuestions: []
 		}
-	}
+	};
 
+	// CSS for required/optional fields
 	fieldReqs = {
 		required: {
 			float: 'right',
@@ -158,7 +168,7 @@ class ExerciseTool extends Component {
 	 *
 	 * @param concept
 	 */
-	getExercisesForConcept(concept) {
+	getExercisesForConcept(concept: string) {
 		let componentRef = this;
 		let conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
 		this.setState({
@@ -187,7 +197,7 @@ class ExerciseTool extends Component {
 	 * @param count
 	 * @returns {*}
 	 */
-	getAverageDifficulty(exercise, questionIndex, total, count) {
+	getAverageDifficulty(exercise: any, questionIndex: number, total: number, count: number) {
 		if (!exercise) {
 			return 0;
 		} else if (exercise.questions[questionIndex]) {
@@ -247,7 +257,7 @@ class ExerciseTool extends Component {
 	 *
 	 * @param exerciseID
 	 */
-	handleDeleteExercise(exerciseID) {
+	handleDeleteExercise(exerciseID: string) {
 		this.state.allExercises[exerciseID].concepts.forEach((concept) => {
 			let conceptRef = firebase.database().ref("ConceptExerciseMap/" + concept);
 			conceptRef.once("value", function(snapshot) {
@@ -292,8 +302,8 @@ class ExerciseTool extends Component {
 	 * @param field
 	 * @returns {Function}
 	 */
-	handleExerciseChange(field) {
-		return (e) => {
+	handleExerciseChange(field: string) {
+		return (e: any) => {
 			this.updateExercise(field, e.target.value);
 		}
 	}
@@ -303,7 +313,7 @@ class ExerciseTool extends Component {
 	 * @param field
 	 * @param value
 	 */
-	updateExercise(field, value) {
+	updateExercise(field: string, value: any) {
 		// deep copy instead of shallow copy
 		let temp = Object.assign({}, this.state.currentExercise);
 		temp[field] = value;
@@ -314,17 +324,20 @@ class ExerciseTool extends Component {
 	 * Adds a question to the exercise. `followup` is a boolean indicating whether
 	 * this question has a followup
 	 *
-	 * @param
+	 * @param any
 	 */
-	addQuestion(question) {
+	addQuestion(question: any) {
 		let exercise = Object.assign({}, this.state.currentExercise);
 		if (this.state.isFollowup) {
-			let parent = Object.assign({}, exercise.questions[this.state.followupTo]);
-			let followupQuestions = Object.assign([], parent.followupQuestions);
-			followupQuestions.push(question);
-			parent.followupQuestions = followupQuestions;
-			exercise.questions[this.state.followupTo] = parent;
+			// retrieve the parent question, append the followup to the parent question
+			// update the state
+			let parent = Object.assign({}, exercise.questions[this.state.followupTo]); // retrieve the parent question
+			let followupQuestions = Object.assign([], parent.followupQuestions);			 // retrieve the parent question's followup questions
+			followupQuestions.push(question); 																				 // append the new followup question
+			parent.followupQuestions = followupQuestions;															 // update parent
+			exercise.questions[this.state.followupTo] = parent;												 // update exercise
 		} else {
+			// add to the end of the list if the current question is not a followup
 			exercise.questions.push(question);
 		}
 		this.setState({
@@ -340,7 +353,7 @@ class ExerciseTool extends Component {
 	/**
 	 * Updates the `currentQuestion` field through out the authoring session
 	 */
-	updateCurrentQuestion(question, currentCell) {
+	updateCurrentQuestion(question: any, currentCell: number) {
 		this.setState({
 			currentQuestion: question,
 			currentCell: currentCell
@@ -382,7 +395,7 @@ class ExerciseTool extends Component {
 	 *
 	 * @param value
 	 */
-	handleTabChange(value) {
+	handleTabChange(value: any) {
     this.setState({
       tabValue: value
     })
@@ -805,16 +818,16 @@ class ExerciseTool extends Component {
 	 * @returns {*}
 	 */
 	renderViewExercises() {
-		let editorStyles = {
-			width: "80%",
-			height: "200px",
-			marginTop: "60px"
-		};
+		// let editorStyles = {
+		// 	width: "80%",
+		// 	height: "200px",
+		// 	marginTop: "60px"
+		// };
 
-		let buttonContainerStyles = {
-      marginTop: "30px",
-			width: "50%",
-    };
+		// let buttonContainerStyles = {
+    //   marginTop: "30px",
+		// 	width: "50%",
+    // };
 
 		return (
 			<div style={{marginTop: "6%"}}>
@@ -832,11 +845,12 @@ class ExerciseTool extends Component {
 					let exerciseCardStyle = {
 						whiteSpace: "pre-wrap",
 						padding: "30px",
-						color: "#000000"
+						color: "#000000",
+            borderColor: '#000000'
 					};
 					if (this.state.editMode && id === this.state.editID) {
-						exerciseCardStyle["borderColor"] = "#f1c232";
-						exerciseCardStyle["color"] = "#f1c232";
+						exerciseCardStyle.borderColor = "#f1c232";
+						exerciseCardStyle.color = "#f1c232";
 					}
 					return (
 						<Card style={exerciseCardStyle} key={id}>

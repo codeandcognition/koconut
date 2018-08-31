@@ -5,15 +5,31 @@ import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import './BreadCrumbs.css';
-import Grow from '@material-ui/core/Grow';
+import { Link, withRouter} from "react-router-dom";
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 
 type Props = {
   conceptType: string,
-  chosenInstruction: any
+  chosenInstruction: any,
+  sendExerciseViewDataToFirebase: Function,
+  exerciseId: string
 }
 
-export default class BreadCrumbs extends Component {
+class BreadCrumbs extends Component {
+	LearnerMode = {
+		instruction: "instruction",
+		practice: "exercise"
+	};
 
+	Type = {
+		read: "READ",
+		write: "WRITE"
+	};
+
+	handleMenuOpen: Function;
+	handleMenuClose: Function;
 
   constructor(props: Props) {
     super(props);
@@ -26,7 +42,7 @@ export default class BreadCrumbs extends Component {
       onboardingConcepts: null,
       conceptAnchorEl: null,
       typeAnchorEl: null
-    }
+    };
 
     this.handleMenuOpen = this.handleMenuOpen.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
@@ -37,33 +53,37 @@ export default class BreadCrumbs extends Component {
       concept: this.formatCamelCasedString(this.props.conceptType),
       orderedConcepts: this.getOrderedConcepts()
     }, () => {
-
-      var semantic = [];
-      var template = [];
-      var onboarding = [];
-
-      this.getConceptsByType(this.state.orderedConcepts, t.semantic).map((item) => {
-        var concept = this.formatCamelCasedString(item.name);
-        semantic.push(concept);
+      let conceptNames = {};
+      this.state.orderedConcepts.forEach((concept) => {
+        conceptNames[concept.name] = this.formatCamelCasedString(concept.name);
       });
 
-      this.getConceptsByType(this.state.orderedConcepts, t.template).map((item) => {
-        var concept = this.formatCamelCasedString(item.name);
-        template.push(concept);
-      });
-
-      this.getConceptsByType(this.state.orderedConcepts, t.onboarding).map((item) => {
-        var concept = this.formatCamelCasedString(item.name);
-        onboarding.push(concept);
-      });
+      let semantic = this.getConceptsByType(this.state.orderedConcepts, t.semantic).map(i => i.name);
+      let template = this.getConceptsByType(this.state.orderedConcepts, t.template).map(i => i.name);
+      let onboarding = this.getConceptsByType(this.state.orderedConcepts, t.onboarding).map(i => i.name);
 
       this.setState({
         semanticConcepts: semantic,
         templateConcepts: template,
-        onboardingConcepts: onboarding
+        onboardingConcepts: onboarding,
+        conceptNames: conceptNames
       });
     });
   }
+
+  componentDidMount() {
+  	this.mounted = true;
+		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+			if (user && this.mounted) {
+				this.getUserState();
+			}
+		})
+	}
+
+	componentWillUnmount() {
+  	this.mounted = false;
+  	this.authUnsub();
+	}
 
   /**
    * This function takes in a camel cased string and converts it to normal
@@ -72,10 +92,10 @@ export default class BreadCrumbs extends Component {
    * @returns {string}
    */
   formatCamelCasedString(camelString: string) {
-    var result = "";
-    if (camelString.length !== 0) {
+    let result = "";
+    if (camelString && camelString.length !== 0) {
       result = result + camelString.charAt(0).toUpperCase();
-      for (var i = 1; i < camelString.length; i++) {
+      for (let i = 1; i < camelString.length; i++) {
         if (camelString.charAt(i) === camelString.charAt(i).toUpperCase()) {
           result = result + " "
         }
@@ -116,56 +136,80 @@ export default class BreadCrumbs extends Component {
     });
   }
 
-  handleMenuOpen(e, isConceptMenu) {
+  handleMenuOpen(e: any, isConceptMenu : boolean) {
     this.setState({
       conceptAnchorEl: isConceptMenu ? e.currentTarget : null,
       typeAnchorEl: isConceptMenu ? null : e.currentTarget
     });
   }
 
+	/**
+	 * Retrieve user's location on the app from Firebase
+	 */
+	getUserState() {
+		if (firebase.auth().currentUser) {
+			let userId = firebase.auth().currentUser.uid;
+			let userRef = firebase.database().ref('Users/' + userId + '/state');
+			let state = {};
+			userRef.on('value', snap => {
+				if (snap !== null) {
+					state = snap.val();
+					if (this.mounted) {
+						this.setState({
+							concept: state.concept,
+							readOrWrite: state.type,
+							mode: state.mode
+						});
+					}
+				}
+			});
+		}
+	}
+
+	/**
+	 * Stores user's current state on Koconut to Firebase
+	 *
+	 * @param mode
+	 */
+	storeState(mode: string, counter: number, type: string, concept: string) {
+		let state = {
+			mode: mode,
+			type: type,
+			concept: concept,
+			counter: counter
+		};
+		let userId = firebase.auth().currentUser.uid;
+		let userRef = firebase.database().ref('Users/' + userId + '/state');
+		userRef.set(state);
+	}
+
   render() {
-    let readOrWrite = "";
-    if (this.props.readOrWrite === "READ") {
-      readOrWrite = "Learn to Read Code";
-    } else {
-      readOrWrite = "Learn to Write Code";
-    }
+		let conceptName = this.formatCamelCasedString(this.state.concept);
 
-    var conceptMenu = [];
-    if (this.state.semanticConcepts && this.state.semanticConcepts.includes(this.state.concept)) {
-      conceptMenu = this.state.semanticConcepts;
-    } else if (this.state.templateConcepts && this.state.templateConcepts.includes(this.state.concept)) {
-      conceptMenu = this.state.templateConcepts;
-    } else if (this.state.onboardingConcepts && this.state.onboardingConcepts.includes(this.state.concept)) {
-      conceptMenu = this.state.onboardingConcepts;
-    }
+		let link = "";
+		// learner centric link
+		if (this.state.mode === this.LearnerMode.instruction) {
+			if (this.state.readOrWrite === this.Type.read) {
+				link = "Learn to read code";
+			} else if (this.state.readOrWrite === this.Type.write) {
+				link = "Learn to write code";
+			}
+		} else if (this.state.mode === this.LearnerMode.practice) {
+			if (this.state.readOrWrite === this.Type.read) {
+				link = "Practice reading code";
+			} else if (this.state.readOrWrite === this.Type.write) {
+				link = "Practice writing code";
+			}
+		}
 
-    var conceptAnchorEl = this.state.conceptAnchorEl;
-    var typeAnchorEl = this.state.typeAnchorEl;
-
+    let typeAnchorEl = this.state.typeAnchorEl;
     return (
       <div>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href={"#"} aria-owns={conceptAnchorEl ? "concept-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, true)}>{this.state.concept}</a>
-              <Menu id={"concept-menu"}
-                    anchorEl={conceptAnchorEl}
-                    transformOrigin={{
-                      vertical: -45,
-                      horizontal: 20,
-                    }}
-                    open={Boolean(conceptAnchorEl)}
-                    onClose={this.handleMenuClose}>
-                {conceptMenu.map((item, index) => {
-                  return (
-                    <MenuItem key={index} onClick={this.handleMenuClose}>{item}</MenuItem>
-                  );
-                })}
-              </Menu>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#" aria-owns={typeAnchorEl ? "type-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, false)}>{readOrWrite}</a>
+            <li className="breadcrumb-item active">{conceptName}</li>
+            <li className="breadcrumb-item active">
+              <a href="#_" aria-owns={typeAnchorEl ? "type-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, false)}>{link}</a>
               <Menu id={"type-menu"}
                     anchorEl={typeAnchorEl}
                     transformOrigin={{
@@ -174,13 +218,34 @@ export default class BreadCrumbs extends Component {
                     }}
                     open={Boolean(typeAnchorEl)}
                     onClose={this.handleMenuClose}>
-                <MenuItem onClick={this.handleMenuClose}>Learn to Read Code</MenuItem>
-                <MenuItem onClick={this.handleMenuClose}>Practice Reading Code</MenuItem>
-                <MenuItem onClick={this.handleMenuClose}>Learn to Write Code</MenuItem>
-                <MenuItem onClick={this.handleMenuClose}>Practice Writing Code</MenuItem>
+                <Link to={`/instruction/${this.state.concept}/learn-to-read-code`}><MenuItem onClick={() => {
+                  this.props.clearCounterAndFeedback();
+                  this.storeState("instruction", 0, "READ", this.state.concept);
+                }}>Learn to Read Code</MenuItem></Link>
+								<Link to={`/practice/${this.state.concept}/practice-reading-code`}><MenuItem onClick={() => {
+                  this.props.clearCounterAndFeedback();
+                  this.storeState("exercise", 0, "READ", this.state.concept);
+                }}>Practice Reading Code</MenuItem></Link>
+                <Link to={`/instruction/${this.state.concept}/learn-to-write-code`}><MenuItem onClick={() => {
+                  this.props.clearCounterAndFeedback();
+                  this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
+                  this.storeState("instruction", 0, "WRITE", this.state.concept);
+                }}>Learn to Write Code</MenuItem></Link>
+								<Link to={`/practice/${this.state.concept}/practice-writing-code`}><MenuItem onClick={() => {
+                  this.props.clearCounterAndFeedback();
+                  this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
+                  this.storeState("exercise", 0, "WRITE", this.state.concept);
+                }}>Practice Writing Code</MenuItem></Link>
               </Menu>
             </li>
-            <li className="breadcrumb-item active" aria-current="page">{this.props.chosenInstruction ? this.props.chosenInstruction.title : ""}</li>
+						<li className="breadcrumb-item active">{
+							this.props.chosenInstruction ?
+								<p style={{display: 'inline'}}>
+									{this.props.chosenInstruction.title} <span style={{color: "#7986CB"}}>{" (" + this.props.progress + ")" }</span>
+								</p>
+									:
+								""}
+						</li>
           </ol>
         </nav>
       </div>
@@ -188,3 +253,4 @@ export default class BreadCrumbs extends Component {
   }
 }
 
+export default withRouter(BreadCrumbs);

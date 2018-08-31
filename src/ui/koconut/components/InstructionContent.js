@@ -1,14 +1,8 @@
 // @flow
 import React, {Component} from 'react';
 import ReactMarkdown from 'react-markdown';
-import LargeButton from './LargeButton';
 import CodeBlock from'./CodeBlock';
 import './InstructionContent.css';
-
-const largeButtonTypes = {
-  prev: "PREV",
-  next: "NEXT"
-}
 
 /**
  * InstructionContent is the main content of the instructions, along with

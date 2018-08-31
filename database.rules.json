@@ -1,0 +1,45 @@
+{
+  "rules": {
+    "site": {
+      ".read": true,
+   	  ".write": false
+    },
+    "ConceptExerciseMap": {
+      ".read" : "auth != null",
+        ".write" : "auth != null && root.child('Users').child(auth.uid).child('permission').val() === 'author'"
+    },
+    "Users" : {
+      "$uid" : {
+        ".read" : "auth != null && auth.uid == $uid",
+        "waiverStatus" : {
+          ".write" : "auth != null && auth.uid == $uid"
+        },
+        "permission" : {
+          ".write" : "false"
+        },
+        "state" : {
+          ".write" : "auth != null && auth.uid == $uid"
+        },
+        "Data": {
+          "AnswerSubmission" : {
+            ".write": "auth != null && auth.uid == $uid"
+          },
+            "NewPageVisit" : {
+            ".write": "auth != null && auth.uid == $uid"
+          },
+            "SessionEvents" : {
+            ".write": "auth != null && auth.uid == $uid"
+          },
+        }
+      }
+    },
+    "Exercises" : {
+      ".read" : "auth != null",
+      ".write" : "auth != null && root.child('Users').child(auth.uid).child('permission').val() === 'author'"
+    },
+    "Instructions" : {
+      ".read" : "auth != null",
+      ".write" : "auth != null && root.child('Users').child(auth.uid).child('permission').val() === 'author'"
+    }
+  }
+}

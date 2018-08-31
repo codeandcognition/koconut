@@ -8,6 +8,11 @@ import {MasteryModel} from '../data/MasteryModel';
 import ExerciseTypes from '../data/ExerciseTypes';
 import {BayesKT} from './BKT.js';
 import type {Exercise} from '../data/Exercises';
+import firebase from 'firebase/app';
+import 'firebase/database';
+import 'firebase/auth';
+//
+
 
 /**
  * Evaluates and calculates correctness of a student response, and the
@@ -67,22 +72,7 @@ class ResponseEvaluator {
     return this.calculateCertainty(response, this.BKT);
   }
 
-  /**
-   * Send a POST request to the API to compile and execute the given Java code
-   * @param code - the Java code to compile and execute
-   */
-  static executeJava(code: string): Promise<Object> {
-    return fetch('/api/python', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        id: 'Replacemelater', // TODO: Actually get an id
-        content: code,
-      })
-    });
-  }
+
 
   /**
    * Takes in an exercise and student response to update log and mastery model.
@@ -92,13 +82,14 @@ class ResponseEvaluator {
    * @param questionIndex - index of question being evaluated
    * @param questionType - OPTIONAL, for special new types (table and selectMultiple)
    * @param feedback - OPTIONAL, for special new types (table and selectMultiple)
+   * @param exerciseId - OPTIONAL, exercise Id, for firebase logging
    */
   static evaluateAnswer(exercise: Exercise, answer: string, next: Function, questionIndex: number,
-                        questionType: any, feedback: any) {
+                        questionType: any, feedback: any, exerciseId: any) {
     // no one can escape asyncronous programming!!!!
     // >:D
-
     // wrap it in a function for async
+
     let addResponseAndUpdate = (isCorrect, exercise) => {
       ResponseLog.addResponse( // TODO: replace '123' with a real ID
           '123', exercise.concepts,
@@ -123,40 +114,43 @@ class ResponseEvaluator {
         );
       }
 
+      let answerRegex = /[\.#\$\/\[\]]/;
+      let dataToPush = {
+        exerciseId,
+        questionIndex,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        answer: (!answerRegex.test(answer[questionIndex]) && answer[questionIndex] !== "") ? answer[questionIndex] : null,
+        correctness: isCorrect
+      };
+      let uid = firebase.auth().currentUser;
+      if (uid) {
+        uid = uid.uid; // makes flow happier, don't wanna worry about it right now
+      }
+
+      firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
+
+
       // this.printImportantStuff(); //Debug/demo
       next();
     };
 
     // actual logic
     // it's backwards, I know :(
-    if(exercise.questions[questionIndex].type === ExerciseTypes.writeCode ||
-       exercise.questions[questionIndex].type === ExerciseTypes.fillBlank) {
-      this.executeJava(answer)//ExercisePool.getAnswer(exercise);
-      .then((res) => {
-        return res.json();
-      }).then((json) => {
-        console.log(json);
-        addResponseAndUpdate(json.stdout === exercise.questions[questionIndex].answer, exercise);
-      }).catch((err) => {
-        console.log(err);
-        addResponseAndUpdate(false, exercise); // TODO: remove hardcode
-      });
-    } else {
-      let gotCorrect = true;
-      if(questionType === "table") {
-        feedback[questionIndex].forEach((d) => {
-          // console.log(d);
-          d && d.forEach((e) => {
-            if(e === "incorrect") {
-              gotCorrect = false;
-            }
-          })
+    let gotCorrect = true;
+    if(questionType === "table") {
+      feedback[questionIndex].forEach((d) => {
+        // console.log(d);
+        d && d.forEach((e) => {
+          if(e === "incorrect") {
+            gotCorrect = false;
+          }
         })
-      } else {
-        answer = exercise.questions[questionIndex].answer;
-      }
-      addResponseAndUpdate(gotCorrect, exercise);
+      })
+    } else {
+      gotCorrect = feedback[questionIndex].indexOf('incorrect') === -1
     }
+    addResponseAndUpdate(gotCorrect, exercise);
+    
   }
 
   /**

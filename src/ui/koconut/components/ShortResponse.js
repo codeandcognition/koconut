@@ -1,6 +1,8 @@
 // @flow
 import React, {Component} from 'react';
 import './ShortResponse.css';
+import CodeBlock from './CodeBlock';
+import ReactMarkdown from 'react-markdown';
 
 type Props = {
   inputHandler: Function
@@ -25,7 +27,12 @@ class  ShortResponse extends Component {
   render() {
     return (
         <div className='short-response'>
-          <h5>Type your response here:</h5>
+          <div style={{textAlign: "left"}}>
+            <ReactMarkdown className={"flex-grow-1"}
+                         source={this.props.prompt}
+                         renderers={{CodeBlock: CodeBlock}}/>
+          </div>
+          <p>Type your response here:</p>
           {
             <div className="short-response-value">
               <textarea value={this.state.value} disabled={this.props.feedback ? true : false} onChange={(event) => {

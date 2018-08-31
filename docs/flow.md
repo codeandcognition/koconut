@@ -203,8 +203,9 @@ export default class NewClass extends Component {
 
 	// I should have mentioned that you have to flow type your parameters to functions
 	// which is what we do for the constructor with props
-	functionA(numberIn: number) {
+	functionA(numberIn: number): string {
 		this.setState({stateA: numberIn});
+		return "abc";
 	}
 
 	render() {
@@ -212,3 +213,6 @@ export default class NewClass extends Component {
 	}
 }
 ```
+
+## August 2018 - William
+We have started to worry less about Flow, and mostly use "any". To future people working on this, depending on what your views are, you might want to change this. Strict typing hasn't really helped us currently in any way, especially because Flow itself is pretty slow to run, and it really only crashes the build process which isn't very useful, because we make changes on the fly. I personally don't view type checking as super important, because I can keep track of variable types in my head to avoid mistakes. If you find that you like the strictness that other languages provide, then feel free to use it as intended. 
