@@ -71,6 +71,7 @@ class Response extends Component {
                           questionIndex={index}
                           fIndex={this.props.fIndex}
                           answer={answer[index]}
+                          prompt={this.props.question.prompt}
                 />;
       case(Types.checkboxQuestion):
         return <CheckboxQuestion choices={choices} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
