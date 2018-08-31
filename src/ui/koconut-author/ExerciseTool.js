@@ -606,8 +606,8 @@ class ExerciseTool extends Component {
   saveQuestionEditsLocally() {
   	let exercise = Object.assign({}, this.state.currentExercise);
   	if (this.state.isFollowup) {
-  		let question = Object.assign({}, exercise.questions[this.state.currentQuestionIndex]);
-  		let followupQuestions = Object.assign({}, question.followupQuestions);
+  		let question = Object.assign([], exercise.questions[this.state.currentQuestionIndex]);
+  		let followupQuestions = Object.assign([], question.followupQuestions);
   		followupQuestions[this.state.currentFIndex] = this.state.currentQuestion;
   		question.followupQuestions = followupQuestions;
   		exercise.questions[this.state.currentQuestionIndex] = question;
