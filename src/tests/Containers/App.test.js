@@ -8,12 +8,19 @@ Enzyme.configure({ adapter: new Adapter() });
 
 // mocking firebase functions to make sure things are called correctly
 const firebase = {
-  auth: () => firebaseAuth()
+  auth: () => firebaseAuth(),
+  database: () => firebaseDatabase()
 }
 
+const firebaseDatabase = jest.fn().mockImplementation(() => {
+  return {
+    ref: (a) => {return {set: () => {return "set"}}}
+  }
+})
 const firebaseAuth = jest.fn().mockImplementation(() => {
   return {
-    onAuthStateChanged: () => onAuthStateChanged()
+    onAuthStateChanged: () => onAuthStateChanged(),
+    currentUser: {uid: 'asdf'}
   };
 });
 
@@ -41,54 +48,6 @@ describe('<App /> container', () => {
   it('display state at beginning is LOAD', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
     expect(wrapper.state('display')).toBe('LOAD');
-    wrapper.unmount();
-  });
-
-  // if this test fails, it means the display types have been changed
-  // and you will have to add or remove the appropriate tests and
-  // add a spy to their respective methods. 
-  it('renderDisplay calls the correct displays', () => {
-    const wrapper = shallow(<App firebase={firebase}/>);
-    const displayTypes = wrapper.instance().returnDisplayTypes();
-
-    const renderDisplaySpy = jest.spyOn(wrapper.instance(), 'renderDisplay');
-    expect(renderDisplaySpy).toHaveBeenCalledTimes(0);
-
-    const signin = jest.spyOn(wrapper.instance(), 'renderSignin');
-    const signup = jest.spyOn(wrapper.instance(), 'renderSignup');
-    const welcome = jest.spyOn(wrapper.instance(), 'renderWelcome');
-    const feedback = jest.spyOn(wrapper.instance(), 'renderExercise');
-    const concept = jest.spyOn(wrapper.instance(), 'renderConceptSelection');
-    const world = jest.spyOn(wrapper.instance(), 'renderWorldView');
-    const load = jest.spyOn(wrapper.instance(), 'renderLoadView');
-    const instruct = jest.spyOn(wrapper.instance(), '_renderInstructionView');
-    const author = jest.spyOn(wrapper.instance(), 'renderAuthorView');
-
-    expect(signin).toHaveBeenCalledTimes(0);
-    expect(signup).toHaveBeenCalledTimes(0);
-    expect(welcome).toHaveBeenCalledTimes(0);
-    expect(feedback).toHaveBeenCalledTimes(0);
-    expect(concept).toHaveBeenCalledTimes(0);
-    expect(world).toHaveBeenCalledTimes(0);
-    expect(load).toHaveBeenCalledTimes(0);
-    expect(instruct).toHaveBeenCalledTimes(0);
-    expect(author).toHaveBeenCalledTimes(0);
-
-    Object.keys(displayTypes).forEach((d, i) => {
-      wrapper.setState({display: displayTypes[d]});
-      expect(renderDisplaySpy).toHaveBeenCalledTimes(i + 1);
-    })
-
-    expect(signin).toHaveBeenCalledTimes(1);
-    expect(signup).toHaveBeenCalledTimes(1);
-    expect(welcome).toHaveBeenCalledTimes(1);
-    expect(feedback).toHaveBeenCalledTimes(2); // for some reason feedback is called 2 times
-    expect(concept).toHaveBeenCalledTimes(1);
-    expect(world).toHaveBeenCalledTimes(1);
-    expect(load).toHaveBeenCalledTimes(1);
-    expect(instruct).toHaveBeenCalledTimes(1);
-    expect(author).toHaveBeenCalledTimes(1);
-
     wrapper.unmount();
   });
 
@@ -155,18 +114,11 @@ describe('<App /> container', () => {
     wrapper.setState({counter: 3});
     wrapper.instance().generateExercise(concept, exerciseType, generatorFilled);
     expect(generateExercise).toHaveBeenCalledTimes(2);
-    expect(switchToWorldView).toHaveBeenCalledTimes(1);
     expect(wrapper.state().error).toBe(true);
-    expect(wrapper.state().errorMessage).toBe('Looks like we ran out of questions for this concept, stay-tuned for more!');
+    expect(wrapper.state().errorMessage).toBe('Sorry, there are no exercises available for this concept right now.');
     wrapper.setState({counter: 2});
     wrapper.instance().generateExercise(concept, exerciseType, generatorFilled);
     expect(generateExercise).toHaveBeenCalledTimes(3);
-    expect(wrapper.state().error).toBe(false);
-    expect(wrapper.state().display).toBe(displayType.exercise);
-    expect(wrapper.state().exercise).toBe(1);
-    expect(wrapper.state().currentConcept).toBe(concept);
-    expect(wrapper.state().exerciseType).toBe(exerciseType);
-    expect(wrapper.state().counter).toBe(0);
 
     wrapper.unmount();
   });
