@@ -108,9 +108,10 @@ class MemoryTableQuestion extends Component {
 
 	render () {
 		let size = Object.keys(this.props.question.answer).length;
-		if (this.props.fIndex !== -1) {
+		if (this.props.fIndex === -1) { // TODO double check
 			size = Object.keys(JSON.parse(this.props.question.answer)).length;
 		}
+  
 		// determine the number of rows in the memory table
 		let rows = [];
 		for (let i = 0; i < size; i++) {
