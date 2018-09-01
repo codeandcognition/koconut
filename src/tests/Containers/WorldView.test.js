@@ -53,8 +53,8 @@ describe('<WorldView /> container', () => {
     );
     
     // test prop calls
-    expect(wrapper.props().generateExercise()).toBe(2);
-    expect(wrapper.props().getInstruction()).toBe(3);
+    expect(wrapper.props().children.props.generateExercise()).toBe(2);
+    expect(wrapper.props().children.props.getInstruction()).toBe(3);
     wrapper.unmount();
   });
 
