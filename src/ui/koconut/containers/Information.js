@@ -290,7 +290,10 @@ class Information extends Component {
               <Button variant={"outlined"} color={"primary"} onClick={() => {
                 this.props.nextQuestion();
                 this.props.resetAnswer();
-                this.setState({gaveUpCount: 0});
+                this.setState({
+                  gaveUpCount: 0,
+                  gaveUpArr: []
+                });
               }}>Continue</Button>
             </div>
           }
