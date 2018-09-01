@@ -870,7 +870,7 @@ class App extends Component {
     return(
 				<div>
 					{this.renderNavBar()}
-					<WorldView switchToWorldView={this.switchToWorldView} generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
+					<WorldView firebase={this.props.firebase} switchToWorldView={this.switchToWorldView} generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
 				</div>
     )
   }

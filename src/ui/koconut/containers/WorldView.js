@@ -7,8 +7,6 @@ import ConceptCard from './../components/ConceptCard';
 import {t} from '../../../data/ConceptAbbreviations';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
-import firebase from 'firebase/app';
-import 'firebase/auth';
 
 type Props = {
 	setFirebaseUser: Function,
@@ -55,7 +53,7 @@ class WorldView extends Component {
 
   componentDidMount() {
   	this.mounted = true;
-  	this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+  	this.authUnsub = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
   		if (this.mounted) {
 				this.setState({loading: false}, () => {
 					if (!user) {
@@ -63,12 +61,14 @@ class WorldView extends Component {
 					}
 				});
 			}
-		})
+		}) : null;
 	}
 
 	componentWillUnmount() {
   	// unlisten for auth changes
-		this.authUnsub();
+    if (this.authUnsub) {
+		  this.authUnsub();
+    }
 		this.mounted = false;
 	}
 

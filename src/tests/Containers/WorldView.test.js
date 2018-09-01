@@ -5,6 +5,32 @@ import React from 'react';
 import Enzyme, {shallow, mount} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import ConceptCard from '../../ui/koconut/components/ConceptCard';
+import {MemoryRouter} from 'react-router';
+
+const firebase = {
+  auth: () => firebaseAuth(),
+  database: () => firebaseDatabase()
+}
+
+const firebaseDatabase = jest.fn().mockImplementation(() => {
+  return {
+    ref: (a) => {return {set: () => {return "set"}}}
+  }
+})
+const firebaseAuth = jest.fn().mockImplementation(() => {
+  return {
+    onAuthStateChanged: () => onAuthStateChanged(),
+    currentUser: {uid: 'asdf'}
+  };
+});
+
+const onAuthStateChanged = jest.fn().mockImplementation((fbUser) => {
+  return () => stopWatchingAuthCallback();
+});
+
+const stopWatchingAuthCallback = jest.fn().mockImplementation(() => {
+  return null;
+});
 
 // configure enzyme to work with React version 16
 Enzyme.configure({ adapter: new Adapter() });
@@ -19,10 +45,11 @@ describe('<WorldView /> container', () => {
   }
 
   it('WorldView mounts correctly', () => {
-    const wrapper = mount(
+    const wrapper = mount(<MemoryRouter initialEntries={['/']}>
       <WorldView 
+        firebase={firebase}
         generateExercise={generateExercise}
-        getInstruction={getInstruction}/>
+        getInstruction={getInstruction}/></MemoryRouter>
     );
     
     // test prop calls
