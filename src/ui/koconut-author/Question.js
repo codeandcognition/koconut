@@ -184,9 +184,9 @@ class Question extends Component {
 		return (
 				<div style={{marginTop: '4%'}}>
 					<p style={{color: '#3F51B5'}}>Python code to run <i>before</i> learner's code <span style={this.fieldReqs.optional}>optional</span></p>
-					<textarea style={textArea} onChange={this.handleChange('preCondition')}/>
+					<textarea style={textArea} onChange={this.handleChange('preCondition')} value={this.state.currentQuestion.preCondition}/>
 					<p style={{color: '#3F51B5'}}>Python code to run <i>after</i> learner's code <span style={this.fieldReqs.optional}>optional</span></p>
-					<textarea style={textArea} onChange={this.handleChange('preCondition')}/>
+					<textarea style={textArea} onChange={this.handleChange('postCondition')} value={this.state.currentQuestion.postCondition}/>
 				</div>
 		);
 	}
