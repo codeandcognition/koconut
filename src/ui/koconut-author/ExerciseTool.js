@@ -101,7 +101,9 @@ class ExerciseTool extends Component {
 			hint: "",
 			feedback: {},
 			followupPrompt: "",
-			followupQuestions: []
+			followupQuestions: [],
+			preCondition: "",
+			postCondition: ""
 		},
 		table: {
 			prompt: "",
@@ -418,7 +420,7 @@ class ExerciseTool extends Component {
 				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalFQuestions === 0 ? currentFIndex : currentFIndex + 1} of {totalFQuestions}</p>}
 				<div className={"question-container"}>
 					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex - 1 : currentIndex - 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "LEFT")}>
-						<i className="fa fa-chevron-left" aria-hidden="true"></i>
+						<i className="fa fa-chevron-left" aria-hidden="true"/>
 					</button>
 					<Question addQuestion={this.addQuestion}
 										editMode={this.state.editMode}
@@ -430,7 +432,7 @@ class ExerciseTool extends Component {
 										handleUpdateQuestion={this.saveQuestionEditsLocally}
 										currentCell={this.state.currentCell} />
 					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex + 1 : currentIndex + 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "RIGHT")}>
-						<i className="fa fa-chevron-right" aria-hidden="true"></i>
+						<i className="fa fa-chevron-right" aria-hidden="true"/>
 					</button>
 				</div>
 			</div>
