@@ -160,6 +160,8 @@ class Exercise extends Component {
             exerciseId={this.props.exerciseId}
             readOrWrite={this.props.readOrWrite}
             instructionOrPractice={"PRACTICE"}
+            generateExercise={this.props.generateExercise}
+            concept={this.props.concept}
             clearCounterAndFeedback={this.props.clearCounterAndFeedback}
           />
 					{!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderExercise()}

@@ -255,7 +255,7 @@ class InstructionView extends Component {
 								:
 								<div className={"overallView"}>
 									<BreadCrumbs
-											conceptType={this.props.conceptType}
+											concept={this.props.conceptType}
 											readOrWrite={this.props.readOrWrite}
 											chosenInstruction={chosenInstruction}
 											instructionOrPractice={"INSTRUCTION"}

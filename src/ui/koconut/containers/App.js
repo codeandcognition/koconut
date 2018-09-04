@@ -855,6 +855,7 @@ class App extends Component {
               clearCounterAndFeedback={this.clearCounterAndFeedback}
               sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
               exerciseId={this.state.exerciseId}
+							generateExercise={this.generateExercise}
 					/>
 				</div>
     );
@@ -878,7 +879,10 @@ class App extends Component {
     return(
 				<div>
 					{this.renderNavBar()}
-					<WorldView firebase={this.props.firebase} switchToWorldView={this.switchToWorldView} generateExercise={this.generateExercise} getInstruction={this.getInstruction}/>
+					<WorldView firebase={this.props.firebase}
+										 switchToWorldView={this.switchToWorldView}
+										 generateExercise={this.generateExercise}
+										 getInstruction={this.getInstruction}/>
 				</div>
     )
   }
@@ -894,7 +898,7 @@ class App extends Component {
 					<InstructionView conceptType={this.state.currentConcept}
 													 readOrWrite={this.state.instructionType}
 													 setError={this.setInstructionViewError}
-													 generateExercise={this.props.generateExercise}
+													 generateExercise={this.generateExercise}
 													 storeUserState={this.storeState}
 													 sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
 													 exerciseId={this.state.exerciseId}
