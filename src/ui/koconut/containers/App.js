@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react';
+import { Link} from "react-router-dom";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import './App.css';
 import PopOverMessage from './PopoverMessage';
@@ -222,14 +223,12 @@ class App extends Component {
         this.setState({
           error: true,
           errorMessage: 'Sorry, there are no exercises available for this concept right now.'
-        });
+        }, this.storeState("exercise", this.state.counter, this.state.exerciseType, concept));
       } else if (this.state.counter === exercises.length) { // reached the end of the list
-        // go back to the world view
-        this.switchToWorldView();
         this.setState({
           error: true,
           errorMessage: 'Looks like we ran out of questions for this concept, stay-tuned for more!'
-        });
+        }, this.storeState("exercise", this.state.counter, this.state.exerciseType, concept));
       } else {
         this.setState({
           display: displayType.exercise,
@@ -257,7 +256,7 @@ class App extends Component {
 			type: type,
 			concept: concept,
 			counter: counter
-		}
+		};
 		let userId = this.props.firebase.auth().currentUser.uid;
 		let userRef = this.props.firebase.database().ref('Users/' + userId + '/state');
 		userRef.set(state);
@@ -900,19 +899,17 @@ class App extends Component {
 	 */
 	renderDisplay() {
 		return (
-				<Router>
-					<Switch>
-						<Route exact path={Routes.home} component={() => this.renderSignin()}/>
-						<Route exact path={Routes.signin} component={() => this.renderSignin()}/>
-						<Route exact path={Routes.signup} component={() => this.renderSignup()}/>
-						<Route exact path={Routes.welcome} component={() => this.renderWelcome()}/>
-						<Route exact path={Routes.worldview} component={() => this.renderWorldView()}/>
-						<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
-						<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
-						<Route exact path={Routes.practice} render={() => this.renderExercise()}/>
-						<Redirect to={Routes.home} />
-					</Switch>
-				</Router>
+			<Switch>
+				<Route exact path={Routes.home} component={() => this.renderSignin()}/>
+				<Route exact path={Routes.signin} component={() => this.renderSignin()}/>
+				<Route exact path={Routes.signup} component={() => this.renderSignup()}/>
+				<Route exact path={Routes.welcome} component={() => this.renderWelcome()}/>
+				<Route exact path={Routes.worldview} component={() => this.renderWorldView()}/>
+				<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
+				<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
+				<Route exact path={Routes.practice} render={() => this.renderExercise()}/>
+				<Redirect to={Routes.home} />
+			</Switch>
 		);
 	}
 
@@ -926,14 +923,16 @@ class App extends Component {
 
   render() {
     return (
-        <div className="App">
-          <MuiThemeProvider theme={this.theme}>
-            <div className="main">
-              {this.renderDisplay()}
-							{this.state.error && this.renderErrorMessage()}
-            </div>
-          </MuiThemeProvider>
-				</div>
+					<div className="App">
+						<Router>
+							<MuiThemeProvider theme={this.theme}>
+								<div className="main">
+									{this.renderDisplay()}
+									{this.state.error && this.renderErrorMessage()}
+								</div>
+							</MuiThemeProvider>
+						</Router>
+					</div>
 		);
 	}
 }

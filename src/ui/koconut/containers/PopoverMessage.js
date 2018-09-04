@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
+import { Link} from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Routes from './../../../Routes';
 
 class PopOver extends Component {
 	constructor(props) {
 		super(props);
-		// this.handleClose = this.handleClose.bind(this);
 		this.state = {
 			open: true,
 			dialogText: this.props.errorMessage
@@ -48,10 +49,12 @@ class PopOver extends Component {
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
-						<Button onClick={() => this.handleClose()}
-										color="primary" autoFocus>
+						<Link to={Routes.worldview}>
+							<Button onClick={() => this.handleClose()}
+													color="primary" autoFocus>
 							Close
-						</Button>
+							</Button>
+						</Link>
 					</DialogActions>
 				</Dialog>
 
