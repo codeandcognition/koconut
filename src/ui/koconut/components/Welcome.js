@@ -22,13 +22,13 @@ const strings = {
       "Guided learning -- you're not sure what to study"]
   },
   language: {
-    desc: "Language: Java",
-    rationale: "We're using Java because it's the introductory language in University of Washington CS courses.",
-    example_desc: "This is an example of Java code:",
-    example_code: ["int x = 1337;", "System.out.println(\"Hi!\");", "System.out.println(\"My name is \" + x);"]
+    desc: "Language: Python",
+    rationale: "We're using Python because it is lightweight and commonly used as an introductory computer science course programming language.",
+    example_desc: "This is an example of Python code:",
+    example_code: ["x = 1337", "print(\"Hi!\")", "print(\"My name is \" + x)"]
   },
   nsf: "this project is NSF funded",
-  agreement: "I have read and understand the purposes of this program.",
+  agreement: "I have read and understand the purposes of this program. I understand that my usage data will be logged and anonymized. For preliminary tests, I understand that I can request to have my data deleted.",
   iagree: "I Agree"
 }
 
