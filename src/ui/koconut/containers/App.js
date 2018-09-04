@@ -568,6 +568,18 @@ class App extends Component {
       let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
       let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
       let preCondition = question.preCondition ? "\n"+question.preCondition+"\n" : "";
+
+      /** 
+        * This following code will replace `<SEED>` in the precondition with a randomly generated
+        * number that is shared between both the user's answer and the actual answer.
+        * 
+        * SEED CAN ONLY BE SET ONCE PER PRECONDITION
+        */
+      let seedCheck = preCondition.split("<SEED>");
+      if(seedCheck.length > 1) {
+        preCondition = `${seedCheck[0]}${Math.random()}${seedCheck[1]}`;
+      }
+
       let postCondition = question.postCondition ? "\n"+question.postCondition+"\n" : "";
       let executedAnswer = this.runCode(preCondition + learnerAnswer + postCondition);
       let expectedAnswer = this.runCode(preCondition + question.answer + postCondition);
