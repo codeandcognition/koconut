@@ -55,13 +55,29 @@ class WorldView extends Component {
   	this.mounted = true;
   	this.authUnsub = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
   		if (this.mounted) {
-				this.setState({loading: false}, () => {
+				this.setState({loading: true}, () => {
 					if (!user) {
 						this.props.history.push(Routes.signin);
 					}
+					this.checkWaiverStatus(user);
 				});
 			}
 		}) : null;
+	}
+
+	/**
+	 * Function to ensure that learner can't change the route to get to the world view
+	 * @param user
+	 */
+	checkWaiverStatus(user) {
+		let databaseRef = this.props.firebase.database().ref("Users/" + user.uid + "/waiverStatus");
+		databaseRef.once("value", (snapshot) => {
+			if (snapshot == null || !snapshot.val()) {
+				this.props.history.push(Routes.welcome);
+			} else {
+				this.setState({loading: false});
+			}
+		})
 	}
 
 	componentWillUnmount() {
