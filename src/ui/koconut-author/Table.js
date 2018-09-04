@@ -3,6 +3,8 @@ import Button from '@material-ui/core/Button/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import FormControl from '@material-ui/core/FormControl';
+import NativeSelect from '@material-ui/core/NativeSelect';
 import Cell from './Cell';
 
 class Table extends Component {
@@ -25,6 +27,12 @@ class Table extends Component {
 			}
 		}
 	}
+
+	Difficulty = {
+		low: 0,
+		med: 1,
+		high: 2
+	};
 
 	fieldReqs = {
 		required: {
@@ -56,6 +64,7 @@ class Table extends Component {
 	renderTableQuestion() {
 		return (
 				<div>
+					{this.renderDifficultyForm()}
 					{this.renderColumnNamesForm()}
 					{this.renderNumRowsForm()}
 					<br/>
@@ -108,6 +117,30 @@ class Table extends Component {
 					});
 				}} />
 			</div>
+		);
+	}
+
+	renderDifficultyForm() {
+		return (
+				<div>
+					<p style={{color: '#3F51B5'}}>Difficulty level <span style={this.fieldReqs.required}>required</span></p>
+					<FormControl>
+						<NativeSelect value={this.state.currentTable.difficulty} onChange={evt => {
+							let table = Object.assign({}, this.state.currentTable);
+							table.difficulty = evt.target.value;
+							this.setState({currentTable: table});
+						}}>
+							<option>Select difficulty level</option>
+							{
+								Object.keys(this.Difficulty).map((level, key) => {
+									let value = this.Difficulty[level];
+									return <option key={key}>{value}</option>
+								})
+							}
+						</NativeSelect>
+					</FormControl>
+					<br/><br/>
+				</div>
 		);
 	}
 
@@ -174,6 +207,7 @@ class Table extends Component {
 				</div>
 		);
 	}
+
 
 	/**
 	 * Renders the cell tiles for the table

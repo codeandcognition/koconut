@@ -22,7 +22,8 @@ class AuthorView extends Component {
 		}
 	}
 
-	componentWillMount() {
+	componentDidMount() {
+		this.mounted = true;
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
 			if (user) {
 				this.setState({currentUser: user}, () => {
@@ -44,7 +45,7 @@ class AuthorView extends Component {
 		databaseRef.once("value", snapshot => {
 			if (snapshot && snapshot.val()) {
 				let snap = snapshot.val();
-				if (snap.permission === "author") {
+				if (snap.permission === "author" && this.mounted) {
 					this.setState({loading: false});
 				} else {
 					this.props.history.push(Routes.signin);
@@ -56,6 +57,7 @@ class AuthorView extends Component {
 
 	componentWillUnmount() {
 		this.authUnsub();
+		this.mounted = false;
 	}
 
 	toggleDisplay(tabKey) {

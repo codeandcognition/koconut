@@ -112,7 +112,8 @@ class ExerciseTool extends Component {
 			colNames: [],
 			data: [],
 			followupPrompt: "",
-			followupQuestions: []
+			followupQuestions: [],
+			difficulty: -1,
 		}
 	};
 

@@ -75,7 +75,9 @@ class WorldView extends Component {
 			if (snapshot == null || !snapshot.val()) {
 				this.props.history.push(Routes.welcome);
 			} else {
-				this.setState({loading: false});
+				if (this.mounted) {
+					this.setState({loading: false});
+				}
 			}
 		})
 	}

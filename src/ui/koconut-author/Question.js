@@ -504,8 +504,7 @@ class Question extends Component {
 						{this.renderQuestionTypeDropdown()}
 						<br/>
 						{this.renderAnswer()}
-						<br/>
-						{this.renderDifficultyField()}
+						{!this.props.insideTable && <div><br/> {this.renderDifficultyField()}</div>}
 						<br/>
 						{this.renderHintField()}
 						<br/>
