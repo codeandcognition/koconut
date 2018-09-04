@@ -413,9 +413,9 @@ class ExerciseTool extends Component {
 		let totalFQuestions = (this.state.isFollowup && this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions) ? this.state.currentExercise.questions[this.state.currentQuestionIndex].followupQuestions.length : 0;
 		return (
 			<div>
-				<p className={"question-tracker"}>Question {totalQuestions == 0 ? currentIndex : currentIndex + 1} of {totalQuestions}</p>
+				<p className={"question-tracker"}>Question {totalQuestions === 0 ? currentIndex : currentIndex + 1} of {totalQuestions}</p>
 				{!this.state.isFollowup && this.state.currentQuestion.followupQuestions && <p className={"question-tracker"}>{this.state.currentQuestion.followupQuestions.length} Follow-up Question{this.state.currentQuestion.followupQuestions.length !== 1 && 's'}</p>}
-				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalFQuestions == 0 ? currentFIndex : currentFIndex + 1} of {totalFQuestions}</p>}
+				{this.state.isFollowup && <p className={"question-tracker"}>Follow-up {totalFQuestions === 0 ? currentFIndex : currentFIndex + 1} of {totalFQuestions}</p>}
 				<div className={"question-container"}>
 					<button className={"question-nav-arrow"} onClick={() => this.navigateToQuestion(this.state.isFollowup ? currentFIndex - 1 : currentIndex - 1, this.state.isFollowup ? totalFQuestions - 1 : totalQuestions - 1, "LEFT")}>
 						<i className="fa fa-chevron-left" aria-hidden="true"></i>

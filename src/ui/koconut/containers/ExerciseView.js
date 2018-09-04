@@ -119,7 +119,7 @@ class Exercise extends Component {
     );
 	}
 
-	renderQuestion() {
+	renderExercise() {
   	return(
   			<div>
 					<Prompt exercise={this.props.exercise} />
@@ -162,7 +162,7 @@ class Exercise extends Component {
             instructionOrPractice={"PRACTICE"}
             clearCounterAndFeedback={this.props.clearCounterAndFeedback}
           />
-					{!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderQuestion()}
+					{!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderExercise()}
         </div>
     );
   }

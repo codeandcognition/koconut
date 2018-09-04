@@ -408,6 +408,7 @@ class App extends Component {
 		let answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
 		let addToFeedback = [];
 		allCells.forEach((d, i) => {
+
 			let arrayIndexToPushTo = Math.floor(i / colNames.length);
 			if (!addToFeedback[arrayIndexToPushTo]) {
 				addToFeedback[arrayIndexToPushTo] = [];
@@ -420,7 +421,7 @@ class App extends Component {
 				// it's for the greater good and expandability
 			} else if (answerArr &&
 					answerArr[arrayIndexToPushTo] && d.answer ===
-					answerArr[arrayIndexToPushTo][subArrayIndex]) {
+					answerArr[arrayIndexToPushTo][subArrayIndex].replace(new RegExp('\'', 'g'), "\"")) {
 				cellValue = "correct";
 			} else {
 				cellValue = "incorrect";
