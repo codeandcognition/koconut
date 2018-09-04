@@ -223,6 +223,7 @@ class BreadCrumbs extends Component {
                   this.storeState("instruction", 0, "READ", this.state.concept);
                 }}>Learn to Read Code</MenuItem></Link>
 								<Link to={`/practice/${this.state.concept}/practice-reading-code`}><MenuItem onClick={() => {
+								  this.props.generateExercise(this.props.concept, "READ");
                   this.props.clearCounterAndFeedback();
                   this.storeState("exercise", 0, "READ", this.state.concept);
                 }}>Practice Reading Code</MenuItem></Link>
@@ -232,6 +233,7 @@ class BreadCrumbs extends Component {
                   this.storeState("instruction", 0, "WRITE", this.state.concept);
                 }}>Learn to Write Code</MenuItem></Link>
 								<Link to={`/practice/${this.state.concept}/practice-writing-code`}><MenuItem onClick={() => {
+								  this.props.generateExercise(this.props.concept, "WRITE");
                   this.props.clearCounterAndFeedback();
                   this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
                   this.storeState("exercise", 0, "WRITE", this.state.concept);
