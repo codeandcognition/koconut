@@ -575,10 +575,7 @@ class App extends Component {
         * 
         * SEED CAN ONLY BE SET ONCE PER PRECONDITION
         */
-      let seedCheck = preCondition.split("<SEED>");
-      if(seedCheck.length > 1) {
-        preCondition = `${seedCheck[0]}${Math.random()}${seedCheck[1]}`;
-      }
+      preCondition = preCondition.replace("<SEED>", Math.random().toString());
 
       let postCondition = question.postCondition ? "\n"+question.postCondition+"\n" : "";
       let executedAnswer = this.runCode(preCondition + learnerAnswer + postCondition);
