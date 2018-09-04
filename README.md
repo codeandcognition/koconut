@@ -207,7 +207,7 @@ I wouldn't entirely call it bad code, but there is repeated code, and it feels m
 ### Conventions
 The existing code for the most part is split into a container/component structure. Normally components means it's reused universally throughout the app in different places, but we found that the existing code before us had it split to where containers were the large entire-page views and components were subcomponents of the view. I highly suggest following existing conventions, because if you don't, the people who work on this codebase after you will be even more confused than you are.
 
-### :dizzy:
+### \:dizzy\:
 There is a lot to take in. It's normal to be lost on an entire structure of an app, especially when being put smack dab in the middle of it all. Take it one issue at a time. See what needs to be fixed or added, trace to where a component is by using the React developer tools and browser developer console. Add a BUNCH of `console.log` statements to get your bearings. Eventually you will slowly understand more and more of the system. But you won't understand all of it-- I (William) would say that I don't. 
 
 ### Exercise view structure
