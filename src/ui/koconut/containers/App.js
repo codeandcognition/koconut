@@ -796,6 +796,7 @@ class App extends Component {
 	renderErrorMessage() {
 		return (<PopOverMessage toggleError={this.state.error}
 														errorMessage={this.state.errorMessage}
+														closeMessage={"Back to world view"}
 														resetError={this.resetError}/>);
 	}
 
