@@ -244,10 +244,13 @@ class InstructionView extends Component {
 	}
 
   render() {
+
     let chosenInstruction = null;
     if (this.state.instructionList) {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
+    let hasMultiplePages = this.state.instructionList && this.state.instructionList.length > 1;
+
     return (
 				<div ref={"instructionView"}>
 					{
@@ -268,8 +271,8 @@ class InstructionView extends Component {
 									/>
 									{this.state.instructionList && chosenInstruction &&
                   <div className={"content-container"}>
-                    <button className={"nav-arrow-btn left-arrow"}
-														onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left"/></button>
+										{hasMultiplePages && <button className={"nav-arrow-btn left-arrow"}
+														onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left"/></button>}
                     <div className={"instruct-content-container"}>
                       <InstructionTitle
                           instruction={chosenInstruction}/>
@@ -281,12 +284,13 @@ class InstructionView extends Component {
                           next={this.nextInstruction}
                       />
                     </div>
-                    <button className={"nav-arrow-btn right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right"/></button>
+										{hasMultiplePages && <button className={"nav-arrow-btn" +
+										" right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right"/></button>}
                   </div>
 									}
 								</div>
 					}
-					<div className={"dot-navigation-container"}>
+					{hasMultiplePages && <div className={"dot-navigation-container"}>
 						<div className={"dot-navigation-container2"}>
 							<ul className={"dot-navigation"}>
 								{this.state.instructionList && this.state.instructionList.map((item, index) => {
@@ -302,7 +306,7 @@ class InstructionView extends Component {
 								})}
 							</ul>
 						</div>
-					</div>
+					</div>}
 				</div>
     )
   }
