@@ -631,7 +631,7 @@ class App extends Component {
       return Sk.builtinFiles["files"][x];
     }
     let output = [];
-    Sk.configure({output: d => output.push(d), read: builtinRead});
+    Sk.configure({output: d => output.push(d), read: builtinRead, execLimit: 1000});
     try {
       Sk.importMainWithBody("<stdin>", false, code);
     } catch(e) {
