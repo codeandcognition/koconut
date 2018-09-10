@@ -490,6 +490,7 @@ describe('<App /> container', () => {
     expect(generateExercise.mock.calls[0][1]).toBe('');
     wrapper.unmount();
   });
+
   it('Skulpt works for basic code', () => {
     const wrapper = shallow(<App firebase={firebase}/>);
     let code = `a = 1 + 2\nb = 2 + 3\nc = a + b\nprint(c)`
@@ -503,4 +504,6 @@ describe('<App /> container', () => {
     expect(wrapper.instance().runCode(code)).toContain("TimeLimitError");
     wrapper.unmount();
   });
+
+  
 });
