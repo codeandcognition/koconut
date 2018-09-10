@@ -647,7 +647,7 @@ class App extends Component {
    * @param {number} fIndex followup question index
    */
   updateWrongAnswersCount(checkerForCorrectness: boolean, questionIndex: number, fIndex: number) {
-    var temp;
+    let temp;
     if (fIndex === -1) {
       temp = this.state.timesGotQuestionWrong;
       if (!temp[questionIndex]) {
