@@ -57,6 +57,11 @@ const InstructionView = Loadable({
     loader: () => import('./InstructionView'),
     loading: Loading,
 });
+// TODO: Delete this path later
+const AllExercises = Loadable({
+	loader: () => import('./AllExercises'),
+	loading: Loading,
+});
 
 
 // Display type enum
@@ -911,6 +916,19 @@ class App extends Component {
   }
 
 	/**
+	 * Path that links to all exercises
+	 * @returns {*}
+	 */
+  renderAllExercises() {
+  	// show all exercises view in development mode
+		if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+			return(<AllExercises/>);
+		} else {
+			return this.renderWorldView();
+		}
+	}
+
+	/**
 	 * predefined routes within koconut
 	 */
 	renderDisplay() {
@@ -924,6 +942,7 @@ class App extends Component {
 				<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
 				<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
 				<Route exact path={Routes.practice} render={() => this.renderExercise()}/>
+				<Route exact path={Routes.allexercises} render={() => this.renderAllExercises()}/>
 				<Redirect to={Routes.home} />
 			</Switch>
 		);
