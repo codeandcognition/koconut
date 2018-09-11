@@ -110,14 +110,12 @@ class AllExercises extends Component {
 									return (
 										<div key={index2}>
 											<h5>{this.formatCamelCasedString(concept.name)}</h5>
-                      {this.state.conceptExerciseMap[concept.name] && this.state.conceptExerciseMap[concept.name].map((exerciseId, index) => {
-												{this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise) => {
-                          {/* Place exercise info container here */}
-												})}
-												{this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise) => {
-													{/* Place exercise info container here */}
-												})}
-                      })}
+											{this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise) => {
+												{/* Place exercise info container here */}
+											})}
+											{this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise) => {
+												{/* Place exercise info container here */}
+											})}
 										</div>
 									);
 								})}
