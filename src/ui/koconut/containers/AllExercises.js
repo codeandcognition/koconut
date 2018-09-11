@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import "./AllExercises.css";
 import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import {t} from '../../../data/ConceptAbbreviations';
+import ExerciseTypes from '../../../data/ExerciseTypes.js';
 
 import ExerciseInfoContainer from './../components/ExerciseInfoContainer';
 
@@ -69,6 +70,25 @@ class AllExercises extends Component {
     return result;
   }
 
+  getExercisesByTypeAndConcept(exerciseType: string,
+                               concept: string,
+                               exerciseList: any, // calm down flow jeez
+                               conceptMapGetter: any): any { // made conceptMapGetter an any type to stop flow's anger
+    // what happens if there are more than 1 type?
+    let results = [];
+    let exerciseIds = [];
+    if(exerciseList && conceptMapGetter) {
+      conceptMapGetter[concept].forEach((exerciseId) => {
+        if ((exerciseType === "READ" && exerciseList[exerciseId] && ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type)) ||
+            (exerciseType === "WRITE" && exerciseList[exerciseId] && !ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type) )) {
+          results.push(exerciseList[exerciseId]);
+          exerciseIds.push(exerciseId);
+        }
+      })
+    }
+    return {results, exerciseIds};
+  }
+
 
 	render() {
     let sections = [
@@ -77,8 +97,6 @@ class AllExercises extends Component {
       {name: t.template, title: "Templates"}
     ];
 		let conceptList = this.getOrderedConcepts();
-
-		console.log(this.state.conceptExerciseMap);
 
     return (
 				<div className={"container"}>
@@ -93,7 +111,12 @@ class AllExercises extends Component {
 										<div key={index2}>
 											<h5>{this.formatCamelCasedString(concept.name)}</h5>
                       {this.state.conceptExerciseMap[concept.name] && this.state.conceptExerciseMap[concept.name].map((exerciseId, index) => {
-                        {/* Place exercise info container here */}
+												{this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise) => {
+                          {/* Place exercise info container here */}
+												})}
+												{this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise) => {
+													{/* Place exercise info container here */}
+												})}
                       })}
 										</div>
 									);
