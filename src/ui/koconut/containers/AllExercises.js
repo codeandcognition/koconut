@@ -110,9 +110,11 @@ class AllExercises extends Component {
 									return (
 										<div key={index2}>
 											<h5>{this.formatCamelCasedString(concept.name)}</h5>
+											<p>READ TYPES</p>
 											{this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise) => {
 												{/* Place exercise info container here */}
 											})}
+											<p>WRITE TYPES</p>
 											{this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise) => {
 												{/* Place exercise info container here */}
 											})}
