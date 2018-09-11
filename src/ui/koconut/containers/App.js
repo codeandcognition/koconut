@@ -207,6 +207,11 @@ class App extends Component {
 				});
 			}
 		});
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+      console.log("aaaaaaaaaaaaaaaaaa")
+    } else {
+        console.log("vbbbbbbbbbbbbbbbbbb")// production code
+    }
 	}
 
   /**
@@ -924,6 +929,7 @@ class App extends Component {
 				<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
 				<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
 				<Route exact path={Routes.practice} render={() => this.renderExercise()}/>
+        
 				<Redirect to={Routes.home} />
 			</Switch>
 		);
