@@ -22,7 +22,7 @@ class ExerciseTypes {
    */
   static isSurvey = function(type: string): boolean {
     return type === this.survey;
-  }
+  };
 
   /**
    * Determines whether the exercise type is a read type
