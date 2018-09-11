@@ -74,11 +74,13 @@ class AllExercises extends Component {
                                concept: string,
                                exerciseList: any, // calm down flow jeez
                                conceptMapGetter: any): any { // made conceptMapGetter an any type to stop flow's anger
+    // TODO: Address the isReadType issue, can the type just be brought out?
     // what happens if there are more than 1 type?
+
     let results = [];
     let exerciseIds = [];
     if(exerciseList && conceptMapGetter) {
-      conceptMapGetter[concept].forEach((exerciseId) => {
+     conceptMapGetter[concept] && conceptMapGetter[concept].forEach((exerciseId) => {
         if ((exerciseType === "READ" && exerciseList[exerciseId] && ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type)) ||
             (exerciseType === "WRITE" && exerciseList[exerciseId] && !ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type) )) {
           results.push(exerciseList[exerciseId]);
@@ -87,7 +89,7 @@ class AllExercises extends Component {
       })
     }
     return {results, exerciseIds};
-  }
+}
 
 
 	render() {
@@ -97,7 +99,6 @@ class AllExercises extends Component {
       {name: t.template, title: "Templates"}
     ];
 		let conceptList = this.getOrderedConcepts();
-
     return (
 				<div className={"container"}>
 					<h1>Koconut Exercises</h1>
@@ -111,11 +112,13 @@ class AllExercises extends Component {
 										<div key={index2}>
 											<h5>{this.formatCamelCasedString(concept.name)}</h5>
 											<p>READ TYPES</p>
-											{this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise) => {
-												{/* Place exercise info container here */}
-											})}
+											{this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise, index) => {
+                        let exerciseIds = this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["exerciseIds"];
+											  {/* Place exercise info container here */}
+                      })}
 											<p>WRITE TYPES</p>
-											{this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise) => {
+											{this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise, index) => {
+											  let exerciseIds = this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["exerciseIds"];
 												{/* Place exercise info container here */}
 											})}
 										</div>
