@@ -16,7 +16,7 @@ import type {Exercise} from '../../../data/Exercises';
 
 const Sk = require('skulpt');
 
-const Loading = () => <div>Loading content...</div>;
+const Loading = () => <div></div>;
 const Navbar = Loadable({
     loader: () => import('../components/Navbar'),
     loading: Loading,

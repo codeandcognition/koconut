@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
 import QuestionContainer from './QuestionContainer';
+import type {Exercise} from '../../../data/Exercises';
 
 type Props = {
-	// firebase id
-	// TODO: will need more
+	firebaseID: string,
+	quadrant: string,
+	exercise: Exercise,
+	renderCodeView: Function,
+	renderResponseView: Function
 };
 
 class ExerciseInfoContainer extends Component {
@@ -15,6 +19,7 @@ class ExerciseInfoContainer extends Component {
 		return (
 			<div>
 				<p>Firebase ID</p>
+				<p>Quadrant</p>
 				<QuestionContainer/>
 				<br/>
 				<QuestionContainer/>

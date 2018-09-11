@@ -2,8 +2,19 @@ import React, {Component} from 'react';
 import Types from '../../../data/ExerciseTypes.js';
 import Submit from './Submit';
 
-class ExerciseQuestion extends Component {
+type Props = {
+	key: number,
+	question: any,
+	index: number,
+	renderCodeView: Function,
+	renderResponseView: Function,
+	feedback: any,
+	answer: any,
+	submitHandler: Function,
+	fIndex: number
+};
 
+class ExerciseQuestion extends Component {
   render() {
 
     return (

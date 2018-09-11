@@ -41,7 +41,6 @@ class AllExercises extends Component {
         conceptExerciseMap: snapshot.val()
       })
     });
-
   }
 
   getOrderedConcepts(): ConceptKnowledge[] {
