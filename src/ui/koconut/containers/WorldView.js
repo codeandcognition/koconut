@@ -93,8 +93,8 @@ class WorldView extends Component {
 	renderWorld() {
 		let conceptList = this.getOrderedConcepts();
 		let titleLeft = [
-			{name: t.onboarding, title : "Intro"},
-			{name: t.semantic, title : "Code constructs"}
+			{name: t.onboarding, title : "Get started"},
+			{name: t.semantic, title : "Building blocks"}
 		];
 		let titleRight = [
 			{name: t.template, title : "Templates"}

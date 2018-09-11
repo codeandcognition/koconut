@@ -269,7 +269,7 @@ class InstructionView extends Component {
 									{this.state.instructionList && chosenInstruction &&
                   <div className={"content-container"}>
                     <button className={"nav-arrow-btn left-arrow"}
-														onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left"/></button>
+														onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left" style={{fontSize: '1em'}}/></button>
                     <div className={"instruct-content-container"}>
                       <InstructionTitle
                           instruction={chosenInstruction}/>

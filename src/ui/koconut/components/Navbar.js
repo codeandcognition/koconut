@@ -133,9 +133,7 @@ class Navbar extends Component {
                           aria-owns={this.menuAnchor ? 'menu' : null}
                           aria-haspopup="true"
                           id="menu-button">
-                      <img alt={"hamburger menu"}
-                      style={{width: "2vw", filter: "invert(100%)", pointerEvents: "none"}}
-                      src={"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/220px-Hamburger_icon.svg.png"}/>
+										<i className="fas fa-bars" style={{color: '#fff', fontSize: '1.5em'}}></i>
                   </Button>
                   <Menu id={'menu'}
                         anchorEl={this.state.menuAnchor}
