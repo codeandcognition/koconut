@@ -579,6 +579,8 @@ class App extends Component {
       let postCondition = question.postCondition ? "\n"+question.postCondition+"\n" : "";
       let executedAnswer = this.runCode(preCondition + learnerAnswer + postCondition);
       let expectedAnswer = this.runCode(preCondition + question.answer + postCondition);
+      console.log(executedAnswer);
+      console.log(expectedAnswer);
       if (executedAnswer === expectedAnswer) {
         temp[index] = 'correct';
       } else {
@@ -631,7 +633,7 @@ class App extends Component {
       return Sk.builtinFiles["files"][x];
     }
     let output = [];
-    Sk.configure({output: d => output.push(d), read: builtinRead});
+    Sk.configure({output: d => output.push(d), read: builtinRead, execLimit: 1000});
     try {
       Sk.importMainWithBody("<stdin>", false, code);
     } catch(e) {
@@ -647,7 +649,7 @@ class App extends Component {
    * @param {number} fIndex followup question index
    */
   updateWrongAnswersCount(checkerForCorrectness: boolean, questionIndex: number, fIndex: number) {
-    var temp;
+    let temp;
     if (fIndex === -1) {
       temp = this.state.timesGotQuestionWrong;
       if (!temp[questionIndex]) {
@@ -796,6 +798,7 @@ class App extends Component {
 	renderErrorMessage() {
 		return (<PopOverMessage toggleError={this.state.error}
 														errorMessage={this.state.errorMessage}
+														closeMessage={"Back to world view"}
 														resetError={this.resetError}/>);
 	}
 

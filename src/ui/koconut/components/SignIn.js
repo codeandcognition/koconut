@@ -68,7 +68,7 @@ class SignIn extends Component {
 							this.routeUser();
 						});
           }
-          return user.updateProfile({displayName: this.state.displayName});
+          // return user.updateProfile({displayName: this.state.displayName});
         })
         .catch((error) => {
           this.setState({errorMessage: error.message});
@@ -80,21 +80,24 @@ class SignIn extends Component {
 	 * status
 	 */
 	routeUser() {
-		let databaseRef = firebase.database()
-			.ref("Users/" + this.state.currentUser.uid);
-		databaseRef.once("value").then((snapshot) => {
-			if (snapshot !== null && snapshot.val() !== null) {
-				let snap = snapshot.val();
-				let waiverStatus = snap.waiverStatus;
-				if (waiverStatus) {
-					this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.worldview));
-				} else {
-					this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
-				}
-			} else {
-				this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
-			}
-		});
+    if(this.state.currentUser && this.state.currentUser.uid) {
+      let databaseRef = firebase.database()
+        .ref("Users/" + this.state.currentUser.uid);
+      databaseRef.once("value").then((snapshot) => {
+        if (snapshot !== null && snapshot.val() !== null) {
+          let snap = snapshot.val();
+          let waiverStatus = snap.waiverStatus;
+          if (waiverStatus) {
+            this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.worldview));
+          } else {
+            this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
+          }
+        } else {
+          this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
+        }
+      });
+    }
+		
 	}
 
 	/**

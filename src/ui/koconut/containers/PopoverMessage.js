@@ -52,7 +52,7 @@ class PopOver extends Component {
 						<Link to={Routes.worldview}>
 							<Button onClick={() => this.handleClose()}
 													color="primary" autoFocus>
-							Close
+							{this.props.closeMessage}
 							</Button>
 						</Link>
 					</DialogActions>

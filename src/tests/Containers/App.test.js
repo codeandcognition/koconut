@@ -490,14 +490,20 @@ describe('<App /> container', () => {
     expect(generateExercise.mock.calls[0][1]).toBe('');
     wrapper.unmount();
   });
-  it('stub test', () => {
-    const wrapper = shallow(<App firebase={firebase}/>);
 
+  it('Skulpt works for basic code', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    let code = `a = 1 + 2\nb = 2 + 3\nc = a + b\nprint(c)`
+    expect(wrapper.instance().runCode(code)).toBe('8');
     wrapper.unmount();
   });
-  it('stub test', () => {
-    const wrapper = shallow(<App firebase={firebase}/>);
 
+  it('Skulpt times out within 1000 ms', () => {
+    const wrapper = shallow(<App firebase={firebase}/>);
+    let code = `while True:\n  print('a')`
+    expect(wrapper.instance().runCode(code)).toContain("TimeLimitError");
     wrapper.unmount();
   });
+
+  
 });
