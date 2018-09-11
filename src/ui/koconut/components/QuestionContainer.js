@@ -1,14 +1,20 @@
 import React, {Component} from 'react';
 
 type Props = {
-	// TODO: Add to this
+	key: number,
+	index: number,
+	fIndex: number,
+	quadrant: string,
+	question: any,
+	answer: any,
+	renderCodeView: Function,
+	renderResponseView: Function
 };
 
 class QuestionContainer extends Component {
 	render() {
 		return(
 				<div>
-					<p>Quadrant Info</p>
 					<p>Exercise Question</p>
 					<p>Answer</p>
 				</div>

@@ -32,14 +32,15 @@ class AllExercises extends Component {
 	render() {
 	  let containerStyle = {
 	    padding: "30px"
-    }
+    };
 
 		return (
-				<div className={"container"}>
-					Display All exercises here
+				<div className={"container"} style={containerStyle}>
+					<h1>Koconut Exercises</h1>
 					<ExerciseInfoContainer/>
-					<br/>
+					--------------------------------------------
 					<ExerciseInfoContainer/>
+					--------------------------------------------
 				</div>
 		);
 	}
