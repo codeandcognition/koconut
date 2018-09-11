@@ -47,7 +47,7 @@ class ExerciseGenerator {
         }
       })
     }
-    return {results,exerciseIds};
+    return {results, exerciseIds};
   }
 
 

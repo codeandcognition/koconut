@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import { withRouter} from "react-router-dom";
 import firebase from 'firebase';
+import "./AllExercises.css";
+import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
+import {t} from '../../../data/ConceptAbbreviations';
 
 import ExerciseInfoContainer from './../components/ExerciseInfoContainer';
 
@@ -14,32 +17,73 @@ class AllExercises extends Component {
 	}
 
 	componentDidMount() {
-		this.getAllExercises();
+		this.getAllExercises(() => this.getExercisesForConcept("printStatements"));
 	}
 
-	getAllExercises() {
+	getAllExercises(callback: Function) {
 	  let componentRef = this;
 		let databaseRef = firebase.database().ref("Exercises");
 		databaseRef.on("value", function(snapshot) {
 		  let exercises = snapshot.val();
 			componentRef.setState({
 				allExercises: exercises
-			});
+			}, () => callback());
 		});
 	}
 
+  getOrderedConcepts(): ConceptKnowledge[] {
+    return MasteryModel.model.filter((concept) => concept.should_teach && concept.container).sort(
+        (a, b) => (b.dependencyKnowledge / b.knowledge -
+            a.dependencyKnowledge / a.knowledge));
+  }
+
+  getConceptsByType(orderedConcepts: ConceptKnowledge[], type: string) {
+    return orderedConcepts.filter(concept => {
+      return concept.type === type;
+    })
+  }
+
+  formatCamelCasedString(camelString: string) {
+    let result = "";
+    if (camelString && camelString.length !== 0) {
+      result = result + camelString.charAt(0).toUpperCase();
+      for (let i = 1; i < camelString.length; i++) {
+        if (camelString.charAt(i) === camelString.charAt(i).toUpperCase()) {
+          result = result + " "
+        }
+        result = result + camelString.charAt(i);
+      }
+    }
+    return result;
+  }
+
 
 	render() {
-	  let containerStyle = {
-	    padding: "30px"
-    }
+    let sections = [
+      {name: t.onboarding, title: "Getting Started"},
+      {name: t.semantic, title: "Building Blocks"},
+      {name: t.template, title: "Templates"}
+    ];
+		let conceptList = this.getOrderedConcepts();
 
-		return (
+    return (
 				<div className={"container"}>
-					Display All exercises here
-					<ExerciseInfoContainer/>
-					<br/>
-					<ExerciseInfoContainer/>
+					<h1>Koconut Exercises</h1>
+					{sections.map((item, index) => {
+						let section = t[item.name];
+						return (
+							<div className={"section"} key={index}>
+								<h2>{item.title}</h2>
+								{this.getConceptsByType(conceptList, section).map((concept, index2) => {
+									return (
+										<div key={index2}>
+											<h3>{this.formatCamelCasedString(concept.name)}</h3>
+										</div>
+									);
+								})}
+							</div>
+						);
+					})}
 				</div>
 		);
 	}
