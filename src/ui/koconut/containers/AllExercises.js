@@ -28,9 +28,13 @@ class AllExercises extends Component {
 
 
 	render() {
+	  let containerStyle = {
+	    padding: "30px"
+    }
+
 		return (
-				<div className={"container"}>
-					Display All exercises here
+				<div style={containerStyle} className={"container"}>
+					<h2>Koconut Exercises</h2>
 				</div>
 		);
 	}
