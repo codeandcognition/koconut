@@ -7,7 +7,8 @@ const routes = {
 	welcome: '/welcome',
 	instruction: '/instruction/:concept/:type',
 	practice: '/practice/:concept/:type',
-	error: '/404'
-}
+	error: '/404',
+	allexercises: "/worldview/all-exercises"
+};
 
 export default routes;
