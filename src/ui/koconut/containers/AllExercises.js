@@ -93,7 +93,7 @@ class AllExercises extends Component {
 									return (
 										<div key={index2}>
 											<h5>{this.formatCamelCasedString(concept.name)}</h5>
-                      {this.state.conceptExerciseMap[concept.name].map((exerciseId, index) => {
+                      {this.state.conceptExerciseMap[concept.name] && this.state.conceptExerciseMap[concept.name].map((exerciseId, index) => {
                         {/* Place exercise info container here */}
                       })}
 										</div>
