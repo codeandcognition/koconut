@@ -579,6 +579,8 @@ class App extends Component {
       let postCondition = question.postCondition ? "\n"+question.postCondition+"\n" : "";
       let executedAnswer = this.runCode(preCondition + learnerAnswer + postCondition);
       let expectedAnswer = this.runCode(preCondition + question.answer + postCondition);
+      console.log(executedAnswer);
+      console.log(expectedAnswer);
       if (executedAnswer === expectedAnswer) {
         temp[index] = 'correct';
       } else {
