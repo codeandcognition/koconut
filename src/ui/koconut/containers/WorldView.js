@@ -99,6 +99,7 @@ class WorldView extends Component {
 		let titleRight = [
 			{name: t.template, title : "Templates"}
 		];
+    console.log(conceptList);
 		return (
 				<div className="container" style={{marginTop: '12vh'}}>
 					<div style={{display: "flex"}}>
