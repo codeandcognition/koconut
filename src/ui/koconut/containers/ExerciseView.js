@@ -7,6 +7,7 @@ import BreadCrumbs from '../components/BreadCrumbs';
 import LoadingView from './../components/LoadingView';
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
+import ExerciseNavigation from '../components/ExerciseNavigation';
 
 type Props = {
   exercise: {
@@ -142,6 +143,7 @@ class Exercise extends Component {
 							nextQuestion={this.props.nextQuestion}
 							resetAnswer={this.resetAnswer}
 					/>
+          <ExerciseNavigation />
           {/*<ConceptLabel concepts={this.props.exercise &&
            this.props.exercise.concepts}/>*/}
 				</div>
