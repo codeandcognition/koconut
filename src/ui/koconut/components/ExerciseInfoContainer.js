@@ -7,7 +7,6 @@ type Props = {
 	quadrant: string,
 	exercise: Exercise,
 	renderCodeView: Function,
-	renderResponseView: Function
 };
 
 class ExerciseInfoContainer extends Component {
@@ -16,13 +15,33 @@ class ExerciseInfoContainer extends Component {
 	}
 
 	render() {
+		let questionList = [];
+		this.props.exercise.questions.forEach((question, index) => {
+			questionList.push(
+					<QuestionContainer key={index}
+														 question={question}
+														 renderCodeView={this.props.renderCodeView}
+														 answer={question.answer}
+														 feedback={[]}/>
+			);
+			// to account for followup questions
+			if (question.followupQuestions) {
+				question.followupQuestions.forEach((q, i) => {
+					questionList.push(
+							<QuestionContainer key={index + " " + i}
+																 question={q}
+																 renderCodeView={this.props.renderCodeView}
+																 answer={q.answer}
+																 feedback={[]}/>
+					);
+				})
+			}
+		});
 		return (
 			<div>
-				<p>Firebase ID</p>
-				<p>Quadrant</p>
-				<QuestionContainer/>
-				<br/>
-				<QuestionContainer/>
+				<p>Exercise ID</p>
+				<p>{this.props.firebaseID}</p>
+				{questionList}
 			</div>
 		);
 	}

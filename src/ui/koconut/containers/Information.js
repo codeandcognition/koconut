@@ -34,7 +34,9 @@ type Props = {
     resetAnswer: Function
 };
 class Information extends Component {
-  addGaveUp: Function
+  addGaveUp: Function;
+  renderResponseView: Function;
+  renderCodeView: Function;
   
   constructor(props: Props) {
     super(props);
@@ -48,6 +50,8 @@ class Information extends Component {
       gaveUpArr: []
     };
     this.addGaveUp = this.addGaveUp.bind(this);
+    this.renderResponseView = this.renderResponseView.bind(this);
+    this.renderCodeView = this.renderCodeView.bind(this);
   }
 
   componentWillMount() {
@@ -244,8 +248,8 @@ class Information extends Component {
                   index={index}
                   feedback={this.state.feedback[index]}
                   answer={this.state.answer}
-                  renderCodeView={this.renderCodeView(question, index, -1)}
-                  renderResponseView={this.renderResponseView(question, index, -1)}
+                  renderCodeView={this.renderCodeView}
+                  renderResponseView={this.renderResponseView}
                   renderFeedback={this.renderFeedback(question, index, -1)}
                   submitHandler={this.props.submitHandler}
                   fIndex={-1}
@@ -271,8 +275,8 @@ class Information extends Component {
                           index={index}
                           feedback={this.state.followupFeedback[index] ? this.state.followupFeedback[index][fIndex] : null}
                           answer={this.state.followupAnswers}
-                          renderCodeView={this.renderCodeView(fQuestion, index, fIndex)}
-                          renderResponseView={this.renderResponseView(fQuestion, index, fIndex)}
+                          renderCodeView={this.renderCodeView}
+                          renderResponseView={this.renderResponseView}
                           renderFeedback={this.renderFeedback(fQuestion, index, fIndex)}
                           submitHandler={this.props.submitHandler}
                           fIndex={fIndex}

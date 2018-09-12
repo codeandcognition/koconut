@@ -114,12 +114,22 @@ class AllExercises extends Component {
 											<p>READ TYPES</p>
 											{this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise, index) => {
                         let exerciseIds = this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["exerciseIds"];
-											  {/* Place exercise info container here */}
+											  return (
+											  		<ExerciseInfoContainer key={index}
+																									 firebaseID={exerciseIds[index]}
+																									 exercise={exercise}
+																									 renderCodeView={() => {}}/>
+												);
                       })}
 											<p>WRITE TYPES</p>
 											{this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise, index) => {
 											  let exerciseIds = this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["exerciseIds"];
-												{/* Place exercise info container here */}
+												return (
+														<ExerciseInfoContainer key={index}
+																									 firebaseID={exerciseIds[index]}
+																									 exercise={exercise}
+																									 renderCodeView={() => {}}/>
+												);
 											})}
 										</div>
 									);
