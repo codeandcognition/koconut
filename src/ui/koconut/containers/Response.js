@@ -44,7 +44,6 @@ class Response extends Component {
     if(this.props.question.data) {
       type = "table";
     }
-
     switch (type) {
       case(Types.multipleChoice):
         return <MultipleChoice  // want to modify the handle click? be prepared to dig deep in this nest

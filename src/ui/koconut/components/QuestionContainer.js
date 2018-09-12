@@ -38,7 +38,7 @@ class QuestionContainer extends Component {
 						type={type}
 						choices={question.choices}
 						answer={type === "memoryTable" ? {placeholder: -1} : [[], []]}
-						questionIndex={index}
+						questionIndex={0}
 						question={question}
 						updateHandler={this.props.updateHandler}
 						feedback={feedback}
