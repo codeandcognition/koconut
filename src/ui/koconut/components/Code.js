@@ -173,27 +173,29 @@ class Code extends Component {
     // let hint = this.state.hint;
     // let curLine = this.state.curLine;
 
-    return (
-        <div className={'codeContainer ' + (isWriteType ? 'full' : 'half') +
-        ' ' + this.props.type}>
-          <h4 style={{fontWeight: "bold", textAlign: "left"}}>Code</h4>
-          {(isWriteType && this.props.feedback) ?
-            '' :
-              <div ref="code"
-                   className={'code ' + (isWriteType ? 'full' : 'half') +
-                   ' ' + this.props.type}>
-                {!isWriteType && this.renderMarkdown()}
-                <div className="code-config">
-                  {/* <button onClick={this.handleHintRequest}>?</button> */}
-                  {reset}
-                </div>
+    if (this.props.type === "memoryTable") {
+      console.log(this.props.code);
+    }
 
-                {/* {hint ? <Hint content="//TODO: Place hint here."
-                              pos={curLine}
-                              close={() => this.setState({hint: false})}/> : ''} */}
-              </div>
-          }
-        </div>
+    return (
+      <div className={'codeContainer ' + (isWriteType ? 'full' : 'half') +
+       ' ' + this.props.type}>
+        <h4 style={{fontWeight: "bold", textAlign: "left"}}>Code</h4>
+        {(isWriteType && this.props.feedback) ? '' :
+          <div ref="code" className={'code ' + (isWriteType ? 'full' : 'half') + ' ' + this.props.type}>
+            {!isWriteType && this.renderMarkdown()}
+
+            <div className="code-config">
+              {/* <button onClick={this.handleHintRequest}>?</button> */}
+              {reset}
+            </div>
+
+            {/* {hint ? <Hint content="//TODO: Place hint here."
+                          pos={curLine}
+                          close={() => this.setState({hint: false})}/> : ''} */}
+          </div>
+        }
+      </div>
     );
   }
 }

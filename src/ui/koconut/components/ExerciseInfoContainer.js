@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import QuestionContainer from './QuestionContainer';
 import type {Exercise} from '../../../data/Exercises';
 import Paper from '@material-ui/core/Paper';
+import Code from './Code';
 
 type Props = {
 	firebaseID: string,
@@ -44,6 +45,20 @@ class ExerciseInfoContainer extends Component {
 		return (
 			<Paper style={paperStyle}>
 				<p><span style={{fontWeight: "bold"}}>Exercise ID:</span> {this.props.firebaseID}</p>
+        {this.props.exercise.code &&
+					<div>
+						<Code
+								key={"code" + 0}
+								type={"shortResponse"}
+								code={this.props.exercise.code}
+
+								feedback={[]}
+								questionIndex={0}
+								fIndex={0}
+						/>
+						<br />
+					</div>
+        }
 				{questionList}
 			</Paper>
 		);

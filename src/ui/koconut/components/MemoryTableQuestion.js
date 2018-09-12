@@ -126,6 +126,7 @@ class MemoryTableQuestion extends Component {
 			rows.push(row);
 		}
 
+
 		return(
 				<Paper>
 					<p>Enter the values as a list of comma separated values</p>

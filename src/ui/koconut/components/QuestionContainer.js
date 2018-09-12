@@ -65,15 +65,17 @@ class QuestionContainer extends Component {
     absentCode = absentCode || question.type === Types.table;
     // or if it is a highlight code question
     absentCode = absentCode || question.type === Types.highlightCode;
-    if(Types.isSurvey(question.type) || absentCode) {
+    if (Types.isSurvey(question.type) || absentCode) {
       return '';
     } else {
+
       return (
           <div style={{display: 'flex', justifyContent: 'space-evenly', backgroundColor: '#f7f7f7'}}>
             <Code
                 key={"code" + index}
                 type={question.type}
                 code={question.code}
+
                 feedback={[]}
                 questionIndex={index}
                 fIndex={fIndex}
