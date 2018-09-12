@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import QuestionContainer from './QuestionContainer';
 import type {Exercise} from '../../../data/Exercises';
+import Paper from '@material-ui/core/Paper';
 
 type Props = {
 	firebaseID: string,
 	quadrant: string,
-	exercise: Exercise,
-	renderCodeView: Function,
+	exercise: Exercise
 };
 
 class ExerciseInfoContainer extends Component {
@@ -20,7 +20,6 @@ class ExerciseInfoContainer extends Component {
 			questionList.push(
 					<QuestionContainer key={index}
 														 question={question}
-														 renderCodeView={this.props.renderCodeView}
 														 answer={question.answer}
 														 feedback={[]}/>
 			);
@@ -30,19 +29,23 @@ class ExerciseInfoContainer extends Component {
 					questionList.push(
 							<QuestionContainer key={index + " " + i}
 																 question={q}
-																 renderCodeView={this.props.renderCodeView}
 																 answer={q.answer}
 																 feedback={[]}/>
 					);
 				})
 			}
 		});
+
+    let paperStyle = {
+      padding: "30px",
+			margin: "20px"
+    }
+
 		return (
-			<div>
-				<p>Exercise ID</p>
-				<p>{this.props.firebaseID}</p>
+			<Paper style={paperStyle}>
+				<p><span style={{fontWeight: "bold"}}>Exercise ID:</span> {this.props.firebaseID}</p>
 				{questionList}
-			</div>
+			</Paper>
 		);
 	}
 }

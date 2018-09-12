@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ExerciseQuestion from './ExerciseQuestion';
 import Response from './../containers/Response';
 import Types from '../../../data/ExerciseTypes';
+import Code from './Code';
 
 type Props = {
 	question: any,
@@ -11,10 +12,12 @@ type Props = {
 
 class QuestionContainer extends Component {
 	renderResponseView: Function;
+	renderCodeView: Function;
 
 	constructor(props) {
 		super(props);
 		this.renderResponseView = this.renderResponseView.bind(this);
+		this.renderCodeView = this.renderCodeView.bind(this);
 	}
 
 	/**
@@ -35,7 +38,7 @@ class QuestionContainer extends Component {
 						type={type}
 						choices={question.choices}
 						answer={type === "memoryTable" ? {placeholder: -1} : [[], []]}
-						questionIndex={index}
+						questionIndex={0}
 						question={question}
 						updateHandler={this.props.updateHandler}
 						feedback={feedback}
@@ -46,6 +49,38 @@ class QuestionContainer extends Component {
 						fIndex={fIndex}
 				/>
 	}
+
+  /**
+   * Returns JSX for (or not for) the Code container given the current props
+   * @param question question object in Exercise
+   * @param index index of question in Exercise
+   * @returns JSX for the Code container
+   */
+  renderCodeView(question: any, index: number, fIndex: number) {
+    // questions of type multiple choice but code is undefined
+    let absentCode = question.type === Types.multipleChoice && !question.code;
+    // or if it is a table question
+    absentCode = absentCode || question.type === Types.table;
+    // or if it is a highlight code question
+    absentCode = absentCode || question.type === Types.highlightCode;
+    if(Types.isSurvey(question.type) || absentCode) {
+      return '';
+    } else {
+      return (
+          <div style={{display: 'flex', justifyContent: 'space-evenly', backgroundColor: '#f7f7f7'}}>
+            <Code
+                key={"code" + index}
+                type={question.type}
+                code={question.code}
+                feedback={[]}
+                questionIndex={index}
+                fIndex={fIndex}
+
+            />
+          </div>
+      );
+    }
+  }
 
 	render() {
 		let answer = [];
@@ -61,15 +96,19 @@ class QuestionContainer extends Component {
 			answer = this.props.question.answer;
 		}
 
+		let containerStyle = {
+			borderTop: "2px black solid",
+			padding: "20px"
+		}
+
 		return(
-				<div>
+				<div style={containerStyle}>
 					<ExerciseQuestion question={this.props.question}
-														renderCodeView={this.props.renderCodeView}
+														renderCodeView={this.renderCodeView}
 														renderResponseView={this.renderResponseView}
 														feedback={this.props.feedback}
 														answer={this.props.question.answer}/>
-					<p>Answer</p>
-					<div>{answer}</div>
+					<p><span style={{fontWeight: "bold"}}>Answer:</span> {answer}</p>
 				</div>
 		);
 	}

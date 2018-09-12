@@ -23,7 +23,8 @@ class MultipleChoice extends Component {
 
   render() {
     let labels = this.props.labels;
-
+    // console.log(this.props.answer !== undefined);
+    // console.log(this.props.questionIndex > -1);
     return (
         <div className='multiple-choice'>
           <div>

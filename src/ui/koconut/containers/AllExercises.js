@@ -6,6 +6,7 @@ import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import {t} from '../../../data/ConceptAbbreviations';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 
+
 import ExerciseInfoContainer from './../components/ExerciseInfoContainer';
 
 class AllExercises extends Component {
@@ -98,6 +99,7 @@ class AllExercises extends Component {
       {name: t.semantic, title: "Building Blocks"},
       {name: t.template, title: "Templates"}
     ];
+
 		let conceptList = this.getOrderedConcepts();
     return (
 				<div className={"container"}>
@@ -117,8 +119,7 @@ class AllExercises extends Component {
 											  return (
 											  		<ExerciseInfoContainer key={index}
 																									 firebaseID={exerciseIds[index]}
-																									 exercise={exercise}
-																									 renderCodeView={() => {}}/>
+																									 exercise={exercise} />
 												);
                       })}
 											<p>WRITE TYPES</p>
@@ -127,8 +128,7 @@ class AllExercises extends Component {
 												return (
 														<ExerciseInfoContainer key={index}
 																									 firebaseID={exerciseIds[index]}
-																									 exercise={exercise}
-																									 renderCodeView={() => {}}/>
+																									 exercise={exercise} />
 												);
 											})}
 										</div>
