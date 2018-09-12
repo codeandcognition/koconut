@@ -118,7 +118,7 @@ class TableView extends Component {
             this.updateAnswer(event.target.value, row, col);
           }
         }} value={this.state.answer[row] ? this.state.answer[row][col] : ''}
-           disabled={this.props.feedback}>
+           disabled={this.props.feedback} className={"blank"}>
         </textarea>
       </div>
     }

@@ -5,6 +5,7 @@ import "./AllExercises.css";
 import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import {t} from '../../../data/ConceptAbbreviations';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
+import LoadingView from './../components/LoadingView';
 
 
 import ExerciseInfoContainer from './../components/ExerciseInfoContainer';
@@ -12,7 +13,7 @@ import ExerciseInfoContainer from './../components/ExerciseInfoContainer';
 class AllExercises extends Component {
 	constructor(props) {
 		super(props);
-
+		this.loading = true;
 		this.state = {
 			allExercises: [],
       conceptExerciseMap: {}
@@ -31,6 +32,8 @@ class AllExercises extends Component {
 		  let exercises = snapshot.val();
 			componentRef.setState({
 				allExercises: exercises
+			}, () => {
+				componentRef.loading = false;
 			});
 		});
 	}
@@ -90,8 +93,11 @@ class AllExercises extends Component {
       })
     }
     return {results, exerciseIds};
-}
+	}
 
+	displaySpinner() {
+		return <LoadingView/>
+	}
 
 	render() {
     let sections = [
@@ -100,46 +106,47 @@ class AllExercises extends Component {
       {name: t.template, title: "Templates"}
     ];
 
-		let conceptList = this.getOrderedConcepts();
+    let conceptList = this.getOrderedConcepts();
     return (
-				<div className={"container"}>
-					<h1>Koconut Exercises</h1>
-					{sections.map((item, index) => {
-						let section = t[item.name];
-						return (
-							<div className={"section"} key={index}>
-								<h3>{item.title}</h3>
-								{this.getConceptsByType(conceptList, section).map((concept, index2) => {
-									return (
-										<div key={index2}>
-											<h5 className={"section-heading"}>{this.formatCamelCasedString(concept.name)}</h5>
-											<p className={"section-subheading"}>READ TYPES</p>
-											{this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise, index) => {
-                        let exerciseIds = this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["exerciseIds"];
-											  return (
-											  		<ExerciseInfoContainer key={index}
-																									 firebaseID={exerciseIds[index]}
-																									 exercise={exercise} />
-												);
-                      })}
-											<p className={"section-subheading"}>WRITE TYPES</p>
-											{this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise, index) => {
-											  let exerciseIds = this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["exerciseIds"];
-												return (
-														<ExerciseInfoContainer key={index}
-																									 firebaseID={exerciseIds[index]}
-																									 exercise={exercise} />
-												);
-											})}
-										</div>
-									);
-								})}
-							</div>
-						);
-					})}
-				</div>
-		);
-	}
+        <div className={"container"}>
+          <h1>Koconut Exercises</h1>
+          {this.loading ? this.displaySpinner() : sections.map((item, index) => {
+            let section = t[item.name];
+              return (
+                <div className={"section"} key={index}>
+                  <h3>{item.title}</h3>
+                  {this.getConceptsByType(conceptList, section).map((concept, index2) => {
+                    return (
+                      <div key={index2}>
+                        <h5 className={"section-heading"}>{this.formatCamelCasedString(
+                            concept.name)}</h5>
+                        <p className={"section-subheading"}>READ TYPES</p>
+                        {this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise, index) => {
+                          let exerciseIds = this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["exerciseIds"];
+                          return (
+                            <ExerciseInfoContainer key={index}
+                                                   firebaseID={exerciseIds[index]}
+                                                   exercise={exercise}/>
+                          );
+                        })}
+                        <p className={"section-subheading"}>WRITE TYPES</p>
+                        {this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise, index) => {
+                          let exerciseIds = this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["exerciseIds"];
+                          return (
+                              <ExerciseInfoContainer key={index}
+                                                     firebaseID={exerciseIds[index]}
+                                                     exercise={exercise}/>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+        </div>
+    );
+  }
 }
 
 export default withRouter(AllExercises);
