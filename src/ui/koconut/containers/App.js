@@ -99,6 +99,7 @@ class App extends Component {
   storeState: Function;
   clearCounterAndFeedback: Function;
   sendExerciseViewDataToFirebase: Function;
+  hasNextQuestion: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: Exercise,
@@ -148,7 +149,8 @@ class App extends Component {
       timesGotQuestionWrong: [], // times the user has gotten question wrong,
       // indices are question index
       followupTimesGotQuestionWrong: [],
-      exerciseId: ''
+      exerciseId: '',
+      numExercisesInCurrConcept: 0
     };
     // this.updater = new ResponseEvaluator();
     this.submitResponse = this.submitResponse.bind(this);
@@ -166,6 +168,7 @@ class App extends Component {
     this.storeState = this.storeState.bind(this);
     this.clearCounterAndFeedback = this.clearCounterAndFeedback.bind(this);
     this.sendExerciseViewDataToFirebase = this.sendExerciseViewDataToFirebase.bind(this);
+    this.hasNextQuestion = this.hasNextQuestion.bind(this);
   }
 
   sendExerciseViewDataToFirebase(exerciseId: string) {
@@ -241,6 +244,7 @@ class App extends Component {
           currentConcept: concept,
           counter: exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter,
           exerciseType: exerciseType,
+          numExercisesInCurrConcept: exercises.length,
           error: false // resets the error message
         }, () => {
 						this.storeState("exercise", this.state.counter, this.state.exerciseType, concept);
@@ -284,7 +288,8 @@ class App extends Component {
 								currentConcept: state.concept,
 								counter: state.counter,
 								exerciseType: state.type,
-								exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : {}
+								exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : {},
+                numExercisesInCurrConcept: exercises.length
 							});
 						} else {
 							this.setState({
@@ -824,6 +829,10 @@ class App extends Component {
     this.setState({counter: 0, feedback: []});
   }
 
+  hasNextQuestion() {
+    return this.state.counter < this.state.numExercisesInCurrConcept - 1;
+  }
+
 
 	/**
 	 * Renders the welcome view
@@ -864,6 +873,7 @@ class App extends Component {
               sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
               exerciseId={this.state.exerciseId}
 							generateExercise={this.generateExercise}
+              hasNextQuestion={this.hasNextQuestion}
 					/>
 				</div>
     );
