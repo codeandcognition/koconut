@@ -112,8 +112,8 @@ class AllExercises extends Component {
 								{this.getConceptsByType(conceptList, section).map((concept, index2) => {
 									return (
 										<div key={index2}>
-											<h5>{this.formatCamelCasedString(concept.name)}</h5>
-											<p>READ TYPES</p>
+											<h5 className={"section-heading"}>{this.formatCamelCasedString(concept.name)}</h5>
+											<p className={"section-subheading"}>READ TYPES</p>
 											{this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise, index) => {
                         let exerciseIds = this.getExercisesByTypeAndConcept("READ", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["exerciseIds"];
 											  return (
@@ -122,7 +122,7 @@ class AllExercises extends Component {
 																									 exercise={exercise} />
 												);
                       })}
-											<p>WRITE TYPES</p>
+											<p className={"section-subheading"}>WRITE TYPES</p>
 											{this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["results"].map((exercise, index) => {
 											  let exerciseIds = this.getExercisesByTypeAndConcept("WRITE", concept.name, this.state.allExercises, this.state.conceptExerciseMap)["exerciseIds"];
 												return (

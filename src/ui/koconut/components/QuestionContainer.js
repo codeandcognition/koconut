@@ -3,6 +3,8 @@ import ExerciseQuestion from './ExerciseQuestion';
 import Response from './../containers/Response';
 import Types from '../../../data/ExerciseTypes';
 import Code from './Code';
+import ReactMarkdown from 'react-markdown';
+import CodeBlock from './CodeBlock';
 
 type Props = {
 	question: any,
@@ -101,6 +103,11 @@ class QuestionContainer extends Component {
 			padding: "20px"
 		}
 
+		let code = "";
+		if (this.props.question.type === "writeCode") {
+      code = "```python\n" + answer + "\n```";
+		}
+
 		return(
 				<div style={containerStyle}>
 					<ExerciseQuestion question={this.props.question}
@@ -108,7 +115,15 @@ class QuestionContainer extends Component {
 														renderResponseView={this.renderResponseView}
 														feedback={this.props.feedback}
 														answer={this.props.question.answer}/>
-					<p><span style={{fontWeight: "bold"}}>Answer:</span> {answer}</p>
+					<br />
+					<p><span style={{fontWeight: "bold"}}>Answer:</span> {this.props.question.type !== "writeCode" && answer}</p>
+					{this.props.question.type === "writeCode" &&
+
+						<ReactMarkdown
+								source={code}
+								renderers={{code: CodeBlock}}
+						/>
+					}
 				</div>
 		);
 	}
