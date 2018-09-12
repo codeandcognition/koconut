@@ -173,9 +173,6 @@ class Code extends Component {
     // let hint = this.state.hint;
     // let curLine = this.state.curLine;
 
-    if (this.props.type === "memoryTable") {
-      console.log(this.props.code);
-    }
 
     return (
       <div className={'codeContainer ' + (isWriteType ? 'full' : 'half') +

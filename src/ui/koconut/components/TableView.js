@@ -96,7 +96,7 @@ class TableView extends Component {
     if(question.type === "multipleChoice") {
       let selected = this.state.answer[row] ? this.state.answer[row][col] : null;
       return <div>
-        {question.choices.map((d,i) => {
+        {question.choices && question.choices.map((d,i) => {
             return <span key={`choice${i}-${row}-${col}`}>
               <span onClick={() => {
                 if(!this.props.feedback) {

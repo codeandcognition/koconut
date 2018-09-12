@@ -10,6 +10,7 @@ type Props = {
 	question: any,
 	answer: any,
 	renderCodeView: Function,
+	isFollowup: boolean
 };
 
 class QuestionContainer extends Component {
@@ -95,14 +96,21 @@ class QuestionContainer extends Component {
 				}
 			});
 		} else if (this.props.question.type === "memoryTable") {
-			answer = JSON.stringify(this.props.question.answer);
-		} else {
+      answer = JSON.stringify(this.props.question.answer);
+    } else if (this.props.question.type === "checkboxQuestion") {
+			this.props.question.answer.forEach((item, index) => {
+				answer.push(<p key={index}>{item}</p>)
+      });
+    } else {
 			answer = this.props.question.answer;
 		}
 
 		let containerStyle = {
-			borderTop: "2px black solid",
 			padding: "20px"
+		}
+
+		if (!this.props.isFollowup) {
+			containerStyle["borderTop"] = "2px black solid";
 		}
 
 		let code = "";
@@ -110,7 +118,7 @@ class QuestionContainer extends Component {
       code = "```python\n" + answer + "\n```";
 		}
 
-		return(
+		return (
 				<div style={containerStyle}>
 					<ExerciseQuestion question={this.props.question}
 														renderCodeView={this.renderCodeView}
@@ -119,6 +127,7 @@ class QuestionContainer extends Component {
 														answer={this.props.question.answer}/>
 					<br />
 					<p><span style={{fontWeight: "bold"}}>Answer:</span> {this.props.question.type !== "writeCode" && answer}</p>
+
 					{this.props.question.type === "writeCode" &&
 
 						<ReactMarkdown

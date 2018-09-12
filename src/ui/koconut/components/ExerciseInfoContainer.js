@@ -21,6 +21,7 @@ class ExerciseInfoContainer extends Component {
 			questionList.push(
 					<QuestionContainer key={index}
 														 question={question}
+														 isFollowup={false}
 														 answer={question.answer}
 														 feedback={[]}/>
 			);
@@ -30,6 +31,7 @@ class ExerciseInfoContainer extends Component {
 					questionList.push(
 							<QuestionContainer key={index + " " + i}
 																 question={q}
+																 isFollowup={true}
 																 answer={q.answer}
 																 feedback={[]}/>
 					);
@@ -45,6 +47,9 @@ class ExerciseInfoContainer extends Component {
 		return (
 			<Paper style={paperStyle}>
 				<p><span style={{fontWeight: "bold"}}>Exercise ID:</span> {this.props.firebaseID}</p>
+				{this.props.exercise.prompt &&
+					<p>{this.props.exercise.prompt}</p>
+				}
         {this.props.exercise.code &&
 					<div>
 						<Code
