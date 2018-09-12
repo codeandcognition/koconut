@@ -52,7 +52,8 @@ export default class ExerciseNavigation extends Component {
                   style={{margin: 5, textDecoration: 'none'}}>
                     MORE EXERCISE
                 </Button>
-                <Link onClick={()=>console.log("aa")} to={`/practice/${nextConcept}/practice-reading-code`} style={{textDecoration: 'none'}}>
+                <Link onClick={()=>this.props.generateExercise(nextConcept, "READ")} 
+                to={`/practice/${nextConcept}/practice-reading-code`} style={{textDecoration: 'none'}}>
                   <Button variant={"outlined"} color={"primary"} style={{margin: 5, textDecoration: 'none'}}>
                     NEXT INSTRUCTION
                   </Button>
