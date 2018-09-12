@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 
 export default class ExerciseNavigation extends Component {
   render() {
+
     return <Paper elevation={6} style={{textAlign: 'center', padding: 20}}>
       <Grid fluid>
         <Row>
@@ -17,12 +18,18 @@ export default class ExerciseNavigation extends Component {
             </Row>
             <Row>
               <Col md={12}>
+                <Button variant={"outlined"} 
+                  color={"primary"} 
+                  disabled={!this.props.hasNextQuestion()} 
+                  onClick={this.props.nextQuestion} 
+                  style={{margin: 5, textDecoration: 'none'}}>
+                  MORE EXERCISE
+                </Button>
                 <Link to="/test" style={{textDecoration: 'none'}}>
                   <Button variant={"outlined"} color={"primary"} style={{margin: 5, textDecoration: 'none'}}>
-                    MORE EXERCISE
+                    NEXT INSTRUCTION
                   </Button>
                 </Link>
-                <Button variant={"outlined"} color={"primary"} style={{margin: 5}}>NEXT INSTRUCTION</Button>
               </Col>
             </Row>
           </Col>

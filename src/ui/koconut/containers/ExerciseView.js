@@ -143,7 +143,9 @@ class Exercise extends Component {
 							nextQuestion={this.props.nextQuestion}
 							resetAnswer={this.resetAnswer}
 					/>
-          <ExerciseNavigation />
+          <ExerciseNavigation 
+            hasNextQuestion={this.props.hasNextQuestion}
+            nextQuestion={this.props.nextQuestion}/>
           {/*<ConceptLabel concepts={this.props.exercise &&
            this.props.exercise.concepts}/>*/}
 				</div>
