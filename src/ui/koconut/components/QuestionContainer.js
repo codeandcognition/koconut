@@ -108,7 +108,7 @@ class QuestionContainer extends Component {
 														renderResponseView={this.renderResponseView}
 														feedback={this.props.feedback}
 														answer={this.props.question.answer}/>
-					<p><span style={{fontWeight: "bold"}}>Answer:</span> {answer}</p>
+					<div><span style={{fontWeight: "bold"}}>Answer:</span> {answer}</div>
 				</div>
 		);
 	}
