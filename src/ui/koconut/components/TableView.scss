@@ -25,6 +25,7 @@
 $choice-color: #cccccc;
 
 .choice {
+  height: auto;
   margin: 10px auto; // centering the MC choices
   user-select: none;
   padding: 2.5%;
@@ -51,4 +52,16 @@ $choice-color: #cccccc;
 
 .choice.answer:hover {
   background-color: darken($choice-color, 20%);
+}
+
+.blank {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-bottom: 1px solid #3F51B5;
+}
+
+.blank:focus {
+  outline: none;
+  background-color: #eef3fa;
 }
