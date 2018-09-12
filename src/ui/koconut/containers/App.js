@@ -931,7 +931,8 @@ class App extends Component {
 	 */
   renderAllExercises() {
   	// show all exercises view in development mode
-		if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+		if (true /*!process.env.NODE_ENV || process.env.NODE_ENV ===
+		 'development'*/) { // TODO: Uncomment this for large scale deployment
 			return(<AllExercises/>);
 		} else {
 			return this.renderWorldView();
