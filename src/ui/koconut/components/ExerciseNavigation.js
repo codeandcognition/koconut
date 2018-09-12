@@ -5,7 +5,13 @@ import Button from "@material-ui/core/Button/Button";
 import {Link} from 'react-router-dom';
 import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 
-
+/**
+ * ExerciseNavigation is the navigation bar that appears under the 
+ * exercise when on the ExerciseView. It can be modified to support
+ * more buttons, it uses React-Flexbox-Grid for easy layouting.
+ *
+ * @class
+ */
 export default class ExerciseNavigation extends Component {
 	/**
 	 * Returns sorted concepts list sorted by relevance to the user.
