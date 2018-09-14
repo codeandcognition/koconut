@@ -1,17 +1,14 @@
 import React, {Component} from 'react';
 import { Link} from "react-router-dom";
 import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
-import './ConceptDialog.css'
+import './ConceptDialog.css';
+import ConceptInventory from './../../../data/ConceptMap';
 
 type Props = {
 	title: string,
-	conceptKey: string,
+	conceptCode: string,
 	open: boolean,
 	generateExercise: Function,
 	getInstruction: Function
@@ -38,6 +35,7 @@ class ConceptDialog extends Component {
 	}
 
 	render() {
+		console.log(ConceptInventory[this.props.conceptCode], ConceptInventory[this.props.conceptCode].explanations.definition)
 		return (
 				<Dialog open={this.state.open}>
 					<DialogContent>
@@ -46,6 +44,10 @@ class ConceptDialog extends Component {
 							<i className="far fa-times-circle icon" onClick={() => this.handleClose()}/>
 						</div>
 						<p>
+							{/* TODO: Add concept descriptions in ConceptInventory.js and remove the Lorem Ipsum placeholder*/}
+							{ConceptInventory[this.props.conceptCode].explanations.definition}
+
+
 							Lorem ipsum dolor sit amet, no mucius lobortis definiebas vim, justo
 							placerat liberavisse cu per. Errem delenit sit in, ut cum virtute
 							tacimates, affert soleat eloquentiam id his. Eu sea elitr repudiare

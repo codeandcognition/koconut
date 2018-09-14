@@ -2,9 +2,6 @@
 import React, {Component} from 'react';
 import { withRouter} from "react-router-dom";
 import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
-import {conceptInventory} from '../../../data/ConceptMap.js';
-import ConceptCard from './../components/ConceptCard';
-import {t} from '../../../data/ConceptAbbreviations';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
 import ConceptDialog from './../components/ConceptDialog';
@@ -30,8 +27,7 @@ class WorldView extends Component {
 		this.state = {
 			loading: true,
       didRender: false
-		}
-
+		};
 		this.hierarchyContainer = React.createRef();
 	}
 
@@ -59,10 +55,6 @@ class WorldView extends Component {
     })
   }
 
-  componentDidUpdate() {
-
-  }
-
   componentDidMount() {
   	this.mounted = true;
   	this.authUnsub = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
@@ -84,22 +76,22 @@ class WorldView extends Component {
     let edgesArr = [];
 
     conceptList.forEach((concept) => {
-      let conceptName = this.formatCamelCasedString(concept.name);
+      let conceptName = this.formatCamelCasedString(concept.name); // TODO: don't do this conversion manually
       let node = {
         data : {
-          id: conceptName
+					id: concept.name,
+					name: conceptName
         },
         grabbable: false
       };
       nodesArr.push(node);
       concept.dependencies.forEach((dependency) => {
-        let dependencyName = this.formatCamelCasedString(dependency.name);
         let edge = {
           data: {
-            source: dependencyName,
-            target: conceptName
+            source: dependency.name,
+            target: concept.name
           }
-        }
+        };
         edgesArr.push(edge);
       });
     });
@@ -113,7 +105,7 @@ class WorldView extends Component {
       {
         selector: 'node',
         style: {
-          'content': 'data(id)',
+          'content': 'data(name)',
           'shape': 'roundrectangle',
           'font-size': '20px',
           'text-valign': 'center',
@@ -135,22 +127,22 @@ class WorldView extends Component {
           'display': 'none'
         }
       }
-    ]
-
+    ];
     let cytoLayout = {name: "dagre"};
-
-    let cytoOptions = {
-      panningEnabled: false,
-      zoomingEnabled: false
-    }
-
-
-    var cy = cytoscape({
+    let cy = cytoscape({
       container: this.hierarchyContainer.current,
       style: cytoStyle,
       elements: cytoEl,
       layout: cytoLayout
     });
+    cy.on('mousedown', (evt) => {
+    	let node = evt.target["_private"]["data"];
+    	if (node) {
+				let name = node["name"];
+				let conceptCode = node["id"];
+				this.expandConcept(name, conceptCode);
+			}
+		});
     cy.panningEnabled(false);
     cy.zoomingEnabled(false);
   }
@@ -180,10 +172,12 @@ class WorldView extends Component {
 		this.mounted = false;
 	}
 
-	expandConcept() {
+	expandConcept(name, conceptCode) {
 		// TODO: set additional props
 		this.setState({
-			conceptDialog: true
+			conceptDialog: true,
+			title: name,
+			conceptCode: conceptCode
 		});
 	}
 
@@ -209,14 +203,20 @@ class WorldView extends Component {
 
 	renderWorld() {
 	  if (this.hierarchyContainer.current) {
-	    console.log("this is running");
 	    this.renderCytoscape();
     } else {
 	    this.forceUpdate();
     }
 
 		return (
-				<div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
+				<div>
+					{this.state.conceptDialog && <ConceptDialog title={this.state.title}
+																						 conceptCode={this.state.conceptCode}
+																						 open={this.state.conceptDialog}
+																						 generateExercise={this.props.generateExercise}
+																						 getInstruction={this.props.getInstruction}/>}
+					<div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
+				</div>
 		);
 
 	}

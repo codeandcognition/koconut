@@ -6,7 +6,7 @@ export const conceptInventory = {
     parents: [g.dataTypes],
     explanations: {
       name: "How Code Runs",
-      definition: "this is a test",
+      definition: "Lorem ipsum dolor sit amet, no mucius lobortis definiebas vim, justo placerat liberavisse cu per.",
       examples: [],
       future: []
     },
