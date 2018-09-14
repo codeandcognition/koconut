@@ -166,7 +166,8 @@ class WorldView extends Component {
 
 	renderWorld() {
 
-		let conceptList = this.getOrderedConcepts();
+		let conceptList = this.getOrderedConcepts(); // TODO: Change this to
+		// reference prop when merged with summer2018-master
 		let nodesArr = [];
 		let edgesArr = [];
 
@@ -211,7 +212,6 @@ class WorldView extends Component {
 					'height': "100px"
         }
       },
-
       {
         selector: 'edge',
         style: {
@@ -219,7 +219,8 @@ class WorldView extends Component {
           'width': 4,
           'target-arrow-shape': 'triangle',
           'line-color': '#9dbaea',
-          'target-arrow-color': '#9dbaea'
+          'target-arrow-color': '#9dbaea',
+					'display': 'none'
         }
       }
     ]
