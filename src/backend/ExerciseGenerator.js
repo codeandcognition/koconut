@@ -73,6 +73,8 @@ class ExerciseGenerator {
    * @returns {Array.<*>}
    */
   getOrderedConcepts(): ConceptKnowledge[] {
+  	console.log(ConceptKnowledge);
+  	console.log(MasteryModel);
     return MasteryModel.model.filter((concept) => concept.should_teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
         a.dependencyKnowledge / a.knowledge));

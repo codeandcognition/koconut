@@ -45,11 +45,11 @@ class ConceptCard extends Component {
 			margin: "3px",
 			fontSize: "14px",
 			display: "inline-block"
-		}
+		};
 
 		let titleStyle = {
 			marginBottom: "0"
-		}
+		};
 
 		return(
 				<Card style={{margin: '2%'}}>
