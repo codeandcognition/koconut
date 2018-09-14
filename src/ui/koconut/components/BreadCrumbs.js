@@ -49,7 +49,6 @@ class BreadCrumbs extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props);
     this.setState({
       concept: this.formatCamelCasedString(this.props.conceptType),
       orderedConcepts: this.props.getOrderedConcepts()
