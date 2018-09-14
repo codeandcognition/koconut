@@ -7,8 +7,8 @@ import ConceptCard from './../components/ConceptCard';
 import {t} from '../../../data/ConceptAbbreviations';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
-// import { ReactCytoscape } from 'react-cytoscape';
 
+import ConceptDialog from './../components/ConceptDialog';
 import './WorldView.css';
 
 import cytoscape from 'cytoscape';
@@ -182,6 +182,12 @@ class WorldView extends Component {
 		this.mounted = false;
 	}
 
+	expandConcept() {
+		// TODO: set additional props
+		this.setState({
+			conceptDialog: true
+		});
+	}
 
   /**
    * This function takes in a camel cased string and converts it to normal
@@ -212,10 +218,9 @@ class WorldView extends Component {
     }
 
 		return (
-				<div ref={this.hierarchyContainer} id={"hierarchy-container"}>
+				<div ref={this.hierarchyContainer} id={"hierarchy-container"}></div>
+		);
 
-				</div>
-		)
 	}
 
   render() {
