@@ -1,0 +1,20 @@
+.dialogHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.icon {
+    color: #E91E63;
+    font-size: 2em;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+.icon:hover {
+    color: #ef5350;
+}
+
+.link {
+    width: 30%;
+    margin: 5px !important;
+}
