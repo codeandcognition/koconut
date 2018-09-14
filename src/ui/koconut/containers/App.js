@@ -965,7 +965,8 @@ class App extends Component {
 													 storeUserState={this.storeState}
 													 sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
 													 exerciseId={this.state.exerciseId}
-                           clearCounterAndFeedback={this.clearCounterAndFeedback}/>
+                           clearCounterAndFeedback={this.clearCounterAndFeedback}
+                           getOrderedConcepts={this.getOrderedConcepts}/>
 				</div>
 		);
   }
