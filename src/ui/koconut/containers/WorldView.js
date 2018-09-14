@@ -7,6 +7,8 @@ import ConceptCard from './../components/ConceptCard';
 import {t} from '../../../data/ConceptAbbreviations';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
+import { ReactCytoscape } from 'react-cytoscape';
+import './WorldView.css';
 
 type Props = {
 	setFirebaseUser: Function,
@@ -90,7 +92,7 @@ class WorldView extends Component {
 		this.mounted = false;
 	}
 
-	renderWorld() {
+	/*renderWorld() {
 		let conceptList = this.getOrderedConcepts();
 		let titleLeft = [
 			{name: t.onboarding, title : "Get started"},
@@ -100,10 +102,28 @@ class WorldView extends Component {
 			{name: t.template, title : "Templates"}
 		];
 		return (
-				<div className="container" style={{marginTop: '12vh'}}>
-					<div style={{display: "flex"}}>
-						<div style={{flexGrow: 3, margin: 10}}>
-							{titleLeft.map(cTypeVal => {
+			<div className="container" style={{marginTop: '12vh'}}>
+				<div style={{display: "flex"}}>
+					<div style={{flexGrow: 3, margin: 10}}>
+						{titleLeft.map(cTypeVal => {
+							let cType = t[cTypeVal.name];
+							return <div key={"world-"+cType} style={{marginTop: 10}}>
+								<h1>{cTypeVal.title}</h1>
+								{this.getConceptsByType(conceptList, cType).map((concept, index) => {
+									let name = conceptInventory[concept.name].explanations.name;
+									return <ConceptCard title={name}
+																			key={index}
+																			concept={concept.name}
+																			generateExercise={this.props.generateExercise}
+																			getInstruction={this.props.getInstruction}/>
+								})}
+							</div>
+						})
+						}
+					</div>
+					<div style={{flexGrow: 5, margin: 10}}>
+						{
+							titleRight.map(cTypeVal => {
 								let cType = t[cTypeVal.name];
 								return <div key={"world-"+cType} style={{marginTop: 10}}>
 									<h1>{cTypeVal.title}</h1>
@@ -117,34 +137,110 @@ class WorldView extends Component {
 									})}
 								</div>
 							})
-							}
-						</div>
-						<div style={{flexGrow: 5, margin: 10}}>
-							{
-								titleRight.map(cTypeVal => {
-									let cType = t[cTypeVal.name];
-									return <div key={"world-"+cType} style={{marginTop: 10}}>
-										<h1>{cTypeVal.title}</h1>
-										{this.getConceptsByType(conceptList, cType).map((concept, index) => {
-											let name = conceptInventory[concept.name].explanations.name;
-											return <ConceptCard title={name}
-																					key={index}
-																					concept={concept.name}
-																					generateExercise={this.props.generateExercise}
-																					getInstruction={this.props.getInstruction}/>
-										})}
-									</div>
-								})
-							}
-						</div>
+						}
 					</div>
 				</div>
+			</div>
+		);
+	}*/
+
+  /**
+   * This function takes in a camel cased string and converts it to normal
+   * text with the first letter of every word being capitalized.
+   * @param camelString
+   * @returns {string}
+   */
+  formatCamelCasedString(camelString: string) {
+    let result = "";
+    if (camelString && camelString.length !== 0) {
+      result = result + camelString.charAt(0).toUpperCase();
+      for (let i = 1; i < camelString.length; i++) {
+        if (camelString.charAt(i) === camelString.charAt(i).toUpperCase()) {
+          result = result + " "
+        }
+        result = result + camelString.charAt(i);
+      }
+    }
+    return result;
+  }
+
+	renderWorld() {
+
+		let conceptList = this.getOrderedConcepts();
+		let nodesArr = [];
+		let edgesArr = [];
+
+		conceptList.forEach((concept) => {
+			let conceptName = this.formatCamelCasedString(concept.name);
+			let node = {
+				data : {
+					id: conceptName
+				},
+				grabbable: false
+			};
+			nodesArr.push(node);
+			concept.dependencies.forEach((dependency) => {
+				let dependencyName = this.formatCamelCasedString(dependency.name);
+				let edge = {
+					data: {
+						source: dependencyName,
+						target: conceptName
+					}
+				}
+				edgesArr.push(edge);
+			});
+		});
+
+		let cytoEl = {
+			nodes: nodesArr,
+			edges: edgesArr,
+		};
+
+		let cytoStyle = [
+      {
+        selector: 'node',
+        style: {
+          'content': 'data(id)',
+					'shape': 'roundrectangle',
+					'font-size': '20px',
+          'text-valign': 'center',
+					'color': 'black',
+          'text-halign': 'center',
+          'background-color': 'lightgray',
+					'width': '200px',
+					'height': "100px"
+        }
+      },
+
+      {
+        selector: 'edge',
+        style: {
+          'curve-style': 'bezier',
+          'width': 4,
+          'target-arrow-shape': 'triangle',
+          'line-color': '#9dbaea',
+          'target-arrow-color': '#9dbaea'
+        }
+      }
+    ]
+
+		let cytoLayout = {name: "dagre"};
+
+		let cytoOptions = {
+			panningEnabled: false,
+			zoomingEnabled: false
+		}
+
+		return (
+			<div className={"hierarchy-container"}>
+				<ReactCytoscape containerID={"cyto-container"} elements={cytoEl} style={cytoStyle} layout={cytoLayout} cytoscapeOptions={cytoOptions} />
+			</div>
 		);
 	}
 
   render() {
     return (
-			<div>
+			<div className={"world-container"}>
 				{this.state.loading ?
 						<LoadingView/> :
 						this.renderWorld()
