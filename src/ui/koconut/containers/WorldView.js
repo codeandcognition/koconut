@@ -124,15 +124,22 @@ class WorldView extends Component {
           'target-arrow-shape': 'triangle',
           'line-color': '#9dbaea',
           'target-arrow-color': '#9dbaea',
-          'display': 'none'
+          "visibility": "hidden"
+        }
+      },
+      {
+        selector: '.unhidden',
+        style: {
+          visibility: "visible"
         }
       }
     ];
     let cytoLayout = {name: "dagre"};
+
     let cy = cytoscape({
       container: this.hierarchyContainer.current,
-      style: cytoStyle,
       elements: cytoEl,
+      style: cytoStyle,
       layout: cytoLayout
     });
     cy.on('mousedown', (evt) => {
@@ -145,6 +152,23 @@ class WorldView extends Component {
 		});
     cy.panningEnabled(false);
     cy.zoomingEnabled(false);
+
+
+
+    cy.on('mouseover', 'node', function() {
+      let nodes = cy.nodes();
+      let relatedEdges = nodes.edgesWith("#" + this.id());
+      relatedEdges.forEach((edge) => {
+        edge.addClass("unhidden");
+      });
+    });
+    cy.on('mouseout', 'node', function(evt) {
+      let nodes = cy.nodes();
+      let relatedEdges = nodes.edgesWith("#" + this.id());
+      relatedEdges.forEach((edge) => {
+        edge.removeClass("unhidden");
+      });
+    });
   }
 
 	/**
