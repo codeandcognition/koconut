@@ -121,17 +121,16 @@ class WorldView extends Component {
   }
 
 	renderWorld() {
-
 		let conceptList = this.getOrderedConcepts();
 		let nodesArr = [];
 		let edgesArr = [];
-
 		conceptList.forEach((concept) => {
 			let conceptName = this.formatCamelCasedString(concept.name);
 			let node = {
 				data : {
 					id: conceptName
 				},
+
 				grabbable: false
 			};
 			nodesArr.push(node);
@@ -142,16 +141,14 @@ class WorldView extends Component {
 						source: dependencyName,
 						target: conceptName
 					}
-				}
+				};
 				edgesArr.push(edge);
 			});
 		});
-
 		let cytoEl = {
 			nodes: nodesArr,
 			edges: edgesArr,
 		};
-
 		let cytoStyle = [
       {
         selector: 'node',
@@ -167,7 +164,6 @@ class WorldView extends Component {
 					'height': "100px"
         }
       },
-
       {
         selector: 'edge',
         style: {
@@ -178,15 +174,12 @@ class WorldView extends Component {
           'target-arrow-color': '#9dbaea'
         }
       }
-    ]
-
+    ];
 		let cytoLayout = {name: "dagre"};
-
 		let cytoOptions = {
 			panningEnabled: false,
 			zoomingEnabled: false
-		}
-
+		};
 		return (
 			<div className={"hierarchy-container"}>
 					{/* TODO: Remove placeholder button */}
@@ -198,7 +191,7 @@ class WorldView extends Component {
 																											 generateExercise={this.props.generateExercise}
 																											 getInstruction={this.props.getInstruction}/>
 					}
-					<ReactCytoscape containerID={"cyto-container"} elements={cytoEl} style={cytoStyle} layout={cytoLayout} cytoscapeOptions={cytoOptions} />
+					<ReactCytoscape containerID={"cyto-container"} elements={cytoEl} style={cytoStyle} layout={cytoLayout} cytoscapeOptions={cytoOptions} on={('mousedown', () => {console.log("clicked")})}/>
 			</div>
 		);
 	}
