@@ -25,6 +25,7 @@
     "body-parser": "^1.18.3",
     "bootstrap": "^4.1.1",
     "brace": "^0.10.0",
+    "cytoscape-dagre": "^2.2.1",
     "eslint-plugin-import": "^2.14.0",
     "express": "^4.16.3",
     "firebase": "^5.0.4",

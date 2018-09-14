@@ -8,8 +8,10 @@ import {t} from '../../../data/ConceptAbbreviations';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
 import ConceptDialog from './../components/ConceptDialog';
-import { ReactCytoscape } from 'react-cytoscape';
 import './WorldView.css';
+import cytoscape from 'cytoscape';
+import dagre from 'cytoscape-dagre';
+cytoscape.use( dagre );
 
 type Props = {
 	setFirebaseUser: Function,
@@ -26,8 +28,11 @@ class WorldView extends Component {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			loading: true
+			loading: true,
+      didRender: false
 		}
+
+		this.hierarchyContainer = React.createRef();
 	}
 
 	/**
@@ -54,6 +59,10 @@ class WorldView extends Component {
     })
   }
 
+  componentDidUpdate() {
+
+  }
+
   componentDidMount() {
   	this.mounted = true;
   	this.authUnsub = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
@@ -67,6 +76,84 @@ class WorldView extends Component {
 			}
 		}) : null;
 	}
+
+	renderCytoscape() {
+    let conceptList = this.getOrderedConcepts(); // TODO: Change this to
+    // reference prop when merged with summer2018-master
+    let nodesArr = [];
+    let edgesArr = [];
+
+    conceptList.forEach((concept) => {
+      let conceptName = this.formatCamelCasedString(concept.name);
+      let node = {
+        data : {
+          id: conceptName
+        },
+        grabbable: false
+      };
+      nodesArr.push(node);
+      concept.dependencies.forEach((dependency) => {
+        let dependencyName = this.formatCamelCasedString(dependency.name);
+        let edge = {
+          data: {
+            source: dependencyName,
+            target: conceptName
+          }
+        }
+        edgesArr.push(edge);
+      });
+    });
+
+    let cytoEl = {
+      nodes: nodesArr,
+      edges: edgesArr,
+    };
+
+    let cytoStyle = [
+      {
+        selector: 'node',
+        style: {
+          'content': 'data(id)',
+          'shape': 'roundrectangle',
+          'font-size': '20px',
+          'text-valign': 'center',
+          'color': 'black',
+          'text-halign': 'center',
+          'background-color': 'lightgray',
+          'width': '200px',
+          'height': "100px"
+        }
+      },
+      {
+        selector: 'edge',
+        style: {
+          'curve-style': 'bezier',
+          'width': 4,
+          'target-arrow-shape': 'triangle',
+          'line-color': '#9dbaea',
+          'target-arrow-color': '#9dbaea',
+          'display': 'none'
+        }
+      }
+    ]
+
+    let cytoLayout = {name: "dagre"};
+
+    let cytoOptions = {
+      panningEnabled: false,
+      zoomingEnabled: false
+    }
+
+
+    var cy = cytoscape({
+      container: this.hierarchyContainer.current,
+      style: cytoStyle,
+      elements: cytoEl,
+      layout: cytoLayout
+    });
+    cy.panningEnabled(false);
+    cy.zoomingEnabled(false);
+  }
 
 	/**
 	 * Function to ensure that learner can't change the route to get to the world view
@@ -121,79 +208,17 @@ class WorldView extends Component {
   }
 
 	renderWorld() {
-		let conceptList = this.getOrderedConcepts();
-		let nodesArr = [];
-		let edgesArr = [];
-		conceptList.forEach((concept) => {
-			let conceptName = this.formatCamelCasedString(concept.name);
-			let node = {
-				data : {
-					id: conceptName
-				},
+	  if (this.hierarchyContainer.current) {
+	    console.log("this is running");
+	    this.renderCytoscape();
+    } else {
+	    this.forceUpdate();
+    }
 
-				grabbable: false
-			};
-			nodesArr.push(node);
-			concept.dependencies.forEach((dependency) => {
-				let dependencyName = this.formatCamelCasedString(dependency.name);
-				let edge = {
-					data: {
-						source: dependencyName,
-						target: conceptName
-					}
-				};
-				edgesArr.push(edge);
-			});
-		});
-		let cytoEl = {
-			nodes: nodesArr,
-			edges: edgesArr,
-		};
-		let cytoStyle = [
-      {
-        selector: 'node',
-        style: {
-          'content': 'data(id)',
-					'shape': 'roundrectangle',
-					'font-size': '20px',
-          'text-valign': 'center',
-					'color': 'black',
-          'text-halign': 'center',
-          'background-color': 'lightgray',
-					'width': '200px',
-					'height': "100px"
-        }
-      },
-      {
-        selector: 'edge',
-        style: {
-          'curve-style': 'bezier',
-          'width': 4,
-          'target-arrow-shape': 'triangle',
-          'line-color': '#9dbaea',
-          'target-arrow-color': '#9dbaea'
-        }
-      }
-    ];
-		let cytoLayout = {name: "dagre"};
-		let cytoOptions = {
-			panningEnabled: false,
-			zoomingEnabled: false
-		};
 		return (
-			<div className={"hierarchy-container"}>
-					{/* TODO: Remove placeholder button */}
-					<button className={"btn btn-primary"} onClick={() => this.expandConcept()}>Expand Concept</button>
-					{
-						this.state.conceptDialog && <ConceptDialog open={this.state.conceptDialog}
-																											 conceptKey={"placeholder"}
-																											 title={"Placeholder"}
-																											 generateExercise={this.props.generateExercise}
-																											 getInstruction={this.props.getInstruction}/>
-					}
-					<ReactCytoscape containerID={"cyto-container"} elements={cytoEl} style={cytoStyle} layout={cytoLayout} cytoscapeOptions={cytoOptions} on={('mousedown', () => {console.log("clicked")})}/>
-			</div>
+				<div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 		);
+
 	}
 
   render() {
