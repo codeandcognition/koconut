@@ -34,9 +34,39 @@ class WorldView extends Component {
 	 * @returns {Array.<*>}
 	 */
 	getOrderedConcepts(): ConceptKnowledge[] {
-		return MasteryModel.model.filter((concept) => concept.should_teach && concept.container).sort(
-				(a, b) => (b.dependencyKnowledge / b.knowledge -
-						a.dependencyKnowledge / a.knowledge));
+    let toSort = MasteryModel.model.filter((concept) => concept.should_teach);
+
+    let toProcess = [];
+
+    // count how many incoming edges each vertice has (toSort[##].dependencies.length)
+    toSort.forEach(d => {
+      d.incomingEdgeCount = d.dependencies.length;
+    });
+
+    let topoOrder = [];
+
+    // insert into a to process
+    toSort.forEach(d => {
+      if(d.incomingEdgeCount === 0) {
+        toProcess.push(d);
+      }
+    });
+
+    while(toProcess.length !== 0) {
+      let u = toProcess.pop();
+      topoOrder.push(u);
+      u.parents.forEach(d => {
+        d.incomingEdgeCount--;
+        if(d.incomingEdgeCount === 0) {
+          toProcess.push(d);
+        }
+      });
+    }
+
+    return topoOrder;
+		// return MasteryModel.model.filter((concept) => concept.should_teach && concept.container).sort(
+		// 		(a, b) => (b.dependencyKnowledge / b.knowledge -
+		// 				a.dependencyKnowledge / a.knowledge));
 	}
 
   /**
