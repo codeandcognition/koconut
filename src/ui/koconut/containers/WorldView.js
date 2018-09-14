@@ -89,17 +89,17 @@ class WorldView extends Component {
       let conceptName = this.formatCamelCasedString(concept.name);
       let node = {
         data : {
-          id: conceptName
+          id: concept.name,
+          name: conceptName
         },
         grabbable: false
       };
       nodesArr.push(node);
       concept.dependencies.forEach((dependency) => {
-        let dependencyName = this.formatCamelCasedString(dependency.name);
         let edge = {
           data: {
-            source: dependencyName,
-            target: conceptName
+            source: dependency.name,
+            target: concept.name
           }
         }
         edgesArr.push(edge);
@@ -115,7 +115,7 @@ class WorldView extends Component {
       {
         selector: 'node',
         style: {
-          'content': 'data(id)',
+          'content': 'data(name)',
           'shape': 'roundrectangle',
           'font-size': '20px',
           'text-valign': 'center',
@@ -134,27 +134,44 @@ class WorldView extends Component {
           'target-arrow-shape': 'triangle',
           'line-color': '#9dbaea',
           'target-arrow-color': '#9dbaea',
-          'display': 'none'
+          "visibility": "hidden"
+        }
+      },
+      {
+        selector: '.unhidden',
+        style: {
+          visibility: "visible"
         }
       }
     ]
 
     let cytoLayout = {name: "dagre"};
 
-    let cytoOptions = {
-      panningEnabled: false,
-      zoomingEnabled: false
-    }
-
-
     var cy = cytoscape({
       container: this.hierarchyContainer.current,
-      style: cytoStyle,
       elements: cytoEl,
+      style: cytoStyle,
       layout: cytoLayout
     });
     cy.panningEnabled(false);
     cy.zoomingEnabled(false);
+
+
+
+    cy.on('mouseover', 'node', function() {
+      let nodes = cy.nodes();
+      let relatedEdges = nodes.edgesWith("#" + this.id());
+      relatedEdges.forEach((edge) => {
+        edge.addClass("unhidden");
+      });
+    });
+    cy.on('mouseout', 'node', function(evt) {
+      let nodes = cy.nodes();
+      let relatedEdges = nodes.edgesWith("#" + this.id());
+      relatedEdges.forEach((edge) => {
+        edge.removeClass("unhidden");
+      });
+    });
   }
 
 	/**
@@ -211,7 +228,6 @@ class WorldView extends Component {
 
 	renderWorld() {
 	  if (this.hierarchyContainer.current != undefined) {
-	    console.log("this is running");
 	    this.renderCytoscape();
     } else {
 	    this.forceUpdate();
