@@ -7,6 +7,7 @@ import ConceptCard from './../components/ConceptCard';
 import {t} from '../../../data/ConceptAbbreviations';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
+import ConceptDialog from './../components/ConceptDialog';
 
 type Props = {
 	setFirebaseUser: Function,
@@ -90,6 +91,13 @@ class WorldView extends Component {
 		this.mounted = false;
 	}
 
+	expandConcept() {
+		// TODO: set additional props
+		this.setState({
+			conceptDialog: true
+		});
+	}
+
 	renderWorld() {
 		let conceptList = this.getOrderedConcepts();
 		let titleLeft = [
@@ -101,6 +109,16 @@ class WorldView extends Component {
 		];
 		return (
 				<div className="container" style={{marginTop: '12vh'}}>
+					{/* TODO: Remove placeholder button */}
+					<button className={"btn btn-primary"} onClick={() => this.expandConcept()}>Expand Concept</button>
+					{
+						this.state.conceptDialog && <ConceptDialog open={this.state.conceptDialog}
+																											 conceptKey={"placeholder"}
+																											 title={"Placeholder"}
+																											 generateExercise={this.props.generateExercise}
+																											 getInstruction={this.props.getInstruction}/>
+					}
+
 					<div style={{display: "flex"}}>
 						<div style={{flexGrow: 3, margin: 10}}>
 							{titleLeft.map(cTypeVal => {
