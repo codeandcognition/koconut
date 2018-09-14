@@ -14,6 +14,7 @@ class ConceptKnowledge {
   parents: ConceptKnowledge[];
   explanations: any;
   should_teach: boolean;
+  incomingEdgeCount: ?number;
   type: string;
 
   knowledge: number; //p(cognitive mastery) [0,1]
