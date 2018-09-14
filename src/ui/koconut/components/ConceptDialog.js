@@ -44,14 +44,7 @@ class ConceptDialog extends Component {
 							<i className="far fa-times-circle icon" onClick={() => this.handleClose()}/>
 						</div>
 						<p>
-							{/* TODO: Add concept descriptions in ConceptInventory.js and remove the Lorem Ipsum placeholder*/}
 							{ConceptInventory[this.props.conceptCode].explanations.definition}
-
-
-							Lorem ipsum dolor sit amet, no mucius lobortis definiebas vim, justo
-							placerat liberavisse cu per. Errem delenit sit in, ut cum virtute
-							tacimates, affert soleat eloquentiam id his. Eu sea elitr repudiare
-							scripserit. Eos homero deseruisse id, sonet accumsan dignissim ex quo.
 						</p>
 						<div>
 							<Button color={"primary"} variant={'outlined'} className={'link'}>Learn</Button>
