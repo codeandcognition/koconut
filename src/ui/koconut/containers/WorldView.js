@@ -67,6 +67,8 @@ class WorldView extends Component {
 				});
 			}
 		}) : null;
+
+
 	}
 
 	renderCytoscape() {
@@ -130,7 +132,7 @@ class WorldView extends Component {
       {
         selector: '.unhidden',
         style: {
-          visibility: "visible"
+          "visibility": "visible"
         }
       }
     ];
@@ -142,6 +144,9 @@ class WorldView extends Component {
       style: cytoStyle,
       layout: cytoLayout
     });
+    cy.panningEnabled(false);
+    cy.zoomingEnabled(false);
+
     cy.on('mousedown', (evt) => {
     	let node = evt.target["_private"]["data"];
     	if (node) {
@@ -150,12 +155,9 @@ class WorldView extends Component {
 				this.expandConcept(name, conceptCode);
 			}
 		});
-    cy.panningEnabled(false);
-    cy.zoomingEnabled(false);
 
 
-
-    cy.on('mouseover', 'node', function() {
+    cy.on('mouseover', 'node', function(evt) {
       let nodes = cy.nodes();
       let relatedEdges = nodes.edgesWith("#" + this.id());
       relatedEdges.forEach((edge) => {
@@ -226,10 +228,10 @@ class WorldView extends Component {
   }
 
 	renderWorld() {
-	  if (this.hierarchyContainer.current) {
-	    this.renderCytoscape();
+    if (this.hierarchyContainer.current) {
+      this.renderCytoscape();
     } else {
-	    this.forceUpdate();
+      this.forceUpdate();
     }
 
 		return (
@@ -239,7 +241,7 @@ class WorldView extends Component {
 																						 open={this.state.conceptDialog}
 																						 generateExercise={this.props.generateExercise}
 																						 getInstruction={this.props.getInstruction}/>}
-					<div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
+          <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
 		);
 
