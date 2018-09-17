@@ -71,6 +71,9 @@ class WorldView extends Component {
 
 	}
 
+  /**
+   * This function renders the world view UI.
+   */
 	renderCytoscape() {
     let conceptList = this.getOrderedConcepts(); // TODO: Change this to
     // reference prop when merged with summer2018-master

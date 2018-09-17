@@ -36,7 +36,6 @@ class ConceptDialog extends Component {
 	}
 
 	render() {
-		console.log(ConceptInventory[this.props.conceptCode], ConceptInventory[this.props.conceptCode].explanations.definition)
 		return (
 				<Dialog open={this.state.open} onClose={this.handleClose}>
 					<DialogContent>
