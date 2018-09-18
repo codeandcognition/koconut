@@ -5,7 +5,7 @@ const routes = {
 	worldview: '/worldview',
 	author: '/author',
 	welcome: '/welcome',
-	instruction: '/instruction/:concept/:type',
+	instruction: '/instruction/:concept/:type/page=:pageIndex',
 	practice: '/practice/:concept/:type',
 	error: '/404',
 	allexercises: "/worldview/all-exercises"

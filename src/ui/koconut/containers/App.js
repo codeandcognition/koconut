@@ -310,7 +310,7 @@ class App extends Component {
 	 * @param concept
 	 * @param instructionType
 	 */
-  getInstruction(concept: string, instructionType: string) {
+  getInstruction(concept: string, instructionType: string, pageIndex: number) {
   	this.setState({
 			currentConcept: concept,
 			instructionType: instructionType,
@@ -318,7 +318,7 @@ class App extends Component {
 			error: false // resets error state
   	}, () => {
   		// update state on firebase
-			this.storeState("instruction", 0, this.state.instructionType, concept);
+			this.storeState("instruction", pageIndex, this.state.instructionType, concept);
 		});
 	}
 

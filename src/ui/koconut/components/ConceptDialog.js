@@ -112,7 +112,9 @@ class ConceptDialog extends Component {
 								<ul>
 									{this.state.readInstructions.map((item, index) => {
 										return (
-											<li key={index}>{item}</li>
+											<Link to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
+												<li onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)} key={index}>{item}</li>
+											</Link>
 										);
 									})}
 								</ul>
@@ -122,7 +124,9 @@ class ConceptDialog extends Component {
 								<ul>
 									{this.state.writeInstructions.map((item, index) => {
 										return (
-											<li key={index}>{item}</li>
+											<Link to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}>
+												<li onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)} key={index}>{item}</li>
+											</Link>
 										);
 									})}
 								</ul>
