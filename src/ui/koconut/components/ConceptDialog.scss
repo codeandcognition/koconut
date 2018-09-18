@@ -19,3 +19,15 @@
     width: 30%;
     margin: 5px !important;
 }
+
+.bold-text {
+    font-weight: bold;
+}
+
+.overview-container {
+    display: flex;
+}
+
+.overview-container div {
+    width: 50%;
+}
