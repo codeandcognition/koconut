@@ -8,6 +8,7 @@ import ConceptInventory from './../../../data/ConceptMap';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
+import { withRouter} from "react-router-dom";
 
 type Props = {
 	title: string,
@@ -21,7 +22,9 @@ class ConceptDialog extends Component {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			open: true
+			open: true,
+			readInstructions: [],
+			writeInstructions: []
 		};
 		this.handleClose = this.handleClose.bind(this);
 	}
@@ -29,12 +32,21 @@ class ConceptDialog extends Component {
 	componentWillReceiveProps(props: Props) {
 		this.setState({
 			open: props.open
-		})
+		}, () => {
+      this.getInstructionTitles();
+		});
 	}
+
+	componentWillMount() {
+		this.getInstructionTitles();
+	}
+
 
 	handleClose() {
 		this.setState({
-			open: false
+			open: false,
+			readInstructions: [],
+			writeInstructions: []
 		});
 	}
 
@@ -48,10 +60,38 @@ class ConceptDialog extends Component {
     />
   }
 
+	getInstructionTitles() {
+		let databaseRef = firebase.database().ref("Instructions/" + this.props.conceptCode);
+		let componentRef = this;
+		databaseRef.on("value", function(snapshot) {
+			let results = snapshot.val();
+			if (results != null) {
+				let readResults = results["READ"];
+				let writeResults = results["WRITE"];
+				let readTitles = [];
+				let writeTitles = [];
+				if (readResults) {
+          readResults.forEach((item) => {
+            readTitles.push(item.title);
+          });
+				}
+				if (writeResults) {
+          writeResults.forEach((item) => {
+            writeTitles.push(item.title);
+          });
+				}
+        componentRef.setState({
+          readInstructions: readTitles,
+          writeInstructions: writeTitles
+        });
+			}
+		});
+	}
+
 
 
 	render() {
-		let conceptInfo = ConceptInventory[this.props.conceptCode].explanations
+		let conceptInfo = ConceptInventory[this.props.conceptCode].explanations;
 
 		return (
 				<Dialog open={this.state.open} onClose={this.handleClose}>
@@ -69,10 +109,23 @@ class ConceptDialog extends Component {
 						<div className={"overview-container"}>
 							<div>
 								<p>Reading Code</p>
-
+								<ul>
+									{this.state.readInstructions.map((item, index) => {
+										return (
+											<li key={index}>{item}</li>
+										);
+									})}
+								</ul>
 							</div>
 							<div>
 								<p>Writing Code</p>
+								<ul>
+									{this.state.writeInstructions.map((item, index) => {
+										return (
+											<li key={index}>{item}</li>
+										);
+									})}
+								</ul>
 							</div>
 						</div>
 					</DialogContent>
