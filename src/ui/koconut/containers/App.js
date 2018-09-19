@@ -6,6 +6,7 @@ import PopOverMessage from './PopoverMessage';
 import Types from '../../../data/ExerciseTypes.js';
 import Routes from './../../../Routes';
 import {BrowserRouter as Router, Switch, Redirect, Route} from 'react-router-dom';
+import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import Loadable from 'react-loadable';
 
 
@@ -100,6 +101,7 @@ class App extends Component {
   clearCounterAndFeedback: Function;
   sendExerciseViewDataToFirebase: Function;
   hasNextQuestion: Function;
+  getOrderedConcepts: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: Exercise,
@@ -126,7 +128,7 @@ class App extends Component {
 
   constructor() {
     super();
-    this.generator = new ExerciseGenerator();
+    this.generator = new ExerciseGenerator(this.getOrderedConcepts);
     this.theme = createMuiTheme();
     this.state = {
       exercise: {},
@@ -169,6 +171,7 @@ class App extends Component {
     this.clearCounterAndFeedback = this.clearCounterAndFeedback.bind(this);
     this.sendExerciseViewDataToFirebase = this.sendExerciseViewDataToFirebase.bind(this);
     this.hasNextQuestion = this.hasNextQuestion.bind(this);
+    this.getOrderedConcepts = this.getOrderedConcepts.bind(this);
   }
 
   sendExerciseViewDataToFirebase(exerciseId: string) {
@@ -196,6 +199,46 @@ class App extends Component {
 
   returnDisplayTypes() {
     return displayType;
+  }
+
+    /**
+   * Returns sorted concepts list sorted by relevance to the user.
+   * @returns {Array.<*>}
+   */
+  getOrderedConcepts(): ConceptKnowledge[] {
+    let toSort = MasteryModel.model.filter((concept) => concept.should_teach);
+
+    let toProcess = [];
+
+    // count how many incoming edges each vertice has (toSort[##].dependencies.length)
+    toSort.forEach(d => {
+      d.incomingEdgeCount = d.dependencies.length;
+    });
+
+    let topoOrder = [];
+
+    // insert into a to process
+    toSort.forEach(d => {
+      if(d.incomingEdgeCount === 0) {
+        toProcess.push(d);
+      }
+    });
+
+    while(toProcess.length !== 0) {
+      let u = toProcess.pop();
+      topoOrder.push(u);
+      u.parents.forEach(d => {
+        d.incomingEdgeCount--;
+        if(d.incomingEdgeCount === 0) {
+          toProcess.push(d);
+        }
+      });
+    }
+
+    return topoOrder;
+    // return MasteryModel.model.filter((concept) => concept.should_teach && concept.container).sort(
+		// 		(a, b) => (b.dependencyKnowledge / b.knowledge -
+		// 				a.dependencyKnowledge / a.knowledge));
   }
 
   componentDidMount() {
@@ -874,6 +917,7 @@ class App extends Component {
               exerciseId={this.state.exerciseId}
 							generateExercise={this.generateExercise}
               hasNextQuestion={this.hasNextQuestion}
+              getOrderedConcepts={this.getOrderedConcepts}
 					/>
 				</div>
     );
@@ -900,7 +944,8 @@ class App extends Component {
 					<WorldView firebase={this.props.firebase}
 										 switchToWorldView={this.switchToWorldView}
 										 generateExercise={this.generateExercise}
-										 getInstruction={this.getInstruction}/>
+										 getInstruction={this.getInstruction}
+                     getOrderedConcepts={this.getOrderedConcepts}/>
 				</div>
     )
   }
@@ -920,7 +965,8 @@ class App extends Component {
 													 storeUserState={this.storeState}
 													 sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
 													 exerciseId={this.state.exerciseId}
-                           clearCounterAndFeedback={this.clearCounterAndFeedback}/>
+                           clearCounterAndFeedback={this.clearCounterAndFeedback}
+                           getOrderedConcepts={this.getOrderedConcepts}/>
 				</div>
 		);
   }
@@ -933,7 +979,7 @@ class App extends Component {
   	// show all exercises view in development mode
 		if (true /*!process.env.NODE_ENV || process.env.NODE_ENV ===
 		 'development'*/) { // TODO: Uncomment this for large scale deployment
-			return(<AllExercises/>);
+			return(<AllExercises getOrderedConcepts={this.getOrderedConcepts}/>);
 		} else {
 			return this.renderWorldView();
 		}

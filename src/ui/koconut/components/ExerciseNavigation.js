@@ -13,19 +13,6 @@ import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
  * @class
  */
 export default class ExerciseNavigation extends Component {
-	/**
-	 * Returns sorted concepts list sorted by relevance to the user.
-	 * Only includes concepts where concept.teach is true and concept.container
-	 * is false. 
-   * 
-   * Copied from the WorldView component. Easier to duplicate than refactor.
-	 * @returns {Array.<*>}
-	 */
-	getOrderedConcepts(): ConceptKnowledge[] {
-		return MasteryModel.model.filter((concept) => concept.should_teach && concept.container).sort(
-				(a, b) => (b.dependencyKnowledge / b.knowledge -
-						a.dependencyKnowledge / a.knowledge));
-	}
 
   render() {
     // This next few lines of code finds the nextConcept based on the current concept.
@@ -33,7 +20,7 @@ export default class ExerciseNavigation extends Component {
     // It is important to note that this relevance does not necessarily follow the order
     // of the concepts in the world view.
     let currentConceptIndex = 0;
-    let orderedConcepts = this.getOrderedConcepts();
+    let orderedConcepts = this.props.getOrderedConcepts();
     orderedConcepts.forEach((d,i)=> {
       if(d.name === this.props.concept) {
         currentConceptIndex = i;

@@ -51,7 +51,7 @@ class BreadCrumbs extends Component {
   componentWillMount() {
     this.setState({
       concept: this.formatCamelCasedString(this.props.conceptType),
-      orderedConcepts: this.getOrderedConcepts()
+      orderedConcepts: this.props.getOrderedConcepts()
     }, () => {
       let conceptNames = {};
       this.state.orderedConcepts.forEach((concept) => {
@@ -103,18 +103,6 @@ class BreadCrumbs extends Component {
       }
     }
     return result;
-  }
-
-  /**
-   * Returns sorted concepts list sorted by relevance to the user.
-   * Only includes concepts where concept.teach is true and concept.container
-   * is false
-   * @returns {Array.<*>}
-   */
-  getOrderedConcepts(): ConceptKnowledge[] {
-    return MasteryModel.model.filter((concept) => concept.should_teach && concept.container).sort(
-        (a, b) => (b.dependencyKnowledge / b.knowledge -
-            a.dependencyKnowledge / a.knowledge));
   }
 
   /**

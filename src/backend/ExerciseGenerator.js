@@ -17,7 +17,8 @@ import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
 class ExerciseGenerator {
   counter: number;
 
-  constructor() {
+  constructor(getOrderedConcepts: Function) {
+    this.getOrderedConcepts = getOrderedConcepts;
     this.counter = 0;
   }
 
@@ -38,7 +39,7 @@ class ExerciseGenerator {
     let results = [];
     let exerciseIds = [];
     if(exerciseList && conceptMapGetter) {
-      if (conceptMapGetter[concept]) {
+    	if (conceptMapGetter[concept]) {
 				conceptMapGetter[concept].forEach((exerciseId) => {
 					if ((exerciseType === "READ" && exerciseList[exerciseId] && ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type)) ||
 							(exerciseType === "WRITE" && exerciseList[exerciseId] && !ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type) )) {
@@ -70,6 +71,7 @@ class ExerciseGenerator {
   }
 
   /**
+<<<<<<< HEAD
    * Returns sorted concepts list sorted by relevance to the user.
    * @returns {Array.<*>}
    */
@@ -82,6 +84,8 @@ class ExerciseGenerator {
   }
 
   /**
+=======
+>>>>>>> 46d96f0a1079db337434e6a8c033785e03d69227
    * Get a stub exercise defined in Exercises.js
    * @returns {Exercise} stub exercise
    */

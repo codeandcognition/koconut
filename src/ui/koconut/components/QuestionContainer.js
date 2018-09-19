@@ -107,7 +107,7 @@ class QuestionContainer extends Component {
 
 		let containerStyle = {
 			padding: "20px"
-		}
+		};
 
 		if (!this.props.isFollowup) {
 			containerStyle["borderTop"] = "2px black solid";
@@ -126,7 +126,7 @@ class QuestionContainer extends Component {
 														feedback={this.props.feedback}
 														answer={this.props.question.answer}/>
 					<br />
-					<p><span style={{fontWeight: "bold"}}>Answer:</span> {this.props.question.type !== "writeCode" && answer}</p>
+					<div><span style={{fontWeight: "bold"}}>Answer:</span> {this.props.question.type !== "writeCode" && answer}</div>
 
 					{this.props.question.type === "writeCode" &&
 

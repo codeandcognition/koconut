@@ -48,12 +48,6 @@ class AllExercises extends Component {
     });
   }
 
-  getOrderedConcepts(): ConceptKnowledge[] {
-    return MasteryModel.model.filter((concept) => concept.should_teach && concept.container).sort(
-        (a, b) => (b.dependencyKnowledge / b.knowledge -
-            a.dependencyKnowledge / a.knowledge));
-  }
-
   getConceptsByType(orderedConcepts: ConceptKnowledge[], type: string) {
     return orderedConcepts.filter(concept => {
       return concept.type === type;
@@ -106,7 +100,7 @@ class AllExercises extends Component {
       {name: t.template, title: "Templates"}
     ];
 
-    let conceptList = this.getOrderedConcepts();
+    let conceptList = this.props.getOrderedConcepts();
     return (
         <div className={"container"}>
           <h1>Koconut Exercises</h1>

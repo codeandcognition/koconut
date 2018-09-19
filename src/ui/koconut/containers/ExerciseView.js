@@ -147,7 +147,8 @@ class Exercise extends Component {
             hasNextQuestion={this.props.hasNextQuestion}
             nextQuestion={this.props.nextQuestion}
             concept={this.props.concept}
-            generateExercise={this.props.generateExercise}/>
+            generateExercise={this.props.generateExercise}
+            getOrderedConcepts={this.props.getOrderedConcepts}/>
           {/*<ConceptLabel concepts={this.props.exercise &&
            this.props.exercise.concepts}/>*/}
 				</div>
@@ -169,6 +170,7 @@ class Exercise extends Component {
             generateExercise={this.props.generateExercise}
             concept={this.props.concept}
             clearCounterAndFeedback={this.props.clearCounterAndFeedback}
+            getOrderedConcepts={this.props.getOrderedConcepts}
           />
 					{!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderExercise()}
         </div>

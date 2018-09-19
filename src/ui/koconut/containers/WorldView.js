@@ -31,18 +31,6 @@ class WorldView extends Component {
 		this.hierarchyContainer = React.createRef();
 	}
 
-	/**
-	 * Returns sorted concepts list sorted by relevance to the user.
-	 * Only includes concepts where concept.teach is true and concept.container
-	 * is false
-	 * @returns {Array.<*>}
-	 */
-	getOrderedConcepts(): ConceptKnowledge[] {
-		return MasteryModel.model.filter((concept) => concept.should_teach && concept.container).sort(
-				(a, b) => (b.dependencyKnowledge / b.knowledge -
-						a.dependencyKnowledge / a.knowledge));
-	}
-
   /**
    * getConceptsByType takes the orderedConcepts and then grabs only the ones with the 
    * specified type
