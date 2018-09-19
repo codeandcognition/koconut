@@ -116,14 +116,13 @@ class WorldView extends Component {
           'width': 4,
           'target-arrow-shape': 'triangle',
           'line-color': '#9dbaea',
-          'target-arrow-color': '#9dbaea',
-          "visibility": "hidden"
+          'target-arrow-color': '#9dbaea'
         }
       },
       {
-        selector: '.unhidden',
+        selector: '.hidden',
         style: {
-          "visibility": "visible"
+          "visibility": "hidden"
         }
       }
     ];
@@ -150,17 +149,25 @@ class WorldView extends Component {
 
     cy.on('mouseover', 'node', function(evt) {
       let nodes = cy.nodes();
+      let edges = cy.edges();
       let relatedEdges = nodes.edgesWith("#" + this.id());
-      relatedEdges.forEach((edge) => {
-        edge.addClass("unhidden");
+      relatedEdges = Object.values(relatedEdges);
+      edges.forEach((edge) => {
+        if (!relatedEdges.includes(edge)) {
+          edge.addClass("hidden");
+        }
       });
       document.getElementById("hierarchy-container").style.cursor = "pointer"
     });
     cy.on('mouseout', 'node', function(evt) {
       let nodes = cy.nodes();
+      let edges = cy.edges();
       let relatedEdges = nodes.edgesWith("#" + this.id());
-      relatedEdges.forEach((edge) => {
-        edge.removeClass("unhidden");
+      relatedEdges = Object.values(relatedEdges);
+      edges.forEach((edge) => {
+        if (!relatedEdges.includes(edge)) {
+          edge.removeClass("hidden");
+        }
       });
       document.getElementById("hierarchy-container").style.cursor = "default"
     });
