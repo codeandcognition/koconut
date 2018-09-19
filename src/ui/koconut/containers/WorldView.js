@@ -7,6 +7,7 @@ import LoadingView from './../components/LoadingView';
 import ConceptDialog from './../components/ConceptDialog';
 import './WorldView.css';
 import cytoscape from 'cytoscape';
+import firebase from 'firebase';
 import dagre from 'cytoscape-dagre';
 cytoscape.use( dagre );
 
@@ -26,7 +27,8 @@ class WorldView extends Component {
 		super(props);
 		this.state = {
 			loading: true,
-      didRender: false
+      didRender: false,
+      conceptDescriptions: {}
 		};
 		this.hierarchyContainer = React.createRef();
 	}
@@ -41,6 +43,10 @@ class WorldView extends Component {
     return orderedConcepts.filter(concept => {
       return concept.type === type;
     })
+  }
+
+  componentWillMount() {
+    this.getConceptShortDescriptions();
   }
 
   componentDidMount() {
@@ -207,6 +213,18 @@ class WorldView extends Component {
 		});
 	}
 
+	getConceptShortDescriptions() {
+	  let databaseRef = firebase.database().ref("ConceptShortDescriptions");
+    let componentRef = this;
+	  databaseRef.on("value", function(snapshot) {
+	    if (snapshot && snapshot.val()) {
+        componentRef.setState({
+          conceptDescriptions: snapshot.val()
+        });
+      }
+    });
+  }
+
   /**
    * This function takes in a camel cased string and converts it to normal
    * text with the first letter of every word being capitalized.
@@ -228,8 +246,6 @@ class WorldView extends Component {
   }
 
   getOrderedConcepts(): ConceptKnowledge[] {
-    console.log(ConceptKnowledge);
-    console.log(MasteryModel);
     return MasteryModel.model.filter((concept) => concept.should_teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
             a.dependencyKnowledge / a.knowledge));

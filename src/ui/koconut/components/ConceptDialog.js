@@ -112,8 +112,8 @@ class ConceptDialog extends Component {
 								<ul>
 									{this.state.readInstructions.map((item, index) => {
 										return (
-											<Link to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
-												<li onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)} key={index}>{item}</li>
+											<Link key={index} to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
+												<li onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}>{item}</li>
 											</Link>
 										);
 									})}
