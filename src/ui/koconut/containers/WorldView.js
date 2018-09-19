@@ -157,6 +157,7 @@ class WorldView extends Component {
           edge.addClass("hidden");
         }
       });
+      document.getElementById("hierarchy-container").style.cursor = "pointer"
     });
     cy.on('mouseout', 'node', function(evt) {
       let nodes = cy.nodes();
@@ -168,6 +169,7 @@ class WorldView extends Component {
           edge.removeClass("hidden");
         }
       });
+      document.getElementById("hierarchy-container").style.cursor = "default"
     });
   }
 
