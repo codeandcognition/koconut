@@ -79,7 +79,8 @@ class WorldView extends Component {
       let node = {
         data : {
 					id: concept.name,
-					name: conceptName
+          name: conceptName,
+          content: conceptName + "\n" + this.state.conceptDescriptions[concept.name]
         },
         grabbable: false
       };
@@ -104,15 +105,17 @@ class WorldView extends Component {
       {
         selector: 'node',
         style: {
-          'content': 'data(name)',
+          'content': 'data(content)',
+          'text-wrap': 'wrap',
+          'text-max-width': '243px',
           'shape': 'roundrectangle',
           'font-size': '20px',
           'text-valign': 'center',
           'color': 'black',
           'text-halign': 'center',
           'background-color': 'lightgray',
-          'width': '200px',
-          'height': "100px"
+          'width': '250px',
+          'height': "150px"
         }
       },
       {
@@ -130,6 +133,12 @@ class WorldView extends Component {
         style: {
           "visibility": "hidden"
         }
+      },
+      {
+        selector: '.nodeHovered',
+        style: {
+          "background-color":"darkgrey"
+        }
       }
     ];
     let cytoLayout = {name: "dagre"};
@@ -145,7 +154,7 @@ class WorldView extends Component {
 
     cy.on('mousedown', (evt) => {
     	let node = evt.target["_private"]["data"];
-    	if (node) {
+    	if (evt.target["_private"].group === "nodes") {
 				let name = node["name"];
 				let conceptCode = node["id"];
 				this.expandConcept(name, conceptCode);
@@ -164,6 +173,7 @@ class WorldView extends Component {
         }
       });
       document.getElementById("hierarchy-container").style.cursor = "pointer"
+      this.addClass("nodeHovered");
     });
     cy.on('mouseout', 'node', function(evt) {
       let nodes = cy.nodes();
@@ -176,6 +186,7 @@ class WorldView extends Component {
         }
       });
       document.getElementById("hierarchy-container").style.cursor = "default"
+      this.removeClass("nodeHovered");
     });
   }
 
