@@ -105,7 +105,7 @@ class ConceptDialog extends Component {
 						{conceptInfo.examples.map((item, index) => {
               return this.renderMarkdown(item, index);
             })}
-						<h4>Overview</h4>
+						<br />
 						<div className={"overview-container"}>
 							<div>
 								<p>Reading Code</p>

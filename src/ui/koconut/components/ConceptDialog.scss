@@ -26,10 +26,11 @@
 
 .overview-container {
     display: flex;
+    justify-content: space-between;
 }
 
 .overview-container div {
-    width: 50%;
+    width: 47%;
 }
 
 .overview-container ul {
