@@ -145,7 +145,7 @@ class WorldView extends Component {
 
     cy.on('mousedown', (evt) => {
     	let node = evt.target["_private"]["data"];
-    	if (node) {
+    	if (evt.target["_private"].group === "nodes") {
 				let name = node["name"];
 				let conceptCode = node["id"];
 				this.expandConcept(name, conceptCode);
