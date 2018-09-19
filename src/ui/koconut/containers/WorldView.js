@@ -124,6 +124,12 @@ class WorldView extends Component {
         style: {
           "visibility": "hidden"
         }
+      },
+      {
+        selector: '.nodeHovered',
+        style: {
+          "background-color":"darkgrey"
+        }
       }
     ];
     let cytoLayout = {name: "dagre"};
@@ -158,6 +164,7 @@ class WorldView extends Component {
         }
       });
       document.getElementById("hierarchy-container").style.cursor = "pointer"
+      this.addClass("nodeHovered");
     });
     cy.on('mouseout', 'node', function(evt) {
       let nodes = cy.nodes();
@@ -170,6 +177,7 @@ class WorldView extends Component {
         }
       });
       document.getElementById("hierarchy-container").style.cursor = "default"
+      this.removeClass("nodeHovered");
     });
   }
 
