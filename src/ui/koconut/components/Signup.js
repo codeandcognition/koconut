@@ -6,6 +6,12 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import firebase from 'firebase/app';
 import LoadingView from './LoadingView';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import 'firebase/auth';
 
 type Props = {
@@ -19,7 +25,8 @@ class Signup extends Component {
 			loading: true,
 			email: "",
 			password: "",
-			confirmation: ""
+			confirmation: "",
+      userExperienceError: false
 		}; // need this declaration here, render crashes otherwise
 	}
 
@@ -40,6 +47,9 @@ class Signup extends Component {
 		this.authUnsub();
 	}
 
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 	/**
 	 * Creates a Firebase user account if user info is acceptable,
 	 * displays a warning otherwise
@@ -47,32 +57,36 @@ class Signup extends Component {
 	handleSubmit(evt) {
 		evt.preventDefault();
 		let mismatch = this.state.password !== this.state.confirmation;
-		this.setState({errorMessage: "", errCode: ""});
-		if (!mismatch) {
-			firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-			.then(user => {
-        let uid = user.user.uid;
-        if(uid) {
-          firebase.database().ref(`/Users/${uid}/Data/SessionEvents`).push({
-            type: "start",
-            timestamp: firebase.database.ServerValue.TIMESTAMP
+		this.setState({errorMessage: "", errCode: "", userExperienceError: false});
+
+    if(mismatch) {
+      this.setState({mismatch});
+    } else if(this.state.userExperience === "") {
+      this.setState({userExperienceError: true})
+    } else {
+      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then(user => {
+          let uid = user.user.uid;
+          if(uid) {
+            firebase.database().ref(`/Users/${uid}/Data/SessionEvents`).push({
+              type: "start",
+              timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+            firebase.database().ref(`/Users/${uid}/userExperience`).set(this.state.userExperience);
+          }
+          this.setState({currentUser: user});
+          return user.updateProfile({displayName: this.state.displayName});
+        })
+        .then(this.state.currentUser ? () => this.setState({loading: false}, () => {
+          this.props.history.push(Routes.signin)
+        }) : null)
+        .catch((error) => {
+          this.setState({
+            errorMessage: error.message,
+            errCode: error.code
           });
-        }
-        this.setState({currentUser: user});
-				return user.updateProfile({displayName: this.state.displayName});
-			})
-			.then(this.state.currentUser ? () => this.setState({loading: false}, () => {
-				this.props.history.push(Routes.signin)
-			}) : null)
-			.catch((error) => {
-				this.setState({
-					errorMessage: error.message,
-					errCode: error.code
-				});
-			});
-		} else {
-			this.setState({mismatch: mismatch});
-		}
+        });
+    }
 	}
 
 	/**
@@ -121,11 +135,35 @@ class Signup extends Component {
 										label="Confirm Password"
 										placeholder="Re-enter your password"
 										onInput={evt => this.setState({confirmation: evt.target.value})}/>
-								<Button
+                {this.state.userExperienceError ? <p className="alert alert-warning"
+																					style={{marginTop: '3%', marginBottom: '0%'}}>You must select one of the options below</p> : null}
+								
+                <FormControl style={{marginTop: 10, textAlign: 'center'}}>
+                  <InputLabel htmlFor="userExperience_">I am...</InputLabel>
+                  <Select
+                    value={this.state.userExperience}
+                    onChange={this.handleChange}
+                    inputProps={{
+                      name: 'userExperience',
+                      id: 'userExperience_',
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={"NEW"}>new to programming</MenuItem>
+                    <MenuItem value={"NEWPYTHON"}>a programmer learning python</MenuItem>
+                    <MenuItem value={"STUDENT"}>student reviewing for a midterm or test</MenuItem>
+                    <MenuItem value={"PROGRAMMEROLD"}>programmer that hasn't used python in a while</MenuItem>
+                  </Select>
+                </FormControl>
+								
+                <Button
 										style={{marginTop: '5%', width: '30vh', marginLeft: 'auto', marginRight: 'auto'}}
 										type="submit"
 										variant="outlined"
 										onClick={(evt) => this.handleSubmit(evt)}>Create account</Button>
+                
 								{/* Sign in link is styled to go along with Material UI's styles */}
 								<Link to={Routes.signin}><p style={{cursor: 'pointer', color: '#E91E63', textAlign: 'center'}}>Sign in instead</p></Link>
 							</FormGroup>
