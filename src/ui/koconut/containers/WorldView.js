@@ -80,7 +80,7 @@ class WorldView extends Component {
         data : {
 					id: concept.name,
           name: conceptName,
-          content: conceptName + "\n" + this.state.conceptDescriptions[concept.name]
+          content: conceptName + "\n\n" + this.state.conceptDescriptions[concept.name]
         },
         grabbable: false
       };
