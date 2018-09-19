@@ -55,7 +55,7 @@ class WorldView extends Component {
 				});
 			}
 		}) : null;
-
+    window.scrollTo(0, 0);
 
 	}
 
