@@ -154,6 +154,7 @@ class WorldView extends Component {
       relatedEdges.forEach((edge) => {
         edge.addClass("unhidden");
       });
+      document.getElementById("hierarchy-container").style.cursor = "pointer"
     });
     cy.on('mouseout', 'node', function(evt) {
       let nodes = cy.nodes();
@@ -161,6 +162,7 @@ class WorldView extends Component {
       relatedEdges.forEach((edge) => {
         edge.removeClass("unhidden");
       });
+      document.getElementById("hierarchy-container").style.cursor = "default"
     });
   }
 
