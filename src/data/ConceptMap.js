@@ -1,24 +1,26 @@
 /*
-Currently standalone file. Must confirm the mapping before using
- */
 
-// const sep = { left_paren: "(", right_paren: ")", left_curl: "{", right_curl: "}",
-// 	left_sqr: "[", right_sqr: "]", semicolon: ";", comma: ",", dot: ".",
-// 	triple_dot: "...", at: "@", double_colon: "::"
-// };
+Unused constants
 
-// const op = { assign: "=", greater: ">", lesser: "<", not: "!", equality: "==",
-// 	greater_equality: ">=", lesser_equality: ">=", not_equal: "!=", and: "&&",
-// 	or: "||", incr: "++", decr: "--", add: "+", sub: "-", mult: "*", div: "/",
-// 	add_assign: "+=", sub_assign: "-=", mult_assign: "*=", div_assign: "/="
-// };
+const sep = { left_paren: "(", right_paren: ")", left_curl: "{", right_curl: "}",
+	left_sqr: "[", right_sqr: "]", semicolon: ";", comma: ",", dot: ".",
+	triple_dot: "...", at: "@", double_colon: "::"
+};
 
-// const quote = { single: "'", double: "\"" };
+const op = { assign: "=", greater: ">", lesser: "<", not: "!", equality: "==",
+	greater_equality: ">=", lesser_equality: ">=", not_equal: "!=", and: "&&",
+	or: "||", incr: "++", decr: "--", add: "+", sub: "-", mult: "*", div: "/",
+	add_assign: "+=", sub_assign: "-=", mult_assign: "*=", div_assign: "/="
+};
 
-// const keyword = { new: "new", true: "true", false: "false", if: "if", else: "else",
-// 	for: "for", do: "do", while: "while", continue: "continue", return: "return",
-// 	null: "null", this: "this", super: "super",
-// };
+const quote = { single: "'", double: "\"" };
+
+const keyword = { new: "new", true: "true", false: "false", if: "if", else: "else",
+	for: "for", do: "do", while: "while", continue: "continue", return: "return",
+	null: "null", this: "this", super: "super",
+};
+
+*/
 
 const g = {
 	howCodeRuns: "howCodeRuns",
@@ -32,15 +34,15 @@ const g = {
 	floatEquality: "floatEquality",
 	conditionals: "conditionals",
 	findMaxMin: "findMaxMin"
-}
+};
 
 const t = {
 	semantic: "semantic",
 	template: "template",
 	onboarding: "onboarding"
-}
+};
 
-
+// Concept information that is used to populate the world view
 export const conceptInventory =
 		{
 			[g.howCodeRuns]: {

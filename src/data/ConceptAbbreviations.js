@@ -65,12 +65,12 @@ export const g = {
   floatEquality: "floatEquality",
   conditionals: "conditionals",
   findMaxMin: "findMaxMin"
-}
+};
 
 export const t = {
   semantic: "semantic",
   template: "template",
   onboarding: "onboarding"
-}
+};
 
 export default g;
