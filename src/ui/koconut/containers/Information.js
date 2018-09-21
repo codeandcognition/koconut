@@ -8,8 +8,6 @@ import Paper from '@material-ui/core/Paper';
 import ExerciseQuestion from '../components/ExerciseQuestion';
 
 import './Information.css';
-
-import type {Exercise} from '../../../data/Exercises';
 import Button from "@material-ui/core/Button/Button";
 
 /**
@@ -18,7 +16,7 @@ import Button from "@material-ui/core/Button/Button";
  */
 
 type Props = {
-    exercise: Exercise,
+    exercise: any,
     answer: any,  // Maybe type - can be null/void
     updateHandler: Function,
     feedback: string[],
@@ -136,7 +134,7 @@ class Information extends Component {
       //       question.type !=="multipleChoice" &&
       //       question.type !=="selectMultiple")
       //       ) 
-          ? <div></div> :
+          ? <div/> :
           <Response
             key={"response"+index}
             type={type}
@@ -181,7 +179,7 @@ class Information extends Component {
     return <div />
   }
 
-  addGaveUp(questionIndex, fIndex) {
+  addGaveUp(questionIndex: number, fIndex: number) {
     let gaveUpArr = [];
     gaveUpArr[questionIndex] = true;
     this.setState({

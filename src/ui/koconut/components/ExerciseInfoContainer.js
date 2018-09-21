@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import QuestionContainer from './QuestionContainer';
-import type {Exercise} from '../../../data/Exercises';
 import Paper from '@material-ui/core/Paper';
 import Code from './Code';
 
 type Props = {
 	firebaseID: string,
 	quadrant: string,
-	exercise: Exercise
+	exercise: any
 };
 
 class ExerciseInfoContainer extends Component {

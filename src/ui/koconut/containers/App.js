@@ -13,7 +13,6 @@ import Loadable from 'react-loadable';
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
-import type {Exercise} from '../../../data/Exercises';
 
 const Sk = require('skulpt');
 
@@ -104,7 +103,7 @@ class App extends Component {
   getOrderedConcepts: Function;
   // updater: ResponseEvaluator;
   state: {
-    exercise: Exercise,
+    exercise: any,
 		exerciseType: string,
 		instructionType: string,
     feedback: any, // flow pls
@@ -118,7 +117,7 @@ class App extends Component {
 		error: boolean,
 		errorMessage: string,
 		author: boolean,
-    exerciseList: ?Exercise[],
+    exerciseList: ?any[],
     conceptMapGetter: ?Map<string,number[]>,
     codeTheme: string,
     timesGotQuestionWrong: number[],

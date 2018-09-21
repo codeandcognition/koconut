@@ -7,12 +7,9 @@ import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import {MasteryModel} from '../data/MasteryModel';
 import ExerciseTypes from '../data/ExerciseTypes';
 import {BayesKT} from './BKT.js';
-import type {Exercise} from '../data/Exercises';
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
-//
-
 
 /**
  * Evaluates and calculates correctness of a student response, and the
@@ -84,7 +81,7 @@ class ResponseEvaluator {
    * @param feedback - OPTIONAL, for special new types (table and selectMultiple)
    * @param exerciseId - OPTIONAL, exercise Id, for firebase logging
    */
-  static evaluateAnswer(exercise: Exercise, answer: string, next: Function, questionIndex: number,
+  static evaluateAnswer(exercise: any, answer: string, next: Function, questionIndex: number,
                         questionType: any, feedback: any, exerciseId: any) {
     // no one can escape asyncronous programming!!!!
     // >:D

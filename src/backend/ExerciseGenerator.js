@@ -1,9 +1,6 @@
 // @flow
 import ExerciseTypes from '../data/ExerciseTypes.js';
 import conceptInventory from '../data/ConceptMap';
-
-import type {Exercise} from '../data/Exercises.js';
-
 // import typeof doesn't agree with Flow for some reason:
 //   https://flow.org/en/docs/types/modules/
 // So, we import all of ConceptKnowledge
@@ -28,7 +25,7 @@ class ExerciseGenerator {
    * @param concept - String (Camel Cased)
    * @param exerciseList - List of exercises coming from firebase
    * @param conceptMapGetter - List of concept mappings coming from firebase
-   * @return {Exercise[]} Array of exercises for the given exercise type and concept
+   * @return {any[]} Array of exercises for the given exercise type and concept
    */
   getExercisesByTypeAndConcept(exerciseType: string,
                                concept: string,
@@ -75,8 +72,6 @@ class ExerciseGenerator {
    * @returns {Array.<*>}
    */
   getOrderedConcepts(): ConceptKnowledge[] {
-  	console.log(ConceptKnowledge);
-  	console.log(MasteryModel);
     return MasteryModel.model.filter((concept) => concept.should_teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
         a.dependencyKnowledge / a.knowledge));
