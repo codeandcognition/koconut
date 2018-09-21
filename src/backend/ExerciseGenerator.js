@@ -1,5 +1,4 @@
 // @flow
-import {stubExercise} from '../data/Exercises.js';
 import ExerciseTypes from '../data/ExerciseTypes.js';
 import conceptInventory from '../data/ConceptMap';
 
@@ -16,6 +15,7 @@ import {ConceptKnowledge, MasteryModel} from '../data/MasteryModel';
  */
 class ExerciseGenerator {
   counter: number;
+  getOrderedConcepts: Function;
 
   constructor(getOrderedConcepts: Function) {
     this.getOrderedConcepts = getOrderedConcepts;
@@ -71,7 +71,6 @@ class ExerciseGenerator {
   }
 
   /**
-<<<<<<< HEAD
    * Returns sorted concepts list sorted by relevance to the user.
    * @returns {Array.<*>}
    */
@@ -81,16 +80,6 @@ class ExerciseGenerator {
     return MasteryModel.model.filter((concept) => concept.should_teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
         a.dependencyKnowledge / a.knowledge));
-  }
-
-  /**
-=======
->>>>>>> 46d96f0a1079db337434e6a8c033785e03d69227
-   * Get a stub exercise defined in Exercises.js
-   * @returns {Exercise} stub exercise
-   */
-  getStubExercise() : Exercise {
-    return stubExercise;
   }
 
   /**
@@ -153,70 +142,6 @@ class ExerciseGenerator {
     );
     return types[Math.floor(Math.random() * types.length)];
   }
-
-
-  /**
-   * D E P R E C A T E D - Deprecated, keeping in here because we may want
-   * to use similar functionality in the future
-   *
-   * Returns a generated Exercise
-   * @param concept - specifies a concept type if provided
-   * @returns a generated Exercise
-   */
-  /*generateExercise(concept: ?string) {
-    //First exercise to pass is initial survey
-    // TODO: This is probably bad architecture
-    if(this.counter === 0) {
-      let ret = exampleExercises.filter(
-          (e) => e.exercise.type === ExerciseTypes.survey)[0].exercise;
-      // need to increment
-      this.counter += 1;
-
-      return ret;
-    }
-
-    // Retrieves a concept if not provided
-    if(typeof concept !== 'string') {
-      concept = this.getConcept();
-    }
-
-    // let type = this.getType();
-    let exercisePool = exampleExercises.filter(
-      (e) => {
-        if(typeof concept === 'string') {
-          return e.exercise.concepts.includes(concept);
-        } else {
-          return false;
-        }
-      },
-    );
-
-    let exercise;
-    if(exercisePool.length > 0) {
-      exercise = exercisePool[Math.floor(Math.random() * exercisePool.length)];
-    } else {
-      exercise = stubExercise;
-      exercise.exercise.concepts = [concept];
-    }
-    this.counter += 1;
-    ExercisePool.addExercise(exercise.exercise, exercise.answer);
-    return exercise.exercise;
-  }*/
-
-
-  /**
-   * Deprecated
-   * Gets a specific exercise from the example exercises
-   * For DEBUG eyes only 👀
-   * @param index - the exercise index to retrieve
-   * @private
-   * @returns the exercise at the given index (wraps around if index > size)
-   */
-  // _generateExercise(index: number) {
-  //   let exercise = exampleExercises[index % exampleExercises.length];
-  //   ExercisePool.addExercise(exercise.exercise, exercise.answer);
-  //   return exercise.exercise;
-  // }
 
 }
 
