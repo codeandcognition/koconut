@@ -1,0 +1,18 @@
+@import '../containers/App.scss';
+@import url('https://fonts.googleapis.com/css?family=PT+Sans');
+
+.prompt {
+  /* border-bottom: 1px dotted black; */
+  background-color: $component-background;
+  font-family: "PT Sans", sans-serif;
+
+  p {
+    font-size: 1.25em;
+  }
+}
+
+.exercise-type {
+  font-size: 0.6em;
+  padding: 2%;
+  color: darkblue;
+}

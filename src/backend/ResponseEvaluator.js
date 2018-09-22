@@ -5,10 +5,11 @@
 // So, we import all of ResponseObject
 import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import {MasteryModel} from '../data/MasteryModel';
-import ExercisePool from '../data/ExercisePool';
 import ExerciseTypes from '../data/ExerciseTypes';
 import {BayesKT} from './BKT.js';
-import type {Exercise} from '../data/Exercises';
+import firebase from 'firebase/app';
+import 'firebase/database';
+import 'firebase/auth';
 
 /**
  * Evaluates and calculates correctness of a student response, and the
@@ -68,46 +69,38 @@ class ResponseEvaluator {
     return this.calculateCertainty(response, this.BKT);
   }
 
-  /**
-   * Send a POST request to the API to compile and execute the given Java code
-   * @param code - the Java code to compile and execute
-   */
-  static executeJava(code: string): Promise<Object> {
-    return fetch('/api/java', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        id: 'replacemelater', // TODO: Actually get an id
-        content: code,
-      })
-    });
-  }
+
 
   /**
    * Takes in an exercise and student response to update log and mastery model.
    * @param exercise
    * @param answer
    * @param next - callback to be executed after evaluation
+   * @param questionIndex - index of question being evaluated
+   * @param questionType - OPTIONAL, for special new types (table and selectMultiple)
+   * @param feedback - OPTIONAL, for special new types (table and selectMultiple)
+   * @param exerciseId - OPTIONAL, exercise Id, for firebase logging
    */
-  static evaluateAnswer(exercise: Exercise, answer: string, next: Function) {
+  static evaluateAnswer(exercise: any, answer: string, next: Function, questionIndex: number,
+                        questionType: any, feedback: any, exerciseId: any) {
     // no one can escape asyncronous programming!!!!
     // >:D
-
     // wrap it in a function for async
+
     let addResponseAndUpdate = (isCorrect, exercise) => {
       ResponseLog.addResponse( // TODO: replace '123' with a real ID
-          '123', exercise.concepts, exercise.type, exercise.difficulty, isCorrect,
+          '123', exercise.concepts,
+            exercise.questions[questionIndex].type,
+            exercise.questions[questionIndex].difficulty, isCorrect,
           Date.now(),
       );
 
       //Debug for demo
-      console.groupCollapsed("Response Log");
+      /*console.groupCollapsed("Response Log");
       console.log(ResponseLog.log);
-      console.groupEnd();
+      console.groupEnd();*/
 
-      if (ExerciseTypes.isSurvey(exercise.type)) {
+      if (ExerciseTypes.isSurvey(exercise.questions[questionIndex].type)) {
         MasteryModel.surveyUpdateModel(Array.from(answer).map(x =>
             parseInt(x, 10),
         ));
@@ -118,27 +111,42 @@ class ResponseEvaluator {
         );
       }
 
-      this.printImportantStuff(); //Debug/demo
+      let answerRegex = /[\.#\$\/\[\]]/
+      let dataToPush = {
+        exerciseId,
+        questionIndex,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        answer: (!answerRegex.test(answer[questionIndex]) && answer[questionIndex] !== "") ? answer[questionIndex] : null,
+        correctness: isCorrect
+      };
+      let uid = firebase.auth().currentUser;
+      if (uid) {
+        uid = uid.uid; // makes flow happier, don't wanna worry about it right now
+      }
+
+      firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
+
+
+      // this.printImportantStuff(); //Debug/demo
       next();
     };
 
     // actual logic
     // it's backwards, I know :(
-    if(exercise.type === ExerciseTypes.writeCode ||
-       exercise.type === ExerciseTypes.fillBlank) {
-      this.executeJava(answer)//ExercisePool.getAnswer(exercise);
-      .then((res) => {
-        return res.json();
-      }).then((json) => {
-        console.log(json);
-        addResponseAndUpdate(json.stdout === ExercisePool.getAnswer(exercise), exercise);
-      }).catch((err) => {
-        console.log(err);
-        addResponseAndUpdate(false, exercise); // TODO: remove hardcode
-      });
+    let gotCorrect = true;
+    if(questionType === "table") {
+      feedback[questionIndex].forEach((d) => {
+        d && d.forEach((e) => {
+          if(e === "incorrect") {
+            gotCorrect = false;
+          }
+        })
+      })
     } else {
-      addResponseAndUpdate(answer === ExercisePool.getAnswer(exercise), exercise);
+      gotCorrect = feedback[questionIndex].indexOf('incorrect') === -1
     }
+    addResponseAndUpdate(gotCorrect, exercise);
+    
   }
 
   /**

@@ -48,7 +48,7 @@ class BKT {
    */
   contextualize(response: ResponseObject, constant: number, param: string) {
     let ret = constant;
-    console.groupCollapsed('BKT  Param: ' + param + ' Initial: ' + constant);
+    // console.groupCollapsed('BKT  Param: ' + param + ' Initial: ' + constant);
     if(BKT.notNullOrUndefined(response)) {
       let features = Object.keys(ResponseFeatures);
 
@@ -56,11 +56,12 @@ class BKT {
         let factor = ResponseFeatures[feature].analyze(response);
         let change = ResponseFeatures[feature][param] * factor;
         ret += change;
-        console.log('Feature: ' + feature + ' Param: ' + param + ' \n' + change);
+       //  console.log('Feature: ' + feature + ' Param: ' + param + ' \n' +
+        // change);
       });
     }
-    console.log('Final: ' + ret);
-    console.groupEnd();
+    // console.log('Final: ' + ret);
+    // console.groupEnd();
     return BKT.boundedProbability(ret);
   }
 
@@ -81,8 +82,8 @@ class BKT {
    * @returns {boolean}
    */
   static notNullOrUndefined(input: any) {
-  return !(input === null || input === undefined);
-}
+    return !(input === null || input === undefined);
+  }
 
 }
 

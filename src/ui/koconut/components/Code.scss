@@ -1,0 +1,46 @@
+.codeContainer {
+  padding: 10px;
+  width: 20vw;
+  max-height: 100vh;
+  background-color: #f7f7f7;
+  overflow: visible;
+  position: relative;
+  //overflow-y: scroll;
+  text-align: left;
+}
+
+.code.full {
+  width: 100%;
+}
+
+.code-config {
+  //margin-left: 15px; // aligned with line numbers
+}
+
+.HighlightCode .cm-s-material .CodeMirror-line .CodeMirror-selectedtext {
+  background-color: darkblue;
+}
+
+.HighlightCode .cm-s-eclipse .CodeMirror-line .CodeMirror-selectedtext {
+  background-color: yellow;
+}
+
+.FillBlank .cm-s-eclipse span.cm-comment {
+  border: 1px black solid;
+}
+
+.FillBlank .cm-s-material span.cm-comment {
+  border: 1px black solid;
+}
+
+.hint {
+  background-color: #555;
+  color: white;
+  border-radius: 5px;
+  //border: 1px dotted black;
+  //width: 100px;
+  //height: 100px;
+  position: absolute;
+  overflow: scroll;
+  z-index: 100;
+}

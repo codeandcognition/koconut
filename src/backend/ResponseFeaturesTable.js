@@ -1,14 +1,22 @@
 //@flow
 import {ResponseLog, ResponseObject} from '../data/ResponseLog';
 import ExerciseTypes from '../data/ExerciseTypes';
-import _ from 'lodash';
-
+// import _ from 'lodash';
+import intersection from 'lodash/intersection';
 // A note from Harrison:
 //  I tried to make this file better by putting things in a class, but that ended
 //  up breaking things. So, I tried to fix that using binds, and it worked, but
 //  now this class has been cursed by JavaScript black magic. You're going to need
 //  to add binds for things to work in the future.
 //  🔥🌑🔥
+// A note from William:
+//  Don't worry kiddos, .bind(this) is pretty common nowadays in the future and 
+//  is a very important thing to learn how to do with JavaScript ES6 syntax. A way
+//  to probably avoid .bind(this) is to probably make the functions in the format 
+//  of `const xxx = () => {}` instead of `static xxx() {}`. Arrow function syntax
+//  applies the .bind(this) functionality automatically. 
+//  I won't be changing this code, but I'm fairly sure we can change that if we don't
+//  want to use .bind(this) anymore.
 
 /**
  * Defines response features used for Bayesian Knowledge Tracing.
@@ -57,7 +65,7 @@ class ResponseFeaturesTable {
     let len = ResponseLog.log.length;
     if (len > 0) {
       let responsesOfConcept = ResponseLog.log.filter(
-          (res) => _.intersection(res.concepts, response.concepts).length > 0);
+          (res) => intersection(res.concepts, response.concepts).length > 0);
       let incorrectResponses = responsesOfConcept.filter(
           (res) => res.correct === false);
       return incorrectResponses.length / responsesOfConcept.length;
@@ -155,10 +163,13 @@ class ResponseFeaturesTable {
     let len = ResponseLog.log.length;
     if (len > 1) {
       let relevant = ResponseLog.log.filter(
-          (res) => _.intersection(res.concepts, response.concepts).length > 0);
+          (res) => intersection(res.concepts, response.concepts).length > 0);
       // Running sum to compute total time taken on this concept
       return relevant.reduce((sum, res) => {
         let pos = ResponseLog.log.indexOf(res);
+        if(pos === 0) {
+          return 0;
+        }
         let pre = ResponseLog.log[pos - 1];
         let time = this.convertMilliToMin(res.timestamp - pre.timestamp);
         return sum + time;
@@ -174,7 +185,7 @@ class ResponseFeaturesTable {
    */
   static numberOfTimesUsingConcept(response: ResponseObject) {
     return ResponseLog.log.filter(
-        (res) => _.intersection(res.concepts, response.concepts).length > 0).length;
+        (res) => intersection(res.concepts, response.concepts).length > 0).length;
   }
 
   /**

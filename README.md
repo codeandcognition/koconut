@@ -17,6 +17,7 @@
 - [Flow](docs/flow.md)
 - [Jest](docs/jest.md)
 - [Deprecated](docs/deprecated.md)
+- [Accessing the authoring tool](src/ui/koconut-author/README.md)
 
 ## Project Information
 
@@ -30,8 +31,7 @@ Currently, _koconut_ is built using the following stack:
 
 #### Backend
 - [Node.js](https://nodejs.org/en/): a JavaScript runtime
-- [Express](http://expressjs.com/): a web framework
-- _TODO: unknown database_
+- [Firebase](https://firebase.google.com/): an easy-to-use storage and authentication system
 
 ### Tools
 
@@ -138,6 +138,11 @@ Jest tests can be quickly run using `yarn test`.
 
 [WebStorm](https://www.jetbrains.com/webstorm/) is a JavaScript (and more!) IDE that can assist with development. WebStorm (and all JetBrains software) is free to use for students through a yearly license which can be obtained [**here**](https://www.jetbrains.com/student/).
 
+#### Note from William
+You can use Visual Studio Code instead of Webstorm, but you will find that it is harder to use Flow with. I set up the flow file on my computer similar to Webstorm's setup, with a different add on. Visual Studio's add on for Flow is a lot slower and feels a bit buggier, whereas Webstorm's feels very smooth. 
+
+If you're just getting started, I highly suggest using Webstorm. Once you get more familiar with the code base, then you can choose to switch to Visual Studio Code. I switched over after halfway through my time here, mostly because I just liked VSCode better.
+
 #### Using the Google Style Guide in WebStorm
 
 You can automatically import the Google Style Guide into your settings by choosing it from the existing style guides:
@@ -193,3 +198,39 @@ It is recommended that you use token authentication: [Personal API Tokens](https
 #### Express
 - [MDN - Express Web Framework (Node.js/JavaScript)](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs)
 - [API reference](http://expressjs.com/en/4x/api.html)
+
+## A note for future developers on Koconut - September 2018
+
+### The state of Koconut is a little jumbled up. 
+I wouldn't entirely call it bad code, but there is repeated code, and it feels messy at some points. This was necessary in order to build upon the existing code architecture, and we tried to do it as neat as we could without introducing too much complexity. I encourage you to think about the complexity of your code before you program it in. 
+
+### Conventions
+The existing code for the most part is split into a container/component structure. Normally components means it's reused universally throughout the app in different places, but we found that the existing code before us had it split to where containers were the large entire-page views and components were subcomponents of the view. I highly suggest following existing conventions, because if you don't, the people who work on this codebase after you will be even more confused than you are.
+
+### "i am now dizzy"
+There is a lot to take in. It's normal to be lost on an entire structure of an app, especially when being put smack dab in the middle of it all. Take it one issue at a time. See what needs to be fixed or added, trace to where a component is by using the React developer tools and browser developer console. Add a BUNCH of `console.log` statements to get your bearings. Eventually you will slowly understand more and more of the system. But you won't understand all of it-- I (William) would say that I don't. 
+
+### Exercise view structure
+Probably the most important view to understand is the Exercise view. There are a lot of moving parts to this container, and it spans over more than 5 different files. Like I mentioned, this was because there was an existing architecture that we didn't want to destroy. 
+
+Note that there is a distinction between **exercise** and **question**. Exercise is the entire exercise, which can have multiple questions or follow up questions.
+
+Understanding the schemas first is key to actually understanding how it is all passed down. I encourage you to take a look through the firebase database and seeing how things link to one another, what an exercise looks like in the App as well as as-raw-data. Essentially, this complexity is for turning the data from json to an interactive experience.
+
+* In essence, the `App.js` controls the logic for the entire app. (It might be beneficial to think about restructuring part of the app and using [Redux](https://redux.js.org/)). It has functions that check the answer, connect the exercises to firebase, etc. That's why it's so large!
+* The `ExerciseView` component is imported at the top using the `react-loadable` library. This library allows code splitting to make the final output bundle to be split into multiple different bundles, reducing the maximum file size. See issue [#118](https://github.com/codeandcognition/koconut/issues/118) to learn more. It works seamlessly with React Router.
+```
+const ExerciseView = Loadable({
+    loader: () => import('./ExerciseView'),
+    loading: Loading,
+});
+```
+* `renderExercise()` is called in the `renderDisplay()` method, and is based on the Route.
+* `renderExercise()` actually creates the `ExerciseView` component, and passes a whole bunch of methods from `App` down. These methods are bound to `App` in the constructor. Some data from the state and such get passed down as well.
+* In the `ExerciseView`, we display the `BreadCrumbs`, and we also conditionally display a `LoadingView` component or call the `renderQuestion()` method, based on if the exercise has loaded or not. This is due to the app waiting for the firebase database. 
+* `ExerciseView` also keeps track of the answers that the user has entered, and passes it all the way back up to `App` when the submit button is pressed.
+* In `renderQuestion()` we have a `Prompt` and `ReactMarkdown` component which pretty much displays prompt information about the specific exercise. We also have an `Information` component, which is the actual meaty part of the **exercises**. 
+* The `Information` component has many of the props that were passed to `ExerciseView` from `App`. We're passing down the functions another layer.
+* The `Information` component renders every question and also has the continue button logic. It also has subcomponents like the `Code` and `Response` components that are part of the questions, depending on what type of question it is. There is also the `Feedback` component which gives the user detailed information about their answer or the correct answer. The `Information` class holds more logic that is core to exercises than the `ExerciseView` does. 
+* `Response` will conditionally render the question based on what type of question it is. If you want to add more types of problems, this is the place to add stuff to! You will also want to modify your Authoring tool to support the new types, and also modify the `ExerciseTypes.js` file to support the new types as well. 
+* `Response` passes down specific props to each question that are key to answering the problem, like `inputHandler`, which is actually the prop passed to `Response`, `updateHandler`. This `updateHandler` method comes all the way from `ExerciseView`-- you can see it in the `renderExercise()` method. 

@@ -1,6 +1,6 @@
 // @flow
 import ace from 'brace';
-import _ from 'lodash';
+import escapeRegExp from 'lodash/escapeRegExp'
 
 const {Range} = ace.acequire('ace/range'); // Ace has a built-in range datatype
 
@@ -26,7 +26,7 @@ class CodeParser {
   static clean(code: string): string {
     // fancy "make a regex of the tags and replace each instance with nothing"
     let re = Object.values(_tags).
-        map((tag: any /* hush */) => _.escapeRegExp(tag)).
+        map((tag: any /* hush */) => escapeRegExp(tag)).
         join('|');
     return code.replace(new RegExp(re, 'g'), '');
   }
@@ -49,7 +49,7 @@ class CodeParser {
       // check if each tag is on the line
       Object.values(_tags).forEach((tag) => {
         if (typeof tag === 'string') {
-          let index = lines[i].search(new RegExp(_.escapeRegExp(tag)));
+          let index = lines[i].search(new RegExp(escapeRegExp(tag)));
 
           // add range/line data to ranges if tag found
           if (index !== -1) {
