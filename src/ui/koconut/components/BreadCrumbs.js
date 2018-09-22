@@ -1,7 +1,7 @@
 // @flow
 import React, {Component} from 'react';
 import {t} from '../../../data/ConceptAbbreviations';
-import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
+import {ConceptKnowledge } from '../../../data/MasteryModel';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import './BreadCrumbs.css';

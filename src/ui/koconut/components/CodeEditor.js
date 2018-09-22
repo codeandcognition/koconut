@@ -9,9 +9,6 @@ import 'brace/mode/python';
 
 class CodeEditor extends Component {
   handleSelect: Function;
-  handleChange: Function;
-  handleThemeChange: Function;
-  handleSelect: Function;
   handleReset: Function;
   handleHintRequest: Function;
   handleChange: Function;
@@ -34,7 +31,7 @@ class CodeEditor extends Component {
       theme: 'textmate',
       code: this.props.code,
       highlighted: ''
-    }
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);

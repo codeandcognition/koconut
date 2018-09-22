@@ -3,7 +3,6 @@ import Paper from '@material-ui/core/Paper';
 import {Grid, Row, Col} from 'react-flexbox-grid';
 import Button from "@material-ui/core/Button/Button";
 import {Link} from 'react-router-dom';
-import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 
 /**
  * ExerciseNavigation is the navigation bar that appears under the 

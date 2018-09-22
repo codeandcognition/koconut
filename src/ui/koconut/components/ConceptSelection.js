@@ -49,7 +49,7 @@ class ConceptSelection extends Component {
   render() {
     let styles = {
       marginTop: '7%'
-    }
+    };
 
     // TODO: the implementation below is less than ideal but constrained by
     // the conceptInventory data structure

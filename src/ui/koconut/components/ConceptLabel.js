@@ -5,14 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import conceptInventory from '../../../data/ConceptMap';
 import './ConceptLabel.css'
 
-// type Props = {concepts: string};
-
 class ConceptLabel extends Component {
-
-  // constructor(props: Props) {
-  //   super(props);
-  // }
-
   renderTooltip(id: number, name: string, example:string, content: string) {
     return content ? (
         <ReactTooltip id={id} place="top" effect="solid">
@@ -50,7 +43,7 @@ class ConceptLabel extends Component {
 
           })}</div>
         :
-        <div></div>
+        <div/>
   }
 
   render() {
