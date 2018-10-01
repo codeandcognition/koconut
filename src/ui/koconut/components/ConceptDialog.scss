@@ -1,0 +1,39 @@
+.dialogHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.icon {
+    color: #E91E63;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+    margin-left: 10px;
+}
+
+.icon:hover {
+    color: #ef5350;
+}
+
+.link {
+    width: 30%;
+    margin: 5px !important;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.overview-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.overview-container div {
+    width: 47%;
+}
+
+.overview-container ul {
+    padding-left: 15px;
+}
+

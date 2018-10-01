@@ -145,6 +145,10 @@ declare module '@material-ui/core/CardMedia/index' {
 declare module '@material-ui/core/Checkbox/Checkbox' {
   declare module.exports: any;
 }
+declare module '@material-ui/core/Checkbox' {
+  declare module.exports: any;
+}
+
 
 declare module '@material-ui/core/Checkbox/index' {
   declare module.exports: any;
@@ -690,6 +694,10 @@ declare module '@material-ui/core/es/FormControlLabel/FormControlLabel' {
   declare module.exports: any;
 }
 
+declare module '@material-ui/core/FormControlLabel' {
+  declare module.exports: any;
+}
+
 declare module '@material-ui/core/es/FormControlLabel/index' {
   declare module.exports: any;
 }
@@ -714,6 +722,9 @@ declare module '@material-ui/core/es/FormLabel/FormLabel' {
   declare module.exports: any;
 }
 
+declare module '@material-ui/core/FormLabel' {
+  declare module.exports: any;
+}
 declare module '@material-ui/core/es/FormLabel/index' {
   declare module.exports: any;
 }
@@ -939,6 +950,20 @@ declare module '@material-ui/core/es/ListSubheader/ListSubheader' {
 }
 
 declare module '@material-ui/core/es/Menu/index' {
+  declare module.exports: any;
+}
+declare module '@material-ui/core/es/Menu' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/Menu' {
+  declare module.exports: any;
+}
+declare module '@material-ui/core/MenuItem' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/es/MenuItem' {
   declare module.exports: any;
 }
 
@@ -1510,6 +1535,10 @@ declare module '@material-ui/core/FormControl/FormControl' {
   declare module.exports: any;
 }
 
+declare module '@material-ui/core/FormControl' {
+  declare module.exports: any;
+}
+
 declare module '@material-ui/core/FormControl/index' {
   declare module.exports: any;
 }
@@ -1523,6 +1552,10 @@ declare module '@material-ui/core/FormControlLabel/index' {
 }
 
 declare module '@material-ui/core/FormGroup/FormGroup' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/FormGroup' {
   declare module.exports: any;
 }
 
@@ -1575,6 +1608,10 @@ declare module '@material-ui/core/GridListTileBar/GridListTileBar' {
 }
 
 declare module '@material-ui/core/GridListTileBar/index' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/Grow' {
   declare module.exports: any;
 }
 
@@ -2102,6 +2139,30 @@ declare module '@material-ui/core/Table/Table' {
   declare module.exports: any;
 }
 
+declare module '@material-ui/core/Table' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/TableBody' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/TableCell' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/TableHead' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/TableRow' {
+  declare module.exports: any;
+}
+
+declare module '@material-ui/core/Paper' {
+  declare module.exports: any;
+}
+
 declare module '@material-ui/core/TableBody/index' {
   declare module.exports: any;
 }
@@ -2214,6 +2275,9 @@ declare module '@material-ui/core/test-utils/unwrap' {
   declare module.exports: any;
 }
 
+declare module '@material-ui/core/TextField' {
+  declare module.exports: any;
+}
 declare module '@material-ui/core/TextField/index' {
   declare module.exports: any;
 }

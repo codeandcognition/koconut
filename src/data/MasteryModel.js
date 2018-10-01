@@ -1,7 +1,6 @@
 // @flow
 import conceptInventory from './ConceptMap.js';
-import _ from 'lodash';
-
+import _forEach from 'lodash/forEach';
 /**
  * ConceptKnowledge object is a node containing a concept, with a boolean
  * to represent the student knowing or not knowing, along with a second
@@ -9,18 +8,21 @@ import _ from 'lodash';
  */
 class ConceptKnowledge {
   name: string;
-  teach: boolean;
   container: boolean;
 
   dependencies: ConceptKnowledge[];
   parents: ConceptKnowledge[];
+  explanations: any;
+  should_teach: boolean;
+  incomingEdgeCount: ?number;
+  type: string;
 
   knowledge: number; //p(cognitive mastery) [0,1]
   dependencyKnowledge: number; //p(support cognitive mastery) [0,1]
 
-  constructor(name: string, teach: boolean, container: boolean) {
+  constructor(name: string, teach: boolean, container: boolean, type: string) {
     this.name = name;
-    this.teach = teach;
+    this.should_teach = teach;
     this.container = container;
 
     this.dependencies = [];
@@ -30,6 +32,7 @@ class ConceptKnowledge {
     this.dependencyKnowledge = 1; // Avg of dependencies' K values
                                   // default is 1 because having no dependencies
                                   // means full knowledge
+    this.type = type;
   }
 
   /**
@@ -132,15 +135,15 @@ class MasteryModelClass {
    */
   _populate() {
     // Create ConceptKnowledge objects for each concept
-    _.forEach(conceptInventory, (c, name) => this.model.push(
-        new ConceptKnowledge(name, c.should_teach, c.container)));
+    _forEach(conceptInventory, (c, name) => this.model.push(
+        new ConceptKnowledge(name, c.should_teach, c.container, c.type)));
 
     // Create a mapping of strings to ConceptKnowledge objects
     let map = this.modelMap;
     this.model.forEach((m) => map.set(m.name, m));
 
     // Fill ConceptKnowledge objects with references parents/dependencies
-    _.forEach(conceptInventory, (c, name) => {
+    _forEach(conceptInventory, (c, name) => {
       // Ensure that map gets a valid ConceptKnowledge object
       let obj_ = map.get(name); // Weird type coercion nonsense
       let obj: ConceptKnowledge;
