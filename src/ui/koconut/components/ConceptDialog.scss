@@ -37,3 +37,21 @@
     padding-left: 15px;
 }
 
+.options {
+    display: flex;
+    justify-content: space-between;
+}
+
+.resume {
+    margin: 2% 0 3% 0;
+    height: 20px;
+}
+
+.switch {
+    margin: 0 20% 0 20%;
+}
+
+.switch-text {
+    margin: 0;
+    font-size: 0.65em;
+}
