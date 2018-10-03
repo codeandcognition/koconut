@@ -11,6 +11,9 @@ import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
 import { withRouter} from "react-router-dom";
 
+const LEARN = "Learn";
+const PRACTICE = "Practice";
+
 type Props = {
 	title: string,
 	conceptCode: string,
@@ -129,7 +132,7 @@ class ConceptDialog extends Component {
 							<p className={'bold-text'}>Reading {this.props.title}</p>
 							<div className={"overview-container"}>
 								<div>
-									<p>Reading Code</p>
+									<p>{LEARN}</p>
 									<ul>
 										{this.state.readInstructions.map((item, index) => {
 											return (
@@ -141,7 +144,16 @@ class ConceptDialog extends Component {
 									</ul>
 								</div>
 								<div>
-									<p>Writing Code</p>
+									<p>{PRACTICE}</p>
+								</div>
+							</div>
+						</div>
+
+						<div>
+							<p className={'bold-text'}>Writing {this.props.title}</p>
+							<div className={"overview-container"}>
+								<div>
+									<p>{LEARN}</p>
 									<ul>
 										{this.state.writeInstructions.map((item, index) => {
 											return (
@@ -152,11 +164,10 @@ class ConceptDialog extends Component {
 										})}
 									</ul>
 								</div>
+								<div>
+									<p>{PRACTICE}</p>
+								</div>
 							</div>
-						</div>
-
-						<div>
-							<p className={'bold-text'}>Writing {this.props.title}</p>
 						</div>
 					</DialogContent>
 				</Dialog>
