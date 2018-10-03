@@ -131,17 +131,17 @@ class ConceptDialog extends Component {
 						<div>
 							<p className={'bold-text'}>Reading {this.props.title}</p>
 							<div className={"overview-container"}>
-								<div>
+							<div>
 									<p>{LEARN}</p>
-									<ul>
 										{this.state.readInstructions.map((item, index) => {
 											return (
-													<Link key={'r' + index} to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
-														<li onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}>{item}</li>
+													<Link key={'r' + index} 
+                          onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}
+                          to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
+														<div style={{width: '100%'}}>{item}</div>
 													</Link>
 											);
 										})}
-									</ul>
 								</div>
 								<div>
 									<p>{PRACTICE}</p>
@@ -154,15 +154,16 @@ class ConceptDialog extends Component {
 							<div className={"overview-container"}>
 								<div>
 									<p>{LEARN}</p>
-									<ul>
+									
 										{this.state.writeInstructions.map((item, index) => {
 											return (
-													<Link key={'w' + index}to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}>
-														<li onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)} key={index}>{item}</li>
+													<Link key={'w' + index}to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
+                          onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}>
+														<div style={{width: '100%'}}>{item}</div>
 													</Link>
 											);
 										})}
-									</ul>
+									
 								</div>
 								<div>
 									<p>{PRACTICE}</p>
