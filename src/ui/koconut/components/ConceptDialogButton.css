@@ -1,0 +1,7 @@
+.dialogbutton {
+  background-color: #eee;
+}
+
+.dialogbutton:hover {
+  background-color: #ddd;
+}

@@ -1,0 +1,13 @@
+.hint {
+  position: relative; }
+
+.close-hint {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  padding: 5%;
+  cursor: pointer;
+  transition: color 200ms; }
+
+.close-hint:hover {
+  color: #aaa; }

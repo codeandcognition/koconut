@@ -1,0 +1,8 @@
+.response {
+  padding: 2.5%; }
+
+.response.half {
+  width: 50%; }
+
+.response.full {
+  width: 100%; }
