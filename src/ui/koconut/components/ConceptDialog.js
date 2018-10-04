@@ -9,7 +9,8 @@ import ConceptInventory from './../../../data/ConceptMap';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
-import { withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import ConceptDialogButton from './ConceptDialogButton';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
@@ -137,8 +138,12 @@ class ConceptDialog extends Component {
 											return (
 													<Link key={'r' + index} 
                           onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}
-                          to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
-														<div style={{width: '100%'}}>{item}</div>
+                          to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}
+                          style={{textDecoration: 'none', color: 'black'}}>
+														{/* <div style={{width: '100%'}}>{item}</div> */}
+                            <ConceptDialogButton name={item} read={true} suggestionText={"asdf"} 
+                            showInitially={false} 
+                            color={"#ffffff"} />
 													</Link>
 											);
 										})}
