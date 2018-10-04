@@ -150,6 +150,10 @@ class ConceptDialog extends Component {
 								</div>
 								<div>
 									<p>{PRACTICE}</p>
+									{/* Placeholder button */}
+									<Button variant="contained"
+													className={'resume'}
+													onClick={() => this.props.generateExercise(this.props.conceptCode, "READ")}>Practice</Button>
 								</div>
 							</div>
 						</div>
@@ -172,6 +176,10 @@ class ConceptDialog extends Component {
 								</div>
 								<div>
 									<p>{PRACTICE}</p>
+									{/* Placeholder button */}
+									<Button variant="contained"
+													className={'resume'}
+													onClick={() => this.props.generateExercise(this.props.conceptCode, "PRACTICE")}>Practice</Button>
 								</div>
 							</div>
 						</div>
