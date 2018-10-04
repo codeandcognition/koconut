@@ -21,9 +21,6 @@
 *.sh
 *.swp
 
-# sass
-src/**/*.css
-
 # floo
 .floo*
 

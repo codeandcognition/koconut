@@ -1,0 +1,23 @@
+.outerPart {
+  width: 30%;
+  height: 70vh;
+  text-align: center;
+  align-content: center;
+  padding: 10px; }
+
+.buttonPart {
+  width: 100%;
+  cursor: pointer;
+  color: black;
+  background-color: #d1d1d1;
+  margin: auto;
+  margin-top: 23.33333vh;
+  border-radius: 5px; }
+
+.greyed {
+  color: grey; }
+
+.textPart, .chevron {
+  display: inline-flex;
+  vertical-align: middle;
+  font-size: 20px; }
