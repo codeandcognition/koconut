@@ -132,7 +132,7 @@ class ConceptDialog extends Component {
 						<div>
 							<p className={'bold-text'}>Reading {this.props.title}</p>
 							<div className={"overview-container"}>
-							<div>
+							<div className={'column'}>
 									<p>{LEARN}</p>
 										{this.state.readInstructions.map((item, index) => {
 											return (
@@ -148,7 +148,7 @@ class ConceptDialog extends Component {
 											);
 										})}
 								</div>
-								<div>
+								<div className={'column'}>
 									<p>{PRACTICE}</p>
 									{/* Placeholder button */}
 									<Button variant="contained"
@@ -161,7 +161,7 @@ class ConceptDialog extends Component {
 						<div>
 							<p className={'bold-text'}>Writing {this.props.title}</p>
 							<div className={"overview-container"}>
-								<div>
+								<div className={'column'}>
 									<p>{LEARN}</p>
 									
 										{this.state.writeInstructions.map((item, index) => {
@@ -174,7 +174,7 @@ class ConceptDialog extends Component {
 										})}
 									
 								</div>
-								<div>
+								<div className={'column'}>
 									<p>{PRACTICE}</p>
 									{/* Placeholder button */}
 									<Button variant="contained"

@@ -23,7 +23,7 @@ export default class ConceptDialogButton extends Component {
         padding: '5px 20px 5px 20px'
       }}
       className="dialogbutton">
-      <div>
+      <div style={{width: '100%'}}>
         <div>
           {name}{read && <span style={{fontSize: 20, color: 'white', marginLeft: 5}}>✓</span>}
         </div>

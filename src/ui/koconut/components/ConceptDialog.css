@@ -23,7 +23,7 @@
   display: flex;
   justify-content: space-between; }
 
-.overview-container div {
+.column {
   width: 47%; }
 
 .overview-container ul {
