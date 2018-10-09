@@ -142,7 +142,7 @@ class ConceptDialog extends Component {
                           style={{textDecoration: 'none', color: 'black'}}>
 														{/* <div style={{width: '100%'}}>{item}</div> */}
                             <ConceptDialogButton name={item} read={true} suggestionText={"asdf"} 
-                            showInitially={false} 
+                            showInitially={true} 
                             color={"#ffffff"} />
 													</Link>
 											);

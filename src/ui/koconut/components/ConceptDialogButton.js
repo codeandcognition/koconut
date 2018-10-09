@@ -13,7 +13,7 @@ export default class ConceptDialogButton extends Component {
     }
   }
   render() {
-    let {name, read, suggestionText, showInitially, color} = this.state;
+    let {name, read, suggestionText, showInitially, color, hover} = this.state;
     return <div role="button" style={{
         width: '100%',
         cursor: 'pointer',
@@ -22,24 +22,31 @@ export default class ConceptDialogButton extends Component {
         borderRadius: 10,
         padding: '5px 20px 0px 20px'
       }}
-      className="dialogbutton">
+      className="dialogbutton"
+      onMouseEnter={() => {this.setState({hover:true})}}
+      onMouseLeave={() => {this.setState({hover:false})}}>
       <div style={{width: '100%', 
-      position: 'relative',
-      textAlign: 'center'}}>
+        position: 'relative',
+        textAlign: 'center'}}>
         <div style={{
           marginBottom: 5
         }}>
           {name}{read && <span style={{fontSize: 20, color: 'white', marginLeft: 5}}>✓</span>}
         </div>
-        <div style={{backgroundColor: '#3F51B5',
-        position: 'absolute', 
-        bottom: 0, 
-        left:0,
-        right:0,
-        height: 4, 
-        width: '90%', 
-        margin: 'auto',
-        }}></div>
+        {suggestionText !== '' && <div style={{backgroundColor: color,
+          position: 'absolute', 
+          bottom: 0, 
+          left:0,
+          right:0,
+          height: hover ? '90%' : showInitially ? 0 : 5,   
+          width: '90%', 
+          margin: 'auto',
+          transition: 'height 0.25s',
+        }}><div style={{
+          display: hover ? 'inline' : 'none',
+          color: 'white',
+          transition: 'display 0.25s'
+        }}>{suggestionText}</div></div>}
       </div>
     </div>
   }
