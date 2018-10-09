@@ -20,14 +20,26 @@ export default class ConceptDialogButton extends Component {
         textDecoration: 'none',
         marginBottom: 10,
         borderRadius: 10,
-        padding: '5px 20px 5px 20px'
+        padding: '5px 20px 0px 20px'
       }}
       className="dialogbutton">
-      <div style={{width: '100%'}}>
-        <div>
+      <div style={{width: '100%', 
+      position: 'relative',
+      textAlign: 'center'}}>
+        <div style={{
+          marginBottom: 5
+        }}>
           {name}{read && <span style={{fontSize: 20, color: 'white', marginLeft: 5}}>✓</span>}
         </div>
-        <div style={{backgroundColor: 'blue'}}></div>
+        <div style={{backgroundColor: '#3F51B5',
+        position: 'absolute', 
+        bottom: 0, 
+        left:0,
+        right:0,
+        height: 4, 
+        width: '90%', 
+        margin: 'auto',
+        }}></div>
       </div>
     </div>
   }
