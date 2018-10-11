@@ -30,7 +30,7 @@ class ConceptDialog extends Component {
 			open: true,
 			readInstructions: [],
 			writeInstructions: [],
-			showRecommendations: true
+			showRecommendations: false
 		};
 		this.handleClose = this.handleClose.bind(this);
 	}
@@ -142,7 +142,7 @@ class ConceptDialog extends Component {
                           style={{textDecoration: 'none', color: 'black'}}>
 														{/* <div style={{width: '100%'}}>{item}</div> */}
                             <ConceptDialogButton name={item} read={true} suggestionText={"asdf"} 
-                            showInitially={true} 
+                            showInitially={true} maximized={this.state.showRecommendations}
                             color={"#35b"} />
 													</Link>
 											);
