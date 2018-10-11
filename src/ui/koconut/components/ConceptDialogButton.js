@@ -14,7 +14,8 @@ export default class ConceptDialogButton extends Component {
       read: props.read,
       suggestionText: props.suggestionText || '',
       showInitially: props.showInitially || true,
-      color: props.color || '#3F51B5' //should factor out
+      color: props.color || '#3F51B5', //should factor out,
+      maximized: props.maximized || false
     }
 
 
@@ -28,10 +29,14 @@ export default class ConceptDialogButton extends Component {
     this.hoverHeight = '90%';
   }
 
+  componentWillReceiveProps({name, read, suggestionText, showInitially, color, hover, maximized}) {
+    this.setState({name, read, suggestionText, showInitially, color, hover, maximized});
+  }
+
 
 
   render() {
-    let {name, read, suggestionText, showInitially, color, hover} = this.state;
+    let {name, read, suggestionText, showInitially, color, hover, maximized} = this.state;
     return <div role="button" style={{
         width: '100%',
         cursor: 'pointer',
@@ -56,12 +61,12 @@ export default class ConceptDialogButton extends Component {
           bottom: 0, 
           left:0,
           right:0,
-          height: hover ? this.hoverHeight : showInitially ? this.initHeight : 0,   
+          height: hover || (maximized && showInitially) ? this.hoverHeight : showInitially ? this.initHeight : 0,   
           width: this.hoverWidth, 
           margin: 'auto',
           transition: 'height 0.25s',
         }}><div style={{
-          display: hover ? 'inline' : 'none',
+          display: hover || (maximized && showInitially) ? 'inline' : 'none',
           color: 'white',
           transition: 'display 0.25s'
         }}>{suggestionText}</div></div>}
