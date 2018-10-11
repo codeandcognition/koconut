@@ -267,7 +267,6 @@ class App extends Component {
   generateExercise(concept: string, exerciseType: string) {
 		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).results;
 		let exerciseIds = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).exerciseIds;
-		console.log(exercises);
 		if (exercises) {
       if (exercises.length === 0) {
         this.setState({
@@ -280,7 +279,6 @@ class App extends Component {
           errorMessage: 'Looks like we ran out of questions for this concept, stay-tuned for more!'
         }, this.storeState("exercise", this.state.counter, this.state.exerciseType, concept));
       } else {
-      	console.log(exercises[exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter]);
         this.setState({
           display: displayType.exercise,
           exercise: exercises[exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter],//this.generator.getStubExercise(), // exercises[this.state.counter].exercise, // TODO: convert this for testing
