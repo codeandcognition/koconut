@@ -145,6 +145,11 @@ class ConceptDialog extends Component {
 								</div>
 								<div>
 									<p>{PRACTICE}</p>
+									{/* Placeholder button */}
+									<Link to={`/practice/${this.props.concept}/practice-reading-code`}>
+										<p className={'resume'}
+											 onClick={() => this.props.generateExercise(this.props.conceptCode, "READ")}>Practice</p>
+									</Link>
 								</div>
 							</div>
 						</div>
@@ -157,7 +162,7 @@ class ConceptDialog extends Component {
 									
 										{this.state.writeInstructions.map((item, index) => {
 											return (
-													<Link key={'w' + index}to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
+													<Link key={'w' + index} to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
                           onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}>
 														<div style={{width: '100%'}}>{item}</div>
 													</Link>
@@ -167,6 +172,11 @@ class ConceptDialog extends Component {
 								</div>
 								<div>
 									<p>{PRACTICE}</p>
+									{/* Placeholder button */}
+									<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
+										<p className={'resume'}
+											 onClick={() => this.props.generateExercise(this.props.conceptCode, "PRACTICE")}>Practice</p>
+									</Link>
 								</div>
 							</div>
 						</div>
