@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 import './ConceptDialogButton.css';
 
+/**
+ * ConceptDialogButton is the class for each button on the world view concept dialog
+ * popup.
+ * @class
+ */
 export default class ConceptDialogButton extends Component {
   constructor(props) {
     super(props);
@@ -12,10 +17,19 @@ export default class ConceptDialogButton extends Component {
       color: props.color || '#3F51B5' //should factor out
     }
 
+
+    // width of hover box
     this.hoverWidth = '95%';
+
+    // appearing initial height of hover box
     this.initHeight = 5;
+
+    // total height the hover box goes to
     this.hoverHeight = '90%';
   }
+
+
+
   render() {
     let {name, read, suggestionText, showInitially, color, hover} = this.state;
     return <div role="button" style={{
@@ -42,7 +56,7 @@ export default class ConceptDialogButton extends Component {
           bottom: 0, 
           left:0,
           right:0,
-          height: hover ? this.hoverHeight : showInitially ? 0 : this.initHeight,   
+          height: hover ? this.hoverHeight : showInitially ? this.initHeight : 0,   
           width: this.hoverWidth, 
           margin: 'auto',
           transition: 'height 0.25s',
