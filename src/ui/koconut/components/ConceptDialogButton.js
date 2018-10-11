@@ -11,6 +11,10 @@ export default class ConceptDialogButton extends Component {
       showInitially: props.showInitially || true,
       color: props.color || '#3F51B5' //should factor out
     }
+
+    this.hoverWidth = '95%';
+    this.initHeight = 5;
+    this.hoverHeight = '90%';
   }
   render() {
     let {name, read, suggestionText, showInitially, color, hover} = this.state;
@@ -38,8 +42,8 @@ export default class ConceptDialogButton extends Component {
           bottom: 0, 
           left:0,
           right:0,
-          height: hover ? '90%' : showInitially ? 0 : 5,   
-          width: '90%', 
+          height: hover ? this.hoverHeight : showInitially ? 0 : this.initHeight,   
+          width: this.hoverWidth, 
           margin: 'auto',
           transition: 'height 0.25s',
         }}><div style={{
