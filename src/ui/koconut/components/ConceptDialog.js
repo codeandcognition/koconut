@@ -99,6 +99,69 @@ class ConceptDialog extends Component {
 		this.setState({[type]: evt.target.checked});
 	}
 
+	displayReadingRelatedSection() {
+		return (
+				<div>
+					<p className={'bold-text'}>Reading {this.props.title}</p>
+					<div className={"overview-container"}>
+						<div>
+							<p>{LEARN}</p>
+							{this.state.readInstructions.map((item, index) => {
+								return (
+										<Link key={'r' + index}
+													onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}
+													to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
+											<div style={{width: '100%'}}>{item}</div>
+										</Link>
+								);
+							})}
+						</div>
+						<div>
+							<p>{PRACTICE}</p>
+							{/* Placeholder button */}
+							<Link to={`/practice/${this.props.concept}/practice-reading-code`}>
+								<Button variant={'contained'}
+												className={'resume'}
+												onClick={() => this.props.generateExercise(this.props.conceptCode, "READ")}>Practice</Button>
+							</Link>
+						</div>
+					</div>
+				</div>
+		);
+	}
+
+	displayWritingRelatedSection() {
+		return (
+				<div>
+					<p className={'bold-text'}>Writing {this.props.title}</p>
+					<div className={"overview-container"}>
+						<div>
+							<p>{LEARN}</p>
+
+							{this.state.writeInstructions.map((item, index) => {
+								return (
+										<Link key={'w' + index} to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
+													onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}>
+											<div style={{width: '100%'}}>{item}</div>
+										</Link>
+								);
+							})}
+
+						</div>
+						<div>
+							<p>{PRACTICE}</p>
+							{/* Placeholder button */}
+							<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
+								<Button variant={'contained'}
+												className={'resume'}
+												onClick={() => this.props.generateExercise(this.props.conceptCode, "PRACTICE")}>Practice</Button>
+							</Link>
+						</div>
+					</div>
+				</div>
+		);
+	}
+
 	render() {
 		let conceptInfo = ConceptInventory[this.props.conceptCode].explanations;
 
@@ -130,60 +193,11 @@ class ConceptDialog extends Component {
               return this.renderMarkdown(item, index);
             })}
 
-						<div>
-							<p className={'bold-text'}>Reading {this.props.title}</p>
-							<div className={"overview-container"}>
-							<div>
-									<p>{LEARN}</p>
-										{this.state.readInstructions.map((item, index) => {
-											return (
-													<Link key={'r' + index} 
-                          onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}
-                          to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
-														<div style={{width: '100%'}}>{item}</div>
-													</Link>
-											);
-										})}
-								</div>
-								<div>
-									<p>{PRACTICE}</p>
-									{/* Placeholder button */}
-									<Link to={`/practice/${this.props.concept}/practice-reading-code`}>
-										<Button variant={'contained'}
-														className={'resume'}
-														onClick={() => this.props.generateExercise(this.props.conceptCode, "READ")}>Practice</Button>
-									</Link>
-								</div>
-							</div>
-						</div>
+						{/* Display Reading related sections*/}
+						{this.displayReadingRelatedSection()}
 
-						<div>
-							<p className={'bold-text'}>Writing {this.props.title}</p>
-							<div className={"overview-container"}>
-								<div>
-									<p>{LEARN}</p>
-									
-										{this.state.writeInstructions.map((item, index) => {
-											return (
-													<Link key={'w' + index} to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
-                          onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}>
-														<div style={{width: '100%'}}>{item}</div>
-													</Link>
-											);
-										})}
-									
-								</div>
-								<div>
-									<p>{PRACTICE}</p>
-									{/* Placeholder button */}
-									<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
-										<Button variant={'contained'}
-														className={'resume'}
-														onClick={() => this.props.generateExercise(this.props.conceptCode, "PRACTICE")}>Practice</Button>
-									</Link>
-								</div>
-							</div>
-						</div>
+						{/* Display Writing related sections*/}
+						{this.displayWritingRelatedSection()}
 					</DialogContent>
 				</Dialog>
 		);
