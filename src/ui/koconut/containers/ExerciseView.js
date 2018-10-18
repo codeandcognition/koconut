@@ -61,12 +61,9 @@ class Exercise extends Component {
     this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
   }
 
-<<<<<<< HEAD
   componentDidUpdate() {
 		window.scrollTo(0, 0);
 	}
-=======
->>>>>>> feature187/update-concept-overview
 
   // debug comment: never reaching componentWillUnmount
   componentWillUnmount() {
