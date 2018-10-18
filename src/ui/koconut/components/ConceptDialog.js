@@ -135,13 +135,17 @@ class ConceptDialog extends Component {
 							<div className={'column'}>
 									<p>{LEARN}</p>
 										{this.state.readInstructions.map((item, index) => {
+                      let read = this.props.instructionsRead && 
+                            this.props.instructionsRead[this.props.conceptCode] &&
+                            this.props.instructionsRead[this.props.conceptCode]["READ"] ? 
+                            this.props.instructionsRead[this.props.conceptCode]["READ"][index] : "unread";
 											return (
 													<Link key={'r' + index} 
                           onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}
                           to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}
                           style={{textDecoration: 'none', color: 'black'}}>
 														{/* <div style={{width: '100%'}}>{item}</div> */}
-                            <ConceptDialogButton name={item} read={true} suggestionText={"asdf"} 
+                            <ConceptDialogButton name={item} read={read} suggestionText={"asdf"} 
                             showInitially={true} maximized={this.state.showRecommendations}
                             color={"#35b"} />
 													</Link>

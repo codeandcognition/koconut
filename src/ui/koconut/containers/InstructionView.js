@@ -75,6 +75,9 @@ class InstructionView extends Component {
       page,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     });
+
+    // Store page read data in firebase using key value pairs (When read from, it will return an array! Super useful for worldview)
+    firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/InstructionsRead/${concept}/${readOrWrite}/${page}`).set('read');
   }
 
   /**

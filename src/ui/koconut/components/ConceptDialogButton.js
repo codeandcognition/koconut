@@ -27,6 +27,11 @@ export default class ConceptDialogButton extends Component {
 
     // total height the hover box goes to
     this.hoverHeight = '90%';
+
+    this.types = {
+      READ: 'read',
+      UNREAD: 'unread'
+    }
   }
 
   componentWillReceiveProps({name, read, suggestionText, showInitially, color, hover, maximized}) {
@@ -54,7 +59,7 @@ export default class ConceptDialogButton extends Component {
         <div style={{
           marginBottom: 5
         }}>
-          {name}{read && <span style={{fontSize: 20, color: 'white', marginLeft: 5}}>✓</span>}
+          {name}{read === this.types.READ && <span style={{fontSize: 20, color: 'white', marginLeft: 5}}>✓</span>}
         </div>
         {suggestionText !== '' && <div style={{backgroundColor: color,
           position: 'absolute', 
