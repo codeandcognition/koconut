@@ -1,0 +1,39 @@
+.App {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff; }
+
+.title {
+  text-align: center; }
+
+.main {
+  padding: 0; }
+
+.btn {
+  display: inline-block;
+  border: 1px solid #555;
+  border-radius: 0.5em;
+  padding: 0.5em;
+  margin: 0.5em;
+  cursor: pointer;
+  user-select: none;
+  transition-duration: 50ms; }
+
+.btn:hover {
+  background-color: #eee; }
+
+body {
+  overflow-y: scroll !important; }
+
+.debug {
+  margin-left: 0.5em; }
+
+.feedback {
+  margin: 0;
+  padding: 1em;
+  border-left: 1px dotted darkslategray;
+  text-align: center;
+  background-color: #fff;
+  position: relative; }

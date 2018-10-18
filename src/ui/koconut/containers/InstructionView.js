@@ -39,7 +39,7 @@ class InstructionView extends Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      currInstructionIndex: 0,
+      currInstructionIndex: Number(this.props.match.params.pageIndex),
       instructionList: null,
 			readOrWrite: "",
 			conceptType: ""
@@ -75,6 +75,9 @@ class InstructionView extends Component {
       page,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     });
+
+    // Store page read data in firebase using key value pairs (When read from, it will return an array! Super useful for worldview)
+    firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/InstructionsRead/${concept}/${readOrWrite}/${page}`).set('read');
   }
 
   /**
@@ -147,7 +150,8 @@ class InstructionView extends Component {
 				})
 			}
 		});
-		this.sendInstructViewLogDataToFirebase(0, this.props.conceptType, this.props.readOrWrite);
+    
+		this.sendInstructViewLogDataToFirebase(Number(this.props.match.params.pageIndex), this.props.conceptType, this.props.readOrWrite);
 		document.addEventListener("keydown", (e: any) => this.handleKeyPress(e.key));
   }
 
@@ -167,7 +171,7 @@ class InstructionView extends Component {
    */
   componentWillReceiveProps(nextProps: Props) {
 		this.firebaseListener = firebase.database().ref(`Instructions/${nextProps.conceptType}/${nextProps.readOrWrite}`);
-		this.sendInstructViewLogDataToFirebase(0, nextProps.conceptType, nextProps.readOrWrite);
+		this.sendInstructViewLogDataToFirebase(Number(this.props.match.params.pageIndex), nextProps.conceptType, nextProps.readOrWrite);
 		this.updateInstructions();
   }
 

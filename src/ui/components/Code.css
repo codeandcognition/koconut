@@ -1,0 +1,30 @@
+.code {
+  padding: 0;
+  width: 75%;
+  max-height: 60vh;
+  background-color: #f7f7f7;
+  overflow: visible;
+  position: relative; }
+
+.code.full {
+  width: 100%; }
+
+.HighlightCode .cm-s-material .CodeMirror-line .CodeMirror-selectedtext {
+  background-color: darkblue; }
+
+.HighlightCode .cm-s-eclipse .CodeMirror-line .CodeMirror-selectedtext {
+  background-color: yellow; }
+
+.FillBlank .cm-s-eclipse span.cm-comment {
+  border: 1px black solid; }
+
+.FillBlank .cm-s-material span.cm-comment {
+  border: 1px black solid; }
+
+.hint {
+  background-color: #555;
+  color: white;
+  border-radius: 5px;
+  position: absolute;
+  overflow: scroll;
+  z-index: 100; }

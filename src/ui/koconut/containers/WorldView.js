@@ -28,7 +28,8 @@ class WorldView extends Component {
 		this.state = {
 			loading: true,
       didRender: false,
-      conceptDescriptions: {}
+      conceptDescriptions: {},
+      instructionsRead: {}
 		};
 		this.hierarchyContainer = React.createRef();
 	}
@@ -58,6 +59,9 @@ class WorldView extends Component {
 						this.props.history.push(Routes.signin);
 					}
 					this.checkWaiverStatus(user);
+          this.props.firebase.database().ref(`/Users/${user.uid}/Data/InstructionsRead`).on('value', (snap) => {
+            this.setState({instructionsRead: snap.val()});
+          })
 				});
 			}
 		}) : null;
@@ -268,14 +272,14 @@ class WorldView extends Component {
     } else {
       this.forceUpdate();
     }
-
 		return (
 				<div>
 					{this.state.conceptDialog && <ConceptDialog title={this.state.title}
 																						 conceptCode={this.state.conceptCode}
 																						 open={this.state.conceptDialog}
 																						 generateExercise={this.props.generateExercise}
-																						 getInstruction={this.props.getInstruction}/>}
+																						 getInstruction={this.props.getInstruction}
+                                             instructionsRead={this.state.instructionsRead}/>}
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
 		);

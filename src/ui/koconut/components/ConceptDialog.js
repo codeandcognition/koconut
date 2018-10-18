@@ -9,7 +9,9 @@ import ConceptInventory from './../../../data/ConceptMap';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
-import { withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import ConceptDialogButton from './ConceptDialogButton';
+import {Grid, Row, Col} from 'react-flexbox-grid';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
@@ -29,7 +31,7 @@ class ConceptDialog extends Component {
 			open: true,
 			readInstructions: [],
 			writeInstructions: [],
-			showRecommendations: true
+			showRecommendations: false
 		};
 		this.handleClose = this.handleClose.bind(this);
 	}
@@ -129,21 +131,45 @@ class ConceptDialog extends Component {
             })}
 
 						<div>
-							<p className={'bold-text'}>Reading {this.props.title}</p>
+							<Grid fluid>
+                <Row>
+                  <Col md={6}>
+                    <p className={'bold-text'}>Reading {this.props.title}</p>
+                  </Col>
+                  <Col md={6}>
+                    <div class="progress">
+                      <div class="progress-bar bg-success" 
+                      role="progressbar" 
+                      style={{width: '25%'}} 
+                      aria-valuenow="25" 
+                      aria-valuemin="0" 
+                      aria-valuemax="100">asdfasdf</div>
+                    </div>
+                  </Col>
+                </Row>
+              </Grid>
 							<div className={"overview-container"}>
-							<div>
+							<div className={'column'}>
 									<p>{LEARN}</p>
 										{this.state.readInstructions.map((item, index) => {
+                      let read = this.props.instructionsRead && 
+                            this.props.instructionsRead[this.props.conceptCode] &&
+                            this.props.instructionsRead[this.props.conceptCode]["READ"] ? 
+                            this.props.instructionsRead[this.props.conceptCode]["READ"][index] : "unread";
 											return (
 													<Link key={'r' + index} 
                           onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}
-                          to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
-														<div style={{width: '100%'}}>{item}</div>
+                          to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}
+                          style={{textDecoration: 'none', color: 'black'}}>
+														{/* <div style={{width: '100%'}}>{item}</div> */}
+                            <ConceptDialogButton name={item} read={read} suggestionText={"asdf"} 
+                            showInitially={true} maximized={this.state.showRecommendations}
+                            color={"#35b"} />
 													</Link>
 											);
 										})}
 								</div>
-								<div>
+								<div className={'column'}>
 									<p>{PRACTICE}</p>
 									{/* Placeholder button */}
 									<Link to={`/practice/${this.props.concept}/practice-reading-code`}>
@@ -156,22 +182,45 @@ class ConceptDialog extends Component {
 						</div>
 
 						<div>
-							<p className={'bold-text'}>Writing {this.props.title}</p>
+							<Grid fluid>
+                <Row>
+                  <Col md={6}>
+                    <p className={'bold-text'}>Writing {this.props.title}</p>
+                  </Col>
+                  <Col md={6}>
+                    <div class="progress">
+                      <div class="progress-bar bg-success" 
+                      role="progressbar" 
+                      style={{width: '25%'}} 
+                      aria-valuenow="25" 
+                      aria-valuemin="0" 
+                      aria-valuemax="100">asdfasdf</div>
+                    </div>
+                  </Col>
+                </Row>
+              </Grid>
 							<div className={"overview-container"}>
-								<div>
+								<div className={'column'}>
 									<p>{LEARN}</p>
-									
-										{this.state.writeInstructions.map((item, index) => {
+                    {this.state.writeInstructions.map((item, index) => {
+                      let read = this.props.instructionsRead && 
+                            this.props.instructionsRead[this.props.conceptCode] &&
+                            this.props.instructionsRead[this.props.conceptCode]["WRITE"] ? 
+                            this.props.instructionsRead[this.props.conceptCode]["WRITE"][index] : "unread";
 											return (
-													<Link key={'w' + index} to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
-                          onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}>
-														<div style={{width: '100%'}}>{item}</div>
+													<Link key={'w' + index} 
+                          onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}
+                          to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
+                          style={{textDecoration: 'none', color: 'black'}}>
+														{/* <div style={{width: '100%'}}>{item}</div> */}
+                            <ConceptDialogButton name={item} read={read} suggestionText={"asdf"} 
+                            showInitially={true} maximized={this.state.showRecommendations}
+                            color={"#35b"} />
 													</Link>
 											);
-										})}
-									
+										})}									
 								</div>
-								<div>
+								<div className={'column'}>
 									<p>{PRACTICE}</p>
 									{/* Placeholder button */}
 									<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
