@@ -14,7 +14,9 @@ cytoscape.use( dagre );
 type Props = {
 	setFirebaseUser: Function,
 	generateExercise: Function,
-	getInstruction: Function
+	getInstruction: Function,
+	exercisesList: any,
+	conceptMapGetter: any
 };
 
 /**
@@ -62,7 +64,6 @@ class WorldView extends Component {
 			}
 		}) : null;
     window.scrollTo(0, 0);
-
 	}
 
   /**
@@ -272,10 +273,12 @@ class WorldView extends Component {
 		return (
 				<div>
 					{this.state.conceptDialog && <ConceptDialog title={this.state.title}
-																						 conceptCode={this.state.conceptCode}
-																						 open={this.state.conceptDialog}
-																						 generateExercise={this.props.generateExercise}
-																						 getInstruction={this.props.getInstruction}/>}
+																											conceptCode={this.state.conceptCode}
+																											open={this.state.conceptDialog}
+																											generateExercise={this.props.generateExercise}
+																											getInstruction={this.props.getInstruction}
+																											exercisesList={this.props.exercisesList}
+																											conceptMapGetter={this.props.conceptMapGetter}/>}
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
 		);

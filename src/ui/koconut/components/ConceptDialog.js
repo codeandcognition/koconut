@@ -19,7 +19,9 @@ type Props = {
 	conceptCode: string,
 	open: boolean,
 	generateExercise: Function,
-	getInstruction: Function
+	getInstruction: Function,
+	exercisesList: any,
+	conceptMapGetter: any
 };
 
 class ConceptDialog extends Component {

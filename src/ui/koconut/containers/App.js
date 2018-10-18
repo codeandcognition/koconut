@@ -944,7 +944,9 @@ class App extends Component {
 										 switchToWorldView={this.switchToWorldView}
 										 generateExercise={this.generateExercise}
 										 getInstruction={this.getInstruction}
-                     getOrderedConcepts={this.getOrderedConcepts}/>
+                     getOrderedConcepts={this.getOrderedConcepts}
+										 exercisesList={this.state.exerciseList}
+										 conceptMapGeter={this.state.conceptMapGetter}/>
 				</div>
     )
   }
