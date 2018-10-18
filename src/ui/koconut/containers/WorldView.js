@@ -9,6 +9,7 @@ import './WorldView.css';
 import cytoscape from 'cytoscape';
 import firebase from 'firebase';
 import dagre from 'cytoscape-dagre';
+import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 cytoscape.use( dagre );
 
 type Props = {
@@ -16,7 +17,8 @@ type Props = {
 	generateExercise: Function,
 	getInstruction: Function,
 	exercisesList: any,
-	conceptMapGetter: any
+	conceptMapGetter: any,
+	getOrderedConcepts: Function
 };
 
 /**
@@ -51,6 +53,10 @@ class WorldView extends Component {
     this.getConceptShortDescriptions();
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+		this.props = nextProps;
+	}
+
   componentDidMount() {
   	this.mounted = true;
   	this.authUnsub = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
@@ -70,8 +76,7 @@ class WorldView extends Component {
    * This function renders the world view UI.
    */
 	renderCytoscape() {
-    let conceptList = this.getOrderedConcepts(); // TODO: Change this to
-    // reference prop when merged with summer2018-master
+		let conceptList = this.props.getOrderedConcepts();
     let nodesArr = [];
     let edgesArr = [];
 
@@ -278,7 +283,8 @@ class WorldView extends Component {
 																											generateExercise={this.props.generateExercise}
 																											getInstruction={this.props.getInstruction}
 																											exercisesList={this.props.exercisesList}
-																											conceptMapGetter={this.props.conceptMapGetter}/>}
+																											conceptMapGetter={this.props.conceptMapGetter}
+																											getOrderedConcepts={this.props.getOrderedConcepts}/>}
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
 		);

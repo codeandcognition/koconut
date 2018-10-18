@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Button from '@material-ui/core/Button';
+import './ExerciseButton.css'
 
 type Props = {
 	text: string,
@@ -15,8 +16,7 @@ class ExerciseButton extends Component {
 
 	render() {
 		return (
-				<Button variant={'contained'}
-								className={'resume'}>Practice</Button>
+				<button className={'exerciseButton'}>{this.props.text}</button>
 		);
 	}
 }

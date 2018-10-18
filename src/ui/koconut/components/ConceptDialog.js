@@ -10,6 +10,8 @@ import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
 import { withRouter} from "react-router-dom";
+import ExerciseButton from './ExerciseButton';
+import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
@@ -21,7 +23,8 @@ type Props = {
 	generateExercise: Function,
 	getInstruction: Function,
 	exercisesList: any,
-	conceptMapGetter: any
+	conceptMapGetter: any,
+	getOrderedConcepts: Function
 };
 
 class ConceptDialog extends Component {
@@ -34,9 +37,11 @@ class ConceptDialog extends Component {
 			showRecommendations: true
 		};
 		this.handleClose = this.handleClose.bind(this);
+		this.generator = new ExerciseGenerator(this.props.getOrderedConcepts);
 	}
 
 	componentWillReceiveProps(props: Props) {
+		this.props = props;
 		this.setState({
 			open: props.open
 		}, () => {
@@ -99,6 +104,12 @@ class ConceptDialog extends Component {
 		this.setState({[type]: evt.target.checked});
 	}
 
+	filterExercisesByConcept(concept, exerciseType) {
+		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.props.exercisesList, this.props.conceptMapGetter).results;
+		// let exerciseIds = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.props.exercisesList, this.props.conceptMapGetter).exerciseIds;
+		return exercises;
+	}
+
 	displayReadingRelatedSection() {
 		return (
 				<div>
@@ -118,6 +129,7 @@ class ConceptDialog extends Component {
 						</div>
 						<div>
 							<p>{PRACTICE}</p>
+							{this.getExercisePreviews(this.props.conceptCode, "READ")}
 							{/* Placeholder button */}
 							<Link to={`/practice/${this.props.concept}/practice-reading-code`}>
 								<Button variant={'contained'}
@@ -151,6 +163,7 @@ class ConceptDialog extends Component {
 						<div>
 							<p>{PRACTICE}</p>
 							{/* Placeholder button */}
+							{this.getExercisePreviews(this.props.conceptCode, "WRITE")}
 							<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
 								<Button variant={'contained'}
 												className={'resume'}
@@ -160,6 +173,14 @@ class ConceptDialog extends Component {
 					</div>
 				</div>
 		);
+	}
+
+	getExercisePreviews(concept, exerciseType) {
+		let exercises = [];
+		this.filterExercisesByConcept(concept, exerciseType).forEach((e, i) => {
+			exercises.push(<ExerciseButton key={i} text={e.shortPrompt} read={false} recommendation={""} showRecomenddation={false}/>);
+		});
+		return exercises;
 	}
 
 	render() {

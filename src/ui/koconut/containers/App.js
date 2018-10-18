@@ -235,9 +235,6 @@ class App extends Component {
     }
 
     return topoOrder;
-    // return MasteryModel.model.filter((concept) => concept.should_teach && concept.container).sort(
-		// 		(a, b) => (b.dependencyKnowledge / b.knowledge -
-		// 				a.dependencyKnowledge / a.knowledge));
   }
 
   componentDidMount() {
@@ -946,7 +943,8 @@ class App extends Component {
 										 getInstruction={this.getInstruction}
                      getOrderedConcepts={this.getOrderedConcepts}
 										 exercisesList={this.state.exerciseList}
-										 conceptMapGeter={this.state.conceptMapGetter}/>
+										 conceptMapGetter={this.state.conceptMapGetter}
+										 getOrderedConcepts={this.getOrderedConcepts}/>
 				</div>
     )
   }
