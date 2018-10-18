@@ -169,16 +169,23 @@ class ConceptDialog extends Component {
 							<div className={"overview-container"}>
 								<div className={'column'}>
 									<p>{LEARN}</p>
-									
-										{this.state.writeInstructions.map((item, index) => {
+                    {this.state.writeInstructions.map((item, index) => {
+                      let read = this.props.instructionsRead && 
+                            this.props.instructionsRead[this.props.conceptCode] &&
+                            this.props.instructionsRead[this.props.conceptCode]["WRITE"] ? 
+                            this.props.instructionsRead[this.props.conceptCode]["WRITE"][index] : "unread";
 											return (
-													<Link key={'w' + index} to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
-                          onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}>
-														<div style={{width: '100%'}}>{item}</div>
+													<Link key={'w' + index} 
+                          onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}
+                          to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
+                          style={{textDecoration: 'none', color: 'black'}}>
+														{/* <div style={{width: '100%'}}>{item}</div> */}
+                            <ConceptDialogButton name={item} read={read} suggestionText={"asdf"} 
+                            showInitially={true} maximized={this.state.showRecommendations}
+                            color={"#35b"} />
 													</Link>
 											);
-										})}
-									
+										})}									
 								</div>
 								<div className={'column'}>
 									<p>{PRACTICE}</p>
