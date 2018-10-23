@@ -18,7 +18,8 @@ type Props = {
 	getInstruction: Function,
 	exercisesList: any,
 	conceptMapGetter: any,
-	getOrderedConcepts: Function
+	getOrderedConcepts: Function,
+	goToExercise: Function
 };
 
 /**
@@ -284,7 +285,8 @@ class WorldView extends Component {
 																											getInstruction={this.props.getInstruction}
 																											exercisesList={this.props.exercisesList}
 																											conceptMapGetter={this.props.conceptMapGetter}
-																											getOrderedConcepts={this.props.getOrderedConcepts}/>}
+																											getOrderedConcepts={this.props.getOrderedConcepts}
+																											goToExercise={this.props.goToExercise}/>}
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
 		);

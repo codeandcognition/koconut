@@ -24,7 +24,8 @@ type Props = {
 	getInstruction: Function,
 	exercisesList: any,
 	conceptMapGetter: any,
-	getOrderedConcepts: Function
+	getOrderedConcepts: Function,
+	goToExercise: Function,
 };
 
 class ConceptDialog extends Component {
@@ -106,8 +107,8 @@ class ConceptDialog extends Component {
 
 	filterExercisesByConcept(concept, exerciseType) {
 		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.props.exercisesList, this.props.conceptMapGetter).results;
-		// let exerciseIds = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.props.exercisesList, this.props.conceptMapGetter).exerciseIds;
-		return exercises;
+		let exerciseIds = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.props.exercisesList, this.props.conceptMapGetter).exerciseIds;
+		return {exercises, exerciseIds};
 	}
 
 	displayReadingRelatedSection() {
@@ -177,8 +178,24 @@ class ConceptDialog extends Component {
 
 	getExercisePreviews(concept, exerciseType) {
 		let exercises = [];
-		this.filterExercisesByConcept(concept, exerciseType).forEach((e, i) => {
-			exercises.push(<ExerciseButton key={i} text={e.shortPrompt} read={false} recommendation={""} showRecomenddation={false}/>);
+		let exerciseIds = this.filterExercisesByConcept(concept, exerciseType).exerciseIds;
+		this.filterExercisesByConcept(concept, exerciseType).exercises.forEach((e, i) => {
+			let id = exerciseIds[i];
+			exercises.push(
+					<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
+						<ExerciseButton key={i} // exerciseId
+														concept={concept}
+														exerciseType={exerciseType}
+														exercise={e}
+														exerciseId={id}
+														index={i}
+														numberOfExercises={exerciseIds.length}
+														read={false}
+														recommendation={""}
+														showRecommendation={false}
+														goToExercise={this.props.goToExercise}/>
+					</Link>
+				);
 		});
 		return exercises;
 	}

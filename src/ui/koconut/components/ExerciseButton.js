@@ -3,10 +3,16 @@ import Button from '@material-ui/core/Button';
 import './ExerciseButton.css'
 
 type Props = {
-	text: string,
+	concept: string,
+	exerciseType: string,
+	exercise: any,
+	exerciseId: number,
+	index: number,
+	numberOfExercises: number,
 	read: boolean,
 	recommendation: string,
-	showRecommendation: boolean
+	showRecommendation: boolean,
+	goToExercise: Function
 };
 
 class ExerciseButton extends Component {
@@ -16,7 +22,12 @@ class ExerciseButton extends Component {
 
 	render() {
 		return (
-				<button className={'exerciseButton'}>{this.props.text}</button>
+				<button className={'exerciseButton'}
+								onClick={() => this.props.goToExercise(this.props.concept,
+										this.props.exerciseType, this.props.exercise,
+										this.props.exerciseId, this.props.index, this.props.numberOfExercises)}>
+					{this.props.exercise.shortPrompt}
+				</button>
 		);
 	}
 }
