@@ -10,13 +10,13 @@
 .reg {
   background-color: white; }
 
-.disabled {
+.disabledt {
   cursor: not-allowed; }
 
-.notdisabled {
+.notdisabledt {
   cursor: pointer; }
 
-.choice {
+.choicet {
   height: auto;
   margin: 10px auto;
   user-select: none;
@@ -27,16 +27,16 @@
   transition-duration: 50ms;
   background-color: white; }
 
-.choice:active {
+.choicet:active {
   opacity: .95; }
 
-.choice:hover {
+.choicet:hover {
   background-color: #b3b3b3; }
 
-.choice.answer {
+.answert {
   background-color: #a6a6a6; }
 
-.choice.answer:hover {
+.answert:hover {
   background-color: #999999; }
 
 .blank {

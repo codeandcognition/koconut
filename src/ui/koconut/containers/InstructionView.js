@@ -46,6 +46,7 @@ class InstructionView extends Component {
     };
     this.prevInstruction = this.prevInstruction.bind(this);
     this.nextInstruction = this.nextInstruction.bind(this);
+    console.log('constructing')
   }
 
 
@@ -93,7 +94,9 @@ class InstructionView extends Component {
 								index - 1}, () => {
 				// store user location on firebase
 				this.storeUserState("instruction");
-				this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite);
+        // if(index !== this.state.currInstructionIndex) {
+				//   this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite);
+        // }
 			});
 		};
   }
@@ -112,14 +115,17 @@ class InstructionView extends Component {
     // so it's just to be safe (and possibly make flow not complain.
     if(this.state.instructionList) {
     	if (this.mounted) {
+        let currentValue = this.state.currInstructionIndex;
 				this.setState({currInstructionIndex:
 							index >= this.state.instructionList.length-1  ?
 									this.state.instructionList.length-1 :
 									index + 1}, () => {
 					// store user location on firebase
 					this.storeUserState("instruction");
-					this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite);
-          this.storeUserState("instruction");
+					// if(this.state.currInstructionIndex !== currentValue) {
+          //   this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite);
+          // }
+          // this.storeUserState("instruction");
 				});
 			}
     }
@@ -150,7 +156,7 @@ class InstructionView extends Component {
 				})
 			}
 		});
-    
+    console.log('mount');
 		this.sendInstructViewLogDataToFirebase(Number(this.props.match.params.pageIndex), this.props.conceptType, this.props.readOrWrite);
 		document.addEventListener("keydown", (e: any) => this.handleKeyPress(e.key));
   }
@@ -170,6 +176,7 @@ class InstructionView extends Component {
    * @param nextProps- the new prop object being received
    */
   componentWillReceiveProps(nextProps: Props) {
+    console.log('mountNP');
 		this.firebaseListener = firebase.database().ref(`Instructions/${nextProps.conceptType}/${nextProps.readOrWrite}`);
 		this.sendInstructViewLogDataToFirebase(Number(this.props.match.params.pageIndex), nextProps.conceptType, nextProps.readOrWrite);
 		this.updateInstructions();

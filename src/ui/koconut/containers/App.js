@@ -954,7 +954,7 @@ class App extends Component {
    * @private
    */
   _renderInstructionView() {
-
+    console.log('rendering')
     return(
     		<div>
 					{this.renderNavBar()}
@@ -1014,6 +1014,7 @@ class App extends Component {
 	}
 
   render() {
+    console.log('app RENDERING')
     return (
 					<div className="App">
 						<Router>
