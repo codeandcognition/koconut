@@ -9,7 +9,6 @@ import './WorldView.css';
 import cytoscape from 'cytoscape';
 import firebase from 'firebase';
 import dagre from 'cytoscape-dagre';
-import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 cytoscape.use( dagre );
 
 type Props = {

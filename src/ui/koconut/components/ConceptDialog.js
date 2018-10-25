@@ -151,7 +151,7 @@ class ConceptDialog extends Component {
 								);
 							})}
 						</div>
-						<div>
+						<div className={"column"}>
 							<p>{PRACTICE}</p>
 							{this.getExercisePreviews(this.props.conceptCode, "READ")}
 							{/* Placeholder button */}
@@ -199,9 +199,8 @@ class ConceptDialog extends Component {
 										</Link>
 								);
 							})}
-
 						</div>
-						<div>
+						<div className={"column"}>
 							<p>{PRACTICE}</p>
 							{this.getExercisePreviews(this.props.conceptCode, "WRITE")}
 						</div>
