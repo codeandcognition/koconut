@@ -10,7 +10,6 @@ import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
 import ConceptDialogButton from './ConceptDialogButton';
-import {Grid, Row, Col} from 'react-flexbox-grid';
 import ExerciseButton from './ExerciseButton';
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import Progress from './Progress';
