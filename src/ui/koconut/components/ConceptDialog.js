@@ -115,7 +115,7 @@ class ConceptDialog extends Component {
 	displayReadingRelatedSection() {
 		return (
 				<div>
-					<Progress title={this.props.title} percent={10} level={"beginner"}/>
+					<Progress title={this.props.title} percent={10}/>
 					<div className={"overview-container"}>
 						<div className={"column"}>
 							<p>{LEARN}</p>
@@ -148,7 +148,7 @@ class ConceptDialog extends Component {
 	displayWritingRelatedSection() {
 		return (
 				<div>
-					<Progress title={this.props.title} percent={70.5} level={"advanced"}/>
+					<Progress title={this.props.title} percent={70.5}/>
 					<div className={"overview-container"}>
 						<div className={"column"}>
 							<p>{LEARN}</p>

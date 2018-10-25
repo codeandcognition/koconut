@@ -3,8 +3,7 @@ import {Grid, Row, Col} from 'react-flexbox-grid';
 
 type Props = {
 	title: string,
-	percent: number,
-	level: string
+	percent: number
 };
 
 class Progress extends Component {
@@ -17,7 +16,19 @@ class Progress extends Component {
 	}
 
 	render() {
-		let percent = "" + Math.round(this.props.percent) + "%";
+		let percent = Math.round(this.props.percent);
+		let level = "";
+		if (percent > 0 && percent <= 40) {
+			level = "novice";
+		} else if (percent > 40 && percent <= 60) {
+			level = "intermediate";
+		} else if (percent > 60 && percent <= 85) {
+			level = "advanced";
+		} else {
+			level = "expert";
+		}
+
+
 		return(
 				<Grid fluid>
 					<Row>
@@ -28,10 +39,10 @@ class Progress extends Component {
 							<div class="progress">
 								<div class="progress-bar bg-success"
 										 role="progressbar"
-										 style={{width: percent}}
+										 style={{width: percent + "%"}}
 										 aria-valuenow="25"
 										 aria-valuemin="0"
-										 aria-valuemax="100">{this.props.level}</div>
+										 aria-valuemax="100">{level}</div>
 							</div>
 						</Col>
 					</Row>
