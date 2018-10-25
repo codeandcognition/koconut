@@ -1,0 +1,50 @@
+.custmc {
+  margin: 2px; }
+
+.table-wrong {
+  background-color: #fcd8d8; }
+
+.table-correct {
+  background-color: #e6f8e6; }
+
+.reg {
+  background-color: white; }
+
+.disabledt {
+  cursor: not-allowed; }
+
+.notdisabledt {
+  cursor: pointer; }
+
+.choicet {
+  height: auto;
+  margin: 10px auto;
+  user-select: none;
+  padding: 2.5%;
+  width: 33%;
+  border-radius: 20px;
+  border: 2px solid #cccccc;
+  transition-duration: 50ms;
+  background-color: white; }
+
+.choicet:active {
+  opacity: .95; }
+
+.choicet:hover {
+  background-color: #b3b3b3; }
+
+.answert {
+  background-color: #a6a6a6; }
+
+.answert:hover {
+  background-color: #999999; }
+
+.blank {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-bottom: 1px solid #3F51B5; }
+
+.blank:focus {
+  outline: none;
+  background-color: #eef3fa; }

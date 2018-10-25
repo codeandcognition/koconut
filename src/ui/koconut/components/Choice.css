@@ -1,0 +1,27 @@
+.choice {
+  margin: 10px auto;
+  user-select: none;
+  padding: 2.5%;
+  width: 33%;
+  border-radius: 20px;
+  border: 2px solid #cccccc;
+  transition-duration: 50ms;
+  background-color: white; }
+
+.choice:active {
+  opacity: .95; }
+
+.choice:hover {
+  background-color: #b3b3b3; }
+
+.choice.answer {
+  background-color: #a6a6a6; }
+
+.choice.answer:hover {
+  background-color: #999999; }
+
+.disabled {
+  cursor: not-allowed; }
+
+.notdisabled {
+  cursor: pointer; }

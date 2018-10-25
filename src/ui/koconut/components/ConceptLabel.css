@@ -1,0 +1,11 @@
+.concept-label {
+  background: #090;
+  color: #eee;
+  padding-left: 0.5em; }
+
+.concept-label > .concept {
+  display: inline-block;
+  margin: 0.2em;
+  padding: 0.2em 0.4em;
+  border: 1px solid #eee;
+  border-radius: 0.4em; }
