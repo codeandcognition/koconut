@@ -984,6 +984,7 @@ class App extends Component {
    * @private
    */
   _renderInstructionView() {
+
     return(
     		<div>
 					{this.renderNavBar()}

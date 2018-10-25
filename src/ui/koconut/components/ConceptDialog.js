@@ -9,9 +9,9 @@ import ConceptInventory from './../../../data/ConceptMap';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
-import { withRouter} from "react-router-dom";
 import ExerciseButton from './ExerciseButton';
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
+import {Grid, Row, Col} from 'react-flexbox-grid';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
@@ -35,7 +35,7 @@ class ConceptDialog extends Component {
 			open: true,
 			readInstructions: [],
 			writeInstructions: [],
-			showRecommendations: true
+			showRecommendations: false
 		};
 		this.handleClose = this.handleClose.bind(this);
 		this.generator = new ExerciseGenerator(this.props.getOrderedConcepts);
@@ -128,7 +128,7 @@ class ConceptDialog extends Component {
 								);
 							})}
 						</div>
-						<div>
+						<div className={"column"}>
 							<p>{PRACTICE}</p>
 							{this.getExercisePreviews(this.props.conceptCode, "READ")}
 							{/* Placeholder button */}
@@ -154,9 +154,8 @@ class ConceptDialog extends Component {
 										</Link>
 								);
 							})}
-
 						</div>
-						<div>
+						<div className={"column"}>
 							<p>{PRACTICE}</p>
 							{this.getExercisePreviews(this.props.conceptCode, "WRITE")}
 						</div>

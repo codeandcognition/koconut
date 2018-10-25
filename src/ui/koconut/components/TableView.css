@@ -25,7 +25,8 @@
   border-radius: 20px;
   border: 2px solid #cccccc;
   transition-duration: 50ms;
-  background-color: white; }
+  background-color: white;
+}
 
 .choicet:active {
   opacity: .95; }
@@ -36,7 +37,17 @@
 .answert {
   background-color: #a6a6a6; }
 
-.answert:hover {
+
+.choice:active {
+  opacity: .95; }
+
+.choice:hover {
+  background-color: #b3b3b3; }
+
+.choice.answer {
+  background-color: #a6a6a6; }
+
+.choice.answer:hover {
   background-color: #999999; }
 
 .blank {

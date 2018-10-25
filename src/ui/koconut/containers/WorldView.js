@@ -9,7 +9,6 @@ import './WorldView.css';
 import cytoscape from 'cytoscape';
 import firebase from 'firebase';
 import dagre from 'cytoscape-dagre';
-import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 cytoscape.use( dagre );
 
 type Props = {
@@ -33,7 +32,8 @@ class WorldView extends Component {
 		this.state = {
 			loading: true,
       didRender: false,
-      conceptDescriptions: {}
+      conceptDescriptions: {},
+      instructionsRead: {}
 		};
 		this.hierarchyContainer = React.createRef();
 	}
@@ -67,6 +67,9 @@ class WorldView extends Component {
 						this.props.history.push(Routes.signin);
 					}
 					this.checkWaiverStatus(user);
+          this.props.firebase.database().ref(`/Users/${user.uid}/Data/InstructionsRead`).on('value', (snap) => {
+            this.setState({instructionsRead: snap.val()});
+          })
 				});
 			}
 		}) : null;
@@ -275,7 +278,6 @@ class WorldView extends Component {
     } else {
       this.forceUpdate();
     }
-
 		return (
 				<div>
 					{this.state.conceptDialog && <ConceptDialog title={this.state.title}
