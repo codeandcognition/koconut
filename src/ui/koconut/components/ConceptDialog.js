@@ -10,9 +10,9 @@ import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
 import ConceptDialogButton from './ConceptDialogButton';
-import {Grid, Row, Col} from 'react-flexbox-grid';
 import ExerciseButton from './ExerciseButton';
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
+import Progress from './Progress';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
@@ -115,23 +115,7 @@ class ConceptDialog extends Component {
 	displayReadingRelatedSection() {
 		return (
 				<div>
-					<Grid fluid>
-						<Row>
-							<Col md={6}>
-								<p className={'bold-text'}>Reading {this.props.title}</p>
-							</Col>
-							<Col md={6}>
-								<div class="progress">
-									<div class="progress-bar bg-success"
-											 role="progressbar"
-											 style={{width: '25%'}}
-											 aria-valuenow="25"
-											 aria-valuemin="0"
-											 aria-valuemax="100">asdfasdf</div>
-								</div>
-							</Col>
-						</Row>
-					</Grid>
+					<Progress title={this.props.title} percent={10}/>
 					<div className={"overview-container"}>
 						<div className={"column"}>
 							<p>{LEARN}</p>
@@ -164,23 +148,7 @@ class ConceptDialog extends Component {
 	displayWritingRelatedSection() {
 		return (
 				<div>
-					<Grid fluid>
-						<Row>
-							<Col md={6}>
-								<p className={'bold-text'}>Writing {this.props.title}</p>
-							</Col>
-							<Col md={6}>
-								<div class="progress">
-									<div class="progress-bar bg-success"
-											 role="progressbar"
-											 style={{width: '25%'}}
-											 aria-valuenow="25"
-											 aria-valuemin="0"
-											 aria-valuemax="100">asdfasdf</div>
-								</div>
-							</Col>
-						</Row>
-					</Grid>
+					<Progress title={this.props.title} percent={70.5}/>
 					<div className={"overview-container"}>
 						<div className={"column"}>
 							<p>{LEARN}</p>
