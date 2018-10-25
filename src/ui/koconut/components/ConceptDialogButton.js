@@ -43,7 +43,7 @@ export default class ConceptDialogButton extends Component {
   render() {
     let {name, read, suggestionText, showInitially, color, hover, maximized} = this.state;
     return <div role="button" style={{
-        width: '100%',
+        width: 'auto',
         cursor: 'pointer',
         textDecoration: 'none',
         marginBottom: 10,

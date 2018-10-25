@@ -9,9 +9,10 @@ import ConceptInventory from './../../../data/ConceptMap';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
-import { withRouter } from "react-router-dom";
 import ConceptDialogButton from './ConceptDialogButton';
 import {Grid, Row, Col} from 'react-flexbox-grid';
+import ExerciseButton from './ExerciseButton';
+import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
@@ -21,7 +22,11 @@ type Props = {
 	conceptCode: string,
 	open: boolean,
 	generateExercise: Function,
-	getInstruction: Function
+	getInstruction: Function,
+	exercisesList: any,
+	conceptMapGetter: any,
+	getOrderedConcepts: Function,
+	goToExercise: Function,
 };
 
 class ConceptDialog extends Component {
@@ -34,9 +39,11 @@ class ConceptDialog extends Component {
 			showRecommendations: false
 		};
 		this.handleClose = this.handleClose.bind(this);
+		this.generator = new ExerciseGenerator(this.props.getOrderedConcepts);
 	}
 
 	componentWillReceiveProps(props: Props) {
+		this.props = props;
 		this.setState({
 			open: props.open
 		}, () => {
@@ -99,6 +106,134 @@ class ConceptDialog extends Component {
 		this.setState({[type]: evt.target.checked});
 	}
 
+	filterExercisesByConcept(concept, exerciseType) {
+		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.props.exercisesList, this.props.conceptMapGetter).results;
+		let exerciseIds = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.props.exercisesList, this.props.conceptMapGetter).exerciseIds;
+		return {exercises, exerciseIds};
+	}
+
+	displayReadingRelatedSection() {
+		return (
+				<div>
+					<Grid fluid>
+						<Row>
+							<Col md={6}>
+								<p className={'bold-text'}>Reading {this.props.title}</p>
+							</Col>
+							<Col md={6}>
+								<div class="progress">
+									<div class="progress-bar bg-success"
+											 role="progressbar"
+											 style={{width: '25%'}}
+											 aria-valuenow="25"
+											 aria-valuemin="0"
+											 aria-valuemax="100">asdfasdf</div>
+								</div>
+							</Col>
+						</Row>
+					</Grid>
+					<div className={"overview-container"}>
+						<div className={"column"}>
+							<p>{LEARN}</p>
+							{this.state.readInstructions.map((item, index) => {
+								let read = this.props.instructionsRead &&
+								this.props.instructionsRead[this.props.conceptCode] &&
+								this.props.instructionsRead[this.props.conceptCode]["READ"] ?
+										this.props.instructionsRead[this.props.conceptCode]["READ"][index] : "unread";
+								return (
+										<Link key={'r' + index}
+													onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}
+													to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
+											<ConceptDialogButton name={item} read={read} suggestionText={"asdf"}
+																					 showInitially={true} maximized={this.state.showRecommendations}
+																					 color={"#35b"} />
+										</Link>
+								);
+							})}
+						</div>
+						<div>
+							<p>{PRACTICE}</p>
+							{this.getExercisePreviews(this.props.conceptCode, "READ")}
+							{/* Placeholder button */}
+						</div>
+					</div>
+				</div>
+		);
+	}
+
+	displayWritingRelatedSection() {
+		return (
+				<div>
+					<Grid fluid>
+						<Row>
+							<Col md={6}>
+								<p className={'bold-text'}>Writing {this.props.title}</p>
+							</Col>
+							<Col md={6}>
+								<div class="progress">
+									<div class="progress-bar bg-success"
+											 role="progressbar"
+											 style={{width: '25%'}}
+											 aria-valuenow="25"
+											 aria-valuemin="0"
+											 aria-valuemax="100">asdfasdf</div>
+								</div>
+							</Col>
+						</Row>
+					</Grid>
+					<div className={"overview-container"}>
+						<div className={"column"}>
+							<p>{LEARN}</p>
+
+							{this.state.writeInstructions.map((item, index) => {
+								let read = this.props.instructionsRead &&
+								this.props.instructionsRead[this.props.conceptCode] &&
+								this.props.instructionsRead[this.props.conceptCode]["READ"] ?
+										this.props.instructionsRead[this.props.conceptCode]["READ"][index] : "unread";
+								return (
+										<Link key={'w' + index} to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
+													onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}>
+											<ConceptDialogButton name={item} read={read} suggestionText={"asdf"}
+																					 showInitially={true} maximized={this.state.showRecommendations}
+																					 color={"#35b"} />
+										</Link>
+								);
+							})}
+
+						</div>
+						<div>
+							<p>{PRACTICE}</p>
+							{this.getExercisePreviews(this.props.conceptCode, "WRITE")}
+						</div>
+					</div>
+				</div>
+		);
+	}
+
+	getExercisePreviews(concept, exerciseType) {
+		let exercises = [];
+		let exerciseIds = this.filterExercisesByConcept(concept, exerciseType).exerciseIds;
+		this.filterExercisesByConcept(concept, exerciseType).exercises.forEach((e, i) => {
+			let id = exerciseIds[i];
+			exercises.push(
+					<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
+						<ExerciseButton key={i} // exerciseId
+														concept={concept}
+														exerciseType={exerciseType}
+														exercise={e}
+														exerciseId={id}
+														index={i}
+														numberOfExercises={exerciseIds.length}
+														read={false}
+														recommendation={""}
+														showRecommendation={false}
+														goToExercise={this.props.goToExercise}/>
+					</Link>
+				);
+		});
+		return exercises;
+	}
+
 	render() {
 		let conceptInfo = ConceptInventory[this.props.conceptCode].explanations;
 
@@ -130,107 +265,11 @@ class ConceptDialog extends Component {
               return this.renderMarkdown(item, index);
             })}
 
-						<div>
-							<Grid fluid>
-                <Row>
-                  <Col md={6}>
-                    <p className={'bold-text'}>Reading {this.props.title}</p>
-                  </Col>
-                  <Col md={6}>
-                    <div class="progress">
-                      <div class="progress-bar bg-success" 
-                      role="progressbar" 
-                      style={{width: '25%'}} 
-                      aria-valuenow="25" 
-                      aria-valuemin="0" 
-                      aria-valuemax="100">asdfasdf</div>
-                    </div>
-                  </Col>
-                </Row>
-              </Grid>
-							<div className={"overview-container"}>
-							<div className={'column'}>
-									<p>{LEARN}</p>
-										{this.state.readInstructions.map((item, index) => {
-                      let read = this.props.instructionsRead && 
-                            this.props.instructionsRead[this.props.conceptCode] &&
-                            this.props.instructionsRead[this.props.conceptCode]["READ"] ? 
-                            this.props.instructionsRead[this.props.conceptCode]["READ"][index] : "unread";
-											return (
-													<Link key={'r' + index} 
-                          onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}
-                          to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}
-                          style={{textDecoration: 'none', color: 'black'}}>
-														{/* <div style={{width: '100%'}}>{item}</div> */}
-                            <ConceptDialogButton name={item} read={read} suggestionText={"asdf"} 
-                            showInitially={true} maximized={this.state.showRecommendations}
-                            color={"#35b"} />
-													</Link>
-											);
-										})}
-								</div>
-								<div className={'column'}>
-									<p>{PRACTICE}</p>
-									{/* Placeholder button */}
-									<Link to={`/practice/${this.props.concept}/practice-reading-code`}>
-										<Button variant={'contained'}
-														className={'resume'}
-														onClick={() => this.props.generateExercise(this.props.conceptCode, "READ")}>Practice</Button>
-									</Link>
-								</div>
-							</div>
-						</div>
+						{/* Display Reading related sections*/}
+						{this.displayReadingRelatedSection()}
 
-						<div>
-							<Grid fluid>
-                <Row>
-                  <Col md={6}>
-                    <p className={'bold-text'}>Writing {this.props.title}</p>
-                  </Col>
-                  <Col md={6}>
-                    <div class="progress">
-                      <div class="progress-bar bg-success" 
-                      role="progressbar" 
-                      style={{width: '25%'}} 
-                      aria-valuenow="25" 
-                      aria-valuemin="0" 
-                      aria-valuemax="100">asdfasdf</div>
-                    </div>
-                  </Col>
-                </Row>
-              </Grid>
-							<div className={"overview-container"}>
-								<div className={'column'}>
-									<p>{LEARN}</p>
-                    {this.state.writeInstructions.map((item, index) => {
-                      let read = this.props.instructionsRead && 
-                            this.props.instructionsRead[this.props.conceptCode] &&
-                            this.props.instructionsRead[this.props.conceptCode]["WRITE"] ? 
-                            this.props.instructionsRead[this.props.conceptCode]["WRITE"][index] : "unread";
-											return (
-													<Link key={'w' + index} 
-                          onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}
-                          to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
-                          style={{textDecoration: 'none', color: 'black'}}>
-														{/* <div style={{width: '100%'}}>{item}</div> */}
-                            <ConceptDialogButton name={item} read={read} suggestionText={"asdf"} 
-                            showInitially={true} maximized={this.state.showRecommendations}
-                            color={"#35b"} />
-													</Link>
-											);
-										})}									
-								</div>
-								<div className={'column'}>
-									<p>{PRACTICE}</p>
-									{/* Placeholder button */}
-									<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
-										<Button variant={'contained'}
-														className={'resume'}
-														onClick={() => this.props.generateExercise(this.props.conceptCode, "PRACTICE")}>Practice</Button>
-									</Link>
-								</div>
-							</div>
-						</div>
+						{/* Display Writing related sections*/}
+						{this.displayWritingRelatedSection()}
 					</DialogContent>
 				</Dialog>
 		);

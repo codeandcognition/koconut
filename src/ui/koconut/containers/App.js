@@ -101,6 +101,7 @@ class App extends Component {
   sendExerciseViewDataToFirebase: Function;
   hasNextQuestion: Function;
   getOrderedConcepts: Function;
+  goToExercise: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: any,
@@ -171,6 +172,7 @@ class App extends Component {
     this.sendExerciseViewDataToFirebase = this.sendExerciseViewDataToFirebase.bind(this);
     this.hasNextQuestion = this.hasNextQuestion.bind(this);
     this.getOrderedConcepts = this.getOrderedConcepts.bind(this);
+    this.goToExercise = this.goToExercise.bind(this);
   }
 
   sendExerciseViewDataToFirebase(exerciseId: string) {
@@ -235,9 +237,6 @@ class App extends Component {
     }
 
     return topoOrder;
-    // return MasteryModel.model.filter((concept) => concept.should_teach && concept.container).sort(
-		// 		(a, b) => (b.dependencyKnowledge / b.knowledge -
-		// 				a.dependencyKnowledge / a.knowledge));
   }
 
   componentDidMount() {
@@ -267,7 +266,6 @@ class App extends Component {
   generateExercise(concept: string, exerciseType: string) {
 		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).results;
 		let exerciseIds = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).exerciseIds;
-		console.log(exercises);
 		if (exercises) {
       if (exercises.length === 0) {
         this.setState({
@@ -280,7 +278,6 @@ class App extends Component {
           errorMessage: 'Looks like we ran out of questions for this concept, stay-tuned for more!'
         }, this.storeState("exercise", this.state.counter, this.state.exerciseType, concept));
       } else {
-      	console.log(exercises[exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter]);
         this.setState({
           display: displayType.exercise,
           exercise: exercises[exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter],//this.generator.getStubExercise(), // exercises[this.state.counter].exercise, // TODO: convert this for testing
@@ -296,6 +293,33 @@ class App extends Component {
       }
     }
   }
+
+	/**
+	 * Is passed as a prop to WorldView -> ConceptDialog
+	 * Updates the state in App.js when invoked in ConceptDialog.js
+	 *
+	 * @param concept
+	 * @param exerciseType
+	 * @param exercise
+	 * @param exerciseId
+	 * @param index
+	 * @param numberOfExercises
+	 */
+  goToExercise(concept: string, exerciseType: string, exercise: any,
+							 exerciseId: string, index: number, numberOfExercises: number) {
+		this.setState({
+			display: displayType.exercise,
+			exercise: exercise,
+			exerciseId: exerciseId,
+			currentConcept: concept,
+			counter: index,
+			exerciseType: exerciseType,
+			numExercisesInCurrConcept: numberOfExercises,
+			error: false // resets the error message
+		}, () => {
+			this.storeState("exercise", this.state.counter, this.state.exerciseType, concept);
+		});
+	}
 
 	/**
 	 * Stores user's current state on Koconut to Firebase
@@ -946,7 +970,11 @@ class App extends Component {
 										 switchToWorldView={this.switchToWorldView}
 										 generateExercise={this.generateExercise}
 										 getInstruction={this.getInstruction}
-                     getOrderedConcepts={this.getOrderedConcepts}/>
+                     getOrderedConcepts={this.getOrderedConcepts}
+										 exercisesList={this.state.exerciseList}
+										 conceptMapGetter={this.state.conceptMapGetter}
+										 getOrderedConcepts={this.getOrderedConcepts}
+										 goToExercise={this.goToExercise}/>
 				</div>
     )
   }

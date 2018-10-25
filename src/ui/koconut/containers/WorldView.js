@@ -9,12 +9,17 @@ import './WorldView.css';
 import cytoscape from 'cytoscape';
 import firebase from 'firebase';
 import dagre from 'cytoscape-dagre';
+import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 cytoscape.use( dagre );
 
 type Props = {
 	setFirebaseUser: Function,
 	generateExercise: Function,
-	getInstruction: Function
+	getInstruction: Function,
+	exercisesList: any,
+	conceptMapGetter: any,
+	getOrderedConcepts: Function,
+	goToExercise: Function
 };
 
 /**
@@ -50,6 +55,10 @@ class WorldView extends Component {
     this.getConceptShortDescriptions();
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+		this.props = nextProps;
+	}
+
   componentDidMount() {
   	this.mounted = true;
   	this.authUnsub = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
@@ -66,15 +75,13 @@ class WorldView extends Component {
 			}
 		}) : null;
     window.scrollTo(0, 0);
-
 	}
 
   /**
    * This function renders the world view UI.
    */
 	renderCytoscape() {
-    let conceptList = this.getOrderedConcepts(); // TODO: Change this to
-    // reference prop when merged with summer2018-master
+		let conceptList = this.props.getOrderedConcepts();
     let nodesArr = [];
     let edgesArr = [];
 
@@ -275,11 +282,14 @@ class WorldView extends Component {
 		return (
 				<div>
 					{this.state.conceptDialog && <ConceptDialog title={this.state.title}
-																						 conceptCode={this.state.conceptCode}
-																						 open={this.state.conceptDialog}
-																						 generateExercise={this.props.generateExercise}
-																						 getInstruction={this.props.getInstruction}
-                                             instructionsRead={this.state.instructionsRead}/>}
+																											conceptCode={this.state.conceptCode}
+																											open={this.state.conceptDialog}
+																											generateExercise={this.props.generateExercise}
+																											getInstruction={this.props.getInstruction}
+																											exercisesList={this.props.exercisesList}
+																											conceptMapGetter={this.props.conceptMapGetter}
+																											getOrderedConcepts={this.props.getOrderedConcepts}
+																											goToExercise={this.props.goToExercise}/>}
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
 		);
