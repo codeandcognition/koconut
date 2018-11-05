@@ -12,6 +12,7 @@ export default class DataLogger {
    * @param {string} textContent Content inside the notepad or the coder
    * @param {object} textPosition Position of the cursor of the text. Has fields `row` and `col` coming from AceEditor
    * @param {?number} selectedAnswer Optional parameter. Required only for READ type questions. -1 if not answered, 0-n if answered
+   * @throws {error} selectedAnswer not provided if this.type is "READ" and selectedAnswer parameter not provided
    */
   addData(event, keyPressed, textContent, textPosition, selectedAnswer) {
     let timestamp = Date.now();
@@ -54,12 +55,21 @@ export default class DataLogger {
   /**
    * sendDataToFirebase will upload the data object to firebase based on the user path
    * Requiring the user to enter userId and exerciseId makes resetting easier.
+   *
+   * Automatically clears the data after pushing data to firebase
+   * 
    * @param {string} userId Must provide a user Id for firebase path
    * @param {string} exerciseId Must provide an exercise Id corresponding with this current exercise
    * @param {object} firebase Must dependency inject firebase
    */
   sendDataToFirebase(userId, exerciseId, firebase) {
     // do some stuff
+    const objectToPush = {
+      ExerciseType: this.type,
+      ExerciseId: exerciseId,
+      DataLog: this.data
+    };
+    firebase.database().ref(`/Users/${userId}/Data/LogData`).push(objectToPush);
     this._clearData();
   }
 }
