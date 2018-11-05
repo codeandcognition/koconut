@@ -37,7 +37,7 @@ class Progress extends Component {
 						</Col>
 						<Col md={6}>
 							<div class="progress">
-								<div class="progress-bar bg-success"
+								<div className="progress-bar bg-success"
 										 role="progressbar"
 										 style={{width: percent + "%"}}
 										 aria-valuenow="25"

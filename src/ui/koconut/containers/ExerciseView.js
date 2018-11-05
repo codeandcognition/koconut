@@ -8,6 +8,7 @@ import LoadingView from './../components/LoadingView';
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
 import ExerciseNavigation from '../components/ExerciseNavigation';
+import DataLogger from '../dataLogging/DataLogger';
 
 type Props = {
   exercise: {
@@ -50,6 +51,9 @@ class Exercise extends Component {
       followupAnswers: []
     };
     this.resetAnswer = this.resetAnswer.bind(this);
+    this.dataLogger = new DataLogger(this.props.readOrWrite);
+    this.dataLogger.addData('MOUSECLICK','M1','asdfsasdf',{row: 1, col: 2},1);
+    console.log(this.dataLogger.getData());
   }
 
   /**
