@@ -25,18 +25,7 @@
   border-radius: 20px;
   border: 2px solid #cccccc;
   transition-duration: 50ms;
-  background-color: white;
-}
-
-.choicet:active {
-  opacity: .95; }
-
-.choicet:hover {
-  background-color: #b3b3b3; }
-
-.answert {
-  background-color: #a6a6a6; }
-
+  background-color: white; }
 
 .choicet:active {
   opacity: .95; }
