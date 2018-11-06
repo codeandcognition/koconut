@@ -1,5 +1,17 @@
+/**
+ * DataLogger class keeps track of a question log (one at a time)
+ * You must clear it manually after every question
+ * @class
+ */
 export default class DataLogger {
+  /**
+   * constructor for DataLogger class
+   * Sets up a data array and type.
+   * @param {stirng} type the type of the datalogger
+   * @throws {error} if type is not READ or WRITE
+   */
   constructor(type) {
+    this._checkTypes(type)
     this.data = [];
     this.type = type;
   }
@@ -41,7 +53,19 @@ export default class DataLogger {
    * @param {string} newType "READ" or "WRITE"
    */
   updateType(newType) {
+    this._checkTypes(newType);
     this.type = newType;
+  }
+
+  /**
+   * checkTypes checks to see if the type is valid as a READ type or WRITE type
+   * @param {string} type type to check
+   * @throws {error} if type is not READ or WRITE
+   */
+  _checkTypes(type) {
+    if(!(type === "READ" || type === "WRITE")) {
+      throw new Error('Invalid type provided');
+    }
   }
 
   /**

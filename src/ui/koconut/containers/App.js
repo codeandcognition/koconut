@@ -920,6 +920,7 @@ class App extends Component {
 				<div>
 					{this.renderNavBar()}
 					<ExerciseView
+              firebaseUser={this.state.firebaseUser}
 							updateUserState={this.updateUserState}
 							exercise={this.state.exercise}
 							readOrWrite={this.state.exerciseType}
@@ -943,6 +944,7 @@ class App extends Component {
 							generateExercise={this.generateExercise}
               hasNextQuestion={this.hasNextQuestion}
               getOrderedConcepts={this.getOrderedConcepts}
+              firebase={this.props.firebase}
 					/>
 				</div>
     );
