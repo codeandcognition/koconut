@@ -88,10 +88,6 @@ describe('DataLogger tests', () => {
     const textPosition = {row: 1, col: 2};
     const selectedAnswer = 1;
 
-        
-
-
-
     let d = new DataLogger('READ');    
     d.addData(event, keyPressed, textContent, textPosition, selectedAnswer);
     const push = jest.fn().mockImplementation((object) => jest.fn().mockImplementation((object) => {
