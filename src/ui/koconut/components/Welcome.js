@@ -30,7 +30,7 @@ const strings = {
   nsf: "this project is NSF funded",
   agreement: "I have read and understand the purposes of this program. I understand that my usage data will be logged and anonymized. For preliminary tests, I understand that I can request to have my data deleted.",
   iagree: "I Agree"
-}
+};
 
 class Welcome extends Component {
   // TODO: Maybe this should be a ReactMarkdown component

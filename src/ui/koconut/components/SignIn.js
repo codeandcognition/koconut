@@ -34,7 +34,7 @@ class SignIn extends Component {
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
 			if (user) {
 				if (this.mounted) {
-					this.setState({currentUser: user}, () => this.routeUser());
+					this.setState({currentUser: user}, () => this.routeUser(this.props.history.location.search["assignmentId"]));
 				}
 			} else {
 				if (this.mounted) {
@@ -65,7 +65,7 @@ class SignIn extends Component {
               timestamp: firebase.database.ServerValue.TIMESTAMP
             });
 						this.setState({loading: false, currentUser: user}, () => {
-							this.routeUser();
+							this.routeUser(null);
 						});
           }
           // return user.updateProfile({displayName: this.state.displayName});
@@ -79,10 +79,14 @@ class SignIn extends Component {
 	 * routes user to the world view or the welcome view depending on their waiver
 	 * status
 	 */
-	routeUser() {
+	routeUser(assignmentId) {
     if(this.state.currentUser && this.state.currentUser.uid) {
       let databaseRef = firebase.database()
         .ref("Users/" + this.state.currentUser.uid);
+      if (!assignmentId) {
+				databaseRef.set({exerciseAssignmentId: assignmentId});
+			}
+      // set user assignment id
       databaseRef.once("value").then((snapshot) => {
         if (snapshot !== null && snapshot.val() !== null) {
           let snap = snapshot.val();

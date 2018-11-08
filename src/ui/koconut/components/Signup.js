@@ -58,7 +58,6 @@ class Signup extends Component {
 		evt.preventDefault();
 		let mismatch = this.state.password !== this.state.confirmation;
 		this.setState({errorMessage: "", errCode: "", userExperienceError: false});
-
     if(mismatch) {
       this.setState({mismatch});
     } else if(this.state.userExperience === "") {
@@ -78,7 +77,9 @@ class Signup extends Component {
           return user.updateProfile({displayName: this.state.displayName});
         })
         .then(this.state.currentUser ? () => this.setState({loading: false}, () => {
-          this.props.history.push(Routes.signin)
+        	// this is to document user assignment id
+					this.props.history.location.search = {assignmentId: this.state.assignmentId};
+          this.props.history.push(Routes.signin);
         }) : null)
         .catch((error) => {
           this.setState({
@@ -135,10 +136,16 @@ class Signup extends Component {
 										label="Confirm Password"
 										placeholder="Re-enter your password"
 										onInput={evt => this.setState({confirmation: evt.target.value})}/>
+								<TextField
+										id="assignmentId"
+										type="text"
+										label="Assignment ID"
+										placeholder="Ask the study moderator"
+										onInput={evt => this.setState({assignmentId: evt.target.value})}/>
                 {this.state.userExperienceError ? <p className="alert alert-warning"
 																					style={{marginTop: '3%', marginBottom: '0%'}}>You must select one of the options below</p> : null}
-								
-                <FormControl style={{marginTop: 10, textAlign: 'center'}}>
+
+								{/*<FormControl style={{marginTop: 10, textAlign: 'center'}}>
                   <InputLabel htmlFor="userExperience_">I am...</InputLabel>
                   <Select
                     value={this.state.userExperience}
@@ -156,7 +163,7 @@ class Signup extends Component {
                     <MenuItem value={"STUDENT"}>student reviewing for a midterm or test</MenuItem>
                     <MenuItem value={"PROGRAMMEROLD"}>programmer that hasn't used python in a while</MenuItem>
                   </Select>
-                </FormControl>
+                </FormControl>*/}
 								
                 <Button
 										style={{marginTop: '5%', width: '30vh', marginLeft: 'auto', marginRight: 'auto'}}
