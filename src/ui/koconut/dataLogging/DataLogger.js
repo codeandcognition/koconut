@@ -21,16 +21,32 @@ export default class DataLogger {
    * pushed to firebase
    * @param {string} event a string of either "MOUSECLICK" or "KEYBOARD"
    * @param {string} keyPressed A string indicating which button was pressed from either the mouse or keyboard
-   * @param {string} textContent Content inside the notepad or the coder
-   * @param {object} textPosition Position of the cursor of the text. Has fields `row` and `col` coming from AceEditor
+   * @param {?string} textContent Content inside the notepad or the coder, default value will be the most recent logs' or empty string if log is empty
+   * @param {?object} textPosition Position of the cursor of the text. Has fields `row` and `col` coming from AceEditor, default value will be -1, -1
    * @param {?number} selectedAnswer Optional parameter. Required only for READ type questions. -1 if not answered, 0-n if answered
    * @throws {error} selectedAnswer not provided if this.type is "READ" and selectedAnswer parameter not provided
    */
-  addData(event, keyPressed, textContent, textPosition, selectedAnswer) {
+  addData({event, keyPressed, textContent, textPosition, selectedAnswer}) {
     let timestamp = Date.now();
     if(this.type === "READ" && selectedAnswer === undefined) {
       throw new Error('selectedAnswer not provided');
     }
+
+    // textContent has to not be empty string, but still be falsey
+    // This means even if emptied out, it will be updated correctly.
+    if(textContent !== "" && !textContent) {
+      if(this.data.length === 0) {
+        textContent = ""
+      } else {
+        textContent = this.data[this.data.length - 1].textContent;
+      }
+    }
+
+    // if textPosition isn't given, it means user is clicked out of the aceeditor
+    if(!textPosition) {
+      textPosition = {row: -1, col: -1}
+    }
+
     let dataObject = {event, keyPressed, textContent, textPosition, timestamp};
     if(this.type === "READ") {
       dataObject = {...dataObject, selectedAnswer};
