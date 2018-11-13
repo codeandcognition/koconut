@@ -116,7 +116,17 @@ class CodeEditor extends Component {
   }
 
   handleClick = () => {
-    console.log(this.refs.aceEditor.editor.session);
+    // console.log(this.refs.aceEditor.editor.session);
+    console.log(this.refs.aceEditor.editor.textInput.getElement())
+    let thing = this.refs.aceEditor.editor.textInput.getElement();
+    // thing.addEventListener('input', (e) => {
+    //   console.log(e.data);
+    //   // console.log(e.target);
+    // })
+
+    thing.addEventListener('keydown', (e) => {
+      console.log(e);
+    })
   }
 
   /**
@@ -160,6 +170,15 @@ class CodeEditor extends Component {
             type: 'background'
           }
         ]}
+        commands={
+          [
+            // {
+            //   name: 'test',
+            //   bindKey: {win: 'left', mac: 'left'},
+            //   exec: () => {console.log('test testtesttestestseatset')}
+            // }
+          ]
+        }
         /* https://github.com/securingsincity/react-ace/issues/29#issuecomment-296398653 */
     />;
   }
@@ -187,7 +206,7 @@ class CodeEditor extends Component {
   render() {
     return(
         <div style={{textAlign: "left"}} 
-          // onClick={this.handleClick}
+          onClick={this.handleClick}
           >
           <ReactMarkdown className={"flex-grow-1"}
                          source={this.props.prompt}
