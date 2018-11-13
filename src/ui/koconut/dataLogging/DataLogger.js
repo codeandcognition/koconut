@@ -23,13 +23,14 @@ export default class DataLogger {
    * @param {string} keyPressed A string indicating which button was pressed from either the mouse or keyboard
    * @param {?string} textContent Content inside the notepad or the coder, default value will be the most recent logs' or empty string if log is empty
    * @param {?object} textPosition Position of the cursor of the text. Has fields `row` and `col` coming from AceEditor, default value will be -1, -1
+   *                                Has an optional `range` field which has to do with when the user may highlight things.
    * @param {?number} selectedAnswer Optional parameter. Required only for READ type questions. -1 if not answered, 0-n if answered
    * @throws {error} selectedAnswer not provided if this.type is "READ" and selectedAnswer parameter not provided
    */
   addData({event, keyPressed, textContent, textPosition, selectedAnswer}) {
     let timestamp = Date.now();
     if(this.type === "READ" && selectedAnswer === undefined) {
-      throw new Error('selectedAnswer not provided');
+      selectedAnswer = -1;
     }
 
     // textContent has to not be empty string, but still be falsey
