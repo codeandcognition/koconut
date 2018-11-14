@@ -65,7 +65,8 @@ class SignIn extends Component {
               timestamp: firebase.database.ServerValue.TIMESTAMP
             });
 						this.setState({loading: false, currentUser: user}, () => {
-							this.routeUser(null);
+							console.log(this.props.history.location.search["assignmentId"])
+							this.routeUser(this.props.history.location.search["assignmentId"]); // TODO: Change this!!
 						});
           }
           // return user.updateProfile({displayName: this.state.displayName});
@@ -79,14 +80,10 @@ class SignIn extends Component {
 	 * routes user to the world view or the welcome view depending on their waiver
 	 * status
 	 */
-	routeUser(assignmentId) {
+	routeUser() {
     if(this.state.currentUser && this.state.currentUser.uid) {
       let databaseRef = firebase.database()
-        .ref("Users/" + this.state.currentUser.uid);
-      if (!assignmentId) {
-				databaseRef.set({exerciseAssignmentId: assignmentId});
-			}
-      // set user assignment id
+        .ref("UsersNcme2019/" + this.state.currentUser.uid + "/exerciseAssignmentId");
       databaseRef.once("value").then((snapshot) => {
         if (snapshot !== null && snapshot.val() !== null) {
           let snap = snapshot.val();

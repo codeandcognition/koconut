@@ -34,6 +34,12 @@ class Signup extends Component {
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
 			this.setState({ currentUser: user, loading: false }, () => {
 				if (user) {
+					let assignmentId = this.props.history.location.search["assignmentId"];
+					if (assignmentId) {
+						let databaseRef = firebase.database()
+						.ref("UsersNcme2019/" + this.state.currentUser.uid + "/exerciseAssignmentId");
+						databaseRef.set(assignmentId);
+					}
 					this.props.history.push(Routes.signin);
 				} else {
 					this.props.history.push(Routes.signup);
@@ -63,6 +69,8 @@ class Signup extends Component {
     } else if(this.state.userExperience === "") {
       this.setState({userExperienceError: true})
     } else {
+			// this is to document user assignment id
+			this.props.history.location.search = {assignmentId: this.state.assignmentId};
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(user => {
           let uid = user.user.uid;
@@ -73,12 +81,11 @@ class Signup extends Component {
             });
             firebase.database().ref(`/Users/${uid}/userExperience`).set(this.state.userExperience);
           }
-          this.setState({currentUser: user});
-          return user.updateProfile({displayName: this.state.displayName});
+          this.setState({currentUser: user}, () => {
+						return user.updateProfile({displayName: this.state.displayName})
+					});
         })
         .then(this.state.currentUser ? () => this.setState({loading: false}, () => {
-        	// this is to document user assignment id
-					this.props.history.location.search = {assignmentId: this.state.assignmentId};
           this.props.history.push(Routes.signin);
         }) : null)
         .catch((error) => {
