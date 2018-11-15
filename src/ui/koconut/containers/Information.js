@@ -279,6 +279,7 @@ class Information extends Component {
                           renderResponseView={this.renderResponseView}
                           renderFeedback={this.renderFeedback(fQuestion, index, fIndex)}
                           submitHandler={this.props.submitHandler}
+                          dataLogger={this.props.dataLogger}
                           fIndex={fIndex}
                         />
                       }

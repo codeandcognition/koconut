@@ -77,6 +77,24 @@ class CodeEditor extends Component {
     // TODO: Also, newlines and deletion isn't safe
     // console.log(event);
     // console.log('handlechange')
+    
+    // Data logger aspect of handling change
+    let dl = this.props.dataLogger;
+    let textPosition = this.refs.aceEditor.editor.getCursorPosition();
+    let key;
+    if(event.lines.length > 1 || event.lines[0].length > 1) {
+      key = "PASTE";
+    } else {
+      key = event.lines[0];
+    }
+    dl.addData({
+      event: "KEYBOARD",
+      keyPressed: key,
+      textContent: this.refs.aceEditor.editor.getValue(),
+      textPosition
+    })
+
+    // set state of value
     if (event.start.row !== -1) {
       this.setState({code: value}, () => {
 				if (this.props.inputHandler !== undefined) { // wow such type safety
@@ -89,17 +107,10 @@ class CodeEditor extends Component {
     }
   }
 
-  handleCursorChange(value, event) {
-    // console.log('-handlecursorchange')
-    // console.log(value, event);
-  }
-
   /**
    * Stores highlighted text from text area in component state: highlighted.
    */
   handleSelect(s,e: any /* need to make Flow play nicely */) {
-    // console.log(s,e);
-    // console.log('-handleselect')
     if(this.props.type === Types.highlightCode) {
       let selected = this.refs.aceEditor.editor.session.getTextRange(
           e.getRange());
@@ -111,53 +122,36 @@ class CodeEditor extends Component {
           this.props.inputHandler(selected, this.props.questionIndex, this.props.fIndex); // William summer 2018
         }
       });
-    }
-    
+    }   
   }
 
-  // handleClick = () => {
-  //   // console.log(this.refs.aceEditor.editor.session);
-  //   console.log(this.refs.aceEditor.editor.textInput.getElement())
-  //   let thing = this.refs.aceEditor.editor.textInput.getElement();
-  //   // thing.addEventListener('input', (e) => {
-  //   //   console.log(e.data);
-  //   //   // console.log(e.target);
-  //   // })
-
-  //   thing.addEventListener('keydown', (e) => {
-      
-  //     console.log(e.data);
-  //   })
-  // }
-
+  /**
+   * On component mount, set up arrow key listener and click listener
+   */
   componentDidMount() {
     let dl = this.props.dataLogger;
     if(this.refs.aceEditor) {
-      console.log('asdf')
       let aceEditorTextInputEl = this.refs.aceEditor.editor.textInput.getElement(); 
       aceEditorTextInputEl.addEventListener('keydown', e => {
         let {key} = e;
-        // console.log(this.refs.aceEditor.editor)
-        let textPosition = this.refs.aceEditor.editor.getCursorPosition();
-        console.log(this.refs.aceEditor.editor.getValue())
-          // console.log(e.target.selectionStart, e.target.selectionEnd);
         if(key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowDown" || 
           key === "ArrowUp") {
-          // position change
+          let textPosition = this.refs.aceEditor.editor.getCursorPosition();
           dl.addData({
             event: "KEYBOARD",
             keyPressed: key,
             textPosition
           })
-        } else {
-          dl.addData({
-            event: "KEYBOARD",
-            keyPressed: key,
-            // textContent: 
-            textPosition
-          })
-        }
-        console.log(dl.getData());
+        } 
+      });
+      
+      this.refs.aceEditor.editor.addEventListener('click', e => {
+        let textPosition = e.editor.getCursorPosition();
+        dl.addData({
+          event: "MOUSE",
+          keyPressed: "LeftClick",
+          textPosition
+        })
       });
     } 
   }
@@ -239,7 +233,7 @@ class CodeEditor extends Component {
   render() {
     return(
         <div style={{textAlign: "left"}} 
-          onClick={this.handleClick}
+          // onClick={this.handleClick}
           >
           <ReactMarkdown className={"flex-grow-1"}
                          source={this.props.prompt}

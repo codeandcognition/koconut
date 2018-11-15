@@ -98,19 +98,65 @@ export default class DataLogger {
    * Requiring the user to enter userId and exerciseId makes resetting easier.
    *
    * Automatically clears the data after pushing data to firebase
-   * 
-   * @param {string} userId Must provide a user Id for firebase path
-   * @param {string} exerciseId Must provide an exercise Id corresponding with this current exercise
-   * @param {object} firebase Must dependency inject firebase
    */
-  sendDataToFirebase(userId, exerciseId, firebase) {
+  sendDataToFirebase() {
     // do some stuff
+    let {userId, exerciseId, firebase} = this;
+    if(!firebase || !exerciseId || !userId) {
+      throw new Error(`You have not bound one of userId, exerciseId, or Firebase to the data logger
+      
+      Firebase: ${firebase},
+      ExerciseId: ${exerciseId},
+      UserID: ${userId}
+
+      Use \`.bindInformation({firebase, exerciseId, userId})\` to bind all three at once
+      `);
+    }
     const objectToPush = {
       ExerciseType: this.type,
       ExerciseId: exerciseId,
       DataLog: this.data
     };
-    firebase.database().ref(`/Users/${userId}/Data/LogData`).push(objectToPush);
+    // firebase.database().ref(`/Users/${userId}/Data/LogData`).push(objectToPush);
     this._clearData();
+    console.log(userId, exerciseId, firebase, this.getData())
+  }
+
+  /**
+   * @param {string} userId Must provide a user Id for firebase path
+   */
+  bindUserId(userId) {
+    this.userId = userId;
+  }
+
+
+  /**
+   * @param {string} exerciseId Must provide an exercise Id corresponding with this current exercise
+   */
+  bindExerciseId(exerciseId) {
+    this.exerciseId = exerciseId;
+  }
+
+  /**
+   * @param {object} firebase Must dependency inject firebase
+   */
+  bindFirebase(firebase) {
+    this.firebase = firebase;
+  }
+
+  /**
+   * bindInformation is a combination of all three binds that just lets you do
+   * it all at once
+   */
+  bindInformation({userId, exerciseId, firebase}) {
+    if(userId) {
+      this.bindUserId(userId);
+    }
+    if(exerciseId) {
+      this.bindExerciseId(exerciseId);
+    }
+    if(firebase) {
+      this.bindFirebase(firebase);
+    }
   }
 }
