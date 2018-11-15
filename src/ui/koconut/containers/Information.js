@@ -149,6 +149,7 @@ class Information extends Component {
             mode={this.props.mode}
             submitHandler={this.props.submitHandler}
             fIndex={fIndex}
+            dataLogger={this.props.dataLogger}
             />
   }
 
@@ -251,6 +252,7 @@ class Information extends Component {
                   renderFeedback={this.renderFeedback(question, index, -1)}
                   submitHandler={this.props.submitHandler}
                   fIndex={-1}
+                  dataLogger={this.props.dataLogger}
                 />
                 {question.followupQuestions && question.followupQuestions.map((fQuestion, fIndex) => {
                   var correctTable = true;

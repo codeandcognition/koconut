@@ -115,18 +115,51 @@ class CodeEditor extends Component {
     
   }
 
-  handleClick = () => {
-    // console.log(this.refs.aceEditor.editor.session);
-    console.log(this.refs.aceEditor.editor.textInput.getElement())
-    let thing = this.refs.aceEditor.editor.textInput.getElement();
-    // thing.addEventListener('input', (e) => {
-    //   console.log(e.data);
-    //   // console.log(e.target);
-    // })
+  // handleClick = () => {
+  //   // console.log(this.refs.aceEditor.editor.session);
+  //   console.log(this.refs.aceEditor.editor.textInput.getElement())
+  //   let thing = this.refs.aceEditor.editor.textInput.getElement();
+  //   // thing.addEventListener('input', (e) => {
+  //   //   console.log(e.data);
+  //   //   // console.log(e.target);
+  //   // })
 
-    thing.addEventListener('keydown', (e) => {
-      console.log(e);
-    })
+  //   thing.addEventListener('keydown', (e) => {
+      
+  //     console.log(e.data);
+  //   })
+  // }
+
+  componentDidMount() {
+    let dl = this.props.dataLogger;
+    if(this.refs.aceEditor) {
+      console.log('asdf')
+      let aceEditorTextInputEl = this.refs.aceEditor.editor.textInput.getElement(); 
+      aceEditorTextInputEl.addEventListener('keydown', e => {
+        let {key} = e;
+        // console.log(this.refs.aceEditor.editor)
+        let textPosition = this.refs.aceEditor.editor.getCursorPosition();
+        console.log(this.refs.aceEditor.editor.getValue())
+          // console.log(e.target.selectionStart, e.target.selectionEnd);
+        if(key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowDown" || 
+          key === "ArrowUp") {
+          // position change
+          dl.addData({
+            event: "KEYBOARD",
+            keyPressed: key,
+            textPosition
+          })
+        } else {
+          dl.addData({
+            event: "KEYBOARD",
+            keyPressed: key,
+            // textContent: 
+            textPosition
+          })
+        }
+        console.log(dl.getData());
+      });
+    } 
   }
 
   /**

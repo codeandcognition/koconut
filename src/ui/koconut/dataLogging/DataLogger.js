@@ -7,7 +7,7 @@ export default class DataLogger {
   /**
    * constructor for DataLogger class
    * Sets up a data array and type.
-   * @param {stirng} type the type of the datalogger
+   * @param {string} type the type of the datalogger
    * @throws {error} if type is not READ or WRITE
    */
   constructor(type) {

@@ -159,6 +159,7 @@ class Exercise extends Component {
 							followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
 							nextQuestion={this.props.nextQuestion}
 							resetAnswer={this.resetAnswer}
+              dataLogger={this.dataLogger}
 					/>
           <ExerciseNavigation 
             hasNextQuestion={this.props.hasNextQuestion}
