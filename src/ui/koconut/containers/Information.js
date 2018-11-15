@@ -107,6 +107,7 @@ class Information extends Component {
 						/>
 						<div style={{margin: '2%'}}>
 							<h5>Scratch Pad</h5>
+              {/** TODO: SCRATCHPAD SCRATCH PAD */}
 							<textarea style={{width: '12em', height: '20em', backgroundColor: '#FFF9C4'}}/>
 						</div>
 					</div>

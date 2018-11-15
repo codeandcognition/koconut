@@ -54,6 +54,7 @@ class Response extends Component {
             questionIndex={index}
             feedback={this.props.feedback}
             fIndex={this.props.fIndex}
+            dataLogger={this.props.dataLogger} 
         />;
       case(Types.shortResponse):
         return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index} fIndex={this.props.fIndex} prompt={this.props.question.prompt}/>;
