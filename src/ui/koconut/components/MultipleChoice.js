@@ -29,7 +29,7 @@ class MultipleChoice extends Component {
         <div className='multiple-choice'>
           <div>
 						<h5 className={'heading'}>{this.props.title}</h5>
-            {console.log(this.props.choices)}
+            {/* {console.log(this.props.choices)} */}
 						{/* Create a choice component for each item in answers */}
 						{this.props.answer !== undefined && this.props.questionIndex > -1 && this.props.choices.map((choice, i) =>
 								choice.length > 0 ?
@@ -45,9 +45,11 @@ class MultipleChoice extends Component {
 															? this.props.tooltips[i]
 															: undefined
 												}
+                        choiceIndex={i}
 												handleClick={this.props.handleClick}
 												questionIndex={this.props.questionIndex}
 												disabled={this.props.feedback}
+                        dataLogger={this.props.dataLogger}
 										/>) : ''
 						)}
           </div>

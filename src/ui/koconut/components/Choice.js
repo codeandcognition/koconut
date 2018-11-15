@@ -39,6 +39,11 @@ class Choice extends Component {
             onClick={() => {
               if (!this.props.disabled) {
                 this.props.handleClick(this.props.choice, this.props.questionIndex, this.props.fIndex);
+                this.props.dataLogger.addData({
+                  event: "MOUSECLICK",
+                  keyPressed: "LeftClick",
+                  selectedAnswer: this.props.choiceIndex
+                });
               }
             }}
             data-tip
