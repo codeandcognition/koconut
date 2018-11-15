@@ -7,6 +7,8 @@ import Feedback from '../components/Feedback';
 import Paper from '@material-ui/core/Paper';
 import ExerciseQuestion from '../components/ExerciseQuestion';
 
+ 
+
 import './Information.css';
 import Button from "@material-ui/core/Button/Button";
 
@@ -45,7 +47,10 @@ class Information extends Component {
       answer: null,
       followupAnswers: null,
       gaveUpCount: 0,
-      gaveUpArr: []
+      gaveUpArr: [],
+      mode: 'python',
+      theme: 'textmate',
+      code: ''
     };
     this.addGaveUp = this.addGaveUp.bind(this);
     this.renderResponseView = this.renderResponseView.bind(this);
@@ -63,6 +68,7 @@ class Information extends Component {
   }
 
   componentWillReceiveProps(nextProps: Props) {
+    this.props.dataLogger.updateType(nextProps.readOrWrite);
     this.setState({
       exercise: nextProps.exercise,
       feedback: nextProps.feedback,
@@ -72,19 +78,22 @@ class Information extends Component {
     });
   }
 
+  
+
   /**
    * Returns JSX for (or not for) the Code container given the current props
    * @param question question object in Exercise
    * @param index index of question in Exercise
    * @returns JSX for the Code container
    */
-  renderCodeView(question: any, index: number, fIndex: number) {
+  renderCodeView(question: any, index: number, fIndex: number, renderAce: ?any) {
   	// questions of type multiple choice but code is undefined
   	let absentCode = question.type === Types.multipleChoice && !question.code;
   	// or if it is a table question
   	absentCode = absentCode || question.type === Types.table;
   	// or if it is a highlight code question
   	absentCode = absentCode || question.type === Types.highlightCode;
+    this.codeviewrendered = true;
 		if(Types.isSurvey(question.type) || absentCode) {
 			return '';
 		} else {
@@ -108,11 +117,13 @@ class Information extends Component {
 						<div style={{margin: '2%'}}>
 							<h5>Scratch Pad</h5>
               {/** TODO: SCRATCHPAD SCRATCH PAD */}
-							<textarea style={{width: '12em', height: '20em', backgroundColor: '#FFF9C4'}}/>
+							{/* <textarea style={{width: '12em', height: '20em', backgroundColor: '#FFF9C4'}}/> */}
+              {renderAce && renderAce()}
 						</div>
 					</div>
 			);
 		}
+    
   }
 
   /**

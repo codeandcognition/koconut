@@ -197,15 +197,6 @@ class CodeEditor extends Component {
             type: 'background'
           }
         ]}
-        commands={
-          [
-            // {
-            //   name: 'test',
-            //   bindKey: {win: 'left', mac: 'left'},
-            //   exec: () => {console.log('test testtesttestestseatset')}
-            // }
-          ]
-        }
         /* https://github.com/securingsincity/react-ace/issues/29#issuecomment-296398653 */
     />;
   }

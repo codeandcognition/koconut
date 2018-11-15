@@ -147,6 +147,7 @@ class Exercise extends Component {
 					<Prompt exercise={this.props.exercise} />
 					{(this.props.exercise && this.props.exercise.code) && this.renderOverarchingCode()}
 					<Information
+              readOrWrite={this.props.readOrWrite}
 							exercise={this.props.exercise}
 							answer={this.state.answer}
 							followupAnswers={this.state.followupAnswers}
