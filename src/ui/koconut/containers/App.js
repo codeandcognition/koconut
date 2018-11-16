@@ -29,6 +29,11 @@ const ConceptSelection = Loadable({
     loader: () => import('../components/ConceptSelection'),
     loading: Loading,
 });
+const NcmeLandingView = Loadable({
+	loader: () => import('../components/NcmeLandingView'),
+	loading: Loading,
+});
+
 const WorldView = Loadable({
     loader: () => import('./WorldView'),
     loading: Loading,
@@ -102,6 +107,7 @@ class App extends Component {
   hasNextQuestion: Function;
   getOrderedConcepts: Function;
   goToExercise: Function;
+	generateNCMEExercise: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: any,
@@ -123,7 +129,9 @@ class App extends Component {
     codeTheme: string,
     timesGotQuestionWrong: number[],
     followupTimesGotQuestionWrong: any[],
-    exerciseId: string
+    exerciseId: string,
+		assignmentId: string,
+		assignExercisesGetter: any
   };
 
   constructor() {
@@ -173,6 +181,7 @@ class App extends Component {
     this.hasNextQuestion = this.hasNextQuestion.bind(this);
     this.getOrderedConcepts = this.getOrderedConcepts.bind(this);
     this.goToExercise = this.goToExercise.bind(this);
+    this.generateNCMEExercise = this.generateNCMEExercise.bind(this);
   }
 
   sendExerciseViewDataToFirebase(exerciseId: string) {
@@ -250,10 +259,22 @@ class App extends Component {
 						firebaseUser: user
 					});
 				});
+				// get user's assignment id and writes it to state
+				this.assignmentIdGetter = this.props.firebase.database().ref('UsersNcme2019/' + user.uid + '/exerciseAssignmentId');
+				this.assignmentIdGetter.on('value', (snap) => {
+					this.setState({assignmentId: snap.val()});
+				});
+				// get assignment getter
+				this.assignExercisesGetter = this.props.firebase.database().ref('ExerciseAssignmentNcme2019/');
+				this.assignExercisesGetter.on('value', (snap) => {
+					this.setState({assignExercisesGetter: snap.val()});
+				});
+				/*
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
 				this.conceptMapGetter.on('value', (snap) => {
 					this.setState({conceptMapGetter: snap.val()}, () => {this.updateUserState()});
 				});
+				*/
 			}
 		});
 	}
@@ -293,6 +314,31 @@ class App extends Component {
       }
     }
   }
+
+	/**
+	 *
+	 */
+	generateNCMEExercise() {
+		let exerciseIds = this.state.assignExercisesGetter[this.state.assignmentId];
+		let exercises = [];
+		exerciseIds.forEach(id => {
+			exercises.push(this.state.exerciseList[id]);
+		});
+		// TODO: implement the logic to display exercises in the exercise view
+		if (exercises.length > 0) {
+			console.log("here");
+			this.setState({
+				display: displayType.exercise,
+				exercise: exercises[this.state.counter],
+				exerciseId: exerciseIds[this.state.counter],
+				currentConcept: "",
+				counter: this.state.counter,
+				exerciseType: "",
+				numExercisesInCurrConcept: exercises.length,
+				error: false // resets the error message
+			});
+		}
+	}
 
 	/**
 	 * Is passed as a prop to WorldView -> ConceptDialog
@@ -981,6 +1027,14 @@ class App extends Component {
     )
   }
 
+  ncmeLandingView() {
+  	return(
+  			<div>
+					<NcmeLandingView generateNCMEExercise={this.generateNCMEExercise}/>
+				</div>
+		)
+	}
+
   /**
    * test method to render instruction view
    * @private
@@ -1031,6 +1085,7 @@ class App extends Component {
 				<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
 				<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
 				<Route exact path={Routes.practice} render={() => this.renderExercise()}/>
+				<Route exact path={Routes.ncmelanding} render={() => this.ncmeLandingView()}/>
 				<Route exact path={Routes.allexercises} render={() => this.renderAllExercises()}/>
 				<Redirect to={Routes.home} />
 			</Switch>
