@@ -44,10 +44,10 @@ class Welcome extends Component {
   componentWillMount() {
   	this.authUnsub = firebase.auth().onAuthStateChanged(user => {
   		if (user) {
-				let databaseRef = firebase.database().ref("Users/" + user.uid + "/waiverStatus");
+				let databaseRef = firebase.database().ref("UsersNcme2019/" + user.uid + "/waiverStatus");
 				databaseRef.once("value", (snapshot) => {
 					if (snapshot != null && snapshot.val()) {
-						this.props.history.push(Routes.worldview);
+						this.props.history.push(Routes.ncmelanding);
 					}
 				})
 			} else {
@@ -73,7 +73,7 @@ class Welcome extends Component {
 	 */
 	updateWaiverStatus() {
 		let databaseRef = firebase.database()
-		.ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
+		.ref("UsersNcme2019/" + this.state.firebaseUser.uid + "/waiverStatus");
 		databaseRef.set(true);
 		this.props.history.push(Routes.worldview);
 	}
