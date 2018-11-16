@@ -89,7 +89,7 @@ class SignIn extends Component {
           let snap = snapshot.val();
           let waiverStatus = snap.waiverStatus;
           if (waiverStatus) {
-            this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.worldview));
+            this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.ncmelanding));
           } else {
             this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
           }
