@@ -51,8 +51,8 @@ class Exercise extends Component {
       followupAnswers: []
     };
     this.resetAnswer = this.resetAnswer.bind(this);
-    this.dataLogger = new DataLogger(this.props.readOrWrite);
-    this.dataLogger.addData('MOUSECLICK','M1','asdfsasdf',{row: 1, col: 2},1);
+    // this.dataLogger = new DataLogger(this.props.readOrWrite);
+    // this.dataLogger.addData('MOUSECLICK','M1','asdfsasdf',{row: 1, col: 2},1);
     // this.dataLogger.sendDataToFirebase(this.props.firebaseUser.uid, this.props.exerciseId, this.props.firebase);
   }
 
@@ -64,6 +64,9 @@ class Exercise extends Component {
     window.scrollTo(0, 0);
     this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
   }
+
+  componentDidUpdate() {
+	}
 
   // debug comment: never reaching componentWillUnmount
   componentWillUnmount() {

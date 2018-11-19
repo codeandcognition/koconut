@@ -267,7 +267,9 @@ class App extends Component {
 				// get assignment getter
 				this.assignExercisesGetter = this.props.firebase.database().ref('ExerciseAssignmentNcme2019/');
 				this.assignExercisesGetter.on('value', (snap) => {
-					this.setState({assignExercisesGetter: snap.val()});
+					this.setState({assignExercisesGetter: snap.val()}, () => {
+						this.updateUserState();
+					});
 				});
 				/*
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
@@ -331,6 +333,8 @@ class App extends Component {
 				exerciseType: exercises[this.state.counter].exerciseType,
 				numExercisesInCurrConcept: exercises.length,
 				error: false // resets the error message
+			}, () => {
+				this.storeState("exercise", this.state.counter, this.state.exerciseType, "");
 			});
 		}
 	}
@@ -392,7 +396,7 @@ class App extends Component {
 
 	/**
 	 * Stores user's current state on Koconut to Firebase
-	 *
+	 * Revised it to write to UsersNcme2019 branch on Firebase
 	 * @param mode
 	 */
 	storeState(mode: string, counter: number, type: string, concept: string) {
@@ -403,36 +407,35 @@ class App extends Component {
 			counter: counter
 		};
 		let userId = this.props.firebase.auth().currentUser.uid;
-		let userRef = this.props.firebase.database().ref('Users/' + userId + '/state');
+		let userRef = this.props.firebase.database().ref('UsersNcme2019/' + userId + '/state');
 		userRef.set(state);
 	}
 
 	/**
 	 * Retrieves current user's most recent state on the app from Firebase
+	 * revised it to read from UsersNcme2019 branch on Firebase
 	 */
 	updateUserState() {
 		if (this.props.firebase.auth().currentUser) {
 			let userId = this.props.firebase.auth().currentUser.uid;
-			let userRef = this.props.firebase.database().ref('Users/' + userId + '/state');
+			let userRef = this.props.firebase.database().ref('UsersNcme2019/' + userId + '/state');
 			let state = {};
 			userRef.on('value', snap => {
 				if (snap.val() !== null) {
 					state = snap.val();
-					if (this.state.conceptMapGetter) {
-						let exercises = this.generator.getExercisesByTypeAndConcept(state.type, state.concept, this.state.exerciseList, this.state.conceptMapGetter).results;
-						if (state.mode === "exercise") {
-							this.setState({
-								currentConcept: state.concept,
-								counter: state.counter,
-								exerciseType: state.type,
-								exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : {},
-                numExercisesInCurrConcept: exercises.length
-							});
-						} else {
-							this.setState({
-								counter: 0
-							});
-						}
+					let exercises = this.generateExerciseList()["exercises"];
+					if (state.mode === "exercise") {
+						this.setState({
+							currentConcept: state.concept,
+							counter: state.counter,
+							exerciseType: state.type,
+							exercise: (exercises && exercises[state.counter]) ? exercises[state.counter].exercise : {},
+							numExercisesInCurrConcept: exercises.length
+						});
+					} else {
+						this.setState({
+							counter: 0
+						});
 					}
 				}
 			});
