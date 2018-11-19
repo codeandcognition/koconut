@@ -319,25 +319,48 @@ class App extends Component {
 	 *
 	 */
 	generateNCMEExercise() {
-		let exerciseIds = this.state.assignExercisesGetter[this.state.assignmentId];
-		let exercises = [];
-		exerciseIds.forEach(id => {
-			exercises.push(this.state.exerciseList[id]);
-		});
-		// TODO: implement the logic to display exercises in the exercise view
+		let exercises = this.generateExerciseList()["exercises"];
+		let exerciseIds = this.generateExerciseList()["exerciseIds"];
 		if (exercises.length > 0) {
-			console.log("here");
 			this.setState({
 				display: displayType.exercise,
-				exercise: exercises[this.state.counter],
+				exercise: exercises[this.state.counter].exercise,
 				exerciseId: exerciseIds[this.state.counter],
 				currentConcept: "",
 				counter: this.state.counter,
-				exerciseType: "",
+				exerciseType: exercises[this.state.counter].exerciseType,
 				numExercisesInCurrConcept: exercises.length,
 				error: false // resets the error message
 			});
 		}
+	}
+
+	/**
+	 * Function to generate exercise list for a specific assignment id
+	 */
+	generateExerciseList() {
+		let exerciseIds = this.state.assignExercisesGetter[this.state.assignmentId]["Order"];
+		let exercises = [];
+		exerciseIds.forEach(id => {
+			let temp = {};
+			temp["exercise"] = this.state.exerciseList[id];
+			let readExercises = this.state.assignExercisesGetter[this.state.assignmentId]["READ"];
+			let writeExercises = this.state.assignExercisesGetter[this.state.assignmentId]["WRITE"];
+			// check if exercise is of type READ
+			readExercises.forEach(elem => {
+				if (elem === id) {
+					temp["exerciseType"] = "READ";
+				}
+			});
+			// check if exercise is of type WRITE
+			writeExercises.forEach(elem => {
+				if (elem === id) {
+					temp["exerciseType"] = "WRITE";
+				}
+			});
+			exercises.push(temp);
+		});
+		return {exerciseIds, exercises};
 	}
 
 	/**
@@ -1084,7 +1107,7 @@ class App extends Component {
 				<Route exact path={Routes.worldview} component={() => this.renderWorldView()}/>
 				<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
 				<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
-				<Route exact path={Routes.practice} render={() => this.renderExercise()}/>
+				<Route exact path={Routes.ncmeassessment} render={() => this.renderExercise()}/>
 				<Route exact path={Routes.ncmelanding} render={() => this.ncmeLandingView()}/>
 				<Route exact path={Routes.allexercises} render={() => this.renderAllExercises()}/>
 				<Redirect to={Routes.home} />

@@ -54,7 +54,6 @@ class Exercise extends Component {
     this.dataLogger = new DataLogger(this.props.readOrWrite);
     this.dataLogger.addData('MOUSECLICK','M1','asdfsasdf',{row: 1, col: 2},1);
     // this.dataLogger.sendDataToFirebase(this.props.firebaseUser.uid, this.props.exerciseId, this.props.firebase);
-    console.log(this.dataLogger.getData());
   }
 
   /**
@@ -167,16 +166,21 @@ class Exercise extends Component {
 
     return (
         <div className="exercise-view" style={styles}>
-					<BreadCrumbs conceptType={this.props.concept}
-            sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
-            exerciseId={this.props.exerciseId}
-            readOrWrite={this.props.readOrWrite}
-            instructionOrPractice={"PRACTICE"}
-            generateExercise={this.props.generateExercise}
-            concept={this.props.concept}
-            clearCounterAndFeedback={this.props.clearCounterAndFeedback}
-            getOrderedConcepts={this.props.getOrderedConcepts}
-          />
+					{
+						/*
+							TODO: Breadcrumbs are disabled since concept is undefined
+							<BreadCrumbs conceptType={this.props.concept}
+								sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
+								exerciseId={this.props.exerciseId}
+								readOrWrite={this.props.readOrWrite}
+								instructionOrPractice={"PRACTICE"}
+								generateExercise={this.props.generateExercise}
+								concept={this.props.concept}
+								clearCounterAndFeedback={this.props.clearCounterAndFeedback}
+								getOrderedConcepts={this.props.getOrderedConcepts}
+							/>
+						 */
+					}
 					{!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderExercise()}
         </div>
     );
