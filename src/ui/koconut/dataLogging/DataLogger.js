@@ -119,7 +119,6 @@ export default class DataLogger {
     };
     // firebase.database().ref(`/Users/${userId}/Data/LogData`).push(objectToPush);
     this._clearData();
-    console.log(userId, exerciseId, firebase, this.getData())
   }
 
   /**

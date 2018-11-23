@@ -75,8 +75,6 @@ class CodeEditor extends Component {
   handleChange(value: string, event: Object) {
     // TODO: Actually prevent rows
     // TODO: Also, newlines and deletion isn't safe
-    // console.log(event);
-    // console.log('handlechange')
     
     // Data logger aspect of handling change
     let dl = this.props.dataLogger;
@@ -160,43 +158,41 @@ class CodeEditor extends Component {
    *  Renders Ace with preferred options.
    *  Handles editable/non-editable state for code view.
    */
-
-// check just one direection ? no shift? 
-
   renderAce() {
     return <AceEditor
         ref="aceEditor"
-        className={"ace-editor"}
+        className={`ace-editor`}
         width="100%"
         height="20em"
         value={this.state.code}
         readOnly={this.props.type !== Types.fillBlank &&
         this.props.type !== Types.writeCode && this.props.type !== Types.highlightCode}
-        mode={this.state.mode}
+        mode={`none`} //${this.state.mode} /////  `exercise.type === "shortanswer" ? 'none' : ${this.state.mode}`
         theme={this.state.theme}
-        highlightActiveLine={true}
+        highlightActiveLine={true} // `exercise.type === "shortanswer" ? false : true
         // onInput={this.handleInput}
+        showPrintMargin={false}
         onCursorChange={this.handleCursorChange}
         onChange={this.handleChange}
         onSelectionChange={this.handleSelect}
         setOptions={{
-          showLineNumbers: true,
+          showLineNumbers: true, ////// `exercise.type === "shortanswer" ? false : true
           tabSize: 2,
         }}
         minLines={6}
         editorProps={{
           $blockScrolling: Infinity,
         }}
-        markers={[//TODO: Remove me :O
-          {
-            startRow: 0,
-            startCol: 0,
-            endRow: 100,
-            endCol: 100,
-            className: 'box',
-            type: 'background'
-          }
-        ]}
+        // markers={[//TODO: Remove me :O
+        //   {
+        //     startRow: 0,
+        //     startCol: 0,
+        //     endRow: 100,
+        //     endCol: 100,
+        //     className: 'box',
+        //     type: 'background'
+        //   }
+        // ]}
         /* https://github.com/securingsincity/react-ace/issues/29#issuecomment-296398653 */
     />;
   }
@@ -205,7 +201,6 @@ class CodeEditor extends Component {
    *  Resets both the code state and answer state.
    */
   handleReset() {
-    console.log(this.props.code);
     this.setState({code: this.props.code});
     this.props.inputHandler(this.props.code, this.props.questionIndex);
     this.resetCursor();
