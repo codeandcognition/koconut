@@ -5,6 +5,6 @@
 .answer-preview {
   text-align: left; }
 
-.test {
-  background-color: green;
+.ace-editor {
+  border: 1px solid gray;
 }

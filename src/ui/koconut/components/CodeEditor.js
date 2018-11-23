@@ -159,6 +159,7 @@ class CodeEditor extends Component {
    *  Handles editable/non-editable state for code view.
    */
   renderAce() {
+    let {isShortAnswerNcme: sA} = this.props; // grab isShortAnswer prop and store it in shorter variable sA
     return <AceEditor
         ref="aceEditor"
         className={`ace-editor`}
@@ -167,32 +168,23 @@ class CodeEditor extends Component {
         value={this.state.code}
         readOnly={this.props.type !== Types.fillBlank &&
         this.props.type !== Types.writeCode && this.props.type !== Types.highlightCode}
-        mode={`none`} //${this.state.mode} /////  `exercise.type === "shortanswer" ? 'none' : ${this.state.mode}`
+        mode={`${sA ? 'none' : this.state.mode}`}
         theme={this.state.theme}
-        highlightActiveLine={true} // `exercise.type === "shortanswer" ? false : true
+        highlightActiveLine={!sA} 
+        showGutter={!sA}
         // onInput={this.handleInput}
         showPrintMargin={false}
         onCursorChange={this.handleCursorChange}
         onChange={this.handleChange}
         onSelectionChange={this.handleSelect}
         setOptions={{
-          showLineNumbers: true, ////// `exercise.type === "shortanswer" ? false : true
+          showLineNumbers: !sA,
           tabSize: 2,
         }}
         minLines={6}
         editorProps={{
           $blockScrolling: Infinity,
         }}
-        // markers={[//TODO: Remove me :O
-        //   {
-        //     startRow: 0,
-        //     startCol: 0,
-        //     endRow: 100,
-        //     endCol: 100,
-        //     className: 'box',
-        //     type: 'background'
-        //   }
-        // ]}
         /* https://github.com/securingsincity/react-ace/issues/29#issuecomment-296398653 */
     />;
   }
