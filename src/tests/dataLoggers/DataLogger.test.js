@@ -15,6 +15,33 @@ describe('DataLogger tests', () => {
     expect(d.getData().length).toBe(1);
   });
 
+  it('addData fills empty data correctly', () => {
+    let d = new DataLogger('READ');
+    let textContent = "asdfasdf";
+    let textPosition = {row: 1, col: 2};
+    d.addData({
+      event: "MOUSECLICK", 
+      keyPressed: "M1", 
+      textContent, 
+      textPosition,
+      selectedAnswer: -1
+    });
+
+    expect(d.getData().length).toBe(1);
+
+    d.addData({
+      event: "MOUSECLICK", 
+      keyPressed: "M1",
+      selectedAnswer: -1
+    });
+
+    expect(d.getData().length).toBe(2);
+
+    let latestData = d.getData()[1];
+    expect(latestData.textContent).toBe(textContent);
+    expect(latestData.textPosition).toMatchObject({row: -1, col: -1});
+  }) 
+
   it('addData handles large amounts of additions', () => {
     let d = new DataLogger('READ');
     expect(d.getData().length).toBe(0);
@@ -27,17 +54,7 @@ describe('DataLogger tests', () => {
       });
     }
     expect(d.getData().length).toBe(100000);    
-  });
-
-  it('addData throws an error if selectedAnswer is not provided', () => {
-    let d = new DataLogger('READ');
-    expect(() => {d.addData({event: "MOUSECLICK", 
-        keyPressed: "M1", 
-        textContent: "asdfasdf", 
-        textPosition: {row: 1, col: 2}
-      })}
-    ).toThrow();
-  });
+  }, 500);
 
   it('addData works for WRITE types', () => {
     let d = new DataLogger('WRITE');
@@ -63,7 +80,7 @@ describe('DataLogger tests', () => {
     expect(d.getData()[0].selectedAnswer).toBeUndefined();
   });
 
-  it('addData timestamps value roughly correct', () => {
+  it('addData timestamps value roughly correct (may fail within +- 2ms)', () => {
     const event = 'MOUSECLICK';
     const keyPressed = 'M1';
     const textContent = 'asdfasdf';

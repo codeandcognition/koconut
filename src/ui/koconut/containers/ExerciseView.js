@@ -57,10 +57,14 @@ class Exercise extends Component {
 
 
     this.dataLogger = exerciseIsStudy ? new DataLogger(this.props.readOrWrite) : null;
-
+    this.dataLogger.bindInformation({
+      userId: this.props.firebaseUser.uid,
+      exerciseId: this.props.exerciseId,
+      firebase: this.props.firebase
+    });
     /** TEMPORARY */
     // this.dataLogger.addData('MOUSECLICK','M1','asdfsasdf',{row: 1, col: 2},1);
-    // // this.dataLogger.sendDataToFirebase(this.props.firebaseUser.uid, this.props.exerciseId, this.props.firebase);
+    // this.dataLogger.sendDataToFirebase(this.props.firebaseUser.uid, this.props.exerciseId, this.props.firebase);
     // console.log(this.dataLogger.getData());
 
 
@@ -143,6 +147,7 @@ class Exercise extends Component {
 					<Prompt exercise={this.props.exercise} />
 					{(this.props.exercise && this.props.exercise.code) && this.renderOverarchingCode()}
 					<Information
+              readOrWrite={this.props.readOrWrite}
 							exercise={this.props.exercise}
 							answer={this.state.answer}
 							followupAnswers={this.state.followupAnswers}
@@ -159,6 +164,7 @@ class Exercise extends Component {
 							followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
 							nextQuestion={this.props.nextQuestion}
 							resetAnswer={this.resetAnswer}
+              dataLogger={this.dataLogger}
 					/>
           <ExerciseNavigation 
             hasNextQuestion={this.props.hasNextQuestion}
