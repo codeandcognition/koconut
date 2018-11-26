@@ -51,26 +51,9 @@ class Exercise extends Component {
       followupAnswers: []
     };
     this.resetAnswer = this.resetAnswer.bind(this);
-
-
     let exerciseIsStudy = true; // TODO: TEMPORARY! SHOULD READ FROM PROPS
 
-
-    this.dataLogger = exerciseIsStudy ? new DataLogger(this.props.readOrWrite) : null;
-    this.dataLogger.bindInformation({
-      userId: this.props.firebaseUser.uid,
-      exerciseId: this.props.exerciseId,
-      firebase: this.props.firebase
-    });
-    /** TEMPORARY */
-    // this.dataLogger.addData('MOUSECLICK','M1','asdfsasdf',{row: 1, col: 2},1);
-    // this.dataLogger.sendDataToFirebase(this.props.firebaseUser.uid, this.props.exerciseId, this.props.firebase);
-    // console.log(this.dataLogger.getData());
-
-
-    ////////////////
-
-
+    this.dataLogger = new DataLogger("READ");
   }
 
   /**
@@ -82,6 +65,9 @@ class Exercise extends Component {
     this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
   }
 
+  componentDidUpdate() {
+	}
+
   // debug comment: never reaching componentWillUnmount
   componentWillUnmount() {
 		this.mounted = false;
@@ -90,6 +76,14 @@ class Exercise extends Component {
 			this.props.resetFeedback();
     }
   }
+
+  componentWillReceiveProps(nextProps: Props) {
+		this.dataLogger.bindInformation({
+			userId: nextProps.firebaseUser.uid,
+			exerciseId: nextProps.exerciseId,
+			firebase: nextProps.firebase
+		});
+	}
 
   /**
    * Returns whether the answer is defined and non-null or not.
@@ -185,16 +179,21 @@ class Exercise extends Component {
 
     return (
         <div className="exercise-view" style={styles}>
-					<BreadCrumbs conceptType={this.props.concept}
-            sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
-            exerciseId={this.props.exerciseId}
-            readOrWrite={this.props.readOrWrite}
-            instructionOrPractice={"PRACTICE"}
-            generateExercise={this.props.generateExercise}
-            concept={this.props.concept}
-            clearCounterAndFeedback={this.props.clearCounterAndFeedback}
-            getOrderedConcepts={this.props.getOrderedConcepts}
-          />
+					{
+						/*
+							TODO: Breadcrumbs are disabled since concept is undefined
+							<BreadCrumbs conceptType={this.props.concept}
+								sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
+								exerciseId={this.props.exerciseId}
+								readOrWrite={this.props.readOrWrite}
+								instructionOrPractice={"PRACTICE"}
+								generateExercise={this.props.generateExercise}
+								concept={this.props.concept}
+								clearCounterAndFeedback={this.props.clearCounterAndFeedback}
+								getOrderedConcepts={this.props.getOrderedConcepts}
+							/>
+						 */
+					}
 					{!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderExercise()}
         </div>
     );
