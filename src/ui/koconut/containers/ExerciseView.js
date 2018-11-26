@@ -62,11 +62,13 @@ class Exercise extends Component {
   componentDidMount() {
     this.mounted = true;
     window.scrollTo(0, 0);
+		// this.dataLogger.bindInformation({
+		// 	userId: this.props.firebaseUser.uid,
+		// 	exerciseId: this.props.exerciseId,
+		// 	firebase: this.props.firebase
+		// });
     this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
   }
-
-  componentDidUpdate() {
-	}
 
   // debug comment: never reaching componentWillUnmount
   componentWillUnmount() {
@@ -160,14 +162,19 @@ class Exercise extends Component {
 							resetAnswer={this.resetAnswer}
               dataLogger={this.dataLogger}
 					/>
-          <ExerciseNavigation 
+					{
+						/*
+						NOTE: Disabled for NCME 2019 Study
+						<ExerciseNavigation
             hasNextQuestion={this.props.hasNextQuestion}
             nextQuestion={this.props.nextQuestion}
             concept={this.props.concept}
             generateExercise={this.props.generateExercise}
             getOrderedConcepts={this.props.getOrderedConcepts}/>
-          {/*<ConceptLabel concepts={this.props.exercise &&
-           this.props.exercise.concepts}/>*/}
+						{/*<ConceptLabel concepts={this.props.exercise &&
+						 this.props.exercise.concepts}/>*/
+					}
+
 				</div>
 		);
 	}

@@ -323,7 +323,7 @@ class App extends Component {
 	generateNCMEExercise() {
 		let exercises = this.generateExerciseList()["exercises"];
 		let exerciseIds = this.generateExerciseList()["exerciseIds"];
-		if (exercises.length > 0) {
+		if (exercises.length > 0 && this.state.counter < exercises.length) {
 			this.setState({
 				display: displayType.exercise,
 				exercise: exercises[this.state.counter].exercise,
@@ -335,6 +335,11 @@ class App extends Component {
 				error: false // resets the error message
 			}, () => {
 				this.storeState("exercise", this.state.counter, this.state.exerciseType, "");
+			});
+		} else if (this.state.counter >= exercises.length) {
+			this.setState({
+				errorMessage: "This is the end of the study",
+				error: true
 			});
 		}
 	}
@@ -362,7 +367,9 @@ class App extends Component {
 					temp["exerciseType"] = "WRITE";
 				}
 			});
-			exercises.push(temp);
+      if (temp.exerciseType) {
+				exercises.push(temp);
+			}
 		});
 		return {exerciseIds, exercises};
 	}
@@ -424,12 +431,14 @@ class App extends Component {
 				if (snap.val() !== null) {
 					state = snap.val();
 					let exercises = this.generateExerciseList()["exercises"];
+					let exerciseIds = this.generateExerciseList()["exerciseIds"];
 					if (state.mode === "exercise") {
 						this.setState({
 							currentConcept: state.concept,
 							counter: state.counter,
 							exerciseType: state.type,
 							exercise: (exercises && exercises[state.counter]) ? exercises[state.counter].exercise : {},
+							exerciseId: (exerciseIds && exerciseIds[state.counter]),
 							numExercisesInCurrConcept: exercises.length
 						});
 					} else {
@@ -893,7 +902,7 @@ class App extends Component {
         timesGotQuestionWrong: [],
         followupTimesGotQuestionWrong: []
     }, () => {
-      this.generateExercise(this.state.currentConcept, this.state.exerciseType);
+      this.generateNCMEExercise(this.state.currentConcept, this.state.exerciseType);
     });
   }
 
@@ -1013,7 +1022,7 @@ class App extends Component {
               clearCounterAndFeedback={this.clearCounterAndFeedback}
               sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
               exerciseId={this.state.exerciseId}
-							generateExercise={this.generateExercise}
+							generateExercise={this.generateNCMEExercise}
               hasNextQuestion={this.hasNextQuestion}
               getOrderedConcepts={this.getOrderedConcepts}
               firebase={this.props.firebase}
