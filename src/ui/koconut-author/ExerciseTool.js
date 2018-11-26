@@ -217,7 +217,7 @@ class ExerciseTool extends Component {
 	 * ConceptExerciseMap branch ordered by difficulty
 	 */
   addExercise() {
-  	if (this.state.currentExercise.concepts.length > 0) {
+  	if (this.state.currentExercise.concepts.length >= 0) { // made ">= 0" to be trivially true for NCME study. change back to "> 0"
 			let pushKey = firebase.database().ref().child("Exercises").push().key;
 			let exerciseRef = firebase.database().ref("Exercises/" + pushKey);
 			exerciseRef.set(this.state.currentExercise);
@@ -752,7 +752,7 @@ class ExerciseTool extends Component {
           </div>
 
 					<div style={formSectionStyle}>
-						<p style={sectionHeading}>Tag concepts for this exercise <span style={this.fieldReqs.required}>required</span></p>
+						<p style={sectionHeading}>Tag concepts for this exercise</p>
 						<FormControl style={{display: "flex", flexDirection: "row", justifyContent: "center", marginBottom: "30px"}}>
 							<NativeSelect onChange={(evt) => {
 												evt.preventDefault();
