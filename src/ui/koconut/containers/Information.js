@@ -254,6 +254,7 @@ class Information extends Component {
                 <ExerciseQuestion
                   key={index}
                   question={question}
+                  nextQuestion={this.props.nextQuestion}
                   index={index}
                   feedback={this.state.feedback[index]}
                   answer={this.state.answer}

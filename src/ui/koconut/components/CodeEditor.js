@@ -158,6 +158,9 @@ class CodeEditor extends Component {
    *  Renders Ace with preferred options.
    *  Handles editable/non-editable state for code view.
    */
+
+// check just one direection ? no shift? 
+
   renderAce() {
     let {isShortAnswerNcme: sA} = this.props; // grab isShortAnswer prop and store it in shorter variable sA
     return <AceEditor
