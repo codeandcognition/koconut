@@ -334,7 +334,6 @@ class App extends Component {
 				numExercisesInCurrConcept: exercises.length,
 				error: false // resets the error message
 			}, () => {
-				console.log(this.state.exerciseType);
 				this.storeState("exercise", this.state.counter, this.state.exerciseType, "");
 			});
 		} else if (this.state.counter >= exercises.length) {
@@ -368,7 +367,7 @@ class App extends Component {
 					temp["exerciseType"] = "WRITE";
 				}
 			});
-			if (temp.exerciseType) {
+      if (temp.exerciseType) {
 				exercises.push(temp);
 			}
 		});
