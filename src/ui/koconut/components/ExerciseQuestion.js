@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Types from '../../../data/ExerciseTypes.js';
 import Submit from './Submit';
 import AceEditor from 'react-ace';
-// import "./CodeEditor.css";
 import 'brace/mode/python';
 
 type Props = {
@@ -34,8 +33,6 @@ class ExerciseQuestion extends Component {
   handleChange(value: string, event: Object) {
     // TODO: Actually prevent rows
     // TODO: Also, newlines and deletion isn't safe
-    // console.log(event);
-    // console.log('handlechange')
     
     // Data logger aspect of handling 
     let dl = this.props.dataLogger;
@@ -139,7 +136,6 @@ class ExerciseQuestion extends Component {
 										submitHandler={() => {
 											this.props.dataLogger.sendDataToFirebase();
                       // this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex);
-                      // console.log(this.props.dataLogger.getData());
                       // TODO: Removed submit / question check logic
                       this.props.nextQuestion();
                     }} />

@@ -51,7 +51,6 @@ class Exercise extends Component {
       followupAnswers: []
     };
     this.resetAnswer = this.resetAnswer.bind(this);
-    let exerciseIsStudy = true; // TODO: TEMPORARY! SHOULD READ FROM PROPS
 
     this.dataLogger = new DataLogger("READ");
   }

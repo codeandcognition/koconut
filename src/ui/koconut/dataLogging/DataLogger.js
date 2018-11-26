@@ -159,4 +159,42 @@ export default class DataLogger {
       this.bindFirebase(firebase);
     }
   }
+
+  /**
+   * @param {string} userId Must provide a user Id for firebase path
+   */
+  bindUserId(userId) {
+    this.userId = userId;
+  }
+
+
+  /**
+   * @param {string} exerciseId Must provide an exercise Id corresponding with this current exercise
+   */
+  bindExerciseId(exerciseId) {
+    this.exerciseId = exerciseId;
+  }
+
+  /**
+   * @param {object} firebase Must dependency inject firebase
+   */
+  bindFirebase(firebase) {
+    this.firebase = firebase;
+  }
+
+  /**
+   * bindInformation is a combination of all three binds that just lets you do
+   * it all at once
+   */
+  bindInformation({userId, exerciseId, firebase}) {
+    if(userId) {
+      this.bindUserId(userId);
+    }
+    if(exerciseId) {
+      this.bindExerciseId(exerciseId);
+    }
+    if(firebase) {
+      this.bindFirebase(firebase);
+    }
+  }
 }
