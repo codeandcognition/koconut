@@ -117,7 +117,7 @@ export default class DataLogger {
       ExerciseId: exerciseId,
       DataLog: this.data
     };
-    // firebase.database().ref(`/Users/${userId}/Data/LogData`).push(objectToPush);
+    firebase.database().ref(`/UsersNcme2019/${userId}/Data/LogData`).push(objectToPush);
     this._clearData();
     console.log(userId, exerciseId, firebase, this.getData())
   }

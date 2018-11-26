@@ -62,10 +62,16 @@ class Exercise extends Component {
   componentDidMount() {
     this.mounted = true;
     window.scrollTo(0, 0);
+		// this.dataLogger.bindInformation({
+		// 	userId: this.props.firebaseUser.uid,
+		// 	exerciseId: this.props.exerciseId,
+		// 	firebase: this.props.firebase
+		// });
     this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
   }
 
   componentDidUpdate() {
+
 	}
 
   // debug comment: never reaching componentWillUnmount
