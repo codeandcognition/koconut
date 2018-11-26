@@ -8,6 +8,8 @@ const routes = {
 	instruction: '/instruction/:concept/:type/page=:pageIndex',
 	practice: '/practice/:concept/:type',
 	error: '/404',
+	ncmelanding: '/ncme-study',
+	ncmeassessment: '/assessment',
 	allexercises: "/worldview/all-exercises"
 };
 

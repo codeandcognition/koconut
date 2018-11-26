@@ -29,6 +29,11 @@ const ConceptSelection = Loadable({
     loader: () => import('../components/ConceptSelection'),
     loading: Loading,
 });
+const NcmeLandingView = Loadable({
+	loader: () => import('../components/NcmeLandingView'),
+	loading: Loading,
+});
+
 const WorldView = Loadable({
     loader: () => import('./WorldView'),
     loading: Loading,
@@ -102,6 +107,7 @@ class App extends Component {
   hasNextQuestion: Function;
   getOrderedConcepts: Function;
   goToExercise: Function;
+	generateNCMEExercise: Function;
   // updater: ResponseEvaluator;
   state: {
     exercise: any,
@@ -123,7 +129,9 @@ class App extends Component {
     codeTheme: string,
     timesGotQuestionWrong: number[],
     followupTimesGotQuestionWrong: any[],
-    exerciseId: string
+    exerciseId: string,
+		assignmentId: string,
+		assignExercisesGetter: any
   };
 
   constructor() {
@@ -173,6 +181,7 @@ class App extends Component {
     this.hasNextQuestion = this.hasNextQuestion.bind(this);
     this.getOrderedConcepts = this.getOrderedConcepts.bind(this);
     this.goToExercise = this.goToExercise.bind(this);
+    this.generateNCMEExercise = this.generateNCMEExercise.bind(this);
   }
 
   sendExerciseViewDataToFirebase(exerciseId: string) {
@@ -250,10 +259,24 @@ class App extends Component {
 						firebaseUser: user
 					});
 				});
+				// get user's assignment id and writes it to state
+				this.assignmentIdGetter = this.props.firebase.database().ref('UsersNcme2019/' + user.uid + '/exerciseAssignmentId');
+				this.assignmentIdGetter.on('value', (snap) => {
+					this.setState({assignmentId: snap.val()});
+				});
+				// get assignment getter
+				this.assignExercisesGetter = this.props.firebase.database().ref('ExerciseAssignmentNcme2019/');
+				this.assignExercisesGetter.on('value', (snap) => {
+					this.setState({assignExercisesGetter: snap.val()}, () => {
+						this.updateUserState();
+					});
+				});
+				/*
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
 				this.conceptMapGetter.on('value', (snap) => {
 					this.setState({conceptMapGetter: snap.val()}, () => {this.updateUserState()});
 				});
+				*/
 			}
 		});
 	}
@@ -295,6 +318,56 @@ class App extends Component {
   }
 
 	/**
+	 *
+	 */
+	generateNCMEExercise() {
+		let exercises = this.generateExerciseList()["exercises"];
+		let exerciseIds = this.generateExerciseList()["exerciseIds"];
+		if (exercises.length > 0) {
+			this.setState({
+				display: displayType.exercise,
+				exercise: exercises[this.state.counter].exercise,
+				exerciseId: exerciseIds[this.state.counter],
+				currentConcept: "",
+				counter: this.state.counter,
+				exerciseType: exercises[this.state.counter].exerciseType,
+				numExercisesInCurrConcept: exercises.length,
+				error: false // resets the error message
+			}, () => {
+				this.storeState("exercise", this.state.counter, this.state.exerciseType, "");
+			});
+		}
+	}
+
+	/**
+	 * Function to generate exercise list for a specific assignment id
+	 */
+	generateExerciseList() {
+		let exerciseIds = this.state.assignExercisesGetter[this.state.assignmentId]["Order"];
+		let exercises = [];
+		exerciseIds.forEach(id => {
+			let temp = {};
+			temp["exercise"] = this.state.exerciseList[id];
+			let readExercises = this.state.assignExercisesGetter[this.state.assignmentId]["READ"];
+			let writeExercises = this.state.assignExercisesGetter[this.state.assignmentId]["WRITE"];
+			// check if exercise is of type READ
+			readExercises.forEach(elem => {
+				if (elem === id) {
+					temp["exerciseType"] = "READ";
+				}
+			});
+			// check if exercise is of type WRITE
+			writeExercises.forEach(elem => {
+				if (elem === id) {
+					temp["exerciseType"] = "WRITE";
+				}
+			});
+			exercises.push(temp);
+		});
+		return {exerciseIds, exercises};
+	}
+
+	/**
 	 * Is passed as a prop to WorldView -> ConceptDialog
 	 * Updates the state in App.js when invoked in ConceptDialog.js
 	 *
@@ -323,7 +396,7 @@ class App extends Component {
 
 	/**
 	 * Stores user's current state on Koconut to Firebase
-	 *
+	 * Revised it to write to UsersNcme2019 branch on Firebase
 	 * @param mode
 	 */
 	storeState(mode: string, counter: number, type: string, concept: string) {
@@ -334,36 +407,35 @@ class App extends Component {
 			counter: counter
 		};
 		let userId = this.props.firebase.auth().currentUser.uid;
-		let userRef = this.props.firebase.database().ref('Users/' + userId + '/state');
+		let userRef = this.props.firebase.database().ref('UsersNcme2019/' + userId + '/state');
 		userRef.set(state);
 	}
 
 	/**
 	 * Retrieves current user's most recent state on the app from Firebase
+	 * revised it to read from UsersNcme2019 branch on Firebase
 	 */
 	updateUserState() {
 		if (this.props.firebase.auth().currentUser) {
 			let userId = this.props.firebase.auth().currentUser.uid;
-			let userRef = this.props.firebase.database().ref('Users/' + userId + '/state');
+			let userRef = this.props.firebase.database().ref('UsersNcme2019/' + userId + '/state');
 			let state = {};
 			userRef.on('value', snap => {
 				if (snap.val() !== null) {
 					state = snap.val();
-					if (this.state.conceptMapGetter) {
-						let exercises = this.generator.getExercisesByTypeAndConcept(state.type, state.concept, this.state.exerciseList, this.state.conceptMapGetter).results;
-						if (state.mode === "exercise") {
-							this.setState({
-								currentConcept: state.concept,
-								counter: state.counter,
-								exerciseType: state.type,
-								exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : {},
-                numExercisesInCurrConcept: exercises.length
-							});
-						} else {
-							this.setState({
-								counter: 0
-							});
-						}
+					let exercises = this.generateExerciseList()["exercises"];
+					if (state.mode === "exercise") {
+						this.setState({
+							currentConcept: state.concept,
+							counter: state.counter,
+							exerciseType: state.type,
+							exercise: (exercises && exercises[state.counter]) ? exercises[state.counter].exercise : {},
+							numExercisesInCurrConcept: exercises.length
+						});
+					} else {
+						this.setState({
+							counter: 0
+						});
 					}
 				}
 			});
@@ -981,6 +1053,14 @@ class App extends Component {
     )
   }
 
+  ncmeLandingView() {
+  	return(
+  			<div>
+					<NcmeLandingView generateNCMEExercise={this.generateNCMEExercise}/>
+				</div>
+		)
+	}
+
   /**
    * test method to render instruction view
    * @private
@@ -1030,7 +1110,8 @@ class App extends Component {
 				<Route exact path={Routes.worldview} component={() => this.renderWorldView()}/>
 				<Route exact path={Routes.author} component={() => this.renderAuthorView()}/>
 				<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
-				<Route exact path={Routes.practice} render={() => this.renderExercise()}/>
+				<Route exact path={Routes.ncmeassessment} render={() => this.renderExercise()}/>
+				<Route exact path={Routes.ncmelanding} render={() => this.ncmeLandingView()}/>
 				<Route exact path={Routes.allexercises} render={() => this.renderAllExercises()}/>
 				<Redirect to={Routes.home} />
 			</Switch>

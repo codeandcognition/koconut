@@ -34,7 +34,7 @@ class SignIn extends Component {
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
 			if (user) {
 				if (this.mounted) {
-					this.setState({currentUser: user}, () => this.routeUser());
+					this.setState({currentUser: user}, () => this.routeUser(this.props.history.location.search["assignmentId"]));
 				}
 			} else {
 				if (this.mounted) {
@@ -65,7 +65,8 @@ class SignIn extends Component {
               timestamp: firebase.database.ServerValue.TIMESTAMP
             });
 						this.setState({loading: false, currentUser: user}, () => {
-							this.routeUser();
+							console.log(this.props.history.location.search["assignmentId"])
+							this.routeUser(this.props.history.location.search["assignmentId"]); // TODO: Change this!!
 						});
           }
           // return user.updateProfile({displayName: this.state.displayName});
@@ -82,13 +83,13 @@ class SignIn extends Component {
 	routeUser() {
     if(this.state.currentUser && this.state.currentUser.uid) {
       let databaseRef = firebase.database()
-        .ref("Users/" + this.state.currentUser.uid);
+        .ref("UsersNcme2019/" + this.state.currentUser.uid + "/exerciseAssignmentId");
       databaseRef.once("value").then((snapshot) => {
         if (snapshot !== null && snapshot.val() !== null) {
           let snap = snapshot.val();
           let waiverStatus = snap.waiverStatus;
           if (waiverStatus) {
-            this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.worldview));
+            this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.ncmelanding));
           } else {
             this.mounted && this.setState({loading: false}, () => this.props.history.push(Routes.welcome));
           }
