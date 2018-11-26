@@ -54,13 +54,14 @@ class Response extends Component {
             questionIndex={index}
             feedback={this.props.feedback}
             fIndex={this.props.fIndex}
+            dataLogger={this.props.dataLogger} 
         />;
       case(Types.shortResponse):
         return <ShortResponse feedback={this.props.feedback} inputHandler={update} questionIndex={index} fIndex={this.props.fIndex} prompt={this.props.question.prompt}/>;
       case(Types.survey):
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):
-        return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex} prompt={this.props.question.prompt}/>
+        return <CodeEditor dataLogger={this.props.dataLogger} type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex} prompt={this.props.question.prompt}/>
       case(Types.highlightCode):
 				return <CodeEditor type={type} inputHandler={update} questionIndex={index} code={this.props.question.code} fIndex={this.props.fIndex}/>
       case(Types.table):

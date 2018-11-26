@@ -51,9 +51,9 @@ class Exercise extends Component {
       followupAnswers: []
     };
     this.resetAnswer = this.resetAnswer.bind(this);
-    // this.dataLogger = new DataLogger(this.props.readOrWrite);
-    // this.dataLogger.addData('MOUSECLICK','M1','asdfsasdf',{row: 1, col: 2},1);
-    // this.dataLogger.sendDataToFirebase(this.props.firebaseUser.uid, this.props.exerciseId, this.props.firebase);
+    let exerciseIsStudy = true; // TODO: TEMPORARY! SHOULD READ FROM PROPS
+
+    this.dataLogger = new DataLogger("READ");
   }
 
   /**
@@ -76,6 +76,14 @@ class Exercise extends Component {
 			this.props.resetFeedback();
     }
   }
+
+  componentWillReceiveProps(nextProps: Props) {
+		this.dataLogger.bindInformation({
+			userId: nextProps.firebaseUser.uid,
+			exerciseId: nextProps.exerciseId,
+			firebase: nextProps.firebase
+		});
+	}
 
   /**
    * Returns whether the answer is defined and non-null or not.
@@ -133,6 +141,7 @@ class Exercise extends Component {
 					<Prompt exercise={this.props.exercise} />
 					{(this.props.exercise && this.props.exercise.code) && this.renderOverarchingCode()}
 					<Information
+              readOrWrite={this.props.readOrWrite}
 							exercise={this.props.exercise}
 							answer={this.state.answer}
 							followupAnswers={this.state.followupAnswers}
@@ -149,6 +158,7 @@ class Exercise extends Component {
 							followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
 							nextQuestion={this.props.nextQuestion}
 							resetAnswer={this.resetAnswer}
+              dataLogger={this.dataLogger}
 					/>
           <ExerciseNavigation 
             hasNextQuestion={this.props.hasNextQuestion}

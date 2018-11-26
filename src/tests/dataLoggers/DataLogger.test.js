@@ -6,41 +6,81 @@ describe('DataLogger tests', () => {
   it('addData adds data to internal structure', () => {
     let d = new DataLogger('READ');
     expect(d.getData().length).toBe(0);
-    d.addData('MOUSECLICK', 'M1', 'asdfsasdf', {row: 1, col: 2}, 1);
+    d.addData({event: "MOUSECLICK", 
+      keyPressed: "M1", 
+      textContent: "asdfasdf", 
+      textPosition: {row: 1, col: 2},
+      selectedAnswer: 1
+    });
     expect(d.getData().length).toBe(1);
   });
+
+  it('addData fills empty data correctly', () => {
+    let d = new DataLogger('READ');
+    let textContent = "asdfasdf";
+    let textPosition = {row: 1, col: 2};
+    d.addData({
+      event: "MOUSECLICK", 
+      keyPressed: "M1", 
+      textContent, 
+      textPosition,
+      selectedAnswer: -1
+    });
+
+    expect(d.getData().length).toBe(1);
+
+    d.addData({
+      event: "MOUSECLICK", 
+      keyPressed: "M1",
+      selectedAnswer: -1
+    });
+
+    expect(d.getData().length).toBe(2);
+
+    let latestData = d.getData()[1];
+    expect(latestData.textContent).toBe(textContent);
+    expect(latestData.textPosition).toMatchObject({row: -1, col: -1});
+  }) 
 
   it('addData handles large amounts of additions', () => {
     let d = new DataLogger('READ');
     expect(d.getData().length).toBe(0);
     for(let i = 0; i < 100000; i++) {
-      d.addData('MOUSECLICK', 'M1', 'asdfsasdf', {row: 1, col: 2}, 1);
+        d.addData({event: "MOUSECLICK", 
+        keyPressed: "M1", 
+        textContent: "asdfasdf", 
+        textPosition: {row: 1, col: 2},
+        selectedAnswer: 1
+      });
     }
     expect(d.getData().length).toBe(100000);    
-  });
-
-  it('addData throws an error if selectedAnswer is not provided', () => {
-    let d = new DataLogger('READ');
-    let paramsWithoutSelectedAnswer = ['MOUSECLICK', 'M1', 'asdfsasdf', {row: 1, col: 2}];
-    expect(() => {d.addData(...paramsWithoutSelectedAnswer)}).toThrow();
-  });
+  }, 500);
 
   it('addData works for WRITE types', () => {
     let d = new DataLogger('WRITE');
     expect(d.getData().length).toBe(0);
-    d.addData('MOUSECLICK', 'M1', 'asdfsasdf', {row: 1, col: 2});
+    d.addData({event: "MOUSECLICK", 
+      keyPressed: "M1", 
+      textContent: "asdfasdf", 
+      textPosition: {row: 1, col: 2}
+    });
     expect(d.getData().length).toBe(1);
   });
 
   it('addData doesn\'t keep track of selectedAnswer for WRITE types', () => {
     let d = new DataLogger('WRITE');
     expect(d.getData().length).toBe(0);
-    d.addData('MOUSECLICK', 'M1', 'asdfsasdf', {row: 1, col: 2}, 1);
+    d.addData({event: "MOUSECLICK", 
+      keyPressed: "M1", 
+      textContent: "asdfasdf", 
+      textPosition: {row: 1, col: 2},
+      selectedAnswer: 1
+    });
     expect(d.getData().length).toBe(1);
     expect(d.getData()[0].selectedAnswer).toBeUndefined();
   });
 
-  it('addData timestamps value roughly correct', () => {
+  it('addData timestamps value roughly correct (may fail within +- 2ms)', () => {
     const event = 'MOUSECLICK';
     const keyPressed = 'M1';
     const textContent = 'asdfasdf';
@@ -48,7 +88,7 @@ describe('DataLogger tests', () => {
     const selectedAnswer = 1;
     let d = new DataLogger('READ');    
     const timestamp1 = Date.now();
-    d.addData(event, keyPressed, textContent, textPosition, selectedAnswer);
+    d.addData({event, keyPressed, textContent, textPosition, selectedAnswer});
     const timestamp2 = Date.now();
 
     let e = d.getData()[0];
@@ -89,7 +129,7 @@ describe('DataLogger tests', () => {
     const selectedAnswer = 1;
 
     let d = new DataLogger('READ');    
-    d.addData(event, keyPressed, textContent, textPosition, selectedAnswer);
+    d.addData({event, keyPressed, textContent, textPosition, selectedAnswer});
     const push = jest.fn().mockImplementation((object) => jest.fn().mockImplementation((object) => {
       return object;
     }));

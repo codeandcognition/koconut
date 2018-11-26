@@ -75,6 +75,26 @@ class CodeEditor extends Component {
   handleChange(value: string, event: Object) {
     // TODO: Actually prevent rows
     // TODO: Also, newlines and deletion isn't safe
+    // console.log(event);
+    // console.log('handlechange')
+    
+    // Data logger aspect of handling change
+    let dl = this.props.dataLogger;
+    let textPosition = this.refs.aceEditor.editor.getCursorPosition();
+    let key;
+    if(event.lines.length > 1 || event.lines[0].length > 1) {
+      key = "PASTE";
+    } else {
+      key = event.lines[0];
+    }
+    dl.addData({
+      event: "KEYBOARD",
+      keyPressed: key,
+      textContent: this.refs.aceEditor.editor.getValue(),
+      textPosition
+    })
+
+    // set state of value
     if (event.start.row !== -1) {
       this.setState({code: value}, () => {
 				if (this.props.inputHandler !== undefined) { // wow such type safety
@@ -90,23 +110,59 @@ class CodeEditor extends Component {
   /**
    * Stores highlighted text from text area in component state: highlighted.
    */
-  handleSelect(e: any /* need to make Flow play nicely */) {
-    let selected = this.refs.aceEditor.editor.session.getTextRange(
-        e.getRange());
-    selected = selected.trimEnd();
-    selected = selected.trimStart();
-    this.setState({highlighted: selected}, () => {
-			// this check mitigates a bug caused by spam switching exercises
-			if (this.props.inputHandler !== undefined) {
-				this.props.inputHandler(selected, this.props.questionIndex, this.props.fIndex); // William summer 2018
-			}
-    });
+  handleSelect(s,e: any /* need to make Flow play nicely */) {
+    if(this.props.type === Types.highlightCode) {
+      let selected = this.refs.aceEditor.editor.session.getTextRange(
+          e.getRange());
+      selected = selected.trimEnd();
+      selected = selected.trimStart();
+      this.setState({highlighted: selected}, () => {
+        // this check mitigates a bug caused by spam switching exercises
+        if (this.props.inputHandler !== undefined) {
+          this.props.inputHandler(selected, this.props.questionIndex, this.props.fIndex); // William summer 2018
+        }
+      });
+    }   
+  }
+
+  /**
+   * On component mount, set up arrow key listener and click listener
+   */
+  componentDidMount() {
+    let dl = this.props.dataLogger;
+    if(this.refs.aceEditor) {
+      let aceEditorTextInputEl = this.refs.aceEditor.editor.textInput.getElement(); 
+      aceEditorTextInputEl.addEventListener('keydown', e => {
+        let {key} = e;
+        if(key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowDown" || 
+          key === "ArrowUp") {
+          let textPosition = this.refs.aceEditor.editor.getCursorPosition();
+          dl.addData({
+            event: "KEYBOARD",
+            keyPressed: key,
+            textPosition
+          })
+        } 
+      });
+      
+      this.refs.aceEditor.editor.addEventListener('click', e => {
+        let textPosition = e.editor.getCursorPosition();
+        dl.addData({
+          event: "MOUSE",
+          keyPressed: "LeftClick",
+          textPosition
+        })
+      });
+    } 
   }
 
   /**
    *  Renders Ace with preferred options.
    *  Handles editable/non-editable state for code view.
    */
+
+// check just one direection ? no shift? 
+
   renderAce() {
     return <AceEditor
         ref="aceEditor"
@@ -119,10 +175,10 @@ class CodeEditor extends Component {
         mode={this.state.mode}
         theme={this.state.theme}
         highlightActiveLine={true}
+        // onInput={this.handleInput}
+        onCursorChange={this.handleCursorChange}
         onChange={this.handleChange}
-        onSelectionChange={this.props.type === Types.highlightCode
-            ? this.handleSelect
-            : undefined}
+        onSelectionChange={this.handleSelect}
         setOptions={{
           showLineNumbers: true,
           tabSize: 2,
@@ -167,7 +223,9 @@ class CodeEditor extends Component {
 
   render() {
     return(
-        <div style={{textAlign: "left"}}>
+        <div style={{textAlign: "left"}} 
+          // onClick={this.handleClick}
+          >
           <ReactMarkdown className={"flex-grow-1"}
                          source={this.props.prompt}
                          renderers={{CodeBlock: CodeBlock}}/>
