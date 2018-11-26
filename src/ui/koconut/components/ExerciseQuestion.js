@@ -128,7 +128,6 @@ class ExerciseQuestion extends Component {
   }
 
   render() {
-
     return (
       <div>
         <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
@@ -139,8 +138,10 @@ class ExerciseQuestion extends Component {
             <Submit disabled={this.props.answer[this.props.index] === undefined}
 										submitHandler={() => {
 											this.props.dataLogger.sendDataToFirebase();
-                      this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex);
+                      // this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex);
                       // console.log(this.props.dataLogger.getData());
+                      // TODO: Removed submit / question check logic
+                      this.props.nextQuestion();
                     }} />
             }
           </div>

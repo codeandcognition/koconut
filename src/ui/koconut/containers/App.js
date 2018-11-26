@@ -323,9 +323,7 @@ class App extends Component {
 	generateNCMEExercise() {
 		let exercises = this.generateExerciseList()["exercises"];
 		let exerciseIds = this.generateExerciseList()["exerciseIds"];
-		console.log(exerciseIds);
-		console.log(this.state.counter, exerciseIds[this.state.counter]);
-		if (exercises.length > 0) {
+		if (exercises.length > 0 && this.state.counter < exercises.length) {
 			this.setState({
 				display: displayType.exercise,
 				exercise: exercises[this.state.counter].exercise,
@@ -338,6 +336,11 @@ class App extends Component {
 			}, () => {
 				console.log(this.state.exerciseType);
 				this.storeState("exercise", this.state.counter, this.state.exerciseType, "");
+			});
+		} else if (this.state.counter >= exercises.length) {
+			this.setState({
+				errorMessage: "This is the end of the study",
+				error: true
 			});
 		}
 	}
@@ -900,7 +903,7 @@ class App extends Component {
         timesGotQuestionWrong: [],
         followupTimesGotQuestionWrong: []
     }, () => {
-      this.generateExercise(this.state.currentConcept, this.state.exerciseType);
+      this.generateNCMEExercise(this.state.currentConcept, this.state.exerciseType);
     });
   }
 

@@ -166,14 +166,19 @@ class Exercise extends Component {
 							resetAnswer={this.resetAnswer}
               dataLogger={this.dataLogger}
 					/>
-          <ExerciseNavigation 
+					{
+						/*
+						NOTE: Disabled for NCME 2019 Study
+						<ExerciseNavigation
             hasNextQuestion={this.props.hasNextQuestion}
             nextQuestion={this.props.nextQuestion}
             concept={this.props.concept}
             generateExercise={this.props.generateExercise}
             getOrderedConcepts={this.props.getOrderedConcepts}/>
-          {/*<ConceptLabel concepts={this.props.exercise &&
-           this.props.exercise.concepts}/>*/}
+						{/*<ConceptLabel concepts={this.props.exercise &&
+						 this.props.exercise.concepts}/>*/
+					}
+
 				</div>
 		);
 	}
