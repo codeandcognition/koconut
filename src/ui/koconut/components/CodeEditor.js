@@ -125,10 +125,13 @@ class CodeEditor extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let {exerciseId} = nextProps;
+    let {exerciseId, code, questionIndex} = nextProps;
+    console.log(exerciseId);
     if(exerciseId !== this.state.exerciseId) {
       this.handleReset();
-      this.setState({exerciseId});
+      this.setState({exerciseId, code, questionIndex}, () => {
+        this.handleReset();
+      });
     }
   }
 
@@ -205,8 +208,8 @@ class CodeEditor extends Component {
    *  Resets both the code state and answer state.
    */
   handleReset() {
-    this.setState({code: this.props.code});
-    this.props.inputHandler(this.props.code, this.props.questionIndex);
+    this.setState({code: this.state.code});
+    this.props.inputHandler(this.state.code, this.state.questionIndex);
     this.resetCursor();
   }
 
