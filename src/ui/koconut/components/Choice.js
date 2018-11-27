@@ -49,7 +49,12 @@ class Choice extends Component {
             data-tip
             style={{width: "60%"}}
             data-for={this.props.content}>
-          {this.props.content}
+            <ReactMarkdown className={"flex-grow-1"}
+												 source={this.props.content}
+												 renderers={{code: CodeBlock}}
+												 escapeHtml={true}
+					/>
+          {/* {this.props.content} */} {/** TODO: Replaced this line with the reactmarkdown */}
           <br />
           {this.renderTooltip()}
         </div>
