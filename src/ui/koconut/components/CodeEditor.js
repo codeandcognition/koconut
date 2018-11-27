@@ -30,7 +30,8 @@ class CodeEditor extends Component {
       mode: 'python',
       theme: 'textmate',
       code: this.props.code,
-      highlighted: ''
+      highlighted: '',
+      exerciseId: this.props.exerciseId
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -121,6 +122,14 @@ class CodeEditor extends Component {
         }
       });
     }   
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let {exerciseId} = nextProps;
+    if(exerciseId !== this.state.exerciseId) {
+      this.handleReset();
+      this.setState({exerciseId});
+    }
   }
 
   /**

@@ -1065,6 +1065,7 @@ class App extends Component {
   ncmeLandingView() {
   	return(
   			<div>
+					{this.renderNavBar()}
 					<NcmeLandingView generateNCMEExercise={this.generateNCMEExercise}/>
 				</div>
 		)

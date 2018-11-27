@@ -63,7 +63,8 @@ class Information extends Component {
       feedback: this.props.feedback,
       followupFeedback: this.props.followupFeedback,
       answer: this.props.answer,
-      followupAnswers: this.props.followupAnswers
+      followupAnswers: this.props.followupAnswers,
+      exerciseId: this.props.exerciseId
     });
   }
 
@@ -74,7 +75,8 @@ class Information extends Component {
       feedback: nextProps.feedback,
       followupFeedback: this.props.followupFeedback,
       answer: nextProps.answer,
-      followupAnswers: this.props.followupAnswers
+      followupAnswers: this.props.followupAnswers,
+      exerciseId: nextProps.exerciseId
     });
   }
 
@@ -146,6 +148,7 @@ class Information extends Component {
       //       ) 
           ? <div/> :
           <Response
+            exerciseId={this.state.exerciseId}
             key={"response"+index}
             type={type}
             choices={question.choices}
