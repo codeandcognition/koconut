@@ -30,7 +30,8 @@ class CodeEditor extends Component {
       mode: 'python',
       theme: 'textmate',
       code: this.props.code,
-      highlighted: ''
+      highlighted: '',
+      exerciseId: this.props.exerciseId
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -123,6 +124,17 @@ class CodeEditor extends Component {
     }   
   }
 
+  componentWillReceiveProps(nextProps) {
+    let {exerciseId, code, questionIndex} = nextProps;
+    console.log(exerciseId);
+    if(exerciseId !== this.state.exerciseId) {
+      this.handleReset();
+      this.setState({exerciseId, code, questionIndex}, () => {
+        this.handleReset();
+      });
+    }
+  }
+
   /**
    * On component mount, set up arrow key listener and click listener
    */
@@ -196,8 +208,8 @@ class CodeEditor extends Component {
    *  Resets both the code state and answer state.
    */
   handleReset() {
-    this.setState({code: this.props.code});
-    this.props.inputHandler(this.props.code, this.props.questionIndex);
+    this.setState({code: this.state.code});
+    this.props.inputHandler(this.state.code, this.state.questionIndex);
     this.resetCursor();
   }
 

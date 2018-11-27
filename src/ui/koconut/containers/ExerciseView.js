@@ -48,7 +48,8 @@ class Exercise extends Component {
     super(props);
     this.state = {
       answer: [],
-      followupAnswers: []
+      followupAnswers: [],
+      exerciseId: ''
     };
     this.resetAnswer = this.resetAnswer.bind(this);
 
@@ -61,12 +62,13 @@ class Exercise extends Component {
   componentDidMount() {
     this.mounted = true;
     window.scrollTo(0, 0);
-		// this.dataLogger.bindInformation({
-		// 	userId: this.props.firebaseUser.uid,
-		// 	exerciseId: this.props.exerciseId,
-		// 	firebase: this.props.firebase
-		// });
+		this.dataLogger.bindInformation({
+			userId: this.props.firebaseUser.uid,
+			exerciseId: this.props.exerciseId,
+			firebase: this.props.firebase
+		});
     this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
+    this.setState({exerciseId: this.props.exerciseId});
   }
 
   // debug comment: never reaching componentWillUnmount
@@ -84,6 +86,7 @@ class Exercise extends Component {
 			exerciseId: nextProps.exerciseId,
 			firebase: nextProps.firebase
 		});
+    this.setState({exerciseId: nextProps.exerciseId});
 	}
 
   /**
@@ -142,6 +145,7 @@ class Exercise extends Component {
 					<Prompt exercise={this.props.exercise} />
 					{(this.props.exercise && this.props.exercise.code) && this.renderOverarchingCode()}
 					<Information
+              exerciseId={this.state.exerciseId}
               readOrWrite={this.props.readOrWrite}
 							exercise={this.props.exercise}
 							answer={this.state.answer}

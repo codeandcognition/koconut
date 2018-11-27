@@ -4,3 +4,6 @@
 
 .answer-preview {
   text-align: left; }
+
+.ace-editor {
+  border: 2px solid gray; }

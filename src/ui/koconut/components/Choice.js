@@ -1,7 +1,10 @@
 // @flow
 import React, {Component} from 'react';
 import ReactTooltip from 'react-tooltip';
+import ReactMarkdown from 'react-markdown'
+import CodeBlock from'./CodeBlock';
 import './Choice.css';
+
 
 /**
  * The Choice component represents a choice in a multiple choice exercise
@@ -49,7 +52,12 @@ class Choice extends Component {
             data-tip
             style={{width: "60%"}}
             data-for={this.props.content}>
-          {this.props.content}
+            <ReactMarkdown className={"flex-grow-1"}
+												 source={this.props.content}
+												 renderers={{code: CodeBlock}}
+												 escapeHtml={true}
+					/>
+          {/* {this.props.content} */} {/** TODO: Replaced this line with the reactmarkdown */}
           <br />
           {this.renderTooltip()}
         </div>

@@ -30,6 +30,18 @@ class Response extends Component {
     fIndex: number
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      exerciseId: this.props.exerciseId
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let {exerciseId} = nextProps;
+    this.setState({exerciseId});
+  }
+
   /**
    * Returns JSX based on the response type
    * @returns JSX for a type of response (MultipleChoice, ShortResponse)
@@ -62,7 +74,8 @@ class Response extends Component {
         return <SurveyView choices={choices} inputHandler={update} questionIndex={index}/>;
       case(Types.writeCode):
         return <CodeEditor dataLogger={this.props.dataLogger} 
-            type={type} 
+            type={type}
+            exerciseId={this.state.exerciseId}
             inputHandler={update} 
             questionIndex={index}
             code={this.props.question.code}
