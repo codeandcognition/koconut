@@ -5,8 +5,12 @@ import Routes from './../../../Routes';
 
 class NcmeLandingView extends Component {
 	render() {
+		let style = {
+			marginTop: "10%"
+		};
+
 		return(
-				<div className={"container"}>
+				<div className={"container"} style={style}>
 					<div>
 						<p>Instructions on think aloud</p>
 					</div>

@@ -63,7 +63,7 @@ class Navbar extends Component {
   }
 
   componentWillUnmount() {
-  	this.mounted = false
+  	this.mounted = false;
     this.authUnsub();
   }
 
@@ -109,7 +109,7 @@ class Navbar extends Component {
             <Toolbar>
 							{(this.props.history.location.pathname === Routes.author ||
 									this.props.history.location.pathname.includes("instruction") ||
-									this.props.history.location.pathname.includes("practice"))  ?
+									this.props.history.location.pathname.includes("practice")) ?
 									<div style={{marginRight: 5}}>
 										<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
 											<BackButton
