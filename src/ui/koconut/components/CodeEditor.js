@@ -126,7 +126,7 @@ class CodeEditor extends Component {
 
   componentWillReceiveProps(nextProps) {
     let {exerciseId, code, questionIndex} = nextProps;
-    console.log(exerciseId);
+    console.log(`componentWillReceiveProps. exerciseId: ${exerciseId}`);
     if(exerciseId !== this.state.exerciseId) {
       this.handleReset();
       this.setState({exerciseId, code, questionIndex}, () => {

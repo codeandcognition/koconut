@@ -173,6 +173,7 @@ class App extends Component {
     this.resetError = this.resetError.bind(this);
     this.switchToWorldView = this.switchToWorldView.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
+    this.previousQuestion = this.previousQuestion.bind(this);
     this.resetFeedback = this.resetFeedback.bind(this);
     this.updateUserState = this.updateUserState.bind(this);
     this.storeState = this.storeState.bind(this);
@@ -906,6 +907,22 @@ class App extends Component {
     });
   }
 
+  /**
+   * previousQuestion will set the state of the exercise to be the previous question.
+	 * for debugging and can be removed
+   */
+  previousQuestion() {
+    this.setState({
+      counter: this.state.counter - 1,
+      feedback: [],
+      followupFeedback: [],
+      timesGotQuestionWrong: [],
+      followupTimesGotQuestionWrong: []
+    }, () => {
+      this.generateNCMEExercise(this.state.currentConcept, this.state.exerciseType);
+    });
+  }
+
   // TODO William rewrite this to make it clear feedback instead of
   // just changing displaytype
   submitTryAgain(questionIndex: number, followupIndex: number) {
@@ -982,7 +999,6 @@ class App extends Component {
     return this.state.counter < this.state.numExercisesInCurrConcept - 1;
   }
 
-
 	/**
 	 * Renders the welcome view
 	 * @returns {*}
@@ -1018,6 +1034,7 @@ class App extends Component {
 							timesGotQuestionWrong={this.state.timesGotQuestionWrong}
 							followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
 							nextQuestion={this.nextQuestion}
+							previousQuestion={this.previousQuestion}
 							resetFeedback={this.resetFeedback}
               clearCounterAndFeedback={this.clearCounterAndFeedback}
               sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
