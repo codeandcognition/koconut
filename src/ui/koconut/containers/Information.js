@@ -7,8 +7,6 @@ import Feedback from '../components/Feedback';
 import Paper from '@material-ui/core/Paper';
 import ExerciseQuestion from '../components/ExerciseQuestion';
 
- 
-
 import './Information.css';
 import Button from "@material-ui/core/Button/Button";
 
@@ -258,6 +256,7 @@ class Information extends Component {
                   key={index}
                   question={question}
                   nextQuestion={this.props.nextQuestion}
+                  previousQuestion={this.props.previousQuestion}
                   index={index}
                   feedback={this.state.feedback[index]}
                   answer={this.state.answer}

@@ -3,6 +3,7 @@ import Types from '../../../data/ExerciseTypes.js';
 import Submit from './Submit';
 import AceEditor from 'react-ace';
 import 'brace/mode/python';
+import Button from "@material-ui/core/Button/Button"; // for debugging button
 
 type Props = {
 	question: any,
@@ -131,6 +132,9 @@ class ExerciseQuestion extends Component {
           {this.props.question.code && this.props.question.type !== Types.writeCode && this.props.renderCodeView(this.props.question, this.props.index, this.props.fIndex, this.renderAce)}
           <div style={{width: "100%", margin: "0", padding: "0"}}>
             {this.props.renderResponseView(this.props.question, this.props.index, this.props.fIndex)}
+            {!(this.props.feedback) &&
+            <Button onClick={() => this.props.previousQuestion()}>Go back</Button>
+            }
             {!(this.props.feedback) &&
             <Submit disabled={this.props.answer[this.props.index] === undefined}
 										submitHandler={() => {

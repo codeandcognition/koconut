@@ -162,6 +162,7 @@ class Exercise extends Component {
 							timesGotQuestionWrong={this.props.timesGotQuestionWrong}
 							followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
 							nextQuestion={this.props.nextQuestion}
+              previousQuestion={this.props.previousQuestion}
 							resetAnswer={this.resetAnswer}
               dataLogger={this.dataLogger}
 					/>
