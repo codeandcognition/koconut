@@ -258,6 +258,7 @@ class Information extends Component {
                   nextQuestion={this.props.nextQuestion}
                   previousQuestion={this.props.previousQuestion}
                   index={index}
+                  getCount={this.props.getCount}
                   feedback={this.state.feedback[index]}
                   answer={this.state.answer}
                   renderCodeView={this.renderCodeView}
