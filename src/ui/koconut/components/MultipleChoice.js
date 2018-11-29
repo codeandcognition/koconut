@@ -2,6 +2,8 @@
 import React, {Component} from 'react';
 import Choice from './Choice';
 import './MultipleChoice.css';
+import CodeBlock from './CodeBlock';
+import ReactMarkdown from "react-markdown";
 
 /**
  * The MultipleChoice component represents multiple choice answer selection
@@ -26,7 +28,13 @@ class MultipleChoice extends Component {
     return (
         <div className='multiple-choice'>
           <div>
-						<h5 className={'heading'}>{this.props.title}</h5>
+						<h5 className={'heading'}>
+              <ReactMarkdown
+                  source={this.props.title}
+                  renderers={{code: CodeBlock}}
+              />
+              {/*{this.props.title}*/}
+						</h5>
 						{this.props.answer !== undefined && this.props.questionIndex > -1 && this.props.choices.map((choice, i) =>
 								choice.length > 0 ?
 										(<Choice
