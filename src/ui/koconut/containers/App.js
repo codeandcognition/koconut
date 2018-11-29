@@ -342,6 +342,7 @@ class App extends Component {
 				errorMessage: "This is the end of the study",
 				error: true
 			});
+      this.clearCounterAndFeedback();
 		}
 	}
 
@@ -1154,6 +1155,7 @@ class App extends Component {
 	}
 
   render() {
+    console.log(this.state.counter);
     return (
 					<div className="App">
 						<Router>
