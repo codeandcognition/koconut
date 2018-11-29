@@ -43,6 +43,10 @@
     "Instructions": {
       ".read": "auth != null",
       ".write": "auth != null && root.child('Users').child(auth.uid).child('permission').val() === 'author'"
+    },
+    "UsersNcme2019" : {
+      ".read" : "auth != null",
+      ".write": "auth != null"
     }
   }
 }
