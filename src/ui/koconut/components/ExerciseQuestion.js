@@ -133,11 +133,15 @@ class ExerciseQuestion extends Component {
           <div style={{width: "100%", margin: "0", padding: "0"}}>
             {this.props.renderResponseView(this.props.question, this.props.index, this.props.fIndex)}
             {!(this.props.feedback) &&
-            <Button onClick={() => this.props.previousQuestion()}>Go back</Button>
+            <Button onClick={() => {
+              this.props.previousQuestion();
+              window.scrollTo(0,0);
+            }}>Go back</Button>
             }
             {!(this.props.feedback) &&
             <Submit disabled={this.props.answer[this.props.index] === undefined}
 										submitHandler={() => {
+                      window.scrollTo(0,0);
 											this.props.dataLogger.sendDataToFirebase();
                       // this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex);
                       // TODO: Removed submit / question check logic
