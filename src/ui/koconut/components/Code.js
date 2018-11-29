@@ -155,12 +155,14 @@ class Code extends Component {
   }
 
   renderMarkdown() {
-    let code = "```python\n" + this.state.code + "\n```";
-    return <ReactMarkdown className={"flex-grow-1"}
-                          source={code}
-                          renderers={{code: CodeBlock}}
-                          escapeHtml={true}
-          />
+    let code = "```Java\n" + this.state.code + "\n```";
+    return (<div style={{fontSize: '1em'}}>
+			<ReactMarkdown
+					source={code}
+					renderers={{code: CodeBlock}}
+					escapeHtml={true}
+			/>
+    </div>);
   }
 
   render() {
@@ -175,11 +177,11 @@ class Code extends Component {
 
 
     return (
-      <div className={'codeContainer ' + (isWriteType ? 'full' : 'half') +
+      <div className={'codeContainer ' + (isWriteType ? 'full' : 'full') +
        ' ' + this.props.type}>
         <h4 style={{fontWeight: "bold", textAlign: "left"}}>Code</h4>
         {(isWriteType && this.props.feedback) ? '' :
-          <div ref="code" className={'code ' + (isWriteType ? 'full' : 'half') + ' ' + this.props.type}>
+          <div ref="code" className={'code ' + (isWriteType ? 'full' : 'full') + ' ' + this.props.type}>
             {!isWriteType && this.renderMarkdown()}
 
             <div className="code-config">

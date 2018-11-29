@@ -1,11 +1,11 @@
 .codeContainer {
   padding: 10px;
-  width: 20vw;
-  max-height: 100vh;
+  width: 100%;
+  height: 20em;
   background-color: #f7f7f7;
   overflow: visible;
   position: relative;
-  //overflow-y: scroll;
+  overflow-y: scroll;
   text-align: left;
 }
 

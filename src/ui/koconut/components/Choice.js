@@ -52,8 +52,7 @@ class Choice extends Component {
             data-tip
             style={{width: "60%"}}
             data-for={this.props.content}>
-            <ReactMarkdown className={"flex-grow-1"}
-												 source={this.props.content}
+            <ReactMarkdown source={this.props.content}
 												 renderers={{code: CodeBlock}}
 												 escapeHtml={true}
 					/>

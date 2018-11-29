@@ -28,7 +28,7 @@ class  ShortResponse extends Component {
     return (
         <div className='short-response'>
           <div style={{textAlign: "left"}}>
-            <ReactMarkdown className={"flex-grow-1"}
+            <ReactMarkdown
                          source={this.props.prompt}
                          renderers={{CodeBlock: CodeBlock}}/>
           </div>
