@@ -14,10 +14,7 @@
   cursor: pointer; }
 
 .choice {
-  height: auto;
-  margin: 10px auto;
   user-select: none;
-  padding: 2.5%;
   width: 33%;
   border-radius: 20px;
   border: 2px solid #cccccc;

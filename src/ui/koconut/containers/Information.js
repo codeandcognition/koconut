@@ -98,7 +98,7 @@ class Information extends Component {
 			return '';
 		} else {
 			return (
-					<div style={{display: 'flex', justifyContent: 'space-evenly', backgroundColor: '#f7f7f7'}}>
+					<div style={{display: 'flex', justifyContent: 'space-evenly', backgroundColor: '#f7f7f7', height: 'auto', width: '100%'}}>
 						<Code
 								key={"code" + index}
 								type={question.type}
@@ -114,8 +114,8 @@ class Information extends Component {
 								submitTryAgain={this.props.submitTryAgain}
 								fIndex={fIndex}
 						/>
-						<div style={{margin: '2%'}}>
-							<h5>Scratch Pad</h5>
+						<div style={{margin: '2%', width: '100%'}}>
+							<h5 style={{textAlign: 'left'}}>Scratch Pad</h5>
               {renderAce && renderAce()}
 						</div>
 					</div>

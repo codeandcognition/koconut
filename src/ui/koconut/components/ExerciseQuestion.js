@@ -63,7 +63,7 @@ class ExerciseQuestion extends Component {
     return <AceEditor
         ref="aceEditor"
         className={"ace-editor"}
-        width="12em"
+        width="100%"
         height="20em"
         value={this.state.code}
         // readOnly={this.props.type !== Types.fillBlank &&
@@ -130,22 +130,27 @@ class ExerciseQuestion extends Component {
       <div>
         <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
           {this.props.question.code && this.props.question.type !== Types.writeCode && this.props.renderCodeView(this.props.question, this.props.index, this.props.fIndex, this.renderAce)}
-          <div style={{width: "100%", margin: "0", padding: "0"}}>
-            {this.props.renderResponseView(this.props.question, this.props.index, this.props.fIndex)}
-            {!(this.props.feedback) &&
-            <Button onClick={() => this.props.previousQuestion()}>Go back</Button>
-            }
-            {!(this.props.feedback) &&
-            <Submit disabled={this.props.answer[this.props.index] === undefined}
-										submitHandler={() => {
-											this.props.dataLogger.sendDataToFirebase();
-                      // this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex);
-                      // TODO: Removed submit / question check logic
-                      this.props.nextQuestion();
-                    }} />
-            }
-          </div>
         </div>
+        <br/>
+				<div style={{width: "100%"}}>
+					{this.props.renderResponseView(this.props.question, this.props.index, this.props.fIndex)}
+          <div style={{display: 'flex', justifyContent: 'center'}}>
+						{!(this.props.feedback) &&
+						<Button
+								onClick={() => this.props.previousQuestion()}
+								variant={'outlined'}>Previous Question</Button>
+						}
+          </div>
+					{!(this.props.feedback) &&
+					<Submit disabled={this.props.answer[this.props.index] === undefined}
+									submitHandler={() => {
+										this.props.dataLogger.sendDataToFirebase();
+										// this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex);
+										// TODO: Removed submit / question check logic
+										this.props.nextQuestion();
+									}} />
+					}
+				</div>
         {this.props.renderFeedback}
       </div>
     );

@@ -3,14 +3,14 @@ $choice-color: #cccccc;
 .choice {
   margin: 10px auto; // centering the MC choices
   user-select: none;
-  padding: 2.5%;
   width: 33%;
-  // margin: 10px;
   border-radius: 20px;
   border: 2px solid $choice-color;
-  // background-color: $choice-color;
   transition-duration: 50ms;
   background-color: white;
+  height: 3em;
+  overflow-y: scroll;
+  padding: 0.5%;
 }
 
 .choice:active {
