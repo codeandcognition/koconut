@@ -28,13 +28,12 @@ class MultipleChoice extends Component {
     return (
         <div className='multiple-choice'>
           <div>
-						<h5 className={'heading'}>
-              <ReactMarkdown
-                  source={this.props.title}
-                  renderers={{code: CodeBlock}}
-              />
-              {/*{this.props.title}*/}
-						</h5>
+            <p className={'heading'}>
+							<ReactMarkdown
+									source={this.props.title}
+									renderers={{code: CodeBlock}}
+							/>
+            </p>
 						{this.props.answer !== undefined && this.props.questionIndex > -1 && this.props.choices.map((choice, i) =>
 								choice.length > 0 ?
 										(<Choice

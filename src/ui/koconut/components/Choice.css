@@ -1,12 +1,14 @@
 .choice {
   margin: 10px auto;
   user-select: none;
-  padding: 2.5%;
   width: 33%;
   border-radius: 20px;
   border: 2px solid #cccccc;
   transition-duration: 50ms;
-  background-color: white; }
+  background-color: white;
+  height: 3em;
+  overflow-y: scroll;
+  padding: 0.5%; }
 
 .choice:active {
   opacity: .95; }
