@@ -146,7 +146,10 @@ export default class DataLogger {
 
   /**
    * bindInformation is a combination of all three binds that just lets you do
-   * it all at once
+   * it all at once.
+   * 
+   * Because you are binding new information to it, it clears the data inside the data logger
+   * automatically.
    */
   bindInformation({userId, exerciseId, firebase}) {
     if(userId) {
@@ -158,6 +161,7 @@ export default class DataLogger {
     if(firebase) {
       this.bindFirebase(firebase);
     }
+    this._clearData();
   }
 
   /**

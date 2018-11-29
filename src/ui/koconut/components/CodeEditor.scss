@@ -10,3 +10,8 @@
 .ace-editor {
   border: 2px solid gray;
 }
+
+.writecodeBlock > pre {
+  max-height: 250px;
+  overflow-y: scroll;
+}
