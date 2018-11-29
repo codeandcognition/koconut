@@ -150,6 +150,7 @@ class CodeEditor extends Component {
           dl.addData({
             event: "KEYBOARD",
             keyPressed: key,
+            textContent: this.refs.aceEditor.editor.getValue(),
             textPosition
           })
         } 
@@ -160,6 +161,7 @@ class CodeEditor extends Component {
         dl.addData({
           event: "MOUSE",
           keyPressed: "LeftClick",
+          textContent: this.refs.aceEditor.editor.getValue(),
           textPosition
         })
       });
