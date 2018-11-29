@@ -76,7 +76,7 @@ class CodeEditor extends Component {
   handleChange(value: string, event: Object) {
     // TODO: Actually prevent rows
     // TODO: Also, newlines and deletion isn't safe
-    
+
     // Data logger aspect of handling change
     let dl = this.props.dataLogger;
     let textPosition = this.refs.aceEditor.editor.getCursorPosition();
@@ -121,7 +121,7 @@ class CodeEditor extends Component {
           this.props.inputHandler(selected, this.props.questionIndex, this.props.fIndex); // William summer 2018
         }
       });
-    }   
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -141,10 +141,10 @@ class CodeEditor extends Component {
   componentDidMount() {
     let dl = this.props.dataLogger;
     if(this.refs.aceEditor) {
-      let aceEditorTextInputEl = this.refs.aceEditor.editor.textInput.getElement(); 
+      let aceEditorTextInputEl = this.refs.aceEditor.editor.textInput.getElement();
       aceEditorTextInputEl.addEventListener('keydown', e => {
         let {key} = e;
-        if(key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowDown" || 
+        if(key === "ArrowLeft" || key === "ArrowRight" || key === "ArrowDown" ||
           key === "ArrowUp") {
           let textPosition = this.refs.aceEditor.editor.getCursorPosition();
           dl.addData({
@@ -152,9 +152,9 @@ class CodeEditor extends Component {
             keyPressed: key,
             textPosition
           })
-        } 
+        }
       });
-      
+
       this.refs.aceEditor.editor.addEventListener('click', e => {
         let textPosition = e.editor.getCursorPosition();
         dl.addData({
@@ -163,7 +163,7 @@ class CodeEditor extends Component {
           textPosition
         })
       });
-    } 
+    }
   }
 
   /**
@@ -171,7 +171,7 @@ class CodeEditor extends Component {
    *  Handles editable/non-editable state for code view.
    */
 
-// check just one direection ? no shift? 
+// check just one direection ? no shift?
 
   renderAce() {
     let {isShortAnswerNcme: sA} = this.props; // grab isShortAnswer prop and store it in shorter variable sA
@@ -185,7 +185,7 @@ class CodeEditor extends Component {
         this.props.type !== Types.writeCode && this.props.type !== Types.highlightCode}
         mode={`${sA ? 'none' : this.state.mode}`}
         theme={this.state.theme}
-        highlightActiveLine={!sA} 
+        highlightActiveLine={!sA}
         showGutter={!sA}
         // onInput={this.handleInput}
         showPrintMargin={false}
@@ -208,7 +208,7 @@ class CodeEditor extends Component {
    *  Resets both the code state and answer state.
    */
   handleReset() {
-    this.setState({code: this.state.code});
+    this.setState({code: this.props.code});
     this.props.inputHandler(this.state.code, this.state.questionIndex);
     this.resetCursor();
   }
@@ -225,7 +225,7 @@ class CodeEditor extends Component {
 
   render() {
     return(
-        <div style={{textAlign: "left"}} 
+        <div style={{textAlign: "left"}}
           // onClick={this.handleClick}
           >
 					<ReactMarkdown
