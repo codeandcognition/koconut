@@ -228,9 +228,10 @@ class CodeEditor extends Component {
         <div style={{textAlign: "left"}} 
           // onClick={this.handleClick}
           >
-          <ReactMarkdown className={"flex-grow-1"}
-                         source={this.props.prompt}
-                         renderers={{CodeBlock: CodeBlock}}/>
+					<ReactMarkdown
+							source={this.props.prompt}
+							renderers={{code: CodeBlock}}
+					/>
           {this.renderAce()}
           {this.props.type === Types.highlightCode && <p className={"answer-preview"}>Your answer: {this.state.highlighted}</p>}
           <div className={"button-container"}>
