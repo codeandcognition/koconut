@@ -15,7 +15,9 @@ class Prompt extends Component {
   render() {
     return (
         <div className="prompt">
-          <ReactMarkdown source={this.props.exercise.prompt ? this.props.exercise.prompt : ""}>
+          <ReactMarkdown 
+            source={this.props.exercise.prompt ? this.props.exercise.prompt : ""}
+          >
             {/* for debugging */}
           </ReactMarkdown>
         </div>

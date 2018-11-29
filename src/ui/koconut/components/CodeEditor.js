@@ -233,6 +233,7 @@ class CodeEditor extends Component {
 					<ReactMarkdown
 							source={this.props.prompt}
 							renderers={{code: CodeBlock}}
+              className={"writecodeBlock"}
 					/>
           {this.renderAce()}
           {this.props.type === Types.highlightCode && <p className={"answer-preview"}>Your answer: {this.state.highlighted}</p>}
