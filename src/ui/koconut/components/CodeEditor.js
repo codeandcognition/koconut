@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import "./CodeEditor.css";
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from'./CodeBlock';
-import 'brace/mode/python';
+import 'brace/mode/java';
 
 class CodeEditor extends Component {
   handleSelect: Function;
@@ -27,7 +27,7 @@ class CodeEditor extends Component {
     super(props);
 
     this.state = {
-      mode: 'python',
+      mode: 'java',
       theme: 'textmate',
       code: this.props.code,
       highlighted: '',

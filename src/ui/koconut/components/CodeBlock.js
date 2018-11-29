@@ -29,7 +29,7 @@ export default class CodeBlock extends React.PureComponent {
         const { language, value } = this.props;
 
         return (
-            <SyntaxHighlighter language={language || 'python'}
+            <SyntaxHighlighter language={language || 'java'}
                 style={style}
                 showLineNumbers
                 className="codeblock">
