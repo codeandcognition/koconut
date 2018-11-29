@@ -126,6 +126,7 @@ class ExerciseQuestion extends Component {
   }
 
   render() {
+    console.log(this.props.index);
     return (
       <div>
         <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
