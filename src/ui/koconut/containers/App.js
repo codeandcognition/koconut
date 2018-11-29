@@ -342,6 +342,7 @@ class App extends Component {
 				errorMessage: "This is the end of the study",
 				error: true
 			});
+      this.clearCounterAndFeedback();
 		}
 	}
 
@@ -1030,6 +1031,7 @@ class App extends Component {
 							mode={this.state.display}
 							concept={this.state.currentConcept}
 							codeTheme={this.state.codeTheme}
+              getCount={() => {return this.state.counter}}
 							toggleCodeTheme={(theme) => this.setState({codeTheme: theme})}
 							timesGotQuestionWrong={this.state.timesGotQuestionWrong}
 							followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}

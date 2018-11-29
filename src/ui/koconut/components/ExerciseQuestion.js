@@ -137,6 +137,7 @@ class ExerciseQuestion extends Component {
           <div style={{display: 'flex', justifyContent: 'center'}}>
 						{!(this.props.feedback) &&
 						<Button
+                disabled={this.props.getCount() === 0}
 								onClick={() => this.props.previousQuestion()}
 								variant={'outlined'}>Previous Question</Button>
 						}

@@ -157,6 +157,7 @@ class Exercise extends Component {
 							submitTryAgain={this.props.submitTryAgain}
 							mode={this.props.mode}
 							codeTheme={this.props.codeTheme}
+              getCount={this.props.getCount}
 							toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
 							submitHandler={this.props.submitHandler}
 							timesGotQuestionWrong={this.props.timesGotQuestionWrong}

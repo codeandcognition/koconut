@@ -40,9 +40,9 @@ class PopOver extends Component {
 
 				<Dialog
 						open={this.state.open}
-						aria-labelledby="Oops"
+						// aria-labelledby="Oops"
 						aria-describedby={this.state.dialogText}>
-					<DialogTitle>{"Oops"}</DialogTitle>
+					{/* <DialogTitle>{"Oops"}</DialogTitle> */}
 					<DialogContent>
 						<DialogContentText>
 							{this.state.dialogText}
