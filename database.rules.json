@@ -47,6 +47,10 @@
     "UsersNcme2019" : {
       ".read" : "auth != null",
       ".write": "auth != null"
+    },
+    "ExerciseAssignmentNcme2019" :{
+      ".read" : "auth != null",
+      ".write": "auth != null"
     }
   }
 }
