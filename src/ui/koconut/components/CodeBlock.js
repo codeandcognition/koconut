@@ -1,5 +1,7 @@
-import React, {Component} from 'react';
-import * as hljs from 'highlight.js';
+import React from 'react';
+import PropTypes from 'prop-types';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { vs as style } from 'react-syntax-highlighter/dist/styles/hljs'
 import './CodeBlock.css'
 
 // type Props = {
@@ -10,28 +12,29 @@ import './CodeBlock.css'
 /**
  * CodeBlock is boilerplate code provided by the React-Markdown to support
  * syntax highlighting in code.
+ * CodeBlock sourced from https://gist.github.com/ibrahima/d21950a95aee3212e991a8404e238093
  * @class
  */
-export default class CodeBlock extends Component {
-  componentDidMount() {
-    this.highlightCode();
-  }
+export default class CodeBlock extends React.PureComponent {
+    static propTypes = {
+        value: PropTypes.string.isRequired,
+        language: PropTypes.string,
+    }
 
-  componentDidUpdate() {
-    this.highlightCode();
-  }
+    static defaultProps = {
+        language: null,
+    }
 
-  highlightCode() {
-    hljs.highlightBlock(this.refs.code);
-  }
+    render() {
+        const { language, value } = this.props;
 
-  render() {
-    return (
-        <pre>
-          <code ref="code" className={this.props.language || 'js'}>
-            {this.props.value}
-          </code>
-        </pre>
-    )
-  }
+        return (
+            <SyntaxHighlighter language={language || 'python'}
+                style={style}
+                showLineNumbers
+                className="codeblock">
+                {value}
+            </SyntaxHighlighter>
+        );
+    }
 }
