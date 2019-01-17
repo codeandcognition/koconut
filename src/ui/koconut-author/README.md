@@ -1,6 +1,6 @@
 # Authoring Tool
 
-The authoring tool was developed to ease content generation for Koconut. As of 08/20/19, the authoring tool supports
+The authoring tool was developed to ease content generation for Koconut. As of 08/20/18, the authoring tool supports
 creation of new exercises, instructions and adding new concepts to the concept network.
 
 

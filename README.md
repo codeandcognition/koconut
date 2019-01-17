@@ -180,6 +180,9 @@ It is recommended that you use token authentication: [Personal API Tokens](https
 - [Intro to React](https://facebook.github.io/react/tutorial/tutorial.html)
 - [React Developer Tools](https://github.com/facebook/react-devtools)
 
+#### React Libraries
+- [react-loadable](https://github.com/jamiebuilds/react-loadable):  A higher order component for loading components with promises
+
 #### Sass
 - [Sass Basics](http://sass-lang.com/guide)
 - [Official Docs](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)
