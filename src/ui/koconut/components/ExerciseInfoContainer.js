@@ -41,7 +41,7 @@ class ExerciseInfoContainer extends Component {
     let paperStyle = {
       padding: "30px",
 			margin: "20px"
-    }
+    };
 
 		return (
 			<Paper style={paperStyle}>

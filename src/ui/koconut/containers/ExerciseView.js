@@ -61,6 +61,13 @@ class Exercise extends Component {
     this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+  	// scroll to top if navigating to a new exercise
+		if (this.props.exerciseId != nextProps.exerciseId) {
+			window.scrollTo(0, 0);
+		}
+	}
+
   // debug comment: never reaching componentWillUnmount
   componentWillUnmount() {
 		this.mounted = false;
