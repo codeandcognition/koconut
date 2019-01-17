@@ -87,7 +87,10 @@ class ExerciseQuestion extends Component {
             {this.props.renderResponseView(this.props.question, this.props.index, this.props.fIndex)}
             {!(this.props.feedback) &&
             <Submit disabled={this.props.answer[this.props.index] === undefined}
-										submitHandler={() => this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex)} />
+										submitHandler={() => {
+                      window.scrollTo(0, 0);
+                      this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex)} />
+                    }
             }
           </div>
         </div>
