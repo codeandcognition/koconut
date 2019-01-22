@@ -108,7 +108,6 @@ class ExerciseQuestion extends Component {
 				disableSubmit = false;
       }
     }
-
     return (
       <div>
         <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
