@@ -78,6 +78,36 @@ class ExerciseQuestion extends Component {
   }
 
   render() {
+    // determine whether submit should be disabled
+    // to avoid evaluating incomplete answers
+    let answer = this.props.answer[this.props.index];
+    let disableSubmit = false;
+    if (answer) {
+      if (this.props.question.type === "table") {
+				// count the number of answers expected
+				let numAnswerCells = 0;
+				this.props.question.data.forEach(cell => {
+					if (!cell.prompt && !cell.code) {
+						numAnswerCells++;
+					}
+				});
+
+				// count the number of answers entered by user
+				let count = 0;
+				for (let i = 0; i < answer.length; i++) {
+					if (answer[i]) {
+						for (let j = 0; j < answer[i].length; j++) {
+							if (answer[i][j]) {
+								count++;
+							}
+						}
+          }
+				}
+				disableSubmit = numAnswerCells != count;
+      }
+    } else {
+			disableSubmit = true;
+    }
 
     return (
       <div>
@@ -86,7 +116,7 @@ class ExerciseQuestion extends Component {
           <div style={{width: "100%", margin: "0", padding: "0"}}>
             {this.props.renderResponseView(this.props.question, this.props.index, this.props.fIndex)}
             {!(this.props.feedback) &&
-            <Submit disabled={this.props.answer[this.props.index] === undefined}
+            <Submit disabled={disableSubmit}
 										submitHandler={() => {
                       window.scrollTo(0, 0);
                       this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex) 
