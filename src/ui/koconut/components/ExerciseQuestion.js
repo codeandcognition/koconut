@@ -81,7 +81,7 @@ class ExerciseQuestion extends Component {
     // determine whether submit should be disabled
     // to avoid evaluating incomplete answers
     let answer = this.props.answer[this.props.index];
-    let disableSubmit = false;
+    let disableSubmit = true;
     if (answer) {
       if (this.props.question.type === "table") {
 				// count the number of answers expected
@@ -104,9 +104,9 @@ class ExerciseQuestion extends Component {
           }
 				}
 				disableSubmit = numAnswerCells != count;
+      } else {
+				disableSubmit = false;
       }
-    } else {
-			disableSubmit = true;
     }
 
     return (
