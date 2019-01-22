@@ -3,17 +3,7 @@ import QuestionContainer from './QuestionContainer';
 import Paper from '@material-ui/core/Paper';
 import Code from './Code';
 
-type Props = {
-	firebaseID: string,
-	quadrant: string,
-	exercise: any
-};
-
 class ExerciseInfoContainer extends Component {
-	constructor(props: Props) {
-		super(props);
-	}
-
 	render() {
 		let questionList = [];
 		this.props.exercise.questions.forEach((question, index) => {

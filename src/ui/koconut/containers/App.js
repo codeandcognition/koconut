@@ -975,7 +975,6 @@ class App extends Component {
                      getOrderedConcepts={this.getOrderedConcepts}
 										 exercisesList={this.state.exerciseList}
 										 conceptMapGetter={this.state.conceptMapGetter}
-										 getOrderedConcepts={this.getOrderedConcepts}
 										 goToExercise={this.goToExercise}/>
 				</div>
     )

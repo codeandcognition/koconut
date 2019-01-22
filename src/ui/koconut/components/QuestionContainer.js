@@ -14,10 +14,7 @@ type Props = {
 };
 
 class QuestionContainer extends Component {
-	renderResponseView: Function;
-	renderCodeView: Function;
-
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 		this.renderResponseView = this.renderResponseView.bind(this);
 		this.renderCodeView = this.renderCodeView.bind(this);

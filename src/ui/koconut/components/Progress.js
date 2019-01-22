@@ -7,10 +7,6 @@ type Props = {
 };
 
 class Progress extends Component {
-	constructor(props: Props) {
-		super(props);
-	}
-
 	componentWillReceiveProps(nextProps: Props) {
 		this.props = nextProps;
 	}

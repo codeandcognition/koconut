@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { withRouter} from "react-router-dom";
 import firebase from 'firebase';
 import "./AllExercises.css";
-import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
+import {ConceptKnowledge} from '../../../data/MasteryModel';
 import {t} from '../../../data/ConceptAbbreviations';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 import LoadingView from './../components/LoadingView';
