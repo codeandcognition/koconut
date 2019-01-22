@@ -1,5 +1,7 @@
 .dialogbutton {
   background-color: #eee;
+  color: black;
+  text-decoration: none;
 }
 
 .dialogbutton:hover {
