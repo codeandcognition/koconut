@@ -36,13 +36,29 @@ class Progress extends Component {
 							<p className={'bold-text'}>Reading {this.props.title}</p>
 						</Col>
 						<Col md={6}>
-							<div class="progress">
-								<div class="progress-bar bg-success"
+							<div className="progress" style={{height: 25}}>
+								<div className="progress-bar"
 										 role="progressbar"
-										 style={{width: percent + "%"}}
+										 style={{
+                        width: percent + "%", 
+                        color: 'black',
+                        backgroundColor: 'rgb(130,183,79)',
+                        fontSize: '15'
+                      }}
 										 aria-valuenow="25"
 										 aria-valuemin="0"
-										 aria-valuemax="100">{level}</div>
+										 aria-valuemax="100">{percent >= 30 && level}</div>
+                {percent < 30 && 
+                <div className="progress-bar"
+                  style={{ 
+                        color: 'black',
+                        background: 'none',
+                        fontSize: '15'
+                  }}
+                  >
+                  {level}
+                </div>
+                }
 							</div>
 						</Col>
 					</Row>
