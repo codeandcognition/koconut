@@ -11,6 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Routes from './../../../Routes';
 import LoadingView from '../components/LoadingView';
+import Homepage from '../components/Homepage/Homepage';
 
 class SignIn extends Component {
 
@@ -150,6 +151,7 @@ class SignIn extends Component {
 				<div
 						style={{textAlign: "center", padding: "10vw"}} className="container">
 					<h1>Koconut</h1>
+          <Homepage></Homepage>
 					<img style={{width: "10vh" }}
 							 src={"https://i.pinimg.com/originals/bd/87/87/bd8787a601af7682d857f6c365d4421b.png"}
 							 alt={"cocount"} />
