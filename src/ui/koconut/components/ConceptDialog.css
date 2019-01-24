@@ -34,15 +34,8 @@
   justify-content: space-between; }
 
 .resume {
-  width: 40%;
-  cursor: pointer;
-  text-decoration: none;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  padding-top: 12px;
-  color: black;
-  text-align: center;
-  background-color: #eee; }
+  margin: 2% 0 3% 0;
+  height: 20px; }
 
 .switch {
   margin: 0 20% 0 20%; }
