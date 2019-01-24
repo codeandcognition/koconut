@@ -183,18 +183,15 @@ class ConceptDialog extends Component {
 		this.filterExercisesByConcept(concept, exerciseType).exercises.forEach((e, i) => {
 			let id = exerciseIds[i];
 			exercises.push(
-					<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
-						<ExerciseButton key={i} // exerciseId
-														concept={concept}
-														exerciseType={exerciseType}
-														exercise={e}
-														exerciseId={id}
-														index={i}
-														numberOfExercises={exerciseIds.length}
-														read={false}
-														recommendation={""}
-														showRecommendation={false}
-														goToExercise={this.props.goToExercise}/>
+					<Link to={`/practice/${this.props.conceptCode}/practice-writing-code`}
+              onClick={() => this.props.goToExercise(concept, exerciseType,
+              e, id, i, exerciseIds.length)}
+            >
+            <ConceptDialogButton name={e.shortPrompt} read={false}
+              suggestionText={"asdf"} 
+              showInitially={true}
+              maximized={this.state.showRecommendations}
+              color={"#35b"}/>
 					</Link>
 				);
 		});
