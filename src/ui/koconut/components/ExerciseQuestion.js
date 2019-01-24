@@ -13,13 +13,13 @@ type Props = {
 };
 
 class ExerciseQuestion extends Component {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       code: '',
       mode: 'python',
       theme: 'textmate'
-    }
+    };
 
      this.renderAce = this.renderAce.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -103,12 +103,11 @@ class ExerciseQuestion extends Component {
 						}
           }
 				}
-				disableSubmit = numAnswerCells != count;
+				disableSubmit = numAnswerCells !== count;
       } else {
 				disableSubmit = false;
       }
     }
-
     return (
       <div>
         <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>

@@ -10,6 +10,7 @@ import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
 import ConceptDialogButton from './ConceptDialogButton';
+import ExerciseButton from './ExerciseButton';
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import Progress from './Progress';
 
@@ -209,7 +210,7 @@ class ConceptDialog extends Component {
 						</div>
 						<p>{conceptInfo.definition}</p>
 						<div className={'options'}>
-							<div role="button" className={'resume'}>Resume</div>
+							<Button variant="contained" className={'resume'}>Resume</Button>
 							<div>
 								{/* TODO: Placeholders for now */}
 								<p className={'switch-text'}>

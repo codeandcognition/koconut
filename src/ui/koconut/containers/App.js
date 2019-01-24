@@ -286,7 +286,8 @@ class App extends Component {
           counter: exerciseType !== this.state.exerciseType || concept !== this.state.currentConcept ? 0 : this.state.counter,
           exerciseType: exerciseType,
           numExercisesInCurrConcept: exercises.length,
-          error: false // resets the error message
+          error: false, // resets the error message,
+					feedback: [],
         }, () => {
 						this.storeState("exercise", this.state.counter, this.state.exerciseType, concept);
         });
@@ -315,7 +316,8 @@ class App extends Component {
 			counter: index,
 			exerciseType: exerciseType,
 			numExercisesInCurrConcept: numberOfExercises,
-			error: false // resets the error message
+			error: false, // resets the error message
+			feedback: []
 		}, () => {
 			this.storeState("exercise", this.state.counter, this.state.exerciseType, concept);
 		});
@@ -973,7 +975,6 @@ class App extends Component {
                      getOrderedConcepts={this.getOrderedConcepts}
 										 exercisesList={this.state.exerciseList}
 										 conceptMapGetter={this.state.conceptMapGetter}
-										 getOrderedConcepts={this.getOrderedConcepts}
 										 goToExercise={this.goToExercise}/>
 				</div>
     )

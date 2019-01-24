@@ -111,7 +111,7 @@ class ResponseEvaluator {
         );
       }
 
-      let answerRegex = /[\.#\$\/\[\]]/
+      let answerRegex = /[\.#\$\/\[\]]/;
       let dataToPush = {
         exerciseId,
         questionIndex,

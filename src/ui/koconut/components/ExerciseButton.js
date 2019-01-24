@@ -1,25 +1,20 @@
 import React, {Component} from 'react';
-import Button from '@material-ui/core/Button';
 import './ExerciseButton.css'
 
-type Props = {
-	concept: string,
-	exerciseType: string,
-	exercise: any,
-	exerciseId: number,
-	index: number,
-	numberOfExercises: number,
-	read: boolean,
-	recommendation: string,
-	showRecommendation: boolean,
-	goToExercise: Function
-};
+// type Props = {
+// 	concept: string,
+// 	exerciseType: string,
+// 	exercise: any,
+// 	exerciseId: number,
+// 	index: number,
+// 	numberOfExercises: number,
+// 	read: boolean,
+// 	recommendation: string,
+// 	showRecommendation: boolean,
+// 	goToExercise: Function
+// };
 
 class ExerciseButton extends Component {
-	constructor(props: Props) {
-		super(props);
-	}
-
 	render() {
 		return (
 				<button className={'exerciseButton'}

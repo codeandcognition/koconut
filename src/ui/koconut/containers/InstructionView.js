@@ -63,21 +63,23 @@ class InstructionView extends Component {
    * @param {string} readOrWrite if the concept is read or write
    */
   sendInstructViewLogDataToFirebase(page:number, concept:string, readOrWrite:string) {
-    let uid = firebase.auth().currentUser;
-    if(uid) {
-      uid = uid.uid;
-    }
-    let pageType = 'instruction';
-    firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
-      pageType,
-      concept,
-      readOrWrite,
-      page,
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    });
+  	if (firebase.auth().currentUser) {
+			let uid = firebase.auth().currentUser;
+			if(uid) {
+				uid = uid.uid;
+			}
+			let pageType = 'instruction';
+			firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/NewPageVisit`).push({
+				pageType,
+				concept,
+				readOrWrite,
+				page,
+				timestamp: firebase.database.ServerValue.TIMESTAMP
+			});
 
-    // Store page read data in firebase using key value pairs (When read from, it will return an array! Super useful for worldview)
-    firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/InstructionsRead/${concept}/${readOrWrite}/${page}`).set('read');
+			// Store page read data in firebase using key value pairs (When read from, it will return an array! Super useful for worldview)
+			firebase.database().ref(`/Users/${uid?uid:'nullValue'}/Data/InstructionsRead/${concept}/${readOrWrite}/${page}`).set('read');
+		}
   }
 
   /**

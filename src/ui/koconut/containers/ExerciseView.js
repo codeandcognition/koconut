@@ -63,7 +63,7 @@ class Exercise extends Component {
 
   componentWillReceiveProps(nextProps: Props) {
   	// scroll to top if navigating to a new exercise
-		if (this.props.exerciseId != nextProps.exerciseId) {
+		if (this.props.exerciseId !== nextProps.exerciseId) {
 			window.scrollTo(0, 0);
 		}
 	}
