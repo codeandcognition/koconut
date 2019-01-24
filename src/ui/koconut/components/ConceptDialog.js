@@ -10,6 +10,7 @@ import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import firebase from 'firebase';
 import ConceptDialogButton from './ConceptDialogButton';
+import ExerciseButton from './ExerciseButton';
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import Progress from './Progress';
 
@@ -182,15 +183,18 @@ class ConceptDialog extends Component {
 		this.filterExercisesByConcept(concept, exerciseType).exercises.forEach((e, i) => {
 			let id = exerciseIds[i];
 			exercises.push(
-					<Link to={`/practice/${this.props.concept}/practice-writing-code`}
-            onClick={() => this.prop.goToExercise(concept, exerciseType,
-            e, id, i, exerciseIds.length)}
-            >
-            <ConceptDialogButton name={e.shortPrompt} read={false}
-              suggestionText={"asdf"} 
-              showInitially={true}
-              maximized={this.state.showRecommendations}
-              color={"#35b"}/>
+					<Link to={`/practice/${this.props.concept}/practice-writing-code`}>
+						<ExerciseButton key={i} // exerciseId
+														concept={concept}
+														exerciseType={exerciseType}
+														exercise={e}
+														exerciseId={id}
+														index={i}
+														numberOfExercises={exerciseIds.length}
+														read={false}
+														recommendation={""}
+														showRecommendation={false}
+														goToExercise={this.props.goToExercise}/>
 					</Link>
 				);
 		});
@@ -209,7 +213,7 @@ class ConceptDialog extends Component {
 						</div>
 						<p>{conceptInfo.definition}</p>
 						<div className={'options'}>
-							<div role="button" className={'resume'}>Resume</div>
+							<Button variant="contained" className={'resume'}>Resume</Button>
 							<div>
 								{/* TODO: Placeholders for now */}
 								<p className={'switch-text'}>
