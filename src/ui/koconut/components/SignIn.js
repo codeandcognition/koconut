@@ -11,6 +11,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Routes from './../../../Routes';
 import LoadingView from '../components/LoadingView';
+import Homepage from '../components/Homepage/Homepage';
+import {Grid, Row, Col} from 'react-flexbox-grid';
 
 class SignIn extends Component {
 
@@ -138,53 +140,75 @@ class SignIn extends Component {
 	 */
   renderForm() {
 		let buttonStyle = {
-			margin: "2px",
-			marginBottom: "15px"
+			marginBottom: "15px",
+      textAlign: 'center',
+      marginRight: '5%',
+      marginTop: 10
 		};
 		let textFieldStyle = {
 			marginBottom: "10px",
-			width: "12vw"
+			// width: "12vw"
+      width: "100%"
 		};
 
 		return (
 				<div
-						style={{textAlign: "center", padding: "10vw"}} className="container">
-					<h1>Koconut</h1>
-					<img style={{width: "10vh" }}
-							 src={"https://i.pinimg.com/originals/bd/87/87/bd8787a601af7682d857f6c365d4421b.png"}
-							 alt={"cocount"} />
-					<h3>a tutor to help you learn</h3>
-					<form>
-						<TextField style={textFieldStyle}
-											 onInput={(e) => this.setState({emailAddress: e.target.value})}
-											 label={"Email Address"}
-											 placeholder={"Enter your email address"}
-											 type={"email"} />
-						<br />
-						<TextField style={textFieldStyle}
-											 onInput={(e) => this.setState({password: e.target.value})}
-											 label={"Password"} placeholder={"Enter your password"}
-											 type="password" />
-					</form>
-					<br />
-					{this.state.errorMessage &&
-					<p style={{textAlign: "left", marginBottom: "0"}}
-						 className={"alert alert-danger"}>{this.state.errorMessage}</p>
-					}
-					<br />
-					<Button style={buttonStyle}
-									variant={"outlined"}
-									onClick={() => this.signInUser()}>Sign In</Button>
-					<br />
-					<Link to={Routes.signup}>
-						<p
-								style={{fontSize: '14px', color: '#e91363', cursor: 'pointer'}}>
-							Create Account
-						</p>
-					</Link>
-					<p onClick={(e) => this.togglePasswordResetView(true)}
-						 style={{marginBottom: "15px", fontSize: '14px', color: '#00BCD4', cursor: 'pointer'}}>Forgot Password</p>
-					<Dialog open={this.state.showPasswordResetView}
+						style={{textAlign: "center", paddingTop: "10vw", width: '100%'}} className="container">
+          <Homepage>
+            <div>
+              <div style={{backgroundColor: 'white',
+              border: "1px solid #4054B2",
+              borderRadius: 10}}>
+                <form style={{width: '100%'}}>
+                  <div style={{width: '90%', margin: 'auto'}}>
+                    <h1 style={{textAlign: 'left', marginTop: 30, fontSize: 25}}>Sign in to continue learning!</h1>
+                    <TextField style={textFieldStyle}
+                            onInput={(e) => this.setState({emailAddress: e.target.value})}
+                            label={"Email Address"}
+                            placeholder={"Enter your email address"}
+                            type={"email"} />
+                  
+                  <TextField style={textFieldStyle}
+                            onInput={(e) => this.setState({password: e.target.value})}
+                            label={"Password"} placeholder={"Enter your password"}
+                            type="password" />
+                  </div>
+                </form>
+                <Grid>
+                <Row>
+                  <Col md={6} sm={6} xs={6}>
+                    <div style={{width: '100%', marginLeft: '5%', textAlign: 'left'}}>
+                      <Button style={buttonStyle}
+                          variant={"outlined"}
+                          color={"primary"}
+                          onClick={() => this.togglePasswordResetView(true)}>Forgot password</Button>
+                    </div>
+                  </Col>
+                  <Col md={6} sm={6} xs={6}>
+                    <div style={{width: '100%', textAlign: 'right'}}>
+                      <Button style={buttonStyle}
+                          variant={"contained"}
+                          color={"primary"}
+                          onClick={() => this.signInUser()}>Sign In</Button>
+                    </div>
+                  </Col>
+                </Row>
+                </Grid>
+              </div>
+              <p style={{textAlign: 'left', marginLeft: '2%', marginTop: '2%'}}>Don't have an account? <Link to={Routes.signup}>
+                <span>
+                  Create Account
+                </span>
+              </Link></p>
+              {this.state.errorMessage &&
+              <p style={{textAlign: "left", marginBottom: "0"}}
+                className={"alert alert-danger"}>{this.state.errorMessage}</p>
+              }
+            </div>
+          </Homepage>
+					
+					{/** Sign in dialog boxes */}
+          <Dialog open={this.state.showPasswordResetView}
 									title={"Reset Password"}
 									primary={true}
 									aria-labelledby="form-dialog-title">
