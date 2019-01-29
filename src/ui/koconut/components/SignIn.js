@@ -154,7 +154,6 @@ class SignIn extends Component {
 		return (
 				<div
 						style={{textAlign: "center", paddingTop: "10vw", width: '100%'}} className="container">
-					{/* <h1>Koconut</h1> */}
           <Homepage>
             <div>
               <div style={{backgroundColor: 'white',
@@ -177,7 +176,7 @@ class SignIn extends Component {
                 </form>
                 <Grid>
                 <Row>
-                  <Col md={6}>
+                  <Col md={6} sm={6} xs={6}>
                     <div style={{width: '100%', marginLeft: '5%', textAlign: 'left'}}>
                       <Button style={buttonStyle}
                           variant={"outlined"}
@@ -185,7 +184,7 @@ class SignIn extends Component {
                           onClick={() => this.togglePasswordResetView(true)}>Forgot password</Button>
                     </div>
                   </Col>
-                  <Col md={6}>
+                  <Col md={6} sm={6} xs={6}>
                     <div style={{width: '100%', textAlign: 'right'}}>
                       <Button style={buttonStyle}
                           variant={"contained"}
@@ -208,7 +207,7 @@ class SignIn extends Component {
             </div>
           </Homepage>
 					
-					
+					{/** Sign in dialog boxes */}
           <Dialog open={this.state.showPasswordResetView}
 									title={"Reset Password"}
 									primary={true}
