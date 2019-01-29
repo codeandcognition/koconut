@@ -161,7 +161,7 @@ class SignIn extends Component {
               borderRadius: 10}}>
                 <form style={{width: '100%'}}>
                   <div style={{width: '90%', margin: 'auto'}}>
-                    <h1 style={{textAlign: 'left', marginTop: 30, fontSize: 25}}>Sign in to learn!</h1>
+                    <h1 style={{textAlign: 'left', marginTop: 30, fontSize: 25}}>Sign in to continue learning!</h1>
                     <TextField style={textFieldStyle}
                             onInput={(e) => this.setState({emailAddress: e.target.value})}
                             label={"Email Address"}
