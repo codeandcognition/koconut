@@ -46,6 +46,7 @@ header {
 .submit-container {
   display: flex;
   justify-content: center;
+  max-height: 4em;
   /*background-color: $component-background;*/ }
 
 .btn.btn-submit.click {
