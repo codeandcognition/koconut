@@ -123,7 +123,7 @@ class App extends Component {
     codeTheme: string,
     timesGotQuestionWrong: number[],
     followupTimesGotQuestionWrong: any[],
-    exerciseId: string
+    exerciseId: string,
   };
 
   constructor() {
@@ -831,7 +831,8 @@ class App extends Component {
   // just changing displaytype
   submitTryAgain(questionIndex: number, followupIndex: number) {
     let tempFeedback = (followupIndex === -1) ? this.state.feedback : this.state.followupFeedback;
-    tempFeedback[questionIndex] = null;
+    // console.log(tempFeedback[questionIndex]);
+    // tempFeedback[questionIndex] = null;
     this.setState({
       display: displayType.exercise,
       feedback: (followupIndex === -1) ? tempFeedback : this.state.feedback,
