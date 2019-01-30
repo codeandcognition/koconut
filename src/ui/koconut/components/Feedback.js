@@ -133,7 +133,10 @@ class Feedback extends Component {
         </div>
         <div className="feedback-ok">
           {!correctBool && !this.state.gaveUp &&
-            <div style={{display: "flex", justifyContent: "flex-end"}}><Button color={"primary"} variant="outlined" onClick={this.props.submitTryAgain}>Try Again</Button>
+            <div style={{display: "flex", justifyContent: "flex-end"}}>
+              {/* Note: to retry after an imperfect submission, learners don't have to hit try again */}
+              {/*<Button color={"primary"} variant="outlined" onClick={this.props.submitTryAgain}>
+                  Try Again</Button>*/}
               
                 <Button style={{marginLeft: "10px"}} variant="outlined" onClick={() => {
                   this.props.addGaveUp(this.props.questionIndex, this.props.fIndex);
