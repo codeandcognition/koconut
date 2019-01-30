@@ -123,9 +123,10 @@ class Information extends Component {
    * Returns JSX for (or not for) the Response container given the current props
    * @param question question object in Exercise
    * @param index index of question in Exercise
+	 * @param hintFor index of the question for which hint is active (only relevant for table questions)
    * @returns JSX for the Response container
    */
-  renderResponseView(question: any, index: number, fIndex: number) {
+  renderResponseView(question: any, index: number, fIndex: number, hintFor: number) {
     let type = question.type;
 
     let parentFeedback = this.state.feedback[index];
@@ -133,28 +134,29 @@ class Information extends Component {
         && this.state.followupFeedback[index]) ? this.state.followupFeedback[index][fIndex] : this.state.followupFeedback[index];
     let feedback = fIndex === -1 ? parentFeedback : followupFeedback;
 
-      return Types.isInlineResponseType(type) && type !== Types.writeCode
-      // || (this.props.feedback[index] &&
-      //       (question.type !=="table" &&
-      //       question.type !=="multipleChoice" &&
-      //       question.type !=="selectMultiple")
-      //       ) 
-          ? <div/> :
-          <Response
-            key={"response"+index}
-            type={type}
-            choices={question.choices}
-            answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
-            questionIndex={index}
-            question={question}
-            updateHandler={this.props.updateHandler}
-            feedback={feedback}
-            submitOk={this.props.submitOk}
-            submitTryAgain={this.props.submitTryAgain}
-            mode={this.props.mode}
-            submitHandler={this.props.submitHandler}
-            fIndex={fIndex}
-            />
+		return Types.isInlineResponseType(type) && type !== Types.writeCode
+		// || (this.props.feedback[index] &&
+		//       (question.type !=="table" &&
+		//       question.type !=="multipleChoice" &&
+		//       question.type !=="selectMultiple")
+		//       )
+				? <div/> :
+				<Response
+					key={"response"+index}
+					type={type}
+					choices={question.choices}
+					answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
+					questionIndex={index}
+					question={question}
+					hintFor={hintFor}
+					updateHandler={this.props.updateHandler}
+					feedback={feedback}
+					submitOk={this.props.submitOk}
+					submitTryAgain={this.props.submitTryAgain}
+					mode={this.props.mode}
+					submitHandler={this.props.submitHandler}
+					fIndex={fIndex}
+					/>
   }
 
   /**
@@ -205,7 +207,6 @@ class Information extends Component {
   }
 
   render() {
-
     // todo count correct correctly
     let correctCount = this.state.feedback.reduce((acc, item, index) => {
           if (this.state.exercise.questions[index].type === "checkboxQuestion" ||

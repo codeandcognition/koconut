@@ -27,7 +27,8 @@ class Response extends Component {
     submitHandler: Function,
     submitTryAgain: Function,
     question: any,
-    fIndex: number
+    fIndex: number,
+    hintFor: number
   };
 
   /**
@@ -71,6 +72,7 @@ class Response extends Component {
                           fIndex={this.props.fIndex}
                           answer={answer[index]}
                           prompt={this.props.question.prompt}
+                          hintFor={this.props.hintFor}
                 />;
       case(Types.checkboxQuestion):
         return <CheckboxQuestion choices={choices} inputHandler={update} questionIndex={index} feedback={this.props.feedback}
