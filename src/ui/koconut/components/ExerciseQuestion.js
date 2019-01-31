@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import Types from '../../../data/ExerciseTypes.js';
 import Submit from './Submit';
+import HintButton from './Hint';
 import AceEditor from 'react-ace';
 import 'brace/mode/python';
+import HintContainer from '../containers/HintContainer';
 
 type Props = {
 	question: any,
@@ -10,6 +12,7 @@ type Props = {
 	renderResponseView: Function,
 	answer: any,
 	submitHandler: Function,
+	hintRequestHandler: Function
 };
 
 class ExerciseQuestion extends Component {
@@ -18,11 +21,13 @@ class ExerciseQuestion extends Component {
     this.state = {
       code: '',
       mode: 'python',
-      theme: 'textmate'
+      theme: 'textmate',
+			hintForIndex: -1,
     };
 
-     this.renderAce = this.renderAce.bind(this);
+    this.renderAce = this.renderAce.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.hintRequestHandler = this.hintRequestHandler.bind(this);
   }
 
    /**
@@ -77,6 +82,55 @@ class ExerciseQuestion extends Component {
     />
   }
 
+  hintRequestHandler() {
+  	// if table question
+  	if (this.props.question.data) {
+			// if first time
+			let target = 2;
+			if (!this.props.feedback) {
+				let table = this.props.answer[0];
+				target = this.getQuestionNumber(table);
+			} else {
+				target = this.getQuestionNumber(this.props.feedback)
+			}
+			// do something to activate the hint!
+			this.setState({
+				hintForIndex: target,
+				hintFor: this.props.question.data[target]
+			});
+		} else {
+			this.setState({
+				hintForIndex: -1,
+				hintFor: this.props.question
+			});
+		}
+	}
+
+	/**
+	 * getQuestionNumber returns the question for which the hint will be displayed
+	 *
+	 * @param table -- is the newly constructed answer array or the feedback array
+	 * @returns {number}
+	 */
+	getQuestionNumber(table) {
+		if (!table) {
+			return 2;
+		}
+		let target = 0;
+		for (let i = 0; i < table.length; i++) {
+			for (let j = 0; j < table[i].length; j++) {
+				target++;
+				if (j !== 0 && (!table[i][j] || table[i][j] === "incorrect")) {
+					return target
+				}
+			}
+		}
+	}
+
+	renderHint() {
+		return <HintContainer content={this.state.hintFor.hint}/>
+	}
+
   render() {
     // determine whether submit should be disabled
     // to avoid evaluating incomplete answers
@@ -108,22 +162,32 @@ class ExerciseQuestion extends Component {
 				disableSubmit = false;
       }
     }
+
+    let submitButtonText = this.props.feedback ? "Try Again" : "Submit";
+
     return (
       <div>
         <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
           {this.props.question.code && this.props.question.type !== Types.writeCode && this.props.renderCodeView(this.props.question, this.props.index, this.props.fIndex, this.renderAce)}
           <div style={{width: "100%", margin: "0", padding: "0"}}>
-            {this.props.renderResponseView(this.props.question, this.props.index, this.props.fIndex)}
-            {!(this.props.feedback) &&
-            <Submit disabled={disableSubmit}
-										submitHandler={() => {
-                      window.scrollTo(0, 0);
-                      this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex) 
-                    }
-                    }
-                    /> 
-                    
-            }
+            {this.props.renderResponseView(this.props.question, this.props.index, this.props.fIndex, this.state.hintForIndex)}
+						<div style={{display: 'flex', justifyContent: 'space-between', margin: '0.5% 2% 0.5% 2%'}}>
+							<div style={{display: 'flex'}}>
+								<HintButton hintRequestHandler={this.hintRequestHandler} disableHint={false}/>
+								{this.state.hintFor && this.renderHint()}
+							</div>
+							{(this.props.feedback !== null) &&
+							<Submit text={submitButtonText}
+											disabled={disableSubmit}
+											submitHandler={() => {
+												window.scrollTo(0, 0);
+												this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex)
+											}
+											}
+							/>
+
+							}
+						</div>
           </div>
         </div>
         {this.props.renderFeedback}

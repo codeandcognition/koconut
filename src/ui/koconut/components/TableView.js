@@ -15,7 +15,8 @@ type Props = {
   inputHandler: Function,
   questionIndex: number,
   question: any,
-  fIndex: number
+  fIndex: number,
+  hintFor: number,
 }
 
 /**
@@ -30,7 +31,8 @@ class TableView extends Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      answer: []
+      answer: [],
+      hintFor: -1
     };
   }
 
@@ -42,11 +44,28 @@ class TableView extends Component {
    * @param col col of question
    */
   updateAnswer(choice: string, row: number, col: number) {
+    let cols = this.props.question.colNames.length;
+    let rows = this.props.question.data.length / cols;
     let tempAns = this.state.answer;
 
-    if(!tempAns[row]) {
-      tempAns[row] = [];
+    for (let i = 0; i < rows; i++) {
+      if (!tempAns[i]) {
+        let temp = [];
+				for (let j = 0; j < this.props.question.colNames.length; j++) {
+					temp.push("");
+				}
+				tempAns[i] = temp;
+      }
     }
+
+
+    // if(!tempAns[row]) {
+    //   let temp = [];
+    //   for (let i = 0; i < this.props.question.colNames.length; i++) {
+    //     temp.push("");
+    //   }
+    //   tempAns[row] = temp;
+    // }
 
     tempAns[row][col] = choice;
     this.props.inputHandler(tempAns, this.props.questionIndex, this.props.fIndex);
@@ -70,7 +89,7 @@ class TableView extends Component {
 	 * @param nextProps
 	 */
   componentWillReceiveProps(nextProps : Props) {
-		this.setState({answer: nextProps.answer ? nextProps.answer : []});
+		this.setState({answer: nextProps.answer ? nextProps.answer : [], hintFor: nextProps.hintFor});
 	}
 
   /**
@@ -92,18 +111,19 @@ class TableView extends Component {
       return this.renderMarkdown(question.code);
     }
 
-    //if thispropsfeedback, set disabled
+    // to support hints, don't disable the buttons
     if(question.type === "multipleChoice") {
       let selected = this.state.answer[row] ? this.state.answer[row][col] : null;
       return <div>
         {question.choices && question.choices.map((d,i) => {
             return <span key={`choice${i}-${row}-${col}`}>
               <span onClick={() => {
-                if(!this.props.feedback) {
-                  this.updateAnswer(d, row, col);
-                }
+                // if(!this.props.feedback) {
+                //   this.updateAnswer(d, row, col);
+                // }
+								this.updateAnswer(d, row, col);
               }}
-                  className={"custmct choicet " + (selected === d ? "answert":"" ) + " " + (this.props.feedback ? "disabledt" : "notdisabledt")}
+                  className={"custmct choicet " + (selected === d ? "answert":"" ) /* + " " + (this.props.feedback ? "disabledt" : "notdisabledt") */}
               >{d}</span>
             </span>
           })
@@ -111,14 +131,15 @@ class TableView extends Component {
       </div>
     }
 
+    // to support hints, don't disable the fields
     if(question.type === "fillBlank") {
       return <div>
         <textarea onChange={(event) => {
-          if(!this.props.feedback) {
-            this.updateAnswer(event.target.value, row, col);
-          }
-        }} value={this.state.answer[row] ? this.state.answer[row][col] : ''}
-           disabled={this.props.feedback} className={"blank"}>
+          // if(!this.props.feedback) {
+          //   this.updateAnswer(event.target.value, row, col);
+          // }
+					this.updateAnswer(event.target.value, row, col);
+        }} value={this.state.answer[row] ? this.state.answer[row][col] : ''} className={"blank"}>
         </textarea>
       </div>
     }
@@ -171,7 +192,6 @@ class TableView extends Component {
           </TableHead>
           <TableBody>
             {augmentedCells.map((d, i) => {
-
               return (
                   <TableRow key={"row-" + i}>
                   {
@@ -185,6 +205,14 @@ class TableView extends Component {
                           correctness = "table-correct";
                         }
                       }
+
+											let cols = this.props.question.colNames.length;
+											let activeHint =  ((i * cols) + j) + 1;
+
+											if (this.state.hintFor === activeHint && (correctness === "table-wrong" || correctness === "")) {
+											  correctness += " table-hint"
+                      }
+
                       return <TableCell key={"cell"+i+j} className={correctness !== "" ? correctness : "reg"}>
                         {this.generateCell(e,i,j)}
                       </TableCell>
@@ -200,7 +228,6 @@ class TableView extends Component {
   }
 
   render() {
-
     return (
         <div className='table-view' style={{textAlign: "left"}}>
           <ReactMarkdown className={"flex-grow-1"}

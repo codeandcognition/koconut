@@ -9,7 +9,8 @@ import './Submit.css';
 class Submit extends Component {
   props: {
     submitHandler: Function,
-    disabled: boolean
+    disabled: boolean,
+    text: string
   };
 
   render() {
@@ -18,7 +19,7 @@ class Submit extends Component {
           <button disabled={this.props.disabled}
                   className={"btn btn-submit click"}
                   onClick={this.props.submitHandler}>
-            Submit
+            {this.props.text}
           </button>
         </div>
     );
