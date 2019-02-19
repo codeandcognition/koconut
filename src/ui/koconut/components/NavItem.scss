@@ -1,0 +1,28 @@
+.recommendation {
+    font-family: Roboto;
+    font-style: italic;
+    font-weight: bold;
+    line-height: normal;
+    font-size: 1em;
+    color: #4054B2;
+    text-align: left;
+    
+}
+
+.nav-item {
+    display: block;
+    cursor: pointer;
+}
+
+.nav-item-text {
+    text-align: left;
+    padding: 0;
+}
+
+.nav-item-info {
+    display: flex !important; 
+}
+
+.item-status {
+    margin: 0.5%;
+}
