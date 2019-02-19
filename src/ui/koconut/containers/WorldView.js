@@ -4,6 +4,7 @@ import { withRouter} from "react-router-dom";
 import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
+import SideNavigation from './../components/SideNavigation';
 import ConceptDialog from './../components/ConceptDialog';
 import './WorldView.css';
 import cytoscape from 'cytoscape';
@@ -280,15 +281,26 @@ class WorldView extends Component {
     }
 		return (
 				<div>
-					{this.state.conceptDialog && <ConceptDialog title={this.state.title}
-																											conceptCode={this.state.conceptCode}
-																											open={this.state.conceptDialog}
-																											generateExercise={this.props.generateExercise}
-																											getInstruction={this.props.getInstruction}
-																											exercisesList={this.props.exercisesList}
-																											conceptMapGetter={this.props.conceptMapGetter}
-																											getOrderedConcepts={this.props.getOrderedConcepts}
-																											goToExercise={this.props.goToExercise}/>}
+					{this.state.conceptDialog && 
+            <SideNavigation title={this.state.title} 
+              conceptCode={this.state.conceptCode} 
+              open={this.state.conceptDialog}
+              generateExercise={this.props.generateExercise} 
+              getInstruction={this.props.getInstruction} 
+              exercisesList={this.props.exercisesList} 
+              conceptMapGetter={this.props.conceptMapGetter} 
+              getOrderedConcepts={this.props.getOrderedConcepts} 
+              goToExercise={this.props.goToExercise} />}/>
+          }
+					{/*{this.state.conceptDialog && <ConceptDialog title={this.state.title}*/}
+																											{/*conceptCode={this.state.conceptCode}*/}
+																											{/*open={this.state.conceptDialog}*/}
+																											{/*generateExercise={this.props.generateExercise}*/}
+																											{/*getInstruction={this.props.getInstruction}*/}
+																											{/*exercisesList={this.props.exercisesList}*/}
+																											{/*conceptMapGetter={this.props.conceptMapGetter}*/}
+																											{/*getOrderedConcepts={this.props.getOrderedConcepts}*/}
+																											{/*goToExercise={this.props.goToExercise}/>}*/}
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
 		);
