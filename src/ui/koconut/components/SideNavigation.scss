@@ -5,8 +5,26 @@
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #EEEEEE;
+  background-color: #eceff1;/* #EEEEEE;*/
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
+  z-index: 5;
+  border: 0.5px solid #C4C4C4;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sidebar-close {
+  cursor: pointer;
+  margin: 1%;
+  color: #e91e63;
+  font-size: 2em;
+}
+
+.sidebar-close:hover {
+  color: #e57373;
 }
