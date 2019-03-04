@@ -35,8 +35,11 @@ class SideNavigation extends Component {
 			readInstructions: [],
 			writeInstructions: []
 		}
-
 		this.generator = new ExerciseGenerator(this.props.getOrderedConcepts);
+	}
+
+	componentDidMount() {
+		this.getInstructionTitles();
 	}
 
 	componentWillReceiveProps(props) {
@@ -90,13 +93,17 @@ class SideNavigation extends Component {
 				this.props.instructionsRead[this.props.conceptCode]["READ"] ?
 				this.props.instructionsRead[this.props.conceptCode]["READ"][index] : null;
 			buttonsList.push(
-				<NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem>
+				<Link key={index} 
+					to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}><NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem></Link>
 			)
 		});
 		let exerciseIds = this.filterExercisesByConcept(this.props.conceptCode, type).exerciseIds;
 		this.filterExercisesByConcept(this.props.conceptCode, type).exercises.map((ex, index) => {
 			buttonsList.push(
-				<NavItem suggestionText={"placeholder for now"} name={ex.shortPrompt}></NavItem>
+				<Link key={"ex" + index} 
+					to={`/practice/${this.props.conceptCode}/practice-writing-code`}
+					onClick={() => this.props.goToExercise(this.props.conceptCode, "WRITE",
+						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem suggestionText={"placeholder for now"} name={ex.shortPrompt}></NavItem></Link>
 			);
 		});
 		return <List style={{ width: '100%' }}>{buttonsList}</List>;
