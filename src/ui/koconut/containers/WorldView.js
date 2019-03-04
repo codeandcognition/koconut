@@ -5,7 +5,6 @@ import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
 import SideNavigation from './../components/SideNavigation';
-// import ConceptDialog from './../components/ConceptDialog';
 import './WorldView.css';
 import cytoscape from 'cytoscape';
 import firebase from 'firebase';
