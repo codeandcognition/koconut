@@ -9,6 +9,7 @@ import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import NavSection from './NavSection';
 import NavItem from './NavItem';
 import './SideNavigation.css';
+import Progress from './Progress';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
@@ -122,14 +123,17 @@ class SideNavigation extends Component {
 						</div>
 						<NavSection
 							title={"Overview"}
+							progress={<Progress percent={25}/>}
 							body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
 						</NavSection>
 						<NavSection
 							title={"Reading"}
+							progress={<Progress percent={25} />}
 							body={readingSection}>
 						</NavSection>
 						<NavSection
 							title={"Writing"}
+							progress={<Progress percent={25} />}
 							body={writingSection}>
 						</NavSection>
 					</CardContent>

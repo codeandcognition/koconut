@@ -29,9 +29,6 @@ class Progress extends Component {
 				<Grid fluid>
 					<Row>
 						<Col md={6}>
-							<p className={'bold-text'}>Reading {this.props.title}</p>
-						</Col>
-						<Col md={6}>
 							<div className="progress" style={{height: 25}}>
 								<div className="progress-bar"
 										 role="progressbar"
