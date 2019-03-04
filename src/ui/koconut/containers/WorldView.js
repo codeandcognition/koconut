@@ -5,7 +5,7 @@ import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
 import SideNavigation from './../components/SideNavigation';
-import ConceptDialog from './../components/ConceptDialog';
+// import ConceptDialog from './../components/ConceptDialog';
 import './WorldView.css';
 import cytoscape from 'cytoscape';
 import firebase from 'firebase';
@@ -36,7 +36,8 @@ class WorldView extends Component {
       conceptDescriptions: {},
       instructionsRead: {}
 		};
-		this.hierarchyContainer = React.createRef();
+    this.hierarchyContainer = React.createRef();
+    this.closeConcept = this.closeConcept.bind(this);
 	}
 
   /**
@@ -227,13 +228,20 @@ class WorldView extends Component {
 	}
 
 	expandConcept(name, conceptCode) {
-		// TODO: set additional props
 		this.setState({
 			conceptDialog: true,
 			title: name,
 			conceptCode: conceptCode
 		});
-	}
+  }
+  
+  closeConcept() {
+    this.setState({
+      conceptDialog: false,
+      title: "",
+      conceptCode: ""
+    });
+  }
 
 	getConceptShortDescriptions() {
 	  let databaseRef = firebase.database().ref("ConceptShortDescriptions");
@@ -285,6 +293,7 @@ class WorldView extends Component {
             <SideNavigation title={this.state.title} 
               conceptCode={this.state.conceptCode} 
               open={this.state.conceptDialog}
+              closeMenu={this.closeConcept}
               generateExercise={this.props.generateExercise} 
               getInstruction={this.props.getInstruction} 
               exercisesList={this.props.exercisesList} 
@@ -292,15 +301,6 @@ class WorldView extends Component {
               getOrderedConcepts={this.props.getOrderedConcepts} 
               goToExercise={this.props.goToExercise} />}/>
           }
-					{/*{this.state.conceptDialog && <ConceptDialog title={this.state.title}*/}
-																											{/*conceptCode={this.state.conceptCode}*/}
-																											{/*open={this.state.conceptDialog}*/}
-																											{/*generateExercise={this.props.generateExercise}*/}
-																											{/*getInstruction={this.props.getInstruction}*/}
-																											{/*exercisesList={this.props.exercisesList}*/}
-																											{/*conceptMapGetter={this.props.conceptMapGetter}*/}
-																											{/*getOrderedConcepts={this.props.getOrderedConcepts}*/}
-																											{/*goToExercise={this.props.goToExercise}/>}*/}
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
 		);

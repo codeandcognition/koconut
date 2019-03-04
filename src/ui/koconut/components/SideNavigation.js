@@ -23,6 +23,7 @@ type Props = {
 	conceptMapGetter: any,
 	getOrderedConcepts: Function,
 	goToExercise: Function,
+	closeMenu: Function,
 };
 
 class SideNavigation extends Component {
@@ -39,7 +40,12 @@ class SideNavigation extends Component {
 	}
 
 	componentWillReceiveProps(props) {
-		this.getInstructionTitles();
+		this.setState({
+			title: props.title,
+			conceptCode: props.conceptCode,
+			readInstructions: [],
+			writeInstructions: []
+		}, this.getInstructionTitles());
 	}
 
 	getInstructionTitles() {
@@ -99,13 +105,13 @@ class SideNavigation extends Component {
 	render() {
 		let readingSection = this.constructButtonList(this.state.readInstructions, "READ");
 		let writingSection = this.constructButtonList(this.state.writeInstructions, "WRITE");
-
+		let ref = this;
 		return (
 				<div id={"sidenav"} className={"sidebar"}>
 					<CardContent>
 						<div className={"sidebar-header"}>
 							<h2>{this.state.title}</h2>
-							<i className="far fa-times-circle sidebar-close"></i>
+							<i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>
 						</div>
 						<NavSection
 							title={"Overview"}
