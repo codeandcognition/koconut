@@ -298,7 +298,8 @@ class WorldView extends Component {
               exercisesList={this.props.exercisesList} 
               conceptMapGetter={this.props.conceptMapGetter} 
               getOrderedConcepts={this.props.getOrderedConcepts} 
-              goToExercise={this.props.goToExercise} />}/>
+              goToExercise={this.props.goToExercise} />} 
+              persist={false}/>
           }
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
