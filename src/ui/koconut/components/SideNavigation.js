@@ -25,6 +25,7 @@ type Props = {
 	getOrderedConcepts: Function,
 	goToExercise: Function,
 	closeMenu: Function,
+	persist: boolean
 };
 
 class SideNavigation extends Component {
@@ -71,11 +72,11 @@ class SideNavigation extends Component {
 					writeResults.forEach((item) => {
 						writeTitles.push(item.title);
 					});
+					componentRef.setState({
+						readInstructions: readTitles,
+						writeInstructions: writeTitles
+					});
 				}
-				componentRef.setState({
-					readInstructions: readTitles,
-					writeInstructions: writeTitles
-				});
 			}
 		});
 	}
@@ -119,7 +120,7 @@ class SideNavigation extends Component {
 					<CardContent>
 						<div className={"sidebar-header"}>
 							<h2>{this.state.title}</h2>
-							<i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>
+						{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
 						</div>
 						<NavSection
 							title={"Overview"}
