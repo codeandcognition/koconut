@@ -944,8 +944,12 @@ class App extends Component {
               sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
               exerciseId={this.state.exerciseId}
 							generateExercise={this.generateExercise}
-              hasNextQuestion={this.hasNextQuestion}
-              getOrderedConcepts={this.getOrderedConcepts}
+							hasNextQuestion={this.hasNextQuestion}
+							getInstruction={this.getInstruction}
+							exerciseList={this.state.exerciseList}
+							conceptMapGetter={this.state.conceptMapGetter}
+							getOrderedConcepts={this.getOrderedConcepts}
+							goToExercise={this.goToExercise}
 					/>
 				</div>
     );
@@ -997,8 +1001,12 @@ class App extends Component {
 													 storeUserState={this.storeState}
 													 sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
 													 exerciseId={this.state.exerciseId}
-                           clearCounterAndFeedback={this.clearCounterAndFeedback}
-                           getOrderedConcepts={this.getOrderedConcepts}/>
+													 clearCounterAndFeedback={this.clearCounterAndFeedback}
+													 getInstruction={this.getInstruction}
+													 getOrderedConcepts={this.getOrderedConcepts}
+													 exercisesList={this.state.exerciseList} 
+													 conceptMapGetter={this.state.conceptMapGetter} 
+													 goToExercise={this.goToExercise}/>
 				</div>
 		);
   }
