@@ -9,6 +9,7 @@ import InstructionTitle from '../components/InstructionTitle';
 import InstructionContent from '../components/InstructionContent';
 import LoadingView from '../components/LoadingView';
 import './InstructionView.css';
+import SideNavigation from './../components/SideNavigation';
 
 import 'firebase/auth';
 import 'firebase/database';
@@ -17,7 +18,10 @@ type Props = {
   conceptType: string,
   readOrWrite: string,
 	generateExercise: Function,
-	storeUserState: Function
+	storeUserState: Function,
+	getInstruction: Function,
+	exercisesList: any[],
+	goToExercise: Function,
 }
 
 /**
@@ -257,62 +261,75 @@ class InstructionView extends Component {
     }
     let hasMultiplePages = this.state.instructionList && this.state.instructionList.length > 1;
 
+		console.log(this.props);
     return (
 				<div ref={"instructionView"}>
 					{
 						this.state.instructionList === null && chosenInstruction ? <LoadingView/>
 								:
-								<div className={"overallView"}>
-									<BreadCrumbs
+								<div>
+									<SideNavigation title={this.props.conceptType}
+										conceptCode={this.props.conceptType}
+										open={true}
+										closeMenu={null}
+										generateExercise={this.props.generateExercise}
+										getInstruction={this.props.getInstruction}
+										exercisesList={this.props.exercisesList}
+										conceptMapGetter={this.props.conceptMapGetter}
+										getOrderedConcepts={this.props.getOrderedConcepts}
+										goToExercise={this.props.goToExercise} persist={true} />
+									<div className={"overallView"}>
+										<BreadCrumbs
 											concept={this.props.conceptType}
 											readOrWrite={this.props.readOrWrite}
 											chosenInstruction={chosenInstruction}
 											instructionOrPractice={"INSTRUCTION"}
 											generateExercise={this.props.generateExercise}
 											storeUserState={this.props.storeUserState}
-                      clearCounterAndFeedback={this.props.clearCounterAndFeedback}
+											clearCounterAndFeedback={this.props.clearCounterAndFeedback}
 											sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
 											exerciseId={this.props.exerciseId}
-                      getOrderedConcepts={this.props.getOrderedConcepts}
+											getOrderedConcepts={this.props.getOrderedConcepts}
 											progress={(this.state.currInstructionIndex + 1) + " out of " + (this.state.instructionList && this.state.instructionList.length)}
-									/>
-									{this.state.instructionList && chosenInstruction &&
-                  <div className={"content-container"}>
-                    <button className={"nav-arrow-btn left-arrow"}
-														onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left" style={{fontSize: '1em'}}/></button>
-                    <div className={"instruct-content-container"}>
-                      <InstructionTitle
-                          instruction={chosenInstruction}/>
-                      <InstructionContent
-                          maxInstruction={this.state.instructionList.length}
-                          instruction={chosenInstruction}
-                          currentInstructionIndex={this.state.currInstructionIndex}
-                          prev={this.prevInstruction}
-                          next={this.nextInstruction}
-                      />
-                    </div>
-										{hasMultiplePages && <button className={"nav-arrow-btn" +
-										" right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right"/></button>}
-                  </div>
-									}
-								</div>
-					}
-					{hasMultiplePages && <div className={"dot-navigation-container"}>
-						<div className={"dot-navigation-container2"}>
-							<ul className={"dot-navigation"}>
-								{this.state.instructionList && this.state.instructionList.map((item, index) => {
-									let selectedStyle = {};
-									if (index === this.state.currInstructionIndex) {
-										selectedStyle = {
-											color: "#3f51b5"
+										/>
+										{this.state.instructionList && chosenInstruction &&
+											<div className={"content-container"}>
+												<button className={"nav-arrow-btn left-arrow"}
+													onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left" style={{ fontSize: '1em' }} /></button>
+												<div className={"instruct-content-container"}>
+													<InstructionTitle
+														instruction={chosenInstruction} />
+													<InstructionContent
+														maxInstruction={this.state.instructionList.length}
+														instruction={chosenInstruction}
+														currentInstructionIndex={this.state.currInstructionIndex}
+														prev={this.prevInstruction}
+														next={this.nextInstruction}
+													/>
+												</div>
+												{hasMultiplePages && <button className={"nav-arrow-btn" +
+													" right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right" /></button>}
+											</div>
 										}
-									}
-									return (
-											<li className="dot" key={index} style={selectedStyle} onClick={() => this.navigateToPage(index)}><i className="fas fa-circle"/></li>
-									);
-								})}
-							</ul>
-						</div>
+									</div>
+										</div>
+							}
+							{hasMultiplePages && <div className={"dot-navigation-container"}>
+								<div className={"dot-navigation-container2"}>
+									<ul className={"dot-navigation"}>
+										{this.state.instructionList && this.state.instructionList.map((item, index) => {
+											let selectedStyle = {};
+											if (index === this.state.currInstructionIndex) {
+												selectedStyle = {
+													color: "#3f51b5"
+												}
+											}
+											return (
+													<li className="dot" key={index} style={selectedStyle} onClick={() => this.navigateToPage(index)}><i className="fas fa-circle"/></li>
+											);
+										})}
+									</ul>
+								</div>
 					</div>}
 				</div>
     )
