@@ -185,7 +185,7 @@ class Exercise extends Component {
             exercisesList={this.props.exercisesList}
             conceptMapGetter={this.props.conceptMapGetter}
             getOrderedConcepts={this.props.getOrderedConcepts}
-            goToExercise={this.props.goToExercise} persist={true}/>
+            goToExercise={this.props.goToExercise} persist={true} instructionsMap={this.props.instructionsMap}/>
           </div>
           <div className="exercise-view">
             <BreadCrumbs conceptType={this.props.concept}

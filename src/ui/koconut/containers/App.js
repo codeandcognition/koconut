@@ -254,6 +254,10 @@ class App extends Component {
 				this.conceptMapGetter.on('value', (snap) => {
 					this.setState({conceptMapGetter: snap.val()}, () => {this.updateUserState()});
 				});
+				this.instructionMap = this.props.firebase.database().ref('Instructions');
+				this.instructionMap.on('value', (snap) => {
+					this.setState({ instructionsMap: snap.val() }, () => { this.updateUserState() });
+				});
 			}
 		});
 	}
@@ -949,7 +953,8 @@ class App extends Component {
 							exerciseList={this.state.exerciseList}
 							conceptMapGetter={this.state.conceptMapGetter}
 							getOrderedConcepts={this.getOrderedConcepts}
-							goToExercise={this.goToExercise}
+							goToExercise={this.goToExercise} 
+							instructionsMap={this.state.instructionsMap}
 					/>
 				</div>
     );
@@ -980,7 +985,7 @@ class App extends Component {
                      getOrderedConcepts={this.getOrderedConcepts}
 										 exercisesList={this.state.exerciseList}
 										 conceptMapGetter={this.state.conceptMapGetter}
-										 goToExercise={this.goToExercise}/>
+										 goToExercise={this.goToExercise} instructionsMap={this.state.instructionsMap}/>
 				</div>
     )
   }
@@ -990,7 +995,6 @@ class App extends Component {
    * @private
    */
   _renderInstructionView() {
-
     return(
     		<div>
 					{this.renderNavBar()}
@@ -1006,7 +1010,8 @@ class App extends Component {
 													 getOrderedConcepts={this.getOrderedConcepts}
 													 exercisesList={this.state.exerciseList} 
 													 conceptMapGetter={this.state.conceptMapGetter} 
-													 goToExercise={this.goToExercise}/>
+													 goToExercise={this.goToExercise} 
+													 instructionsMap={this.state.instructionsMap}/>
 				</div>
 		);
   }

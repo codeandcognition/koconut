@@ -280,6 +280,23 @@ class WorldView extends Component {
             a.dependencyKnowledge / a.knowledge));
   }
 
+  renderSidebar() {
+    return (
+      <SideNavigation title={this.state.title}
+        conceptCode={this.state.conceptCode}
+        open={this.state.conceptDialog}
+        closeMenu={this.closeConcept}
+        instructionsMap={this.props.instructionsMap}
+        generateExercise={this.props.generateExercise}
+        getInstruction={this.props.getInstruction}
+        exercisesList={this.props.exercisesList}
+        conceptMapGetter={this.props.conceptMapGetter}
+        getOrderedConcepts={this.props.getOrderedConcepts}
+        goToExercise={this.props.goToExercise}
+        persist={false} />
+    );
+  }
+
 	renderWorld() {
     if (this.hierarchyContainer.current) {
       this.renderCytoscape();
@@ -289,17 +306,7 @@ class WorldView extends Component {
 		return (
 				<div>
 					{this.state.conceptDialog && 
-            <SideNavigation title={this.state.title} 
-              conceptCode={this.state.conceptCode} 
-              open={this.state.conceptDialog}
-              closeMenu={this.closeConcept}
-              generateExercise={this.props.generateExercise} 
-              getInstruction={this.props.getInstruction} 
-              exercisesList={this.props.exercisesList} 
-              conceptMapGetter={this.props.conceptMapGetter} 
-              getOrderedConcepts={this.props.getOrderedConcepts} 
-              goToExercise={this.props.goToExercise} />} 
-              persist={false}/>
+            this.renderSidebar()
           }
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>

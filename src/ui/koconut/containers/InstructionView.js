@@ -260,8 +260,6 @@ class InstructionView extends Component {
       chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
     }
     let hasMultiplePages = this.state.instructionList && this.state.instructionList.length > 1;
-
-		console.log(this.props);
     return (
 				<div ref={"instructionView"}>
 					{
@@ -277,7 +275,7 @@ class InstructionView extends Component {
 										exercisesList={this.props.exercisesList}
 										conceptMapGetter={this.props.conceptMapGetter}
 										getOrderedConcepts={this.props.getOrderedConcepts}
-										goToExercise={this.props.goToExercise} persist={true} />
+										goToExercise={this.props.goToExercise} persist={true} instructionsMap={this.props.instructionsMap} />
 									<div className={"overallView"}>
 										<BreadCrumbs
 											concept={this.props.conceptType}

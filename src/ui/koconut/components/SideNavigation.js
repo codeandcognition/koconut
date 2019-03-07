@@ -35,7 +35,8 @@ class SideNavigation extends Component {
 			title: props.title,
 			conceptCode: props.conceptCode,
 			readInstructions: [],
-			writeInstructions: []
+			writeInstructions: [],
+			instructionsMap: props.instructionsMap
 		}
 		this.generator = new ExerciseGenerator(this.props.getOrderedConcepts);
 	}
@@ -49,35 +50,30 @@ class SideNavigation extends Component {
 			title: props.title,
 			conceptCode: props.conceptCode,
 			readInstructions: [],
-			writeInstructions: []
+			writeInstructions: [],
+			conceptMapGetter: props.conceptMapGetter,
+			instructionsMap: props.instructionsMap
 		}, this.getInstructionTitles());
 	}
 
 	getInstructionTitles() {
-		let databaseRef = firebase.database().ref("Instructions/" + this.props.conceptCode);
-		let componentRef = this;
-		databaseRef.on("value", function (snapshot) {
-			let results = snapshot.val();
-			if (results != null) {
-				let readResults = results["READ"];
-				let writeResults = results["WRITE"];
-				let readTitles = [];
-				let writeTitles = [];
-				if (readResults) {
-					readResults.forEach((item) => {
-						readTitles.push(item.title);
-					});
-				}
-				if (writeResults) {
-					writeResults.forEach((item) => {
-						writeTitles.push(item.title);
-					});
-					componentRef.setState({
-						readInstructions: readTitles,
-						writeInstructions: writeTitles
-					});
-				}
-			}
+		let instructions = this.state.instructionsMap[this.props.conceptCode];
+		let readResults = instructions["READ"];
+		let writeResults = instructions["WRITE"];
+		let readTitles = [];
+		let writeTitles = [];
+		readResults.forEach((item) => {
+			readTitles.push(item.title);
+		});
+		writeResults.forEach((item) => {
+			writeTitles.push(item.title);
+		});
+		this.setState({
+			readInstructions: readTitles,
+			writeInstructions: writeTitles
+		}, () => {
+			console.log(this.state.readInstructions);
+			console.log(this.state.writeInstructions);
 		});
 	}
 
