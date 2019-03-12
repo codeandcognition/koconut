@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react';
+import React, {Component, FunctionComponent} from 'react';
 import ReactMarkdown from 'react-markdown';
 import Prompt from '../components/Prompt';
 import Information from './Information';
@@ -8,6 +8,7 @@ import LoadingView from './../components/LoadingView';
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
 import ExerciseNavigation from '../components/ExerciseNavigation';
+import SideNavigation from './../components/SideNavigation';
 
 type Props = {
   exercise: {
@@ -29,7 +30,10 @@ type Props = {
   timesGotQuestionWrong: [],
   followupTimesGotQuestionWrong: [],
   resetFeedback: Function,
-  sendExerciseViewDataToFirebase: Function
+  sendExerciseViewDataToFirebase: Function,
+  getInstruction: Function,
+  generateExercise: Function,
+  exerciseList: any[]
 }
 
 /**
@@ -129,33 +133,33 @@ class Exercise extends Component {
 
 	renderExercise() {
   	return(
-  			<div>
-					<Prompt exercise={this.props.exercise} />
-					{(this.props.exercise && this.props.exercise.code) && this.renderOverarchingCode()}
-					<Information
-							exercise={this.props.exercise}
-							answer={this.state.answer}
-							followupAnswers={this.state.followupAnswers}
-							updateHandler={(content, index, fIndex) => this.updateAnswers(content, index, fIndex)}
-							feedback={this.props.feedback}
-							followupFeedback={this.props.followupFeedback}
-							submitOk={this.props.submitOk}
-							submitTryAgain={this.props.submitTryAgain}
-							mode={this.props.mode}
-							codeTheme={this.props.codeTheme}
-							toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
-							submitHandler={this.props.submitHandler}
-							timesGotQuestionWrong={this.props.timesGotQuestionWrong}
-							followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
-							nextQuestion={this.props.nextQuestion}
-							resetAnswer={this.resetAnswer}
-					/>
-          <ExerciseNavigation 
-            hasNextQuestion={this.props.hasNextQuestion}
-            nextQuestion={this.props.nextQuestion}
-            concept={this.props.concept}
-            generateExercise={this.props.generateExercise}
-            getOrderedConcepts={this.props.getOrderedConcepts}/>
+        <div>
+            <Prompt exercise={this.props.exercise} />
+            {(this.props.exercise && this.props.exercise.code) && this.renderOverarchingCode()}
+            <Information
+              exercise={this.props.exercise}
+              answer={this.state.answer}
+              followupAnswers={this.state.followupAnswers}
+              updateHandler={(content, index, fIndex) => this.updateAnswers(content, index, fIndex)}
+              feedback={this.props.feedback}
+              followupFeedback={this.props.followupFeedback}
+              submitOk={this.props.submitOk}
+              submitTryAgain={this.props.submitTryAgain}
+              mode={this.props.mode}
+              codeTheme={this.props.codeTheme}
+              toggleCodeTheme={(test) => this.props.toggleCodeTheme(test)}
+              submitHandler={this.props.submitHandler}
+              timesGotQuestionWrong={this.props.timesGotQuestionWrong}
+              followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
+              nextQuestion={this.props.nextQuestion}
+              resetAnswer={this.resetAnswer}
+            />
+            <ExerciseNavigation
+              hasNextQuestion={this.props.hasNextQuestion}
+              nextQuestion={this.props.nextQuestion}
+              concept={this.props.concept}
+              generateExercise={this.props.generateExercise}
+              getOrderedConcepts={this.props.getOrderedConcepts} />
           {/*<ConceptLabel concepts={this.props.exercise &&
            this.props.exercise.concepts}/>*/}
 				</div>
@@ -166,20 +170,34 @@ class Exercise extends Component {
     let styles = {  // TODO put this in the constructor, unnecessary calculations per render
       marginTop: '10%'
     };
-
+    console.log(this.props.exercisesList);
     return (
-        <div className="exercise-view" style={styles}>
-					<BreadCrumbs conceptType={this.props.concept}
-            sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
-            exerciseId={this.props.exerciseId}
-            readOrWrite={this.props.readOrWrite}
-            instructionOrPractice={"PRACTICE"}
+        <div className="exercise-container" style={styles}>
+          <div className="sidebar-menu">
+          <SideNavigation title={this.props.concept}
+            conceptCode={this.props.concept}
+            open={true}
+            closeMenu={null}
             generateExercise={this.props.generateExercise}
-            concept={this.props.concept}
-            clearCounterAndFeedback={this.props.clearCounterAndFeedback}
+            getInstruction={this.props.getInstruction}
+            exercisesList={this.props.exercisesList}
+            conceptMapGetter={this.props.conceptMapGetter}
             getOrderedConcepts={this.props.getOrderedConcepts}
-          />
-					{!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderExercise()}
+            goToExercise={this.props.goToExercise} persist={true} instructionsMap={this.props.instructionsMap}/>
+          </div>
+          <div className="exercise-view">
+            <BreadCrumbs conceptType={this.props.concept}
+              sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
+              exerciseId={this.props.exerciseId}
+              readOrWrite={this.props.readOrWrite}
+              instructionOrPractice={"PRACTICE"}
+              generateExercise={this.props.generateExercise}
+              concept={this.props.concept}
+              clearCounterAndFeedback={this.props.clearCounterAndFeedback}
+              getOrderedConcepts={this.props.getOrderedConcepts}
+            />
+            {!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView/> : this.renderExercise()}
+          </div>
         </div>
     );
   }

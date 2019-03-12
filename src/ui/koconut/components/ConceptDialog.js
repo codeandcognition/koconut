@@ -208,7 +208,6 @@ class ConceptDialog extends Component {
 							<h2>{this.props.title}</h2>
 							<i className="far fa-times-circle icon" onClick={() => this.handleClose()}/>
 						</div>
-						<p>{conceptInfo.definition}</p>
 						<div className={'options'}>
 							<Button variant="contained" className={'resume'}>Resume</Button>
 							<div>

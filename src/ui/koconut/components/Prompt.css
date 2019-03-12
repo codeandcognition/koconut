@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=PT+Sans");
 @import url("https://fonts.googleapis.com/css?family=PT+Sans");
 html {
-  background-color: #f8f8f8;
+  background-color: #fafafa;
   padding: 0px;
   margin: 0px; }
 
@@ -10,7 +10,7 @@ html {
   padding: 0;
   width: 100%;
   min-height: 100%;
-  background-color: #f8f8f8;
+  background-color: #fafafa;
   font-family: "PT Sans", sans-serf;
   padding-bottom: 50px; }
 
@@ -46,7 +46,7 @@ header {
 
 .prompt {
   /* border-bottom: 1px dotted black; */
-  background-color: #f8f8f8;
+  background-color: #fafafa;
   font-family: "PT Sans", sans-serif; }
   .prompt p {
     font-size: 1.25em; }
