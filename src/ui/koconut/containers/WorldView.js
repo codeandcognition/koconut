@@ -167,7 +167,8 @@ class WorldView extends Component {
     	let node = evt.target["_private"]["data"];
     	if (evt.target["_private"].group === "nodes") {
 				let name = node["name"];
-				let conceptCode = node["id"];
+        let conceptCode = node["id"];
+        this.closeConcept();
 				this.expandConcept(name, conceptCode);
 			}
 		});
@@ -281,6 +282,7 @@ class WorldView extends Component {
   }
 
   renderSidebar() {
+    console.log(this.state.conceptCode);
     return (
       <SideNavigation title={this.state.title}
         conceptCode={this.state.conceptCode}
@@ -305,9 +307,7 @@ class WorldView extends Component {
     }
 		return (
 				<div>
-					{this.state.conceptDialog && 
-            this.renderSidebar()
-          }
+					{this.state.conceptDialog && this.renderSidebar() }
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
 		);

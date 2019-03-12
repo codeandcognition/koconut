@@ -1,16 +1,14 @@
 .overallView {
-  padding-top: 100px;
-  height: 100%;
-  padding-left: 5%;
-  padding-right: 5%;
-  padding-bottom: 2%; }
+  margin: 7% auto 7% auto !important;
+  float: right;
+  width: 75%; }
 
 .content-container {
-  width: 100%; }
+  width: 95%;
+  margin: auto; }
 
 .instruct-content-container {
-  margin-left: 10px;
-  margin-right: 10px;
+  margin: auto;
   width: 100%; }
 
 .nav-arrow-btn {

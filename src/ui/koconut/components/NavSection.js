@@ -10,6 +10,16 @@ class NavSection extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        if (this.props.getInstructionTitles) {
+            this.props.getInstructionTitles();
+        }
+    }
+
+    componentWillReceiveProps(props) {
+        // console.log(props);
+    }
+
     render() { 
         let column = {
             flexBasis: '33.33%',

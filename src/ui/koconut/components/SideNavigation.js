@@ -39,6 +39,7 @@ class SideNavigation extends Component {
 			instructionsMap: props.instructionsMap
 		}
 		this.generator = new ExerciseGenerator(this.props.getOrderedConcepts);
+		this.getInstructionTitles = this.getInstructionTitles.bind(this);
 	}
 
 	componentDidMount() {
@@ -49,15 +50,13 @@ class SideNavigation extends Component {
 		this.setState({
 			title: props.title,
 			conceptCode: props.conceptCode,
-			readInstructions: [],
-			writeInstructions: [],
 			conceptMapGetter: props.conceptMapGetter,
 			instructionsMap: props.instructionsMap
 		}, this.getInstructionTitles());
 	}
 
 	getInstructionTitles() {
-		let instructions = this.state.instructionsMap[this.props.conceptCode];
+		let instructions = this.props.instructionsMap[this.props.conceptCode];
 		let readResults = instructions["READ"];
 		let writeResults = instructions["WRITE"];
 		let readTitles = [];
@@ -68,12 +67,14 @@ class SideNavigation extends Component {
 		writeResults.forEach((item) => {
 			writeTitles.push(item.title);
 		});
+		// console.log(readTitles);
+		// console.log(writeTitles);
 		this.setState({
 			readInstructions: readTitles,
 			writeInstructions: writeTitles
 		}, () => {
-			console.log(this.state.readInstructions);
-			console.log(this.state.writeInstructions);
+			// console.log(this.state.readInstructions);
+			// console.log(this.state.writeInstructions);
 		});
 	}
 
@@ -92,11 +93,13 @@ class SideNavigation extends Component {
 				this.props.instructionsRead[this.props.conceptCode]["READ"][index] : null;
 			buttonsList.push(
 				<Link key={index} 
-					to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}><NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem></Link>
+					onClick={() => this.props.getInstruction(this.props.conceptCode, type, index)}
+					to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
+					><NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem></Link>
 			)
 		});
-		let exerciseIds = this.filterExercisesByConcept(this.props.conceptCode, type).exerciseIds;
-		this.filterExercisesByConcept(this.props.conceptCode, type).exercises.map((ex, index) => {
+		let {exercises, exerciseIds} = this.filterExercisesByConcept(this.props.conceptCode, type);
+		exercises.map((ex, index) => {
 			buttonsList.push(
 				<Link key={"ex" + index} 
 					to={`/practice/${this.props.conceptCode}/practice-writing-code`}
@@ -119,16 +122,19 @@ class SideNavigation extends Component {
 						{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
 						</div>
 						<NavSection
+							getInstructionTitles={null} 
 							title={"Overview"}
 							progress={<Progress percent={25}/>}
-							body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
+							body={<ConceptOverview conceptCode={this.props.conceptCode} />}>
 						</NavSection>
 						<NavSection
+							getInstructionTitles={this.getInstructionTitles}
 							title={"Reading"}
 							progress={<Progress percent={25} />}
 							body={readingSection}>
 						</NavSection>
 						<NavSection
+							getInstructionTitles={this.getInstructionTitles}
 							title={"Writing"}
 							progress={<Progress percent={25} />}
 							body={writingSection}>
