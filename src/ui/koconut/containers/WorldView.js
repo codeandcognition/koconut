@@ -282,7 +282,6 @@ class WorldView extends Component {
   }
 
   renderSidebar() {
-    console.log(this.state.conceptCode);
     return (
       <SideNavigation title={this.state.title}
         conceptCode={this.state.conceptCode}

@@ -67,14 +67,9 @@ class SideNavigation extends Component {
 		writeResults.forEach((item) => {
 			writeTitles.push(item.title);
 		});
-		// console.log(readTitles);
-		// console.log(writeTitles);
 		this.setState({
 			readInstructions: readTitles,
 			writeInstructions: writeTitles
-		}, () => {
-			// console.log(this.state.readInstructions);
-			// console.log(this.state.writeInstructions);
 		});
 	}
 
@@ -103,7 +98,7 @@ class SideNavigation extends Component {
 			buttonsList.push(
 				<Link key={"ex" + index} 
 					to={`/practice/${this.props.conceptCode}/practice-writing-code`}
-					onClick={() => this.props.goToExercise(this.props.conceptCode, "WRITE",
+					onClick={() => this.props.goToExercise(this.props.conceptCode, type,
 						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem suggestionText={"placeholder for now"} name={ex.shortPrompt}></NavItem></Link>
 			);
 		});

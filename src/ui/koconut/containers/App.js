@@ -950,7 +950,7 @@ class App extends Component {
 							generateExercise={this.generateExercise}
 							hasNextQuestion={this.hasNextQuestion}
 							getInstruction={this.getInstruction}
-							exerciseList={this.state.exerciseList}
+							exercisesList={this.state.exerciseList}
 							conceptMapGetter={this.state.conceptMapGetter}
 							getOrderedConcepts={this.getOrderedConcepts}
 							goToExercise={this.goToExercise} 
