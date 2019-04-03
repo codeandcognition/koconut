@@ -56,13 +56,12 @@ def runcode_handler():
             resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
             return resp
         
-        if test_output is user_output:
+        if test_output == user_output:
             resp_body = {
                 "pass": True
             }
             resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
             return resp
-        print(user_output, test_output)
         expected, got = ("", "")
         split_user_output = user_output.split("\n")
         split_test_output = test_output.split("\n")
