@@ -44,14 +44,17 @@ def runcode_handler():
         try:
             user_output = subprocess.check_output(["python", "temp/{}.py".format(filename_user_answer)], text=True)
             test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], text=True)
+            
+            # remove the files
             os.remove("temp/{}.py".format(filename_user_answer))
             os.remove("temp/{}.py".format(filename_test_code))
         except subprocess.CalledProcessError as exc:
+            # if there is an error, remove the files and then fail because of an error
             os.remove("temp/{}.py".format(filename_user_answer))
             os.remove("temp/{}.py".format(filename_test_code))
             resp_body = {
                 "pass": False,
-                "failMessage": "Unable to compile code, {}".format(exc.stdout())
+                "failMessage": "Unable to compile code"
             }
             resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
             return resp
