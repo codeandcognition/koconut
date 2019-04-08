@@ -455,20 +455,44 @@ class App extends Component {
    * @return {string[]}
    */
   checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
-    let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
-    let feedbackTemp = (fIndex === -1) ? this.state.feedback : this.state.followupFeedback;
-    let checkerForCorrectness = true;
-    if (questionType === Types.table) {
-    	checkerForCorrectness = this.verifyTableQuestion(question, questionIndex, fIndex, answer, feedbackTemp);
-    } else if (questionType === Types.checkboxQuestion) { // Assumes question.answer and answer are both arrays
-      checkerForCorrectness = this.verifyCheckboxQuestion(question, questionIndex, answer, fIndex, feedbackTemp);
-    } else if (questionType === Types.memoryTable) {
-    	checkerForCorrectness = this.verifyMemoryTable(question, questionIndex, answer, fIndex, feedbackTemp);
-		} else {
-			checkerForCorrectness = this.verifyOtherQuestions(question, questionIndex, answer, fIndex, feedbackTemp, questionType);
+		let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
+		let requestBody = {};
+		requestBody.userAnswer = answer;
+		switch (questionType) {
+			case Types.multipleChoice:
+					requestBody.questionCode = "";
+					requestBody.testCode = "";
+					requestBody.expectedAnswer = question.answer;
+					break;
+			case Types.fillBlank || Types.isInlineResponseType:
+					requestBody.expectedAnswer = question.answer;
+					requestBody.questionCode = question.code ? question.code : "";
+					requestBody.testCode = "";
+					break;
+			case Types.highlightCode:
+					requestBody.userAnswer = answer.trim();
+					requestBody.expectedAnswer = question.answer;
+					requestBody.testCode = "";
+					break
+			case Types.checkboxQuestion:
+					requestBody.questionCode = "";
+					requestBody.testCode = "";
+					requestBody.expectedAnswer = question.answer;
+					break;
+			case Types.memoryTable:
+					requestBody.expectedAnswer = question.answer;
+					requestBody.questionCode = "";
+					requestBody.testCode = "";
+					break;
+			case Types.writeCode:
+					// need to add in pre/post conditions to user answer
+					requestBody.testCode = question.testCode;
+					requestBody.expectedAnswer = "";
+					this.verifyWriteCodeQuestion(requestBody);
+					break;
+			default:
+					return;
 		}
-		this.updateWrongAnswersCount(checkerForCorrectness, questionIndex, fIndex);
-		return feedbackTemp;
   }
 
 	/**
@@ -630,6 +654,31 @@ class App extends Component {
 		});
 	}
 
+
+	verifyWriteCodeQuestion(requestBody: any, questionIndex: number, fIndex: number) {
+			const url = "http://localhost:8080/checker/writecode";
+			const response = fetch(url, {
+				method: "POST",
+				mode: "cors",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(requestBody)
+			})
+			.then(res => {
+				return res.json();
+			})
+			.then(feedback => {
+				if (feedback.failMessage) {
+					this.updateWrongAnswersCount(false, questionIndex, fIndex);
+				}
+				console.log(feedback);
+			})
+			.catch(err => {
+				return err;
+			});
+	}
+
 	/**
 	 *
 	 * @param question
@@ -649,7 +698,53 @@ class App extends Component {
       }
       let index = (fIndex === -1) ? questionIndex: fIndex;
       let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
-      let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
+			let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
+			// @TODO: this needs to be added to question schema
+			let testCode = question.testCode;
+
+			let requestBody = {
+				userCode: learnerAnswer,
+				testCode: testCode
+			};
+
+			// @TODO: set this
+			const correctness_endpoint = "";
+			fetch(correctness_endpoint, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(requestBody)
+			})
+			.then(res => {
+				return res.json()
+			})
+			.then(body => {
+				if (body.pass) {
+					temp[index] = 'correct';
+				} else {
+					temp[index] = 'incorrect';
+					checkerForCorrectness = false;
+					this.setState({
+						error: true,
+						errorMessage: body.failMessage
+					});
+				}
+
+				if (fIndex === -1) {
+					feedbackTemp = temp;
+				} else {
+					feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
+					feedbackTemp[questionIndex] = temp;
+				}
+			})
+			.catch(error => {
+				this.setState({
+					error: true,
+					errorMessage: error
+				});
+			});
+
       let preCondition = question.preCondition ? "\n"+question.preCondition+"\n" : "";
 
       /** 
@@ -766,20 +861,20 @@ class App extends Component {
    */
   submitResponse(answer: any, questionIndex: number, questionType: string, fIndex: number) {
   	if (answer !== null && answer !== undefined) {
-      let feedback = this.checkAnswer(answer, questionIndex, questionType, fIndex);
-      ResponseEvaluator.evaluateAnswer(this.state.exercise, answer
-          , () => { // TODO: Reconfigure for followup question answer structure
-        this.setState({
-          feedback: (fIndex === -1) ? feedback : this.state.feedback,
-          followupFeedback: (fIndex === -1) ? this.state.followupFeedback : feedback,
-          nextConcepts: this.getConcepts(),
-          display: this.state.exercise.type !== 'survey'
-              ? displayType.exercise
-              : (this.state.conceptOptions > 1
-                  ? displayType.concept
-                  : displayType.exercise),
-        });
-      }, questionIndex, questionType, feedback, this.state.exerciseId);
+      this.checkAnswer(answer, questionIndex, questionType, fIndex);
+      // ResponseEvaluator.evaluateAnswer(this.state.exercise, answer
+      //     , () => { // TODO: Reconfigure for followup question answer structure
+      //   this.setState({
+      //     feedback: (fIndex === -1) ? feedback : this.state.feedback,
+      //     followupFeedback: (fIndex === -1) ? this.state.followupFeedback : feedback,
+      //     nextConcepts: this.getConcepts(),
+      //     display: this.state.exercise.type !== 'survey'
+      //         ? displayType.exercise
+      //         : (this.state.conceptOptions > 1
+      //             ? displayType.concept
+      //             : displayType.exercise),
+      //   });
+      // }, questionIndex, questionType, feedback, this.state.exerciseId);
     }
   }
 
