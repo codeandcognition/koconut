@@ -170,7 +170,6 @@ class Exercise extends Component {
     let styles = {  // TODO put this in the constructor, unnecessary calculations per render
       marginTop: '10%'
     };
-    console.log(this.props.exercisesList);
     return (
         <div className="exercise-container" style={styles}>
           <div className="sidebar-menu">
