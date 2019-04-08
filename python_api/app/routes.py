@@ -5,12 +5,14 @@ import json
 import secrets
 import subprocess
 import os
+from flask_cors import cross_origin
 
 JSON_TYPE = "application/json"
 TEXT_TYPE = "text/plain"
 
 
 @app.route("/checker/writecode", methods=["POST"])
+@cross_origin()
 def writecode_handler():
     # Make sure is POST request
     if request.method != "POST":
@@ -98,6 +100,7 @@ def multiplechoice_handler():
         resp = Response("Request body must be JSON",
                         status=415, mimetype=TEXT_TYPE)
         return resp
+
 
     
 
