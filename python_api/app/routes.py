@@ -74,7 +74,7 @@ def writecode_handler():
     split_user_output = user_output.split("\n")
     split_test_output = test_output.split("\n")
     for idx, line in enumerate(split_test_output):
-        if split_user_output[idx] is not line:
+        if split_user_output[idx] != line:
             expected = line
             got = split_user_output[idx]
             break
