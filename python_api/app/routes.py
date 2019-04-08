@@ -101,8 +101,98 @@ def multiplechoice_handler():
                         status=415, mimetype=TEXT_TYPE)
         return resp
 
+    # get request body
+    req_body = request.get_json()
+    user_answer = req_body.get("userAnswer", "")
+    expected_answer = req_body.get("expectedAnswer", "")
 
+    if expected_answer != user_answer:
+        resp_body = {
+            "pass": False,
+            "failMessage": "Wrong answer selected"
+        }
+        resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
+        return resp
+        
+    resp_body = {
+        "pass": True
+    }
+    resp = Response(json.dump(resp_body), status=200, mimetype=JSON_TYPE)
+    return resp
+
+@app.route("/checker/shortanswer", methods=["Post"])
+def shortanswer_handler():
+    # Make sure is POST request
+    if request.method != "POST":
+        resp = Response("Must be a POST request",
+                        status=405, mimetype=TEXT_TYPE)
+        return resp
+
+    # Make sure is JSON request body
+    if (is_req_json_type(request)):
+        resp = Response("Request body must be JSON",
+                        status=415, mimetype=TEXT_TYPE)
+        return resp
+
+    # get request body
+    req_body = request.get_json()
+    user_answer = req_body.get("userAnswer", "")
+    question_code = req_body.get("questionCode", "")
+    expected_answer = req_body.get("expectedAnswer", "")
+
+    if question_code != "":
+        # Create hash for temp file
+        filename_test_code = secrets.token_urlsafe(16)
+
+        # put code into temp file
+        file_test_code = open("temp/{}.py".format(filename_test_code), "w")
+        file_test_code.write(question_code)
+
+        # close file
+        file_test_code.close()
+
+        # check std output of file
+        test_output = ""
+        try:
+            test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], universal_newlines=True)
+
+            # remove file
+            os.remove("temp/{}.py".format(filename_test_code))
+        except subprocess.CalledProcessError as exc:
+            os.remove("temp/{}.py".format(filename_test_code))
+            # should never hit here
+            resp = Response("Test failed to be parsed. Internal server error", status=500, mimetype=TEXT_TYPE)
+            return resp
+   
+        if test_output != user_answer:
+            expected, got = ("", "")
+            split_user_output = user_answer.split("\n")
+            split_test_output = test_output.split("\n")
+            for idx, line in enumerate(split_test_output):
+                if split_user_output[idx] != line:
+                    expected = line
+                    got = split_user_output[idx]
+                    break
+            resp_body = {
+                "pass": False,
+                "failMessage": "Expected {} but got {}".format(expected, got)
+            }
+            resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
+            return resp
     
+    if user_answer != expected_answer:
+        resp_body = {
+            "pass": False,
+            "failMessage": "Expected {} but got {}".format(expected_answer, user_answer)
+        }
+        resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
+        return resp      
+    
+    resp_body = {
+        "pass": True
+    }
+    resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
+    return resp
 
 def is_req_json_type(request):
     return request.headers.get("Content-Type") != JSON_TYPE
