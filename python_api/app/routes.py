@@ -117,7 +117,8 @@ def multiplechoice_handler():
     resp_body = {
         "pass": True
     }
-    resp = Response(json.dump(resp_body), status=200, mimetype=JSON_TYPE)
+
+    resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
 
 @app.route("/checker/shortanswer", methods=["Post"])
