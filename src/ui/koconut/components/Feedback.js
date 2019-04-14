@@ -32,12 +32,12 @@ class Feedback extends Component {
     />
   }
 
-  showFeedbackMessage(type: string, timeswrong: any, feedback: any, gotCorrect: string) {
+  showFeedbackMessage(type: string, timeswrong: any, feedback: any, correctness: string) {
     if(type === "multipleChoice") {
       let answer = this.props.answer[this.props.questionIndex];
       return <div>{feedback[answer]}</div>
     } else {
-      if(gotCorrect === "correct") {
+      if(correctness.pass) {
         return <div>{feedback ? feedback.correct : ''}</div>
       } else {
         if(feedback && feedback.incorrect && timeswrong > feedback.incorrect.length) {
@@ -119,7 +119,7 @@ class Feedback extends Component {
       gotCorrect = this.props.feedback;
     }
 
-    let correctBool = gotCorrect === "correct";
+    let correctBool = this.props.feedback.pass;
     return (
       <div style={{width: "100%", textAlign: "left"}} className="feedback">
         <h4 style={{fontWeight: "bold", textAlign: "left"}}>Feedback</h4>

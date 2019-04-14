@@ -166,7 +166,7 @@ class Information extends Component {
    * @returns JSX for the Feedback container
    */
   renderFeedback(question: any, index: number, fIndex: number) {
-    let parentFeedback = this.state.feedback[index];
+    let parentFeedback = this.state.feedback;
     let followupFeedback = (this.state.followupFeedback
                             && this.state.followupFeedback[index]) ? this.state.followupFeedback[index][fIndex] : this.state.followupFeedback[index];
     let feedback = fIndex === -1 ? parentFeedback : followupFeedback;
@@ -208,38 +208,39 @@ class Information extends Component {
 
   render() {
     // todo count correct correctly
-    let correctCount = this.state.feedback.reduce((acc, item, index) => {
-          if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
-              this.state.exercise.questions[index].type === "table") {
-            return (item && item.toString().indexOf("incorrect") === -1 &&
-            item.toString().indexOf("correct") !== -1) ? acc + 1 : acc;
-          } else {
-            return item === "correct" ? acc + 1 : acc;
-          }
-        }
-    , 0);
+    // let correctCount = this.state.feedback.reduce((acc, item, index) => {
+    //       if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
+    //           this.state.exercise.questions[index].type === "table") {
+    //         return (item && item.toString().indexOf("incorrect") === -1 &&
+    //         item.toString().indexOf("correct") !== -1) ? acc + 1 : acc;
+    //       } else {
+    //         return item === "correct" ? acc + 1 : acc;
+    //       }
+    //     }
+    // , 0);
 
-    this.state.followupFeedback.forEach((feedback) => {
-      let count = feedback && feedback.reduce((acc, item, index) => {
-        if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
-            this.state.exercise.questions[index].type === "table") {
-          return (item && item.toString().indexOf("incorrect") === -1 &&
-              item.toString().indexOf("correct") !== -1) ? acc + 1 : acc;
-        } else {
-          return item === "correct" ? acc + 1 : acc;
-        }
-      }, 0);
-      correctCount = correctCount + count;
-    });
+    // if (this.state.followupFeedback) {
+    //   this.state.followupFeedback.forEach((feedback) => {
+    //     let count = feedback && feedback.reduce((acc, item, index) => {
+    //       if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
+    //         this.state.exercise.questions[index].type === "table") {
+    //         return (item && item.toString().indexOf("incorrect") === -1 &&
+    //           item.toString().indexOf("correct") !== -1) ? acc + 1 : acc;
+    //       } else {
+    //         return item === "correct" ? acc + 1 : acc;
+    //       }
+    //     }, 0);
+    //     correctCount = correctCount + count;
+    //   });
+    // }
+    // correctCount = correctCount + this.state.gaveUpCount;
 
-    correctCount = correctCount + this.state.gaveUpCount;
-
-    let expectedCorrect = this.state.exercise.questions.length;
-    this.state.exercise.questions.forEach((item) => {
-      if (item.followupQuestions) {
-        expectedCorrect = expectedCorrect + item.followupQuestions.length;
-      }
-    });
+    // let expectedCorrect = this.state.exercise.questions.length;
+    // this.state.exercise.questions.forEach((item) => {
+    //   if (item.followupQuestions) {
+    //     expectedCorrect = expectedCorrect + item.followupQuestions.length;
+    //   }
+    // });
 
     return (
         <div ref={"information"}>
@@ -250,7 +251,7 @@ class Information extends Component {
                   key={index}
                   question={question}
                   index={index}
-                  feedback={this.state.feedback[index]}
+                  feedback={this.state.feedback}
                   answer={this.state.answer}
                   renderCodeView={this.renderCodeView}
                   renderResponseView={this.renderResponseView}
@@ -293,7 +294,8 @@ class Information extends Component {
             );
             })
           }
-          {correctCount >= expectedCorrect && this.scrollToBottom() &&
+          {/* {correctCount >= expectedCorrect && this.scrollToBottom() &&
+          } */}
             <div className={"cont-btn-container"} >
               <Button variant={"outlined"} color={"primary"} onClick={() => {
                 this.props.nextQuestion();
@@ -304,7 +306,6 @@ class Information extends Component {
                 });
               }}>Continue</Button>
             </div>
-          }
         </div>
 
     );

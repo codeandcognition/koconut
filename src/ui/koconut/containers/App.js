@@ -134,7 +134,7 @@ class App extends Component {
       exercise: {},
 			exerciseType: '', // yet to be defined
 			instructionType: '',
-      feedback: [],
+      feedback: {},
       followupFeedback: [],
       nextConcepts: [],
       counter: 0, // Changed this from 1 to 0 -- cuz 0-based indexing
@@ -454,7 +454,7 @@ class App extends Component {
    * @param {number} fIndex followup question index
    * @return {string[]}
    */
-  checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
+  async checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
 		let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
 		let requestBody = {};
 		requestBody.userAnswer = answer;
@@ -486,9 +486,10 @@ class App extends Component {
 					break;
 			case Types.writeCode:
 					// need to add in pre/post conditions to user answer
+					requestBody.userAnswer = answer[0] + "\n" + question.postCondition;
 					requestBody.testCode = question.testCode;
 					requestBody.expectedAnswer = "";
-					this.verifyWriteCodeQuestion(requestBody);
+					await this.verifyWriteCodeQuestion(requestBody, questionIndex, fIndex);
 					break;
 			default:
 					return;
@@ -654,150 +655,35 @@ class App extends Component {
 		});
 	}
 
-
-	verifyWriteCodeQuestion(requestBody: any, questionIndex: number, fIndex: number) {
+	async verifyWriteCodeQuestion(requestBody: any, questionIndex: number, fIndex: number) {
 			const url = "http://localhost:8080/checker/writecode";
-			const response = fetch(url, {
-				method: "POST",
-				mode: "cors",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(requestBody)
-			})
-			.then(res => {
-				return res.json();
-			})
-			.then(feedback => {
-				if (feedback.failMessage) {
-					this.updateWrongAnswersCount(false, questionIndex, fIndex);
-				}
-				console.log(feedback);
-			})
-			.catch(err => {
-				return err;
-			});
-	}
-
-	/**
-	 *
-	 * @param question
-	 * @param questionIndex
-	 * @param answer
-	 * @param fIndex
-	 * @param feedbackTemp
-	 * @returns {boolean}
-	 */
-	verifyOtherQuestions(question: any, questionIndex: number, answer: any, fIndex: number, feedbackTemp: any, questionType: any) {
-  	let checkerForCorrectness = true;
-
-    // For writecode. // TODO refactor reused code
-    if(questionType === Types.writeCode) {
-      if (fIndex !== -1) {
-        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-      }
-      let index = (fIndex === -1) ? questionIndex: fIndex;
-      let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
-			let learnerAnswer = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
-			// @TODO: this needs to be added to question schema
-			let testCode = question.testCode;
-
-			let requestBody = {
-				userCode: learnerAnswer,
-				testCode: testCode
-			};
-
-			// @TODO: set this
-			const correctness_endpoint = "";
-			fetch(correctness_endpoint, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(requestBody)
-			})
-			.then(res => {
-				return res.json()
-			})
-			.then(body => {
-				if (body.pass) {
-					temp[index] = 'correct';
-				} else {
-					temp[index] = 'incorrect';
-					checkerForCorrectness = false;
-					this.setState({
-						error: true,
-						errorMessage: body.failMessage
-					});
-				}
-
-				if (fIndex === -1) {
-					feedbackTemp = temp;
-				} else {
-					feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-					feedbackTemp[questionIndex] = temp;
-				}
-			})
-			.catch(error => {
+			const request = async () => {
+				const response = await fetch(url, {
+					method: "POST",
+					mode: "cors",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(requestBody)
+				})
+				const feedback = await response.json();
 				this.setState({
-					error: true,
-					errorMessage: error
-				});
-			});
-
-      let preCondition = question.preCondition ? "\n"+question.preCondition+"\n" : "";
-
-      /** 
-        * This following code will replace `<SEED>` in the precondition with a randomly generated
-        * number that is shared between both the user's answer and the actual answer.
-        * 
-        * SEED CAN ONLY BE SET ONCE PER PRECONDITION
-        */
-      preCondition = preCondition.replace("<SEED>", Math.random().toString());
-
-      let postCondition = question.postCondition ? "\n"+question.postCondition+"\n" : "";
-      let executedAnswer = this.runCode(preCondition + learnerAnswer + postCondition);
-      let expectedAnswer = this.runCode(preCondition + question.answer + postCondition);
-      console.log(executedAnswer);
-      console.log(expectedAnswer);
-      if (executedAnswer === expectedAnswer) {
-        temp[index] = 'correct';
-      } else {
-        temp[index] = 'incorrect';
-        checkerForCorrectness = false;
-      }
-      if (fIndex === -1) {
-        feedbackTemp = temp;
-      } else {
-        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-        feedbackTemp[questionIndex] = temp;
-      }
-    } else {
-      if (fIndex !== -1) {
-        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-      }
-      let index = (fIndex === -1) ? questionIndex : fIndex;
-      let temp = (fIndex === -1) ? feedbackTemp : feedbackTemp[questionIndex];
-      let learnerAnswer = (fIndex === -1) ? (answer[questionIndex] ? answer[questionIndex].trim() : null) 
-      : (answer[questionIndex] && answer[questionIndex][fIndex] ? answer[questionIndex][fIndex].trim() : null);
-      if (question.answer === learnerAnswer) {
-        temp[index] = "correct";
-      } else {
-        temp[index] = "incorrect";
-        checkerForCorrectness = false;
-      }
-      if (fIndex === -1) {
-        feedbackTemp = temp;
-      } else {
-        feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-        feedbackTemp[questionIndex] = temp;
-      }
-    }
-
-		
-		return checkerForCorrectness;
+					feedback: fIndex === -1 ? feedback : [],
+					followupFeedback: fIndex === 1? [] : feedback,
+					nextConcepts: this.getConcepts(),
+					display: this.state.exercise.type !== 'survey'
+						? displayType.exercise
+						: (this.state.conceptOptions > 1
+							? displayType.concept
+							: displayType.exercise),
+				}, () => {
+					if (!feedback.pass) {
+						this.updateWrongAnswersCount(false, questionIndex, fIndex);
+					}
+				});	
+			}
+			await request();
 	}
-
     /**
    * runCode will run the code provided in a python interpreter (Skulpt)
    * Most of this code comes from Skulpt's examples. Documentation for this
@@ -861,27 +747,15 @@ class App extends Component {
    */
   submitResponse(answer: any, questionIndex: number, questionType: string, fIndex: number) {
   	if (answer !== null && answer !== undefined) {
-      this.checkAnswer(answer, questionIndex, questionType, fIndex);
-      // ResponseEvaluator.evaluateAnswer(this.state.exercise, answer
-      //     , () => { // TODO: Reconfigure for followup question answer structure
-      //   this.setState({
-      //     feedback: (fIndex === -1) ? feedback : this.state.feedback,
-      //     followupFeedback: (fIndex === -1) ? this.state.followupFeedback : feedback,
-      //     nextConcepts: this.getConcepts(),
-      //     display: this.state.exercise.type !== 'survey'
-      //         ? displayType.exercise
-      //         : (this.state.conceptOptions > 1
-      //             ? displayType.concept
-      //             : displayType.exercise),
-      //   });
-      // }, questionIndex, questionType, feedback, this.state.exerciseId);
+			// sets feedback / followupFeedback
+			this.checkAnswer(answer, questionIndex, questionType, fIndex);
     }
   }
 
   resetFeedback() {
     this.setState({
-      feedback: [],
-      followupFeedback: [],
+      feedback: null,
+      followupFeedback: null,
       timesGotQuestionWrong: [],
       followupTimesGotQuestionWrong: []
     });
