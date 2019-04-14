@@ -166,7 +166,7 @@ class Information extends Component {
    * @returns JSX for the Feedback container
    */
   renderFeedback(question: any, index: number, fIndex: number) {
-    let parentFeedback = this.state.feedback;
+    let parentFeedback = this.state.feedback[index];
     let followupFeedback = (this.state.followupFeedback
                             && this.state.followupFeedback[index]) ? this.state.followupFeedback[index][fIndex] : this.state.followupFeedback[index];
     let feedback = fIndex === -1 ? parentFeedback : followupFeedback;
@@ -181,7 +181,7 @@ class Information extends Component {
         answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
         addGaveUp={this.addGaveUp}
         fIndex={fIndex}
-      />
+      /> 
     }
     return <div />
   }
@@ -242,6 +242,8 @@ class Information extends Component {
     //   }
     // });
 
+    console.log(this.state.feedback);
+
     return (
         <div ref={"information"}>
           {this.state.exercise.questions.map((question, index) => {
@@ -251,7 +253,7 @@ class Information extends Component {
                   key={index}
                   question={question}
                   index={index}
-                  feedback={this.state.feedback}
+                  feedback={this.state.feedback[index]}
                   answer={this.state.answer}
                   renderCodeView={this.renderCodeView}
                   renderResponseView={this.renderResponseView}
@@ -294,18 +296,18 @@ class Information extends Component {
             );
             })
           }
-          {/* {correctCount >= expectedCorrect && this.scrollToBottom() &&
-          } */}
-            <div className={"cont-btn-container"} >
-              <Button variant={"outlined"} color={"primary"} onClick={() => {
-                this.props.nextQuestion();
-                this.props.resetAnswer();
-                this.setState({
-                  gaveUpCount: 0,
-                  gaveUpArr: []
-                });
-              }}>Continue</Button>
-            </div>
+
+          <div className={"cont-btn-container"} >
+            <Button variant={"outlined"} color={"primary"} onClick={() => {
+              this.props.nextQuestion();
+              this.props.resetAnswer();
+              this.setState({
+                gaveUpCount: 0,
+                gaveUpArr: []
+              });
+            }}>Continue</Button>
+          </div>
+
         </div>
 
     );

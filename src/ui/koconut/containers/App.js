@@ -77,6 +77,10 @@ const displayType = {
   instruct: 'INSTRUCT',
 	author: 'AUTHOR'
 };
+
+// 
+const PYTHON_API = "http://localhost:8080/checker/";
+
 /**
  * Renders the koconut application view.
  * @class
@@ -134,7 +138,7 @@ class App extends Component {
       exercise: {},
 			exerciseType: '', // yet to be defined
 			instructionType: '',
-      feedback: {},
+      feedback: [],
       followupFeedback: [],
       nextConcepts: [],
       counter: 0, // Changed this from 1 to 0 -- cuz 0-based indexing
@@ -457,12 +461,13 @@ class App extends Component {
   async checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
 		let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
 		let requestBody = {};
-		requestBody.userAnswer = answer;
+		requestBody.userAnswer = answer[questionIndex];
 		switch (questionType) {
 			case Types.multipleChoice:
 					requestBody.questionCode = "";
 					requestBody.testCode = "";
 					requestBody.expectedAnswer = question.answer;
+					await this.verifyMultipleChoiceQuestion(requestBody, questionIndex, fIndex);
 					break;
 			case Types.fillBlank || Types.isInlineResponseType:
 					requestBody.expectedAnswer = question.answer;
@@ -486,7 +491,7 @@ class App extends Component {
 					break;
 			case Types.writeCode:
 					// need to add in pre/post conditions to user answer
-					requestBody.userAnswer = answer[0] + "\n" + question.postCondition;
+					requestBody.userAnswer = answer[questionIndex] + "\n" + question.postCondition;
 					requestBody.testCode = question.testCode;
 					requestBody.expectedAnswer = "";
 					await this.verifyWriteCodeQuestion(requestBody, questionIndex, fIndex);
@@ -494,89 +499,45 @@ class App extends Component {
 			default:
 					return;
 		}
-  }
-
-	/**
-	 * verifies the correctness of user input for table questions
-	 *
-	 * @param question
-	 * @param questionIndex
-	 * @param fIndex
-	 * @param answer
-	 * @param feedbackTemp
-	 * @returns {boolean}
-	 */
-  verifyTableQuestion(question: any, questionIndex: number, fIndex : number, answer: [], feedbackTemp: any) {
-		// basically the answer will come in looking like this for a table type problem
-		// mixed with regular problems
-		// let stub = ["a", "a", [["", "a", "a"], ["", "a", "a"]], "a"];
-		let checkerForCorrectness = true;
-		let colNames = question.colNames;
-		let allCells = question.data;
-		let answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
-		let addToFeedback = [];
-		allCells.forEach((d, i) => {
-
-			let arrayIndexToPushTo = Math.floor(i / colNames.length);
-			if (!addToFeedback[arrayIndexToPushTo]) {
-				addToFeedback[arrayIndexToPushTo] = [];
-			}
-			let subArrayIndex = i % colNames.length;
-			let cellValue = null;
-			if (d.answer === "") {
-				cellValue = null;
-				// sorry to whoever has to understand this later :(
-				// it's for the greater good and expandability
-			} else if (answerArr &&
-					answerArr[arrayIndexToPushTo] && d.answer ===
-					answerArr[arrayIndexToPushTo][subArrayIndex].replace(new RegExp('\'', 'g'), "\"")) {
-				cellValue = "correct";
-			} else {
-				cellValue = "incorrect";
-				checkerForCorrectness = false;
-			}
-			addToFeedback[arrayIndexToPushTo][subArrayIndex] = cellValue;
-		});
-		if (fIndex === -1) {
-			feedbackTemp[questionIndex] = addToFeedback;
-		} else {
-			feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-			feedbackTemp[questionIndex][fIndex] = addToFeedback;
-		}
-		return checkerForCorrectness;
 	}
+	
+	async verifyMultipleChoiceQuestion(requestBody: any, questionIndex: number, fIndex: number) {
+			const request = async () => {
+				const response = await fetch(PYTHON_API + "multiplechoice", {
+					method: "POST",
+					mode: "cors",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(requestBody)
+				})
+				const feedback = await response.json();
 
-	/**
-	 * Verifies the correctness of a checkbox question
-	 * @param question
-	 * @param questionIndex
-	 * @param answer
-	 * @param fIndex
-	 * @param feedbackTemp
-	 * @returns {boolean}
-	 */
-	verifyCheckboxQuestion(question: any, questionIndex: number, answer: any, fIndex: number, feedbackTemp: any) {
-		let isCorrect = true;
-		let answerArr = (fIndex === -1) ? answer[questionIndex] : answer[questionIndex][fIndex];
-		let checkerForCorrectness = true;
-		if (answerArr && question.answer.length === answerArr.length) {
-			question.answer.forEach((item) => {
-				if (!answerArr.includes(item)) {
-					isCorrect = false;
-					checkerForCorrectness = false;
+				let temp = [];
+				if (fIndex === -1) {
+					temp = this.state.feedback;
+					temp[questionIndex] = feedback;
+				} else {
+					temp = this.state.followupFeedback;
+					temp[fIndex] = feedback;
 				}
-			})
-		} else {
-			isCorrect = false;
-			checkerForCorrectness = false;
-		}
-		if (fIndex === -1) {
-			feedbackTemp[questionIndex] = isCorrect ? "correct" : "incorrect";
-		} else {
-			feedbackTemp[questionIndex] = feedbackTemp[questionIndex] ? feedbackTemp[questionIndex] : [];
-			feedbackTemp[questionIndex][fIndex] = isCorrect ? "correct" : "incorrect";
-		}
-		return checkerForCorrectness;
+				
+				this.setState({
+					feedback: fIndex === -1 ? temp : [],
+					followupFeedback: fIndex === 1 ? [] : temp,
+					nextConcepts: this.getConcepts(),
+					display: this.state.exercise.type !== 'survey'
+						? displayType.exercise
+						: (this.state.conceptOptions > 1
+							? displayType.concept
+							: displayType.exercise),
+				}, () => {
+					if (!feedback.pass) {
+						this.updateWrongAnswersCount(false, questionIndex, fIndex);
+					}
+				});
+			}
+			await request();
 	}
 
 	/**
@@ -656,9 +617,8 @@ class App extends Component {
 	}
 
 	async verifyWriteCodeQuestion(requestBody: any, questionIndex: number, fIndex: number) {
-			const url = "http://localhost:8080/checker/writecode";
 			const request = async () => {
-				const response = await fetch(url, {
+				const response = await fetch(PYTHON_API + "writecode", {
 					method: "POST",
 					mode: "cors",
 					headers: {
@@ -667,9 +627,19 @@ class App extends Component {
 					body: JSON.stringify(requestBody)
 				})
 				const feedback = await response.json();
+
+				let temp = [];
+				if (fIndex === -1) {
+					temp = this.state.feedback;
+					temp[questionIndex] = feedback;
+				} else {
+					temp = this.state.followupFeedback;
+					temp[fIndex] = feedback;
+				}
+
 				this.setState({
-					feedback: fIndex === -1 ? feedback : [],
-					followupFeedback: fIndex === 1? [] : feedback,
+					feedback: fIndex === -1 ? temp : [],
+					followupFeedback: fIndex === 1 ? [] : temp,
 					nextConcepts: this.getConcepts(),
 					display: this.state.exercise.type !== 'survey'
 						? displayType.exercise
@@ -684,29 +654,7 @@ class App extends Component {
 			}
 			await request();
 	}
-    /**
-   * runCode will run the code provided in a python interpreter (Skulpt)
-   * Most of this code comes from Skulpt's examples. Documentation for this
-   * will be in the docs folder.
-   * @param code input python code as a string
-   * @returns {string} python std output as a string
-   */
-  runCode(code: string): string {
-    function builtinRead(x) {
-      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-          throw new Error("File not found: '" + x + "'");
-      return Sk.builtinFiles["files"][x];
-    }
-    let output = [];
-    Sk.configure({output: d => output.push(d), read: builtinRead, execLimit: 1000});
-    try {
-      Sk.importMainWithBody("<stdin>", false, code);
-    } catch(e) {
-      return e.toString();
-    }
-    return output.join("").trim();
-  }
-
+ 
   /**
    * updateWrongAnswersCount updates the count for wrong answers
    * @param {boolean} checkerForCorrectness correctness false or true

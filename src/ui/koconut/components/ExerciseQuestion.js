@@ -164,7 +164,7 @@ class ExerciseQuestion extends Component {
     }
 
 		
-		let submitButtonText = this.props.feedback.length == 0 ? "Submit" : "Try Again";
+		let submitButtonText = this.props.feedback ? "Try Again" : "Submit";
 
     return (
       <div>
@@ -186,7 +186,6 @@ class ExerciseQuestion extends Component {
 											}
 											}
 							/>
-
 							}
 						</div>
           </div>
