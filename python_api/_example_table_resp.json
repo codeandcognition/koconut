@@ -1,0 +1,199 @@
+{
+	"userAnswer": [
+		[
+			"integer",
+			"stdfhdfh"
+		],
+		[
+			"Integer",
+			"fdhdf"
+		],
+		[
+			"Integer",
+			"dfhdf"
+		],
+		[
+			"Integer",
+			"dfhdf"
+		],
+		[
+			"Float",
+			"dfhdf"
+		]
+	],
+	"questions": [
+		[
+			{
+				"answer": "4",
+				"code": "",
+				"difficulty": "0",
+				"feedback": {
+					"correct": "Correct! Integers drop the decimal value.",
+					"incorrect": [
+						"Not quite. Do you remember how integers handle decimal values?"
+					]
+				},
+				"followupPrompt": "",
+				"hint": "placeholder",
+				"prompt": "",
+				"type": "fillBlank"
+			},
+			{
+				"answer": "Float",
+				"choices": [
+					"Integer",
+					"Float"
+				],
+				"code": "",
+				"difficulty": "0",
+				"feedback": {
+					"Float": "Correct! Operations involving decimals result in floating point numbers.",
+					"Integer": "Not quite! Try breaking this expression into parts and solve each part."
+				},
+				"followupPrompt": "",
+				"hint": "placeholder",
+				"prompt": "",
+				"type": "multipleChoice"
+			}
+		],
+		[
+			{
+				"answer": "float",
+				"choices": [
+					"integer",
+					"float"
+				],
+				"code": "",
+				"difficulty": "0",
+				"feedback": {
+					"float": "Correct! Any operation that involves a float will result in a float as output.",
+					"integer": "Not quite! Think back to the lesson on what happens to calculations involving a float"
+				},
+				"followupPrompt": "",
+				"hint": "placeholder",
+				"prompt": "",
+				"type": "multipleChoice"
+			},
+			{
+				"answer": "3.0",
+				"code": "",
+				"difficulty": "0",
+				"feedback": {
+					"correct": "Correct! Operations involving decimals result in floats",
+					"incorrect": [
+						"Notice that we're dividing by a float",
+						"Do operations involving floats result in integers?"
+					]
+				},
+				"followupPrompt": "",
+				"hint": "placeholder",
+				"prompt": "",
+				"type": "fillBlank"
+			}
+		],
+		[
+			{
+				"answer": "7.0",
+				"code": "",
+				"difficulty": "0",
+				"feedback": {
+					"correct": "Correct! Any operation that involves a float will result in a float as output.",
+					"incorrect": [
+						"Not quite. Think back to the lesson on calculations with float",
+						"Do operations that involve float ever result in integers?"
+					]
+				},
+				"followupPrompt": "",
+				"hint": "placeholder",
+				"prompt": "",
+				"type": "fillBlank"
+			},
+			{
+				"answer": "Integer",
+				"choices": [
+					"Integer",
+					"Float"
+				],
+				"code": "",
+				"difficulty": "0",
+				"feedback": {
+					"Float": "Not quite! This calculation does not involve any floats.",
+					"Integer": "Correct! If a variable is a number, we can use it in arithmetic operations. In this case, it results in an integer"
+				},
+				"followupPrompt": "",
+				"hint": "placeholder",
+				"prompt": "",
+				"type": "multipleChoice"
+			}
+		],
+		[
+			{
+				"answer": "8",
+				"code": "",
+				"difficulty": "0",
+				"feedback": {
+					"correct": "Correct! Since there are no decimals involved in the calculation, this results in an integer.",
+					"incorrect": [
+						"Remember, there are no decimals involved in this calculation.",
+						"You can use variables in arithmetic operations. Try replacing, my_value with 4. What does that result?"
+					]
+				},
+				"followupPrompt": "",
+				"hint": "placeholder",
+				"prompt": "",
+				"type": "fillBlank"
+			},
+			{
+				"answer": "Float",
+				"choices": [
+					"Integer",
+					"Float"
+				],
+				"code": "",
+				"difficulty": "0",
+				"feedback": {
+					"Float": "Correct!",
+					"Integer": "Not quite! This calculation involves a float"
+				},
+				"followupPrompt": "",
+				"hint": "placeholder",
+				"prompt": "",
+				"type": "multipleChoice"
+			}
+		],
+		[
+			{
+				"answer": "Integer",
+				"choices": [
+					"Integer",
+					"Float"
+				],
+				"code": "",
+				"difficulty": "0",
+				"feedback": {
+					"Float": "Not quite. Think back to the lesson on how integers handle decimal points.",
+					"Integer": "Correct! Integers drop the decimal value."
+				},
+				"followupPrompt": "",
+				"hint": "placeholder",
+				"prompt": "",
+				"type": "multipleChoice"
+			},
+			{
+				"answer": "2.1",
+				"code": "",
+				"difficulty": "0",
+				"feedback": {
+					"correct": "Correct!",
+					"incorrect": [
+						"Calculate the modulus before the addition operator."
+					]
+				},
+				"followupPrompt": "",
+				"hint": "placeholder",
+				"prompt": "",
+				"type": "fillBlank"
+			}
+		]
+	]
+}

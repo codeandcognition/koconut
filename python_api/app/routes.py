@@ -10,6 +10,10 @@ from flask_cors import cross_origin
 JSON_TYPE = "application/json"
 TEXT_TYPE = "text/plain"
 
+# Question types
+FILL_BLANK = "fillBlank"
+MULTIPLE_CHOICE = "multipleChoice"
+SHORT_ANSWER = "shortAnswer"
 
 @app.route("/checker/writecode", methods=["POST"])
 @cross_origin()
@@ -179,7 +183,7 @@ def shortanswer_handler():
                     break
             resp_body = {
                 "pass": False,
-                "failMessage": "Expected {} but got {}".format(expected, got)
+                "failMessage": "Expected {} but got {}".format(expected, got) # TODO: For these, we should probably not send the answer alongside the result, but for now it is fine as a test
             }
             resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
             return resp
@@ -216,6 +220,59 @@ def table_handler():
     req_body = request.get_json()
     questions = req.body.get("questions")
     answers = req.body.get("answer")
+
+    results = []
+    # iterate through each row and col of the questions/answers
+    for i, question_row in enumerate(questions):
+        results.append([])
+        for j, question in enumerate(question_row):
+            # results[i].append()
+            if question["type"] == FILL_BLANK:
+                actual_answer = question["answer"]
+                user_answer = answers[i][j]
+                correctness = fill_blank_question_check_correctness(actual_answer, user_answer)
+                if correctness:
+                    results[i].append({
+                        "pass": True,
+                    })
+                else:
+                    results[i].append({
+                        "pass": False,
+                        "failMessage": "Expected {} but got {}".format(actual_answer, user_answer)
+                    })
+            elif question["type"] == MULTIPLE_CHOICE:
+                # MULTIPLE_CHOICE is the same as FILL_BLANK at the moment, but we can change it
+                # in the future to incorporate different functionality
+                actual_answer = question["answer"]
+                user_answer = answers[i][j]
+                correctness = multiple_choice_question_check_correctness(actual_answer, user_answer)
+                if correctness:
+                    results[i].append({
+                        "pass": True,
+                    })
+                else:
+                    results[i].append({
+                        "pass": False,
+                        "failMessage": "Expected {} but got {}".format(actual_answer, user_answer)
+                    })
+
+def fill_blank_question_check_correctness(actual_answer, user_answer):
+    """
+    fill_blank_question_check_correctness compares the actual answer to the user's answer
+
+    a true is returned if it is correct, a false is returned if it is wrong
+
+    In the future this method can be expanded to provide specialized responses per each wrong answer
+    but that is a reach goal
+    """
+    return actual_answer.strip() == user_answer.strip()
+
+def multiple_choice_question_check_correctness(actual_answer, user_answer):
+    """
+    Similar to fill_blank_question_check_correctness this method can be expanded to provide
+    specialized responses per each wrong answer
+    """
+    return actual_answer.strip() == user_answer.strip()
 
 def is_req_json_type(request):
     return request.headers.get("Content-Type") != JSON_TYPE
