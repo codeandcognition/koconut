@@ -242,8 +242,6 @@ class Information extends Component {
     //   }
     // });
 
-    console.log(this.state.feedback);
-
     return (
         <div ref={"information"}>
           {this.state.exercise.questions.map((question, index) => {

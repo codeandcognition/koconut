@@ -702,8 +702,8 @@ class App extends Component {
 
   resetFeedback() {
     this.setState({
-      feedback: null,
-      followupFeedback: null,
+      feedback: [],
+      followupFeedback: [],
       timesGotQuestionWrong: [],
       followupTimesGotQuestionWrong: []
     });

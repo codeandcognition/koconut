@@ -103,7 +103,9 @@ class Exercise extends Component {
       let temp = this.state.answer;
       temp[index] = content;
       this.setState({
-        answer: temp
+        answer: temp,
+      }, () => {
+        this.props.resetFeedback();
       });
     } else {
       let temp = this.state.followupAnswers;
@@ -111,6 +113,8 @@ class Exercise extends Component {
       temp[index][fIndex] = content;
       this.setState({
         followupAnswers: temp
+      }, () => {
+        this.props.resetFeedback();
       });
     }
   }
