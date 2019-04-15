@@ -49,8 +49,10 @@ def writecode_handler():
     user_output = ""
     test_output = ""
     try:
-        user_output = subprocess.check_output(["python", "temp/{}.py".format(filename_user_answer)], universal_newlines=True)
-        test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], universal_newlines=True)
+        user_output = subprocess.check_output(["python", "temp/{}.py".format(filename_user_answer)],
+            universal_newlines=True)
+        test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], 
+            universal_newlines=True)
         
         # remove the files
         os.remove("temp/{}.py".format(filename_user_answer))
@@ -117,7 +119,7 @@ def multiplechoice_handler():
     resp_body = {
         "pass": True
     }
-    resp = Response(json.dump(resp_body), status=200, mimetype=JSON_TYPE)
+    resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
 
 @app.route("/checker/shortanswer", methods=["Post"])
@@ -154,14 +156,16 @@ def shortanswer_handler():
         # check std output of file
         test_output = ""
         try:
-            test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], universal_newlines=True)
+            test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], 
+                universal_newlines=True)
 
             # remove file
             os.remove("temp/{}.py".format(filename_test_code))
         except subprocess.CalledProcessError as exc:
             os.remove("temp/{}.py".format(filename_test_code))
             # should never hit here
-            resp = Response("Test failed to be parsed. Internal server error", status=500, mimetype=TEXT_TYPE)
+            resp = Response("Test failed to be parsed. Internal server error", status=500, 
+                mimetype=TEXT_TYPE)
             return resp
    
         if test_output != user_answer:
@@ -193,6 +197,25 @@ def shortanswer_handler():
     }
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
+
+@app.route("/checker/table", methods=["Post"])
+def table_handler():
+    # Make sure is POST request
+    if request.method != "POST":
+        resp = Response("Must be a POST request",
+                        status=405, mimetype=TEXT_TYPE)
+        return resp
+
+    # Make sure is JSON request body
+    if (is_req_json_type(request)):
+        resp = Response("Request body must be JSON",
+                        status=415, mimetype=TEXT_TYPE)
+        return resp
+
+    # get request body
+    req_body = request.get_json()
+    questions = req.body.get("questions")
+    answers = req.body.get("answer")
 
 def is_req_json_type(request):
     return request.headers.get("Content-Type") != JSON_TYPE
