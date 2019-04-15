@@ -467,7 +467,7 @@ class App extends Component {
 					requestBody.questionCode = "";
 					requestBody.testCode = "";
 					requestBody.expectedAnswer = question.answer;
-					await this.verifyMultipleChoiceQuestion(requestBody, questionIndex, fIndex);
+					await this.verifyUserAnswer("multiplechoice", requestBody, questionIndex, fIndex);
 					break;
 			case Types.fillBlank || Types.isInlineResponseType:
 					requestBody.expectedAnswer = question.answer;
@@ -483,61 +483,123 @@ class App extends Component {
 					requestBody.questionCode = "";
 					requestBody.testCode = "";
 					requestBody.expectedAnswer = question.answer;
+
+					await this.verifyUserAnswer("checkbox", requestBody, questionIndex, fIndex);
 					break;
 			case Types.memoryTable:
-					requestBody.expectedAnswer = question.answer;
 					requestBody.questionCode = "";
 					requestBody.testCode = "";
+
+					// convert values to strings (ex: int to str)
+					let expectedAnswer = {};
+					Object.keys(question.answer).forEach((variableName) => {
+						let valueHistory = question.answer[variableName];
+						let values = [];
+						valueHistory.forEach((val) => {
+							values.push(val + "");
+						});
+						expectedAnswer[variableName] = values;
+					});
+
+					requestBody.expectedAnswer = expectedAnswer;
+					this.verifyUserAnswer(requestBody, questionIndex, fIndex);
 					break;
 			case Types.writeCode:
 					// need to add in pre/post conditions to user answer
 					requestBody.userAnswer = answer[questionIndex] + "\n" + question.postCondition;
 					requestBody.testCode = question.testCode;
 					requestBody.expectedAnswer = "";
-					await this.verifyWriteCodeQuestion(requestBody, questionIndex, fIndex);
+					await this.verifyUserAnswer("writecode", requestBody, questionIndex, fIndex);
+					break;
+			case Types.table:
+					let cells = question.data;
+					let numberOfColumns = question.colNames.length;
+					let numberOfRows = cells.length / numberOfColumns;
+					let questions = [];
+					
+					for (let i = 0; i < numberOfRows; i++) {
+							questions[i] = [];
+					}
+
+					for (let i = 0; i < cells.length; i++) {
+						let cell = cells[i];
+						// omit cells that are just prompts
+						if (cell.answer) {
+							let row = i % numberOfRows;
+							questions[row].push(cell);
+						}
+					}
+
+					// omit cells that map to prompt cells in the table
+					let answer = requestBody.userAnswer;
+					for (let i = 0; i < answer.length; i++) {
+						let row = answer[i];
+						let numQuestionsInRow = questions[i].length;
+						row = row.slice(numberOfColumns - numQuestionsInRow);
+						answer[i] = row;
+					}
+					requestBody.userAnswer = answer;
+					requestBody.questions = questions;
+
+					await this.verifyTableQuestion("table", requestBody, questionIndex, fIndex);
 					break;
 			default:
 					return;
 		}
 	}
-	
-	async verifyMultipleChoiceQuestion(requestBody: any, questionIndex: number, fIndex: number) {
-			const request = async () => {
-				const response = await fetch(PYTHON_API + "multiplechoice", {
-					method: "POST",
-					mode: "cors",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(requestBody)
-				})
-				const feedback = await response.json();
 
-				let temp = [];
-				if (fIndex === -1) {
-					temp = this.state.feedback;
-					temp[questionIndex] = feedback;
-				} else {
-					temp = this.state.followupFeedback;
-					temp[fIndex] = feedback;
-				}
-				
-				this.setState({
-					feedback: fIndex === -1 ? temp : [],
-					followupFeedback: fIndex === 1 ? [] : temp,
-					nextConcepts: this.getConcepts(),
-					display: this.state.exercise.type !== 'survey'
-						? displayType.exercise
-						: (this.state.conceptOptions > 1
-							? displayType.concept
-							: displayType.exercise),
-				}, () => {
-					if (!feedback.pass) {
-						this.updateWrongAnswersCount(false, questionIndex, fIndex);
-					}
-				});
+	/**
+	 * Updates the app state with feedback for user
+	 * @param {*} feedback 
+	 * @param {*} questionIndex 
+	 * @param {*} fIndex 
+	 */
+	setFeedback(feedback: any, questionIndex: number, fIndex: number) {
+			let temp = [];
+			if (fIndex === -1) {
+				temp = this.state.feedback;
+				temp[questionIndex] = feedback;
+			} else {
+				temp = this.state.followupFeedback;
+				temp[fIndex] = feedback;
 			}
-			await request();
+
+			this.setState({
+				feedback: fIndex === -1 ? temp : [],
+				followupFeedback: fIndex === 1 ? [] : temp,
+				nextConcepts: this.getConcepts(),
+				display: this.state.exercise.type !== 'survey'
+					? displayType.exercise
+					: (this.state.conceptOptions > 1
+						? displayType.concept
+						: displayType.exercise),
+			}, () => {
+				if (!feedback.pass) {
+					this.updateWrongAnswersCount(false, questionIndex, fIndex);
+				}
+			});
+	}
+
+	/**
+	 * Sends a request to the Correctness API to verify user response
+	 * @param {*} requestBody 
+	 * @param {*} questionIndex 
+	 * @param {*} fIndex 
+	 */
+	async verifyUserAnswer(endpointExtension: string, requestBody: any, questionIndex: number, fIndex: number) {
+		const request = async () => {
+			const response = await fetch(PYTHON_API + endpointExtension, {
+				method: "POST",
+				mode: "cors",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(requestBody)
+			})
+			const feedback = await response.json();
+			this.setFeedback(feedback, questionIndex, fIndex);
+		}
+		await request();
 	}
 
 	/**
@@ -614,45 +676,6 @@ class App extends Component {
 				}
 			}
 		});
-	}
-
-	async verifyWriteCodeQuestion(requestBody: any, questionIndex: number, fIndex: number) {
-			const request = async () => {
-				const response = await fetch(PYTHON_API + "writecode", {
-					method: "POST",
-					mode: "cors",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(requestBody)
-				})
-				const feedback = await response.json();
-
-				let temp = [];
-				if (fIndex === -1) {
-					temp = this.state.feedback;
-					temp[questionIndex] = feedback;
-				} else {
-					temp = this.state.followupFeedback;
-					temp[fIndex] = feedback;
-				}
-
-				this.setState({
-					feedback: fIndex === -1 ? temp : [],
-					followupFeedback: fIndex === 1 ? [] : temp,
-					nextConcepts: this.getConcepts(),
-					display: this.state.exercise.type !== 'survey'
-						? displayType.exercise
-						: (this.state.conceptOptions > 1
-							? displayType.concept
-							: displayType.exercise),
-				}, () => {
-					if (!feedback.pass) {
-						this.updateWrongAnswersCount(false, questionIndex, fIndex);
-					}
-				});	
-			}
-			await request();
 	}
  
   /**
