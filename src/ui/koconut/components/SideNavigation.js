@@ -61,12 +61,18 @@ class SideNavigation extends Component {
 		let writeResults = instructions["WRITE"];
 		let readTitles = [];
 		let writeTitles = [];
-		readResults.forEach((item) => {
-			readTitles.push(item.title);
-		});
-		writeResults.forEach((item) => {
-			writeTitles.push(item.title);
-		});
+		if (readResults) {
+			readResults.forEach((item) => {
+				readTitles.push(item.title);
+			});
+		}
+
+		if (writeResults) {
+			writeResults.forEach((item) => {
+				writeTitles.push(item.title);
+			});
+		}
+		
 		this.setState({
 			readInstructions: readTitles,
 			writeInstructions: writeTitles
