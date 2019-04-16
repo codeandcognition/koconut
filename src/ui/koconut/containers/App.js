@@ -521,13 +521,14 @@ class App extends Component {
 							questions[i] = [];
 					}
 
-					for (let i = 0; i < cells.length; i++) {
-						let cell = cells[i];
-						// omit cells that are just prompts
-						if (cell.answer) {
-							let row = i % numberOfRows;
-							questions[row].push(cell);
-						}
+					let cell = 0;
+					for (let i = 0; i < numberOfRows; i++) {
+							for (let j = 0; j < numberOfColumns; j++) {
+									let row = questions[i];
+									row.push(cells[cell]);
+									cell++;
+									questions[i] = row;
+							}
 					}
 
 					// omit cells that map to prompt cells in the table
@@ -535,7 +536,7 @@ class App extends Component {
 					for (let i = 0; i < answer.length; i++) {
 						let row = answer[i];
 						let numQuestionsInRow = questions[i].length;
-						row = row.slice(numberOfColumns - numQuestionsInRow);
+						row = row.slice(numberOfColumns - numQuestionsInRow, numberOfColumns);
 						answer[i] = row;
 					}
 					requestBody.userAnswer = answer;
