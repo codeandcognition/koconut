@@ -9,6 +9,7 @@ import LoadingView from './../components/LoadingView';
 
 
 import ExerciseInfoContainer from './../components/ExerciseInfoContainer';
+import { write } from 'fs';
 
 class AllExercises extends Component {
 	constructor(props) {
@@ -77,14 +78,23 @@ class AllExercises extends Component {
 
     let results = [];
     let exerciseIds = [];
-    if(exerciseList && conceptMapGetter) {
-     conceptMapGetter[concept] && conceptMapGetter[concept].forEach((exerciseId) => {
-        if ((exerciseType === "READ" && exerciseList[exerciseId] && ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type)) ||
-            (exerciseType === "WRITE" && exerciseList[exerciseId] && !ExerciseTypes.isReadType(exerciseList[exerciseId].questions[0].type) )) {
+    if (exerciseList && conceptMapGetter && conceptMapGetter[concept]) {
+      let readExercises = conceptMapGetter[concept]["READ"];
+      let writeExercises = conceptMapGetter[concept]["WRITE"];
+
+      if (readExercises) {
+        readExercises.forEach((exerciseId) => {
           results.push(exerciseList[exerciseId]);
           exerciseIds.push(exerciseId);
-        }
-      })
+        });
+      }
+      
+      if (writeExercises) {
+        writeExercises.forEach((exerciseId) => {
+          results.push(exerciseList[exerciseId]);
+          exerciseIds.push(exerciseId);
+        });
+      }
     }
     return {results, exerciseIds};
 	}
