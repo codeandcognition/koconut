@@ -192,9 +192,7 @@ def table_handler():
         # https://stackoverflow.com/questions/2905965/creating-threads-in-python 
         # TODO: Multithread this to make it more performant (not necessary unless app grows a ton)
         for j, question in enumerate(question_row):
-            # results[i].append()
             if question["type"] == FILL_BLANK:
-                # TODO: if code is defined, then run code instead of compare 
                 user_answer = answers[i][j]
                 if question["code"] != "":
                     actual_answer = question["answer"]
@@ -209,10 +207,6 @@ def table_handler():
                             "failMessage": "Expected {} but got {}".format(actual_answer, user_answer)
                         })
                 else:
-                    # TODO: Run the code
-                    # TODO:
-                    # Fillblank questions will compare the output to the user's input.
-                    # Writecode questions will compare the output to the user's output
                     ran_code = fill_blank_run_code(user_answer, question["code"])
                     results[i].append(ran_code)
 
