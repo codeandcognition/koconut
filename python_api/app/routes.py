@@ -225,21 +225,33 @@ def table_handler():
     # iterate through each row and col of the questions/answers
     for i, question_row in enumerate(questions):
         results.append([])
+        # https://stackoverflow.com/questions/2905965/creating-threads-in-python 
+        # TODO: Multithread this to make it more performant (not necessary unless app grows a ton)
         for j, question in enumerate(question_row):
             # results[i].append()
             if question["type"] == FILL_BLANK:
-                actual_answer = question["answer"]
+                # TODO: if code is defined, then run code instead of compare 
                 user_answer = answers[i][j]
-                correctness = fill_blank_question_check_correctness(actual_answer, user_answer)
-                if correctness:
-                    results[i].append({
-                        "pass": True,
-                    })
+                if question["code"] != "":
+                    actual_answer = question["answer"]
+                    correctness = fill_blank_question_check_correctness(actual_answer, user_answer)
+                    if correctness:
+                        results[i].append({
+                            "pass": True,
+                        })
+                    else:
+                        results[i].append({
+                            "pass": False,
+                            "failMessage": "Expected {} but got {}".format(actual_answer, user_answer)
+                        })
                 else:
-                    results[i].append({
-                        "pass": False,
-                        "failMessage": "Expected {} but got {}".format(actual_answer, user_answer)
-                    })
+                    # TODO: Run the code
+                    # TODO:
+                    # Fillblank questions will compare the output to the user's input.
+                    # Writecode questions will compare the output to the user's output
+                    ran_code = fill_blank_run_code(user_answer, question["code"])
+                    results[i].append(ran_code)
+
             elif question["type"] == MULTIPLE_CHOICE:
                 # MULTIPLE_CHOICE is the same as FILL_BLANK at the moment, but we can change it
                 # in the future to incorporate different functionality
@@ -260,6 +272,8 @@ def fill_blank_question_check_correctness(actual_answer, user_answer):
     """
     fill_blank_question_check_correctness compares the actual answer to the user's answer
 
+    This function is only for if there is no code provided  
+
     a true is returned if it is correct, a false is returned if it is wrong
 
     In the future this method can be expanded to provide specialized responses per each wrong answer
@@ -273,6 +287,59 @@ def multiple_choice_question_check_correctness(actual_answer, user_answer):
     specialized responses per each wrong answer
     """
     return actual_answer.strip() == user_answer.strip()
+
+def fill_blank_run_code(user_answer, test_code):
+    """
+    fill_blank_run_code will take in the user's answer and test code and then process it to check
+    correctness.
+
+    It will return the response body for the message, not the response itself. 
+    """
+    # Create random hashes for each temp file for no overlap
+    filename_test_code = secrets.token_urlsafe(16)
+
+    # Put code into those temp files
+    file_test_code = open("temp/{}.py".format(filename_test_code), "w")
+    file_test_code.write(test_code)
+
+    # Close the files
+    file_test_code.close()
+
+    # Check the std output of all files
+    test_output = ""
+    try:
+        test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], 
+            universal_newlines=True)
+        
+        # remove the files
+        os.remove("temp/{}.py".format(filename_test_code))
+    except subprocess.CalledProcessError as exc:
+        # if there is an error, remove the files and then fail because of an error
+        os.remove("temp/{}.py".format(filename_test_code))
+        resp_body = {
+            "pass": False,
+            "failMessage": "Unable to compile code"
+        }
+        return resp_body
+    
+    if test_output == user_answer:
+        resp_body = {
+            "pass": True
+        }
+        return resp_body
+    expected, got = ("", "")
+    split_user_answer = user_answer.split("\n")
+    split_test_output = test_output.split("\n")
+    for idx, line in enumerate(split_test_output):
+        if split_user_answer[idx] != line:
+            expected = line
+            got = split_user_answer[idx]
+            break
+    resp_body = {
+        "pass": False,
+        "failMessage": "Expected {} but got {}".format(expected, got)
+    }
+    return resp_body
 
 def is_req_json_type(request):
     return request.headers.get("Content-Type") != JSON_TYPE
