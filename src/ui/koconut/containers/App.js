@@ -462,6 +462,7 @@ class App extends Component {
 		let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
 		let requestBody = {};
 		requestBody.userAnswer = answer[questionIndex];
+		
 		switch (questionType) {
 			case Types.multipleChoice:
 					requestBody.questionCode = "";
@@ -506,7 +507,7 @@ class App extends Component {
 					break;
 			case Types.writeCode:
 					// need to add in pre/post conditions to user answer
-					requestBody.userAnswer = answer[questionIndex] + "\n" + question.postCondition;
+					requestBody.userAnswer = requestBody.userAnswer + "\n" + question.postCondition;
 					requestBody.testCode = question.testCode;
 					requestBody.expectedAnswer = "";
 					await this.verifyUserAnswer("writecode", requestBody, questionIndex, fIndex);
