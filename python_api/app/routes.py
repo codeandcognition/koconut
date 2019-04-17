@@ -15,8 +15,9 @@ FILL_BLANK = "fillBlank"
 MULTIPLE_CHOICE = "multipleChoice"
 SHORT_ANSWER = "shortAnswer"
 WRITE_CODE = "writeCode"
+TABLE = "table"
 
-@app.route("/checker/writeCode", methods=["POST"])
+@app.route(f"/checker/{WRITE_CODE}", methods=["POST"])
 @cross_origin()
 def writecode_handler():
     # Make sure is POST request
@@ -94,7 +95,7 @@ def writecode_handler():
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
 
-@app.route("/checker/multipleChoice", methods=["POST"])
+@app.route(f"/checker/{MULTIPLE_CHOICE}", methods=["POST"])
 def multiplechoice_handler():
     # Make sure is POST request
     if request.method != "POST":
@@ -127,7 +128,7 @@ def multiplechoice_handler():
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
 
-@app.route("/checker/shortAnswer", methods=["Post"])
+@app.route(f"/checker/{SHORT_ANSWER}", methods=["Post"])
 def shortanswer_handler():
     # Make sure is POST request
     if request.method != "POST":
@@ -166,7 +167,7 @@ def shortanswer_handler():
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
 
-@app.route("/checker/table", methods=["Post"])
+@app.route(f"/checker/{TABLE}", methods=["Post"])
 def table_handler():
     # Make sure is POST request
     if request.method != "POST":
@@ -204,7 +205,8 @@ def table_handler():
                     else:
                         results[i].append({
                             "pass": False,
-                            "failMessage": "Expected {} but got {}".format(actual_answer, user_answer)
+                            "failMessage": "Expected {} but got {}".format(actual_answer, 
+                                user_answer)
                         })
                 else:
                     ran_code = fill_blank_run_code(user_answer, question["code"])
