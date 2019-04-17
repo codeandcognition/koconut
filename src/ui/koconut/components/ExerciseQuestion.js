@@ -132,39 +132,40 @@ class ExerciseQuestion extends Component {
 	}
 
   render() {
-    // determine whether submit should be disabled
-    // to avoid evaluating incomplete answers
-    let answer = this.props.answer[this.props.index];
-    let disableSubmit = true;
-    if (answer) {
-      if (this.props.question.type === "table") {
-				// count the number of answers expected
-				let numAnswerCells = 0;
-				this.props.question.data.forEach(cell => {
-					if (!cell.prompt && !cell.code) {
-						numAnswerCells++;
-					}
-				});
+		let disableSubmit = true;
+		if (this.props.answer) {
+			// determine whether submit should be disabled
+			// to avoid evaluating incomplete answers
+			let answer = this.props.answer[this.props.index];
+			if (answer) {
+				if (this.props.question.type === "table") {
+					// count the number of answers expected
+					let numAnswerCells = 0;
+					this.props.question.data.forEach(cell => {
+						if (!cell.prompt && !cell.code) {
+							numAnswerCells++;
+						}
+					});
 
-				// count the number of answers entered by user
-				let count = 0;
-				for (let i = 0; i < answer.length; i++) {
-					if (answer[i]) {
-						for (let j = 0; j < answer[i].length; j++) {
-							if (answer[i][j]) {
-								count++;
+					// count the number of answers entered by user
+					let count = 0;
+					for (let i = 0; i < answer.length; i++) {
+						if (answer[i]) {
+							for (let j = 0; j < answer[i].length; j++) {
+								if (answer[i][j]) {
+									count++;
+								}
 							}
 						}
-          }
+					}
+					disableSubmit = numAnswerCells !== count;
+				} else {
+					disableSubmit = false;
 				}
-				disableSubmit = numAnswerCells !== count;
-      } else {
-				disableSubmit = false;
-      }
-    }
-
-    let submitButtonText = this.props.feedback ? "Try Again" : "Submit";
-
+			}
+		}
+		
+		let submitButtonText = this.props.feedback ? "Try Again" : "Submit";
     return (
       <div>
         <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>
