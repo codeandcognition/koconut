@@ -14,6 +14,7 @@ TEXT_TYPE = "text/plain"
 FILL_BLANK = "fillBlank"
 MULTIPLE_CHOICE = "multipleChoice"
 SHORT_ANSWER = "shortAnswer"
+WRITE_CODE = "writeCode"
 
 @app.route("/checker/writeCode", methods=["POST"])
 @cross_origin()
@@ -230,6 +231,12 @@ def table_handler():
                         "pass": False,
                         "failMessage": "Expected {} but got {}".format(actual_answer, user_answer)
                     })
+            
+            elif question["type"] == WRITE_CODE:
+                user_answer = answers[i][j]
+                test_code = question["code"]
+                ran_code = write_code_run_code(user_answer, test_code)
+                results[i].append(ran_code)
 
 def fill_blank_question_check_correctness(actual_answer, user_answer):
     """
@@ -297,6 +304,62 @@ def fill_blank_run_code(user_answer, test_code):
         if split_user_answer[idx] != line:
             expected = line
             got = split_user_answer[idx]
+            break
+    resp_body = {
+        "pass": False,
+        "failMessage": "Expected {} but got {}".format(expected, got)
+    }
+    return resp_body
+
+def write_code_run_code(user_answer, test_code):
+    # Create random hashes for each temp file for no overlap
+    filename_user_answer = secrets.token_urlsafe(16)
+    filename_test_code = secrets.token_urlsafe(16)
+
+    # Put code into those temp files
+    file_user_answer = open("temp/{}.py".format(filename_user_answer), "w")
+    file_test_code = open("temp/{}.py".format(filename_test_code), "w")
+    file_user_answer.write(user_answer)
+    file_test_code.write(test_code)
+
+    # Close the files
+    file_user_answer.close()
+    file_test_code.close()
+
+    # Check the std output of all files
+    user_output = ""
+    test_output = ""
+    try:
+        user_output = subprocess.check_output(["python", "temp/{}.py".format(filename_user_answer)],
+            universal_newlines=True)
+        test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], 
+            universal_newlines=True)
+        
+        # remove the files
+        os.remove("temp/{}.py".format(filename_user_answer))
+        os.remove("temp/{}.py".format(filename_test_code))
+    except subprocess.CalledProcessError as exc:
+        # if there is an error, remove the files and then fail because of an error
+        os.remove("temp/{}.py".format(filename_user_answer))
+        os.remove("temp/{}.py".format(filename_test_code))
+        resp_body = {
+            "pass": False,
+            "failMessage": "Unable to compile code"
+        }
+        return resp_body
+    
+    if test_output == user_output:
+        resp_body = {
+            "pass": True
+        }
+        return resp_body
+    expected, got = ("", "")
+    split_user_output = user_output.split("\n")
+    split_test_output = test_output.split("\n")
+    for idx, line in enumerate(split_test_output):
+        if split_user_output[idx] != line:
+            expected = line
+            got = split_user_output[idx]
             break
     resp_body = {
         "pass": False,
