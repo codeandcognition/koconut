@@ -96,6 +96,7 @@ def writecode_handler():
     return resp
 
 @app.route(f"/checker/{MULTIPLE_CHOICE}", methods=["POST"])
+@cross_origin()
 def multiplechoice_handler():
     # Make sure is POST request
     if request.method != "POST":
@@ -129,6 +130,7 @@ def multiplechoice_handler():
     return resp
 
 @app.route(f"/checker/{SHORT_ANSWER}", methods=["Post"])
+@cross_origin()
 def shortanswer_handler():
     # Make sure is POST request
     if request.method != "POST":
@@ -168,6 +170,7 @@ def shortanswer_handler():
     return resp
 
 @app.route(f"/checker/{TABLE}", methods=["Post"])
+@cross_origin()
 def table_handler():
     # Make sure is POST request
     if request.method != "POST":
