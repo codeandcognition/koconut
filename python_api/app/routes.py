@@ -15,7 +15,7 @@ FILL_BLANK = "fillBlank"
 MULTIPLE_CHOICE = "multipleChoice"
 SHORT_ANSWER = "shortAnswer"
 
-@app.route("/checker/writecode", methods=["POST"])
+@app.route("/checker/writeCode", methods=["POST"])
 @cross_origin()
 def writecode_handler():
     # Make sure is POST request
@@ -93,7 +93,7 @@ def writecode_handler():
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
 
-@app.route("/checker/multiplechoice", methods=["POST"])
+@app.route("/checker/multipleChoice", methods=["POST"])
 def multiplechoice_handler():
     # Make sure is POST request
     if request.method != "POST":
@@ -126,7 +126,7 @@ def multiplechoice_handler():
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
 
-@app.route("/checker/shortanswer", methods=["Post"])
+@app.route("/checker/shortAnswer", methods=["Post"])
 def shortanswer_handler():
     # Make sure is POST request
     if request.method != "POST":
@@ -147,47 +147,10 @@ def shortanswer_handler():
     expected_answer = req_body.get("expectedAnswer", "")
 
     if question_code != "":
-        # Create hash for temp file
-        filename_test_code = secrets.token_urlsafe(16)
+        resp_body = fill_blank_run_code(user_answer, question_code)
+        resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
+        return resp
 
-        # put code into temp file
-        file_test_code = open("temp/{}.py".format(filename_test_code), "w")
-        file_test_code.write(question_code)
-
-        # close file
-        file_test_code.close()
-
-        # check std output of file
-        test_output = ""
-        try:
-            test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], 
-                universal_newlines=True)
-
-            # remove file
-            os.remove("temp/{}.py".format(filename_test_code))
-        except subprocess.CalledProcessError as exc:
-            os.remove("temp/{}.py".format(filename_test_code))
-            # should never hit here
-            resp = Response("Test failed to be parsed. Internal server error", status=500, 
-                mimetype=TEXT_TYPE)
-            return resp
-   
-        if test_output != user_answer:
-            expected, got = ("", "")
-            split_user_output = user_answer.split("\n")
-            split_test_output = test_output.split("\n")
-            for idx, line in enumerate(split_test_output):
-                if split_user_output[idx] != line:
-                    expected = line
-                    got = split_user_output[idx]
-                    break
-            resp_body = {
-                "pass": False,
-                "failMessage": "Expected {} but got {}".format(expected, got) # TODO: For these, we should probably not send the answer alongside the result, but for now it is fine as a test
-            }
-            resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
-            return resp
-    
     if user_answer != expected_answer:
         resp_body = {
             "pass": False,
