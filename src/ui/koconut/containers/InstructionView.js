@@ -275,7 +275,9 @@ class InstructionView extends Component {
 										exercisesList={this.props.exercisesList}
 										conceptMapGetter={this.props.conceptMapGetter}
 										getOrderedConcepts={this.props.getOrderedConcepts}
-										goToExercise={this.props.goToExercise} persist={true} instructionsMap={this.props.instructionsMap} />
+										goToExercise={this.props.goToExercise} 
+										persist={true} 
+										instructionsMap={this.props.instructionsMap} />
 									<div className={"overallView"}>
 										<BreadCrumbs
 											concept={this.props.conceptType}

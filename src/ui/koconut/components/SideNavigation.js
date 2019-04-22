@@ -25,7 +25,8 @@ type Props = {
 	getOrderedConcepts: Function,
 	goToExercise: Function,
 	closeMenu: Function,
-	persist: boolean
+	persist: boolean,
+	updateUserState: Function
 };
 
 class SideNavigation extends Component {
