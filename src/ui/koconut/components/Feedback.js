@@ -38,7 +38,7 @@ class Feedback extends Component {
       return <div>{feedback[answer]}</div>
     } else {
       if(correctness.pass) {
-        return <div>{feedback ? feedback.correct : ''}</div>
+        return <div>{feedback && feedback.correct}</div>
       } else {
         if(feedback && feedback.incorrect && timeswrong > feedback.incorrect.length) {
           return <div>{feedback.incorrect[feedback.incorrect.length - 1]}</div>

@@ -512,7 +512,7 @@ class App extends Component {
 					}
 					if (question.postCondition) {
 						requestBody.userAnswer = requestBody.userAnswer + "\n" + question.postCondition;
-						requestBody.testCode = question.answer + "\n" + question.postCondition;
+						requestBody.testCode = requestBody.testCode + "\n" + question.postCondition;
 					}
 					requestBody.expectedAnswer = "";
 					break;
