@@ -13,6 +13,7 @@ import Loadable from 'react-loadable';
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
+import ExerciseTypes from '../../../data/ExerciseTypes.js';
 
 const Sk = require('skulpt');
 
@@ -468,7 +469,7 @@ class App extends Component {
 					requestBody.questionCode = "";
 					requestBody.testCode = "";
 					requestBody.expectedAnswer = question.answer;
-					await this.verifyUserAnswer("multiplechoice", requestBody, questionIndex, fIndex);
+					await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex);
 					break;
 			case Types.fillBlank || Types.isInlineResponseType:
 					requestBody.expectedAnswer = question.answer;
@@ -484,8 +485,6 @@ class App extends Component {
 					requestBody.questionCode = "";
 					requestBody.testCode = "";
 					requestBody.expectedAnswer = question.answer;
-
-					await this.verifyUserAnswer("checkbox", requestBody, questionIndex, fIndex);
 					break;
 			case Types.memoryTable:
 					requestBody.questionCode = "";
@@ -503,14 +502,19 @@ class App extends Component {
 					});
 
 					requestBody.expectedAnswer = expectedAnswer;
-					this.verifyUserAnswer(requestBody, questionIndex, fIndex);
 					break;
 			case Types.writeCode:
 					// need to add in pre/post conditions to user answer
-					requestBody.userAnswer = requestBody.userAnswer + "\n" + question.postCondition;
-					requestBody.testCode = question.testCode;
+					if (question.preCondition) {
+						let preCondition = question.preCondition.replace("<SEED>", this.getRandomInteger(1, 1000));
+						requestBody.userAnswer = preCondition + "\n" + requestBody.userAnswer;
+						requestBody.testCode = preCondition + "\n" + question.answer;
+					}
+					if (question.postCondition) {
+						requestBody.userAnswer = requestBody.userAnswer + "\n" + question.postCondition;
+						requestBody.testCode = question.answer + "\n" + question.postCondition;
+					}
 					requestBody.expectedAnswer = "";
-					await this.verifyUserAnswer("writecode", requestBody, questionIndex, fIndex);
 					break;
 			case Types.table:
 					let cells = question.data;
@@ -542,44 +546,52 @@ class App extends Component {
 					}
 					requestBody.userAnswer = answer;
 					requestBody.questions = questions;
-
-					await this.verifyTableQuestion("table", requestBody, questionIndex, fIndex);
 					break;
 			default:
 					return;
 		}
+		await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex);
+	}
+
+	getRandomInteger(min: number, max: number) {
+		return Math.floor(Math.random() * (max - min)) + min
 	}
 
 	/**
 	 * Updates the app state with feedback for user
+	 * @param {string} type is indicates question type
 	 * @param {*} feedback 
 	 * @param {*} questionIndex 
 	 * @param {*} fIndex 
 	 */
-	setFeedback(feedback: any, questionIndex: number, fIndex: number) {
-			let temp = [];
-			if (fIndex === -1) {
-				temp = this.state.feedback;
-				temp[questionIndex] = feedback;
+	setFeedback(type: string, feedback: any, questionIndex: number, fIndex: number) {
+			if (type == ExerciseTypes.table) {
+				console.log(feedback);
 			} else {
-				temp = this.state.followupFeedback;
-				temp[fIndex] = feedback;
-			}
-
-			this.setState({
-				feedback: fIndex === -1 ? temp : [],
-				followupFeedback: fIndex === 1 ? [] : temp,
-				nextConcepts: this.getConcepts(),
-				display: this.state.exercise.type !== 'survey'
-					? displayType.exercise
-					: (this.state.conceptOptions > 1
-						? displayType.concept
-						: displayType.exercise),
-			}, () => {
-				if (!feedback.pass) {
-					this.updateWrongAnswersCount(false, questionIndex, fIndex);
+				let temp = [];
+				if (fIndex === -1) {
+					temp = this.state.feedback;
+					temp[questionIndex] = feedback;
+				} else {
+					temp = this.state.followupFeedback;
+					temp[fIndex] = feedback;
 				}
-			});
+
+				this.setState({
+					feedback: fIndex === -1 ? temp : [],
+					followupFeedback: fIndex === 1 ? [] : temp,
+					nextConcepts: this.getConcepts(),
+					display: this.state.exercise.type !== 'survey'
+						? displayType.exercise
+						: (this.state.conceptOptions > 1
+							? displayType.concept
+							: displayType.exercise),
+				}, () => {
+					if (!feedback.pass) {
+						this.updateWrongAnswersCount(false, questionIndex, fIndex);
+					}
+				});
+			}
 	}
 
 	/**
@@ -599,87 +611,11 @@ class App extends Component {
 				body: JSON.stringify(requestBody)
 			})
 			const feedback = await response.json();
-			this.setFeedback(feedback, questionIndex, fIndex);
+			this.setFeedback(endpointExtension, feedback, questionIndex, fIndex);
 		}
 		await request();
 	}
 
-	/**
-	 * helper function to check answer for memory table questions
-	 * @param answerKey
-	 * @param userInput
-	 * @returns {boolean}
-	 */
-  arrayEquals(answerKey: string[], userInput: string[]) {
-  	if (!userInput || answerKey.length !== userInput.length) {
-  		return false;
-		}
-		let equals = true;
-		for (let i = 0; i < answerKey.length; i++) {
-			// intended comparision (types are different)
-			if (answerKey[i].toString() !== userInput[i].toString()) {
-				return false;
-			}
-		}
-		return equals;
-	}
-
-	/**
-	 * Function to check correctness of user input for memory table questions
-	 * Process the parameters before passing them to a helper method to handle the
-	 * case where the question is a follow up question
-	 *
-	 * @param question
-	 * @param questionIndex
-	 * @param answer
-	 * @param fIndex
-	 * @param feedbackTemp
-	 * @returns {boolean}
-	 */
-	verifyMemoryTable(question: any, questionIndex : number, answer: any, fIndex: number, feedbackTemp : any) {
-  	let checkerForCorrectness = true;
-		if (fIndex === -1) {
-			let response = answer[questionIndex];
-			feedbackTemp[questionIndex] = "correct";
-			this.verifyMemoryTableHelper(question, questionIndex, response, feedbackTemp);
-			checkerForCorrectness = feedbackTemp[questionIndex] === "correct";
-		} else {
-			let response = !answer[questionIndex] && [];
-			feedbackTemp[questionIndex] = !feedbackTemp[questionIndex] && [];
-			response = answer[questionIndex][fIndex];
-			feedbackTemp[questionIndex][fIndex] = "correct";
-			this.verifyMemoryTableHelper(question, fIndex, response, feedbackTemp[questionIndex]);
-			checkerForCorrectness = feedbackTemp[questionIndex][fIndex] === "correct";
-		}
-		return checkerForCorrectness;
-	}
-
-	/**
-	 * Compares user input with the correct answer for a memory table question
-	 * @param question
-	 * @param questionIndex
-	 * @param response
-	 * @param feedback
-	 */
-	verifyMemoryTableHelper(question: any, questionIndex : number, response: any, feedback : any) {
-		let answer = question.answer;
-		if (typeof(answer) === "string") {
-			answer = JSON.parse(answer);
-		}
-		Object.keys(response).forEach((variable) => {
-			if (feedback[questionIndex] === "correct") {
-				if(response.hasOwnProperty(variable)) {
-					let values = response[variable];
-					let valuesKey = answer[variable];
-					let equal = this.arrayEquals(values, valuesKey);
-					feedback[questionIndex] = equal ? "correct" : "incorrect";
-				} else {
-					feedback[questionIndex] = "incorrect";
-				}
-			}
-		});
-	}
- 
   /**
    * updateWrongAnswersCount updates the count for wrong answers
    * @param {boolean} checkerForCorrectness correctness false or true
@@ -953,7 +889,7 @@ class App extends Component {
 													 exercisesList={this.state.exerciseList} 
 													 conceptMapGetter={this.state.conceptMapGetter} 
 													 goToExercise={this.goToExercise} 
-													 instructionsMap={this.state.instructionsMap}/>
+													 instructionsMap={this.state.instructionsMap} />
 				</div>
 		);
   }
