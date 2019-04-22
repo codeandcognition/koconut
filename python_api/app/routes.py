@@ -16,6 +16,8 @@ MULTIPLE_CHOICE = "multipleChoice"
 SHORT_ANSWER = "shortAnswer"
 WRITE_CODE = "writeCode"
 TABLE = "table"
+SELECT_MULTIPLE = "selectMultiple"
+CHECKBOX_QUESTION = "checkboxQuestion"
 
 @app.route(f"/checker/{WRITE_CODE}", methods=["POST"])
 @cross_origin()
@@ -36,6 +38,8 @@ def writecode_handler():
     req_body = request.get_json()
     user_answer = req_body.get("userAnswer", "")
     test_code = req_body.get("testCode", "")
+
+    # TODO: REFACTOR USING METHOD DEFINED BELOW
 
     # Create random hashes for each temp file for no overlap
     filename_user_answer = secrets.token_urlsafe(16)
@@ -169,6 +173,34 @@ def shortanswer_handler():
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
 
+@app.route(f"/checker/{CHECKBOX_QUESTION}", methods=["POST"])
+@cross_origin()
+def checkbox_handler():
+    # Make sure is POST request
+    if request.method != "POST":
+        resp = Response("Must be a POST request",
+                        status=405, mimetype=TEXT_TYPE)
+        return resp
+
+    # Make sure is JSON request body
+    if (is_req_json_type(request)):
+        resp = Response("Request body must be JSON",
+                        status=415, mimetype=TEXT_TYPE)
+        return resp
+
+    # get request body
+    req_body = request.get_json()
+    user_answer = req_body.get("userAnswer", None)
+    expected_answer = req_body.get("expectedAnswer", None)
+
+    if user_answer is None or expected_answer is None:
+        resp = Response("An error occurred when decoding question", status=500, mimetype=TEXT_TYPE)
+        return resp
+    
+    resp_body = checkbox_question_check_correctness(expected_answer, user_answer)
+    resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
+    return resp
+
 @app.route(f"/checker/{TABLE}", methods=["Post"])
 @cross_origin()
 def table_handler():
@@ -186,8 +218,8 @@ def table_handler():
 
     # get request body
     req_body = request.get_json()
-    questions = req.body.get("questions")
-    answers = req.body.get("answer")
+    questions = req_body.get("questions")
+    answers = req_body.get("answer")
 
     results = []
     # iterate through each row and col of the questions/answers
@@ -236,6 +268,49 @@ def table_handler():
                 test_code = question["code"]
                 ran_code = write_code_run_code(user_answer, test_code)
                 results[i].append(ran_code)
+            
+            elif question["type"] == SELECT_MULTIPLE or question["type"] == CHECKBOX_QUESTION:
+                # checkbox questions expect the answer to be in an array of choices
+                user_answer = answers[i][j]
+                actual_answer = question["answer"]
+                results[i].append(checkbox_question_check_correctness(actual_answer,user_answer))
+            else:
+                results[i].append({
+                    "blank": True
+                })
+
+def checkbox_question_check_correctness(actual_answer, user_answer): 
+    """
+    checkbox_question_check_correctness compares the actual checkbox answer to the user's answer
+
+    The way this function is implemented internally is that it sorts the two arrays and compares 
+    each value for the previous one. Therefore, it doesn't check WHICH ones are correct, it just
+    checks if the entire solution is matching. If we want to give personalized responses or mark
+    which one is wrong, we must check these individually with some other method. But for now, 
+    this will do. 
+
+    TODO: Make this more robust and check which choices in specific are wrong
+    """   
+    actual = actual_answer[:]
+    user = user_answer[:]
+   
+    if len(actual) != len(user):
+        return {
+            "pass": False,
+            "failMessage": f"Expected {len(actual)} choices chosen but got {len(user)}"
+        }
+    actual.sort()
+    user.sort()
+
+    for idx, ans in enumerate(actual):
+        if ans != user[idx]:
+            return {
+                "pass": False,
+                "failMessage": f"Expected {ans} but got {user[idx]}"
+            }
+    return {
+        "pass": True
+    }
 
 def fill_blank_question_check_correctness(actual_answer, user_answer):
     """
