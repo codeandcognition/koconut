@@ -133,7 +133,7 @@ def multiplechoice_handler():
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
 
-@app.route(f"/checker/{SHORT_ANSWER}", methods=["Post"])
+@app.route(f"/checker/{SHORT_ANSWER}", methods=["POST"])
 @cross_origin()
 def shortanswer_handler():
     # Make sure is POST request
@@ -278,6 +278,8 @@ def table_handler():
                 results[i].append({
                     "blank": True
                 })
+    resp = Response(json.dumps(results), status=200, mimetype=JSON_TYPE)
+    return resp
 
 def checkbox_question_check_correctness(actual_answer, user_answer): 
     """
