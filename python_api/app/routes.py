@@ -18,6 +18,7 @@ WRITE_CODE = "writeCode"
 TABLE = "table"
 SELECT_MULTIPLE = "selectMultiple"
 CHECKBOX_QUESTION = "checkboxQuestion"
+MEMORY_TABLE = "memoryTable"
 
 @app.route(f"/checker/{WRITE_CODE}", methods=["POST"])
 @cross_origin()
@@ -386,6 +387,26 @@ def fill_blank_run_code(user_answer, test_code):
         "failMessage": "Expected {} but got {}".format(expected, got)
     }
     return resp_body
+
+@app.route(f"/checker/{MEMORY_TABLE}", methods=["POST"])
+@cross_origin()
+def memorytable_handler():
+    # Make sure is POST request
+    if request.method != "POST":
+        resp = Response("Must be a POST request",
+                        status=405, mimetype=TEXT_TYPE)
+        return resp
+
+    # Make sure is JSON request body
+    if (is_req_json_type(request)):
+        resp = Response("Request body must be JSON",
+                        status=415, mimetype=TEXT_TYPE)
+        return resp
+
+    # Get request body
+    req_body = request.get_json()
+    user_answer = req_body.get("userAnswer", "")
+    test_code = req_body.get("testCode", "")
 
 def write_code_run_code(user_answer, test_code):
     # Create random hashes for each temp file for no overlap
