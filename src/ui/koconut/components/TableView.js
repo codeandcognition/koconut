@@ -199,10 +199,10 @@ class TableView extends Component {
                       let correctness = "";
                       if (this.props.feedback && this.props.feedback[i]) { 
                         let temp = this.props.feedback[i][j];
-                        if (temp === "incorrect") {
-                          correctness = "table-wrong";
-                        } else if(temp === "correct") {
+                        if (temp.pass) {
                           correctness = "table-correct";
+                        } else if (temp.pass === false) {
+                          correctness = "table-wrong";
                         }
                       }
 

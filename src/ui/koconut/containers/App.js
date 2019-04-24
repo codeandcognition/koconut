@@ -530,7 +530,9 @@ class App extends Component {
 					for (let i = 0; i < numberOfRows; i++) {
 							for (let j = 0; j < numberOfColumns; j++) {
 									let row = questions[i];
-									row.push(cells[cell]);
+									if (cells[cell].answer) {
+										row.push(cells[cell]);
+									}
 									cell++;
 									questions[i] = row;
 							}
@@ -542,6 +544,7 @@ class App extends Component {
 						let row = answer[i];
 						let numQuestionsInRow = questions[i].length;
 						row = row.slice(numberOfColumns - numQuestionsInRow, numberOfColumns);
+						
 						answer[i] = row;
 					}
 					requestBody.userAnswer = answer;
@@ -566,32 +569,54 @@ class App extends Component {
 	 */
 	setFeedback(type: string, feedback: any, questionIndex: number, fIndex: number) {
 			if (type == ExerciseTypes.table) {
-				console.log(feedback);
-			} else {
+				let question = this.state.exercise.questions[questionIndex];
+				let numberOfColumns = question.colNames.length;
+				let numberOfQuestionColumns = feedback[0].length;
 				let temp = [];
-				if (fIndex === -1) {
-					temp = this.state.feedback;
-					temp[questionIndex] = feedback;
-				} else {
-					temp = this.state.followupFeedback;
-					temp[fIndex] = feedback;
+				for (let i = 0; i < numberOfColumns - numberOfQuestionColumns; i++) {
+					temp.push({});
 				}
-
-				this.setState({
-					feedback: fIndex === -1 ? temp : [],
-					followupFeedback: fIndex === 1 ? [] : temp,
-					nextConcepts: this.getConcepts(),
-					display: this.state.exercise.type !== 'survey'
-						? displayType.exercise
-						: (this.state.conceptOptions > 1
-							? displayType.concept
-							: displayType.exercise),
-				}, () => {
-					if (!feedback.pass) {
-						this.updateWrongAnswersCount(false, questionIndex, fIndex);
-					}
-				});
+				for (let i = 0; i < feedback.length; i++) {
+					let line = feedback[i];
+					feedback[i] = temp.concat(line);
+				}
 			}
+			let temp = [];
+			if (fIndex === -1) {
+				temp = this.state.feedback;
+				temp[questionIndex] = feedback;
+			} else {
+				temp = this.state.followupFeedback;
+				temp[fIndex] = feedback;
+			}
+			let passed = true;
+			if (type === ExerciseTypes.table) {
+				for (let i = 0; i < feedback.length; i++) {
+					let item = feedback[i];
+					passed = Object.keys(item).length > 0 && item.pass;
+					if (!passed) {
+						break;
+					}
+				}
+			} else {
+				passed = feedback.pass;
+			}
+
+		// update feedback in state
+		this.setState({
+			feedback: fIndex === -1 ? temp : [],
+			followupFeedback: fIndex === 1 ? [] : temp,
+			nextConcepts: this.getConcepts(),
+			display: this.state.exercise.type !== 'survey'
+				? displayType.exercise
+				: (this.state.conceptOptions > 1
+					? displayType.concept
+					: displayType.exercise),
+		}, () => {
+			if (!passed) {
+				this.updateWrongAnswersCount(false, questionIndex, fIndex);
+			}
+		});
 	}
 
 	/**
