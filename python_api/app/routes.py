@@ -231,7 +231,7 @@ def table_handler():
         for j, question in enumerate(question_row):
             if question["type"] == FILL_BLANK:
                 user_answer = answers[i][j]
-                if question["code"] != "":
+                if question["code"] == "":
                     actual_answer = question["answer"]
                     correctness = fill_blank_question_check_correctness(actual_answer, user_answer)
                     if correctness:
@@ -406,7 +406,42 @@ def memorytable_handler():
     # Get request body
     req_body = request.get_json()
     user_answer = req_body.get("userAnswer", "")
-    test_code = req_body.get("testCode", "")
+    expected_answer = req_body.get("expectedAnswer", "")
+
+    resp_body = memorytable_check_correctness(user_answer, expected_answer)
+    resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
+    return resp
+
+def memorytable_check_correctness(user_answer, expected_answer):
+    """
+    memorytable_check_correctness will compare the user answer dictionary to the expected answer and
+    make sure that they are a deep copy. 
+
+    It does not incorporate any code checking at all, just string comparisons. 
+    """
+    for variable, expected_values in expected_answer:
+        if variable not in user_answer:
+            return {
+                "pass": False,
+                "failMessage": f"Expected variable {variable} not provided."
+            }
+        user_values = user_answer[variable]
+        if len(expected_values) != len(user_values):
+            return {
+                "pass": False,
+                "failMessage": f"Length of expected values for {variable} is different."
+            }
+        for idx, expected_value in expected_values:
+            user_value = user_values[idx]
+            if expected_value.strip() != user_value.strip():
+                return {
+                    "pass": False,
+                    "failMessage": f"Values for {variable} are incorrect."
+                }
+    return {
+        "pass": True
+    }
+
 
 def write_code_run_code(user_answer, test_code):
     # Create random hashes for each temp file for no overlap
