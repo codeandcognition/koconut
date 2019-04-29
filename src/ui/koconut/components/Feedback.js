@@ -34,9 +34,11 @@ class Feedback extends Component {
   }
 
   showFeedbackMessage(type: string, timeswrong: any, feedback: any, correctness: string) {
-    if(type === "multipleChoice") {
+    if(type === ExerciseTypes.multipleChoice) {
       let answer = this.props.answer[this.props.questionIndex];
       return <div>{feedback[answer]}</div>
+    } else if (type === ExerciseTypes.checkboxQuestion)  {
+      return <div>{feedback.failMessage}</div>
     } else {
       let feedbackMessages = []
       if (feedback) {
