@@ -220,7 +220,7 @@ def table_handler():
     # get request body
     req_body = request.get_json()
     questions = req_body.get("questions")
-    answers = req_body.get("answer")
+    answers = req_body.get("userAnswer")
 
     results = []
     # iterate through each row and col of the questions/answers
