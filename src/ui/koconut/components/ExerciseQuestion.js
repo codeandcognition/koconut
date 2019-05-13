@@ -162,11 +162,7 @@ class ExerciseQuestion extends Component {
 							}
 						}
 					}
-
-					// console.log("number answer cells", numAnswerCells);
-					// console.log("count", count);
-
-					disableSubmit = numAnswerCells !== count;
+					disableSubmit = count < numAnswerCells;
 				} else {
 					disableSubmit = false;
 				}

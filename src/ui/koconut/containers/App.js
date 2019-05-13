@@ -544,15 +544,15 @@ class App extends Component {
 				}
 
 				// omit cells that map to prompt cells in the table
-				let answer = requestBody.userAnswer;
-				for (let i = 0; i < answer.length; i++) {
-					let row = answer[i];
+				let userAnswer = requestBody.userAnswer;
+				for (let i = 0; i < userAnswer.length; i++) {
+					let row = userAnswer[i];
 					let numQuestionsInRow = questions[i].length;
 					row = row.slice(numberOfColumns - numQuestionsInRow, numberOfColumns);
 
-					answer[i] = row;
+					userAnswer[i] = row;
 				}
-				requestBody.userAnswer = answer;
+				requestBody.userAnswer = userAnswer;
 				requestBody.questions = questions;
 				break;
 			default:

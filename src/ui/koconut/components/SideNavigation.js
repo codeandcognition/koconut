@@ -94,7 +94,6 @@ class SideNavigation extends Component {
 				this.props.instructionsRead[this.props.conceptCode]["READ"] ?
 				this.props.instructionsRead[this.props.conceptCode]["READ"][index] : null;
 			let text = "";
-			console.log(this.props.instructionRecommendations);
 			if (this.props.instructionRecommendations[this.props.conceptCode] &&
 				this.props.instructionRecommendations[this.props.conceptCode][type] &&
 				this.props.instructionRecommendations[this.props.conceptCode][type][index]) {

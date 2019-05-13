@@ -48,9 +48,6 @@ class TableView extends Component {
     let rows = this.props.question.data.length / cols;
     let tempAns = this.state.answer;
 
-    console.log(choice, row, col);
-    console.log(this.props.feedback);
-
     for (let i = 0; i < rows; i++) {
       if (!tempAns[i]) {
         let temp = [];
@@ -68,8 +65,6 @@ class TableView extends Component {
     }, () => {
       this.props.inputHandler(tempAns, this.props.questionIndex, this.props.fIndex);
     });
-
-    console.log(tempAns);
   }
 
   /**
