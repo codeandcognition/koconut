@@ -49,15 +49,6 @@ class Feedback extends Component {
         });
       }
       return <div>{feedbackMessages}</div>
-      // if(correctness.pass) {
-      //   return <div>{feedback && feedback.correct}</div>
-      // } else {
-      //   if(feedback && feedback.incorrect && timeswrong > feedback.incorrect.length) {
-      //     return <div>{feedback.incorrect[feedback.incorrect.length - 1]}</div>
-      //   } else {
-      //     return <div>{feedback && feedback.incorrect && feedback.incorrect[timeswrong-1]}</div>
-      //   }
-      // }
     }
   }
   

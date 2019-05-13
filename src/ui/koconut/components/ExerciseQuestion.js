@@ -5,6 +5,8 @@ import HintButton from './Hint';
 import AceEditor from 'react-ace';
 import 'brace/mode/python';
 import HintContainer from '../containers/HintContainer';
+import { Button } from '@material-ui/core';
+import ExerciseTypes from '../../../data/ExerciseTypes.js';
 
 type Props = {
 	question: any,
@@ -138,7 +140,7 @@ class ExerciseQuestion extends Component {
 			// to avoid evaluating incomplete answers
 			let answer = this.props.answer[this.props.index];
 			if (answer) {
-				if (this.props.question.type === "table") {
+				if (this.props.question.type === ExerciseTypes.table) {
 					// count the number of answers expected
 					let numAnswerCells = 0;
 					this.props.question.data.forEach(cell => {
@@ -148,7 +150,9 @@ class ExerciseQuestion extends Component {
 					});
 
 					// count the number of answers entered by user
+					// console.log(answer);
 					let count = 0;
+					// console.log(count);
 					for (let i = 0; i < answer.length; i++) {
 						if (answer[i]) {
 							for (let j = 0; j < answer[i].length; j++) {
@@ -158,6 +162,10 @@ class ExerciseQuestion extends Component {
 							}
 						}
 					}
+
+					// console.log("number answer cells", numAnswerCells);
+					// console.log("count", count);
+
 					disableSubmit = numAnswerCells !== count;
 				} else {
 					disableSubmit = false;
@@ -178,15 +186,17 @@ class ExerciseQuestion extends Component {
 								<HintButton hintRequestHandler={this.hintRequestHandler} disableHint={false}/>
 								{this.state.hintFor && this.renderHint()}
 							</div>
-							{(this.props.feedback !== null) &&
-							<Submit text={submitButtonText}
-											disabled={disableSubmit}
-											submitHandler={() => {
-												window.scrollTo(0, 0);
-												this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex)
-											}
-											}
-							/>
+							{this.props.feedback && this.props.feedback.length > 0 ?
+								<p>Update your answer to try again!</p>
+								:
+								<Submit text={submitButtonText}
+									disabled={disableSubmit}
+									submitHandler={() => {
+										window.scrollTo(0, 0);
+										this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex)
+									}
+									}
+								/>
 							}
 						</div>
           </div>

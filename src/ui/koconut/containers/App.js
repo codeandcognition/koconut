@@ -626,6 +626,8 @@ class App extends Component {
 	 * @param {*} fIndex 
 	 */
 	async verifyUserAnswer(endpointExtension: string, requestBody: any, questionIndex: number, fIndex: number) {
+		console.log(requestBody);
+		
 		const request = async () => {
 			const response = await fetch(PYTHON_API + endpointExtension, {
 				method: "POST",
