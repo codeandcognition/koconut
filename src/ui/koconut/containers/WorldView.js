@@ -18,7 +18,8 @@ type Props = {
 	exercisesList: any,
 	conceptMapGetter: any,
 	getOrderedConcepts: Function,
-	goToExercise: Function
+  goToExercise: Function,
+  exerciseRecommendations: any
 };
 
 /**
@@ -294,7 +295,8 @@ class WorldView extends Component {
         conceptMapGetter={this.props.conceptMapGetter}
         getOrderedConcepts={this.props.getOrderedConcepts}
         goToExercise={this.props.goToExercise}
-        persist={false} />
+        persist={false} 
+        exerciseRecommendations={this.props.exerciseRecommendations}/>
     );
   }
 

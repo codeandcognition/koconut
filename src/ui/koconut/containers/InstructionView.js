@@ -22,6 +22,7 @@ type Props = {
 	getInstruction: Function,
 	exercisesList: any[],
 	goToExercise: Function,
+	exerciseRecommendations: any,
 }
 
 /**
@@ -277,7 +278,8 @@ class InstructionView extends Component {
 										getOrderedConcepts={this.props.getOrderedConcepts}
 										goToExercise={this.props.goToExercise} 
 										persist={true} 
-										instructionsMap={this.props.instructionsMap} />
+										instructionsMap={this.props.instructionsMap} 
+										exerciseRecommendations={this.props.exerciseRecommendations}/>
 									<div className={"overallView"}>
 										<BreadCrumbs
 											concept={this.props.conceptType}

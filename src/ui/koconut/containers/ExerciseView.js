@@ -33,7 +33,8 @@ type Props = {
   sendExerciseViewDataToFirebase: Function,
   getInstruction: Function,
   generateExercise: Function,
-  exerciseList: any[]
+  exerciseList: any[],
+  exerciseRecommendations: any
 }
 
 /**
@@ -186,7 +187,10 @@ class Exercise extends Component {
             exercisesList={this.props.exercisesList}
             conceptMapGetter={this.props.conceptMapGetter}
             getOrderedConcepts={this.props.getOrderedConcepts}
-            goToExercise={this.props.goToExercise} persist={true} instructionsMap={this.props.instructionsMap}/>
+            goToExercise={this.props.goToExercise} 
+            persist={true} 
+            instructionsMap={this.props.instructionsMap}
+            exerciseRecommendations={this.props.exerciseRecommendations}/>
           </div>
           <div className="exercise-view">
             <BreadCrumbs conceptType={this.props.concept}

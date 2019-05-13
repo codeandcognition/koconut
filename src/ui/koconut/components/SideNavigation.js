@@ -102,11 +102,17 @@ class SideNavigation extends Component {
 		});
 		let {exercises, exerciseIds} = this.filterExercisesByConcept(this.props.conceptCode, type);
 		exercises.map((ex, index) => {
+			let exerciseId = exerciseIds[index];
+			let text = "";
+			if (this.props.exerciseRecommendations[exerciseId]) {
+				let recommendation = this.props.exerciseRecommendations[exerciseId];
+				text = recommendation.text; 
+			}
 			buttonsList.push(
 				<Link key={"ex" + index} 
 					to={`/practice/${this.props.conceptCode}/practice-writing-code`}
 					onClick={() => this.props.goToExercise(this.props.conceptCode, type,
-						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem suggestionText={"placeholder for now"} name={ex.shortPrompt}></NavItem></Link>
+						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem suggestionText={text} name={ex.shortPrompt}></NavItem></Link>
 			);
 		});
 		return <List style={{ width: '100%' }}>{buttonsList}</List>;

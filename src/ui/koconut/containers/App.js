@@ -128,7 +128,8 @@ class App extends Component {
     codeTheme: string,
     timesGotQuestionWrong: number[],
     followupTimesGotQuestionWrong: any[],
-    exerciseId: string,
+		exerciseId: string,
+		exerciseRecommendations: any
   };
 
   constructor() {
@@ -151,7 +152,8 @@ class App extends Component {
 			errorMessage: '', // none
 			author: false,
       exerciseList: null,
-      conceptMapGetter: null,
+			conceptMapGetter: null,
+			exerciseRecommendations: {},
       codeTheme: '',
       timesGotQuestionWrong: [], // times the user has gotten question wrong,
       // indices are question index
@@ -244,7 +246,8 @@ class App extends Component {
     return topoOrder;
   }
 
-  componentDidMount() {
+	// TODO: Update this when reading recommendations data from Firebase
+	componentDidMount() {
   	this.mounted = true;
   	this.props.firebase.auth().onAuthStateChanged(user => {
   		if (user) {
@@ -860,6 +863,7 @@ class App extends Component {
 							getOrderedConcepts={this.getOrderedConcepts}
 							goToExercise={this.goToExercise} 
 							instructionsMap={this.state.instructionsMap}
+							exerciseRecommendations={this.state.exerciseRecommendations}
 					/>
 				</div>
     );
@@ -890,7 +894,9 @@ class App extends Component {
                      getOrderedConcepts={this.getOrderedConcepts}
 										 exercisesList={this.state.exerciseList}
 										 conceptMapGetter={this.state.conceptMapGetter}
-										 goToExercise={this.goToExercise} instructionsMap={this.state.instructionsMap}/>
+										 goToExercise={this.goToExercise} 
+										 instructionsMap={this.state.instructionsMap} 
+										 exerciseRecommendations={this.state.exerciseRecommendations}/>
 				</div>
     )
   }
@@ -916,7 +922,8 @@ class App extends Component {
 													 exercisesList={this.state.exerciseList} 
 													 conceptMapGetter={this.state.conceptMapGetter} 
 													 goToExercise={this.goToExercise} 
-													 instructionsMap={this.state.instructionsMap} />
+													 instructionsMap={this.state.instructionsMap} 
+													 exerciseRecommendations={this.state.exerciseRecommendations}/>
 				</div>
 		);
   }
