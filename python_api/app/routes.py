@@ -6,6 +6,8 @@ import secrets
 import subprocess
 import os
 from flask_cors import cross_origin
+import python_api.app.bkt as bkt
+import pandas as pd
 
 JSON_TYPE = "application/json"
 TEXT_TYPE = "text/plain"
@@ -30,7 +32,7 @@ def writecode_handler():
         return resp
 
     # Make sure is JSON request body
-    if (is_req_json_type(request)):
+    if (is_req_not_json_type(request)):
         resp = Response("Request body must be JSON",
                         status=415, mimetype=TEXT_TYPE)
         return resp
@@ -61,10 +63,10 @@ def writecode_handler():
     test_output = ""
     try:
         user_output = subprocess.check_output(["python", "temp/{}.py".format(filename_user_answer)],
-            universal_newlines=True)
-        test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], 
-            universal_newlines=True)
-        
+                                              universal_newlines=True)
+        test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)],
+                                              universal_newlines=True)
+
         # remove the files
         os.remove("temp/{}.py".format(filename_user_answer))
         os.remove("temp/{}.py".format(filename_test_code))
@@ -78,7 +80,6 @@ def writecode_handler():
         }
         resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
         return resp
-    
     if test_output == user_output:
         resp_body = {
             "pass": True
@@ -110,7 +111,7 @@ def multiplechoice_handler():
         return resp
 
     # Make sure is JSON request body
-    if (is_req_json_type(request)):
+    if (is_req_not_json_type(request)):
         resp = Response("Request body must be JSON",
                         status=415, mimetype=TEXT_TYPE)
         return resp
@@ -127,7 +128,6 @@ def multiplechoice_handler():
         }
         resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
         return resp
-        
     resp_body = {
         "pass": True
     }
@@ -144,7 +144,7 @@ def shortanswer_handler():
         return resp
 
     # Make sure is JSON request body
-    if (is_req_json_type(request)):
+    if (is_req_not_json_type(request)):
         resp = Response("Request body must be JSON",
                         status=415, mimetype=TEXT_TYPE)
         return resp
@@ -166,8 +166,8 @@ def shortanswer_handler():
             "failMessage": "Expected {} but got {}".format(expected_answer, user_answer)
         }
         resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
-        return resp      
-    
+        return resp
+
     resp_body = {
         "pass": True
     }
@@ -184,7 +184,7 @@ def checkbox_handler():
         return resp
 
     # Make sure is JSON request body
-    if (is_req_json_type(request)):
+    if (is_req_not_json_type(request)):
         resp = Response("Request body must be JSON",
                         status=415, mimetype=TEXT_TYPE)
         return resp
@@ -195,12 +195,15 @@ def checkbox_handler():
     expected_answer = req_body.get("expectedAnswer", None)
 
     if user_answer is None or expected_answer is None:
-        resp = Response("An error occurred when decoding question", status=500, mimetype=TEXT_TYPE)
+        resp = Response("An error occurred when decoding question",
+                        status=500, mimetype=TEXT_TYPE)
         return resp
-    
-    resp_body = checkbox_question_check_correctness(expected_answer, user_answer)
+
+    resp_body = checkbox_question_check_correctness(
+        expected_answer, user_answer)
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
+
 
 @app.route(f"/checker/{TABLE}", methods=["Post"])
 @cross_origin()
@@ -212,7 +215,7 @@ def table_handler():
         return resp
 
     # Make sure is JSON request body
-    if (is_req_json_type(request)):
+    if (is_req_not_json_type(request)):
         resp = Response("Request body must be JSON",
                         status=415, mimetype=TEXT_TYPE)
         return resp
@@ -220,20 +223,21 @@ def table_handler():
     # get request body
     req_body = request.get_json()
     questions = req_body.get("questions")
-    answers = req_body.get("userAnswer")
+    answers = req_body.get("answer")
 
     results = []
     # iterate through each row and col of the questions/answers
     for i, question_row in enumerate(questions):
         results.append([])
-        # https://stackoverflow.com/questions/2905965/creating-threads-in-python 
+        # https://stackoverflow.com/questions/2905965/creating-threads-in-python
         # TODO: Multithread this to make it more performant (not necessary unless app grows a ton)
         for j, question in enumerate(question_row):
             if question["type"] == FILL_BLANK:
                 user_answer = answers[i][j]
                 if question["code"] == "":
                     actual_answer = question["answer"]
-                    correctness = fill_blank_question_check_correctness(actual_answer, user_answer)
+                    correctness = fill_blank_question_check_correctness(
+                        actual_answer, user_answer)
                     if correctness:
                         results[i].append({
                             "pass": True,
@@ -241,11 +245,12 @@ def table_handler():
                     else:
                         results[i].append({
                             "pass": False,
-                            "failMessage": "Expected {} but got {}".format(actual_answer, 
-                                user_answer)
+                            "failMessage": "Expected {} but got {}".format(actual_answer,
+                                                                           user_answer)
                         })
                 else:
-                    ran_code = fill_blank_run_code(user_answer, question["code"])
+                    ran_code = fill_blank_run_code(
+                        user_answer, question["code"])
                     results[i].append(ran_code)
 
             elif question["type"] == MULTIPLE_CHOICE:
@@ -253,7 +258,8 @@ def table_handler():
                 # in the future to incorporate different functionality
                 actual_answer = question["answer"]
                 user_answer = answers[i][j]
-                correctness = multiple_choice_question_check_correctness(actual_answer, user_answer)
+                correctness = multiple_choice_question_check_correctness(
+                    actual_answer, user_answer)
                 if correctness:
                     results[i].append({
                         "pass": True,
@@ -263,18 +269,17 @@ def table_handler():
                         "pass": False,
                         "failMessage": "Expected {} but got {}".format(actual_answer, user_answer)
                     })
-            
             elif question["type"] == WRITE_CODE:
                 user_answer = answers[i][j]
                 test_code = question["code"]
                 ran_code = write_code_run_code(user_answer, test_code)
                 results[i].append(ran_code)
-            
             elif question["type"] == SELECT_MULTIPLE or question["type"] == CHECKBOX_QUESTION:
                 # checkbox questions expect the answer to be in an array of choices
                 user_answer = answers[i][j]
                 actual_answer = question["answer"]
-                results[i].append(checkbox_question_check_correctness(actual_answer,user_answer))
+                results[i].append(checkbox_question_check_correctness(
+                    actual_answer, user_answer))
             else:
                 results[i].append({
                     "blank": True
@@ -282,7 +287,8 @@ def table_handler():
     resp = Response(json.dumps(results), status=200, mimetype=JSON_TYPE)
     return resp
 
-def checkbox_question_check_correctness(actual_answer, user_answer): 
+
+def checkbox_question_check_correctness(actual_answer, user_answer):
     """
     checkbox_question_check_correctness compares the actual checkbox answer to the user's answer
 
@@ -293,10 +299,10 @@ def checkbox_question_check_correctness(actual_answer, user_answer):
     this will do. 
 
     TODO: Make this more robust and check which choices in specific are wrong
-    """   
+    """
     actual = actual_answer[:]
     user = user_answer[:]
-   
+
     if len(actual) != len(user):
         return {
             "pass": False,
@@ -355,9 +361,9 @@ def fill_blank_run_code(user_answer, test_code):
     # Check the std output of all files
     test_output = ""
     try:
-        test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], 
-            universal_newlines=True)
-        
+        test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)],
+                                              universal_newlines=True)
+
         # remove the files
         os.remove("temp/{}.py".format(filename_test_code))
     except subprocess.CalledProcessError as exc:
@@ -368,7 +374,6 @@ def fill_blank_run_code(user_answer, test_code):
             "failMessage": "Unable to compile code"
         }
         return resp_body
-    
     if test_output == user_answer:
         resp_body = {
             "pass": True
@@ -398,7 +403,7 @@ def memorytable_handler():
         return resp
 
     # Make sure is JSON request body
-    if (is_req_json_type(request)):
+    if (is_req_not_json_type(request)):
         resp = Response("Request body must be JSON",
                         status=415, mimetype=TEXT_TYPE)
         return resp
@@ -463,10 +468,10 @@ def write_code_run_code(user_answer, test_code):
     test_output = ""
     try:
         user_output = subprocess.check_output(["python", "temp/{}.py".format(filename_user_answer)],
-            universal_newlines=True)
-        test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)], 
-            universal_newlines=True)
-        
+                                              universal_newlines=True)
+        test_output = subprocess.check_output(["python", "temp/{}.py".format(filename_test_code)],
+                                              universal_newlines=True)
+
         # remove the files
         os.remove("temp/{}.py".format(filename_user_answer))
         os.remove("temp/{}.py".format(filename_test_code))
@@ -479,7 +484,6 @@ def write_code_run_code(user_answer, test_code):
             "failMessage": "Unable to compile code"
         }
         return resp_body
-    
     if test_output == user_output:
         resp_body = {
             "pass": True
@@ -499,5 +503,87 @@ def write_code_run_code(user_answer, test_code):
     }
     return resp_body
 
-def is_req_json_type(request):
+
+def is_req_not_json_type(request):
     return request.headers.get("Content-Type") != JSON_TYPE
+
+
+@app.route("/bkt", methods=["POST"])
+@cross_origin()
+def bkt_handler():
+    # Make sure is POST request
+    if request.method != "POST":
+        resp = Response("Must be a POST request",
+                        status=405, mimetype=TEXT_TYPE)
+        return resp
+
+    # Make sure is JSON request body
+    if is_req_not_json_type(request):
+        resp = Response("Request body must be JSON",
+                        status=415, mimetype=TEXT_TYPE)
+        return resp
+
+    # get request body
+    req_body = request.get_json()
+
+    is_correct = req_body.get("is_correct", None)
+    eid = req_body.get("eid", None)
+    transfer = req_body.get("transfer", None)
+    item_params = req_body.get("item_params", None)
+    item_params_df = None
+    try:
+        item_params_df = convert_item_params_to_dataframe(item_params)
+    except Exception as exc:
+        resp = Response(f"Error: {exc}", status=400, mimetype=TEXT_TYPE)
+        return resp
+    prior_pknown = req_body.get("prior_pknown", None)
+    exercise_ids = req_body.get("exercise_ids", None)
+
+    if (is_correct is None) or (eid is None) \
+            or (transfer is None) or (item_params_df is None) \
+            or (prior_pknown is None) or (exercise_ids is None):
+        resp = Response("You are missing a field",
+                        status=400, mimetype=TEXT_TYPE)
+        return resp
+
+    pk_new = None
+    try:
+        pk_new = bkt.posterior_pknown(
+            is_correct, eid, transfer, item_params_df, prior_pknown)
+    except Exception as exc:
+        resp = Response(f"Error: {exc}", status=400, mimetype=TEXT_TYPE)
+        return resp
+
+    # TODO: This may be returned as an un-serializable object (Series), will have to
+    # call a function to convert to list if so
+    suggested_exercises = bkt.order_next_questions(
+        exercise_ids, pk_new, item_params)
+
+    results = {
+        "pk_new": pk_new,
+        "suggested_exercises": suggested_exercises
+    }
+    resp = Response(json.dumps(results), status=200, mimetype=JSON_TYPE)
+    return resp
+
+
+def convert_item_params_to_dataframe(item_params):
+    """
+    item_params is json array:
+        [
+            {
+                eid: string,
+                slip: float,
+                guess: float,
+                concept: string,
+            }
+        ]
+
+    returns pandas representation of this json array
+    """
+    for item in item_params:
+        if len(item) != 4:
+            raise ValueError("Invalid item params provided")
+        if ("eid" not in item) or ("slip" not in item) or ("guess" not in item) or ("concept" not in item):
+            raise ValueError("Invalid item params provided")
+    return pd.DataFrame(item_params)
