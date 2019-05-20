@@ -150,9 +150,7 @@ class ExerciseQuestion extends Component {
 					});
 
 					// count the number of answers entered by user
-					// console.log(answer);
 					let count = 0;
-					// console.log(count);
 					for (let i = 0; i < answer.length; i++) {
 						if (answer[i]) {
 							for (let j = 0; j < answer[i].length; j++) {
@@ -170,7 +168,6 @@ class ExerciseQuestion extends Component {
 		}
 		
 		let submitButtonText = this.props.feedback ? "Try Again" : "Submit";
-
     return (
       <div>
         <div className="information" style={{width: "100%", display: "flex", textAlign: "center", justifyContent: "space-between"}}>

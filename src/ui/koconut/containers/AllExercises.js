@@ -88,7 +88,6 @@ class AllExercises extends Component {
           exerciseIds.push(exerciseId);
         });
       }
-      
       if (writeExercises) {
         writeExercises.forEach((exerciseId) => {
           results.push(exerciseList[exerciseId]);
