@@ -33,13 +33,15 @@ class Choice extends Component {
   }
 
   render() {
+    // ${this.props.disabled ? 'disabled' : 'notdisabled'}
     return (
         <div
-            className={`choice ${this.props.answer ? 'answer' : ''} ${this.props.disabled ? 'disabled' : 'notdisabled'}`}
+            className={`choice ${this.props.answer ? 'answer' : ''}`}
             onClick={() => {
-              if (!this.props.disabled) {
-                this.props.handleClick(this.props.choice, this.props.questionIndex, this.props.fIndex);
-              }
+              this.props.handleClick(this.props.choice, this.props.questionIndex, this.props.fIndex);
+              // if (!this.props.disabled) {
+
+              // }
             }}
             data-tip
             style={{width: "60%"}}
