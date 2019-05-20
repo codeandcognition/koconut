@@ -110,7 +110,7 @@ class SideNavigation extends Component {
 				<Link key={index}
 					onClick={() => this.props.getInstruction(this.props.conceptCode, type, index)}
 					to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
-				><NavItem name={item} read={read} suggestionText={text}></NavItem></Link>
+				><NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem></Link>
 			)
 		});
 		let { exercises, exerciseIds } = this.filterExercisesByConcept(this.props.conceptCode, type);
@@ -149,19 +149,19 @@ class SideNavigation extends Component {
 					<NavSection
 						getInstructionTitles={null}
 						title={"Overview"}
-						progress={<Progress percent={25} />}
+						progress={<Progress percent={0.25} />}
 						body={<ConceptOverview conceptCode={this.props.conceptCode} />}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Reading"}
-						progress={<Progress percent={25} />}
+						progress={<Progress percent={0.55} />}
 						body={readingSection}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Writing"}
-						progress={<Progress percent={25} />}
+						progress={<Progress percent={0.98} />}
 						body={writingSection}>
 					</NavSection>
 				</CardContent>
