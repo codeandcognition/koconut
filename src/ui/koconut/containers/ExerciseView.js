@@ -33,7 +33,8 @@ type Props = {
   sendExerciseViewDataToFirebase: Function,
   getInstruction: Function,
   generateExercise: Function,
-  exerciseList: any[]
+  exerciseList: any[],
+  exerciseRecommendations: any
 }
 
 /**
@@ -103,7 +104,9 @@ class Exercise extends Component {
       let temp = this.state.answer;
       temp[index] = content;
       this.setState({
-        answer: temp
+        answer: temp,
+      }, () => {
+        this.props.resetFeedback();
       });
     } else {
       let temp = this.state.followupAnswers;
@@ -111,6 +114,8 @@ class Exercise extends Component {
       temp[index][fIndex] = content;
       this.setState({
         followupAnswers: temp
+      }, () => {
+        this.props.resetFeedback();
       });
     }
   }
@@ -170,7 +175,6 @@ class Exercise extends Component {
     let styles = {  // TODO put this in the constructor, unnecessary calculations per render
       marginTop: '10%'
     };
-    console.log(this.props.exercisesList);
     return (
         <div className="exercise-container" style={styles}>
           <div className="sidebar-menu">
@@ -183,7 +187,11 @@ class Exercise extends Component {
             exercisesList={this.props.exercisesList}
             conceptMapGetter={this.props.conceptMapGetter}
             getOrderedConcepts={this.props.getOrderedConcepts}
-            goToExercise={this.props.goToExercise} persist={true} instructionsMap={this.props.instructionsMap}/>
+            goToExercise={this.props.goToExercise} 
+            persist={true} 
+            instructionsMap={this.props.instructionsMap}
+            exerciseRecommendations={this.props.exerciseRecommendations} 
+            instructionRecommendations={this.props.instructionRecommendations}/>
           </div>
           <div className="exercise-view">
             <BreadCrumbs conceptType={this.props.concept}

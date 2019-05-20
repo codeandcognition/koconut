@@ -181,7 +181,7 @@ class Information extends Component {
         answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
         addGaveUp={this.addGaveUp}
         fIndex={fIndex}
-      />
+      /> 
     }
     return <div />
   }
@@ -207,40 +207,6 @@ class Information extends Component {
   }
 
   render() {
-    // todo count correct correctly
-    let correctCount = this.state.feedback.reduce((acc, item, index) => {
-          if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
-              this.state.exercise.questions[index].type === "table") {
-            return (item && item.toString().indexOf("incorrect") === -1 &&
-            item.toString().indexOf("correct") !== -1) ? acc + 1 : acc;
-          } else {
-            return item === "correct" ? acc + 1 : acc;
-          }
-        }
-    , 0);
-
-    this.state.followupFeedback.forEach((feedback) => {
-      let count = feedback && feedback.reduce((acc, item, index) => {
-        if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
-            this.state.exercise.questions[index].type === "table") {
-          return (item && item.toString().indexOf("incorrect") === -1 &&
-              item.toString().indexOf("correct") !== -1) ? acc + 1 : acc;
-        } else {
-          return item === "correct" ? acc + 1 : acc;
-        }
-      }, 0);
-      correctCount = correctCount + count;
-    });
-
-    correctCount = correctCount + this.state.gaveUpCount;
-
-    let expectedCorrect = this.state.exercise.questions.length;
-    this.state.exercise.questions.forEach((item) => {
-      if (item.followupQuestions) {
-        expectedCorrect = expectedCorrect + item.followupQuestions.length;
-      }
-    });
-
     return (
         <div ref={"information"}>
           {this.state.exercise.questions.map((question, index) => {
@@ -293,18 +259,18 @@ class Information extends Component {
             );
             })
           }
-          {correctCount >= expectedCorrect && this.scrollToBottom() &&
-            <div className={"cont-btn-container"} >
-              <Button variant={"outlined"} color={"primary"} onClick={() => {
-                this.props.nextQuestion();
-                this.props.resetAnswer();
-                this.setState({
-                  gaveUpCount: 0,
-                  gaveUpArr: []
-                });
-              }}>Continue</Button>
-            </div>
-          }
+
+          <div className={"cont-btn-container"} >
+            <Button variant={"outlined"} color={"primary"} onClick={() => {
+              this.props.nextQuestion();
+              this.props.resetAnswer();
+              this.setState({
+                gaveUpCount: 0,
+                gaveUpArr: []
+              });
+            }}>Continue</Button>
+          </div>
+
         </div>
 
     );

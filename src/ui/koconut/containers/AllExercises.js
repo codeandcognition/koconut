@@ -79,10 +79,17 @@ class AllExercises extends Component {
     let results = [];
     let exerciseIds = [];
     if (exerciseList && conceptMapGetter && conceptMapGetter[concept]) {
-      let exercises = conceptMapGetter[concept][exerciseType];
+      let readExercises = conceptMapGetter[concept]["READ"];
+      let writeExercises = conceptMapGetter[concept]["WRITE"];
 
-      if (exercises) {
-        exercises.forEach((exerciseId) => {
+      if (readExercises) {
+        readExercises.forEach((exerciseId) => {
+          results.push(exerciseList[exerciseId]);
+          exerciseIds.push(exerciseId);
+        });
+      }
+      if (writeExercises) {
+        writeExercises.forEach((exerciseId) => {
           results.push(exerciseList[exerciseId]);
           exerciseIds.push(exerciseId);
         });

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import firebase from 'firebase';
 import List from '@material-ui/core/List';
@@ -25,7 +25,8 @@ type Props = {
 	getOrderedConcepts: Function,
 	goToExercise: Function,
 	closeMenu: Function,
-	persist: boolean
+	persist: boolean,
+	updateUserState: Function
 };
 
 class SideNavigation extends Component {
@@ -61,12 +62,18 @@ class SideNavigation extends Component {
 		let writeResults = instructions["WRITE"];
 		let readTitles = [];
 		let writeTitles = [];
-		readResults.forEach((item) => {
-			readTitles.push(item.title);
-		});
-		writeResults.forEach((item) => {
-			writeTitles.push(item.title);
-		});
+		if (readResults) {
+			readResults.forEach((item) => {
+				readTitles.push(item.title);
+			});
+		}
+
+		if (writeResults) {
+			writeResults.forEach((item) => {
+				writeTitles.push(item.title);
+			});
+		}
+
 		this.setState({
 			readInstructions: readTitles,
 			writeInstructions: writeTitles
@@ -86,20 +93,43 @@ class SideNavigation extends Component {
 				this.props.instructionsRead[this.props.conceptCode] &&
 				this.props.instructionsRead[this.props.conceptCode]["READ"] ?
 				this.props.instructionsRead[this.props.conceptCode]["READ"][index] : null;
+			let text = "";
+			if (this.props.instructionRecommendations[this.props.conceptCode] &&
+				this.props.instructionRecommendations[this.props.conceptCode][type] &&
+				this.props.instructionRecommendations[this.props.conceptCode][type][index]) {
+				let conceptReccomendations = this.props.instructionRecommendations[this.props.conceptCode];
+				let recommendationsForType = conceptReccomendations[type];
+				let instructionReccomendation = recommendationsForType[index];
+				if (instructionReccomendation) {
+					text = instructionReccomendation.text;
+				} else {
+					text = "this can help you";
+				}
+			}
 			buttonsList.push(
-				<Link key={index} 
+				<Link key={index}
 					onClick={() => this.props.getInstruction(this.props.conceptCode, type, index)}
 					to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
-					><NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem></Link>
+				><NavItem name={item} read={read} suggestionText={text}></NavItem></Link>
 			)
 		});
-		let {exercises, exerciseIds} = this.filterExercisesByConcept(this.props.conceptCode, type);
+		let { exercises, exerciseIds } = this.filterExercisesByConcept(this.props.conceptCode, type);
 		exercises.map((ex, index) => {
+			let exerciseId = exerciseIds[index];
+			let text = "";
+			if (this.props.exerciseRecommendations[exerciseId]) {
+				let recommendation = this.props.exerciseRecommendations[exerciseId];
+				text = recommendation.text;
+				if (!text) {
+					// if recommendation text isn't set
+					text = "this can help you";
+				}
+			}
 			buttonsList.push(
-				<Link key={"ex" + index} 
+				<Link key={"ex" + index}
 					to={`/practice/${this.props.conceptCode}/practice-writing-code`}
 					onClick={() => this.props.goToExercise(this.props.conceptCode, type,
-						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem suggestionText={"placeholder for now"} name={ex.shortPrompt}></NavItem></Link>
+						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem suggestionText={text} name={ex.shortPrompt}></NavItem></Link>
 			);
 		});
 		return <List style={{ width: '100%' }}>{buttonsList}</List>;
@@ -110,32 +140,32 @@ class SideNavigation extends Component {
 		let writingSection = this.constructButtonList(this.state.writeInstructions, "WRITE");
 		let ref = this;
 		return (
-				<div id={"sidenav"} className={"sidebar"}>
-					<CardContent>
-						<div className={"sidebar-header"}>
-							<h2>{this.state.title}</h2>
+			<div id={"sidenav"} className={"sidebar"}>
+				<CardContent>
+					<div className={"sidebar-header"}>
+						<h2>{this.state.title}</h2>
 						{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
-						</div>
-						<NavSection
-							getInstructionTitles={null} 
-							title={"Overview"}
-							progress={<Progress percent={25}/>}
-							body={<ConceptOverview conceptCode={this.props.conceptCode} />}>
-						</NavSection>
-						<NavSection
-							getInstructionTitles={this.getInstructionTitles}
-							title={"Reading"}
-							progress={<Progress percent={25} />}
-							body={readingSection}>
-						</NavSection>
-						<NavSection
-							getInstructionTitles={this.getInstructionTitles}
-							title={"Writing"}
-							progress={<Progress percent={25} />}
-							body={writingSection}>
-						</NavSection>
-					</CardContent>
-				</div>
+					</div>
+					<NavSection
+						getInstructionTitles={null}
+						title={"Overview"}
+						progress={<Progress percent={25} />}
+						body={<ConceptOverview conceptCode={this.props.conceptCode} />}>
+					</NavSection>
+					<NavSection
+						getInstructionTitles={this.getInstructionTitles}
+						title={"Reading"}
+						progress={<Progress percent={25} />}
+						body={readingSection}>
+					</NavSection>
+					<NavSection
+						getInstructionTitles={this.getInstructionTitles}
+						title={"Writing"}
+						progress={<Progress percent={25} />}
+						body={writingSection}>
+					</NavSection>
+				</CardContent>
+			</div>
 		);
 	}
 }

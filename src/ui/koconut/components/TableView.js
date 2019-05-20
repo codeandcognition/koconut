@@ -53,23 +53,18 @@ class TableView extends Component {
         let temp = [];
 				for (let j = 0; j < this.props.question.colNames.length; j++) {
 					temp.push("");
-				}
-				tempAns[i] = temp;
+        }
+        tempAns[i] = temp;
       }
     }
 
-
-    // if(!tempAns[row]) {
-    //   let temp = [];
-    //   for (let i = 0; i < this.props.question.colNames.length; i++) {
-    //     temp.push("");
-    //   }
-    //   tempAns[row] = temp;
-    // }
-
     tempAns[row][col] = choice;
-    this.props.inputHandler(tempAns, this.props.questionIndex, this.props.fIndex);
-    this.setState({answer: tempAns});
+
+    this.setState({
+      answer: tempAns,
+    }, () => {
+      this.props.inputHandler(tempAns, this.props.questionIndex, this.props.fIndex);
+    });
   }
 
   /**
@@ -199,10 +194,10 @@ class TableView extends Component {
                       let correctness = "";
                       if (this.props.feedback && this.props.feedback[i]) { 
                         let temp = this.props.feedback[i][j];
-                        if (temp === "incorrect") {
-                          correctness = "table-wrong";
-                        } else if(temp === "correct") {
+                        if (temp.pass) {
                           correctness = "table-correct";
+                        } else if (temp.pass === false) {
+                          correctness = "table-wrong";
                         }
                       }
 
