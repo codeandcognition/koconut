@@ -6,7 +6,7 @@ import secrets
 import subprocess
 import os
 from flask_cors import cross_origin
-import python_api.app.bkt as bkt
+from .bkt import posterior_pknown, order_next_questions 
 import pandas as pd
 
 JSON_TYPE = "application/json"
@@ -548,7 +548,7 @@ def bkt_handler():
 
     pk_new = None
     try:
-        pk_new = bkt.posterior_pknown(
+        pk_new = posterior_pknown(
             is_correct, eid, transfer, item_params_df, prior_pknown)
     except Exception as exc:
         resp = Response(f"Error: {exc}", status=400, mimetype=TEXT_TYPE)
@@ -556,7 +556,7 @@ def bkt_handler():
 
     # TODO: This may be returned as an un-serializable object (Series), will have to
     # call a function to convert to list if so
-    suggested_exercises = bkt.order_next_questions(
+    suggested_exercises = order_next_questions(
         exercise_ids, pk_new, item_params)
 
     results = {
