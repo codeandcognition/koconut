@@ -15,6 +15,7 @@ import {ModelUpdater} from './../../../backend/ModelUpdater';
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
+import { write } from 'fs';
 
 const Sk = require('skulpt');
 
@@ -266,6 +267,7 @@ class App extends Component {
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
 				this.conceptMapGetter.on('value', (snap) => {
 					this.setState({ conceptMapGetter: snap.val() }, () => { this.updateUserState() });
+					console.log(snap.val());
 				});
 				this.instructionMap = this.props.firebase.database().ref('Instructions');
 				this.instructionMap.on('value', (snap) => {
@@ -281,7 +283,7 @@ class App extends Component {
 		let exerciseParams = {};
 		if (this.state.conceptMapGetter) {
 			Object.keys(this.state.conceptMapGetter).forEach((conceptKey) => {
-				let params = this.state.conceptMapGetter[conceptKey].params;
+				let params = this.state.conceptMapGetter[conceptKey].bktParams;
 				conceptParams[conceptKey] = params;
 			});
 		}
@@ -646,6 +648,9 @@ class App extends Component {
 					? displayType.concept
 					: displayType.exercise),
 		}, () => {
+			if (this.modelUpdater) {
+				this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations);
+			}
 			if (!passed) {
 				this.updateWrongAnswersCount(false, questionIndex, fIndex);
 			}
@@ -659,8 +664,6 @@ class App extends Component {
 	 * @param {*} fIndex 
 	 */
 	async verifyUserAnswer(endpointExtension: string, requestBody: any, questionIndex: number, fIndex: number) {
-		console.log(requestBody);
-
 		const request = async () => {
 			const response = await fetch(PYTHON_API + endpointExtension, {
 				method: "POST",
