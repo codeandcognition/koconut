@@ -113,6 +113,8 @@ To also run the backend api, use a similar command:
 
 > - Starts a nodemon server that will host the backend server and update automatically when files are changed
 
+n.b.: SASS has been behaving unusually (as of May 2019, node v10.15.3, npm v6.9.0, mac OS 10.14.3), so running `npx react-scripts start` can circumvent any SASS errors that prevent start-up.
+
 ### Development Scripts
 
 Command                    | Description
