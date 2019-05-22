@@ -8,6 +8,7 @@ import Routes from './../../../Routes';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 import { ConceptKnowledge, MasteryModel } from '../../../data/MasteryModel';
 import Loadable from 'react-loadable';
+import {ModelUpdater} from './../../../backend/ModelUpdater';
 
 
 // Fake AJAX
@@ -136,6 +137,8 @@ class App extends Component {
 	constructor() {
 		super();
 		this.generator = new ExerciseGenerator(this.getOrderedConcepts);
+		this.modelUpdater = null; // initialized in componentDidMount()
+
 		this.theme = createMuiTheme();
 		this.state = {
 			exercise: {},
@@ -269,6 +272,31 @@ class App extends Component {
 					this.setState({ instructionsMap: snap.val() }, () => { this.updateUserState() });
 				});
 			}
+		});
+	}
+
+	// TODO: Initialize Model Updater
+	initializeModelUpdater() {
+		let conceptParams = {};
+		let exerciseParams = {};
+		if (this.state.conceptMapGetter) {
+			Object.keys(this.state.conceptMapGetter).forEach((conceptKey) => {
+				let params = this.state.conceptMapGetter[conceptKey].params;
+				conceptParams[conceptKey] = params;
+			});
+		}
+		if (this.state.exerciseList) {
+			Object.keys(this.state.exerciseList).forEach((exerciseID) => {
+				let params = this.state.exerciseList[exerciseID].params;
+				exerciseParams[exerciseID] = params;
+			});
+		}
+		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams);
+	}
+
+	updateRecommendations = (recommendedExercises) => {
+		this.setState({
+			exerciseRecommendations: recommendedExercises 
 		});
 	}
 
