@@ -226,7 +226,6 @@ def table_handler():
 
     # get request body
     req_body = request.get_json()
-    print("AAAAAAAAA\n\n\n\n", req_body)
     questions = req_body.get("questions")
     answers = req_body.get("userAnswer")
 
