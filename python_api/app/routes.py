@@ -6,10 +6,7 @@ import secrets
 import subprocess
 import os
 from flask_cors import cross_origin
-<<<<<<< HEAD
-=======
 import python_api.app.bkt as bkt
->>>>>>> 8b1bcf2e00d6ee48c22b2f1c842e8972009862e3
 from .bkt import posterior_pknown, order_next_questions
 import pandas as pd
 
