@@ -6,6 +6,10 @@ import secrets
 import subprocess
 import os
 from flask_cors import cross_origin
+<<<<<<< HEAD
+=======
+import python_api.app.bkt as bkt
+>>>>>>> 8b1bcf2e00d6ee48c22b2f1c842e8972009862e3
 from .bkt import posterior_pknown, order_next_questions
 import pandas as pd
 
@@ -535,22 +539,24 @@ def bkt_handler():
     # get request body
     req_body = request.get_json()
 
-    is_correct = req_body.get("is_correct", None)
-    eid = req_body.get("eid", None)
+    is_correct = req_body.get("isCorrect", None)
+    read_or_write = req_body.get("readOrWrite", None)
+    eid = req_body.get("exerciseID", None)
     transfer = req_body.get("transfer", None)
-    item_params = req_body.get("item_params", None)
+    item_params = req_body.get("itemParams", None)
     item_params_df = None
     try:
         item_params_df = convert_item_params_to_dataframe(item_params)
     except Exception as exc:
         resp = Response(f"Error: {exc}", status=400, mimetype=TEXT_TYPE)
         return resp
-    prior_pknown = req_body.get("prior_pknown", None)
-    exercise_ids = req_body.get("exercise_ids", None)
+    prior_pknown = req_body.get("priorPknown", None)
+    exercise_ids = req_body.get("exerciseIDs", None)
 
     if (is_correct is None) or (eid is None) \
             or (transfer is None) or (item_params_df is None) \
-            or (prior_pknown is None) or (exercise_ids is None):
+            or (prior_pknown is None) or (exercise_ids is None) \
+            or (read_or_write is None):
         resp = Response("You are missing a field",
                         status=400, mimetype=TEXT_TYPE)
         return resp
@@ -569,8 +575,8 @@ def bkt_handler():
         exercise_ids, pk_new, item_params)
 
     results = {
-        "pk_new": pk_new,
-        "suggested_exercises": suggested_exercises
+        "pkNew": pk_new,
+        "suggestedExercises": suggested_exercises
     }
     resp = Response(json.dumps(results), status=200, mimetype=JSON_TYPE)
     return resp
