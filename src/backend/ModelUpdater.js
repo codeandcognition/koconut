@@ -1,4 +1,4 @@
-const BKT_ENDPOINT = `http://localhost:8080/bkt`;
+const BKT_ENDPOINT = `http://localhost:8080/bkt`; // TODO for prod: change URL
 
 const BKT_PARAMS = {
     INIT: "init",
@@ -9,6 +9,8 @@ const BKT_ITEM_PARAMS = {
     SLIP: "slip",
     GUESS: "guess"
 }
+
+const READ = 'READ';
 
 class ModelUpdater {
     conceptParameters: any;
@@ -25,8 +27,8 @@ class ModelUpdater {
         let exerciseIDs = Object.keys(this.exerciseParameters);
         let conceptParams = this.conceptParameters[conceptKey];
         let itemParams = {
-            slip: 0,
-            guess: 0
+            slip: 0.0,
+            guess: 0.0
         };
         let pKnown = this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.INIT];
 
@@ -34,10 +36,11 @@ class ModelUpdater {
         let requestParams = {
             isCorrect: isCorrect,
             exerciseID: exerciseID,
-            readOrWrite: readOrWrite,
+            // readOrWrite: readOrWrite,
             exerciseIDs: exerciseIDs,
             transfer: conceptParams.transfer,
             itemParams: itemParams,
+            isRead: readOrWrite == READ ? true : false,
             priorPknown: pKnown
         };
         let response = await this.request(requestParams);

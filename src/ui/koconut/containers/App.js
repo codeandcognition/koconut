@@ -82,7 +82,7 @@ const displayType = {
 };
 
 // 
-const PYTHON_API = "http://localhost:8080/checker/";
+const PYTHON_API = "http://localhost:8080/checker/"; // TODO for prod: change this route
 
 /**
  * Renders the koconut application view.
@@ -273,6 +273,7 @@ class App extends Component {
 				this.instructionMap.on('value', (snap) => {
 					this.setState({ instructionsMap: snap.val() }, () => { this.updateUserState() });
 				});
+				this.initializeModelUpdater();
 			}
 		});
 	}
@@ -289,11 +290,11 @@ class App extends Component {
 		}
 		if (this.state.exerciseList) {
 			Object.keys(this.state.exerciseList).forEach((exerciseID) => {
-				let params = this.state.exerciseList[exerciseID].params;
+				let params = this.state.exerciseList[exerciseID].bktParams;
 				exerciseParams[exerciseID] = params;
 			});
 		}
-		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams);
+		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams); // TODO: don't think params being passed into modelUpdater correctly
 	}
 
 	updateRecommendations = (recommendedExercises) => {
