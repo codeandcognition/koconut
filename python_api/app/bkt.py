@@ -7,16 +7,13 @@ TRANSFER = 'trasfer'
 SLIP = 'slip'
 GUESS = 'guess'
 
-# concepts/skills
-VAR = 'variable'
-CONDITIONAL = 'conditional'
-
 # terms
 CONCEPT = 'concept'
 EID = "eid"
 UID = 'uid'
 STEP = 'step'
 CORRECT = 'correct'
+IS_READ = 'is_read'
 
 
 def posterior_pknown(is_correct, eid, transfer, item_params, prior_pknown):
@@ -34,7 +31,7 @@ def posterior_pknown(is_correct, eid, transfer, item_params, prior_pknown):
     item_params: pd.DataFrame
         slip and guess parameters for each item
     prior_pknown: float
-        prior probability user learned this concept
+        prior probability user learned this concept (read, write are different concepts)
     """
     if not eid in item_params[EID].unique():
         raise Exception(
@@ -42,23 +39,22 @@ def posterior_pknown(is_correct, eid, transfer, item_params, prior_pknown):
         return prior_pknown
 
     posterior = -1.0
-    slip = item_params[item_params[EID] == eid][SLIP]
-    guess = item_params[item_params[EID] == eid][GUESS]
+    slip = float(item_params[item_params[EID] == eid][SLIP])
+    guess = float(item_params[item_params[EID] == eid][GUESS])
 
     if is_correct:
-        posterior = (prior_pknown * (1.0 - slip)) / \
-            ((prior_pknown * (1 - slip)) + ((1.0-prior_pknown)*guess))
+        posterior = (prior_pknown * (1.0 - slip)) / ((prior_pknown * (1 - slip)) + ((1.0-prior_pknown)*guess))
     else:
-        posterior = (prior_pknown * slip) / \
-            ((prior_pknown * slip) + ((1.0-prior_pknown)*(1.0-guess)))
-
+        posterior = (prior_pknown * slip) / ((prior_pknown * slip) + ((1.0-prior_pknown)*(1.0-guess)))
+    
     return (posterior + (1.0-posterior) * transfer)
 
 
-def pknown_seq(uid, concept, df_opp, concept_params, item_params):
+def pknown_seq(uid, concept, df_opp, concept_params, item_params, is_read=True):
     """
-    predict sequence of probability a concept is known after each step
-
+    Predict sequence of probability a concept is known after each step.
+    Function not used in real-time, but may be used to batch update pknown (e.g. if concept or exercise params updated)
+    
     Parameters
     ----------
     uid: String
@@ -71,44 +67,47 @@ def pknown_seq(uid, concept, df_opp, concept_params, item_params):
         concept parameters (concept, init, transfer)
     item_params: pd.DataFrame
         item parameters (eid, slip, guess, concept)
+    is_read: Boolean
+        True if concept relates to reading, False if it relates to writing
     """
-
-    eids = item_params[item_params[CONCEPT] == concept][EID]
-
+    
+    eids = item_params[(item_params[CONCEPT] == concept) & (item_params[IS_READ] == is_read)][EID]
+    
     # grab exercise sequence for specific user working on specific concept
     exercise_seq = df_opp[(df_opp[UID] == uid) & (df_opp[EID].isin(eids))]
-
-    n_opps = len(exercise_seq)  # number exercises attempted
-    pk = pd.Series(np.zeros(n_opps + 1))
-    pk[0] = concept_params[concept_params[CONCEPT] == concept][INIT]
+    
+    n_opps = len(exercise_seq) # number exercises attempted
+    
+    # filtering for 1 concept to update
+    concept_params_target = concept_params[(concept_params[CONCEPT] == concept) & (concept_params[IS_READ] == is_read)]
+    
+    pk = pd.Series(np.zeros(n_opps + 1))    
+    pk[0] = float(concept_params_target[INIT])
+    
     if(n_opps > 0):
-        transfer = float(
-            concept_params[concept_params[CONCEPT] == concept][TRANSFER])
-
-        for step in range(1, n_opps+1):
-            df_step = df_opp[(df_opp[UID] == uid) & (df_opp[STEP] == step)]
+        transfer = float(concept_params_target[TRANSFER])        
+        
+        for step in range(1,n_opps+1):
+            df_step = exercise_seq[exercise_seq[STEP]==step]
             if(len(df_step) != 1):
                 raise Exception('Did not find exactly 1 response for user {} for step {}. Found {}'
                                 .format(uid, step, len(df_step)))
 
             is_correct = df_step.iloc[0][CORRECT]
             eid = df_step.iloc[0][EID]
-
-            pk[step] = posterior_pknown(
-                is_correct, eid, transfer, item_params, pk[step - 1])
+            
+            pk[step] = posterior_pknown(is_correct, eid, transfer, item_params, pk[step - 1])
     return pk
-
-# done! (lightly tested)
 
 
 def pcorrect(pk, slip, guess):
     return (pk * (1.0-slip)) + ((1.0 - pk) * guess)
 
 
-def pcorrect_seq(uid, concept, df_opp, concept_params, item_params):
+def pcorrect_seq(uid, concept, df_opp, concept_params, item_params, is_read=True):
     """
-    probability of correct responses predicted by BKT
-
+    Probability of correct responses predicted by BKT.
+    
     Parameters
     ----------
     uid: String
@@ -121,16 +120,18 @@ def pcorrect_seq(uid, concept, df_opp, concept_params, item_params):
         concept parameters (concept, init, transfer)
     item_params: pd.DataFrame
         item parameters (eid, slip, guess, concept)
+    is_read: Boolean
+        True if concept relates to reading, False if it relates to writing    
     """
     eids = item_params[item_params[CONCEPT] == concept][EID]
-
+    
     # grab exercise sequence for specific user working on specific concept
-    exercise_seq = df_opp[(df_opp[UID] == uid) & (df_opp[EID].isin(eids))]
-    n_opps = len(exercise_seq)  # number exercises attempted
+    exercise_seq = df_opp[(df_opp[UID] == uid) & (df_opp[EID].isin(eids))]    
+    n_opps = len(exercise_seq) # number exercises attempted
 
-    pk = pknown_seq(uid, concept, df_opp, concept_params, item_params)
+    pk = pknown_seq(uid, concept, df_opp, concept_params, item_params, is_read)
     pc = pd.Series(np.zeros(n_opps))
-    for step in range(0, len(pc)):
+    for step in range(0,len(pc)):
         eid = exercise_seq.iloc[step][EID]
         slip = float(item_params[item_params[EID] == eid][SLIP])
         guess = float(item_params[item_params[EID] == eid][GUESS])
@@ -139,12 +140,11 @@ def pcorrect_seq(uid, concept, df_opp, concept_params, item_params):
     return pc
 
 
-# done! (lightly tested)
-def order_next_questions(exercise_ids, pk, item_params, error=0.0, penalty=1.0):
+def order_next_questions(exercise_ids, pk, item_params, error = 0.0, penalty = 1.0):
     """
     Order questions based on "most answerable." 
-    Exercise IDs and probability of known must be of same concept.
-
+    Exercise IDs and probability of known must be of same concept, either read or write.
+    
     Parameters
     ----------
     exercise_ids: list
@@ -154,22 +154,18 @@ def order_next_questions(exercise_ids, pk, item_params, error=0.0, penalty=1.0):
     item_params: pd.DataFrame
         item parameters (eid, slip, guess, concept)
     """
-
-    df_output = pd.DataFrame(
-        {"eid": exercise_ids, "score": np.zeros(len(exercise_ids))})
-
+    
+    df_output = pd.DataFrame({"eid": exercise_ids, "score": np.zeros(len(exercise_ids))})
+    
     # get max and min scores/p(correct)
     for eid in exercise_ids:
         params = item_params[item_params[EID] == eid].iloc[0]
-        df_output.loc[df_output[EID] == eid, 'score'] = pcorrect(
-            pk, params[SLIP], params[GUESS])
+        df_output.loc[df_output[EID] == eid, 'score'] = pcorrect(pk, params[SLIP], params[GUESS])
 
     min_score = min(df_output['score'])
     max_score = max(df_output['score'])
     target_score = min_score + ((max_score - min_score) * (1 - pk + error))
-    # print('target_score: {}'.format(target_score))
-
+    
     df_output['diff'] = abs(df_output['score'] - target_score) * penalty
-
-    # print(df_output)
-    return df_output.sort_values(by='diff')[EID]
+    
+    return df_output.sort_values(by='diff')[EID] 
