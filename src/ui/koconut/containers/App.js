@@ -631,17 +631,24 @@ class App extends Component {
    * @return {boolean} True if the entire exercise (all questions) are correct, false otherwise
    */
 	checkExerciseCorrectness(feedback){
-		for(let question of feedback){
-			let qCorrect = question[1]['pass'];
-			if (typeof(qCorrect === 'undefined')) {
-				throw "Not getting question correctness properly";
-			}
+		console.log(feedback);
+		let responseChecked = false; // sanity check to ensure b/c each exercise should have at least 1 response checked
 
-			// exercise not correct if any exercise is incorrect
-			if(!qCorrect) return false;
+		for(let response of feedback.flat(2)){
+			let potentialCorrectness = response["pass"];
+
+			// for table questions (and MC questions in tables), responses are empty. Not empty for actual questions
+			if(potentialCorrectness !== undefined){
+				responseChecked = true;
+				if(!potentialCorrectness) {return false;}
+			}
 		}
+		if(!responseChecked){
+			throw("No responses checked. Exercise assumed to be correct.");
+		}
+
 		return true;
-	}
+		}
 
 	/**
 	 * Updates the app state with feedback for user
@@ -698,7 +705,7 @@ class App extends Component {
 					: displayType.exercise),
 		}, () => {
 			if (this.modelUpdater) {
-				this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations);
+				// this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations); //TODO: currently throws error
 			}
 			if (!passed) {
 				this.updateWrongAnswersCount(false, questionIndex, fIndex);
