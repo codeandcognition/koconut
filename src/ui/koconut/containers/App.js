@@ -258,27 +258,29 @@ class App extends Component {
 		this.props.firebase.auth().onAuthStateChanged(user => {
 			if (user) {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
-				this.exerciseGetter.on('value', (snap) => {
+				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
+
+				this.exerciseGetter.on('value', (snap) => { // TODO: this is callback hell. How do I use promises or async/await?
 					this.setState({
 						exerciseList: snap.val(),
 						firebaseUser: user
+					}, () => {
+						this.conceptMapGetter.on('value', (snap) => {
+							this.setState({ conceptMapGetter: snap.val() }, () => { 
+								this.updateUserState();
+								this.initializeModelUpdater(); // need to wait until exerciseList & conceptMapGetter both set
+							});
+						});
 					});
-				});
-				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
-				this.conceptMapGetter.on('value', (snap) => {
-					this.setState({ conceptMapGetter: snap.val() }, () => { this.updateUserState() });
-					console.log(snap.val());
 				});
 				this.instructionMap = this.props.firebase.database().ref('Instructions');
 				this.instructionMap.on('value', (snap) => {
 					this.setState({ instructionsMap: snap.val() }, () => { this.updateUserState() });
 				});
-				this.initializeModelUpdater();
 			}
 		});
 	}
 
-	// TODO: Initialize Model Updater
 	initializeModelUpdater() {
 		let conceptParams = {};
 		let exerciseParams = {};
@@ -286,15 +288,19 @@ class App extends Component {
 			Object.keys(this.state.conceptMapGetter).forEach((conceptKey) => {
 				let params = this.state.conceptMapGetter[conceptKey].bktParams;
 				conceptParams[conceptKey] = params;
+				console.log(`found concept params`);
 			});
 		}
 		if (this.state.exerciseList) {
 			Object.keys(this.state.exerciseList).forEach((exerciseID) => {
 				let params = this.state.exerciseList[exerciseID].bktParams;
 				exerciseParams[exerciseID] = params;
+				console.log(`found exercise params`);
 			});
 		}
 		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams); // TODO: don't think params being passed into modelUpdater correctly
+		console.log(this.modelUpdater); // TODO remove
+		// debugger; // TODO: remove
 	}
 
 	updateRecommendations = (recommendedExercises) => {
