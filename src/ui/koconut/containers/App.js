@@ -133,6 +133,7 @@ class App extends Component {
 		exerciseId: string,
 		exerciseRecommendations: any,
 		instructionRecommendations: any,
+		userBKTParams: any
 	};
 
 	constructor() {
@@ -165,7 +166,8 @@ class App extends Component {
 			// indices are question index
 			followupTimesGotQuestionWrong: [],
 			exerciseId: '',
-			numExercisesInCurrConcept: 0
+			numExercisesInCurrConcept: 0,
+			userBKTParams: {}
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -273,6 +275,11 @@ class App extends Component {
 				this.instructionMap.on('value', (snap) => {
 					this.setState({ instructionsMap: snap.val() }, () => { this.updateUserState() });
 				});
+
+
+				// TODO: Read user's initial params
+				// The following code initializes placeholder params
+				
 			}
 		});
 	}
