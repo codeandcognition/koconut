@@ -22,6 +22,7 @@ SELECT_MULTIPLE = "selectMultiple"
 CHECKBOX_QUESTION = "checkboxQuestion"
 MEMORY_TABLE = "memoryTable"
 
+
 @app.route(f"/checker/{WRITE_CODE}", methods=["POST"])
 @cross_origin()
 def writecode_handler():
@@ -101,6 +102,7 @@ def writecode_handler():
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
 
+
 @app.route(f"/checker/{MULTIPLE_CHOICE}", methods=["POST"])
 @cross_origin()
 def multiplechoice_handler():
@@ -133,6 +135,7 @@ def multiplechoice_handler():
     }
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
+
 
 @app.route(f"/checker/{SHORT_ANSWER}", methods=["POST"])
 @cross_origin()
@@ -173,6 +176,7 @@ def shortanswer_handler():
     }
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
+
 
 @app.route(f"/checker/{CHECKBOX_QUESTION}", methods=["POST"])
 @cross_origin()
@@ -223,7 +227,7 @@ def table_handler():
     # get request body
     req_body = request.get_json()
     questions = req_body.get("questions")
-    answers = req_body.get("answer")
+    answers = req_body.get("userAnswer")
 
     results = []
     # iterate through each row and col of the questions/answers
@@ -321,6 +325,7 @@ def checkbox_question_check_correctness(actual_answer, user_answer):
         "pass": True
     }
 
+
 def fill_blank_question_check_correctness(actual_answer, user_answer):
     """
     fill_blank_question_check_correctness compares the actual answer to the user's answer
@@ -334,12 +339,14 @@ def fill_blank_question_check_correctness(actual_answer, user_answer):
     """
     return actual_answer.strip() == user_answer.strip()
 
+
 def multiple_choice_question_check_correctness(actual_answer, user_answer):
     """
     Similar to fill_blank_question_check_correctness this method can be expanded to provide
     specialized responses per each wrong answer
     """
     return actual_answer.strip() == user_answer.strip()
+
 
 def fill_blank_run_code(user_answer, test_code):
     """
@@ -393,6 +400,7 @@ def fill_blank_run_code(user_answer, test_code):
     }
     return resp_body
 
+
 @app.route(f"/checker/{MEMORY_TABLE}", methods=["POST"])
 @cross_origin()
 def memorytable_handler():
@@ -416,6 +424,7 @@ def memorytable_handler():
     resp_body = memorytable_check_correctness(user_answer, expected_answer)
     resp = Response(json.dumps(resp_body), status=200, mimetype=JSON_TYPE)
     return resp
+
 
 def memorytable_check_correctness(user_answer, expected_answer):
     """

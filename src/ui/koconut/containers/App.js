@@ -82,7 +82,7 @@ const displayType = {
 };
 
 // 
-const PYTHON_API = "http://localhost:8080/checker/";
+const PYTHON_API = "http://localhost:8080/checker/"; // TODO for prod: change this route
 
 /**
  * Renders the koconut application view.
@@ -260,31 +260,51 @@ class App extends Component {
 		this.props.firebase.auth().onAuthStateChanged(user => {
 			if (user) {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
-				this.exerciseGetter.on('value', (snap) => {
+				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
+				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
+
+				// TODO: uncomment this later!
+				// userRef.on("value", (snap) => {
+				// 	this.setState({
+				// 		userBKTParams: snap.val()
+				// 	});
+				// });
+
+				this.exerciseGetter.on('value', (snap) => { // TODO: this is callback hell. How do I use promises or async/await?
 					this.setState({
 						exerciseList: snap.val(),
 						firebaseUser: user
+					}, () => {
+						this.conceptMapGetter.on('value', (snap) => {
+							// TODO: delete this code later -- user params will be read directly from Firebase
+							let userBKTParams = {};
+							let concepts = snap.val();
+							Object.keys(concepts).forEach(concept => {
+								let conceptInfo = concepts[concept]["bktParams"];
+								userBKTParams[concept] = conceptInfo;
+							});
+							// ------------------- DELETE THIS
+
+							this.setState({ 
+									conceptMapGetter: snap.val(),
+									userBKTParams : userBKTParams // TODO: Delete this line laterbktParams
+								}, () => { 
+								this.updateUserState();
+								this.initializeModelUpdater(); // need to wait until exerciseList & conceptMapGetter both set
+							});
+						});
+
 					});
 				});
-				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
-				this.conceptMapGetter.on('value', (snap) => {
-					this.setState({ conceptMapGetter: snap.val() }, () => { this.updateUserState() });
-					console.log(snap.val());
-				});
+
 				this.instructionMap = this.props.firebase.database().ref('Instructions');
 				this.instructionMap.on('value', (snap) => {
 					this.setState({ instructionsMap: snap.val() }, () => { this.updateUserState() });
 				});
-
-
-				// TODO: Read user's initial params
-				// The following code initializes placeholder params
-				
 			}
 		});
 	}
 
-	// TODO: Initialize Model Updater
 	initializeModelUpdater() {
 		let conceptParams = {};
 		let exerciseParams = {};
@@ -292,15 +312,18 @@ class App extends Component {
 			Object.keys(this.state.conceptMapGetter).forEach((conceptKey) => {
 				let params = this.state.conceptMapGetter[conceptKey].bktParams;
 				conceptParams[conceptKey] = params;
+				// console.log(`found concept params`);
 			});
 		}
 		if (this.state.exerciseList) {
 			Object.keys(this.state.exerciseList).forEach((exerciseID) => {
-				let params = this.state.exerciseList[exerciseID].params;
+				let params = this.state.exerciseList[exerciseID].bktParams;
 				exerciseParams[exerciseID] = params;
+				// console.log(`found exercise params`);
 			});
 		}
-		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams);
+		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter);
+		console.log(this.modelUpdater);
 	}
 
 	updateRecommendations = (recommendedExercises) => {
@@ -637,6 +660,7 @@ class App extends Component {
 				let item = feedback[i];
 				passed = Object.keys(item).length > 0 && item.pass;
 				if (!passed) {
+					passed = false;
 					break;
 				}
 			}

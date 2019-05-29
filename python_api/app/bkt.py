@@ -156,10 +156,11 @@ def order_next_questions(exercise_ids, pk, item_params, error = 0.0, penalty = 1
     """
     
     df_output = pd.DataFrame({"eid": exercise_ids, "score": np.zeros(len(exercise_ids))})
+    df_item_params = pd.DataFrame.from_dict(item_params)
     
     # get max and min scores/p(correct)
     for eid in exercise_ids:
-        params = item_params[item_params[EID] == eid].iloc[0]
+        params = df_item_params[df_item_params[EID] == eid].iloc[0]
         df_output.loc[df_output[EID] == eid, 'score'] = pcorrect(pk, params[SLIP], params[GUESS])
 
     min_score = min(df_output['score'])
@@ -168,4 +169,4 @@ def order_next_questions(exercise_ids, pk, item_params, error = 0.0, penalty = 1
     
     df_output['diff'] = abs(df_output['score'] - target_score) * penalty
     
-    return df_output.sort_values(by='diff')[EID] 
+    return list(df_output.sort_values(by='diff')[EID])
