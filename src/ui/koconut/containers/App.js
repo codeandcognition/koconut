@@ -217,7 +217,7 @@ class App extends Component {
 		return displayType;
 	}
 
-	/**
+/**
  * Returns sorted concepts list sorted by relevance to the user.
  * @returns {Array.<*>}
  */
@@ -270,7 +270,7 @@ class App extends Component {
 				// 	});
 				// });
 
-				this.exerciseGetter.on('value', (snap) => { // TODO: this is callback hell. How do I use promises or async/await?
+				this.exerciseGetter.on('value', (snap) => {
 					this.setState({
 						exerciseList: snap.val(),
 						firebaseUser: user
@@ -323,7 +323,6 @@ class App extends Component {
 			});
 		}
 		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter);
-		console.log(this.modelUpdater);
 	}
 
 	updateRecommendations = (recommendedExercises) => {
@@ -534,7 +533,7 @@ class App extends Component {
 				requestBody.questionCode = "";
 				requestBody.testCode = "";
 				requestBody.expectedAnswer = question.answer;
-				await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex);
+				// await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex); // TODO: maybe remove?
 				break;
 			case Types.fillBlank || Types.isInlineResponseType:
 				requestBody.expectedAnswer = question.answer;
@@ -618,11 +617,30 @@ class App extends Component {
 			default:
 				return;
 		}
-		await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex);
+		let feedback = await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex);
+		// console.log(this.checkExerciseCorrectness(feedback)); // TODO remove
 	}
 
 	getRandomInteger(min: number, max: number) {
 		return Math.floor(Math.random() * (max - min)) + min
+	}
+
+	/**
+   * checkExerciseCorrectness checks correctness of entire exercise
+   * @param {Object} feedback string array of answers for each question
+   * @return {boolean} True if the entire exercise (all questions) are correct, false otherwise
+   */
+	checkExerciseCorrectness(feedback){
+		for(let question of feedback){
+			let qCorrect = question[1]['pass'];
+			if (typeof(qCorrect === 'undefined')) {
+				throw "Not getting question correctness properly";
+			}
+
+			// exercise not correct if any exercise is incorrect
+			if(!qCorrect) return false;
+		}
+		return true;
 	}
 
 	/**
@@ -689,7 +707,7 @@ class App extends Component {
 	}
 
 	/**
-	 * Sends a request to the Correctness API to verify user response
+	 * Sends a request to the Correctness API to verify user response, updating state & returning response
 	 * @param {*} requestBody 
 	 * @param {*} questionIndex 
 	 * @param {*} fIndex 
@@ -706,8 +724,10 @@ class App extends Component {
 			})
 			const feedback = await response.json();
 			this.setFeedback(endpointExtension, feedback, questionIndex, fIndex);
+			return feedback;
 		}
-		await request();
+		let feedback = await request();
+		return feedback;
 	}
 
   /**
