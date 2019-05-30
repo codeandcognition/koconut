@@ -618,37 +618,37 @@ class App extends Component {
 				return;
 		}
 		let feedback = await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex);
-		// console.log(this.checkExerciseCorrectness(feedback)); // TODO remove
 	}
 
 	getRandomInteger(min: number, max: number) {
 		return Math.floor(Math.random() * (max - min)) + min
 	}
 
-	/**
-   * checkExerciseCorrectness checks correctness of entire exercise
-   * @param {Object} feedback string array of answers for each question
-   * @return {boolean} True if the entire exercise (all questions) are correct, false otherwise
-   */
-	checkExerciseCorrectness(feedback){
-		console.log(feedback);
-		let responseChecked = false; // sanity check to ensure b/c each exercise should have at least 1 response checked
+	// BXX: pretty sure we don't need this b/c "passed" variable in setFeedback() does this better
+	// /**
+  //  * checkExerciseCorrectness checks correctness of entire exercise
+  //  * @param {Object} feedback string array of answers for each question
+  //  * @return {boolean} True if the entire exercise (all questions) are correct, false otherwise
+  //  */
+	// checkExerciseCorrectness(feedback){
+	// 	console.log(feedback);
+	// 	let responseChecked = false; // sanity check to ensure b/c each exercise should have at least 1 response checked
 
-		for(let response of feedback.flat(2)){
-			let potentialCorrectness = response["pass"];
+	// 	for(let response of feedback.flat(2)){
+	// 		let potentialCorrectness = response["pass"];
 
-			// for table questions (and MC questions in tables), responses are empty. Not empty for actual questions
-			if(potentialCorrectness !== undefined){
-				responseChecked = true;
-				if(!potentialCorrectness) {return false;}
-			}
-		}
-		if(!responseChecked){
-			throw("No responses checked. Exercise assumed to be correct.");
-		}
+	// 		// for table questions (and MC questions in tables), responses are empty. Not empty for actual questions
+	// 		if(potentialCorrectness !== undefined){
+	// 			responseChecked = true;
+	// 			if(!potentialCorrectness) {return false;}
+	// 		}
+	// 	}
+	// 	if(!responseChecked){
+	// 		throw("No responses checked. Exercise assumed to be correct.");
+	// 	}
 
-		return true;
-		}
+	// 	return true;
+	// 	}
 
 	/**
 	 * Updates the app state with feedback for user
@@ -705,7 +705,7 @@ class App extends Component {
 					: displayType.exercise),
 		}, () => {
 			if (this.modelUpdater) {
-				// this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations); //TODO: currently throws error
+				// this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations); //TODO: currently throws errors
 			}
 			if (!passed) {
 				this.updateWrongAnswersCount(false, questionIndex, fIndex);
