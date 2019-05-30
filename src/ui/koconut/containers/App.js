@@ -8,7 +8,7 @@ import Routes from './../../../Routes';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 import { ConceptKnowledge, MasteryModel } from '../../../data/MasteryModel';
 import Loadable from 'react-loadable';
-import {ModelUpdater} from './../../../backend/ModelUpdater';
+import { ModelUpdater } from './../../../backend/ModelUpdater';
 
 
 // Fake AJAX
@@ -217,10 +217,10 @@ class App extends Component {
 		return displayType;
 	}
 
-/**
- * Returns sorted concepts list sorted by relevance to the user.
- * @returns {Array.<*>}
- */
+	/**
+	 * Returns sorted concepts list sorted by relevance to the user.
+	 * @returns {Array.<*>}
+	 */
 	getOrderedConcepts(): ConceptKnowledge[] {
 		let toSort = MasteryModel.model.filter((concept) => concept.should_teach);
 
@@ -285,10 +285,10 @@ class App extends Component {
 							});
 							// ------------------- DELETE THIS
 
-							this.setState({ 
-									conceptMapGetter: snap.val(),
-									userBKTParams : userBKTParams // TODO: Delete this line laterbktParams
-								}, () => { 
+							this.setState({
+								conceptMapGetter: snap.val(),
+								userBKTParams: userBKTParams // TODO: Delete this line laterbktParams
+							}, () => {
 								this.updateUserState();
 								this.initializeModelUpdater(); // need to wait until exerciseList & conceptMapGetter both set
 							});
@@ -327,15 +327,15 @@ class App extends Component {
 
 	updateRecommendations = (recommendedExercises) => {
 		this.setState({
-			exerciseRecommendations: recommendedExercises 
+			exerciseRecommendations: recommendedExercises
 		});
 	}
 
-  /**
-   * Passed in as a prop to WorldView -> ConceptCard
-   * When invoked in concept card, it generates an exercise of the given
-   * concept and type
-   */
+	/**
+	 * Passed in as a prop to WorldView -> ConceptCard
+	 * When invoked in concept card, it generates an exercise of the given
+	 * concept and type
+	 */
 	generateExercise(concept: string, exerciseType: string) {
 		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).results;
 		let exerciseIds = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).exerciseIds;
@@ -485,15 +485,15 @@ class App extends Component {
 		this.setState({ error: false });
 	}
 
-  /**
-   * Set up a firebase authentication listener when component mounts
-   * Will set the state of firebaseUser to be the current logged in user
-   * or null if no user is logged in.
-   *
-   * Can be passed down to props as this.state.firebaseUser, useful for
-   * data collection.
-   * Un app un-mount, stop watching authentication
-   */
+	/**
+	 * Set up a firebase authentication listener when component mounts
+	 * Will set the state of firebaseUser to be the current logged in user
+	 * or null if no user is logged in.
+	 *
+	 * Can be passed down to props as this.state.firebaseUser, useful for
+	 * data collection.
+	 * Un app un-mount, stop watching authentication
+	 */
 	componentWillUnmount() {
 		this.mounted = false;
 	}
@@ -514,19 +514,19 @@ class App extends Component {
 		return ret;
 	}
 
-  /**
-   * checkAnswer will check the answers client side to provide the feedback
-   * to the Response.js object later on
-   * @param {string[]} answer string array of answers for each question
-   * @param {number} questionIndex index of question to check the answer of
-   * @param {string} questionType type of question
-   * @param {number} fIndex followup question index
-   * @return {string[]}
-   */
+	/**
+	 * checkAnswer will check the answers client side to provide the feedback
+	 * to the Response.js object later on
+	 * @param {string[]} answer string array of answers for each question
+	 * @param {number} questionIndex index of question to check the answer of
+	 * @param {string} questionType type of question
+	 * @param {number} fIndex followup question index
+	 * @return {string[]}
+	 */
 	async checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
 		let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
 		let requestBody = {};
-		requestBody.userAnswer = answer[questionIndex];
+		requestBody.userAnswer = [...answer[questionIndex]];
 
 		switch (questionType) {
 			case Types.multipleChoice:
@@ -737,12 +737,12 @@ class App extends Component {
 		return feedback;
 	}
 
-  /**
-   * updateWrongAnswersCount updates the count for wrong answers
-   * @param {boolean} checkerForCorrectness correctness false or true
-   * @param {number} questionIndex question index
-   * @param {number} fIndex followup question index
-   */
+	/**
+	 * updateWrongAnswersCount updates the count for wrong answers
+	 * @param {boolean} checkerForCorrectness correctness false or true
+	 * @param {number} questionIndex question index
+	 * @param {number} fIndex followup question index
+	 */
 	updateWrongAnswersCount(checkerForCorrectness: boolean, questionIndex: number, fIndex: number) {
 		let temp;
 		if (fIndex === -1) {
@@ -771,10 +771,10 @@ class App extends Component {
 		});
 	}
 
-  /**
-   * Submits the give answer to current exercise
-   * @param answer - the answer being submitted
-   */
+	/**
+	 * Submits the give answer to current exercise
+	 * @param answer - the answer being submitted
+	 */
 	submitResponse(answer: any, questionIndex: number, questionType: string, fIndex: number) {
 		if (answer !== null && answer !== undefined) {
 			// sets feedback / followupFeedback
@@ -791,10 +791,10 @@ class App extends Component {
 		});
 	}
 
-  /**
-   * Submits the given concept
-   * @param concept - the concept being submit
-   */
+	/**
+	 * Submits the given concept
+	 * @param concept - the concept being submit
+	 */
 	submitConcept(concept: string) {
 		if (concept !== null && concept !== undefined) {
 			let newCounter = concept === this.state.currentConcept ? (this.state.counter + 1) : 0;
@@ -805,9 +805,9 @@ class App extends Component {
 		}
 	}
 
-  /**
-   * Invoked when student toggles OK button after receiving feedback
-   */
+	/**
+	 * Invoked when student toggles OK button after receiving feedback
+	 */
 	submitOk() {
 		this.setState({
 			nextConcepts: this.getConcepts(),
@@ -815,9 +815,9 @@ class App extends Component {
 		});
 	}
 
-  /**
-   * nextQuestion will set the state of the exercise to be the next question.
-   */
+	/**
+	 * nextQuestion will set the state of the exercise to be the next question.
+	 */
 	nextQuestion() {
 		this.setState({
 			counter: this.state.counter + 1,
@@ -843,9 +843,9 @@ class App extends Component {
 		});
 	}
 
-  /**
-   * renders the sign up view
-   */
+	/**
+	 * renders the sign up view
+	 */
 	renderSignup() {
 		return (
 			<div>
@@ -886,15 +886,15 @@ class App extends Component {
 			resetError={this.resetError} />);
 	}
 
-  /**
-   * Sets the display state to 'WORLD". This function is passed as a prop
-   * to the the navigationbar.
-   * 
-   * NOTE: This function does not actually set the state to world view. Because
-   * React router has been implemented, all this does is set an internal state
-   * to be set to displayType.world. This is still an important function because
-   * it calls the firebase database and sends log data!
-   */
+	/**
+	 * Sets the display state to 'WORLD". This function is passed as a prop
+	 * to the the navigationbar.
+	 * 
+	 * NOTE: This function does not actually set the state to world view. Because
+	 * React router has been implemented, all this does is set an internal state
+	 * to be set to displayType.world. This is still an important function because
+	 * it calls the firebase database and sends log data!
+	 */
 	switchToWorldView() {
 		this.setState({ display: displayType.world, counter: 0, feedback: [] }, () => { this.sendWorldViewDataToFirebase() });
 	}
@@ -918,9 +918,9 @@ class App extends Component {
 		);
 	}
 
-  /**
-   * Renders the exercise view
-   */
+	/**
+	 * Renders the exercise view
+	 */
 	renderExercise() {
 		return (
 			<div>
@@ -960,9 +960,9 @@ class App extends Component {
 			</div>
 		);
 	}
-  /**
-   * Renders the concept selection view
-   */
+	/**
+	 * Renders the concept selection view
+	 */
 	renderConceptSelection() {
 		return (
 			<ConceptSelection
@@ -972,9 +972,9 @@ class App extends Component {
 		);
 	}
 
-  /**
-   * Renders the world view
-   */
+	/**
+	 * Renders the world view
+	 */
 	renderWorldView() {
 		return (
 			<div>
@@ -994,10 +994,10 @@ class App extends Component {
 		)
 	}
 
-  /**
-   * test method to render instruction view
-   * @private
-   */
+	/**
+	 * test method to render instruction view
+	 * @private
+	 */
 	_renderInstructionView() {
 		return (
 			<div>
