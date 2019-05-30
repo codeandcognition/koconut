@@ -705,7 +705,7 @@ class App extends Component {
 					: displayType.exercise),
 		}, () => {
 			if (this.modelUpdater) {
-				// this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations); //TODO: currently throws errors
+				this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations); //TODO: currently throws errors
 			}
 			if (!passed) {
 				this.updateWrongAnswersCount(false, questionIndex, fIndex);
