@@ -160,8 +160,9 @@ def order_next_questions(exercise_ids, pk, item_params, error = 0.0, penalty = 1
     
     # get max and min scores/p(correct)
     for eid in exercise_ids:
-        params = df_item_params[df_item_params[EID] == eid].iloc[0]
-        df_output.loc[df_output[EID] == eid, 'score'] = pcorrect(pk, params[SLIP], params[GUESS])
+        if eid in df_item_params:
+            params = df_item_params[df_item_params[EID] == eid].iloc[0]
+            df_output.loc[df_output[EID] == eid, 'score'] = pcorrect(pk, params[SLIP], params[GUESS])
 
     min_score = min(df_output['score'])
     max_score = max(df_output['score'])
