@@ -8,12 +8,14 @@ import Routes from './../../../Routes';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 import { ConceptKnowledge, MasteryModel } from '../../../data/MasteryModel';
 import Loadable from 'react-loadable';
+import { ModelUpdater } from './../../../backend/ModelUpdater';
 
 
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
+import { write } from 'fs';
 
 const Sk = require('skulpt');
 
@@ -80,7 +82,7 @@ const displayType = {
 };
 
 // 
-const PYTHON_API = "http://localhost:8080/checker/";
+const PYTHON_API = "http://localhost:8080/checker/"; // TODO for prod: change this route
 
 /**
  * Renders the koconut application view.
@@ -131,11 +133,14 @@ class App extends Component {
 		exerciseId: string,
 		exerciseRecommendations: any,
 		instructionRecommendations: any,
+		userBKTParams: any
 	};
 
 	constructor() {
 		super();
 		this.generator = new ExerciseGenerator(this.getOrderedConcepts);
+		this.modelUpdater = null; // initialized in componentDidMount()
+
 		this.theme = createMuiTheme();
 		this.state = {
 			exercise: {},
@@ -161,7 +166,8 @@ class App extends Component {
 			// indices are question index
 			followupTimesGotQuestionWrong: [],
 			exerciseId: '',
-			numExercisesInCurrConcept: 0
+			numExercisesInCurrConcept: 0,
+			userBKTParams: {}
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -212,9 +218,9 @@ class App extends Component {
 	}
 
 	/**
- * Returns sorted concepts list sorted by relevance to the user.
- * @returns {Array.<*>}
- */
+	 * Returns sorted concepts list sorted by relevance to the user.
+	 * @returns {Array.<*>}
+	 */
 	getOrderedConcepts(): ConceptKnowledge[] {
 		let toSort = MasteryModel.model.filter((concept) => concept.should_teach);
 
@@ -254,16 +260,43 @@ class App extends Component {
 		this.props.firebase.auth().onAuthStateChanged(user => {
 			if (user) {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
+				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
+				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
+
+				// TODO: uncomment this later! this code loads user params from firebase (but they're not on firebase yet)
+				// userRef.on("value", (snap) => {
+				// 	this.setState({
+				// 		userBKTParams: snap.val()
+				// 	});
+				// });
+
 				this.exerciseGetter.on('value', (snap) => {
 					this.setState({
 						exerciseList: snap.val(),
 						firebaseUser: user
+					}, () => {
+						this.conceptMapGetter.on('value', (snap) => {
+							// TODO: delete this code later -- user params will be read directly from Firebase (user params not on firebase yet)
+							let userBKTParams = {};
+							let concepts = snap.val();
+							Object.keys(concepts).forEach(concept => {
+								let conceptInfo = concepts[concept]["bktParams"];
+								userBKTParams[concept] = conceptInfo;
+							});
+							// ------------------- DELETE THIS
+
+							this.setState({
+								conceptMapGetter: snap.val(),
+								userBKTParams: userBKTParams // TODO: Delete this line laterbktParams
+							}, () => {
+								this.updateUserState();
+								this.initializeModelUpdater(); // need to wait until exerciseList & conceptMapGetter both set
+							});
+						});
+
 					});
 				});
-				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
-				this.conceptMapGetter.on('value', (snap) => {
-					this.setState({ conceptMapGetter: snap.val() }, () => { this.updateUserState() });
-				});
+
 				this.instructionMap = this.props.firebase.database().ref('Instructions');
 				this.instructionMap.on('value', (snap) => {
 					this.setState({ instructionsMap: snap.val() }, () => { this.updateUserState() });
@@ -272,11 +305,37 @@ class App extends Component {
 		});
 	}
 
-  /**
-   * Passed in as a prop to WorldView -> ConceptCard
-   * When invoked in concept card, it generates an exercise of the given
-   * concept and type
-   */
+	initializeModelUpdater() {
+		let conceptParams = {};
+		let exerciseParams = {};
+		if (this.state.conceptMapGetter) {
+			Object.keys(this.state.conceptMapGetter).forEach((conceptKey) => {
+				let params = this.state.conceptMapGetter[conceptKey].bktParams;
+				conceptParams[conceptKey] = params;
+				// console.log(`found concept params`);
+			});
+		}
+		if (this.state.exerciseList) {
+			Object.keys(this.state.exerciseList).forEach((exerciseID) => {
+				let params = this.state.exerciseList[exerciseID].bktParams;
+				exerciseParams[exerciseID] = params;
+				// console.log(`found exercise params`);
+			});
+		}
+		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter);
+	}
+
+	updateRecommendations = (recommendedExercises) => {
+		this.setState({
+			exerciseRecommendations: recommendedExercises
+		});
+	}
+
+	/**
+	 * Passed in as a prop to WorldView -> ConceptCard
+	 * When invoked in concept card, it generates an exercise of the given
+	 * concept and type
+	 */
 	generateExercise(concept: string, exerciseType: string) {
 		let exercises = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).results;
 		let exerciseIds = this.generator.getExercisesByTypeAndConcept(exerciseType, concept, this.state.exerciseList, this.state.conceptMapGetter).exerciseIds;
@@ -426,15 +485,15 @@ class App extends Component {
 		this.setState({ error: false });
 	}
 
-  /**
-   * Set up a firebase authentication listener when component mounts
-   * Will set the state of firebaseUser to be the current logged in user
-   * or null if no user is logged in.
-   *
-   * Can be passed down to props as this.state.firebaseUser, useful for
-   * data collection.
-   * Un app un-mount, stop watching authentication
-   */
+	/**
+	 * Set up a firebase authentication listener when component mounts
+	 * Will set the state of firebaseUser to be the current logged in user
+	 * or null if no user is logged in.
+	 *
+	 * Can be passed down to props as this.state.firebaseUser, useful for
+	 * data collection.
+	 * Un app un-mount, stop watching authentication
+	 */
 	componentWillUnmount() {
 		this.mounted = false;
 	}
@@ -455,26 +514,26 @@ class App extends Component {
 		return ret;
 	}
 
-  /**
-   * checkAnswer will check the answers client side to provide the feedback
-   * to the Response.js object later on
-   * @param {string[]} answer string array of answers for each question
-   * @param {number} questionIndex index of question to check the answer of
-   * @param {string} questionType type of question
-   * @param {number} fIndex followup question index
-   * @return {string[]}
-   */
+	/**
+	 * checkAnswer will check the answers client side to provide the feedback
+	 * to the Response.js object later on
+	 * @param {string[]} answer string array of answers for each question
+	 * @param {number} questionIndex index of question to check the answer of
+	 * @param {string} questionType type of question
+	 * @param {number} fIndex followup question index
+	 * @return {string[]}
+	 */
 	async checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
 		let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
 		let requestBody = {};
-		requestBody.userAnswer = answer[questionIndex];
+		requestBody.userAnswer = [...answer[questionIndex]];
 
 		switch (questionType) {
 			case Types.multipleChoice:
 				requestBody.questionCode = "";
 				requestBody.testCode = "";
 				requestBody.expectedAnswer = question.answer;
-				await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex);
+				// await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex); // TODO: maybe remove?
 				break;
 			case Types.fillBlank || Types.isInlineResponseType:
 				requestBody.expectedAnswer = question.answer;
@@ -558,12 +617,38 @@ class App extends Component {
 			default:
 				return;
 		}
-		await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex);
+		let feedback = await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex);
 	}
 
 	getRandomInteger(min: number, max: number) {
 		return Math.floor(Math.random() * (max - min)) + min
 	}
+
+	// BXX: pretty sure we don't need this b/c "passed" variable in setFeedback() does this better
+	// /**
+  //  * checkExerciseCorrectness checks correctness of entire exercise
+  //  * @param {Object} feedback string array of answers for each question
+  //  * @return {boolean} True if the entire exercise (all questions) are correct, false otherwise
+  //  */
+	// checkExerciseCorrectness(feedback){
+	// 	console.log(feedback);
+	// 	let responseChecked = false; // sanity check to ensure b/c each exercise should have at least 1 response checked
+
+	// 	for(let response of feedback.flat(2)){
+	// 		let potentialCorrectness = response["pass"];
+
+	// 		// for table questions (and MC questions in tables), responses are empty. Not empty for actual questions
+	// 		if(potentialCorrectness !== undefined){
+	// 			responseChecked = true;
+	// 			if(!potentialCorrectness) {return false;}
+	// 		}
+	// 	}
+	// 	if(!responseChecked){
+	// 		throw("No responses checked. Exercise assumed to be correct.");
+	// 	}
+
+	// 	return true;
+	// 	}
 
 	/**
 	 * Updates the app state with feedback for user
@@ -600,6 +685,7 @@ class App extends Component {
 				let item = feedback[i];
 				passed = Object.keys(item).length > 0 && item.pass;
 				if (!passed) {
+					passed = false;
 					break;
 				}
 			}
@@ -618,6 +704,9 @@ class App extends Component {
 					? displayType.concept
 					: displayType.exercise),
 		}, () => {
+			if (this.modelUpdater) {
+				this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations); //TODO: currently throws errors
+			}
 			if (!passed) {
 				this.updateWrongAnswersCount(false, questionIndex, fIndex);
 			}
@@ -625,14 +714,12 @@ class App extends Component {
 	}
 
 	/**
-	 * Sends a request to the Correctness API to verify user response
+	 * Sends a request to the Correctness API to verify user response, updating state & returning response
 	 * @param {*} requestBody 
 	 * @param {*} questionIndex 
 	 * @param {*} fIndex 
 	 */
 	async verifyUserAnswer(endpointExtension: string, requestBody: any, questionIndex: number, fIndex: number) {
-		console.log(requestBody);
-
 		const request = async () => {
 			const response = await fetch(PYTHON_API + endpointExtension, {
 				method: "POST",
@@ -644,16 +731,18 @@ class App extends Component {
 			})
 			const feedback = await response.json();
 			this.setFeedback(endpointExtension, feedback, questionIndex, fIndex);
+			return feedback;
 		}
-		await request();
+		let feedback = await request();
+		return feedback;
 	}
 
-  /**
-   * updateWrongAnswersCount updates the count for wrong answers
-   * @param {boolean} checkerForCorrectness correctness false or true
-   * @param {number} questionIndex question index
-   * @param {number} fIndex followup question index
-   */
+	/**
+	 * updateWrongAnswersCount updates the count for wrong answers
+	 * @param {boolean} checkerForCorrectness correctness false or true
+	 * @param {number} questionIndex question index
+	 * @param {number} fIndex followup question index
+	 */
 	updateWrongAnswersCount(checkerForCorrectness: boolean, questionIndex: number, fIndex: number) {
 		let temp;
 		if (fIndex === -1) {
@@ -682,10 +771,10 @@ class App extends Component {
 		});
 	}
 
-  /**
-   * Submits the give answer to current exercise
-   * @param answer - the answer being submitted
-   */
+	/**
+	 * Submits the give answer to current exercise
+	 * @param answer - the answer being submitted
+	 */
 	submitResponse(answer: any, questionIndex: number, questionType: string, fIndex: number) {
 		if (answer !== null && answer !== undefined) {
 			// sets feedback / followupFeedback
@@ -702,10 +791,10 @@ class App extends Component {
 		});
 	}
 
-  /**
-   * Submits the given concept
-   * @param concept - the concept being submit
-   */
+	/**
+	 * Submits the given concept
+	 * @param concept - the concept being submit
+	 */
 	submitConcept(concept: string) {
 		if (concept !== null && concept !== undefined) {
 			let newCounter = concept === this.state.currentConcept ? (this.state.counter + 1) : 0;
@@ -716,9 +805,9 @@ class App extends Component {
 		}
 	}
 
-  /**
-   * Invoked when student toggles OK button after receiving feedback
-   */
+	/**
+	 * Invoked when student toggles OK button after receiving feedback
+	 */
 	submitOk() {
 		this.setState({
 			nextConcepts: this.getConcepts(),
@@ -726,9 +815,9 @@ class App extends Component {
 		});
 	}
 
-  /**
-   * nextQuestion will set the state of the exercise to be the next question.
-   */
+	/**
+	 * nextQuestion will set the state of the exercise to be the next question.
+	 */
 	nextQuestion() {
 		this.setState({
 			counter: this.state.counter + 1,
@@ -754,9 +843,9 @@ class App extends Component {
 		});
 	}
 
-  /**
-   * renders the sign up view
-   */
+	/**
+	 * renders the sign up view
+	 */
 	renderSignup() {
 		return (
 			<div>
@@ -797,15 +886,15 @@ class App extends Component {
 			resetError={this.resetError} />);
 	}
 
-  /**
-   * Sets the display state to 'WORLD". This function is passed as a prop
-   * to the the navigationbar.
-   * 
-   * NOTE: This function does not actually set the state to world view. Because
-   * React router has been implemented, all this does is set an internal state
-   * to be set to displayType.world. This is still an important function because
-   * it calls the firebase database and sends log data!
-   */
+	/**
+	 * Sets the display state to 'WORLD". This function is passed as a prop
+	 * to the the navigationbar.
+	 * 
+	 * NOTE: This function does not actually set the state to world view. Because
+	 * React router has been implemented, all this does is set an internal state
+	 * to be set to displayType.world. This is still an important function because
+	 * it calls the firebase database and sends log data!
+	 */
 	switchToWorldView() {
 		this.setState({ display: displayType.world, counter: 0, feedback: [] }, () => { this.sendWorldViewDataToFirebase() });
 	}
@@ -829,9 +918,9 @@ class App extends Component {
 		);
 	}
 
-  /**
-   * Renders the exercise view
-   */
+	/**
+	 * Renders the exercise view
+	 */
 	renderExercise() {
 		return (
 			<div>
@@ -871,9 +960,9 @@ class App extends Component {
 			</div>
 		);
 	}
-  /**
-   * Renders the concept selection view
-   */
+	/**
+	 * Renders the concept selection view
+	 */
 	renderConceptSelection() {
 		return (
 			<ConceptSelection
@@ -883,9 +972,9 @@ class App extends Component {
 		);
 	}
 
-  /**
-   * Renders the world view
-   */
+	/**
+	 * Renders the world view
+	 */
 	renderWorldView() {
 		return (
 			<div>
@@ -905,10 +994,10 @@ class App extends Component {
 		)
 	}
 
-  /**
-   * test method to render instruction view
-   * @private
-   */
+	/**
+	 * test method to render instruction view
+	 * @private
+	 */
 	_renderInstructionView() {
 		return (
 			<div>

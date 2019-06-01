@@ -21,10 +21,6 @@
 *.sh
 *.swp
 
-<<<<<<< HEAD
-
-=======
->>>>>>> fce13603efb10d1f08850b7871c7789fa699c0ae
 # floo
 .floo*
 
@@ -47,3 +43,7 @@ package-lock.json*
 # firebase
 /.firebase
 /functions
+
+# python
+.pyc
+/.ipynb_checkpoints

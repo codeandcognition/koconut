@@ -39,6 +39,8 @@ class Feedback extends Component {
       return <div>{feedback[answer]}</div>
     } else if (type === ExerciseTypes.checkboxQuestion)  {
       return <div>{feedback.failMessage}</div>
+    } else if (type === ExerciseTypes.writeCode) {
+      return <div>{feedback.failMessage}</div>
     } else {
       let feedbackMessages = []
       if (feedback) {
