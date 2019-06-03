@@ -16,6 +16,7 @@ import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 import { write } from 'fs';
+import LoadingView from '../components/LoadingView';
 
 const Sk = require('skulpt');
 
@@ -456,7 +457,8 @@ class App extends Component {
 							});
 						} else {
 							this.setState({
-								counter: 0
+								counter: 0,
+								currentConcept: state.concept
 							});
 						}
 					}
@@ -952,7 +954,8 @@ class App extends Component {
 		return (
 			<div>
 				{this.renderNavBar()}
-				<ExerciseView
+				{this.state.currentConcept &&
+					<ExerciseView
 					updateUserState={this.updateUserState}
 					exercise={this.state.exercise}
 					readOrWrite={this.state.exerciseType}
@@ -985,6 +988,10 @@ class App extends Component {
 					instructionRecommendations={this.state.instructionRecommendations}
 					userBKTParams={this.state.userBKTParams} 
 				/>
+				}
+				{!this.state.currentConcept &&
+					<LoadingView />
+				}
 			</div>
 		);
 	}
@@ -1031,7 +1038,8 @@ class App extends Component {
 		return (
 			<div>
 				{this.renderNavBar()}
-				<InstructionView conceptType={this.state.currentConcept}
+				{this.state.currentConcept &&
+					<InstructionView conceptType={this.state.currentConcept}
 					readOrWrite={this.state.instructionType}
 					setError={this.setInstructionViewError}
 					generateExercise={this.generateExercise}
@@ -1048,6 +1056,9 @@ class App extends Component {
 					exerciseRecommendations={this.state.exerciseRecommendations}
 					instructionRecommendations={this.state.instructionRecommendations}
 					userBKTParams={this.state.userBKTParams} />
+				}
+				{!this.state.currentConcept &&
+					<LoadingView />}
 			</div>
 		);
 	}
