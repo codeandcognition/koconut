@@ -263,12 +263,11 @@ class App extends Component {
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
 				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
 
-				// TODO: uncomment this later! this code loads user params from firebase (but they're not on firebase yet)
-				// userRef.on("value", (snap) => {
-				// 	this.setState({
-				// 		userBKTParams: snap.val()
-				// 	});
-				// });
+				userRef.on("value", (snap) => {
+					this.setState({
+						userBKTParams: snap.val()
+					});
+				});
 
 				this.exerciseGetter.on('value', (snap) => {
 					this.setState({
@@ -276,14 +275,17 @@ class App extends Component {
 						firebaseUser: user
 					}, () => {
 						this.conceptMapGetter.on('value', (snap) => {
-							// TODO: delete this code later -- user params will be read directly from Firebase (user params not on firebase yet)
+							// for previous users who weren't given bktParams upon creation
 							let userBKTParams = {};
-							let concepts = snap.val();
-							Object.keys(concepts).forEach(concept => {
-								let conceptInfo = concepts[concept]["bktParams"];
-								userBKTParams[concept] = conceptInfo;
-							});
-							// ------------------- DELETE THIS
+							if (!this.state.userBKTParams) {
+								let concepts = snap.val();
+								Object.keys(concepts).forEach(concept => {
+									let conceptInfo = concepts[concept]["bktParams"];
+									userBKTParams[concept] = conceptInfo;
+								});
+							} else {
+								userBKTParams = this.state.userBKTParams;
+							}
 
 							this.setState({
 								conceptMapGetter: snap.val(),
