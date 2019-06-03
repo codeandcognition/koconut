@@ -14,6 +14,13 @@ import Progress from './Progress';
 const LEARN = "Learn";
 const PRACTICE = "Practice";
 
+const Categories = {
+	READ: "READ",
+	WRITE: "WRITE"
+}
+
+const progressField = "pKnown";
+
 type Props = {
 	title: string,
 	conceptCode: string,
@@ -139,6 +146,10 @@ class SideNavigation extends Component {
 		let readingSection = this.constructButtonList(this.state.readInstructions, "READ");
 		let writingSection = this.constructButtonList(this.state.writeInstructions, "WRITE");
 		let ref = this;
+
+		let readProgress = this.props.userBKTParams[this.props.conceptCode][Categories.READ][progressField]; 
+		let writeProgress = this.props.userBKTParams[this.props.conceptCode][Categories.WRITE][progressField];
+
 		return (
 			<div id={"sidenav"} className={"sidebar"}>
 				<CardContent>
@@ -149,19 +160,19 @@ class SideNavigation extends Component {
 					<NavSection
 						getInstructionTitles={null}
 						title={"Overview"}
-						progress={<Progress percent={0.25} />}
+						progress={null}
 						body={<ConceptOverview conceptCode={this.props.conceptCode} />}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Reading"}
-						progress={<Progress percent={0.55} />}
+						progress={<Progress percent={readProgress} />}
 						body={readingSection}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Writing"}
-						progress={<Progress percent={0.98} />}
+						progress={<Progress percent={writeProgress} />}
 						body={writingSection}>
 					</NavSection>
 				</CardContent>
