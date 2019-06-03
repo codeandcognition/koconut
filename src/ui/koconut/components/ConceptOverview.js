@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ReactMarkdown from 'react-markdown';
@@ -18,7 +18,7 @@ class ConceptOverview extends Component {
 
     render() {
         let conceptInfo = ConceptInventory[this.props.conceptCode].explanations;
-        return(
+        return (
             <Card>
                 <CardContent>
                     <p>{conceptInfo.definition}</p>
