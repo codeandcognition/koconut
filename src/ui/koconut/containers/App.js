@@ -5,7 +5,7 @@ import './App.css';
 import PopOverMessage from './PopoverMessage';
 import Types from '../../../data/ExerciseTypes.js';
 import Routes from './../../../Routes';
-import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
+import { Switch, Redirect, Route, withRouter } from 'react-router-dom';
 import { ConceptKnowledge, MasteryModel } from '../../../data/MasteryModel';
 import Loadable from 'react-loadable';
 import { ModelUpdater } from './../../../backend/ModelUpdater';
@@ -425,22 +425,58 @@ class App extends Component {
 			userRef.on('value', snap => {
 				if (snap.val() !== null) {
 					state = snap.val();
+
 					if (this.state.conceptMapGetter) {
-						let exercises = this.generator.getExercisesByTypeAndConcept(state.type, state.concept, this.state.exerciseList, this.state.conceptMapGetter).results;
-						if (state.mode === "exercise") {
-							this.setState({
-								currentConcept: state.concept,
-								counter: state.counter,
-								exerciseType: state.type,
-								exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : {},
-								numExercisesInCurrConcept: exercises.length
-							});
-						} else {
-							this.setState({
-								counter: 0,
-								currentConcept: state.concept
-							});
+						let splitPath = this.props.location.pathname.split("/");
+						if (splitPath.length > 2) {
+							let instructionOrPracticeFromPath = splitPath[1];
+							let currentConceptFromPath = splitPath[2];
+							let readOrWriteWithInstructionTypeFromPath = splitPath[3];
+
+							if ((instructionOrPracticeFromPath === "practice" && state.mode !== "exercise") ||
+								(state.concept !== currentConceptFromPath) ||
+								((state.type === "WRITE") && (readOrWriteWithInstructionTypeFromPath !== "learn-to-write-code" || readOrWriteWithInstructionTypeFromPath !== "practice-writing-code")) ||
+								((state.type === "READ") && (readOrWriteWithInstructionTypeFromPath !== "learn-to-read-code" || readOrWriteWithInstructionTypeFromPath !== "practice-reading-code"))
+							) {
+								let readOrWriteType = (readOrWriteWithInstructionTypeFromPath === "learn-to-read-code" || readOrWriteWithInstructionTypeFromPath === "practice-reading-code") ? "READ" : "WRITE"
+								let exercises = this.generator.getExercisesByTypeAndConcept(readOrWriteType, currentConceptFromPath, this.state.exerciseList, this.state.conceptMapGetter).results;
+								if (instructionOrPracticeFromPath === "practice") {
+									this.setState({
+										currentConcept: currentConceptFromPath,
+										counter: 0,
+										exerciseType: readOrWriteType,
+										exercise: (exercises && exercises[0]) ? exercises[0] : {},
+										numExercisesInCurrConcept: exercises.length
+									}, () => {
+										console.log(this.state.currentConcept, this.state.exerciseType)
+									});
+								} else {
+									this.setState({
+										counter: 0,
+										currentConcept: currentConceptFromPath
+									})
+								}
+							}
+							else {
+								let exercises = this.generator.getExercisesByTypeAndConcept(state.type, state.concept, this.state.exerciseList, this.state.conceptMapGetter).results;
+
+								if (state.mode === "exercise") {
+									this.setState({
+										currentConcept: state.concept,
+										counter: state.counter,
+										exerciseType: state.type,
+										exercise: (exercises && exercises[state.counter]) ? exercises[state.counter] : {},
+										numExercisesInCurrConcept: exercises.length
+									});
+								} else {
+									this.setState({
+										counter: 0,
+										currentConcept: state.concept
+									});
+								}
+							}
 						}
+
 					}
 				}
 			});
@@ -1078,17 +1114,15 @@ class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<Router>
-					<MuiThemeProvider theme={this.theme}>
-						<div className="main">
-							{this.renderDisplay()}
-							{this.state.error && this.renderErrorMessage()}
-						</div>
-					</MuiThemeProvider>
-				</Router>
+				<MuiThemeProvider theme={this.theme}>
+					<div className="main">
+						{this.renderDisplay()}
+						{this.state.error && this.renderErrorMessage()}
+					</div>
+				</MuiThemeProvider>
 			</div>
 		);
 	}
 }
 
-export default App;
+export default withRouter(App);

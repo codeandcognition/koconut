@@ -109,7 +109,7 @@ class SideNavigation extends Component {
 			buttonsList.push(
 				<Link key={index}
 					onClick={() => this.props.getInstruction(this.props.conceptCode, type, index)}
-					to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
+					to={`/instruction/${this.props.conceptCode}/learn-to-${type === "READ" ? "read" : "write"}-code/page=${index}`}
 				><NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem></Link>
 			)
 		});
@@ -127,7 +127,7 @@ class SideNavigation extends Component {
 			}
 			buttonsList.push(
 				<Link key={"ex" + index}
-					to={`/practice/${this.props.conceptCode}/practice-writing-code`}
+					to={`/practice/${this.props.conceptCode}/practice-${type === "READ" ? "reading" : "writing"}-code`}
 					onClick={() => this.props.goToExercise(this.props.conceptCode, type,
 						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem suggestionText={text} name={ex.shortPrompt}></NavItem></Link>
 			);

@@ -1,11 +1,11 @@
 // @flow
-import React, {Component} from 'react';
-import {t} from '../../../data/ConceptAbbreviations';
-import {ConceptKnowledge } from '../../../data/MasteryModel';
+import React, { Component } from 'react';
+import { t } from '../../../data/ConceptAbbreviations';
+import { ConceptKnowledge } from '../../../data/MasteryModel';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import './BreadCrumbs.css';
-import { Link, withRouter} from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
@@ -18,24 +18,26 @@ type Props = {
 }
 
 class BreadCrumbs extends Component {
-	LearnerMode = {
-		instruction: "instruction",
-		practice: "exercise"
-	};
+  LearnerMode = {
+    instruction: "instruction",
+    practice: "exercise"
+  };
 
-	Type = {
-		read: "READ",
-		write: "WRITE"
-	};
+  Type = {
+    read: "READ",
+    write: "WRITE"
+  };
 
-	handleMenuOpen: Function;
-	handleMenuClose: Function;
+  handleMenuOpen: Function;
+  handleMenuClose: Function;
 
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      concept: '',
+      concept: this.props.conceptType,
+      readOrWrite: this.props.readOrWrite,
+      mode: this.props.instructionOrPractice,
       orderedConcepts: null,
       semanticConcepts: null,
       templateConcepts: null,
@@ -46,6 +48,16 @@ class BreadCrumbs extends Component {
 
     this.handleMenuOpen = this.handleMenuOpen.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.state.concept !== nextProps.conceptType || this.state.readOrWrite !== nextProps.readOrWrite || this.state.mode !== nextProps.instructionOrPractice) {
+      this.setState({
+        concept: nextProps.conceptType,
+        readOrWrite: nextProps.readOrWrite,
+        mode: nextProps.instructionOrPractice,
+      });
+    }
   }
 
   componentWillMount() {
@@ -72,18 +84,18 @@ class BreadCrumbs extends Component {
   }
 
   componentDidMount() {
-  	this.mounted = true;
-		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-			if (user && this.mounted) {
-				this.getUserState();
-			}
-		})
-	}
+    this.mounted = true;
+    // this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+    // 	if (user && this.mounted) {
+    // 		this.getUserState();
+    // 	}
+    // })
+  }
 
-	componentWillUnmount() {
-  	this.mounted = false;
-  	this.authUnsub();
-	}
+  componentWillUnmount() {
+    this.mounted = false;
+    // this.authUnsub();
+  }
 
   /**
    * This function takes in a camel cased string and converts it to normal
@@ -124,7 +136,7 @@ class BreadCrumbs extends Component {
     });
   }
 
-  handleMenuOpen(e: any, isConceptMenu : boolean) {
+  handleMenuOpen(e: any, isConceptMenu: boolean) {
     this.setState({
       conceptAnchorEl: isConceptMenu ? e.currentTarget : null,
       typeAnchorEl: isConceptMenu ? null : e.currentTarget
@@ -134,61 +146,61 @@ class BreadCrumbs extends Component {
 	/**
 	 * Retrieve user's location on the app from Firebase
 	 */
-	getUserState() {
-		if (firebase.auth().currentUser) {
-			let userId = firebase.auth().currentUser.uid;
-			let userRef = firebase.database().ref('Users/' + userId + '/state');
-			let state = {};
-			userRef.on('value', snap => {
-				if (snap !== null) {
-					state = snap.val();
-					if (this.mounted) {
-						this.setState({
-							concept: state.concept,
-							readOrWrite: state.type,
-							mode: state.mode
-						});
-					}
-				}
-			});
-		}
-	}
+  // getUserState() {
+  //   if (firebase.auth().currentUser) {
+  //     let userId = firebase.auth().currentUser.uid;
+  //     let userRef = firebase.database().ref('Users/' + userId + '/state');
+  //     let state = {};
+  //     userRef.on('value', snap => {
+  //       if (snap !== null) {
+  //         state = snap.val();
+  //         if (this.mounted) {
+  //           this.setState({
+  //             concept: state.concept,
+  //             readOrWrite: state.type,
+  //             mode: state.mode
+  //           });
+  //         }
+  //       }
+  //     });
+  //   }
+  // }
 
 	/**
 	 * Stores user's current state on Koconut to Firebase
 	 *
 	 * @param mode
 	 */
-	storeState(mode: string, counter: number, type: string, concept: string) {
-		let state = {
-			mode: mode,
-			type: type,
-			concept: concept,
-			counter: counter
-		};
-		let userId = firebase.auth().currentUser.uid;
-		let userRef = firebase.database().ref('Users/' + userId + '/state');
-		userRef.set(state);
-	}
+  storeState(mode: string, counter: number, type: string, concept: string) {
+    let state = {
+      mode: mode,
+      type: type,
+      concept: concept,
+      counter: counter
+    };
+    let userId = firebase.auth().currentUser.uid;
+    let userRef = firebase.database().ref('Users/' + userId + '/state');
+    userRef.set(state);
+  }
 
   render() {
-		let conceptName = this.formatCamelCasedString(this.state.concept);
+    let conceptName = this.formatCamelCasedString(this.state.concept);
 
-		let link = "";
-		// learner centric link
-		if (this.state.mode === this.LearnerMode.instruction) {
-			if (this.state.readOrWrite === this.Type.read) {
-				link = "Learn to read code";
-			} else if (this.state.readOrWrite === this.Type.write) {
-				link = "Learn to write code";
-			}
-		} else if (this.state.mode === this.LearnerMode.practice) {
-			if (this.state.readOrWrite === this.Type.read) {
-				link = "Practice reading code";
-			} else if (this.state.readOrWrite === this.Type.write) {
-				link = "Practice writing code";
-			}
-		}
+    let link = "";
+    // learner centric link
+    if (this.state.mode === this.LearnerMode.instruction) {
+      if (this.state.readOrWrite === this.Type.read) {
+        link = "Learn to read code";
+      } else if (this.state.readOrWrite === this.Type.write) {
+        link = "Learn to write code";
+      }
+    } else if (this.state.mode === this.LearnerMode.practice) {
+      if (this.state.readOrWrite === this.Type.read) {
+        link = "Practice reading code";
+      } else if (this.state.readOrWrite === this.Type.write) {
+        link = "Practice writing code";
+      }
+    }
 
     let typeAnchorEl = this.state.typeAnchorEl;
     return (
@@ -199,19 +211,19 @@ class BreadCrumbs extends Component {
             <li className="breadcrumb-item active">
               <a href="#_" aria-owns={typeAnchorEl ? "type-menu" : null} aria-haspopup={"true"} onClick={(e) => this.handleMenuOpen(e, false)}>{link}</a>
               <Menu id={"type-menu"}
-                    anchorEl={typeAnchorEl}
-                    transformOrigin={{
-                      vertical: -45,
-                      horizontal: 20,
-                    }}
-                    open={Boolean(typeAnchorEl)}
-                    onClose={this.handleMenuClose}>
+                anchorEl={typeAnchorEl}
+                transformOrigin={{
+                  vertical: -45,
+                  horizontal: 20,
+                }}
+                open={Boolean(typeAnchorEl)}
+                onClose={this.handleMenuClose}>
                 <Link to={`/instruction/${this.state.concept}/learn-to-read-code`}><MenuItem onClick={() => {
                   this.props.clearCounterAndFeedback();
                   this.storeState("instruction", 0, "READ", this.state.concept);
                 }}>Learn to Read Code</MenuItem></Link>
-								<Link to={`/practice/${this.state.concept}/practice-reading-code`}><MenuItem onClick={() => {
-								  this.props.generateExercise(this.props.concept, "READ");
+                <Link to={`/practice/${this.state.concept}/practice-reading-code`}><MenuItem onClick={() => {
+                  this.props.generateExercise(this.props.concept, "READ");
                   this.props.clearCounterAndFeedback();
                   this.storeState("exercise", 0, "READ", this.state.concept);
                 }}>Practice Reading Code</MenuItem></Link>
@@ -220,22 +232,22 @@ class BreadCrumbs extends Component {
                   this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
                   this.storeState("instruction", 0, "WRITE", this.state.concept);
                 }}>Learn to Write Code</MenuItem></Link>
-								<Link to={`/practice/${this.state.concept}/practice-writing-code`}><MenuItem onClick={() => {
-								  this.props.generateExercise(this.props.concept, "WRITE");
+                <Link to={`/practice/${this.state.concept}/practice-writing-code`}><MenuItem onClick={() => {
+                  this.props.generateExercise(this.props.concept, "WRITE");
                   this.props.clearCounterAndFeedback();
                   this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
                   this.storeState("exercise", 0, "WRITE", this.state.concept);
                 }}>Practice Writing Code</MenuItem></Link>
               </Menu>
             </li>
-						<li className="breadcrumb-item active">{
-							this.props.chosenInstruction ?
-								<p style={{display: 'inline'}}>
-									{this.props.chosenInstruction.title} <span style={{color: "#7986CB"}}>{" (" + this.props.progress + ")" }</span>
-								</p>
-									:
-								""}
-						</li>
+            <li className="breadcrumb-item active">{
+              this.props.chosenInstruction ?
+                <p style={{ display: 'inline' }}>
+                  {this.props.chosenInstruction.title} <span style={{ color: "#7986CB" }}>{" (" + this.props.progress + ")"}</span>
+                </p>
+                :
+                ""}
+            </li>
           </ol>
         </nav>
       </div>

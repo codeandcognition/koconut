@@ -6,24 +6,25 @@ import registerServiceWorker from './registerServiceWorker';
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 
 var config = {
-    apiKey: "AIzaSyBjPZISUiRSL2npF06gg1ZQbWOaOOHpQSY",
-    authDomain: "cyberlearning-1d4e0.firebaseapp.com",
-    databaseURL: "https://cyberlearning-1d4e0.firebaseio.com",
-    projectId: "cyberlearning-1d4e0",
-    storageBucket: "cyberlearning-1d4e0.appspot.com",
-    messagingSenderId: "442084105931"
-  };
+  apiKey: "AIzaSyBjPZISUiRSL2npF06gg1ZQbWOaOOHpQSY",
+  authDomain: "cyberlearning-1d4e0.firebaseapp.com",
+  databaseURL: "https://cyberlearning-1d4e0.firebaseio.com",
+  projectId: "cyberlearning-1d4e0",
+  storageBucket: "cyberlearning-1d4e0.appspot.com",
+  messagingSenderId: "442084105931"
+};
 firebase.initializeApp(config);
 
 
 window.addEventListener('beforeunload', e => {
   e.preventDefault();
   let user = firebase.auth().currentUser;
-  let uid = user?user.uid:null
-  if(uid) {
+  let uid = user ? user.uid : null
+  if (uid) {
     firebase.database().ref(`/Users/${uid}/Data/SessionEvents`).push({
       type: "end",
       timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -31,5 +32,5 @@ window.addEventListener('beforeunload', e => {
   }
 })
 
-ReactDOM.render(<App firebase={firebase}/>, document.getElementById('root'));
+ReactDOM.render(<Router><App firebase={firebase} /></Router>, document.getElementById('root'));
 registerServiceWorker();
