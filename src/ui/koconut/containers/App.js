@@ -16,6 +16,7 @@ import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import ResponseEvaluator from '../../../backend/ResponseEvaluator';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 import { write } from 'fs';
+import LoadingView from '../components/LoadingView';
 
 const Sk = require('skulpt');
 
@@ -436,7 +437,8 @@ class App extends Component {
 							});
 						} else {
 							this.setState({
-								counter: 0
+								counter: 0,
+								currentConcept: state.concept
 							});
 						}
 					}
@@ -626,10 +628,10 @@ class App extends Component {
 
 	// BXX: pretty sure we don't need this b/c "passed" variable in setFeedback() does this better
 	// /**
-  //  * checkExerciseCorrectness checks correctness of entire exercise
-  //  * @param {Object} feedback string array of answers for each question
-  //  * @return {boolean} True if the entire exercise (all questions) are correct, false otherwise
-  //  */
+	//  * checkExerciseCorrectness checks correctness of entire exercise
+	//  * @param {Object} feedback string array of answers for each question
+	//  * @return {boolean} True if the entire exercise (all questions) are correct, false otherwise
+	//  */
 	// checkExerciseCorrectness(feedback){
 	// 	console.log(feedback);
 	// 	let responseChecked = false; // sanity check to ensure b/c each exercise should have at least 1 response checked
@@ -925,38 +927,43 @@ class App extends Component {
 		return (
 			<div>
 				{this.renderNavBar()}
-				<ExerciseView
-					updateUserState={this.updateUserState}
-					exercise={this.state.exercise}
-					readOrWrite={this.state.exerciseType}
-					submitHandler={this.submitResponse}
-					feedback={this.state.feedback}
-					followupFeedback={this.state.followupFeedback}
-					nextConcepts={this.state.nextConcepts}
-					submitOk={this.submitOk}
-					submitTryAgain={this.submitTryAgain}
-					mode={this.state.display}
-					concept={this.state.currentConcept}
-					codeTheme={this.state.codeTheme}
-					toggleCodeTheme={(theme) => this.setState({ codeTheme: theme })}
-					timesGotQuestionWrong={this.state.timesGotQuestionWrong}
-					followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
-					nextQuestion={this.nextQuestion}
-					resetFeedback={this.resetFeedback}
-					clearCounterAndFeedback={this.clearCounterAndFeedback}
-					sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
-					exerciseId={this.state.exerciseId}
-					generateExercise={this.generateExercise}
-					hasNextQuestion={this.hasNextQuestion}
-					getInstruction={this.getInstruction}
-					exercisesList={this.state.exerciseList}
-					conceptMapGetter={this.state.conceptMapGetter}
-					getOrderedConcepts={this.getOrderedConcepts}
-					goToExercise={this.goToExercise}
-					instructionsMap={this.state.instructionsMap}
-					exerciseRecommendations={this.state.exerciseRecommendations}
-					instructionRecommendations={this.state.instructionRecommendations}
-				/>
+				{this.state.currentConcept &&
+					<ExerciseView
+						updateUserState={this.updateUserState}
+						exercise={this.state.exercise}
+						readOrWrite={this.state.exerciseType}
+						submitHandler={this.submitResponse}
+						feedback={this.state.feedback}
+						followupFeedback={this.state.followupFeedback}
+						nextConcepts={this.state.nextConcepts}
+						submitOk={this.submitOk}
+						submitTryAgain={this.submitTryAgain}
+						mode={this.state.display}
+						concept={this.state.currentConcept}
+						codeTheme={this.state.codeTheme}
+						toggleCodeTheme={(theme) => this.setState({ codeTheme: theme })}
+						timesGotQuestionWrong={this.state.timesGotQuestionWrong}
+						followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
+						nextQuestion={this.nextQuestion}
+						resetFeedback={this.resetFeedback}
+						clearCounterAndFeedback={this.clearCounterAndFeedback}
+						sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
+						exerciseId={this.state.exerciseId}
+						generateExercise={this.generateExercise}
+						hasNextQuestion={this.hasNextQuestion}
+						getInstruction={this.getInstruction}
+						exercisesList={this.state.exerciseList}
+						conceptMapGetter={this.state.conceptMapGetter}
+						getOrderedConcepts={this.getOrderedConcepts}
+						goToExercise={this.goToExercise}
+						instructionsMap={this.state.instructionsMap}
+						exerciseRecommendations={this.state.exerciseRecommendations}
+						instructionRecommendations={this.state.instructionRecommendations}
+					/>
+				}
+				{!this.state.currentConcept &&
+					<LoadingView />
+				}
 			</div>
 		);
 	}
@@ -1002,22 +1009,26 @@ class App extends Component {
 		return (
 			<div>
 				{this.renderNavBar()}
-				<InstructionView conceptType={this.state.currentConcept}
-					readOrWrite={this.state.instructionType}
-					setError={this.setInstructionViewError}
-					generateExercise={this.generateExercise}
-					storeUserState={this.storeState}
-					sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
-					exerciseId={this.state.exerciseId}
-					clearCounterAndFeedback={this.clearCounterAndFeedback}
-					getInstruction={this.getInstruction}
-					getOrderedConcepts={this.getOrderedConcepts}
-					exercisesList={this.state.exerciseList}
-					conceptMapGetter={this.state.conceptMapGetter}
-					goToExercise={this.goToExercise}
-					instructionsMap={this.state.instructionsMap}
-					exerciseRecommendations={this.state.exerciseRecommendations}
-					instructionRecommendations={this.state.instructionRecommendations} />
+				{this.state.currentConcept &&
+					<InstructionView conceptType={this.state.currentConcept}
+						readOrWrite={this.state.instructionType}
+						setError={this.setInstructionViewError}
+						generateExercise={this.generateExercise}
+						storeUserState={this.storeState}
+						sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
+						exerciseId={this.state.exerciseId}
+						clearCounterAndFeedback={this.clearCounterAndFeedback}
+						getInstruction={this.getInstruction}
+						getOrderedConcepts={this.getOrderedConcepts}
+						exercisesList={this.state.exerciseList}
+						conceptMapGetter={this.state.conceptMapGetter}
+						goToExercise={this.goToExercise}
+						instructionsMap={this.state.instructionsMap}
+						exerciseRecommendations={this.state.exerciseRecommendations}
+						instructionRecommendations={this.state.instructionRecommendations} />
+				}
+				{!this.state.currentConcept &&
+					<LoadingView />}
 			</div>
 		);
 	}
