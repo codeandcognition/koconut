@@ -726,6 +726,7 @@ class App extends Component {
 		}, async () => {
 			if (this.modelUpdater) {
 				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations);
+				console.log(pkNew);
 				let userID = this.props.firebase.auth().currentUser.uid;
 				let databaseRef = this.props.firebase.database().ref(`Users/${userID}/bktParams/${this.state.currentConcept}/${this.state.exerciseType}/pKnown`);
 				databaseRef.set(pkNew)
@@ -982,6 +983,7 @@ class App extends Component {
 					instructionsMap={this.state.instructionsMap}
 					exerciseRecommendations={this.state.exerciseRecommendations}
 					instructionRecommendations={this.state.instructionRecommendations}
+					userBKTParams={this.state.userBKTParams} 
 				/>
 			</div>
 		);
@@ -1015,7 +1017,8 @@ class App extends Component {
 					goToExercise={this.goToExercise}
 					instructionsMap={this.state.instructionsMap}
 					exerciseRecommendations={this.state.exerciseRecommendations}
-					instructionRecommendations={this.state.instructionRecommendations} />
+					instructionRecommendations={this.state.instructionRecommendations} 
+					userBKTParams={this.state.userBKTParams} />
 			</div>
 		)
 	}
@@ -1043,7 +1046,8 @@ class App extends Component {
 					goToExercise={this.goToExercise}
 					instructionsMap={this.state.instructionsMap}
 					exerciseRecommendations={this.state.exerciseRecommendations}
-					instructionRecommendations={this.state.instructionRecommendations} />
+					instructionRecommendations={this.state.instructionRecommendations}
+					userBKTParams={this.state.userBKTParams} />
 			</div>
 		);
 	}

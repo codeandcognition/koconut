@@ -281,7 +281,8 @@ class InstructionView extends Component {
 										persist={true} 
 										instructionsMap={this.props.instructionsMap} 
 										exerciseRecommendations={this.props.exerciseRecommendations} 
-										instructionRecommendations={this.props.instructionRecommendations}/>
+										instructionRecommendations={this.props.instructionRecommendations}
+										userBKTParams={this.props.userBKTParams} />
 									<div className={"overallView"}>
 										<BreadCrumbs
 											concept={this.props.conceptType}
