@@ -1,7 +1,7 @@
 const BKT_ENDPOINT = `http://localhost:8080/bkt`; // TODO for prod: change URL
 
 const BKT_PARAMS = {
-    INIT: "init",
+    PKNOWN: "pKnown",
     TRANSFER: "transfer"
 }
 
@@ -55,7 +55,7 @@ class ModelUpdater {
             });
         });
 
-        let pKnown = this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.INIT];
+        let pKnown = this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.PKNOWN];
 
         // compose request body
         let requestParams = {
@@ -67,6 +67,7 @@ class ModelUpdater {
             readOrWrite: readOrWrite == READ ? true : false,
             priorPknown: pKnown
         };
+
         let response = await this.request(requestParams);
         if (!response.error) {
             let pkNew = response.pkNew;
@@ -78,7 +79,10 @@ class ModelUpdater {
                 recommendedExercises[exerciseID] = {};
             });
             callback(recommendedExercises); //updates state in App.js
+
+            return pkNew;
         }
+        return pKnown;
     }
 
 
