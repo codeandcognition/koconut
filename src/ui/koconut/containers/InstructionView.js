@@ -260,7 +260,6 @@ class InstructionView extends Component {
 	}
 
 	render() {
-
 		let chosenInstruction = null;
 		if (this.state.instructionList) {
 			chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
@@ -285,7 +284,8 @@ class InstructionView extends Component {
 								persist={true}
 								instructionsMap={this.props.instructionsMap}
 								exerciseRecommendations={this.props.exerciseRecommendations}
-								instructionRecommendations={this.props.instructionRecommendations} />
+								instructionRecommendations={this.props.instructionRecommendations}
+                userBKTParams={this.props.userBKTParams} />
 							<div className={"overallView"}>
 								<BreadCrumbs
 									concept={this.props.conceptType}

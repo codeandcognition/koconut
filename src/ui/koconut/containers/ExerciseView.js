@@ -192,7 +192,7 @@ class Exercise extends Component {
             persist={true}
             instructionsMap={this.props.instructionsMap}
             exerciseRecommendations={this.props.exerciseRecommendations}
-            instructionRecommendations={this.props.instructionRecommendations} />
+            instructionRecommendations={this.props.instructionRecommendations} userBKTParams={this.props.userBKTParams} />
         </div>
         <div className="exercise-view">
           <BreadCrumbs conceptType={this.props.concept}

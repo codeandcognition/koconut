@@ -82,6 +82,18 @@ const displayType = {
 	author: 'AUTHOR'
 };
 
+// Concept Exercise categories Enums
+const Categories = {
+	read: "READ",
+	write: "WRITE"
+}
+
+// BKT enums
+const Fields = {
+	init: "init",
+	pKnown: "pKnown"
+}
+
 // 
 const PYTHON_API = "http://localhost:8080/checker/"; // TODO for prod: change this route
 
@@ -255,7 +267,6 @@ class App extends Component {
 		return topoOrder;
 	}
 
-	// TODO: Update this when reading recommendations data from Firebase
 	componentDidMount() {
 		this.mounted = true;
 		this.props.firebase.auth().onAuthStateChanged(user => {
@@ -282,8 +293,15 @@ class App extends Component {
 								let concepts = snap.val();
 								Object.keys(concepts).forEach(concept => {
 									let conceptInfo = concepts[concept]["bktParams"];
-									userBKTParams[concept] = conceptInfo;
+									let userCentric = {};
+									userCentric[Categories.read] = { [Fields.pKnown]: conceptInfo[Categories.read][Fields.init] };
+									userCentric[Categories.write] = { [Fields.pKnown]: conceptInfo[Categories.write][Fields.init] };
+									userBKTParams[concept] = userCentric;
 								});
+								let ref = this.props.firebase.database().ref(`Users/${user.uid}/bktParams`);
+								ref.set(userBKTParams).catch(err => {
+									console.log(err);
+								})
 							} else {
 								userBKTParams = this.state.userBKTParams;
 							}
@@ -707,9 +725,16 @@ class App extends Component {
 				: (this.state.conceptOptions > 1
 					? displayType.concept
 					: displayType.exercise),
-		}, () => {
+		}, async () => {
 			if (this.modelUpdater) {
-				this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations); //TODO: currently throws errors
+				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations);
+				console.log(pkNew);
+				let userID = this.props.firebase.auth().currentUser.uid;
+				let databaseRef = this.props.firebase.database().ref(`Users/${userID}/bktParams/${this.state.currentConcept}/${this.state.exerciseType}/pKnown`);
+				databaseRef.set(pkNew)
+					.catch((e) => {
+						console.log(e);
+					})
 			}
 			if (!passed) {
 				this.updateWrongAnswersCount(false, questionIndex, fIndex);
@@ -931,37 +956,38 @@ class App extends Component {
 				{this.renderNavBar()}
 				{this.state.currentConcept &&
 					<ExerciseView
-						updateUserState={this.updateUserState}
-						exercise={this.state.exercise}
-						readOrWrite={this.state.exerciseType}
-						submitHandler={this.submitResponse}
-						feedback={this.state.feedback}
-						followupFeedback={this.state.followupFeedback}
-						nextConcepts={this.state.nextConcepts}
-						submitOk={this.submitOk}
-						submitTryAgain={this.submitTryAgain}
-						mode={this.state.display}
-						concept={this.state.currentConcept}
-						codeTheme={this.state.codeTheme}
-						toggleCodeTheme={(theme) => this.setState({ codeTheme: theme })}
-						timesGotQuestionWrong={this.state.timesGotQuestionWrong}
-						followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
-						nextQuestion={this.nextQuestion}
-						resetFeedback={this.resetFeedback}
-						clearCounterAndFeedback={this.clearCounterAndFeedback}
-						sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
-						exerciseId={this.state.exerciseId}
-						generateExercise={this.generateExercise}
-						hasNextQuestion={this.hasNextQuestion}
-						getInstruction={this.getInstruction}
-						exercisesList={this.state.exerciseList}
-						conceptMapGetter={this.state.conceptMapGetter}
-						getOrderedConcepts={this.getOrderedConcepts}
-						goToExercise={this.goToExercise}
-						instructionsMap={this.state.instructionsMap}
-						exerciseRecommendations={this.state.exerciseRecommendations}
-						instructionRecommendations={this.state.instructionRecommendations}
-					/>
+					updateUserState={this.updateUserState}
+					exercise={this.state.exercise}
+					readOrWrite={this.state.exerciseType}
+					submitHandler={this.submitResponse}
+					feedback={this.state.feedback}
+					followupFeedback={this.state.followupFeedback}
+					nextConcepts={this.state.nextConcepts}
+					submitOk={this.submitOk}
+					submitTryAgain={this.submitTryAgain}
+					mode={this.state.display}
+					concept={this.state.currentConcept}
+					codeTheme={this.state.codeTheme}
+					toggleCodeTheme={(theme) => this.setState({ codeTheme: theme })}
+					timesGotQuestionWrong={this.state.timesGotQuestionWrong}
+					followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
+					nextQuestion={this.nextQuestion}
+					resetFeedback={this.resetFeedback}
+					clearCounterAndFeedback={this.clearCounterAndFeedback}
+					sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
+					exerciseId={this.state.exerciseId}
+					generateExercise={this.generateExercise}
+					hasNextQuestion={this.hasNextQuestion}
+					getInstruction={this.getInstruction}
+					exercisesList={this.state.exerciseList}
+					conceptMapGetter={this.state.conceptMapGetter}
+					getOrderedConcepts={this.getOrderedConcepts}
+					goToExercise={this.goToExercise}
+					instructionsMap={this.state.instructionsMap}
+					exerciseRecommendations={this.state.exerciseRecommendations}
+					instructionRecommendations={this.state.instructionRecommendations}
+					userBKTParams={this.state.userBKTParams} 
+				/>
 				}
 				{!this.state.currentConcept &&
 					<LoadingView />
@@ -998,7 +1024,8 @@ class App extends Component {
 					goToExercise={this.goToExercise}
 					instructionsMap={this.state.instructionsMap}
 					exerciseRecommendations={this.state.exerciseRecommendations}
-					instructionRecommendations={this.state.instructionRecommendations} />
+					instructionRecommendations={this.state.instructionRecommendations} 
+					userBKTParams={this.state.userBKTParams} />
 			</div>
 		)
 	}
@@ -1013,21 +1040,22 @@ class App extends Component {
 				{this.renderNavBar()}
 				{this.state.currentConcept &&
 					<InstructionView conceptType={this.state.currentConcept}
-						readOrWrite={this.state.instructionType}
-						setError={this.setInstructionViewError}
-						generateExercise={this.generateExercise}
-						storeUserState={this.storeState}
-						sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
-						exerciseId={this.state.exerciseId}
-						clearCounterAndFeedback={this.clearCounterAndFeedback}
-						getInstruction={this.getInstruction}
-						getOrderedConcepts={this.getOrderedConcepts}
-						exercisesList={this.state.exerciseList}
-						conceptMapGetter={this.state.conceptMapGetter}
-						goToExercise={this.goToExercise}
-						instructionsMap={this.state.instructionsMap}
-						exerciseRecommendations={this.state.exerciseRecommendations}
-						instructionRecommendations={this.state.instructionRecommendations} />
+					readOrWrite={this.state.instructionType}
+					setError={this.setInstructionViewError}
+					generateExercise={this.generateExercise}
+					storeUserState={this.storeState}
+					sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
+					exerciseId={this.state.exerciseId}
+					clearCounterAndFeedback={this.clearCounterAndFeedback}
+					getInstruction={this.getInstruction}
+					getOrderedConcepts={this.getOrderedConcepts}
+					exercisesList={this.state.exerciseList}
+					conceptMapGetter={this.state.conceptMapGetter}
+					goToExercise={this.goToExercise}
+					instructionsMap={this.state.instructionsMap}
+					exerciseRecommendations={this.state.exerciseRecommendations}
+					instructionRecommendations={this.state.instructionRecommendations}
+					userBKTParams={this.state.userBKTParams} />
 				}
 				{!this.state.currentConcept &&
 					<LoadingView />}
