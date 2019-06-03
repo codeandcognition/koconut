@@ -81,6 +81,18 @@ const displayType = {
 	author: 'AUTHOR'
 };
 
+// Concept Exercise categories Enums
+const Categories = {
+	read: "READ",
+	write: "WRITE"
+}
+
+// BKT enums
+const Fields = {
+	init: "init",
+	pKnown: "pKnown"
+}
+
 // 
 const PYTHON_API = "http://localhost:8080/checker/"; // TODO for prod: change this route
 
@@ -254,7 +266,6 @@ class App extends Component {
 		return topoOrder;
 	}
 
-	// TODO: Update this when reading recommendations data from Firebase
 	componentDidMount() {
 		this.mounted = true;
 		this.props.firebase.auth().onAuthStateChanged(user => {
@@ -281,8 +292,15 @@ class App extends Component {
 								let concepts = snap.val();
 								Object.keys(concepts).forEach(concept => {
 									let conceptInfo = concepts[concept]["bktParams"];
-									userBKTParams[concept] = conceptInfo;
+									let userCentric = {};
+									userCentric[Categories.read] = { [Fields.pKnown]: conceptInfo[Categories.read][Fields.init] };
+									userCentric[Categories.write] = { [Fields.pKnown]: conceptInfo[Categories.write][Fields.init] };
+									userBKTParams[concept] = userCentric;
 								});
+								let ref = this.props.firebase.database().ref(`Users/${user.uid}/bktParams`);
+								ref.set(userBKTParams).catch(err => {
+									console.log(err);
+								})
 							} else {
 								userBKTParams = this.state.userBKTParams;
 							}
@@ -628,10 +646,10 @@ class App extends Component {
 
 	// BXX: pretty sure we don't need this b/c "passed" variable in setFeedback() does this better
 	// /**
-  //  * checkExerciseCorrectness checks correctness of entire exercise
-  //  * @param {Object} feedback string array of answers for each question
-  //  * @return {boolean} True if the entire exercise (all questions) are correct, false otherwise
-  //  */
+	//  * checkExerciseCorrectness checks correctness of entire exercise
+	//  * @param {Object} feedback string array of answers for each question
+	//  * @return {boolean} True if the entire exercise (all questions) are correct, false otherwise
+	//  */
 	// checkExerciseCorrectness(feedback){
 	// 	console.log(feedback);
 	// 	let responseChecked = false; // sanity check to ensure b/c each exercise should have at least 1 response checked
@@ -705,9 +723,15 @@ class App extends Component {
 				: (this.state.conceptOptions > 1
 					? displayType.concept
 					: displayType.exercise),
-		}, () => {
+		}, async () => {
 			if (this.modelUpdater) {
-				this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations); //TODO: currently throws errors
+				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations);
+				let userID = this.props.firebase.auth().currentUser.uid;
+				let databaseRef = this.props.firebase.database().ref(`Users/${userID}/bktParams/${this.state.currentConcept}/${this.state.exerciseType}/pKnown`);
+				databaseRef.set(pkNew)
+					.catch((e) => {
+						console.log(e);
+					})
 			}
 			if (!passed) {
 				this.updateWrongAnswersCount(false, questionIndex, fIndex);
