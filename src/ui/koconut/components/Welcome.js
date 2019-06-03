@@ -32,6 +32,16 @@ const strings = {
 	iagree: "I Agree"
 }
 
+const Categories = {
+	read: "READ",
+	write: "WRITE"
+}
+
+const Fields = {
+	init: "init",
+	pKnown: "pKnown"
+}
+
 class Welcome extends Component {
 	// TODO: Maybe this should be a ReactMarkdown component
 	constructor(props) {
@@ -91,7 +101,10 @@ class Welcome extends Component {
 			let concepts = snap.val();
 			Object.keys(concepts).forEach(concept => {
 				let conceptInfo = concepts[concept]["bktParams"];
-				userBKTParams[concept] = conceptInfo;
+				let userCentric = {};
+				userCentric[Categories.read] = {[Fields.pKnown]: conceptInfo[Categories.read][Fields.init]};
+				userCentric[Categories.write] = { [Fields.pKnown]: conceptInfo[Categories.write][Fields.init] };	
+				userBKTParams[concept] = userCentric;
 			});
 			userRef.set(userBKTParams)
 				.catch((e) => {
