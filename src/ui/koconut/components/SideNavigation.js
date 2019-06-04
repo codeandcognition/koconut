@@ -117,7 +117,10 @@ class SideNavigation extends Component {
 				<Link key={index}
 					onClick={() => this.props.getInstruction(this.props.conceptCode, type, index)}
 					to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
-				><NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem></Link>
+				>
+					<NavItem name={item}></NavItem>
+					{/* <NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem> */}
+				</Link>
 			)
 		});
 		let { exercises, exerciseIds } = this.filterExercisesByConcept(this.props.conceptCode, type);

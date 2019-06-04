@@ -1,3 +1,4 @@
+// BXX 5/2019: This is not being used (bkt.py being used in place of it), but we may draw from this later .
 //@flow
 import {ResponseFeatures, g, s} from './ResponseFeaturesTable';
 import {ResponseObject} from '../data/ResponseLog';

@@ -30,10 +30,12 @@ class ModelUpdater {
 
     // @flow
     update = async (isCorrect: boolean, exerciseID: string, conceptKey: string, readOrWrite: string, callback : Function) => {
-        let exerciseIDs = Object.keys(this.exerciseParameters);
+        // let exerciseIDs = Object.keys(this.exerciseParameters);
+        let exerciseIDs = [];
         let conceptParams = this.conceptParameters[conceptKey];
         let itemParams = [];
 
+        // populate itemParams
         Object.keys(this.conceptExerciseMap).forEach((concept) => {
             let read = this.conceptExerciseMap[concept][READ];
             let write = this.conceptExerciseMap[concept][WRITE];
@@ -41,21 +43,25 @@ class ModelUpdater {
                 let params = this.exerciseParameters[eid];
                 if (params) {
                     params[BKT_ITEM_PARAMS.EID] = eid;
-                    params[BKT_ITEM_PARAMS.CONCEPT] = conceptKey;
+                    params[BKT_ITEM_PARAMS.CONCEPT] = concept;
                     itemParams.push(params);
+                    exerciseIDs.push(eid)
                 }
             });
             write.forEach((eid) => {
                 let params = this.exerciseParameters[eid];
                 if (params) {
                     params[BKT_ITEM_PARAMS.EID] = eid;
-                    params[BKT_ITEM_PARAMS.CONCEPT] = conceptKey;
+                    params[BKT_ITEM_PARAMS.CONCEPT] = concept;
                     itemParams.push(params);
+                    exerciseIDs.push(eid);
                 }
             });
         });
 
-        let pKnown = this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.PKNOWN];
+        // console.log(itemParams);
+
+        let pKnown = this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.PKNOWN]; // get prior
 
         // compose request body
         let requestParams = {
@@ -73,7 +79,6 @@ class ModelUpdater {
             let pkNew = response.pkNew;
             let suggestedExercises = response.suggestedExercises;
 
-            // TODO: Write pkNew to Firebase for the user
             let recommendedExercises = {};
             suggestedExercises.forEach((exerciseID) => {
                 recommendedExercises[exerciseID] = {};

@@ -26,7 +26,9 @@ class NavItem extends Component {
 						{this.state.suggestionText && <p className={"recommendation"}>{this.state.suggestionText}</p>}
 						<div className={"nav-item-info"}>
 							<ListItemText className={"nav-item-text"} primary={this.state.name} />
-							<div className={"item-status"} style={complete}><i className={"fas fa-check"} /></div>
+							<div className={"item-status"}>
+							{/* <div className={"item-status"} style={complete}><i className={"fas fa-check"} /> */}
+							</div>
 						</div>
 					</ListItem>
 				</div>

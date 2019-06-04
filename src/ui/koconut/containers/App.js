@@ -333,7 +333,6 @@ class App extends Component {
 			Object.keys(this.state.conceptMapGetter).forEach((conceptKey) => {
 				let params = this.state.conceptMapGetter[conceptKey].bktParams;
 				conceptParams[conceptKey] = params;
-				// console.log(`found concept params`);
 			});
 		}
 		if (this.state.exerciseList) {
@@ -727,8 +726,11 @@ class App extends Component {
 					: displayType.exercise),
 		}, async () => {
 			if (this.modelUpdater) {
+				// given response, get new pknown
 				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations);
 				console.log("New pknown:" + pkNew);
+
+				// update pknown on firebase
 				let userID = this.props.firebase.auth().currentUser.uid;
 				let databaseRef = this.props.firebase.database().ref(`Users/${userID}/bktParams/${this.state.currentConcept}/${this.state.exerciseType}/pKnown`);
 				databaseRef.set(pkNew)
