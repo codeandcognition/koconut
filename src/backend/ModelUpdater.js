@@ -80,7 +80,11 @@ class ModelUpdater {
             });
             callback(recommendedExercises); //updates state in App.js
 
+            this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.PKNOWN] = pkNew; // update priorPKnown locally
+
             return pkNew;
+        } else {
+            throw("Update to pknown failed.")
         }
         return pKnown;
     }
