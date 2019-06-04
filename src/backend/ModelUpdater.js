@@ -20,20 +20,24 @@ class ModelUpdater {
     exerciseParameters: any;
     priorPKnown: any;
     conceptExerciseMap: any;
+    maxNumRecommendations: any;
 
-    constructor(conceptParameters: any, exerciseParameters: any, priorPKnown: any, conceptExerciseMap) {
+    constructor(conceptParameters: any, exerciseParameters: any, priorPKnown: any, conceptExerciseMap, maxNumRecommendations: any) {
         this.conceptParameters = conceptParameters;
         this.exerciseParameters = exerciseParameters;
         this.priorPKnown = priorPKnown;
         this.conceptExerciseMap = conceptExerciseMap;
+        this.maxNumRecommendations = maxNumRecommendations;
     }
 
     // @flow
     update = async (isCorrect: boolean, exerciseID: string, conceptKey: string, readOrWrite: string, callback : Function) => {
-        let exerciseIDs = Object.keys(this.exerciseParameters);
+        // let exerciseIDs = Object.keys(this.exerciseParameters);
+        let exerciseIDs = [];
         let conceptParams = this.conceptParameters[conceptKey];
         let itemParams = [];
 
+        // populate itemParams
         Object.keys(this.conceptExerciseMap).forEach((concept) => {
             let read = this.conceptExerciseMap[concept][READ];
             let write = this.conceptExerciseMap[concept][WRITE];
@@ -41,21 +45,23 @@ class ModelUpdater {
                 let params = this.exerciseParameters[eid];
                 if (params) {
                     params[BKT_ITEM_PARAMS.EID] = eid;
-                    params[BKT_ITEM_PARAMS.CONCEPT] = conceptKey;
+                    params[BKT_ITEM_PARAMS.CONCEPT] = concept;
                     itemParams.push(params);
+                    exerciseIDs.push(eid)
                 }
             });
             write.forEach((eid) => {
                 let params = this.exerciseParameters[eid];
                 if (params) {
                     params[BKT_ITEM_PARAMS.EID] = eid;
-                    params[BKT_ITEM_PARAMS.CONCEPT] = conceptKey;
+                    params[BKT_ITEM_PARAMS.CONCEPT] = concept;
                     itemParams.push(params);
+                    exerciseIDs.push(eid);
                 }
             });
         });
 
-        let pKnown = this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.PKNOWN];
+        let pKnown = this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.PKNOWN]; // get prior
 
         // compose request body
         let requestParams = {
@@ -71,16 +77,21 @@ class ModelUpdater {
         let response = await this.request(requestParams);
         if (!response.error) {
             let pkNew = response.pkNew;
-            let suggestedExercises = response.suggestedExercises;
 
-            // TODO: Write pkNew to Firebase for the user
+            // limit number of recommendations
+            let suggestedExercises = (this.maxNumRecommendations > 0 ? response.suggestedExercises.splice(0, this.maxNumRecommendations) : response.suggestedExercises);
+
             let recommendedExercises = {};
             suggestedExercises.forEach((exerciseID) => {
                 recommendedExercises[exerciseID] = {};
             });
             callback(recommendedExercises); //updates state in App.js
 
+            this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.PKNOWN] = pkNew; // update priorPKnown locally
+
             return pkNew;
+        } else {
+            throw("Update to pknown failed.")
         }
         return pKnown;
     }
