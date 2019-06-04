@@ -61,8 +61,6 @@ class ModelUpdater {
             });
         });
 
-        // console.log(itemParams);
-
         let pKnown = this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.PKNOWN]; // get prior
 
         // compose request body
@@ -79,7 +77,7 @@ class ModelUpdater {
         let response = await this.request(requestParams);
         if (!response.error) {
             let pkNew = response.pkNew;
-            
+
             // limit number of recommendations
             let suggestedExercises = (this.maxNumRecommendations > 0 ? response.suggestedExercises.splice(0, this.maxNumRecommendations) : response.suggestedExercises);
 

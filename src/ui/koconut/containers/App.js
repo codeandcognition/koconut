@@ -646,32 +646,6 @@ class App extends Component {
 		return Math.floor(Math.random() * (max - min)) + min
 	}
 
-	// BXX: pretty sure we don't need this b/c "passed" variable in setFeedback() does this better
-	// /**
-	//  * checkExerciseCorrectness checks correctness of entire exercise
-	//  * @param {Object} feedback string array of answers for each question
-	//  * @return {boolean} True if the entire exercise (all questions) are correct, false otherwise
-	//  */
-	// checkExerciseCorrectness(feedback){
-	// 	console.log(feedback);
-	// 	let responseChecked = false; // sanity check to ensure b/c each exercise should have at least 1 response checked
-
-	// 	for(let response of feedback.flat(2)){
-	// 		let potentialCorrectness = response["pass"];
-
-	// 		// for table questions (and MC questions in tables), responses are empty. Not empty for actual questions
-	// 		if(potentialCorrectness !== undefined){
-	// 			responseChecked = true;
-	// 			if(!potentialCorrectness) {return false;}
-	// 		}
-	// 	}
-	// 	if(!responseChecked){
-	// 		throw("No responses checked. Exercise assumed to be correct.");
-	// 	}
-
-	// 	return true;
-	// 	}
-
 	/**
 	 * Updates the app state with feedback for user
 	 * @param {string} type is indicates question type
@@ -729,7 +703,7 @@ class App extends Component {
 			if (this.modelUpdater) {
 				// given response, get new pknown
 				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations);
-				console.log("New pknown:" + pkNew);
+				// console.log("New pknown:" + pkNew);
 
 				// update pknown on firebase
 				let userID = this.props.firebase.auth().currentUser.uid;
