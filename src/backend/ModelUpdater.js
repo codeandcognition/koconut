@@ -20,12 +20,14 @@ class ModelUpdater {
     exerciseParameters: any;
     priorPKnown: any;
     conceptExerciseMap: any;
+    maxNumRecommendations: any;
 
-    constructor(conceptParameters: any, exerciseParameters: any, priorPKnown: any, conceptExerciseMap) {
+    constructor(conceptParameters: any, exerciseParameters: any, priorPKnown: any, conceptExerciseMap, maxNumRecommendations: any) {
         this.conceptParameters = conceptParameters;
         this.exerciseParameters = exerciseParameters;
         this.priorPKnown = priorPKnown;
         this.conceptExerciseMap = conceptExerciseMap;
+        this.maxNumRecommendations = maxNumRecommendations;
     }
 
     // @flow
@@ -77,7 +79,9 @@ class ModelUpdater {
         let response = await this.request(requestParams);
         if (!response.error) {
             let pkNew = response.pkNew;
-            let suggestedExercises = response.suggestedExercises;
+            
+            // limit number of recommendations
+            let suggestedExercises = (this.maxNumRecommendations > 0 ? response.suggestedExercises.splice(0, this.maxNumRecommendations) : response.suggestedExercises);
 
             let recommendedExercises = {};
             suggestedExercises.forEach((exerciseID) => {

@@ -180,7 +180,8 @@ class App extends Component {
 			followupTimesGotQuestionWrong: [],
 			exerciseId: '',
 			numExercisesInCurrConcept: 0,
-			userBKTParams: {}
+			userBKTParams: {},
+			maxNumRecommendations: 6, // change or set elsewhere?
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -342,7 +343,7 @@ class App extends Component {
 				// console.log(`found exercise params`);
 			});
 		}
-		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter);
+		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter, this.state.maxNumRecommendations);
 	}
 
 	updateRecommendations = (recommendedExercises) => {
