@@ -299,7 +299,8 @@ class WorldView extends Component {
         persist={false} 
         exerciseRecommendations={this.props.exerciseRecommendations} 
         instructionRecommendations={this.props.instructionRecommendations}
-        userBKTParams={this.props.userBKTParams} />
+        userBKTParams={this.props.userBKTParams} 
+        instructionsRead={this.props.instructionsRead} />
     );
   }
 

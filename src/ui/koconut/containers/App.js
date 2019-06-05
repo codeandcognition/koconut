@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-d
 import { ConceptKnowledge, MasteryModel } from '../../../data/MasteryModel';
 import Loadable from 'react-loadable';
 import { ModelUpdater } from './../../../backend/ModelUpdater';
+import { filterCompletedInstructions } from './../../../utils/queryCompleted';
 
 
 // Fake AJAX
@@ -146,7 +147,8 @@ class App extends Component {
 		exerciseId: string,
 		exerciseRecommendations: any,
 		instructionRecommendations: any,
-		userBKTParams: any
+		userBKTParams: any,
+		instructionsRead: any
 	};
 
 	constructor() {
@@ -181,7 +183,8 @@ class App extends Component {
 			exerciseId: '',
 			numExercisesInCurrConcept: 0,
 			userBKTParams: {},
-			maxNumRecommendations: 6, // change or set elsewhere?
+			maxNumRecommendations: 6, // change or set elsewhere?,
+			instructionsRead: {}
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -270,7 +273,7 @@ class App extends Component {
 
 	componentDidMount() {
 		this.mounted = true;
-		this.props.firebase.auth().onAuthStateChanged(user => {
+		this.props.firebase.auth().onAuthStateChanged(async (user) => {
 			if (user) {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
@@ -282,6 +285,9 @@ class App extends Component {
 					});
 				});
 
+				let completedInstructionsRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/NewPageVisit`);
+				let instructionsRead = await filterCompletedInstructions(this.conceptMapGetter, completedInstructionsRef);
+				
 				this.exerciseGetter.on('value', (snap) => {
 					this.setState({
 						exerciseList: snap.val(),
@@ -309,6 +315,7 @@ class App extends Component {
 
 							this.setState({
 								conceptMapGetter: snap.val(),
+								instructionsRead: instructionsRead,
 								userBKTParams: userBKTParams // TODO: Delete this line laterbktParams
 							}, () => {
 								this.updateUserState();
@@ -963,7 +970,8 @@ class App extends Component {
 					instructionsMap={this.state.instructionsMap}
 					exerciseRecommendations={this.state.exerciseRecommendations}
 					instructionRecommendations={this.state.instructionRecommendations}
-					userBKTParams={this.state.userBKTParams} 
+					userBKTParams={this.state.userBKTParams}
+					instructionsRead={this.state.instructionsRead} 
 				/>
 				}
 				{!this.state.currentConcept &&
@@ -1002,7 +1010,8 @@ class App extends Component {
 					instructionsMap={this.state.instructionsMap}
 					exerciseRecommendations={this.state.exerciseRecommendations}
 					instructionRecommendations={this.state.instructionRecommendations} 
-					userBKTParams={this.state.userBKTParams} />
+					userBKTParams={this.state.userBKTParams} 
+					instructionsRead={this.state.instructionsRead} />
 			</div>
 		)
 	}
@@ -1032,7 +1041,8 @@ class App extends Component {
 					instructionsMap={this.state.instructionsMap}
 					exerciseRecommendations={this.state.exerciseRecommendations}
 					instructionRecommendations={this.state.instructionRecommendations}
-					userBKTParams={this.state.userBKTParams} />
+					userBKTParams={this.state.userBKTParams} 
+					instructionsRead={this.state.instructionsRead}/>
 				}
 				{!this.state.currentConcept &&
 					<LoadingView />}
