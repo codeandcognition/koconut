@@ -96,10 +96,8 @@ class SideNavigation extends Component {
 	constructButtonList(instructions, type) {
 		let buttonsList = [];
 		instructions.map((item, index) => {
-			let read = this.props.instructionsRead &&
-				this.props.instructionsRead[this.props.conceptCode] &&
-				this.props.instructionsRead[this.props.conceptCode]["READ"] ?
-				this.props.instructionsRead[this.props.conceptCode]["READ"][index] : null;
+			let read = this.props.instructionsRead[this.props.conceptCode].includes(index);
+
 			let text = "";
 			if (this.props.instructionRecommendations[this.props.conceptCode] &&
 				this.props.instructionRecommendations[this.props.conceptCode][type] &&
@@ -118,7 +116,7 @@ class SideNavigation extends Component {
 					onClick={() => this.props.getInstruction(this.props.conceptCode, type, index)}
 					to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
 				>
-					<NavItem name={item}></NavItem>
+					<NavItem name={item} read={read}></NavItem>
 					{/* <NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem> */}
 				</Link>
 			)
