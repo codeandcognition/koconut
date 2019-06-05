@@ -39,8 +39,10 @@ def posterior_pknown(is_correct, eid, transfer, item_params, prior_pknown):
         return prior_pknown
 
     posterior = -1.0
-    slip = float(item_params[item_params[EID] == eid][SLIP])
-    guess = float(item_params[item_params[EID] == eid][GUESS])
+
+    # .iloc[0] added to get 1st one (just in case exercise ID duplicated to handle error condition where exercise is read & write)
+    slip = float(item_params[item_params[EID] == eid][SLIP].iloc[0]) 
+    guess = float(item_params[item_params[EID] == eid][GUESS].iloc[0])
 
     if is_correct:
         posterior = (prior_pknown * (1.0 - slip)) / ((prior_pknown * (1 - slip)) + ((1.0-prior_pknown)*guess))
@@ -154,7 +156,6 @@ def order_next_questions(exercise_ids, pk, item_params, error = 0.0, penalty = 1
     item_params: pd.DataFrame
         item parameters (eid, slip, guess, concept)
     """
-    
     df_output = pd.DataFrame({"eid": exercise_ids, "score": np.zeros(len(exercise_ids))})
     df_item_params = pd.DataFrame.from_dict(item_params)
     
