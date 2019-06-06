@@ -177,36 +177,39 @@ class Exercise extends Component {
       marginTop: '10%'
     };
     return (
-      <div className="exercise-container" style={styles}>
-        <div className="sidebar-menu">
-          <SideNavigation title={this.props.concept}
-            conceptCode={this.props.concept}
-            open={true}
-            closeMenu={null}
-            generateExercise={this.props.generateExercise}
-            getInstruction={this.props.getInstruction}
-            exercisesList={this.props.exercisesList}
-            conceptMapGetter={this.props.conceptMapGetter}
-            getOrderedConcepts={this.props.getOrderedConcepts}
-            goToExercise={this.props.goToExercise}
-            persist={true}
-            instructionsMap={this.props.instructionsMap}
-            exerciseRecommendations={this.props.exerciseRecommendations}
-            instructionRecommendations={this.props.instructionRecommendations} userBKTParams={this.props.userBKTParams} 
-            instructionsRead={this.props.instructionsRead}  />
-        </div>
-        <div className="exercise-view">
-          <BreadCrumbs conceptType={this.props.concept}
-            sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
-            exerciseId={this.props.exerciseId}
-            readOrWrite={this.props.readOrWrite}
-            instructionOrPractice={"PRACTICE"}
-            generateExercise={this.props.generateExercise}
-            concept={this.props.concept}
-            clearCounterAndFeedback={this.props.clearCounterAndFeedback}
-            getOrderedConcepts={this.props.getOrderedConcepts}
-          />
-          {!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView /> : this.renderExercise()}
+      <div>
+        <div className="exercise-container" style={styles}>
+          <div className="sidebar-menu">
+            <SideNavigation title={this.props.concept}
+              conceptCode={this.props.concept}
+              open={true}
+              closeMenu={null}
+              generateExercise={this.props.generateExercise}
+              getInstruction={this.props.getInstruction}
+              exercisesList={this.props.exercisesList}
+              conceptMapGetter={this.props.conceptMapGetter}
+              getOrderedConcepts={this.props.getOrderedConcepts}
+              goToExercise={this.props.goToExercise}
+              persist={true}
+              instructionsMap={this.props.instructionsMap}
+              exerciseRecommendations={this.props.exerciseRecommendations}
+              instructionRecommendations={this.props.instructionRecommendations} userBKTParams={this.props.userBKTParams}
+              instructionsRead={this.props.instructionsRead}
+              exercisesRead={this.props.exercisesRead} />
+          </div>
+          <div className="exercise-view">
+            <BreadCrumbs conceptType={this.props.concept}
+              sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
+              exerciseId={this.props.exerciseId}
+              readOrWrite={this.props.readOrWrite}
+              instructionOrPractice={"PRACTICE"}
+              generateExercise={this.props.generateExercise}
+              concept={this.props.concept}
+              clearCounterAndFeedback={this.props.clearCounterAndFeedback}
+              getOrderedConcepts={this.props.getOrderedConcepts}
+            />
+            {!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView /> : this.renderExercise()}
+          </div>
         </div>
       </div>
     );
