@@ -18,7 +18,6 @@
 /.idea
 
 # shell
-*.sh
 *.swp
 
 # floo
