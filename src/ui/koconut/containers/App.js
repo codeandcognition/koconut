@@ -10,7 +10,7 @@ import { ConceptKnowledge, MasteryModel } from '../../../data/MasteryModel';
 import conceptMap from '../../../data/ConceptMap';
 import Loadable from 'react-loadable';
 import { ModelUpdater } from './../../../backend/ModelUpdater';
-import { filterCompletedInstructions } from './../../../utils/queryCompleted';
+import { filterCompletedInstructions, filterCompletedExercises } from './../../../utils/queryCompleted';
 
 
 // Fake AJAX
@@ -149,7 +149,8 @@ class App extends Component {
 		exerciseRecommendations: any,
 		instructionRecommendations: any,
 		userBKTParams: any,
-		instructionsRead: any
+		instructionsRead: any,
+		exercisesCompleted: any	
 	};
 
 	constructor() {
@@ -288,6 +289,11 @@ class App extends Component {
 
 				let completedInstructionsRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/NewPageVisit`);
 				let instructionsRead = await filterCompletedInstructions(this.conceptMapGetter, completedInstructionsRef);
+
+				
+				let completedExercisesRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/AnswerSubmission`); 
+				
+				let exercisesCompleted = await filterCompletedExercises(this.conceptMapGetter, completedExercisesRef, this.exerciseGetter);
 				
 				this.exerciseGetter.on('value', (snap) => {
 					this.setState({
@@ -317,6 +323,7 @@ class App extends Component {
 							this.setState({
 								conceptMapGetter: snap.val(),
 								instructionsRead: instructionsRead,
+								exercisesCompleted: exercisesCompleted,
 								userBKTParams: userBKTParams // TODO: Delete this line laterbktParams
 							}, () => {
 								this.updateUserState();
@@ -983,7 +990,8 @@ class App extends Component {
 					exerciseRecommendations={this.state.exerciseRecommendations}
 					instructionRecommendations={this.state.instructionRecommendations}
 					userBKTParams={this.state.userBKTParams}
-					instructionsRead={this.state.instructionsRead} 
+					instructionsRead={this.state.instructionsRead}
+					exercisesCompleted={this.state.exercisesCompleted}
 				/>
 				}
 				{!this.state.currentConcept &&
@@ -1023,7 +1031,8 @@ class App extends Component {
 					exerciseRecommendations={this.state.exerciseRecommendations}
 					instructionRecommendations={this.state.instructionRecommendations} 
 					userBKTParams={this.state.userBKTParams} 
-					instructionsRead={this.state.instructionsRead} />
+					instructionsRead={this.state.instructionsRead} 
+					exercisesCompleted={this.state.exercisesCompleted} />
 			</div>
 		)
 	}
@@ -1054,7 +1063,8 @@ class App extends Component {
 					exerciseRecommendations={this.state.exerciseRecommendations}
 					instructionRecommendations={this.state.instructionRecommendations}
 					userBKTParams={this.state.userBKTParams} 
-					instructionsRead={this.state.instructionsRead}/>
+					instructionsRead={this.state.instructionsRead}
+					exercisesCompleted={this.state.exercisesCompleted}/>
 				}
 				{!this.state.currentConcept &&
 					<LoadingView />}
