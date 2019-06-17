@@ -1,8 +1,6 @@
 ![very cool status](https://img.shields.io/badge/very%20cool-passing-green.svg) ![flow status](https://img.shields.io/badge/flow-happy-yellow.svg) ![emoji status](https://img.shields.io/badge/emojis-active-blue.svg) ![productivity status](https://img.shields.io/badge/productivity-infinity-lightgrey.svg) ![reactmarkdown inline html](https://img.shields.io/badge/reactmarkdown%20inline%20html-finally%20working-green.svg)
 
-# koconut
-
-> :sparkles: _a very cool assess pool_ :sparkles:
+# Codeitz (formerly Koconut)
 
 ## Index
 
@@ -32,6 +30,9 @@ Currently, _koconut_ is built using the following stack:
 #### Backend
 - [Node.js](https://nodejs.org/en/): a JavaScript runtime
 - [Firebase](https://firebase.google.com/): an easy-to-use storage and authentication system
+
+#### Custom APIs
+- [koconut-api](https://github.com/codeandcognition/koconut-api) is a Python API we built which checks correctness and handles user modeling
 
 ### Tools
 
@@ -140,11 +141,6 @@ Jest tests can be quickly run using `yarn test`.
 
 [WebStorm](https://www.jetbrains.com/webstorm/) is a JavaScript (and more!) IDE that can assist with development. WebStorm (and all JetBrains software) is free to use for students through a yearly license which can be obtained [**here**](https://www.jetbrains.com/student/).
 
-#### Note from William
-You can use Visual Studio Code instead of Webstorm, but you will find that it is harder to use Flow with. I set up the flow file on my computer similar to Webstorm's setup, with a different add on. Visual Studio's add on for Flow is a lot slower and feels a bit buggier, whereas Webstorm's feels very smooth. 
-
-If you're just getting started, I highly suggest using Webstorm. Once you get more familiar with the code base, then you can choose to switch to Visual Studio Code. I switched over after halfway through my time here, mostly because I just liked VSCode better.
-
 #### Using the Google Style Guide in WebStorm
 
 You can automatically import the Google Style Guide into your settings by choosing it from the existing style guides:
@@ -170,6 +166,11 @@ You can use the follow instructions to add Flow support to WebStorm (you will pr
 You can register your GitHub account in WebStorm for easy version control: [Registering GitHub Account in WebStorm](https://www.jetbrains.com/help/webstorm/registering-github-account-in-webstorm.html)
 
 It is recommended that you use token authentication: [Personal API Tokens](https://github.com/blog/1509-personal-api-tokens)
+
+### VS Code
+You can use Visual Studio Code instead of Webstorm, but you will find that it is harder to use Flow with. Visual Studio has an add-on for Flow that is a lot slower and feels a bit buggier, whereas Webstorm's feels very smooth. 
+
+If you're just getting started, I highly suggest using Webstorm. Once you get more familiar with the code base, then you can choose to switch to Visual Studio Code.
 
 ### Tutorials and API References
 
