@@ -95,7 +95,7 @@ const Fields = {
 }
 
 // 
-const PYTHON_API = "http://localhost:8080/checker/"; // TODO for prod: change this route
+const PYTHON_API = "http://127.0.0.1:5000/checker/"; // TODO for prod: change this route
 
 /**
  * Renders the koconut application view.
