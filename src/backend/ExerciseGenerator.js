@@ -1,6 +1,6 @@
 // @flow
 import ExerciseTypes from '../data/ExerciseTypes.js';
-import conceptInventory from '../data/ConceptMap';
+import conceptInventory from '../data/ConceptInventory';
 // import typeof doesn't agree with Flow for some reason:
 //   https://flow.org/en/docs/types/modules/
 // So, we import all of ConceptKnowledge

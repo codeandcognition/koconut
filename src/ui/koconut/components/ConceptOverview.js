@@ -3,7 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
-import ConceptInventory from './../../../data/ConceptMap';
+import ConceptInventory from '../../../data/ConceptInventory';
 
 class ConceptOverview extends Component {
     renderMarkdown(codeString: string, index: number) {

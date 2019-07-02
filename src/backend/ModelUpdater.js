@@ -1,4 +1,4 @@
-const BKT_ENDPOINT = `http://localhost:8080/bkt`; // TODO for prod: change URL
+const BKT_ENDPOINT = `http://127.0.0.1:5000/bkt`; // TODO for prod: change URL
 
 const BKT_PARAMS = {
     PKNOWN: "pKnown",
@@ -21,13 +21,16 @@ class ModelUpdater {
     priorPKnown: any;
     conceptExerciseMap: any;
     maxNumRecommendations: any;
+    currentConcept: any;
+    conceptMap: any;
 
-    constructor(conceptParameters: any, exerciseParameters: any, priorPKnown: any, conceptExerciseMap, maxNumRecommendations: any) {
+    constructor(conceptParameters: any, exerciseParameters: any, priorPKnown: any, conceptExerciseMap, maxNumRecommendations: any, conceptMap: any) {
         this.conceptParameters = conceptParameters;
         this.exerciseParameters = exerciseParameters;
         this.priorPKnown = priorPKnown;
         this.conceptExerciseMap = conceptExerciseMap;
         this.maxNumRecommendations = maxNumRecommendations;
+        this.conceptMap = conceptMap;
     }
 
     // @flow
@@ -71,7 +74,9 @@ class ModelUpdater {
             transfer: conceptParams[readOrWrite].transfer,
             itemParams: itemParams,
             readOrWrite: readOrWrite == READ ? true : false,
-            priorPknown: pKnown
+            priorPknown: pKnown,
+            conceptMap: this.conceptMap,
+            targetConcept: conceptKey
         };
 
         let response = await this.request(requestParams);
