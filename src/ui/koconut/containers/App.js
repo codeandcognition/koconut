@@ -7,6 +7,7 @@ import Types from '../../../data/ExerciseTypes.js';
 import Routes from './../../../Routes';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 import { ConceptKnowledge, MasteryModel } from '../../../data/MasteryModel';
+import conceptMap from '../../../data/ConceptMap';
 import Loadable from 'react-loadable';
 import { ModelUpdater } from './../../../backend/ModelUpdater';
 
@@ -340,10 +341,9 @@ class App extends Component {
 			Object.keys(this.state.exerciseList).forEach((exerciseID) => {
 				let params = this.state.exerciseList[exerciseID].bktParams;
 				exerciseParams[exerciseID] = params;
-				// console.log(`found exercise params`);
 			});
 		}
-		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter, this.state.maxNumRecommendations);
+		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter, this.state.maxNumRecommendations, conceptMap);
 	}
 
 	updateRecommendations = (recommendedExercises) => {

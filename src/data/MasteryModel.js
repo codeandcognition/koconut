@@ -1,5 +1,5 @@
 // @flow
-import conceptInventory from './ConceptMap.js';
+import conceptInventory from './ConceptInventory.js';
 import _forEach from 'lodash/forEach';
 /**
  * ConceptKnowledge object is a node containing a concept, with a boolean

@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import MultipleChoice from './MultipleChoice';
 import Submit from './Submit';
-import conceptInventory from '../../../data/ConceptMap';
+import conceptInventory from '../../../data/ConceptInventory';
 import './ConceptSelection.css';
 
 type Props = {
