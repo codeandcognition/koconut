@@ -679,11 +679,12 @@ class App extends Component {
 		if (type === ExerciseTypes.table) {
 			for (let i = 0; i < feedback.length; i++) {
 				let item = feedback[i];
-				passed = Object.keys(item).length > 0 && item.pass;
-				if (!passed) {
-					passed = false;
-					break;
-				}
+				item.forEach((cell) => {
+					if('pass' in cell && !cell.pass){
+						passed = false;
+					}
+				});
+				// passed = Object.keys(item).length > 0 && item.pass;
 			}
 		} else {
 			passed = feedback.pass;
@@ -700,13 +701,12 @@ class App extends Component {
 					? displayType.concept
 					: displayType.exercise),
 		}, async () => {
+			let userID = this.props.firebase.auth().currentUser.uid;
 			if (this.modelUpdater) {
 				// given response, get new pknown
 				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations);
-				// console.log("New pknown:" + pkNew);
 
 				// update pknown on firebase
-				let userID = this.props.firebase.auth().currentUser.uid;
 				let databaseRef = this.props.firebase.database().ref(`Users/${userID}/bktParams/${this.state.currentConcept}/${this.state.exerciseType}/pKnown`);
 				databaseRef.set(pkNew)
 					.catch((e) => {
@@ -717,6 +717,8 @@ class App extends Component {
 				this.updateWrongAnswersCount(false, questionIndex, fIndex);
 			}
 		});
+
+		return passed; // a bit odd that setFeedback() returns whether answer is correct...
 	}
 
 	/**
@@ -736,7 +738,19 @@ class App extends Component {
 				body: JSON.stringify(requestBody)
 			})
 			const feedback = await response.json();
-			this.setFeedback(endpointExtension, feedback, questionIndex, fIndex);
+			let passed = this.setFeedback(endpointExtension, feedback, questionIndex, fIndex);
+
+			// log response to firebase
+			let dataToPush = {
+        exerciseId: this.state.exerciseId,
+        questionIndex: questionIndex, 
+        timestamp: this.props.firebase.database.ServerValue.TIMESTAMP,
+        answer: (requestBody["userAnswer"] ? requestBody["userAnswer"] : null),
+        correctness: passed
+			};
+			let userID = this.props.firebase.auth().currentUser.uid;			
+			this.props.firebase.database().ref(`/Users/${userID?userID:'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
+
 			return feedback;
 		}
 		let feedback = await request();
@@ -759,7 +773,6 @@ class App extends Component {
 			if (!checkerForCorrectness) {
 				temp[questionIndex]++;
 			}
-			// console.log("wrong count", temp);
 		} else {
 			temp = this.state.followupTimesGotQuestionWrong;
 			temp[questionIndex] = temp[questionIndex] ? temp[questionIndex] : [];
@@ -769,7 +782,6 @@ class App extends Component {
 			if (!checkerForCorrectness) {
 				temp[questionIndex][fIndex]++;
 			}
-			// console.log("followup wrong count", temp);
 		}
 		this.setState({
 			timesGotQuestionWrong: (fIndex === -1) ? temp : this.state.timesGotQuestionWrong,

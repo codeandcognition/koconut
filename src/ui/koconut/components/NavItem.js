@@ -18,7 +18,7 @@ class NavItem extends Component {
 	}
 
 	render() {
-		let complete = this.state.read ? { color: "#80B948" } : { color: "grey"};
+		let complete = this.state.read ? { color: "#80B948" } : { color: "#F5F5F5"};
 		let highlight = this.state.suggestionText ? { borderLeft: "5px solid #4054B2"} : {};
 		return(
 				<div>
