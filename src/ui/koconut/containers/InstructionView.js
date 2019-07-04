@@ -287,7 +287,8 @@ class InstructionView extends Component {
 								instructionRecommendations={this.props.instructionRecommendations}
                 				userBKTParams={this.props.userBKTParams}
 								instructionsRead={this.props.instructionsRead}
-								exercisesRead={this.props.exercisesRead}/>
+								exercisesCompleted={this.props.exercisesCompleted}
+								/> 
 							<div className={"overallView"}>
 								<BreadCrumbs
 									concept={this.props.conceptType}
