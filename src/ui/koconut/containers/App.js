@@ -754,6 +754,13 @@ class App extends Component {
 			const feedback = await response.json();
 			let passed = this.setFeedback(endpointExtension, feedback, questionIndex, fIndex);
 
+			// this updates checkmarks in NavItem on correctness
+			if(passed) {
+				let exercisesCompleted = Object.assign({}, this.state.exercisesCompleted); // deep copy
+				exercisesCompleted[this.state.currentConcept].push(this.state.exerciseId); // add exercise to complete list
+				this.setState({exercisesCompleted: exercisesCompleted})
+			}
+
 			// log response to firebase
 			let dataToPush = {
         exerciseId: this.state.exerciseId,

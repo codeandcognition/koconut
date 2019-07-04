@@ -195,7 +195,8 @@ class Exercise extends Component {
               exerciseRecommendations={this.props.exerciseRecommendations}
               instructionRecommendations={this.props.instructionRecommendations} userBKTParams={this.props.userBKTParams}
               instructionsRead={this.props.instructionsRead}
-              exercisesRead={this.props.exercisesRead} />
+              exercisesCompleted={this.props.exercisesCompleted}
+              />
           </div>
           <div className="exercise-view">
             <BreadCrumbs conceptType={this.props.concept}
