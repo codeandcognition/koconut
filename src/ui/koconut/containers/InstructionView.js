@@ -285,7 +285,7 @@ class InstructionView extends Component {
 								instructionsMap={this.props.instructionsMap}
 								exerciseRecommendations={this.props.exerciseRecommendations}
 								instructionRecommendations={this.props.instructionRecommendations}
-                				userBKTParams={this.props.userBKTParams}
+                userBKTParams={this.props.userBKTParams}
 								instructionsRead={this.props.instructionsRead}
 								exercisesCompleted={this.props.exercisesCompleted}
 								/> 
