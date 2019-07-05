@@ -1,3 +1,5 @@
+// PRETTY SURE THIS IS DEPRECATED & REPLACED BY SideNavigation.js
+
 import React, {Component} from 'react';
 import { Link} from "react-router-dom";
 import Dialog from '@material-ui/core/Dialog';
@@ -16,6 +18,8 @@ import Progress from './Progress';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
+const READ = "READ";
+const WRITE = "WRITE";
 
 type Props = {
 	title: string,
@@ -80,8 +84,8 @@ class ConceptDialog extends Component {
 		databaseRef.on("value", function(snapshot) {
 			let results = snapshot.val();
 			if (results != null) {
-				let readResults = results["READ"];
-				let writeResults = results["WRITE"];
+				let readResults = results[READ];
+				let writeResults = results[WRITE];
 				let readTitles = [];
 				let writeTitles = [];
 				if (readResults) {
@@ -115,18 +119,18 @@ class ConceptDialog extends Component {
 	displayReadingRelatedSection() {
 		return (
 				<div>
-					<Progress title={this.props.title} percent={10}/>
+					<Progress title={this.props.title} percent={1}/>
 					<div className={"overview-container"}>
 						<div className={"column"}>
 							<p>{LEARN}</p>
 							{this.state.readInstructions.map((item, index) => {
 								let read = this.props.instructionsRead &&
 								this.props.instructionsRead[this.props.conceptCode] &&
-								this.props.instructionsRead[this.props.conceptCode]["READ"] ?
-										this.props.instructionsRead[this.props.conceptCode]["READ"][index] : "unread";
+								this.props.instructionsRead[this.props.conceptCode][READ] ?
+										this.props.instructionsRead[this.props.conceptCode][READ][index] : "unread";
 								return (
 										<Link key={'r' + index}
-													onClick={() => this.props.getInstruction(this.props.conceptCode, "READ", index)}
+													onClick={() => this.props.getInstruction(this.props.conceptCode, READ, index)}
 													to={`/instruction/${this.props.conceptCode}/learn-to-read-code/page=${index}`}>
 											<ConceptDialogButton name={item} read={read} suggestionText={"asdf"}
 																					 showInitially={true} maximized={this.state.showRecommendations}
@@ -137,7 +141,7 @@ class ConceptDialog extends Component {
 						</div>
 						<div className={"column"}>
 							<p>{PRACTICE}</p>
-							{this.getExercisePreviews(this.props.conceptCode, "READ")}
+							{this.getExercisePreviews(this.props.conceptCode, READ)}
 							{/* Placeholder button */}
 						</div>
 					</div>
@@ -156,11 +160,11 @@ class ConceptDialog extends Component {
 							{this.state.writeInstructions.map((item, index) => {
 								let read = this.props.instructionsRead &&
 								this.props.instructionsRead[this.props.conceptCode] &&
-								this.props.instructionsRead[this.props.conceptCode]["READ"] ?
-										this.props.instructionsRead[this.props.conceptCode]["READ"][index] : "unread";
+								this.props.instructionsRead[this.props.conceptCode][WRITE] ?
+										this.props.instructionsRead[this.props.conceptCode][WRITE][index] : "unread";
 								return (
 										<Link key={'w' + index} to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
-													onClick={() => this.props.getInstruction(this.props.conceptCode, "WRITE", index)}>
+													onClick={() => this.props.getInstruction(this.props.conceptCode, WRITE, index)}>
 											<ConceptDialogButton name={item} read={read} suggestionText={"asdf"}
 																					 showInitially={true} maximized={this.state.showRecommendations}
 																					 color={"#35b"} />
@@ -170,7 +174,7 @@ class ConceptDialog extends Component {
 						</div>
 						<div className={"column"}>
 							<p>{PRACTICE}</p>
-							{this.getExercisePreviews(this.props.conceptCode, "WRITE")}
+							{this.getExercisePreviews(this.props.conceptCode, WRITE)}
 						</div>
 					</div>
 				</div>

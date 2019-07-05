@@ -71,7 +71,7 @@ class WorldView extends Component {
 					}
 					this.checkWaiverStatus(user);
           this.props.firebase.database().ref(`/Users/${user.uid}/Data/InstructionsRead`).on('value', (snap) => {
-            this.setState({instructionsRead: snap.val()});
+            this.setState({instructionsRead: snap.val()}); // this may not be correct (should use filterCompletedInstructions() from queryCompleted.js), but also couldn't get this code to trigger...
           })
 				});
 			}

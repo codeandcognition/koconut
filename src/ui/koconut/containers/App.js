@@ -15,7 +15,7 @@ import { filterCompletedInstructions, filterCompletedExercises } from './../../.
 
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
-import ResponseEvaluator from '../../../backend/ResponseEvaluator';
+// import ResponseEvaluator from '../../../backend/ResponseEvaluator'; // replaced w/ koconut-api /checker endpoint
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 import { write } from 'fs';
 import LoadingView from '../components/LoadingView';
@@ -754,7 +754,7 @@ class App extends Component {
 			const feedback = await response.json();
 			let passed = this.setFeedback(endpointExtension, feedback, questionIndex, fIndex);
 
-			// this updates checkmarks in NavItem on correctness
+			// updates checkmarks in NavItem on correctness
 			if(passed) {
 				let exercisesCompleted = Object.assign({}, this.state.exercisesCompleted); // deep copy
 				exercisesCompleted[this.state.currentConcept].push(this.state.exerciseId); // add exercise to complete list
