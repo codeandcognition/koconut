@@ -1,5 +1,9 @@
 // Utility functions to query completed exercises from Firebase
 
+// TODO import strings instead
+const READ = "READ";
+const WRITE = "WRITE";
+
 // Functions to query Instructions that were read 
 export async function filterCompletedInstructions(conceptsRef, pageVisitsRef) {
     // map from conceptKey to a list of indices that represent instruction pages
@@ -9,18 +13,31 @@ export async function filterCompletedInstructions(conceptsRef, pageVisitsRef) {
     return await groupByConcept(pageVisitsRef, concepts, findUniquePages);
 }
 
+/**
+ * Mutates completed object to add completed instruction (read and write) for given concept
+ * @param {*} ref Reference to firebase database
+ * @param {*} concept string of concept name
+ * @param {*} completed Object which logs which instruction for each concept is already completed/read
+ */
 async function findUniquePages(ref, concept, completed) {
     let snap = await ref.orderByChild("concept").equalTo(concept).once("value");
     if (snap && snap.val()) {
-        let uniquePages = [];
+        let uniquePages = {
+            READ: [],
+            WRITE: []
+        };
         let pagesVisited = snap.val();
         Object.keys(pagesVisited).forEach(pageKey => {
             let page = pagesVisited[pageKey];
-            if (!uniquePages.includes(page.page)) {
-                uniquePages.push(page.page);
+            let readOrWrite = page["readOrWrite"];
+            if(readOrWrite == READ || readOrWrite == WRITE) {
+                if (!uniquePages[readOrWrite].includes(page.page)) {
+                    uniquePages[readOrWrite].push(page.page);
+                }
             }
         });
-        uniquePages = uniquePages.sort();
+        uniquePages[READ] = uniquePages[READ].sort();
+        uniquePages[WRITE] = uniquePages[WRITE].sort();
         completed[concept] = uniquePages;
     }
 }

@@ -96,17 +96,18 @@ class SideNavigation extends Component {
 		return { exercises, exerciseIds };
 	}
 
-	constructButtonList(instructions, type) {
+	constructButtonList(instructions, readOrWrite) {
 		let buttonsList = [];
 		instructions.map((item, index) => {
-			let read = this.props.instructionsRead && this.props.instructionsRead[this.props.conceptCode] ? this.props.instructionsRead[this.props.conceptCode].includes(index) : false;
+			let read = this.props.instructionsRead && this.props.instructionsRead[this.props.conceptCode] && this.props.instructionsRead[this.props.conceptCode][readOrWrite] 
+				? this.props.instructionsRead[this.props.conceptCode][readOrWrite].includes(index) : false;
 
 			let text = "";
 			if (this.props.instructionRecommendations[this.props.conceptCode] &&
-				this.props.instructionRecommendations[this.props.conceptCode][type] &&
-				this.props.instructionRecommendations[this.props.conceptCode][type][index]) {
+				this.props.instructionRecommendations[this.props.conceptCode][readOrWrite] &&
+				this.props.instructionRecommendations[this.props.conceptCode][readOrWrite][index]) {
 				let conceptReccomendations = this.props.instructionRecommendations[this.props.conceptCode];
-				let recommendationsForType = conceptReccomendations[type];
+				let recommendationsForType = conceptReccomendations[readOrWrite];
 				let instructionReccomendation = recommendationsForType[index];
 				if (instructionReccomendation) {
 					text = instructionReccomendation.text;
@@ -116,15 +117,14 @@ class SideNavigation extends Component {
 			}
 			buttonsList.push(
 				<Link key={index}
-					onClick={() => this.props.getInstruction(this.props.conceptCode, type, index)}
-					to={`/instruction/${this.props.conceptCode}/learn-to-write-code/page=${index}`}
+					onClick={() => this.props.getInstruction(this.props.conceptCode, readOrWrite, index)}
+					to={`/instruction/${this.props.conceptCode}/learn-to-${readOrWrite.toLowerCase()}-code/page=${index}`}
 				>
 					<NavItem name={item} read={read}></NavItem>
-					{/* <NavItem name={item} read={read} suggestionText={"placeholder for now"}></NavItem> */}
 				</Link>
 			)
 		});
-		let { exercises, exerciseIds } = this.filterExercisesByConcept(this.props.conceptCode, type);
+		let { exercises, exerciseIds } = this.filterExercisesByConcept(this.props.conceptCode, readOrWrite);
 		exercises.map((ex, index) => {
 			let exerciseId = exerciseIds[index];
 			let text = "";
@@ -139,8 +139,8 @@ class SideNavigation extends Component {
 			}
 			buttonsList.push(
 				<Link key={"ex" + index}
-					to={`/practice/${this.props.conceptCode}/practice-writing-code`}
-					onClick={() => this.props.goToExercise(this.props.conceptCode, type,
+					to={`/practice/${this.props.conceptCode}/practice-${readOrWrite.toLowerCase()}-code`} // TODO: URL endpoint probably should not be hard-coded
+					onClick={() => this.props.goToExercise(this.props.conceptCode, readOrWrite,
 						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem read={read} suggestionText={text} name={ex.shortPrompt}></NavItem></Link>
 			);
 		});
@@ -148,8 +148,8 @@ class SideNavigation extends Component {
 	}
 
 	render() {
-		let readingSection = this.constructButtonList(this.state.readInstructions, "READ");
-		let writingSection = this.constructButtonList(this.state.writeInstructions, "WRITE");
+		let readingSection = this.constructButtonList(this.state.readInstructions, Categories.READ);
+		let writingSection = this.constructButtonList(this.state.writeInstructions, Categories.WRITE);
 		let ref = this;
 
 		let readProgress = this.props.userBKTParams[this.props.conceptCode][Categories.READ][progressField]; 
