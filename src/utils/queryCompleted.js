@@ -48,7 +48,7 @@ export async function filterCompletedExercises(conceptsRef, answerSubmissionsRef
 
     // get all correct submissions (note the firebase query!)
     let correctSubmissionsSnap = await answerSubmissionsRef.orderByChild("correctness").equalTo(true).once("value");
-    let correctSubmissions = correctSubmissionsSnap.val();
+    let correctSubmissions = correctSubmissionsSnap.val() ? correctSubmissionsSnap.val() : {};
 
     // map from exercise to all correctly answered questions within an exercise
     let exerciseToQuestionMapping = findQuestionsAnsweredCorrectly(correctSubmissions);
