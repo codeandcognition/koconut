@@ -207,6 +207,7 @@ class App extends Component {
 		this.hasNextQuestion = this.hasNextQuestion.bind(this);
 		this.getOrderedConcepts = this.getOrderedConcepts.bind(this);
 		this.goToExercise = this.goToExercise.bind(this);
+		this.updateInstructionsRead = this.updateInstructionsRead.bind(this);
 	}
 
 	sendExerciseViewDataToFirebase(exerciseId: string) {
@@ -811,6 +812,27 @@ class App extends Component {
 	}
 
 	/**
+	 * Given a concept, read or write, and instruction index, update this.state.instructionsRead 
+	 * to reflect a new page of instruction being read.
+	 * @param {string} concept 
+	 * @param {string} readOrWrite
+	 * @param {number} index 
+	 */
+	updateInstructionsRead(concept: string, readOrWrite: string, instructionIndex: number){
+		if(this.state.instructionsRead && this.state.instructionsRead[concept] 
+			&& this.state.instructionsRead[concept][readOrWrite] 
+			&& !this.state.instructionsRead[concept][readOrWrite].includes(instructionIndex)) {
+				let instructionsRead = Object.assign({}, this.state.instructionsRead); // deep copy
+				instructionsRead[concept][readOrWrite].push(instructionIndex);
+				instructionsRead[concept][readOrWrite].sort();
+				this.setState({
+					instructionsRead: instructionsRead
+				});
+				console.log(`instructionsRead updated for ${concept} ${readOrWrite} ${instructionIndex}`);
+			}
+	}
+
+	/**
 	 * Submits the give answer to current exercise
 	 * @param answer - the answer being submitted
 	 */
@@ -1045,10 +1067,9 @@ class App extends Component {
 	}
 
 	/**
-	 * test method to render instruction view
-	 * @private
+	 * Renders instruction view
 	 */
-	_renderInstructionView() {
+	renderInstructionView() {
 		return (
 			<div>
 				{this.renderNavBar()}
@@ -1071,6 +1092,7 @@ class App extends Component {
 					instructionRecommendations={this.state.instructionRecommendations}
 					userBKTParams={this.state.userBKTParams} 
 					instructionsRead={this.state.instructionsRead}
+					updateInstructionsRead = {this.updateInstructionsRead}
 					exercisesCompleted={this.state.exercisesCompleted}/>
 				}
 				{!this.state.currentConcept &&
@@ -1105,7 +1127,7 @@ class App extends Component {
 				<Route exact path={Routes.welcome} component={() => this.renderWelcome()} />
 				<Route exact path={Routes.worldview} component={() => this.renderWorldView()} />
 				<Route exact path={Routes.author} component={() => this.renderAuthorView()} />
-				<Route exact path={Routes.instruction} component={() => this._renderInstructionView()} />
+				<Route exact path={Routes.instruction} component={() => this.renderInstructionView()} />
 				<Route exact path={Routes.practice} render={() => this.renderExercise()} />
 				<Route exact path={Routes.allexercises} render={() => this.renderAllExercises()} />
 				<Redirect to={Routes.home} />

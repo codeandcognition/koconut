@@ -23,7 +23,8 @@ type Props = {
 	exercisesList: any[],
 	goToExercise: Function,
 	exerciseRecommendations: any,
-	instructionRecommendations: any
+	instructionRecommendations: any,
+	updateInstructionsRead: Function
 }
 
 /**
@@ -103,7 +104,7 @@ class InstructionView extends Component {
 			}, () => {
 				// store user location on firebase
 				this.storeUserState("instruction");
-				this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite);
+				this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite); // TODO: may cause redundant logs b/c already logged in componentDidMount()
 			});
 		};
 	}
@@ -130,7 +131,7 @@ class InstructionView extends Component {
 				}, () => {
 					// store user location on firebase
 					this.storeUserState("instruction");
-					this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite);
+					this.sendInstructViewLogDataToFirebase(this.state.currInstructionIndex, this.props.conceptType, this.props.readOrWrite); // TODO: may cause redundant logs b/c already logged in componentDidMount()
 					this.storeUserState("instruction");
 				});
 			}
@@ -164,6 +165,7 @@ class InstructionView extends Component {
 		});
 
 		this.sendInstructViewLogDataToFirebase(Number(this.props.match.params.pageIndex), this.props.conceptType, this.props.readOrWrite);
+		this.props.updateInstructionsRead(this.props.conceptType, this.props.readOrWrite, this.state.currInstructionIndex);
 		document.addEventListener("keydown", (e: any) => this.handleKeyPress(e.key));
 	}
 
