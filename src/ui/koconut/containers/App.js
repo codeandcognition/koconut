@@ -606,6 +606,7 @@ class App extends Component {
 				break;
 			case Types.writeCode:
 				// need to add in pre/post conditions to user answer
+				requestBody.userAnswer = requestBody.userAnswer.join().replace(/,/g, ''); // turn userAnswer from char array to string and drop "," separator
 				if (question.preCondition) {
 					let preCondition = question.preCondition.replace("<SEED>", this.getRandomInteger(1, 1000));
 					requestBody.userAnswer = preCondition + "\n" + requestBody.userAnswer;
