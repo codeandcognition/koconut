@@ -563,14 +563,17 @@ class App extends Component {
 	async checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
 		let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
 		let requestBody = {};
-		requestBody.userAnswer = [...answer[questionIndex]];
+		if(answer[questionIndex]) {
+			// TODO: when user answer is string (e.g. MC, write code), this turns it into char array which is then turned back later. Annoying and worth fixing later.
+			requestBody.userAnswer = typeof answer[questionIndex][Symbol.iterator] === 'function' ? [...answer[questionIndex]] : answer[questionIndex];
+		}
 
 		switch (questionType) {
 			case Types.multipleChoice:
 				requestBody.questionCode = "";
 				requestBody.testCode = "";
 				requestBody.expectedAnswer = question.answer;
-				// await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex); // TODO: maybe remove?
+				requestBody.userAnswer = requestBody.userAnswer.join().replace(/,/g, ''); // turn userAnswer from char array to string and drop "," separator
 				break;
 			case Types.fillBlank || Types.isInlineResponseType:
 				requestBody.expectedAnswer = question.answer;
@@ -606,10 +609,16 @@ class App extends Component {
 				break;
 			case Types.writeCode:
 				// need to add in pre/post conditions to user answer
+				requestBody.userAnswer = requestBody.userAnswer.join().replace(/,/g, ''); // turn userAnswer from char array to string and drop "," separator
+
+				if(!("testCode" in requestBody)) {
+					requestBody.testCode = question.answer;
+				}
+				
 				if (question.preCondition) {
 					let preCondition = question.preCondition.replace("<SEED>", this.getRandomInteger(1, 1000));
 					requestBody.userAnswer = preCondition + "\n" + requestBody.userAnswer;
-					requestBody.testCode = preCondition + "\n" + question.answer;
+					requestBody.testCode = preCondition + "\n" + requestBody.testCode;
 				}
 				if (question.postCondition) {
 					requestBody.userAnswer = requestBody.userAnswer + "\n" + question.postCondition;
@@ -828,7 +837,6 @@ class App extends Component {
 				this.setState({
 					instructionsRead: instructionsRead
 				});
-				console.log(`instructionsRead updated for ${concept} ${readOrWrite} ${instructionIndex}`);
 			}
 	}
 

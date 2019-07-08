@@ -34,6 +34,7 @@ class Feedback extends Component {
   }
 
   showFeedbackMessage(type: string, timeswrong: any, feedback: any, correctness: string) {
+    let FAIL_MESSAGE_STR = "failMessage"
     if(type === ExerciseTypes.multipleChoice) {
       let answer = this.props.answer[this.props.questionIndex];
       return <div>{feedback[answer]}</div>
@@ -43,12 +44,19 @@ class Feedback extends Component {
       return <div>{feedback.failMessage}</div>
     } else {
       let feedbackMessages = []
-      if (feedback) {
-        feedback.forEach((e, i) => {
+      if (feedback ) { 
+        if(typeof feedback[Symbol.iterator] === 'function') { // if feedback is iterable
+          feedback.forEach((e, i) => {
+            feedbackMessages.push(
+              <p key={i}>{e.failMessage}</p>
+            );
+          });
+        }
+        else if(FAIL_MESSAGE_STR in feedback) {
           feedbackMessages.push(
-            <p key={i}>{e.failMessage}</p>
+            <p key={0}>{feedback[FAIL_MESSAGE_STR]}</p>
           );
-        });
+        }
       }
       return <div>{feedbackMessages}</div>
     }
