@@ -124,7 +124,7 @@ class Navbar extends Component {
 							}
 							{/* color imported from Material UI */}
 							<Typography style={{flexGrow: 1, color: "#FAFAFA"}} variant={"title"}>
-								Koconut
+								Codeitz
 							</Typography>
               {this.state.currentUser &&
               (<div>

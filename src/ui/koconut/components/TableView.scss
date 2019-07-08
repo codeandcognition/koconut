@@ -14,17 +14,17 @@
   background-color: white;
 }
 
-.disabled {
+.disabledt {
   cursor: not-allowed;
 }
 
-.notdisabled {
+.notdisabledt {
   cursor: pointer;
 }
 
 $choice-color: #cccccc;
 
-.choice {
+.choicet {
   height: auto;
   margin: 10px auto; // centering the MC choices
   user-select: none;
@@ -38,19 +38,19 @@ $choice-color: #cccccc;
   background-color: white;
 }
 
-.choice:active {
+.choicet:active {
   opacity: .95;
 }
 
-.choice:hover {
+.choicet:hover {
   background-color: darken($choice-color, 10%);
 }
 
-.choice.answer {
+.answert {
   background-color: darken($choice-color, 15%);
 }
 
-.choice.answer:hover {
+.answert:hover {
   background-color: darken($choice-color, 20%);
 }
 
@@ -64,4 +64,8 @@ $choice-color: #cccccc;
 .blank:focus {
   outline: none;
   background-color: #eef3fa;
+}
+
+.table-hint {
+  border: 3px solid #ffee58;
 }

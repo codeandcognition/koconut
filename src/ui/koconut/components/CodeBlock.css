@@ -1,0 +1,8 @@
+.codeblock {
+  border-radius: 10px;
+  padding-left: 10px !important;
+  background-color: #eee !important; }
+
+.codeblock > code:first-of-type {
+  border-right: 1px solid black;
+  margin-right: 10px; }

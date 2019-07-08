@@ -4,7 +4,7 @@ import { withRouter} from "react-router-dom";
 import {ConceptKnowledge, MasteryModel} from '../../../data/MasteryModel';
 import Routes from './../../../Routes';
 import LoadingView from './../components/LoadingView';
-import ConceptDialog from './../components/ConceptDialog';
+import SideNavigation from './../components/SideNavigation';
 import './WorldView.css';
 import cytoscape from 'cytoscape';
 import firebase from 'firebase';
@@ -14,7 +14,13 @@ cytoscape.use( dagre );
 type Props = {
 	setFirebaseUser: Function,
 	generateExercise: Function,
-	getInstruction: Function
+	getInstruction: Function,
+	exercisesList: any,
+	conceptMapGetter: any,
+	getOrderedConcepts: Function,
+  goToExercise: Function,
+  exerciseRecommendations: any,
+  instructionReccomendations: any,
 };
 
 /**
@@ -28,9 +34,11 @@ class WorldView extends Component {
 		this.state = {
 			loading: true,
       didRender: false,
-      conceptDescriptions: {}
+      conceptDescriptions: {},
+      instructionsRead: {}
 		};
-		this.hierarchyContainer = React.createRef();
+    this.hierarchyContainer = React.createRef();
+    this.closeConcept = this.closeConcept.bind(this);
 	}
 
   /**
@@ -49,6 +57,10 @@ class WorldView extends Component {
     this.getConceptShortDescriptions();
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+		this.props = nextProps;
+	}
+
   componentDidMount() {
   	this.mounted = true;
   	this.authUnsub = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
@@ -58,19 +70,20 @@ class WorldView extends Component {
 						this.props.history.push(Routes.signin);
 					}
 					this.checkWaiverStatus(user);
+          this.props.firebase.database().ref(`/Users/${user.uid}/Data/InstructionsRead`).on('value', (snap) => {
+            this.setState({instructionsRead: snap.val()}); // this may not be correct (should use filterCompletedInstructions() from queryCompleted.js), but also couldn't get this code to trigger...
+          })
 				});
 			}
 		}) : null;
     window.scrollTo(0, 0);
-
 	}
 
   /**
    * This function renders the world view UI.
    */
 	renderCytoscape() {
-    let conceptList = this.getOrderedConcepts(); // TODO: Change this to
-    // reference prop when merged with summer2018-master
+		let conceptList = this.props.getOrderedConcepts();
     let nodesArr = [];
     let edgesArr = [];
 
@@ -156,7 +169,8 @@ class WorldView extends Component {
     	let node = evt.target["_private"]["data"];
     	if (evt.target["_private"].group === "nodes") {
 				let name = node["name"];
-				let conceptCode = node["id"];
+        let conceptCode = node["id"];
+        this.closeConcept();
 				this.expandConcept(name, conceptCode);
 			}
 		});
@@ -216,13 +230,20 @@ class WorldView extends Component {
 	}
 
 	expandConcept(name, conceptCode) {
-		// TODO: set additional props
 		this.setState({
 			conceptDialog: true,
 			title: name,
 			conceptCode: conceptCode
 		});
-	}
+  }
+  
+  closeConcept() {
+    this.setState({
+      conceptDialog: false,
+      title: "",
+      conceptCode: ""
+    });
+  }
 
 	getConceptShortDescriptions() {
 	  let databaseRef = firebase.database().ref("ConceptShortDescriptions");
@@ -262,20 +283,37 @@ class WorldView extends Component {
             a.dependencyKnowledge / a.knowledge));
   }
 
+  renderSidebar() {
+    return (
+      <SideNavigation title={this.state.title}
+        conceptCode={this.state.conceptCode}
+        open={this.state.conceptDialog}
+        closeMenu={this.closeConcept}
+        instructionsMap={this.props.instructionsMap}
+        generateExercise={this.props.generateExercise}
+        getInstruction={this.props.getInstruction}
+        exercisesList={this.props.exercisesList}
+        conceptMapGetter={this.props.conceptMapGetter}
+        getOrderedConcepts={this.props.getOrderedConcepts}
+        goToExercise={this.props.goToExercise}
+        persist={false} 
+        exerciseRecommendations={this.props.exerciseRecommendations} 
+        instructionRecommendations={this.props.instructionRecommendations}
+        userBKTParams={this.props.userBKTParams} 
+        instructionsRead={this.props.instructionsRead} 
+        exercisesCompleted={this.props.exercisesCompleted}/>
+    );
+  }
+
 	renderWorld() {
     if (this.hierarchyContainer.current) {
       this.renderCytoscape();
     } else {
       this.forceUpdate();
     }
-
 		return (
 				<div>
-					{this.state.conceptDialog && <ConceptDialog title={this.state.title}
-																						 conceptCode={this.state.conceptCode}
-																						 open={this.state.conceptDialog}
-																						 generateExercise={this.props.generateExercise}
-																						 getInstruction={this.props.getInstruction}/>}
+					{this.state.conceptDialog && this.renderSidebar() }
           <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
 				</div>
 		);

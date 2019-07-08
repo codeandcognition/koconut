@@ -45,7 +45,10 @@ class Information extends Component {
       answer: null,
       followupAnswers: null,
       gaveUpCount: 0,
-      gaveUpArr: []
+      gaveUpArr: [],
+      mode: 'python',
+      theme: 'textmate',
+      code: ''
     };
     this.addGaveUp = this.addGaveUp.bind(this);
     this.renderResponseView = this.renderResponseView.bind(this);
@@ -78,13 +81,14 @@ class Information extends Component {
    * @param index index of question in Exercise
    * @returns JSX for the Code container
    */
-  renderCodeView(question: any, index: number, fIndex: number) {
+  renderCodeView(question: any, index: number, fIndex: number, renderAce: ?any) {
   	// questions of type multiple choice but code is undefined
   	let absentCode = question.type === Types.multipleChoice && !question.code;
   	// or if it is a table question
   	absentCode = absentCode || question.type === Types.table;
   	// or if it is a highlight code question
   	absentCode = absentCode || question.type === Types.highlightCode;
+    // this.codeviewrendered = true;
 		if(Types.isSurvey(question.type) || absentCode) {
 			return '';
 		} else {
@@ -107,7 +111,8 @@ class Information extends Component {
 						/>
 						<div style={{margin: '2%'}}>
 							<h5>Scratch Pad</h5>
-							<textarea style={{width: '12em', height: '20em', backgroundColor: '#FFF9C4'}}/>
+							{/* <textarea style={{width: '12em', height: '20em', backgroundColor: '#FFF9C4'}}/> */}
+              {renderAce && renderAce()}
 						</div>
 					</div>
 			);
@@ -118,9 +123,10 @@ class Information extends Component {
    * Returns JSX for (or not for) the Response container given the current props
    * @param question question object in Exercise
    * @param index index of question in Exercise
+	 * @param hintFor index of the question for which hint is active (only relevant for table questions)
    * @returns JSX for the Response container
    */
-  renderResponseView(question: any, index: number, fIndex: number) {
+  renderResponseView(question: any, index: number, fIndex: number, hintFor: number) {
     let type = question.type;
 
     let parentFeedback = this.state.feedback[index];
@@ -128,28 +134,29 @@ class Information extends Component {
         && this.state.followupFeedback[index]) ? this.state.followupFeedback[index][fIndex] : this.state.followupFeedback[index];
     let feedback = fIndex === -1 ? parentFeedback : followupFeedback;
 
-      return Types.isInlineResponseType(type) && type !== Types.writeCode
-      // || (this.props.feedback[index] &&
-      //       (question.type !=="table" &&
-      //       question.type !=="multipleChoice" &&
-      //       question.type !=="selectMultiple")
-      //       ) 
-          ? <div/> :
-          <Response
-            key={"response"+index}
-            type={type}
-            choices={question.choices}
-            answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
-            questionIndex={index}
-            question={question}
-            updateHandler={this.props.updateHandler}
-            feedback={feedback}
-            submitOk={this.props.submitOk}
-            submitTryAgain={this.props.submitTryAgain}
-            mode={this.props.mode}
-            submitHandler={this.props.submitHandler}
-            fIndex={fIndex}
-            />
+		return Types.isInlineResponseType(type) && type !== Types.writeCode
+		// || (this.props.feedback[index] &&
+		//       (question.type !=="table" &&
+		//       question.type !=="multipleChoice" &&
+		//       question.type !=="selectMultiple")
+		//       )
+				? <div/> :
+				<Response
+					key={"response"+index}
+					type={type}
+					choices={question.choices}
+					answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
+					questionIndex={index}
+					question={question}
+					hintFor={hintFor}
+					updateHandler={this.props.updateHandler}
+					feedback={feedback}
+					submitOk={this.props.submitOk}
+					submitTryAgain={this.props.submitTryAgain}
+					mode={this.props.mode}
+					submitHandler={this.props.submitHandler}
+					fIndex={fIndex}
+					/>
   }
 
   /**
@@ -174,7 +181,7 @@ class Information extends Component {
         answer={(fIndex === -1) ? this.state.answer : this.state.followupAnswers}
         addGaveUp={this.addGaveUp}
         fIndex={fIndex}
-      />
+      /> 
     }
     return <div />
   }
@@ -200,41 +207,6 @@ class Information extends Component {
   }
 
   render() {
-
-    // todo count correct correctly
-    let correctCount = this.state.feedback.reduce((acc, item, index) => {
-          if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
-              this.state.exercise.questions[index].type === "table") {
-            return (item && item.toString().indexOf("incorrect") === -1 &&
-            item.toString().indexOf("correct") !== -1) ? acc + 1 : acc;
-          } else {
-            return item === "correct" ? acc + 1 : acc;
-          }
-        }
-    , 0);
-
-    this.state.followupFeedback.forEach((feedback) => {
-      let count = feedback && feedback.reduce((acc, item, index) => {
-        if (this.state.exercise.questions[index].type === "checkboxQuestion" ||
-            this.state.exercise.questions[index].type === "table") {
-          return (item && item.toString().indexOf("incorrect") === -1 &&
-              item.toString().indexOf("correct") !== -1) ? acc + 1 : acc;
-        } else {
-          return item === "correct" ? acc + 1 : acc;
-        }
-      }, 0);
-      correctCount = correctCount + count;
-    });
-
-    correctCount = correctCount + this.state.gaveUpCount;
-
-    let expectedCorrect = this.state.exercise.questions.length;
-    this.state.exercise.questions.forEach((item) => {
-      if (item.followupQuestions) {
-        expectedCorrect = expectedCorrect + item.followupQuestions.length;
-      }
-    });
-
     return (
         <div ref={"information"}>
           {this.state.exercise.questions.map((question, index) => {
@@ -287,18 +259,18 @@ class Information extends Component {
             );
             })
           }
-          {correctCount >= expectedCorrect && this.scrollToBottom() &&
-            <div className={"cont-btn-container"} >
-              <Button variant={"outlined"} color={"primary"} onClick={() => {
-                this.props.nextQuestion();
-                this.props.resetAnswer();
-                this.setState({
-                  gaveUpCount: 0,
-                  gaveUpArr: []
-                });
-              }}>Continue</Button>
-            </div>
-          }
+
+          <div className={"cont-btn-container"} >
+            <Button variant={"outlined"} color={"primary"} onClick={() => {
+              this.props.nextQuestion();
+              this.props.resetAnswer();
+              this.setState({
+                gaveUpCount: 0,
+                gaveUpArr: []
+              });
+            }}>Continue</Button>
+          </div>
+
         </div>
 
     );

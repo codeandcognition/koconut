@@ -1,0 +1,16 @@
+.surveyScale {
+  display: flex;
+  justify-content: space-between; }
+
+.surveyScaleBox {
+  width: 1em;
+  height: 1em;
+  border: 1px solid black;
+  margin-right: .25em;
+  cursor: pointer; }
+
+.surveyScaleBox.true {
+  background-color: black; }
+
+.surveyScale .numeric {
+  margin: 0 0.5em; }

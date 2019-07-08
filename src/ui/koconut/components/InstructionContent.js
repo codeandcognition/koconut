@@ -23,7 +23,7 @@ export default class InstructionContent extends Component {
           <ReactMarkdown className={"flex-grow-1"}
                          source={this.props.instruction.content}
                          renderers={{code: CodeBlock}}
-                         escapeHtml={true}
+                         escapeHtml={false}
                          />
           </div>
           {/*<LargeButton click={this.props.next}

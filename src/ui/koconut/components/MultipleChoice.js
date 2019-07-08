@@ -46,7 +46,7 @@ class MultipleChoice extends Component {
 												}
 												handleClick={this.props.handleClick}
 												questionIndex={this.props.questionIndex}
-												disabled={this.props.feedback ? true : false}
+												disabled={this.props.feedback}
 										/>) : ''
 						)}
           </div>

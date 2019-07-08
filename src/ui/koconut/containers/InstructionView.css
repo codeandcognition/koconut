@@ -1,0 +1,61 @@
+.overallView {
+  margin: 7% auto 7% auto !important;
+  float: right;
+  width: 75%; }
+
+.content-container {
+  width: 95%;
+  margin: auto; }
+
+.instruct-content-container {
+  margin: auto;
+  width: 100%; }
+
+.nav-arrow-btn {
+  border: none;
+  background: none;
+  font-size: 20px;
+  color: #3f51b5;
+  height: 50px;
+  width: 5%;
+  position: fixed;
+  top: 50vh; }
+
+.left-arrow {
+  left: 20px; }
+
+.right-arrow {
+  right: 20px; }
+
+.nav-arrow-btn:hover {
+  cursor: pointer; }
+
+.nav-arrow-btn:focus {
+  outline: none; }
+
+.dot-navigation-container {
+  width: 100%;
+  padding-bottom: 0%; }
+
+.dot-navigation-container2 {
+  margin: auto;
+  width: 30%; }
+
+.dot-navigation {
+  list-style: none;
+  color: lightgray;
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 20px;
+  width: 100%;
+  margin: auto;
+  padding: 10px; }
+
+.dot-navigation .dot:hover {
+  cursor: pointer;
+  filter: brightness(1.1); }
+
+@media (max-width: 825px) {
+  .instruct-content-container {
+    margin: auto;
+    width: 80%; } }

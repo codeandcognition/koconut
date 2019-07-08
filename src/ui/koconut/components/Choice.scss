@@ -1,38 +1,29 @@
-$choice-color: #cccccc;
-
 .choice {
-  margin: 10px auto; // centering the MC choices
+  margin: 10px auto;
   user-select: none;
-  padding: 2.5%;
   width: 33%;
-  // margin: 10px;
   border-radius: 20px;
-  border: 2px solid $choice-color;
-  // background-color: $choice-color;
+  border: 2px solid #cccccc;
   transition-duration: 50ms;
   background-color: white;
-}
+  height: 3em;
+  overflow-y: scroll;
+  padding: 0.5%; }
 
 .choice:active {
-  opacity: .95;
-}
+  opacity: .95; }
 
 .choice:hover {
-  background-color: darken($choice-color, 10%);
-}
+  background-color: #b3b3b3; }
 
 .choice.answer {
-  background-color: darken($choice-color, 15%);
-}
+  background-color: #a6a6a6; }
 
 .choice.answer:hover {
-  background-color: darken($choice-color, 20%);
-}
+  background-color: #999999; }
 
 .disabled {
-  cursor: not-allowed;
-}
+  cursor: not-allowed; }
 
 .notdisabled {
-  cursor: pointer;
-}
+  cursor: pointer; }

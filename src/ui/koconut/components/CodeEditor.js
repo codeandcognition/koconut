@@ -113,6 +113,7 @@ class CodeEditor extends Component {
         className={"ace-editor"}
         width="100%"
         height="20em"
+				wrapEnabled={true}
         value={this.state.code}
         readOnly={this.props.type !== Types.fillBlank &&
         this.props.type !== Types.writeCode && this.props.type !== Types.highlightCode}
@@ -129,7 +130,7 @@ class CodeEditor extends Component {
         }}
         minLines={6}
         editorProps={{
-          $blockScrolling: Infinity,
+          $blockScrolling: true,
         }}
         markers={[//TODO: Remove me :O
           {
