@@ -564,6 +564,7 @@ class App extends Component {
 		let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
 		let requestBody = {};
 		if(answer[questionIndex]) {
+			// TODO: when user answer is string (e.g. MC, write code), this turns it into char array which is then turned back later. Annoying and worth fixing later.
 			requestBody.userAnswer = typeof answer[questionIndex][Symbol.iterator] === 'function' ? [...answer[questionIndex]] : answer[questionIndex];
 		}
 
@@ -572,7 +573,7 @@ class App extends Component {
 				requestBody.questionCode = "";
 				requestBody.testCode = "";
 				requestBody.expectedAnswer = question.answer;
-				// await this.verifyUserAnswer(questionType, requestBody, questionIndex, fIndex); // TODO: maybe remove?
+				requestBody.userAnswer = requestBody.userAnswer.join().replace(/,/g, ''); // turn userAnswer from char array to string and drop "," separator
 				break;
 			case Types.fillBlank || Types.isInlineResponseType:
 				requestBody.expectedAnswer = question.answer;
