@@ -283,9 +283,11 @@ class App extends Component {
 				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
 
 				userRef.on("value", (snap) => {
-					this.setState({
-						userBKTParams: snap.val()
-					});
+					if(snap.val()) {
+						this.setState({
+							userBKTParams: snap.val()
+						});
+					}			
 				});
 
 				let completedInstructionsRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/NewPageVisit`);
@@ -301,10 +303,12 @@ class App extends Component {
 						exerciseList: snap.val(),
 						firebaseUser: user
 					}, () => {
+						let userBKTParams = {};						
 						this.conceptMapGetter.on('value', (snap) => {
 							// for previous users who weren't given bktParams upon creation
-							let userBKTParams = {};
-							if (!this.state.userBKTParams) {
+							// if this.state.userBKTParams is undefined or empty object
+							if (!this.state.userBKTParams || Object.entries(this.state.userBKTParams).length === 0) {
+								console.log(`this.state.userBktParams: ${this.state.userBKTParams}`);
 								let concepts = snap.val();
 								Object.keys(concepts).forEach(concept => {
 									let conceptInfo = concepts[concept]["bktParams"];
