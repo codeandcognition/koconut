@@ -8,6 +8,10 @@
       ".read": "auth != null",
       ".write": "auth != null && root.child('Users').child(auth.uid).child('permission').val() === 'author'"
     },
+    "ConceptShortDescriptions": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('Users').child(auth.uid).child('permission').val() === 'author'"
+    },
     "Users": {
       "$uid": {
         ".read": "auth != null && auth.uid == $uid",
