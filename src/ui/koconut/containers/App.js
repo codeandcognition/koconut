@@ -563,7 +563,9 @@ class App extends Component {
 	async checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
 		let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
 		let requestBody = {};
-		requestBody.userAnswer = [...answer[questionIndex]];
+		if(answer[questionIndex]) {
+			requestBody.userAnswer = typeof answer[questionIndex][Symbol.iterator] === 'function' ? [...answer[questionIndex]] : answer[questionIndex];
+		}
 
 		switch (questionType) {
 			case Types.multipleChoice:
@@ -829,7 +831,6 @@ class App extends Component {
 				this.setState({
 					instructionsRead: instructionsRead
 				});
-				console.log(`instructionsRead updated for ${concept} ${readOrWrite} ${instructionIndex}`);
 			}
 	}
 
