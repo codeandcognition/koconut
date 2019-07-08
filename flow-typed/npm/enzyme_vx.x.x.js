@@ -1,4 +1,4 @@
-// flow-typed signature: e887c619da8a7f1cf9d5c63129348234
+// flow-typed signature: 2d5073c2c882e7da3e49818a3b52a8f1
 // flow-typed version: <<STUB>>/enzyme_v^3.3.0/flow_v0.49.1
 
 /**
@@ -31,6 +31,10 @@ declare module 'enzyme/build/Debug' {
 }
 
 declare module 'enzyme/build/EnzymeAdapter' {
+  declare module.exports: any;
+}
+
+declare module 'enzyme/build/getAdapter' {
   declare module.exports: any;
 }
 
@@ -106,6 +110,10 @@ declare module 'enzyme/src/EnzymeAdapter' {
   declare module.exports: any;
 }
 
+declare module 'enzyme/src/getAdapter' {
+  declare module.exports: any;
+}
+
 declare module 'enzyme/src/index' {
   declare module.exports: any;
 }
@@ -160,6 +168,9 @@ declare module 'enzyme/build/Debug.js' {
 declare module 'enzyme/build/EnzymeAdapter.js' {
   declare module.exports: $Exports<'enzyme/build/EnzymeAdapter'>;
 }
+declare module 'enzyme/build/getAdapter.js' {
+  declare module.exports: $Exports<'enzyme/build/getAdapter'>;
+}
 declare module 'enzyme/build/index.js' {
   declare module.exports: $Exports<'enzyme/build/index'>;
 }
@@ -213,6 +224,9 @@ declare module 'enzyme/src/Debug.js' {
 }
 declare module 'enzyme/src/EnzymeAdapter.js' {
   declare module.exports: $Exports<'enzyme/src/EnzymeAdapter'>;
+}
+declare module 'enzyme/src/getAdapter.js' {
+  declare module.exports: $Exports<'enzyme/src/getAdapter'>;
 }
 declare module 'enzyme/src/index.js' {
   declare module.exports: $Exports<'enzyme/src/index'>;

@@ -1,4 +1,4 @@
-// flow-typed signature: d88bfdb952d7d20a4beb6819b66ffbf5
+// flow-typed signature: 77e317a85e99b4ddb46c21a8912bbd86
 // flow-typed version: <<STUB>>/bootstrap_v^4.1.1/flow_v0.49.1
 
 /**
@@ -78,6 +78,10 @@ declare module 'bootstrap/js/dist/tab' {
   declare module.exports: any;
 }
 
+declare module 'bootstrap/js/dist/toast' {
+  declare module.exports: any;
+}
+
 declare module 'bootstrap/js/dist/tooltip' {
   declare module.exports: any;
 }
@@ -123,6 +127,14 @@ declare module 'bootstrap/js/src/scrollspy' {
 }
 
 declare module 'bootstrap/js/src/tab' {
+  declare module.exports: any;
+}
+
+declare module 'bootstrap/js/src/toast' {
+  declare module.exports: any;
+}
+
+declare module 'bootstrap/js/src/tools/sanitizer' {
   declare module.exports: any;
 }
 
@@ -177,6 +189,9 @@ declare module 'bootstrap/js/dist/scrollspy.js' {
 declare module 'bootstrap/js/dist/tab.js' {
   declare module.exports: $Exports<'bootstrap/js/dist/tab'>;
 }
+declare module 'bootstrap/js/dist/toast.js' {
+  declare module.exports: $Exports<'bootstrap/js/dist/toast'>;
+}
 declare module 'bootstrap/js/dist/tooltip.js' {
   declare module.exports: $Exports<'bootstrap/js/dist/tooltip'>;
 }
@@ -212,6 +227,12 @@ declare module 'bootstrap/js/src/scrollspy.js' {
 }
 declare module 'bootstrap/js/src/tab.js' {
   declare module.exports: $Exports<'bootstrap/js/src/tab'>;
+}
+declare module 'bootstrap/js/src/toast.js' {
+  declare module.exports: $Exports<'bootstrap/js/src/toast'>;
+}
+declare module 'bootstrap/js/src/tools/sanitizer.js' {
+  declare module.exports: $Exports<'bootstrap/js/src/tools/sanitizer'>;
 }
 declare module 'bootstrap/js/src/tooltip.js' {
   declare module.exports: $Exports<'bootstrap/js/src/tooltip'>;

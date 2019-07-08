@@ -1,4 +1,4 @@
-// flow-typed signature: 96f45ccac3c31837ae001657be83c80e
+// flow-typed signature: 2135ff80a9a779948997ca648e9fe9c2
 // flow-typed version: <<STUB>>/flow-typed_v^2.4.0/flow_v0.49.1
 
 /**
@@ -114,7 +114,7 @@ declare module 'flow-typed/dist/lib/stubUtils' {
   declare module.exports: any;
 }
 
-declare module 'flow-typed/dist/lib/validationErrors' {
+declare module 'flow-typed/dist/lib/ValidationError' {
   declare module.exports: any;
 }
 
@@ -188,6 +188,6 @@ declare module 'flow-typed/dist/lib/semver.js' {
 declare module 'flow-typed/dist/lib/stubUtils.js' {
   declare module.exports: $Exports<'flow-typed/dist/lib/stubUtils'>;
 }
-declare module 'flow-typed/dist/lib/validationErrors.js' {
-  declare module.exports: $Exports<'flow-typed/dist/lib/validationErrors'>;
+declare module 'flow-typed/dist/lib/ValidationError.js' {
+  declare module.exports: $Exports<'flow-typed/dist/lib/ValidationError'>;
 }

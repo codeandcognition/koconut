@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "cyberlearning-1d4e0"
+  },
+  "targets": {
+    "cyberlearning-1d4e0": {
+      "hosting": {
+        "codeitz": [
+          "codeitz"
+        ],
+        "ncme2019": [
+          "cyberlearning-1d4e0"
+        ]
+      }
+    }
   }
 }
