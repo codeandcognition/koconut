@@ -1,4 +1,4 @@
-// flow-typed signature: f500d44f947a78299998717814993ea3
+// flow-typed signature: edd2c472c4339db3075d3c3751e1aa84
 // flow-typed version: <<STUB>>/highlight.js_v^9.12.0/flow_v0.49.1
 
 /**
@@ -50,11 +50,19 @@ declare module 'highlight.js/lib/languages/ada' {
   declare module.exports: any;
 }
 
+declare module 'highlight.js/lib/languages/angelscript' {
+  declare module.exports: any;
+}
+
 declare module 'highlight.js/lib/languages/apache' {
   declare module.exports: any;
 }
 
 declare module 'highlight.js/lib/languages/applescript' {
+  declare module.exports: any;
+}
+
+declare module 'highlight.js/lib/languages/arcade' {
   declare module.exports: any;
 }
 
@@ -282,6 +290,10 @@ declare module 'highlight.js/lib/languages/glsl' {
   declare module.exports: any;
 }
 
+declare module 'highlight.js/lib/languages/gml' {
+  declare module.exports: any;
+}
+
 declare module 'highlight.js/lib/languages/go' {
   declare module.exports: any;
 }
@@ -339,6 +351,10 @@ declare module 'highlight.js/lib/languages/ini' {
 }
 
 declare module 'highlight.js/lib/languages/irpf90' {
+  declare module.exports: any;
+}
+
+declare module 'highlight.js/lib/languages/isbl' {
   declare module.exports: any;
 }
 
@@ -506,7 +522,15 @@ declare module 'highlight.js/lib/languages/pf' {
   declare module.exports: any;
 }
 
+declare module 'highlight.js/lib/languages/pgsql' {
+  declare module.exports: any;
+}
+
 declare module 'highlight.js/lib/languages/php' {
+  declare module.exports: any;
+}
+
+declare module 'highlight.js/lib/languages/plaintext' {
   declare module.exports: any;
 }
 
@@ -527,6 +551,10 @@ declare module 'highlight.js/lib/languages/profile' {
 }
 
 declare module 'highlight.js/lib/languages/prolog' {
+  declare module.exports: any;
+}
+
+declare module 'highlight.js/lib/languages/properties' {
   declare module.exports: any;
 }
 
@@ -558,6 +586,10 @@ declare module 'highlight.js/lib/languages/r' {
   declare module.exports: any;
 }
 
+declare module 'highlight.js/lib/languages/reasonml' {
+  declare module.exports: any;
+}
+
 declare module 'highlight.js/lib/languages/rib' {
   declare module.exports: any;
 }
@@ -583,6 +615,10 @@ declare module 'highlight.js/lib/languages/ruleslanguage' {
 }
 
 declare module 'highlight.js/lib/languages/rust' {
+  declare module.exports: any;
+}
+
+declare module 'highlight.js/lib/languages/sas' {
   declare module.exports: any;
 }
 
@@ -756,11 +792,17 @@ declare module 'highlight.js/lib/languages/actionscript.js' {
 declare module 'highlight.js/lib/languages/ada.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/ada'>;
 }
+declare module 'highlight.js/lib/languages/angelscript.js' {
+  declare module.exports: $Exports<'highlight.js/lib/languages/angelscript'>;
+}
 declare module 'highlight.js/lib/languages/apache.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/apache'>;
 }
 declare module 'highlight.js/lib/languages/applescript.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/applescript'>;
+}
+declare module 'highlight.js/lib/languages/arcade.js' {
+  declare module.exports: $Exports<'highlight.js/lib/languages/arcade'>;
 }
 declare module 'highlight.js/lib/languages/arduino.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/arduino'>;
@@ -930,6 +972,9 @@ declare module 'highlight.js/lib/languages/gherkin.js' {
 declare module 'highlight.js/lib/languages/glsl.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/glsl'>;
 }
+declare module 'highlight.js/lib/languages/gml.js' {
+  declare module.exports: $Exports<'highlight.js/lib/languages/gml'>;
+}
 declare module 'highlight.js/lib/languages/go.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/go'>;
 }
@@ -974,6 +1019,9 @@ declare module 'highlight.js/lib/languages/ini.js' {
 }
 declare module 'highlight.js/lib/languages/irpf90.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/irpf90'>;
+}
+declare module 'highlight.js/lib/languages/isbl.js' {
+  declare module.exports: $Exports<'highlight.js/lib/languages/isbl'>;
 }
 declare module 'highlight.js/lib/languages/java.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/java'>;
@@ -1098,8 +1146,14 @@ declare module 'highlight.js/lib/languages/perl.js' {
 declare module 'highlight.js/lib/languages/pf.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/pf'>;
 }
+declare module 'highlight.js/lib/languages/pgsql.js' {
+  declare module.exports: $Exports<'highlight.js/lib/languages/pgsql'>;
+}
 declare module 'highlight.js/lib/languages/php.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/php'>;
+}
+declare module 'highlight.js/lib/languages/plaintext.js' {
+  declare module.exports: $Exports<'highlight.js/lib/languages/plaintext'>;
 }
 declare module 'highlight.js/lib/languages/pony.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/pony'>;
@@ -1115,6 +1169,9 @@ declare module 'highlight.js/lib/languages/profile.js' {
 }
 declare module 'highlight.js/lib/languages/prolog.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/prolog'>;
+}
+declare module 'highlight.js/lib/languages/properties.js' {
+  declare module.exports: $Exports<'highlight.js/lib/languages/properties'>;
 }
 declare module 'highlight.js/lib/languages/protobuf.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/protobuf'>;
@@ -1137,6 +1194,9 @@ declare module 'highlight.js/lib/languages/qml.js' {
 declare module 'highlight.js/lib/languages/r.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/r'>;
 }
+declare module 'highlight.js/lib/languages/reasonml.js' {
+  declare module.exports: $Exports<'highlight.js/lib/languages/reasonml'>;
+}
 declare module 'highlight.js/lib/languages/rib.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/rib'>;
 }
@@ -1157,6 +1217,9 @@ declare module 'highlight.js/lib/languages/ruleslanguage.js' {
 }
 declare module 'highlight.js/lib/languages/rust.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/rust'>;
+}
+declare module 'highlight.js/lib/languages/sas.js' {
+  declare module.exports: $Exports<'highlight.js/lib/languages/sas'>;
 }
 declare module 'highlight.js/lib/languages/scala.js' {
   declare module.exports: $Exports<'highlight.js/lib/languages/scala'>;

@@ -96,8 +96,8 @@ const Fields = {
 	pKnown: "pKnown"
 }
 
-// 
-const PYTHON_API = "http://127.0.0.1:5000/checker/"; // TODO for prod: change this route
+// const PYTHON_API = "http://127.0.0.1:5000/checker/"; // TODO for prod: change this route
+const PYTHON_API = "https://codeitz.herokuapp.com/checker/" // prod route
 
 /**
  * Renders the koconut application view.
@@ -308,7 +308,6 @@ class App extends Component {
 							// for previous users who weren't given bktParams upon creation
 							// if this.state.userBKTParams is undefined or empty object
 							if (!this.state.userBKTParams || Object.entries(this.state.userBKTParams).length === 0) {
-								console.log(`this.state.userBktParams: ${this.state.userBKTParams}`);
 								let concepts = snap.val();
 								Object.keys(concepts).forEach(concept => {
 									let conceptInfo = concepts[concept]["bktParams"];
@@ -907,8 +906,6 @@ class App extends Component {
 	// just changing displaytype
 	submitTryAgain(questionIndex: number, followupIndex: number) {
 		let tempFeedback = (followupIndex === -1) ? this.state.feedback : this.state.followupFeedback;
-		// console.log(tempFeedback[questionIndex]);
-		// tempFeedback[questionIndex] = null;
 		this.setState({
 			display: displayType.exercise,
 			feedback: (followupIndex === -1) ? tempFeedback : this.state.feedback,
