@@ -18,11 +18,12 @@ class NavItem extends Component {
 	}
 
 	render() {
-		let complete = this.state.read ? { color: "#80B948" } : { color: "#F5F5F5"};
-		let highlight = this.state.suggestionText ? { borderLeft: "5px solid #4054B2"} : {};
+		let complete = this.state.read ? { color: "#80B948" } : { color: "#F5F5F5"}; // checkmark is green if complete
+		let highlight = this.state.suggestionText ? { borderLeft: "5px solid #4054B2"} : {}; // recommendation adds blue accent
+		highlight["color"] = "black"; // poor code style
 		return(
 				<div>
-					<ListItem className={"nav-item"} style={highlight}>
+					<ListItem className={"nav-item"} selected={this.props.index==this.props.selectedIndex} style={highlight}>
 						{this.state.suggestionText && <p className={"recommendation"}>{this.state.suggestionText}</p>}
 						<div className={"nav-item-info"}>
 							<ListItemText className={"nav-item-text"} primary={this.state.name} />

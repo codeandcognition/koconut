@@ -290,6 +290,7 @@ class InstructionView extends Component {
                 userBKTParams={this.props.userBKTParams}
 								instructionsRead={this.props.instructionsRead}
 								exercisesCompleted={this.props.exercisesCompleted}
+								selectedIndex={this.props.selectedIndex}
 								/> 
 							<div className={"overallView"}>
 								<BreadCrumbs

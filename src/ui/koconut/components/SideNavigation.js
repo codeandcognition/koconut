@@ -120,7 +120,7 @@ class SideNavigation extends Component {
 					onClick={() => this.props.getInstruction(this.props.conceptCode, readOrWrite, index)}
 					to={`/instruction/${this.props.conceptCode}/learn-to-${readOrWrite.toLowerCase()}-code/page=${index}`}
 				>
-					<NavItem name={item} read={read}></NavItem>
+					<NavItem name={item} read={read} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}${index}`}></NavItem>
 				</Link>
 			)
 		});
@@ -141,7 +141,7 @@ class SideNavigation extends Component {
 				<Link key={"ex" + index}
 					to={`/practice/${this.props.conceptCode}/practice-${readOrWrite.toLowerCase()}-code`} // TODO: URL endpoint probably should not be hard-coded
 					onClick={() => this.props.goToExercise(this.props.conceptCode, readOrWrite,
-						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem read={read} suggestionText={text} name={ex.shortPrompt}></NavItem></Link>
+						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem read={read} suggestionText={text} name={ex.shortPrompt} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}e${index}`}></NavItem></Link>
 			);
 		});
 		return <List style={{ width: '100%' }}>{buttonsList}</List>;

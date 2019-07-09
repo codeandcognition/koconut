@@ -301,7 +301,9 @@ class WorldView extends Component {
         instructionRecommendations={this.props.instructionRecommendations}
         userBKTParams={this.props.userBKTParams} 
         instructionsRead={this.props.instructionsRead} 
-        exercisesCompleted={this.props.exercisesCompleted}/>
+        exercisesCompleted={this.props.exercisesCompleted}
+        selectedIndex={this.props.selectedIndex}
+        />
     );
   }
 
