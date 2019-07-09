@@ -3,11 +3,11 @@ import React, { Component, FunctionComponent } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Prompt from '../components/Prompt';
 import Information from './Information';
-import BreadCrumbs from '../components/BreadCrumbs';
+// import BreadCrumbs from '../components/BreadCrumbs';
 import LoadingView from './../components/LoadingView';
 import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
-import ExerciseNavigation from '../components/ExerciseNavigation';
+// import ExerciseNavigation from '../components/ExerciseNavigation';
 import SideNavigation from './../components/SideNavigation';
 
 type Props = {
@@ -160,12 +160,12 @@ class Exercise extends Component {
           nextQuestion={this.props.nextQuestion}
           resetAnswer={this.resetAnswer}
         />
-        <ExerciseNavigation
+        {/* <ExerciseNavigation
           hasNextQuestion={this.props.hasNextQuestion}
           nextQuestion={this.props.nextQuestion}
           concept={this.props.concept}
           generateExercise={this.props.generateExercise}
-          getOrderedConcepts={this.props.getOrderedConcepts} />
+          getOrderedConcepts={this.props.getOrderedConcepts} /> */}
         {/*<ConceptLabel concepts={this.props.exercise &&
            this.props.exercise.concepts}/>*/}
       </div>
@@ -200,7 +200,7 @@ class Exercise extends Component {
               />
           </div>
           <div className="exercise-view">
-            <BreadCrumbs conceptType={this.props.concept}
+            {/* <BreadCrumbs conceptType={this.props.concept}
               sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
               exerciseId={this.props.exerciseId}
               readOrWrite={this.props.readOrWrite}
@@ -209,7 +209,7 @@ class Exercise extends Component {
               concept={this.props.concept}
               clearCounterAndFeedback={this.props.clearCounterAndFeedback}
               getOrderedConcepts={this.props.getOrderedConcepts}
-            />
+            /> */}
             {!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView /> : this.renderExercise()}
           </div>
         </div>
