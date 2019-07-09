@@ -275,8 +275,8 @@ class InstructionView extends Component {
 						<div>
 							<SideNavigation title={this.props.conceptType}
 								conceptCode={this.props.conceptType}
-								open={true}
 								closeMenu={null}
+								defaultOpen={[this.props.readOrWrite]}
 								generateExercise={this.props.generateExercise}
 								getInstruction={this.props.getInstruction}
 								exercisesList={this.props.exercisesList}

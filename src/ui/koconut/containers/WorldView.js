@@ -287,7 +287,7 @@ class WorldView extends Component {
     return (
       <SideNavigation title={this.state.title}
         conceptCode={this.state.conceptCode}
-        open={this.state.conceptDialog}
+        defaultOpen={["READ", "WRITE"]}
         closeMenu={this.closeConcept}
         instructionsMap={this.props.instructionsMap}
         generateExercise={this.props.generateExercise}

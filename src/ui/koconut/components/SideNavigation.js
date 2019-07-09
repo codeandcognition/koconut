@@ -25,7 +25,6 @@ const progressField = "pKnown";
 type Props = {
 	title: string,
 	conceptCode: string,
-	open: boolean,
 	generateExercise: Function,
 	getInstruction: Function,
 	exercisesList: any,
@@ -34,7 +33,8 @@ type Props = {
 	goToExercise: Function,
 	closeMenu: Function,
 	persist: boolean,
-	updateUserState: Function
+	updateUserState: Function,
+	defaultOpen: Array
 };
 
 class SideNavigation extends Component {
@@ -166,17 +166,20 @@ class SideNavigation extends Component {
 						getInstructionTitles={null}
 						title={"Overview"}
 						progress={null}
+						defaultExpanded={this.props.defaultOpen.includes("OVERVIEW")}
 						body={<ConceptOverview conceptCode={this.props.conceptCode} />}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Reading"}
+						defaultExpanded={this.props.defaultOpen.includes("READ")}
 						progress={<Progress percent={readProgress} />}
 						body={readingSection}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Writing"}
+						defaultExpanded={this.props.defaultOpen.includes("WRITE")}
 						progress={<Progress percent={writeProgress} />}
 						body={writingSection}>
 					</NavSection>

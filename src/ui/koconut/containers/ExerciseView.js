@@ -182,8 +182,8 @@ class Exercise extends Component {
           <div className="sidebar-menu">
             <SideNavigation title={this.props.concept}
               conceptCode={this.props.concept}
-              open={true}
               closeMenu={null}
+              defaultOpen={[this.props.readOrWrite]}
               generateExercise={this.props.generateExercise}
               getInstruction={this.props.getInstruction}
               exercisesList={this.props.exercisesList}
