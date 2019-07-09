@@ -260,7 +260,7 @@ class Information extends Component {
             })
           }
 
-          <div className={"cont-btn-container"} >
+          {/* <div className={"cont-btn-container"} >
             <Button variant={"outlined"} color={"primary"} onClick={() => {
               this.props.nextQuestion();
               this.props.resetAnswer();
@@ -269,7 +269,7 @@ class Information extends Component {
                 gaveUpArr: []
               });
             }}>Continue</Button>
-          </div>
+          </div> */}
 
         </div>
 
