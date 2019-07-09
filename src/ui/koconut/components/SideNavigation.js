@@ -25,7 +25,6 @@ const progressField = "pKnown";
 type Props = {
 	title: string,
 	conceptCode: string,
-	open: boolean,
 	generateExercise: Function,
 	getInstruction: Function,
 	exercisesList: any,
@@ -34,7 +33,8 @@ type Props = {
 	goToExercise: Function,
 	closeMenu: Function,
 	persist: boolean,
-	updateUserState: Function
+	updateUserState: Function,
+	defaultOpen: Array
 };
 
 class SideNavigation extends Component {
@@ -120,7 +120,7 @@ class SideNavigation extends Component {
 					onClick={() => this.props.getInstruction(this.props.conceptCode, readOrWrite, index)}
 					to={`/instruction/${this.props.conceptCode}/learn-to-${readOrWrite.toLowerCase()}-code/page=${index}`}
 				>
-					<NavItem name={item} read={read}></NavItem>
+					<NavItem name={item} read={read} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}${index}`}></NavItem>
 				</Link>
 			)
 		});
@@ -141,7 +141,7 @@ class SideNavigation extends Component {
 				<Link key={"ex" + index}
 					to={`/practice/${this.props.conceptCode}/practice-${readOrWrite.toLowerCase()}-code`} // TODO: URL endpoint probably should not be hard-coded
 					onClick={() => this.props.goToExercise(this.props.conceptCode, readOrWrite,
-						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem read={read} suggestionText={text} name={ex.shortPrompt}></NavItem></Link>
+						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem read={read} suggestionText={text} name={ex.shortPrompt} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}e${index}`}></NavItem></Link>
 			);
 		});
 		return <List style={{ width: '100%' }}>{buttonsList}</List>;
@@ -166,17 +166,20 @@ class SideNavigation extends Component {
 						getInstructionTitles={null}
 						title={"Overview"}
 						progress={null}
+						defaultExpanded={this.props.defaultOpen.includes("OVERVIEW")}
 						body={<ConceptOverview conceptCode={this.props.conceptCode} />}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Reading"}
+						defaultExpanded={this.props.defaultOpen.includes("READ")}
 						progress={<Progress percent={readProgress} />}
 						body={readingSection}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Writing"}
+						defaultExpanded={this.props.defaultOpen.includes("WRITE")}
 						progress={<Progress percent={writeProgress} />}
 						body={writingSection}>
 					</NavSection>

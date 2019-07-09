@@ -3,7 +3,10 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Progress from './Progress';
+
+type Props = {
+    defaultExpanded: Boolean
+}
 
 class NavSection extends Component {
     constructor(props) {
@@ -16,17 +19,13 @@ class NavSection extends Component {
         }
     }
 
-    componentWillReceiveProps(props) {
-        // console.log(props);
-    }
-
     render() { 
         let column = {
             flexBasis: '33.33%',
         };
 
         return(
-            <ExpansionPanel>
+            <ExpansionPanel defaultExpanded={this.props.defaultExpanded ? this.props.defaultExpanded : false}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                     <p>{this.props.title}</p>
                     {this.props.progress}

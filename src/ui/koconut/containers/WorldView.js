@@ -287,7 +287,7 @@ class WorldView extends Component {
     return (
       <SideNavigation title={this.state.title}
         conceptCode={this.state.conceptCode}
-        open={this.state.conceptDialog}
+        defaultOpen={["READ", "WRITE"]}
         closeMenu={this.closeConcept}
         instructionsMap={this.props.instructionsMap}
         generateExercise={this.props.generateExercise}
@@ -301,7 +301,9 @@ class WorldView extends Component {
         instructionRecommendations={this.props.instructionRecommendations}
         userBKTParams={this.props.userBKTParams} 
         instructionsRead={this.props.instructionsRead} 
-        exercisesCompleted={this.props.exercisesCompleted}/>
+        exercisesCompleted={this.props.exercisesCompleted}
+        selectedIndex={this.props.selectedIndex}
+        />
     );
   }
 

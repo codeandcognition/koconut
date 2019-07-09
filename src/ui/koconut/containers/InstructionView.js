@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import BreadCrumbs from '../components/BreadCrumbs';
+// import BreadCrumbs from '../components/BreadCrumbs';
 import InstructionTitle from '../components/InstructionTitle';
 import InstructionContent from '../components/InstructionContent';
 import LoadingView from '../components/LoadingView';
@@ -275,8 +275,8 @@ class InstructionView extends Component {
 						<div>
 							<SideNavigation title={this.props.conceptType}
 								conceptCode={this.props.conceptType}
-								open={true}
 								closeMenu={null}
+								defaultOpen={[this.props.readOrWrite]}
 								generateExercise={this.props.generateExercise}
 								getInstruction={this.props.getInstruction}
 								exercisesList={this.props.exercisesList}
@@ -290,9 +290,10 @@ class InstructionView extends Component {
                 userBKTParams={this.props.userBKTParams}
 								instructionsRead={this.props.instructionsRead}
 								exercisesCompleted={this.props.exercisesCompleted}
+								selectedIndex={this.props.selectedIndex}
 								/> 
 							<div className={"overallView"}>
-								<BreadCrumbs
+								{/* <BreadCrumbs
 									concept={this.props.conceptType}
 									readOrWrite={this.props.readOrWrite}
 									chosenInstruction={chosenInstruction}
@@ -304,11 +305,12 @@ class InstructionView extends Component {
 									exerciseId={this.props.exerciseId}
 									getOrderedConcepts={this.props.getOrderedConcepts}
 									progress={(this.state.currInstructionIndex + 1) + " out of " + (this.state.instructionList && this.state.instructionList.length)}
-								/>
+								/> */}
 								{this.state.instructionList && chosenInstruction &&
 									<div className={"content-container"}>
-										<button className={"nav-arrow-btn left-arrow"}
-											onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left" style={{ fontSize: '1em' }} /></button>
+										{/* <button className={"nav-arrow-btn left-arrow"}
+											onClick={() => this.navigateToPage(this.state.currInstructionIndex - 1 >= 0 ? this.state.currInstructionIndex - 1 : this.state.currInstructionIndex)}><i className="fas fa-chevron-left" style={{ fontSize: '1em' }} />
+											</button> */}
 										<div className={"instruct-content-container"}>
 											<InstructionTitle
 												instruction={chosenInstruction} />
@@ -320,15 +322,15 @@ class InstructionView extends Component {
 												next={this.nextInstruction}
 											/>
 										</div>
-										{hasMultiplePages && <button className={"nav-arrow-btn" +
-											" right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right" /></button>}
+										{/* {hasMultiplePages && <button className={"nav-arrow-btn" +
+											" right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right" /></button>} */}
 									</div>
 								}
 							</div>
 						</div>
 				}
 				{hasMultiplePages && <div className={"dot-navigation-container"}>
-					<div className={"dot-navigation-container2"}>
+					{/* <div className={"dot-navigation-container2"}>
 						<ul className={"dot-navigation"}>
 							{this.state.instructionList && this.state.instructionList.map((item, index) => {
 								let selectedStyle = {};
@@ -342,7 +344,7 @@ class InstructionView extends Component {
 								);
 							})}
 						</ul>
-					</div>
+					</div> */}
 				</div>}
 			</div>
 		)

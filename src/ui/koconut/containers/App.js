@@ -150,7 +150,8 @@ class App extends Component {
 		instructionRecommendations: any,
 		userBKTParams: any,
 		instructionsRead: any,
-		exercisesCompleted: any	
+		exercisesCompleted: any,
+		selectedIndex: string
 	};
 
 	constructor() {
@@ -161,7 +162,7 @@ class App extends Component {
 		this.theme = createMuiTheme();
 		this.state = {
 			exercise: {},
-			exerciseType: '', // yet to be defined
+			exerciseType: '', // "READ" or "WRITE"
 			instructionType: '',
 			feedback: [],
 			followupFeedback: [],
@@ -186,7 +187,8 @@ class App extends Component {
 			numExercisesInCurrConcept: 0,
 			userBKTParams: {},
 			maxNumRecommendations: 6, // change or set elsewhere?,
-			instructionsRead: {}
+			instructionsRead: {},
+			selectedIndex: "" // index of instruction or exercise in focus. e.g. READ0, READe1, WRITE1
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -428,6 +430,7 @@ class App extends Component {
 			counter: index,
 			exerciseType: exerciseType,
 			numExercisesInCurrConcept: numberOfExercises,
+			selectedIndex: `${exerciseType}e${index}`, // "e" to distingusih from instruction #yuck
 			error: false, // resets the error message
 			feedback: []
 		}, () => {
@@ -498,6 +501,7 @@ class App extends Component {
 			currentConcept: concept,
 			instructionType: instructionType,
 			display: displayType.instruct,
+			selectedIndex: `${instructionType}${pageIndex}`,
 			error: false // resets error state
 		}, () => {
 			// update state on firebase
@@ -966,7 +970,12 @@ class App extends Component {
 	 * it calls the firebase database and sends log data!
 	 */
 	switchToWorldView() {
-		this.setState({ display: displayType.world, counter: 0, feedback: [] }, () => { this.sendWorldViewDataToFirebase() });
+		this.setState({ 
+			display: displayType.world, 
+			counter: 0, 
+			feedback: [],
+			selectedIndex: ""
+		}, () => { this.sendWorldViewDataToFirebase() });
 	}
 
 	clearCounterAndFeedback() {
@@ -1030,6 +1039,7 @@ class App extends Component {
 					userBKTParams={this.state.userBKTParams}
 					instructionsRead={this.state.instructionsRead}
 					exercisesCompleted={this.state.exercisesCompleted}
+					selectedIndex={this.state.selectedIndex}
 				/>
 				}
 				{!this.state.currentConcept &&
@@ -1070,7 +1080,9 @@ class App extends Component {
 					instructionRecommendations={this.state.instructionRecommendations} 
 					userBKTParams={this.state.userBKTParams} 
 					instructionsRead={this.state.instructionsRead} 
-					exercisesCompleted={this.state.exercisesCompleted} />
+					exercisesCompleted={this.state.exercisesCompleted}
+					selectedIndex={this.state.selectedIndex}
+					/>
 			</div>
 		)
 	}
@@ -1102,7 +1114,9 @@ class App extends Component {
 					userBKTParams={this.state.userBKTParams} 
 					instructionsRead={this.state.instructionsRead}
 					updateInstructionsRead = {this.updateInstructionsRead}
-					exercisesCompleted={this.state.exercisesCompleted}/>
+					exercisesCompleted={this.state.exercisesCompleted}
+					selectedIndex={this.state.selectedIndex}
+					/>
 				}
 				{!this.state.currentConcept &&
 					<LoadingView />}
