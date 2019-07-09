@@ -21,6 +21,10 @@
         "permission": {
           ".write": "false"
         },
+        "bktParams": {
+          ".read": "auth != null && auth.uid == $uid",
+          ".write": "auth != null && auth.uid == $uid"
+        },
         "state": {
           ".write": "auth != null && auth.uid == $uid"
         },
@@ -29,6 +33,9 @@
         },
         "Data": {
           "AnswerSubmission": {
+            ".write": "auth != null && auth.uid == $uid"
+          },
+          "InstructionsRead": {
             ".write": "auth != null && auth.uid == $uid"
           },
           "NewPageVisit": {
