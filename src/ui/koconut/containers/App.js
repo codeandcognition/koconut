@@ -287,66 +287,66 @@ class App extends Component {
 				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
 
 				userRef.on("value", (snap) => {
-					if(this._isMounted && snap.val()) {
+					if (this._isMounted && snap.val()) {
 						this.setState({
 							userBKTParams: snap.val()
 						});
-					}			
+					}
 				});
 
 				let completedInstructionsRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/NewPageVisit`);
 				let instructionsRead = await filterCompletedInstructions(this.conceptMapGetter, completedInstructionsRef);
 
-				
-				let completedExercisesRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/AnswerSubmission`); 
-				
+
+				let completedExercisesRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/AnswerSubmission`);
+
 				let exercisesCompleted = await filterCompletedExercises(this.conceptMapGetter, completedExercisesRef, this.exerciseGetter);
-				
+
 				this.exerciseGetter.on('value', (snap) => {
-					if(this._isMounted) {
+					if (this._isMounted) {
 						this.setState({
-						exerciseList: snap.val(),
-						firebaseUser: user
-					}, () => {
-						let userBKTParams = {};						
-						this.conceptMapGetter.on('value', (snap) => {
-							// for previous users who weren't given bktParams upon creation
-							// if this.state.userBKTParams is undefined or empty object
-							if (!this.state.userBKTParams || Object.entries(this.state.userBKTParams).length === 0) {
-								let concepts = snap.val();
-								Object.keys(concepts).forEach(concept => {
-									let conceptInfo = concepts[concept]["bktParams"];
-									let userCentric = {};
-									userCentric[Categories.read] = { [Fields.pKnown]: conceptInfo[Categories.read][Fields.init] };
-									userCentric[Categories.write] = { [Fields.pKnown]: conceptInfo[Categories.write][Fields.init] };
-									userBKTParams[concept] = userCentric;
+							exerciseList: snap.val(),
+							firebaseUser: user
+						}, () => {
+							let userBKTParams = {};
+							this.conceptMapGetter.on('value', (snap) => {
+								// for previous users who weren't given bktParams upon creation
+								// if this.state.userBKTParams is undefined or empty object
+								if (!this.state.userBKTParams || Object.entries(this.state.userBKTParams).length === 0) {
+									let concepts = snap.val();
+									Object.keys(concepts).forEach(concept => {
+										let conceptInfo = concepts[concept]["bktParams"];
+										let userCentric = {};
+										userCentric[Categories.read] = { [Fields.pKnown]: conceptInfo[Categories.read][Fields.init] };
+										userCentric[Categories.write] = { [Fields.pKnown]: conceptInfo[Categories.write][Fields.init] };
+										userBKTParams[concept] = userCentric;
+									});
+									let ref = this.props.firebase.database().ref(`Users/${user.uid}/bktParams`);
+									ref.set(userBKTParams).catch(err => {
+										console.log(err);
+									})
+								} else {
+									userBKTParams = this.state.userBKTParams;
+								}
+
+								this.setState({
+									conceptMapGetter: snap.val(),
+									instructionsRead: instructionsRead,
+									exercisesCompleted: exercisesCompleted,
+									userBKTParams: userBKTParams // TODO: Delete this line laterbktParams
+								}, () => {
+									this.updateUserState();
+									this.initializeModelUpdater(); // need to wait until exerciseList & conceptMapGetter both set
 								});
-								let ref = this.props.firebase.database().ref(`Users/${user.uid}/bktParams`);
-								ref.set(userBKTParams).catch(err => {
-									console.log(err);
-								})
-							} else {
-								userBKTParams = this.state.userBKTParams;
-							}
-
-							this.setState({
-								conceptMapGetter: snap.val(),
-								instructionsRead: instructionsRead,
-								exercisesCompleted: exercisesCompleted,
-								userBKTParams: userBKTParams // TODO: Delete this line laterbktParams
-							}, () => {
-								this.updateUserState();
-								this.initializeModelUpdater(); // need to wait until exerciseList & conceptMapGetter both set
 							});
-						});
 
-					});
-				}	
+						});
+					}
 				});
 
 				this.instructionMap = this.props.firebase.database().ref('Instructions');
 				this.instructionMap.on('value', (snap) => {
-					if(this._isMounted) {
+					if (this._isMounted) {
 						this.setState({ instructionsMap: snap.val() }, () => { this.updateUserState() });
 					}
 				});
@@ -576,7 +576,7 @@ class App extends Component {
 	async checkAnswer(answer: any, questionIndex: number, questionType: string, fIndex: number) {
 		let question = (fIndex === -1) ? this.state.exercise.questions[questionIndex] : this.state.exercise.questions[questionIndex].followupQuestions[fIndex];
 		let requestBody = {};
-		if(answer[questionIndex]) {
+		if (answer[questionIndex]) {
 			// TODO: when user answer is string (e.g. MC, write code), this turns it into char array which is then turned back later. Annoying and worth fixing later.
 			requestBody.userAnswer = typeof answer[questionIndex][Symbol.iterator] === 'function' ? [...answer[questionIndex]] : answer[questionIndex];
 		}
@@ -624,10 +624,10 @@ class App extends Component {
 				// need to add in pre/post conditions to user answer
 				requestBody.userAnswer = requestBody.userAnswer.join().replace(/,/g, ''); // turn userAnswer from char array to string and drop "," separator
 
-				if(!("testCode" in requestBody)) {
+				if (!("testCode" in requestBody)) {
 					requestBody.testCode = question.answer;
 				}
-				
+
 				if (question.preCondition) {
 					let preCondition = question.preCondition.replace("<SEED>", this.getRandomInteger(1, 1000));
 					requestBody.userAnswer = preCondition + "\n" + requestBody.userAnswer;
@@ -717,7 +717,7 @@ class App extends Component {
 			for (let i = 0; i < feedback.length; i++) {
 				let item = feedback[i];
 				item.forEach((cell) => {
-					if('pass' in cell && !cell.pass){
+					if ('pass' in cell && !cell.pass) {
 						passed = false;
 					}
 				});
@@ -778,22 +778,22 @@ class App extends Component {
 			let passed = this.setFeedback(endpointExtension, feedback, questionIndex, fIndex);
 
 			// updates checkmarks in NavItem on correctness
-			if(passed) {
+			if (passed) {
 				let exercisesCompleted = Object.assign({}, this.state.exercisesCompleted); // deep copy
 				exercisesCompleted[this.state.currentConcept].push(this.state.exerciseId); // add exercise to complete list
-				this.setState({exercisesCompleted: exercisesCompleted})
+				this.setState({ exercisesCompleted: exercisesCompleted })
 			}
 
 			// log response to firebase
 			let dataToPush = {
-        exerciseId: this.state.exerciseId,
-        questionIndex: questionIndex, 
-        timestamp: this.props.firebase.database.ServerValue.TIMESTAMP,
-        answer: (requestBody["userAnswer"] ? requestBody["userAnswer"] : null),
-        correctness: passed
+				exerciseId: this.state.exerciseId,
+				questionIndex: questionIndex,
+				timestamp: this.props.firebase.database.ServerValue.TIMESTAMP,
+				answer: (requestBody["userAnswer"] ? requestBody["userAnswer"] : null),
+				correctness: passed
 			};
-			let userID = this.props.firebase.auth().currentUser.uid;			
-			this.props.firebase.database().ref(`/Users/${userID?userID:'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
+			let userID = this.props.firebase.auth().currentUser.uid;
+			this.props.firebase.database().ref(`/Users/${userID ? userID : 'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
 
 			return feedback;
 		}
@@ -840,17 +840,29 @@ class App extends Component {
 	 * @param {string} readOrWrite
 	 * @param {number} index 
 	 */
-	updateInstructionsRead(concept: string, readOrWrite: string, instructionIndex: number){
-		if(this.state.instructionsRead && this.state.instructionsRead[concept] 
-			&& this.state.instructionsRead[concept][readOrWrite] 
-			&& !this.state.instructionsRead[concept][readOrWrite].includes(instructionIndex)) {
+	updateInstructionsRead(concept: string, readOrWrite: string, instructionIndex: number) {
+		if (this.state.instructionsRead) {
+			let additionalInstructionRead = (concept in this.state.instructionsRead) && (readOrWrite in this.state.instructionsRead[concept])
+				&& !this.state.instructionsRead[concept][readOrWrite].includes(instructionIndex); // nth instruction of concept & readOrWrite
+			let firstInstructionRead = !(concept in this.state.instructionsRead) && !(readOrWrite in this.state.instructionsRead[concept]); // first instruction of concept & readOrWrite
+
+			if (additionalInstructionRead || firstInstructionRead) {
 				let instructionsRead = Object.assign({}, this.state.instructionsRead); // deep copy
+				if (!(concept in instructionsRead)) {
+					instructionsRead[concept] = {};
+				}
+
+				if (!(readOrWrite in instructionsRead[concept])) {
+					instructionsRead[concept][readOrWrite] = [];
+				}
+
 				instructionsRead[concept][readOrWrite].push(instructionIndex);
 				instructionsRead[concept][readOrWrite].sort();
 				this.setState({
 					instructionsRead: instructionsRead
 				});
 			}
+		}
 	}
 
 	/**
@@ -976,9 +988,9 @@ class App extends Component {
 	 * it calls the firebase database and sends log data!
 	 */
 	switchToWorldView() {
-		this.setState({ 
-			display: displayType.world, 
-			counter: 0, 
+		this.setState({
+			display: displayType.world,
+			counter: 0,
 			feedback: [],
 			selectedIndex: ""
 		}, () => { this.sendWorldViewDataToFirebase() });
@@ -1012,41 +1024,41 @@ class App extends Component {
 				{this.renderNavBar()}
 				{this.state.currentConcept &&
 					<ExerciseView
-					updateUserState={this.updateUserState}
-					exercise={this.state.exercise}
-					readOrWrite={this.state.exerciseType}
-					submitHandler={this.submitResponse}
-					feedback={this.state.feedback}
-					followupFeedback={this.state.followupFeedback}
-					nextConcepts={this.state.nextConcepts}
-					submitOk={this.submitOk}
-					submitTryAgain={this.submitTryAgain}
-					mode={this.state.display}
-					concept={this.state.currentConcept}
-					codeTheme={this.state.codeTheme}
-					toggleCodeTheme={(theme) => this.setState({ codeTheme: theme })}
-					timesGotQuestionWrong={this.state.timesGotQuestionWrong}
-					followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
-					nextQuestion={this.nextQuestion}
-					resetFeedback={this.resetFeedback}
-					clearCounterAndFeedback={this.clearCounterAndFeedback}
-					sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
-					exerciseId={this.state.exerciseId}
-					generateExercise={this.generateExercise}
-					hasNextQuestion={this.hasNextQuestion}
-					getInstruction={this.getInstruction}
-					exercisesList={this.state.exerciseList}
-					conceptMapGetter={this.state.conceptMapGetter}
-					getOrderedConcepts={this.getOrderedConcepts}
-					goToExercise={this.goToExercise}
-					instructionsMap={this.state.instructionsMap}
-					exerciseRecommendations={this.state.exerciseRecommendations}
-					instructionRecommendations={this.state.instructionRecommendations}
-					userBKTParams={this.state.userBKTParams}
-					instructionsRead={this.state.instructionsRead}
-					exercisesCompleted={this.state.exercisesCompleted}
-					selectedIndex={this.state.selectedIndex}
-				/>
+						updateUserState={this.updateUserState}
+						exercise={this.state.exercise}
+						readOrWrite={this.state.exerciseType}
+						submitHandler={this.submitResponse}
+						feedback={this.state.feedback}
+						followupFeedback={this.state.followupFeedback}
+						nextConcepts={this.state.nextConcepts}
+						submitOk={this.submitOk}
+						submitTryAgain={this.submitTryAgain}
+						mode={this.state.display}
+						concept={this.state.currentConcept}
+						codeTheme={this.state.codeTheme}
+						toggleCodeTheme={(theme) => this.setState({ codeTheme: theme })}
+						timesGotQuestionWrong={this.state.timesGotQuestionWrong}
+						followupTimesGotQuestionWrong={this.state.followupTimesGotQuestionWrong}
+						nextQuestion={this.nextQuestion}
+						resetFeedback={this.resetFeedback}
+						clearCounterAndFeedback={this.clearCounterAndFeedback}
+						sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
+						exerciseId={this.state.exerciseId}
+						generateExercise={this.generateExercise}
+						hasNextQuestion={this.hasNextQuestion}
+						getInstruction={this.getInstruction}
+						exercisesList={this.state.exerciseList}
+						conceptMapGetter={this.state.conceptMapGetter}
+						getOrderedConcepts={this.getOrderedConcepts}
+						goToExercise={this.goToExercise}
+						instructionsMap={this.state.instructionsMap}
+						exerciseRecommendations={this.state.exerciseRecommendations}
+						instructionRecommendations={this.state.instructionRecommendations}
+						userBKTParams={this.state.userBKTParams}
+						instructionsRead={this.state.instructionsRead}
+						exercisesCompleted={this.state.exercisesCompleted}
+						selectedIndex={this.state.selectedIndex}
+					/>
 				}
 				{!this.state.currentConcept &&
 					<LoadingView />
@@ -1083,12 +1095,12 @@ class App extends Component {
 					goToExercise={this.goToExercise}
 					instructionsMap={this.state.instructionsMap}
 					exerciseRecommendations={this.state.exerciseRecommendations}
-					instructionRecommendations={this.state.instructionRecommendations} 
-					userBKTParams={this.state.userBKTParams} 
-					instructionsRead={this.state.instructionsRead} 
+					instructionRecommendations={this.state.instructionRecommendations}
+					userBKTParams={this.state.userBKTParams}
+					instructionsRead={this.state.instructionsRead}
 					exercisesCompleted={this.state.exercisesCompleted}
 					selectedIndex={this.state.selectedIndex}
-					/>
+				/>
 			</div>
 		)
 	}
@@ -1102,26 +1114,26 @@ class App extends Component {
 				{this.renderNavBar()}
 				{this.state.currentConcept &&
 					<InstructionView conceptType={this.state.currentConcept}
-					readOrWrite={this.state.instructionType}
-					setError={this.setInstructionViewError}
-					generateExercise={this.generateExercise}
-					storeUserState={this.storeState}
-					sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
-					exerciseId={this.state.exerciseId}
-					clearCounterAndFeedback={this.clearCounterAndFeedback}
-					getInstruction={this.getInstruction}
-					getOrderedConcepts={this.getOrderedConcepts}
-					exercisesList={this.state.exerciseList}
-					conceptMapGetter={this.state.conceptMapGetter}
-					goToExercise={this.goToExercise}
-					instructionsMap={this.state.instructionsMap}
-					exerciseRecommendations={this.state.exerciseRecommendations}
-					instructionRecommendations={this.state.instructionRecommendations}
-					userBKTParams={this.state.userBKTParams} 
-					instructionsRead={this.state.instructionsRead}
-					updateInstructionsRead = {this.updateInstructionsRead}
-					exercisesCompleted={this.state.exercisesCompleted}
-					selectedIndex={this.state.selectedIndex}
+						readOrWrite={this.state.instructionType}
+						setError={this.setInstructionViewError}
+						generateExercise={this.generateExercise}
+						storeUserState={this.storeState}
+						sendExerciseViewDataToFirebase={this.sendExerciseViewDataToFirebase}
+						exerciseId={this.state.exerciseId}
+						clearCounterAndFeedback={this.clearCounterAndFeedback}
+						getInstruction={this.getInstruction}
+						getOrderedConcepts={this.getOrderedConcepts}
+						exercisesList={this.state.exerciseList}
+						conceptMapGetter={this.state.conceptMapGetter}
+						goToExercise={this.goToExercise}
+						instructionsMap={this.state.instructionsMap}
+						exerciseRecommendations={this.state.exerciseRecommendations}
+						instructionRecommendations={this.state.instructionRecommendations}
+						userBKTParams={this.state.userBKTParams}
+						instructionsRead={this.state.instructionsRead}
+						updateInstructionsRead={this.updateInstructionsRead}
+						exercisesCompleted={this.state.exercisesCompleted}
+						selectedIndex={this.state.selectedIndex}
 					/>
 				}
 				{!this.state.currentConcept &&
