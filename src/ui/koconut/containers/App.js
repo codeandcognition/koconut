@@ -154,6 +154,8 @@ class App extends Component {
 		selectedIndex: string
 	};
 
+	_isMounted = false;
+
 	constructor() {
 		super();
 		this.generator = new ExerciseGenerator(this.getOrderedConcepts);
@@ -277,7 +279,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		this.mounted = true;
+		this._isMounted = true;
 		this.props.firebase.auth().onAuthStateChanged(async (user) => {
 			if (user) {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
@@ -285,7 +287,7 @@ class App extends Component {
 				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
 
 				userRef.on("value", (snap) => {
-					if(snap.val()) {
+					if(this._isMounted && snap.val()) {
 						this.setState({
 							userBKTParams: snap.val()
 						});
@@ -301,7 +303,8 @@ class App extends Component {
 				let exercisesCompleted = await filterCompletedExercises(this.conceptMapGetter, completedExercisesRef, this.exerciseGetter);
 				
 				this.exerciseGetter.on('value', (snap) => {
-					this.setState({
+					if(this._isMounted) {
+						this.setState({
 						exerciseList: snap.val(),
 						firebaseUser: user
 					}, () => {
@@ -338,11 +341,14 @@ class App extends Component {
 						});
 
 					});
+				}	
 				});
 
 				this.instructionMap = this.props.firebase.database().ref('Instructions');
 				this.instructionMap.on('value', (snap) => {
-					this.setState({ instructionsMap: snap.val() }, () => { this.updateUserState() });
+					if(this._isMounted) {
+						this.setState({ instructionsMap: snap.val() }, () => { this.updateUserState() });
+					}
 				});
 			}
 		});
@@ -539,7 +545,7 @@ class App extends Component {
 	 * Un app un-mount, stop watching authentication
 	 */
 	componentWillUnmount() {
-		this.mounted = false;
+		this._isMounted = false;
 	}
 
 	/**
