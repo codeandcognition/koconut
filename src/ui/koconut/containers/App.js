@@ -841,16 +841,28 @@ class App extends Component {
 	 * @param {number} index 
 	 */
 	updateInstructionsRead(concept: string, readOrWrite: string, instructionIndex: number){
-		if(this.state.instructionsRead && this.state.instructionsRead[concept] 
-			&& this.state.instructionsRead[concept][readOrWrite] 
-			&& !this.state.instructionsRead[concept][readOrWrite].includes(instructionIndex)) {
+		if(this.state.instructionsRead){
+			let additionalInstructionRead = (concept in this.state.instructionsRead) && (readOrWrite in this.state.instructionsRead[concept])
+				&& !this.state.instructionsRead[concept][readOrWrite].includes(instructionIndex); // nth instruction of concept & readOrWrite
+			let firstInstructionRead = !(concept in this.state.instructionsRead) && !(readOrWrite in this.state.instructionsRead[concept]); // first instruction of concept & readOrWrite
+
+			if(additionalInstructionRead || firstInstructionRead) {
 				let instructionsRead = Object.assign({}, this.state.instructionsRead); // deep copy
+				if(!(concept in instructionsRead)){
+					instructionsRead[concept] = {};
+				}
+
+				if(!(readOrWrite in instructionsRead[concept])) {
+					instructionsRead[concept][readOrWrite] = [];
+				}
+				
 				instructionsRead[concept][readOrWrite].push(instructionIndex);
 				instructionsRead[concept][readOrWrite].sort();
 				this.setState({
 					instructionsRead: instructionsRead
 				});
 			}
+		}
 	}
 
 	/**
