@@ -15,6 +15,21 @@
         "source": "/signin",
         "destination": "/",
         "type": 301
+      },
+      {
+        "source": "/worldview",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/instruction/**",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/practice/**",
+        "destination": "/",
+        "type": 301
       }
     ]
   }
