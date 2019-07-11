@@ -98,7 +98,7 @@ class ExerciseQuestion extends Component {
 			// do something to activate the hint!
 			this.setState({
 				hintForIndex: target,
-				hintFor: this.props.question.data[target]
+				hintFor: this.props.question.data[target-1]
 			});
 		} else {
 			this.setState({
