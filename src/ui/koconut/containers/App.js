@@ -153,8 +153,7 @@ class App extends Component {
 		exercisesCompleted: any,
 		selectedIndex: string,
 		prevQuestionAttemptCorrect: boolean
-	};
-	
+	};	
 
 	_isMounted = false;
 

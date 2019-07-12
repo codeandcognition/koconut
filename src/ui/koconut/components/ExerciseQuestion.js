@@ -8,7 +8,6 @@ import HintContainer from '../containers/HintContainer';
 import { Button } from '@material-ui/core';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 
-
 type Props = {
 	question: any,
 	renderCodeView: Function,
@@ -85,7 +84,6 @@ class ExerciseQuestion extends Component {
         /* https://github.com/securingsincity/react-ace/issues/29#issuecomment-296398653 */
     />
   }
-
 
   hintRequestHandler() {
   	// if table question
