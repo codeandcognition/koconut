@@ -14,7 +14,8 @@ type Props = {
 	renderResponseView: Function,
 	answer: any,
 	submitHandler: Function,
-	hintRequestHandler: Function
+	hintRequestHandler: Function,
+	prevQuestionAttemptCorrect: Boolean
 };
 
 class ExerciseQuestion extends Component {
@@ -179,7 +180,8 @@ class ExerciseQuestion extends Component {
 								<HintButton hintRequestHandler={this.hintRequestHandler} disableHint={false}/>
 								{this.state.hintFor && this.renderHint()}
 							</div>
-							{this.props.feedback && this.props.feedback.length > 0 ?
+
+							{this.props.feedback && this.props.feedback.length > 0 && this.props.prevQuestionAttemptCorrect==false?
 								<p>Update your answer to try again!</p>
 								:
 								<Submit text={submitButtonText}
@@ -191,7 +193,7 @@ class ExerciseQuestion extends Component {
 									}
 								/>
 							}
-						</div>
+							</div>
           </div>
         </div>
         {this.props.renderFeedback}
