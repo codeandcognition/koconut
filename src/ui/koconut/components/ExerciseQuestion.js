@@ -183,7 +183,7 @@ class ExerciseQuestion extends Component {
 								{this.state.hintFor && this.renderHint()}
 							</div>
 
-							{this.props.feedback && this.props.feedback.length > 0 && this.props.prevQuestionAttemptCorrect==false?//TODO: Make sure "update answer" doesn't show up on the user interface if all thh answers are correct.
+							{this.props.feedback && this.props.feedback.length > 0 && this.props.prevQuestionAttemptCorrect==false?
 								<p>Update your answer to try again!</p>
 								:
 								<Submit text={submitButtonText}
