@@ -159,6 +159,8 @@ class Exercise extends Component {
           followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
           nextQuestion={this.props.nextQuestion}
           resetAnswer={this.resetAnswer}
+          prevQuestionAttemptCorrect={this.props.prevQuestionAttemptCorrect}
+
         />
         {/* <ExerciseNavigation
           hasNextQuestion={this.props.hasNextQuestion}
