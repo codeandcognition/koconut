@@ -8,13 +8,15 @@ import HintContainer from '../containers/HintContainer';
 import { Button } from '@material-ui/core';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 
+
 type Props = {
 	question: any,
 	renderCodeView: Function,
 	renderResponseView: Function,
 	answer: any,
 	submitHandler: Function,
-	hintRequestHandler: Function
+	hintRequestHandler: Function,
+	prevQuestionAttemptCorrect: Boolean
 };
 
 class ExerciseQuestion extends Component {
@@ -83,6 +85,7 @@ class ExerciseQuestion extends Component {
         /* https://github.com/securingsincity/react-ace/issues/29#issuecomment-296398653 */
     />
   }
+
 
   hintRequestHandler() {
   	// if table question
@@ -179,7 +182,8 @@ class ExerciseQuestion extends Component {
 								<HintButton hintRequestHandler={this.hintRequestHandler} disableHint={false}/>
 								{this.state.hintFor && this.renderHint()}
 							</div>
-							{this.props.feedback && this.props.feedback.length > 0 ?
+
+							{this.props.feedback && this.props.feedback.length > 0 && this.props.prevQuestionAttemptCorrect==false?//TODO: Make sure "update answer" doesn't show up on the user interface if all thh answers are correct.
 								<p>Update your answer to try again!</p>
 								:
 								<Submit text={submitButtonText}
@@ -191,7 +195,7 @@ class ExerciseQuestion extends Component {
 									}
 								/>
 							}
-						</div>
+							</div>
           </div>
         </div>
         {this.props.renderFeedback}
