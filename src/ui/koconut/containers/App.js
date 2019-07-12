@@ -151,8 +151,7 @@ class App extends Component {
 		userBKTParams: any,
 		instructionsRead: any,
 		exercisesCompleted: any,
-		selectedIndex: string,
-		prevQuestionAttemptCorrect: boolean
+		selectedIndex: string
 	};
 
 	_isMounted = false;
@@ -191,8 +190,7 @@ class App extends Component {
 			userBKTParams: {},
 			maxNumRecommendations: 6, // change or set elsewhere?,
 			instructionsRead: {},
-			selectedIndex: "", // index of instruction or exercise in focus. e.g. READ0, READe1, WRITE1,
-			prevQuestionAttemptCorrect: null // true if prev question attempt correct, false otherwise
+			selectedIndex: "" // index of instruction or exercise in focus. e.g. READ0, READe1, WRITE1
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -440,8 +438,7 @@ class App extends Component {
 			numExercisesInCurrConcept: numberOfExercises,
 			selectedIndex: `${exerciseType}e${index}`, // "e" to distingusih from instruction #yuck
 			error: false, // resets the error message
-			feedback: [],
-			prevQuestionAttemptCorrect: null
+			feedback: []
 		}, () => {
 			this.storeState("exercise", this.state.counter, this.state.exerciseType, concept);
 		});
@@ -735,7 +732,6 @@ class App extends Component {
 			feedback: fIndex === -1 ? temp : [],
 			followupFeedback: fIndex === 1 ? [] : temp,
 			nextConcepts: this.getConcepts(),
-			prevQuestionAttemptCorrect: passed,
 			display: this.state.exercise.type !== 'survey'
 				? displayType.exercise
 				: (this.state.conceptOptions > 1
@@ -1062,8 +1058,6 @@ class App extends Component {
 						instructionsRead={this.state.instructionsRead}
 						exercisesCompleted={this.state.exercisesCompleted}
 						selectedIndex={this.state.selectedIndex}
-						prevQuestionAttemptCorrect={this.state.prevQuestionAttemptCorrect}
-
 					/>
 				}
 				{!this.state.currentConcept &&

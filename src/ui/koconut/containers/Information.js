@@ -222,7 +222,6 @@ class Information extends Component {
                   renderResponseView={this.renderResponseView}
                   renderFeedback={this.renderFeedback(question, index, -1)}
                   submitHandler={this.props.submitHandler}
-                  prevQuestionAttemptCorrect={this.props.prevQuestionAttemptCorrect}
                   fIndex={-1}
                 />
                 {question.followupQuestions && question.followupQuestions.map((fQuestion, fIndex) => {
