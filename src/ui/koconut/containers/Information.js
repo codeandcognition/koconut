@@ -29,7 +29,8 @@ type Props = {
     submitHandler: Function,
     timesGotQuestionWrong: number[],
     nextQuestion: Function,
-    resetAnswer: Function
+    resetAnswer: Function,
+    exerciseId: string
 };
 class Information extends Component {
   addGaveUp: Function;
@@ -223,6 +224,7 @@ class Information extends Component {
                   renderFeedback={this.renderFeedback(question, index, -1)}
                   submitHandler={this.props.submitHandler}
                   prevQuestionAttemptCorrect={this.props.prevQuestionAttemptCorrect}
+                  exerciseId={this.props.exerciseId}
                   fIndex={-1}
                 />
                 {question.followupQuestions && question.followupQuestions.map((fQuestion, fIndex) => {
@@ -250,6 +252,7 @@ class Information extends Component {
                           renderResponseView={this.renderResponseView}
                           renderFeedback={this.renderFeedback(fQuestion, index, fIndex)}
                           submitHandler={this.props.submitHandler}
+                          exerciseId={this.props.exerciseId}
                           fIndex={fIndex}
                         />
                       }
