@@ -15,7 +15,8 @@ type Props = {
 	answer: any,
 	submitHandler: Function,
 	hintRequestHandler: Function,
-	prevQuestionAttemptCorrect: Boolean
+	prevQuestionAttemptCorrect: Boolean,
+	exerciseId: string
 };
 
 class ExerciseQuestion extends Component {
@@ -26,12 +27,26 @@ class ExerciseQuestion extends Component {
       mode: 'python',
       theme: 'textmate',
 			hintForIndex: -1,
+			hintFor: null
     };
 
     this.renderAce = this.renderAce.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.hintRequestHandler = this.hintRequestHandler.bind(this);
-  }
+	}
+	
+	componentDidUpdate(prevProps, prevState, snapshot){
+		// on changing exercise
+		if(prevProps.exerciseId && this.props.exerciseId && prevProps.exerciseId != this.props.exerciseId) {
+			this.setState({
+				code: '', // clear code editor
+
+				// clear hints
+				hintForIndex: -1,
+				hintFor: null
+			});
+		}		
+	}
 
    /**
    * Updates state based on editor changes
@@ -86,25 +101,34 @@ class ExerciseQuestion extends Component {
   }
 
   hintRequestHandler() {
-  	// if table question
-  	if (this.props.question.data) {
-			// if first time
-			let target = 2;
-			if (!this.props.feedback) {
-				let table = this.props.answer[0];
-				target = this.getQuestionNumber(table);
+		let hintActive = this.state.hintFor;
+
+		if (!hintActive) {
+			// if table question
+			if (this.props.question.data) {
+				// if first time
+				let target = 2;
+				if (!this.props.feedback) {
+					let table = this.props.answer[0];
+					target = this.getQuestionNumber(table);
+				} else {
+					target = this.getQuestionNumber(this.props.feedback)
+				}
+				// do something to activate the hint!
+				this.setState({
+					hintForIndex: target,
+					hintFor: this.props.question.data[target-1]
+				});
 			} else {
-				target = this.getQuestionNumber(this.props.feedback)
+				this.setState({
+					hintForIndex: -1,
+					hintFor: this.props.question
+				});
 			}
-			// do something to activate the hint!
-			this.setState({
-				hintForIndex: target,
-				hintFor: this.props.question.data[target-1]
-			});
-		} else {
+		} else { // hint already set, so disable it
 			this.setState({
 				hintForIndex: -1,
-				hintFor: this.props.question
+				hintFor: null
 			});
 		}
 	}
