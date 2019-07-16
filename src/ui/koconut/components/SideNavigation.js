@@ -11,6 +11,7 @@ import NavItem from './NavItem';
 import './SideNavigation.css';
 import Progress from './Progress';
 import ConceptInventory from './../../../data/ConceptMap';
+import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
@@ -154,12 +155,14 @@ class SideNavigation extends Component {
 
 		let readProgress = this.props.userBKTParams[this.props.conceptCode][Categories.READ][progressField]; 
 		let writeProgress = this.props.userBKTParams[this.props.conceptCode][Categories.WRITE][progressField];
-
+		
+		let conceptName = formatCamelCasedString(this.state.title);
+		
 		return (
 			<div id={"sidenav"} className={"sidebar"}>
 				<CardContent>
 					<div className={"sidebar-header"}>
-						<h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : this.state.title}</h2>
+						<h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : conceptName}</h2>
 						{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
 					</div>
 					<NavSection
