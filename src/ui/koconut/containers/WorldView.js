@@ -80,7 +80,7 @@ class WorldView extends Component {
     window.scrollTo(0, 0);
 	}
 
-  /**
+  /*
    * This function renders the world view UI.
    */
 	renderCytoscape() {
@@ -89,7 +89,7 @@ class WorldView extends Component {
     let edgesArr = [];
 
     conceptList.forEach((concept) => {
-      let conceptName = this.formatCamelCasedString(concept.name); // TODO: don't do this conversion manually
+      let conceptName = formatCamelCasedString(concept.name); // TODO: don't do this conversion manually
       let node = {
         data : {
 					id: concept.name,
@@ -259,13 +259,13 @@ class WorldView extends Component {
   }
 
  
-
+  
   getOrderedConcepts(): ConceptKnowledge[] {
     return MasteryModel.model.filter((concept) => concept.should_teach).sort(
         (a, b) => (b.dependencyKnowledge / b.knowledge -
             a.dependencyKnowledge / a.knowledge));
   }
-
+  
   renderSidebar() {
     return (
       <SideNavigation title={this.state.title}
