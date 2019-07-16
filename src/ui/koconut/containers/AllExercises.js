@@ -6,7 +6,7 @@ import {ConceptKnowledge} from '../../../data/MasteryModel';
 import {t} from '../../../data/ConceptAbbreviations';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 import LoadingView from './../components/LoadingView';
-
+import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
 
 import ExerciseInfoContainer from './../components/ExerciseInfoContainer';
 import { write } from 'fs';
@@ -55,19 +55,6 @@ class AllExercises extends Component {
     })
   }
 
-  formatCamelCasedString(camelString: string) {
-    let result = "";
-    if (camelString && camelString.length !== 0) {
-      result = result + camelString.charAt(0).toUpperCase();
-      for (let i = 1; i < camelString.length; i++) {
-        if (camelString.charAt(i) === camelString.charAt(i).toUpperCase()) {
-          result = result + " "
-        }
-        result = result + camelString.charAt(i);
-      }
-    }
-    return result;
-  }
 
   getExercisesByTypeAndConcept(exerciseType: string,
                                concept: string,
