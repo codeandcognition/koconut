@@ -22,6 +22,7 @@ const Categories = {
 }
 
 const progressField = "pKnown";
+const DEFAULT_REC = "based on what you've done, you should try this";
 
 type Props = {
 	title: string,
@@ -113,7 +114,7 @@ class SideNavigation extends Component {
 				if (instructionReccomendation) {
 					text = instructionReccomendation.text;
 				} else {
-					text = "this can help you";
+					text = DEFAULT_REC;
 				}
 			}
 			buttonsList.push(
@@ -137,7 +138,7 @@ class SideNavigation extends Component {
 				icon = recommendation.icon;
 				if (!text) {
 					// if recommendation text isn't set
-					text = "recommended for you";
+					text = DEFAULT_REC;
 				}
 			}
 			buttonsList.push(
