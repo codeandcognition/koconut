@@ -26,17 +26,19 @@ const REC_TYPES = {
     JUMP: "jump"
 };
 
+const REC_PREFIX = "Based on how you've been doing on exercises";
+
 const REC_INFO = {
     "review": {
-        "text": "Based on what you've already done, this exercise will help you review concepts you know",
+        "text": `${REC_PREFIX}, this will help you review concepts you know`,
         "icon": "fa-undo"
     },
     "continue": {
-        "text": "Based on exercises you've done, this exercise will help you continue to develop your understanding",
+        "text": `${REC_PREFIX}, this will help you continue what you've been learning`,
         "icon": "fa-play-circle"
     },
     "jump": {
-        "text": "Based on your prior experiences, this exercise will challenge you; but you're ready for it!",
+        "text": `${REC_PREFIX}, this will challenge you; but you're ready!`,
         "icon": "fa-redo"
     }
 };
@@ -191,7 +193,7 @@ class ModelUpdater {
      * relationship: relationship of concept for recommended exercise to targetConcept
      * proximalDiff: |diff| < proximalDist means exercise is "just right" in difficulty
      */
-    determineRecType = (diff: Number, relationship = RELATIONSHIPS.SAME, proximalDist = 0.1) => {
+    determineRecType = (diff: Number, relationship = RELATIONSHIPS.SAME, proximalDist = 0.05) => {
         console.log(`determineRecType called`);
         if (!Object.values(RELATIONSHIPS).includes(relationship)) { // ensure relationship is acceptable value
             throw `concept relationship type not acceptable. relationship passed in ${relationship}`;
@@ -234,6 +236,7 @@ class ModelUpdater {
             body = await response.json();
             if (body["exerciseInfo"]) {
                 body["exerciseInfo"] = JSON.parse(body["exerciseInfo"]);
+                console.log(body["exerciseInfo"]); // TODO remove
             }
         } else {
             body = { error: response.statusText };
