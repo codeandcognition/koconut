@@ -150,7 +150,7 @@ class SideNavigation extends Component {
 					to={`/practice/${this.props.conceptCode}/practice-${readOrWrite.toLowerCase()}-code`} // TODO: URL endpoint probably should not be hard-coded
 					onClick={() => this.props.goToExercise(this.props.conceptCode, readOrWrite,
 						ex, exerciseIds[index], index, exerciseIds.length)}>
-							<NavItem read={read} suggestionText={text} name={ex.shortPrompt} icon={icon}
+							<NavItem read={read} suggestionText={text} name={ex.shortPrompt} isExercise={true}
 								selectedIndex={this.props.selectedIndex} 
 								index={`${readOrWrite}e${index}`}>
 								</NavItem>
