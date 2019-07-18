@@ -3,6 +3,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import './NavItem.css';
 
+// icons corresponding to instruction vs exercise
+const FA_ICONS = {
+	"INSTRUCTION": "fa-check",
+	"EXERCISE": "fa-star"
+}
+
 class NavItem extends Component {
 	constructor(props) {
 		super(props);
@@ -20,6 +26,7 @@ class NavItem extends Component {
 	render() {
 		let complete = this.state.read ? { color: "#80B948" } : { color: "#F5F5F5"}; // checkmark is green if complete
 		let highlight = this.state.suggestionText ? { borderLeft: "5px solid #4054B2"} : {}; // recommendation adds blue accent
+		let icon = this.props.isExercise ? FA_ICONS.EXERCISE : FA_ICONS.INSTRUCTION;
 		highlight["color"] = "black"; // poor code style
 		return(
 				<div>
@@ -28,7 +35,7 @@ class NavItem extends Component {
 						<div className={"nav-item-info"}>
 							<ListItemText className={"nav-item-text"} primary={this.state.name} />
 							<div className={"item-status"} style={complete}>
-								<i className={"fas fa-check"} ></i>
+								<i className={`fas ${icon}`} ></i>
 							</div>
 						</div>
 					</ListItem>

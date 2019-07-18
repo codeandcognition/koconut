@@ -99,6 +99,8 @@ class SideNavigation extends Component {
 
 	constructButtonList(instructions, readOrWrite) {
 		let buttonsList = [];
+
+		// add instructions
 		instructions.map((item, index) => {
 			let read = this.props.instructionsRead && this.props.instructionsRead[this.props.conceptCode] && this.props.instructionsRead[this.props.conceptCode][readOrWrite] 
 				? this.props.instructionsRead[this.props.conceptCode][readOrWrite].includes(index) : false;
@@ -121,10 +123,12 @@ class SideNavigation extends Component {
 					onClick={() => this.props.getInstruction(this.props.conceptCode, readOrWrite, index)}
 					to={`/instruction/${this.props.conceptCode}/learn-to-${readOrWrite.toLowerCase()}-code/page=${index}`}
 				>
-					<NavItem name={item} read={read} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}${index}`}></NavItem>
+					<NavItem name={item} read={read} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}${index}`} isExercise={false}></NavItem>
 				</Link>
 			)
 		});
+
+		// add exercises
 		let { exercises, exerciseIds } = this.filterExercisesByConcept(this.props.conceptCode, readOrWrite);
 		exercises.map((ex, index) => {
 			let exerciseId = exerciseIds[index];
@@ -142,7 +146,10 @@ class SideNavigation extends Component {
 				<Link key={"ex" + index}
 					to={`/practice/${this.props.conceptCode}/practice-${readOrWrite.toLowerCase()}-code`} // TODO: URL endpoint probably should not be hard-coded
 					onClick={() => this.props.goToExercise(this.props.conceptCode, readOrWrite,
-						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem read={read} suggestionText={text} name={ex.shortPrompt} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}e${index}`}></NavItem></Link>
+						ex, exerciseIds[index], index, exerciseIds.length)}>
+							<NavItem read={read} suggestionText={text} name={ex.shortPrompt} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}e${index}`} isExercise={true}> {/* random "e" in index to differentiate between exercise and instruction*/}
+							</NavItem>
+				</Link>
 			);
 		});
 		return <List style={{ width: '100%' }}>{buttonsList}</List>;
