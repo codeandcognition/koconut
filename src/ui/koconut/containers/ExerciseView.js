@@ -34,7 +34,8 @@ type Props = {
   getInstruction: Function,
   generateExercise: Function,
   exerciseList: any[],
-  exerciseRecommendations: any
+  exerciseRecommendations: any,
+  exerciseId: string
 }
 
 /**
@@ -144,6 +145,7 @@ class Exercise extends Component {
         {(this.props.exercise && this.props.exercise.code) && this.renderOverarchingCode()}
         <Information
           exercise={this.props.exercise}
+          exerciseId={this.props.exerciseId}
           answer={this.state.answer}
           followupAnswers={this.state.followupAnswers}
           updateHandler={(content, index, fIndex) => this.updateAnswers(content, index, fIndex)}
@@ -159,6 +161,7 @@ class Exercise extends Component {
           followupTimesGotQuestionWrong={this.props.followupTimesGotQuestionWrong}
           nextQuestion={this.props.nextQuestion}
           resetAnswer={this.resetAnswer}
+          prevQuestionAttemptCorrect={this.props.prevQuestionAttemptCorrect}
         />
         {/* <ExerciseNavigation
           hasNextQuestion={this.props.hasNextQuestion}

@@ -11,6 +11,7 @@ import NavItem from './NavItem';
 import './SideNavigation.css';
 import Progress from './Progress';
 import ConceptInventory from './../../../data/ConceptMap';
+import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
@@ -21,6 +22,7 @@ const Categories = {
 }
 
 const progressField = "pKnown";
+const DEFAULT_REC = "based on what you've done, you should try this";
 
 type Props = {
 	title: string,
@@ -98,6 +100,8 @@ class SideNavigation extends Component {
 
 	constructButtonList(instructions, readOrWrite) {
 		let buttonsList = [];
+
+		// add instructions
 		instructions.map((item, index) => {
 			let read = this.props.instructionsRead && this.props.instructionsRead[this.props.conceptCode] && this.props.instructionsRead[this.props.conceptCode][readOrWrite] 
 				? this.props.instructionsRead[this.props.conceptCode][readOrWrite].includes(index) : false;
@@ -112,7 +116,7 @@ class SideNavigation extends Component {
 				if (instructionReccomendation) {
 					text = instructionReccomendation.text;
 				} else {
-					text = "this can help you";
+					text = DEFAULT_REC;
 				}
 			}
 			buttonsList.push(
@@ -120,28 +124,37 @@ class SideNavigation extends Component {
 					onClick={() => this.props.getInstruction(this.props.conceptCode, readOrWrite, index)}
 					to={`/instruction/${this.props.conceptCode}/learn-to-${readOrWrite.toLowerCase()}-code/page=${index}`}
 				>
-					<NavItem name={item} read={read} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}${index}`}></NavItem>
+					<NavItem name={item} read={read} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}${index}`} isExercise={false}></NavItem>
 				</Link>
 			)
 		});
+
+		// add exercises
 		let { exercises, exerciseIds } = this.filterExercisesByConcept(this.props.conceptCode, readOrWrite);
 		exercises.map((ex, index) => {
 			let exerciseId = exerciseIds[index];
 			let text = "";
+			let icon = null;
 			let read = this.props.exercisesCompleted && this.props.exercisesCompleted[this.props.conceptCode] ? this.props.exercisesCompleted[this.props.conceptCode].includes(exerciseId) : false;
 			if (this.props.exerciseRecommendations[exerciseId]) {
 				let recommendation = this.props.exerciseRecommendations[exerciseId];
 				text = recommendation.text;
+				icon = recommendation.icon;
 				if (!text) {
 					// if recommendation text isn't set
-					text = "this can help you";
+					text = DEFAULT_REC;
 				}
 			}
 			buttonsList.push(
 				<Link key={"ex" + index}
 					to={`/practice/${this.props.conceptCode}/practice-${readOrWrite.toLowerCase()}-code`} // TODO: URL endpoint probably should not be hard-coded
 					onClick={() => this.props.goToExercise(this.props.conceptCode, readOrWrite,
-						ex, exerciseIds[index], index, exerciseIds.length)}><NavItem read={read} suggestionText={text} name={ex.shortPrompt} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}e${index}`}></NavItem></Link>
+						ex, exerciseIds[index], index, exerciseIds.length)}>
+							<NavItem read={read} suggestionText={text} name={ex.shortPrompt} icon={icon}
+								selectedIndex={this.props.selectedIndex} 
+								index={`${readOrWrite}e${index}`}>
+								</NavItem>
+								</Link>
 			);
 		});
 		return <List style={{ width: '100%' }}>{buttonsList}</List>;
@@ -154,12 +167,14 @@ class SideNavigation extends Component {
 
 		let readProgress = this.props.userBKTParams[this.props.conceptCode][Categories.READ][progressField]; 
 		let writeProgress = this.props.userBKTParams[this.props.conceptCode][Categories.WRITE][progressField];
-
+		
+		let conceptName = formatCamelCasedString(this.state.title);
+		
 		return (
 			<div id={"sidenav"} className={"sidebar"}>
 				<CardContent>
 					<div className={"sidebar-header"}>
-						<h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : this.state.title}</h2>
+						<h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : conceptName}</h2>
 						{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
 					</div>
 					<NavSection
