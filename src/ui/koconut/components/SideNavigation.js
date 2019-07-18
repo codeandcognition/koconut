@@ -134,10 +134,12 @@ class SideNavigation extends Component {
 		exercises.map((ex, index) => {
 			let exerciseId = exerciseIds[index];
 			let text = "";
+			let icon = null;
 			let read = this.props.exercisesCompleted && this.props.exercisesCompleted[this.props.conceptCode] ? this.props.exercisesCompleted[this.props.conceptCode].includes(exerciseId) : false;
 			if (this.props.exerciseRecommendations[exerciseId]) {
 				let recommendation = this.props.exerciseRecommendations[exerciseId];
 				text = recommendation.text;
+				icon = recommendation.icon;
 				if (!text) {
 					// if recommendation text isn't set
 					text = DEFAULT_REC;
