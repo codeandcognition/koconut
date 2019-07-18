@@ -1,5 +1,5 @@
-const BKT_ENDPOINT = `http://127.0.0.1:5000/bkt`; // TODO for prod: change URL
-// const BKT_ENDPOINT = `https://codeitz.herokuapp.com/bkt`; // TODO for prod: change URL
+// const BKT_ENDPOINT = `http://127.0.0.1:5000/bkt`; // TODO for prod: change URL
+const BKT_ENDPOINT = `https://codeitz.herokuapp.com/bkt`; // TODO for prod: change URL
 
 const BKT_PARAMS = {
     PKNOWN: "pKnown",
