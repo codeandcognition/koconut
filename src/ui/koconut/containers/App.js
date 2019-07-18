@@ -848,7 +848,7 @@ class App extends Component {
 		if (this.state.instructionsRead) {
 			let additionalInstructionRead = (concept in this.state.instructionsRead) && (readOrWrite in this.state.instructionsRead[concept])
 				&& !this.state.instructionsRead[concept][readOrWrite].includes(instructionIndex); // nth instruction of concept & readOrWrite
-			let firstInstructionRead = !(concept in this.state.instructionsRead) && !(readOrWrite in this.state.instructionsRead[concept]); // first instruction of concept & readOrWrite
+			let firstInstructionRead = !(concept in this.state.instructionsRead) || !(readOrWrite in this.state.instructionsRead[concept]); // first instruction of concept & readOrWrite
 
 			if (additionalInstructionRead || firstInstructionRead) {
 				let instructionsRead = Object.assign({}, this.state.instructionsRead); // deep copy
