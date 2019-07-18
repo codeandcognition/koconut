@@ -22,6 +22,7 @@ const Categories = {
 }
 
 const progressField = "pKnown";
+const DEFAULT_REC = "based on what you've done, you should try this";
 
 type Props = {
 	title: string,
@@ -115,7 +116,7 @@ class SideNavigation extends Component {
 				if (instructionReccomendation) {
 					text = instructionReccomendation.text;
 				} else {
-					text = "this can help you";
+					text = DEFAULT_REC;
 				}
 			}
 			buttonsList.push(
@@ -133,13 +134,15 @@ class SideNavigation extends Component {
 		exercises.map((ex, index) => {
 			let exerciseId = exerciseIds[index];
 			let text = "";
+			let icon = null;
 			let read = this.props.exercisesCompleted && this.props.exercisesCompleted[this.props.conceptCode] ? this.props.exercisesCompleted[this.props.conceptCode].includes(exerciseId) : false;
 			if (this.props.exerciseRecommendations[exerciseId]) {
 				let recommendation = this.props.exerciseRecommendations[exerciseId];
 				text = recommendation.text;
+				icon = recommendation.icon;
 				if (!text) {
 					// if recommendation text isn't set
-					text = "this can help you";
+					text = DEFAULT_REC;
 				}
 			}
 			buttonsList.push(
@@ -147,9 +150,11 @@ class SideNavigation extends Component {
 					to={`/practice/${this.props.conceptCode}/practice-${readOrWrite.toLowerCase()}-code`} // TODO: URL endpoint probably should not be hard-coded
 					onClick={() => this.props.goToExercise(this.props.conceptCode, readOrWrite,
 						ex, exerciseIds[index], index, exerciseIds.length)}>
-							<NavItem read={read} suggestionText={text} name={ex.shortPrompt} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}e${index}`} isExercise={true}> {/* random "e" in index to differentiate between exercise and instruction*/}
-							</NavItem>
-				</Link>
+							<NavItem read={read} suggestionText={text} name={ex.shortPrompt} icon={icon}
+								selectedIndex={this.props.selectedIndex} 
+								index={`${readOrWrite}e${index}`}>
+								</NavItem>
+								</Link>
 			);
 		});
 		return <List style={{ width: '100%' }}>{buttonsList}</List>;

@@ -31,7 +31,11 @@ class NavItem extends Component {
 		return(
 				<div>
 					<ListItem className={"nav-item"} selected={this.props.index==this.props.selectedIndex} style={highlight}>
-						{this.state.suggestionText && <p className={"recommendation"}>{this.state.suggestionText}</p>}
+						{this.state.suggestionText && 
+						<p className={"recommendation"}>
+							<i className={`fa ${this.props.icon}`}/>
+							{this.state.suggestionText}
+						</p>}
 						<div className={"nav-item-info"}>
 							<ListItemText className={"nav-item-text"} primary={this.state.name} />
 							<div className={"item-status"} style={complete}>
