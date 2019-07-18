@@ -134,12 +134,10 @@ class SideNavigation extends Component {
 		exercises.map((ex, index) => {
 			let exerciseId = exerciseIds[index];
 			let text = "";
-			let icon = null;
 			let read = this.props.exercisesCompleted && this.props.exercisesCompleted[this.props.conceptCode] ? this.props.exercisesCompleted[this.props.conceptCode].includes(exerciseId) : false;
 			if (this.props.exerciseRecommendations[exerciseId]) {
 				let recommendation = this.props.exerciseRecommendations[exerciseId];
 				text = recommendation.text;
-				icon = recommendation.icon;
 				if (!text) {
 					// if recommendation text isn't set
 					text = DEFAULT_REC;
@@ -150,7 +148,7 @@ class SideNavigation extends Component {
 					to={`/practice/${this.props.conceptCode}/practice-${readOrWrite.toLowerCase()}-code`} // TODO: URL endpoint probably should not be hard-coded
 					onClick={() => this.props.goToExercise(this.props.conceptCode, readOrWrite,
 						ex, exerciseIds[index], index, exerciseIds.length)}>
-							<NavItem read={read} suggestionText={text} name={ex.shortPrompt} icon={icon}
+							<NavItem read={read} suggestionText={text} name={ex.shortPrompt} isExercise={true}
 								selectedIndex={this.props.selectedIndex} 
 								index={`${readOrWrite}e${index}`}>
 								</NavItem>

@@ -141,8 +141,7 @@ class ModelUpdater {
                         "text": REC_INFO[recType]["text"],
                         "icon": REC_INFO[recType]["icon"]
                     };
-                } else debugger; // TODO remove
-
+                } else throw "exerciseInfo not returned in response";
             });
             callback(recommendedExercises); //updates state in App.js
 
@@ -236,7 +235,6 @@ class ModelUpdater {
             body = await response.json();
             if (body["exerciseInfo"]) {
                 body["exerciseInfo"] = JSON.parse(body["exerciseInfo"]);
-                console.log(body["exerciseInfo"]); // TODO remove
             }
         } else {
             body = { error: response.statusText };
