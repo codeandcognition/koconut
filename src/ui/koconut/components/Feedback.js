@@ -109,9 +109,13 @@ class Feedback extends Component {
       let values = finalString[variable];
       let output = variable + ":";
       if (values) {
-        values.forEach(val => {
-          output += "\t" + val;
-        });
+        if(Array.isArray(values)) {
+          values.forEach(val => {
+            output += "\t" + val;
+          });
+        } else {
+          output += "\t" + values;
+        }
       }
       list.push(<p key={index}>{output}</p>)
     });
