@@ -615,9 +615,15 @@ class App extends Component {
 				Object.keys(question.answer).forEach((variableName) => {
 					let valueHistory = question.answer[variableName];
 					let values = [];
-					valueHistory.forEach((val) => {
-						values.push(val + "");
-					});
+					if(valueHistory){
+						if(Array.isArray(valueHistory)) {
+							valueHistory.forEach((val) => {
+								values.push(String(val));
+							});
+						} else { // single value
+							values.push(String(valueHistory));
+						}
+					} else throw `no value history for var ${variableName}`;
 					expectedAnswer[variableName] = values;
 				});
 

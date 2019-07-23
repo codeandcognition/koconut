@@ -16,17 +16,27 @@ type Props = {
 	feedback: string
 }
 
+const OUTPUT = 'OUTPUT';
+
 class MemoryTableQuestion extends Component {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			response: {}
+			hasOutput: Object.keys(this.props.question.answer).includes(OUTPUT),
+			response: {} // {index: {"variableName": <var name>, "history": <histroy>}}
 		}
 	}
 
 	fields = {
 		variableName: 'variableName',
 		history: 'history'
+	}
+
+	componentDidMount(){
+		// add OUTPUT if necessary & not already existing
+		if(this.state.hasOutput && !Object.keys(this.state.response).includes(OUTPUT)) {
+			this.updateResponse(this.fields.variableName, OUTPUT, Object.keys(this.props.question.answer).length-1);
+		}
 	}
 
 	handleChange(field: string, index: number) {
@@ -45,65 +55,42 @@ class MemoryTableQuestion extends Component {
 	updateResponse(field: string, value: any, index: number) {
 		value = value.trimLeft();
 		value = value.trimRight();
+		index = String(index);
 
-		if (field === this.fields.variableName) {
-			this.updateResponseKeys(value, index);
-		} else if (field === this.fields.history) {
-			this.updateResponseValues(value, index);
-		}
-	}
-
-	/**
-	 * updates the keys in the learner's response object stored in the state
-	 * @param value
-	 * @param index
-	 */
-	updateResponseKeys(value: string, index: number) {
 		// update the key value
-		let keys = Object.assign([], Object.keys(this.state.response));
-		keys[index] = value;
+		let tempResponses = Object.assign({}, this.state.response);
 
-		// construct the new response object
-		let currentKeys = Object.assign([], Object.keys(this.state.response));
-		let result = {};
-
-		keys.forEach((key, i) => {
-			let currKey = currentKeys[i];
-			let value = this.state.response[currKey];
-			if (value !== undefined) {
-				result[key] = value;
-			} else {
-				result[key] = [];
+		if(tempResponses && typeof(tempResponses) === 'object') {
+			if(!Object.keys(tempResponses).includes(index)) {
+				tempResponses[index] = {};
 			}
-		});
+
+			if (field === this.fields.variableName) {
+				tempResponses[index][this.fields.variableName] = value;
+			} else if (field === this.fields.history) {
+				tempResponses[index][this.fields.history] = String(value).split(",").map(s => String.prototype.trim.apply(s)); // split by comma and trim whitespace
+			} else throw `field is malformed. Is ${field}`;
+		}
 
 		// update the state with the new response object
-		this.setState({
-			response: result
-		}, () => this.props.update(this.state.response, this.props.questionIndex, this.props.fIndex));
+		this.updateResponseState(tempResponses);	
 	}
 
 	/**
-	 * updates the values in the learner's response object stored in the state
-	 * @param value
-	 * @param index
+	 * 
+	 * @param {*} updatedResponse 
+	 * Update response state in both MemoryTable and parent componet with this.props.update
+	 * Tricky part is because this.state.response is of form {index: {fields.variableName: <var name>, fields.history: <value>}, index: {...}} 
+	 * and this.props.update first param is of form {<var name>: <value>, ...}
 	 */
-	updateResponseValues(value: string, index: number) {
-		let values = value.split(',');
-		// trim spaces if any
-		for (let i = 0; i < values.length; i++) {
-			values[i] = values[i].trimLeft();
-			values[i] = values[i].trimRight();
-		}
-
-		let keys = Object.keys(this.state.response);
-		let key = keys[index];
-		let result = Object.assign({}, this.state.response);
-		result[key] = values;
-
+	updateResponseState(updatedResponse: object) {
 		this.setState({
-			response: result
-		}, () => this.props.update(this.state.response, this.props.questionIndex, this.props.fIndex))
+			response: updatedResponse
+		}, () => {
+			let out = {};
+			Object.keys(this.state.response).forEach((i) => {out[this.state.response[Number(i)][this.fields.variableName]] = this.state.response[i][this.fields.history] ? this.state.response[i][this.fields.history] : "";});
+			this.props.update(out, this.props.questionIndex, this.props.fIndex);
+		})
 	}
 
 	render () {
@@ -113,11 +100,16 @@ class MemoryTableQuestion extends Component {
 		let rows = [];
 		for (let i = 0; i < size; i++) {
 			let disabled = this.props.feedback === "correct" || this.props.feedback === "incorrect";
+			let isBottomRowAndOutput = (i == (size-1) && Object.keys(this.props.question.answer).includes(OUTPUT));
+			
 			let row = (
 					<TableRow key={i}>
-						<TableCell><TextField fullWidth
-																	onChange={this.handleChange('variableName', i)}
-																	disabled={disabled}/></TableCell>
+						<TableCell>
+						{isBottomRowAndOutput
+							? <TextField fullWidth onChange={this.handleChange('variableName', i)} disabled={disabled} value={OUTPUT}/>
+							: <TextField fullWidth onChange={this.handleChange('variableName', i)} disabled={disabled}/>
+						}
+						</TableCell>
 						<TableCell><TextField fullWidth
 																	onChange={this.handleChange('history', i)}
 																	disabled={disabled}/></TableCell>
