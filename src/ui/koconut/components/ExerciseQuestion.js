@@ -211,7 +211,7 @@ class ExerciseQuestion extends Component {
 								<Submit text={submitButtonText}
 									disabled={disableSubmit}
 									submitHandler={() => {
-										window.scrollTo(0, 0);
+										window.scrollBy(0, 60); // scroll down a bit so people can see feedback. could improve: https://stackoverflow.com/a/51828976
 										this.props.submitHandler(this.props.answer, this.props.index, this.props.question.type, this.props.fIndex)
 									}
 									}

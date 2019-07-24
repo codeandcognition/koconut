@@ -33,7 +33,7 @@ class NavItem extends Component {
 					<ListItem className={"nav-item"} selected={this.props.index==this.props.selectedIndex} style={highlight}>
 						{this.state.suggestionText && 
 						<p className={"recommendation"}>
-							<i className={`fa ${this.props.icon}`}/>
+							{this.props.recIcon && <i className={`fa ${this.props.recIcon}`}/>}
 							{this.state.suggestionText}
 						</p>}
 						<div className={"nav-item-info"}>

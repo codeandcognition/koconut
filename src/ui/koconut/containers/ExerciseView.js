@@ -38,6 +38,8 @@ type Props = {
   exerciseId: string
 }
 
+const EXERCISE_ID = 'exerciseId'
+
 /**
  * The Exercise container contains all components of an assessment problem.
  * @class
@@ -46,14 +48,16 @@ class Exercise extends Component {
   resetAnswer: Function;
   state: {
     answer: string[],
-    followupAnswers: any[]
+    followupAnswers: any[],
+    exerciseId: string
   };
 
   constructor(props: Props) {
     super(props);
     this.state = {
       answer: [],
-      followupAnswers: []
+      followupAnswers: [],
+      exerciseId: this.props.exerciseId
     };
     this.resetAnswer = this.resetAnswer.bind(this);
   }
@@ -64,14 +68,34 @@ class Exercise extends Component {
   componentDidMount() {
     this.mounted = true;
     window.scrollTo(0, 0);
-    this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
+
+    let storedExerciseId = sessionStorage.getItem(EXERCISE_ID);
+    let stateHasExerciseId = this.state.exerciseId && this.state.exerciseId.length > 0;
+    
+    // no exercise ID on refresh, so used cached version
+    if(!stateHasExerciseId && storedExerciseId){
+      this.setState({
+        exerciseId: storedExerciseId
+      }, this.props.sendExerciseViewDataToFirebase(this.state.exerciseId));
+    } else {
+       // if new exerciseId exists, then update storage
+       if(stateHasExerciseId && this.state.exerciseId != storedExerciseId) {
+        sessionStorage.setItem(EXERCISE_ID, this.state.exerciseId);
+      }
+      this.props.sendExerciseViewDataToFirebase(this.state.exerciseId);
+    }
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    // scroll to top if navigating to a new exercise
     if (this.props.exerciseId !== nextProps.exerciseId) {
-      window.scrollTo(0, 0);
+      window.scrollTo(0, 0); // scroll to top if navigating to a new exercise
       this.resetAnswer();
+    }
+
+    if (nextProps.exerciseId && this.state.exerciseId !== nextProps.exerciseId) {
+      this.setState({
+        exerciseId: nextProps.exerciseId
+      }, sessionStorage.setItem(EXERCISE_ID, nextProps.exerciseId))
     }
   }
 
@@ -145,7 +169,7 @@ class Exercise extends Component {
         {(this.props.exercise && this.props.exercise.code) && this.renderOverarchingCode()}
         <Information
           exercise={this.props.exercise}
-          exerciseId={this.props.exerciseId}
+          exerciseId={this.state.exerciseId}
           answer={this.state.answer}
           followupAnswers={this.state.followupAnswers}
           updateHandler={(content, index, fIndex) => this.updateAnswers(content, index, fIndex)}
@@ -205,7 +229,7 @@ class Exercise extends Component {
           <div className="exercise-view">
             {/* <BreadCrumbs conceptType={this.props.concept}
               sendExerciseViewDataToFirebase={this.props.sendExerciseViewDataToFirebase}
-              exerciseId={this.props.exerciseId}
+              exerciseId={this.state.exerciseId}
               readOrWrite={this.props.readOrWrite}
               instructionOrPractice={"PRACTICE"}
               generateExercise={this.props.generateExercise}
