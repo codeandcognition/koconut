@@ -186,7 +186,7 @@ class App extends Component {
 			timesGotQuestionWrong: [], // times the user has gotten question wrong,
 			// indices are question index
 			followupTimesGotQuestionWrong: [],
-			exerciseId: '',
+			exerciseId: sessionStorage.getItem('exerciseId') || '',
 			numExercisesInCurrConcept: 0,
 			userBKTParams: {},
 			maxNumRecommendations: 6, // change or set elsewhere?,
