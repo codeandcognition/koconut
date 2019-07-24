@@ -76,13 +76,13 @@ class Exercise extends Component {
     if(!stateHasExerciseId && storedExerciseId){
       this.setState({
         exerciseId: storedExerciseId
-      }, this.props.sendExerciseViewDataToFirebase(this.props.exerciseId));
+      }, this.props.sendExerciseViewDataToFirebase(this.state.exerciseId));
     } else {
        // if new exerciseId exists, then update storage
        if(stateHasExerciseId && this.state.exerciseId != storedExerciseId) {
         sessionStorage.setItem(EXERCISE_ID, this.state.exerciseId);
       }
-      this.props.sendExerciseViewDataToFirebase(this.props.exerciseId);
+      this.props.sendExerciseViewDataToFirebase(this.state.exerciseId);
     }
   }
 
