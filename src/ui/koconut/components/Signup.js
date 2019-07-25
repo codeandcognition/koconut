@@ -24,10 +24,19 @@ class Signup extends Component {
 			loading: true,
 			email: "",
 			password: "",
-			confirmation: "",
-      userExperienceError: false
+      confirmation: "",
+      accessCode: "", // code to specify condition
+      accessCodeVisible: false, // if true, textbox asking for access code appears
+      userExperienceError: false,
+      userExperience: "" // response to "I am..." question
 		}; // need this declaration here, render crashes otherwise
-	}
+  }
+  
+  CONDITIONS = {
+    C1: "C1",
+    E1: "E1",
+    C2: "C2"
+  }
 
 	componentDidMount() {
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
@@ -72,6 +81,7 @@ class Signup extends Component {
               timestamp: firebase.database.ServerValue.TIMESTAMP
             });
             firebase.database().ref(`/Users/${uid}/userExperience`).set(this.state.userExperience);
+            firebase.database().ref(`/Users/${uid}/condition`).set(this.determineCondition(this.state.accessCode));
           }
           this.setState({currentUser: user});
           return user.updateProfile({displayName: this.state.displayName});
@@ -86,7 +96,33 @@ class Signup extends Component {
           });
         });
     }
-	}
+  }
+  
+  /**
+   * Given access code which is either string or null, determine the condition
+   * if accessCode is not a string that is an integer -> set state to invalid and return -1
+   * if accessCode is -1, randomly assign based on potential conditions
+   * if accessCode is an integer, then do the following based on the result % primeNum:
+   * {3: "C1", 5: "E1", 7: "C2", else: random}
+   */
+  determineCondition(accessCode, primeNum=47){
+    if(accessCode && !isNaN(accessCode)) {
+      switch(Number(accessCode) % primeNum) {
+        case 3: 
+          return this.CONDITIONS.C1;
+        case 5:
+          return this.CONDITIONS.E1;
+        case 7:
+          return this.CONDITIONS.C2;
+        default:
+          break;
+      }
+    }
+
+    // base case: random option
+    let randInt = Math.floor(Math.random()*Object.keys(this.CONDITIONS).length); // random int in range of Object.keys(CONDITIONS)
+    return this.CONDITIONS[Object.keys(this.CONDITIONS)[randInt]]; // random option
+  }
 
 	/**
 	 * renders the sign up form
@@ -157,6 +193,22 @@ class Signup extends Component {
                         <MenuItem value={"PROGRAMMEROLD"}>programmer that hasn't used python in a while</MenuItem>
                       </Select>
                     </FormControl>
+
+                    {this.state.accessCodeVisible ?
+                      <TextField
+                        id="accessCode"
+                        type="text"
+                        label="access code (optional)"
+                        placeholder="Enter access code"
+                        onInput={evt => this.setState({accessCode: evt.target.value})} 
+                      />
+                    :
+                      <span style={{width:'100%', textAlign: 'left'}}>
+                        <Button onClick={() => {this.setState({accessCodeVisible: true})}}>
+                          <small>I have an access code.</small>
+                        </Button>
+                      </span>
+                    }
                     
                   </FormGroup>
                   <div style={{width: '100%', textAlign: 'right'}}>

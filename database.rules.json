@@ -31,6 +31,9 @@
         "userExperience": {
           ".write": "auth != null && auth.uid == $uid"
         },
+        "condition": {
+          ".write": "auth != null && auth.uid == $uid"
+        },
         "Data": {
           "AnswerSubmission": {
             ".write": "auth != null && auth.uid == $uid"
