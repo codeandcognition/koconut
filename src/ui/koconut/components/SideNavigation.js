@@ -23,6 +23,7 @@ const Categories = {
 
 const progressField = "pKnown";
 const DEFAULT_REC = "based on what you've done, you should try this";
+const DEFAULT_PROGRESS = 1.0;
 
 type Props = {
 	title: string,
@@ -165,8 +166,13 @@ class SideNavigation extends Component {
 		let writingSection = this.constructButtonList(this.state.writeInstructions, Categories.WRITE);
 		let ref = this;
 
-		let readProgress = this.props.userBKTParams[this.props.conceptCode][Categories.READ][progressField]; 
-		let writeProgress = this.props.userBKTParams[this.props.conceptCode][Categories.WRITE][progressField];
+		let conceptHasExercises = Object.keys(this.props.userBKTParams).includes(this.props.conceptCode);
+		let readProgress = null;
+		let writeProgress = null;
+		if(conceptHasExercises){
+			readProgress = this.props.userBKTParams[this.props.conceptCode][Categories.READ][progressField]; 
+			writeProgress = this.props.userBKTParams[this.props.conceptCode][Categories.WRITE][progressField];
+		}
 		
 		let conceptName = formatCamelCasedString(this.state.title);
 		
@@ -188,14 +194,14 @@ class SideNavigation extends Component {
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Reading"}
 						defaultExpanded={this.props.defaultOpen.includes("READ")}
-						progress={<Progress percent={readProgress} />}
+						progress={<Progress percent={conceptHasExercises ? readProgress : DEFAULT_PROGRESS} />}
 						body={readingSection}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Writing"}
 						defaultExpanded={this.props.defaultOpen.includes("WRITE")}
-						progress={<Progress percent={writeProgress} />}
+						progress={<Progress percent={conceptHasExercises ? writeProgress : DEFAULT_PROGRESS} />}
 						body={writingSection}>
 					</NavSection>
 				</CardContent>
