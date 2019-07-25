@@ -167,12 +167,8 @@ class SideNavigation extends Component {
 		let ref = this;
 
 		let conceptHasExercises = Object.keys(this.props.userBKTParams).includes(this.props.conceptCode);
-		let readProgress = null;
-		let writeProgress = null;
-		if(conceptHasExercises){
-			readProgress = this.props.userBKTParams[this.props.conceptCode][Categories.READ][progressField]; 
-			writeProgress = this.props.userBKTParams[this.props.conceptCode][Categories.WRITE][progressField];
-		}
+		let readProgress = conceptHasExercises ? this.props.userBKTParams[this.props.conceptCode][Categories.READ][progressField] : null; 
+		let writeProgress = conceptHasExercises ? this.props.userBKTParams[this.props.conceptCode][Categories.WRITE][progressField]: null;
 		
 		let conceptName = formatCamelCasedString(this.state.title);
 		
