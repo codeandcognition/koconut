@@ -23,7 +23,6 @@ class InstructTool extends Component {
 		super(props);
 		this.state = {
 			instructions: [],
-			//Math.round(Math.random() * 999999999)
 			title: "",
 			concept: "",
 			type: "",
