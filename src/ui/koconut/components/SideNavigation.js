@@ -98,6 +98,14 @@ class SideNavigation extends Component {
 		return { exercises, exerciseIds };
 	}
 
+	/**
+	 * returns true if users has viewed any instruction or gotten any exercise correct, false otherwise
+	 */
+	determineIfAnythingDone(){
+		return !(this.props.instructionsRead[this.props.conceptCode] ||  // check for read instructions
+			(this.props.exercisesCompleted[this.props.conceptCode] && this.props.exercisesCompleted[this.props.conceptCode].length > 0)); // check for correct exercises
+	}
+
 	constructButtonList(instructions, readOrWrite) {
 		let buttonsList = [];
 
@@ -190,7 +198,7 @@ class SideNavigation extends Component {
 						getInstructionTitles={null}
 						title={"Overview"}
 						progress={null}
-						defaultExpanded={this.props.defaultOpen.includes("OVERVIEW")}
+						defaultExpanded={this.props.defaultOpen.includes("OVERVIEW") && this.determineIfAnythingDone()}
 						body={<ConceptOverview conceptCode={this.props.conceptCode} />}>
 					</NavSection>
 					<NavSection
