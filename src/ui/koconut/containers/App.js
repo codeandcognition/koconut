@@ -1080,7 +1080,7 @@ class App extends Component {
 						selectedIndex={this.state.selectedIndex}
 						prevQuestionAttemptCorrect={this.state.prevQuestionAttemptCorrect}
 						userCondition={this.state.userCondition}
-
+						switchToWorldView={this.switchToWorldView}
 					/>
 				}
 				{!this.state.currentConcept &&
@@ -1159,6 +1159,7 @@ class App extends Component {
 						exercisesCompleted={this.state.exercisesCompleted}
 						selectedIndex={this.state.selectedIndex}
 						userCondition={this.state.userCondition}
+						switchToWorldView={this.switchToWorldView}
 					/>
 				}
 				{!this.state.currentConcept &&

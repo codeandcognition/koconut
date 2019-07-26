@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import firebase from 'firebase';
 import List from '@material-ui/core/List';
 import ConceptOverview from './ConceptOverview';
 import CardContent from '@material-ui/core/CardContent';
-import Collapse from '@material-ui/core/Collapse';
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 import NavSection from './NavSection';
 import NavItem from './NavItem';
@@ -13,9 +11,9 @@ import Progress from './Progress';
 import ConceptInventory from './../../../data/ConceptMap';
 import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
 import CONDITIONS from './../../../utils/Conditions';
+import Button from '@material-ui/core/Button';
+import Routes from './../../../Routes';
 
-const LEARN = "Learn";
-const PRACTICE = "Practice";
 
 const Categories = {
 	READ: "READ",
@@ -174,6 +172,12 @@ class SideNavigation extends Component {
 		let writeProgress = conceptHasExercises ? this.props.userBKTParams[this.props.conceptCode][Categories.WRITE][progressField]: null;
 		
 		let conceptName = formatCamelCasedString(this.state.title);
+
+		let style = {
+			marginTop: '10px',
+			width: '100%',
+			// borderLeft: "8px solid #4054B2" // for recommendation
+		}
 		
 		return (
 			<div id={"sidenav"} className={"sidebar"}>
@@ -203,6 +207,11 @@ class SideNavigation extends Component {
 						progress={<Progress percent={conceptHasExercises ? writeProgress : DEFAULT_PROGRESS} />}
 						body={writingSection}>
 					</NavSection>
+					<div>
+						<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
+							<Button style={style} variant="contained"><i class="fa fa-chevron-left" aria-hidden="true"></i> back to world view</Button>
+						</Link>
+					</div>
 				</CardContent>
 			</div>
 		);
