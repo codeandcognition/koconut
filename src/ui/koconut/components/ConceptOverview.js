@@ -18,11 +18,14 @@ class ConceptOverview extends Component {
 
     render() {
         let conceptInfo = ConceptInventory[this.props.conceptCode].explanations;
+        console.log(conceptInfo.examples);
         return (
             <Card>
                 <CardContent>
                     <p>{conceptInfo.definition}</p>
-                    <p><b>Examples</b></p>
+                    {Array.isArray(conceptInfo.examples) && conceptInfo.examples.length > 0 &&
+                    <   p><b>Examples</b></p>
+                    }
                     {conceptInfo.examples.map((item, index) => {
                         return this.renderMarkdown(item, index);
                     })}
