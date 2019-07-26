@@ -27,6 +27,7 @@ class Signup extends Component {
       confirmation: "",
       accessCode: "", // code to specify condition
       accessCodeVisible: false, // if true, textbox asking for access code appears
+      accessCodeInvalid: false,
       userExperienceError: false,
       userExperience: "" // response to "I am..." question
 		}; // need this declaration here, render crashes otherwise
@@ -35,7 +36,8 @@ class Signup extends Component {
   CONDITIONS = {
     C1: "C1",
     E1: "E1",
-    C2: "C2"
+    C2: "C2",
+    INVALID: "INVALID"
   }
 
 	componentDidMount() {
@@ -65,12 +67,16 @@ class Signup extends Component {
 	handleSubmit(evt) {
 		evt.preventDefault();
 		let mismatch = this.state.password !== this.state.confirmation;
-		this.setState({errorMessage: "", errCode: "", userExperienceError: false});
+    this.setState({errorMessage: "", errCode: "", userExperienceError: false}); // unclear why userExperienceError being set to false here, esp. with it being checked a few lines later. race condition!
+    
+    let condition = this.determineCondition(this.state.accessCode);
 
-    if(mismatch) {
+    if(mismatch) { // ensure passwords match
       this.setState({mismatch});
-    } else if(this.state.userExperience === "") {
-      this.setState({userExperienceError: true})
+    } else if(this.state.userExperience === "") { // ensure experience selected
+      this.setState({userExperienceError: true});
+    } else if(condition == this.CONDITIONS.INVALID){ // ensure access code is valid
+      this.setState({accessCodeInvalid: true});
     } else {
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(user => {
@@ -81,7 +87,7 @@ class Signup extends Component {
               timestamp: firebase.database.ServerValue.TIMESTAMP
             });
             firebase.database().ref(`/Users/${uid}/userExperience`).set(this.state.userExperience);
-            firebase.database().ref(`/Users/${uid}/condition`).set(this.determineCondition(this.state.accessCode));
+            firebase.database().ref(`/Users/${uid}/condition`).set(condition);
           }
           this.setState({currentUser: user});
           return user.updateProfile({displayName: this.state.displayName});
@@ -100,26 +106,27 @@ class Signup extends Component {
   
   /**
    * Given access code which is either string or null, determine the condition
-   * if accessCode is not a string that is an integer -> set state to invalid and return -1
-   * if accessCode is -1, randomly assign based on potential conditions
-   * if accessCode is an integer, then do the following based on the result % primeNum:
-   * {3: "C1", 5: "E1", 7: "C2", else: random}
+   * if accessCode is a string which can be cast to an integer, then do the following based on the result % primeNum:
+   * {3: "C1", 5: "E1", 7: "C2", else: "INVALID"}
+   * else: return random condition
    */
   determineCondition(accessCode, primeNum=47){
-    if(accessCode && !isNaN(accessCode)) {
-      switch(Number(accessCode) % primeNum) {
-        case 3: 
-          return this.CONDITIONS.C1;
-        case 5:
-          return this.CONDITIONS.E1;
-        case 7:
-          return this.CONDITIONS.C2;
-        default:
-          break;
-      }
+    if(accessCode) {
+      if(!isNaN(accessCode)) {
+        switch(Number(accessCode) % primeNum) {
+          case 3: 
+            return this.CONDITIONS.C1;
+          case 5:
+            return this.CONDITIONS.E1;
+          case 7:
+            return this.CONDITIONS.C2;
+          default:
+            return this.CONDITIONS.INVALID;
+        }
+      } else return this.CONDITIONS.INVALID;
     }
 
-    // base case: random option
+    // base case: no access code submitted => random option
     let randInt = Math.floor(Math.random()*Object.keys(this.CONDITIONS).length); // random int in range of Object.keys(CONDITIONS)
     return this.CONDITIONS[Object.keys(this.CONDITIONS)[randInt]]; // random option
   }
@@ -194,6 +201,9 @@ class Signup extends Component {
                       </Select>
                     </FormControl>
 
+                    {this.state.accessCodeVisible && this.state.accessCodeInvalid ? <p className="alert alert-warning"
+                      style={{marginTop: '3%', marginBottom: '0%'}}>Sorry, the access code is invalid. Please submit another one, or leave it blank.</p> : null}
+                      
                     {this.state.accessCodeVisible ?
                       <TextField
                         id="accessCode"
