@@ -12,6 +12,7 @@ import './SideNavigation.css';
 import Progress from './Progress';
 import ConceptInventory from './../../../data/ConceptMap';
 import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
+import CONDITIONS from './../../../utils/Conditions';
 
 const LEARN = "Learn";
 const PRACTICE = "Practice";
@@ -109,8 +110,8 @@ class SideNavigation extends Component {
 
 			let text = "";
 			if (this.props.instructionRecommendations[this.props.conceptCode] &&
-				this.props.instructionRecommendations[this.props.conceptCode][readOrWrite] &&
-				this.props.instructionRecommendations[this.props.conceptCode][readOrWrite][index]) {
+			this.props.instructionRecommendations[this.props.conceptCode][readOrWrite] &&
+			this.props.instructionRecommendations[this.props.conceptCode][readOrWrite][index]) {
 				let conceptReccomendations = this.props.instructionRecommendations[this.props.conceptCode];
 				let recommendationsForType = conceptReccomendations[readOrWrite];
 				let instructionReccomendation = recommendationsForType[index];
@@ -132,12 +133,14 @@ class SideNavigation extends Component {
 
 		// add exercises
 		let { exercises, exerciseIds } = this.filterExercisesByConcept(this.props.conceptCode, readOrWrite);
+		let showRecommendations = this.props.userCondition !== CONDITIONS.C1;
+		
 		exercises.map((ex, index) => {
 			let exerciseId = exerciseIds[index];
 			let text = "";
 			let recIcon = null;
 			let read = this.props.exercisesCompleted && this.props.exercisesCompleted[this.props.conceptCode] ? this.props.exercisesCompleted[this.props.conceptCode].includes(exerciseId) : false;
-			if (this.props.exerciseRecommendations[exerciseId]) {
+			if (showRecommendations &&  this.props.exerciseRecommendations[exerciseId]) {
 				let recommendation = this.props.exerciseRecommendations[exerciseId];
 				text = recommendation.text;
 				recIcon = recommendation.icon;

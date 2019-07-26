@@ -192,7 +192,7 @@ class App extends Component {
 			instructionsRead: {},
 			selectedIndex: "", // index of instruction or exercise in focus. e.g. READ0, READe1, WRITE1,
 			prevQuestionAttemptCorrect: null, // true if prev question attempt correct, false otherwise
-			condition: null // experimental condition user is in
+			userCondition: null // experimental condition user is in
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -301,7 +301,7 @@ class App extends Component {
 				userRefCondition.on("value", (snap) => {
 					if (this._isMounted && snap.val()) {
 						this.setState({
-							condition: snap.val()
+							userCondition: snap.val()
 						});
 					}
 				});
@@ -1079,6 +1079,7 @@ class App extends Component {
 						exercisesCompleted={this.state.exercisesCompleted}
 						selectedIndex={this.state.selectedIndex}
 						prevQuestionAttemptCorrect={this.state.prevQuestionAttemptCorrect}
+						userCondition={this.state.userCondition}
 
 					/>
 				}
@@ -1122,6 +1123,7 @@ class App extends Component {
 					instructionsRead={this.state.instructionsRead}
 					exercisesCompleted={this.state.exercisesCompleted}
 					selectedIndex={this.state.selectedIndex}
+					userCondition={this.state.userCondition}
 				/>
 			</div>
 		)
@@ -1156,6 +1158,7 @@ class App extends Component {
 						updateInstructionsRead={this.updateInstructionsRead}
 						exercisesCompleted={this.state.exercisesCompleted}
 						selectedIndex={this.state.selectedIndex}
+						userCondition={this.state.userCondition}
 					/>
 				}
 				{!this.state.currentConcept &&

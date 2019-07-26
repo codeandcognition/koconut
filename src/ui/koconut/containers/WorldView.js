@@ -22,6 +22,7 @@ type Props = {
   goToExercise: Function,
   exerciseRecommendations: any,
   instructionReccomendations: any,
+  userCondition: string
 };
 
 /**
@@ -287,6 +288,7 @@ class WorldView extends Component {
         instructionsRead={this.props.instructionsRead} 
         exercisesCompleted={this.props.exercisesCompleted}
         selectedIndex={this.props.selectedIndex}
+        userCondition={this.props.userCondition}
         />
     );
   }

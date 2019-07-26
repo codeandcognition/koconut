@@ -24,7 +24,8 @@ type Props = {
 	goToExercise: Function,
 	exerciseRecommendations: any,
 	instructionRecommendations: any,
-	updateInstructionsRead: Function
+	updateInstructionsRead: Function,
+	userCondition: string
 }
 
 /**
@@ -292,6 +293,7 @@ class InstructionView extends Component {
 								instructionsRead={this.props.instructionsRead}
 								exercisesCompleted={this.props.exercisesCompleted}
 								selectedIndex={this.props.selectedIndex}
+								userCondition={this.props.userCondition}
 								/> 
 							<div className={"overallView"}>
 								{/* <BreadCrumbs
