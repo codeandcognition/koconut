@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Homepage from './Homepage/Homepage';
 import 'firebase/auth';
+import CONDITIONS from '../../../utils/Conditions';
 
 type Props = {
 	toSignin: Function
@@ -31,13 +32,6 @@ class Signup extends Component {
       userExperienceError: false,
       userExperience: "" // response to "I am..." question
 		}; // need this declaration here, render crashes otherwise
-  }
-  
-  CONDITIONS = {
-    C1: "C1",
-    E1: "E1",
-    C2: "C2",
-    INVALID: "INVALID"
   }
 
 	componentDidMount() {
@@ -75,7 +69,7 @@ class Signup extends Component {
       this.setState({mismatch});
     } else if(this.state.userExperience === "") { // ensure experience selected
       this.setState({userExperienceError: true});
-    } else if(condition == this.CONDITIONS.INVALID){ // ensure access code is valid
+    } else if(condition == CONDITIONS.INVALID){ // ensure access code is valid
       this.setState({accessCodeInvalid: true});
     } else {
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -115,20 +109,20 @@ class Signup extends Component {
       if(!isNaN(accessCode)) {
         switch(Number(accessCode) % primeNum) {
           case 3: 
-            return this.CONDITIONS.C1;
+            return CONDITIONS.C1;
           case 5:
-            return this.CONDITIONS.E1;
+            return CONDITIONS.E1;
           case 7:
-            return this.CONDITIONS.C2;
+            return CONDITIONS.C2;
           default:
-            return this.CONDITIONS.INVALID;
+            return CONDITIONS.INVALID;
         }
-      } else return this.CONDITIONS.INVALID;
+      } else return CONDITIONS.INVALID;
     }
 
     // base case: no access code submitted => random option
-    let randInt = Math.floor(Math.random()*Object.keys(this.CONDITIONS).length); // random int in range of Object.keys(CONDITIONS)
-    return this.CONDITIONS[Object.keys(this.CONDITIONS)[randInt]]; // random option
+    let randInt = Math.floor(Math.random()*Object.keys(CONDITIONS).length); // random int in range of Object.keys(CONDITIONS)
+    return CONDITIONS[Object.keys(CONDITIONS)[randInt]]; // random option
   }
 
 	/**
