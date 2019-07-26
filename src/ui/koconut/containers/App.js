@@ -17,7 +17,6 @@ import { filterCompletedInstructions, filterCompletedExercises } from './../../.
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 // import ResponseEvaluator from '../../../backend/ResponseEvaluator'; // replaced w/ koconut-api /checker endpoint
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
-import { write } from 'fs';
 import LoadingView from '../components/LoadingView';
 
 const Sk = require('skulpt');
@@ -192,7 +191,8 @@ class App extends Component {
 			maxNumRecommendations: 6, // change or set elsewhere?,
 			instructionsRead: {},
 			selectedIndex: "", // index of instruction or exercise in focus. e.g. READ0, READe1, WRITE1,
-			prevQuestionAttemptCorrect: null // true if prev question attempt correct, false otherwise
+			prevQuestionAttemptCorrect: null, // true if prev question attempt correct, false otherwise
+			condition: null // experimental condition user is in
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -286,12 +286,22 @@ class App extends Component {
 			if (user) {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
-				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
 
+				// set state for bkt params
+				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
 				userRef.on("value", (snap) => {
 					if (this._isMounted && snap.val()) {
 						this.setState({
 							userBKTParams: snap.val()
+						});
+					}
+				});
+
+				let userRefCondition = this.props.firebase.database().ref(`/Users/${user.uid}/condition`);
+				userRefCondition.on("value", (snap) => {
+					if (this._isMounted && snap.val()) {
+						this.setState({
+							condition: snap.val()
 						});
 					}
 				});
