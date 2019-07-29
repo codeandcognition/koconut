@@ -263,6 +263,7 @@ class InstructionView extends Component {
 
 	render() {
 		let chosenInstruction = null;
+		const styleCenterText = {textAlign: 'center'};
 		if (this.state.instructionList) {
 			chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
 		}
@@ -324,6 +325,9 @@ class InstructionView extends Component {
 										</div>
 										{/* {hasMultiplePages && <button className={"nav-arrow-btn" +
 											" right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right" /></button>} */}
+										<div style={styleCenterText}>
+											<p><i class="fa fa-chevron-left" aria-hidden="true"></i><i>Use the navigation bar on the left to continue.</i></p>
+										</div>
 									</div>
 								}
 							</div>
