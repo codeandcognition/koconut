@@ -217,7 +217,7 @@ class SideNavigation extends Component {
 					</NavSection>
 					<div>
 						<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
-							<Button style={style} variant="contained"><i class="fa fa-chevron-left" aria-hidden="true"></i> back to world view</Button>
+							<Button style={style} variant="contained"><i className="fa fa-chevron-left" aria-hidden="true"></i> back to world view</Button>
 						</Link>
 					</div>
 				</CardContent>
