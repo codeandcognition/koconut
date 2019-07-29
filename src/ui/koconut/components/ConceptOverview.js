@@ -18,7 +18,6 @@ class ConceptOverview extends Component {
 
     render() {
         let conceptInfo = ConceptInventory[this.props.conceptCode].explanations;
-        console.log(conceptInfo.examples);
         return (
             <Card>
                 <CardContent>
