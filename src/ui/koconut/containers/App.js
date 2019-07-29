@@ -1235,7 +1235,7 @@ class App extends Component {
 	 * @returns {*}
 	 */
 	renderNavBar() {
-		return (<Navbar switchToWorldView={this.switchToWorldView} />);
+		return (<Navbar switchToWorldView={this.switchToWorldView} userCondition={this.state.userCondition}/>);
 	}
 
 	render() {

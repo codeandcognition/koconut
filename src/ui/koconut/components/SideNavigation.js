@@ -215,11 +215,13 @@ class SideNavigation extends Component {
 						progress={<Progress percent={conceptHasExercises ? writeProgress : DEFAULT_PROGRESS} />}
 						body={writingSection}>
 					</NavSection>
-					<div>
-						<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
-							<Button style={style} variant="contained"><i className="fa fa-chevron-left" aria-hidden="true"></i> back to world view</Button>
-						</Link>
-					</div>
+					{this.props.userCondition !== CONDITIONS.C2 &&
+						<div>
+							<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
+								<Button style={style} variant="contained"><i className="fa fa-chevron-left" aria-hidden="true"></i> back to world view</Button>
+							</Link>
+						</div>
+					}
 				</CardContent>
 			</div>
 		);
