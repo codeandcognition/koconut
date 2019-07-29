@@ -329,7 +329,7 @@ class InstructionView extends Component {
 										{/* {hasMultiplePages && <button className={"nav-arrow-btn" +
 											" right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right" /></button>} */}
 										<div style={styleCenterText}>
-											<p><i class="fa fa-chevron-left" aria-hidden="true"></i><i>Use the navigation bar on the left to continue.</i></p>
+											<p><i className="fa fa-chevron-left" aria-hidden="true"></i><i>Use the navigation bar on the left to continue.</i></p>
 										</div>
 									</div>
 								}
