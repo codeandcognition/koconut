@@ -192,7 +192,8 @@ class App extends Component {
 			instructionsRead: {},
 			selectedIndex: "", // index of instruction or exercise in focus. e.g. READ0, READe1, WRITE1,
 			prevQuestionAttemptCorrect: null, // true if prev question attempt correct, false otherwise
-			userCondition: null // experimental condition user is in
+			userCondition: null, // experimental condition user is in
+			exerciseConceptMap: {} //mapping for exercise id to concepts
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -349,6 +350,7 @@ class App extends Component {
 								}, () => {
 									this.updateUserState();
 									this.initializeModelUpdater(); // need to wait until exerciseList & conceptMapGetter both set
+									this.createExerciseConceptMap();
 								});
 							});
 
@@ -364,6 +366,31 @@ class App extends Component {
 				});
 			}
 		});
+	}
+
+	/**
+	 * Update state.exerciseConceptMap w/ object where key is exercise and value is concept (disregarding "read" or "write"). 
+	 * Opposite of concept exercise-map 
+	 */
+	createExerciseConceptMap() {
+		let exerciseConceptMap = {};
+		if(this.state.conceptMapGetter) {
+			for (let conceptName in this.state.conceptMapGetter){
+				let concept = this.state.conceptMapGetter[conceptName];
+
+				for(let key in Categories){
+					let category = Categories[key];
+					if(Object.keys(concept).includes(category)){
+						for(let eid in concept[category]){
+							exerciseConceptMap[concept[category][eid]] = conceptName;
+						}
+					} else console.log(`${Categories[key]} exercises not found for ${conceptName}`);
+				}
+			}
+		}
+		this.setState({
+			exerciseConceptMap: exerciseConceptMap
+		})
 	}
 
 	initializeModelUpdater() {
