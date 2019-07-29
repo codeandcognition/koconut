@@ -10,7 +10,7 @@ import cytoscape from 'cytoscape';
 import firebase from 'firebase';
 import dagre from 'cytoscape-dagre';
 import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
-cytoscape.use( dagre );
+cytoscape.use( dagre ); // layout for directed acyclic graph: https://github.com/cytoscape/cytoscape.js-dagre
 
 type Props = {
 	setFirebaseUser: Function,
@@ -64,7 +64,6 @@ class WorldView extends Component {
 	}
 
   componentDidMount() {
-    sessionStorage.removeItem('exerciseId'); // remove exercise id if in world view
   	this.mounted = true;
   	this.authUnsub = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
   		if (this.mounted) {
@@ -80,6 +79,7 @@ class WorldView extends Component {
 			}
 		}) : null;
     window.scrollTo(0, 0);
+    sessionStorage.removeItem('exerciseId'); // remove exercise id if in world view
 	}
 
   /*
@@ -91,7 +91,7 @@ class WorldView extends Component {
     let edgesArr = [];
 
     conceptList.forEach((concept) => {
-      let conceptName = formatCamelCasedString(concept.name); // TODO: don't do this conversion manually
+      let conceptName = formatCamelCasedString(concept.name);
       let node = {
         data : {
 					id: concept.name,
