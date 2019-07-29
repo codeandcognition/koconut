@@ -177,7 +177,7 @@ class App extends Component {
 			error: false,
 			errorMessage: '', // none
 			author: false,
-			exerciseList: null,
+			exerciseList: null, // TODO: could remove and replace with Object.keys(this.state.exerciseConceptMap)
 			conceptMapGetter: null,
 			exerciseRecommendations: {},
 			instructionRecommendations: {},
@@ -1151,6 +1151,7 @@ class App extends Component {
 					exercisesCompleted={this.state.exercisesCompleted}
 					selectedIndex={this.state.selectedIndex}
 					userCondition={this.state.userCondition}
+					exerciseConceptMap={this.state.exerciseConceptMap}
 				/>
 			</div>
 		)

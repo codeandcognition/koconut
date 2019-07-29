@@ -22,8 +22,12 @@ type Props = {
   goToExercise: Function,
   exerciseRecommendations: any,
   instructionReccomendations: any,
-  userCondition: string
+  userCondition: string,
+  exerciseConceptMap: Object
 };
+
+const REC_STYLE = {'border-width': '6px', 'border-color': '#4054B2', 'border-style': 'solid'};
+// const REC_STYLE = {'border-left': '6px #4054B2 solid'};
 
 /**
  * WorldView is the world view for the app, where the user can see all the
@@ -37,11 +41,12 @@ class WorldView extends Component {
 			loading: true,
       didRender: false,
       conceptDescriptions: {},
-      instructionsRead: {}
+      instructionsRead: {},
+      recommendedConcepts: [], // concepts which have recommended content
 		};
     this.hierarchyContainer = React.createRef();
     this.closeConcept = this.closeConcept.bind(this);
-	}
+  }
 
   /**
    * getConceptsByType takes the orderedConcepts and then grabs only the ones with the 
@@ -53,6 +58,24 @@ class WorldView extends Component {
     return orderedConcepts.filter(concept => {
       return concept.type === type;
     })
+  }
+
+  /**
+   * update state.recommendedConcepts with list of concepts which have recommended exercises
+   */
+  findRecommendedConcepts(callback=null){
+    let recConcepts = [];
+    if(this.props.exerciseConceptMap){
+      for(let eid in this.props.exerciseRecommendations) {
+        if(Object.keys(this.props.exerciseConceptMap).includes(eid)) {
+          let concept = this.props.exerciseConceptMap[eid];
+          if(!recConcepts.includes(concept)){
+            recConcepts.push(concept);
+          }
+        } else throw `Recommended exercise of id ${eid} not found in exerciseConceptMap`
+      }
+    }
+    this.setState({recommendedConcepts: recConcepts}, callback);
   }
 
   componentWillMount() {
@@ -74,7 +97,8 @@ class WorldView extends Component {
 					this.checkWaiverStatus(user);
           this.props.firebase.database().ref(`/Users/${user.uid}/Data/InstructionsRead`).on('value', (snap) => {
             this.setState({instructionsRead: snap.val()}); // this may not be correct (should use filterCompletedInstructions() from queryCompleted.js), but also couldn't get this code to trigger...
-          })
+          });
+          this.findRecommendedConcepts();
 				});
 			}
 		}) : null;
@@ -140,8 +164,8 @@ class WorldView extends Component {
           'curve-style': 'bezier',
           'width': 4,
           'target-arrow-shape': 'triangle',
-          'line-color': '#9dbaea',
-          'target-arrow-color': '#9dbaea'
+          'line-color': 'lightslategray',
+          'target-arrow-color': 'lightslategray'
         }
       },
       {
@@ -165,6 +189,10 @@ class WorldView extends Component {
       style: cytoStyle,
       layout: cytoLayout
     });
+
+    // styling for recommended concepts
+    this.state.recommendedConcepts.forEach( concept => cy.getElementById(concept).style(REC_STYLE));
+
     cy.panningEnabled(false);
     cy.zoomingEnabled(false);
 
@@ -177,7 +205,6 @@ class WorldView extends Component {
 				this.expandConcept(name, conceptCode);
 			}
 		});
-
 
     cy.on('mouseover', 'node', function(evt) {
       let nodes = cy.nodes();
@@ -298,7 +325,8 @@ class WorldView extends Component {
     if (this.hierarchyContainer.current) {
       this.renderCytoscape();
     } else {
-      this.forceUpdate();
+      console.log("forcing update to worldview");
+      this.forceUpdate(); // TODO: this rerenders world view multiple times. Need to figure out why this is necessary.
     }
 		return (
 				<div>
@@ -313,8 +341,8 @@ class WorldView extends Component {
     return (
 			<div className={"world-container"}>
 				{this.state.loading ?
-						<LoadingView/> :
-						this.renderWorld()
+            <LoadingView/> :
+            this.renderWorld()
 				}
 			</div>
 		);
