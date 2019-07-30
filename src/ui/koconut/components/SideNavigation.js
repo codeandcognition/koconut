@@ -186,6 +186,9 @@ class SideNavigation extends Component {
 			width: '100%',
 			// borderLeft: "8px solid #4054B2" // for recommendation
 		}
+
+		let readPercent = conceptHasExercises ? readProgress : DEFAULT_PROGRESS;
+		let writePercent = conceptHasExercises ? writeProgress : DEFAULT_PROGRESS;
 		
 		return (
 			<div id={"sidenav"} className={"sidebar"}>
@@ -205,14 +208,14 @@ class SideNavigation extends Component {
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Reading"}
 						defaultExpanded={this.props.defaultOpen.includes("READ")}
-						progress={<Progress percent={conceptHasExercises ? readProgress : DEFAULT_PROGRESS} />}
+						progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={readPercent} /> : null}
 						body={readingSection}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Writing"}
 						defaultExpanded={this.props.defaultOpen.includes("WRITE")}
-						progress={<Progress percent={conceptHasExercises ? writeProgress : DEFAULT_PROGRESS} />}
+						progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
 						body={writingSection}>
 					</NavSection>
 					{this.props.userCondition !== CONDITIONS.C2 &&
