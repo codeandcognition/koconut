@@ -65,14 +65,14 @@ class WorldView extends Component {
    */
   findRecommendedConcepts(callback=null){
     let recConcepts = [];
-    if(this.props.exerciseConceptMap){
+    if(this.props.exerciseConceptMap && Object.keys(this.props.exerciseConceptMap).length>0) {
       for(let eid in this.props.exerciseRecommendations) {
         if(Object.keys(this.props.exerciseConceptMap).includes(eid)) {
           let concept = this.props.exerciseConceptMap[eid];
           if(!recConcepts.includes(concept)){
             recConcepts.push(concept);
           }
-        } else throw `Recommended exercise of id ${eid} not found in exerciseConceptMap`
+        }
       }
     }
     this.setState({recommendedConcepts: recConcepts}, callback);

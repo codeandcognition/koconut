@@ -298,6 +298,7 @@ class App extends Component {
 					}
 				});
 
+				// set state for userCondition
 				let userRefCondition = this.props.firebase.database().ref(`/Users/${user.uid}/condition`);
 				userRefCondition.on("value", (snap) => {
 					if (this._isMounted && snap.val()) {
@@ -306,6 +307,28 @@ class App extends Component {
 						});
 					}
 				});
+
+				// set state for exerciseRecommendations
+				let exerciseRecommendations = {};
+				let userAnswerSubs = this.props.firebase.database().ref(`/Users/${user.uid}/Data/AnswerSubmission`);
+				userAnswerSubs.on('value', (snap) => {
+					if (this._isMounted && snap.val()) {
+						let oldestTimestamp = -1; // larger is older
+						let data = snap.val();
+						for(let id in data) {
+							if(data[id]["timestamp"] > oldestTimestamp && Object.keys(data[id]).includes("resultingRecommendations")) {
+								oldestTimestamp = data[id]["timestamp"];
+								exerciseRecommendations = Object.assign({}, data[id]["resultingRecommendations"]);
+							}
+						}
+
+						this.setState({
+							exerciseRecommendations: exerciseRecommendations
+						});
+					}
+				});
+
+
 
 				let completedInstructionsRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/NewPageVisit`);
 				let instructionsRead = await filterCompletedInstructions(this.conceptMapGetter, completedInstructionsRef);
@@ -321,6 +344,7 @@ class App extends Component {
 							exerciseList: snap.val(),
 							firebaseUser: user
 						}, () => {
+							// get bkt params
 							let userBKTParams = {};
 							this.conceptMapGetter.on('value', (snap) => {
 								// for previous users who weren't given bktParams upon creation
@@ -346,7 +370,7 @@ class App extends Component {
 									conceptMapGetter: snap.val(),
 									instructionsRead: instructionsRead,
 									exercisesCompleted: exercisesCompleted,
-									userBKTParams: userBKTParams // TODO: Delete this line laterbktParams
+									userBKTParams: userBKTParams // TODO: Delete this line later? unclear why set twice in componentDidMount()
 								}, () => {
 									this.updateUserState();
 									this.initializeModelUpdater(); // need to wait until exerciseList & conceptMapGetter both set
@@ -423,7 +447,7 @@ class App extends Component {
 				timestamp: this.props.firebase.database.ServerValue.TIMESTAMP,
 				answer: userAnswer,
 				correctness: passed,
-				resultingRecommendations: Object.keys(this.state.exerciseRecommendations) // TODO: race condition: do not wait for state.exerciseRecommendations to finish update
+				resultingRecommendations: this.state.exerciseRecommendations // TODO: race condition: do not wait for state.exerciseRecommendations to finish update
 			};
 			let userID = this.props.firebase.auth().currentUser.uid;
 			this.props.firebase.database().ref(`/Users/${userID ? userID : 'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
