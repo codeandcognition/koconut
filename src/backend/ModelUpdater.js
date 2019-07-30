@@ -69,7 +69,7 @@ class ModelUpdater {
     }
 
     // @flow
-    update = async (isCorrect: boolean, exerciseID: string, conceptKey: string, readOrWrite: string, callback: Function) => {
+    update = async (isCorrect: boolean, exerciseID: string, conceptKey: string, readOrWrite: string, questionIndex: Number, userAnswer: string, passed: boolean, callback: Function) => {
         // let exerciseIDs = Object.keys(this.exerciseParameters);
         let exerciseIDs = [];
         let conceptParams = this.conceptParameters[conceptKey];
@@ -147,7 +147,7 @@ class ModelUpdater {
                     };
                 } else throw "exerciseInfo not returned in response";
             });
-            callback(recommendedExercises); //updates state in App.js
+            callback(recommendedExercises, questionIndex, userAnswer, passed); //updates state in App.js
 
             this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.PKNOWN] = pkNew; // update priorPKnown locally
 

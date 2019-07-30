@@ -179,7 +179,7 @@ class App extends Component {
 			author: false,
 			exerciseList: null, // TODO: could remove and replace with Object.keys(this.state.exerciseConceptMap)
 			conceptMapGetter: null,
-			exerciseRecommendations: {},
+			exerciseRecommendations: sessionStorage.getItem('exerciseRecommendations') || {},
 			instructionRecommendations: {},
 			codeTheme: '',
 			timesGotQuestionWrong: [], // times the user has gotten question wrong,
@@ -411,9 +411,22 @@ class App extends Component {
 		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter, this.state.maxNumRecommendations, conceptMap);
 	}
 
-	updateRecommendations = (recommendedExercises) => {
+	// update state w/ exercise recommendations and also push answer submission data to firebase
+	updateRecommendations = (recommendedExercises, questionIndex, userAnswer, passed) => {
 		this.setState({
 			exerciseRecommendations: recommendedExercises
+		}, () => {
+			// not ideal to be doing this here, but need recommendedExercises to be pushed as well
+			let dataToPush = {
+				exerciseId: this.state.exerciseId,
+				questionIndex: questionIndex,
+				timestamp: this.props.firebase.database.ServerValue.TIMESTAMP,
+				answer: userAnswer,
+				correctness: passed,
+				resultingRecommendations: Object.keys(this.state.exerciseRecommendations) // TODO: race condition: do not wait for state.exerciseRecommendations to finish update
+			};
+			let userID = this.props.firebase.auth().currentUser.uid;
+			this.props.firebase.database().ref(`/Users/${userID ? userID : 'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
 		});
 	}
 
@@ -736,7 +749,7 @@ class App extends Component {
 	 * @param {*} questionIndex 
 	 * @param {*} fIndex 
 	 */
-	setFeedback(type: string, feedback: any, questionIndex: number, fIndex: number) {
+	setFeedback(type: string, feedback: any, questionIndex: number, fIndex: number, userAnswer: string) {
 		if (type == ExerciseTypes.table) {
 			let question = this.state.exercise.questions[questionIndex];
 			let numberOfColumns = question.colNames.length;
@@ -788,7 +801,8 @@ class App extends Component {
 			let userID = this.props.firebase.auth().currentUser.uid;
 			if (this.modelUpdater) {
 				// given response, get new pknown
-				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations);
+				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, 
+					this.state.exerciseType, questionIndex, userAnswer, passed, this.updateRecommendations);
 
 				// update pknown on firebase
 				let databaseRef = this.props.firebase.database().ref(`Users/${userID}/bktParams/${this.state.currentConcept}/${this.state.exerciseType}/pKnown`);
@@ -822,7 +836,8 @@ class App extends Component {
 				body: JSON.stringify(requestBody)
 			})
 			const feedback = await response.json();
-			let passed = this.setFeedback(endpointExtension, feedback, questionIndex, fIndex);
+			let userAnswer = requestBody["userAnswer"] ? requestBody["userAnswer"] : null;
+			let passed = this.setFeedback(endpointExtension, feedback, questionIndex, fIndex, userAnswer);
 
 			// updates checkmarks in NavItem on correctness
 			if (passed) {
@@ -832,15 +847,16 @@ class App extends Component {
 			}
 
 			// log response to firebase
-			let dataToPush = {
-				exerciseId: this.state.exerciseId,
-				questionIndex: questionIndex,
-				timestamp: this.props.firebase.database.ServerValue.TIMESTAMP,
-				answer: (requestBody["userAnswer"] ? requestBody["userAnswer"] : null),
-				correctness: passed
-			};
-			let userID = this.props.firebase.auth().currentUser.uid;
-			this.props.firebase.database().ref(`/Users/${userID ? userID : 'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
+			// let dataToPush = {
+			// 	exerciseId: this.state.exerciseId,
+			// 	questionIndex: questionIndex,
+			// 	timestamp: this.props.firebase.database.ServerValue.TIMESTAMP,
+			// 	answer: (requestBody["userAnswer"] ? requestBody["userAnswer"] : null),
+			// 	correctness: passed,
+			// 	resultingRecommendations: this.state.exerciseRecommendations // TODO: race condition: do not wait for state.exerciseRecommendations to finish update
+			// };
+			// let userID = this.props.firebase.auth().currentUser.uid;
+			// this.props.firebase.database().ref(`/Users/${userID ? userID : 'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
 
 			return feedback;
 		}
