@@ -3,7 +3,7 @@
  */
 
 // const BKT_ENDPOINT = `http://127.0.0.1:5000/bkt`; // TODO for prod: change URL
-const BKT_ENDPOINT = `https://codeitz.herokuapp.com/bkt`; // TODO for prod: change URL
+const BKT_ENDPOINT = `https://codeitz.herokuapp.com/bkt`;
 
 const BKT_PARAMS = {
     PKNOWN: "pKnown",
@@ -69,33 +69,39 @@ class ModelUpdater {
     }
 
     // @flow
-    update = async (isCorrect: boolean, exerciseID: string, conceptKey: string, readOrWrite: string, questionIndex: Number, userAnswer: string, passed: boolean, callback: Function) => {
-        // let exerciseIDs = Object.keys(this.exerciseParameters);
+    /**
+     * isCorrect: true if exercise attempt was _entirely_ correct
+     * exerciseID: string of exercise identifier
+     * conceptKey: string of concept identifier
+     * readOrWrite: READ if exercise for reading and WRITE if writing exercise
+     * questionIndex: n-th question in exercise
+     * userAnswer: answer response
+     * exercisesCompleted: object with all exercises user has gotten correct
+     * callback: function to call after making request
+     * recommendComplete: true if recommendations should include previously completed exercises (default is false)
+     */
+    update = async (isCorrect: boolean, exerciseID: string, conceptKey: string, readOrWrite: string, questionIndex: Number, 
+        userAnswer: string, exercisesCompleted: any, callback: Function, recommendComplete = false) => {
         let exerciseIDs = [];
         let conceptParams = this.conceptParameters[conceptKey];
         let itemParams = [];
 
         // populate itemParams
         Object.keys(this.conceptExerciseMap).forEach((concept) => {
-            let read = this.conceptExerciseMap[concept][READ];
-            let write = this.conceptExerciseMap[concept][WRITE];
-            read.forEach((eid) => {
-                let params = this.exerciseParameters[eid];
-                if (params) {
-                    params[BKT_ITEM_PARAMS.EID] = eid;
-                    params[BKT_ITEM_PARAMS.CONCEPT] = concept;
-                    itemParams.push(params);
-                    exerciseIDs.push(eid)
-                }
-            });
-            write.forEach((eid) => {
-                let params = this.exerciseParameters[eid];
-                if (params) {
-                    params[BKT_ITEM_PARAMS.EID] = eid;
-                    params[BKT_ITEM_PARAMS.CONCEPT] = concept;
-                    itemParams.push(params);
-                    exerciseIDs.push(eid);
-                }
+            [READ, WRITE].forEach(readOrWrite => {
+                let exerciseIds = this.conceptExerciseMap[concept][readOrWrite];
+                exerciseIds.forEach((eid) => {
+                    let params = this.exerciseParameters[eid];
+                    let exerciseComplete = (exercisesCompleted && Object.keys(exercisesCompleted).includes(concept) && exercisesCompleted[concept].includes(eid));
+                    if (params) {
+                        params[BKT_ITEM_PARAMS.EID] = eid;
+                        params[BKT_ITEM_PARAMS.CONCEPT] = concept;
+                        itemParams.push(params);
+                        if(recommendComplete || (!recommendComplete && !exerciseComplete)) { // don't recommend completed exercises is recommendComplete flag set to false
+                            exerciseIDs.push(eid);
+                        }
+                    }
+                });
             });
         });
 
@@ -147,7 +153,7 @@ class ModelUpdater {
                     };
                 } else throw "exerciseInfo not returned in response";
             });
-            callback(recommendedExercises, questionIndex, userAnswer, passed); //updates state in App.js
+            callback(recommendedExercises, questionIndex, userAnswer, isCorrect); //updates state in App.js
 
             this.priorPKnown[conceptKey][readOrWrite][BKT_PARAMS.PKNOWN] = pkNew; // update priorPKnown locally
 

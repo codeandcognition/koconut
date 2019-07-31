@@ -295,6 +295,7 @@ class InstructionView extends Component {
 								selectedIndex={this.props.selectedIndex}
 								userCondition={this.props.userCondition}
 								switchToWorldView={this.props.switchToWorldView}
+								exerciseConceptMap={this.props.exerciseConceptMap}
 								/> 
 							<div className={"overallView"}>
 								{/* <BreadCrumbs

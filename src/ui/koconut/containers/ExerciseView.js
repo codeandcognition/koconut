@@ -227,6 +227,7 @@ class Exercise extends Component {
               selectedIndex={this.props.selectedIndex}
               userCondition={this.props.userCondition}
               switchToWorldView={this.props.switchToWorldView}
+              exerciseConceptMap={this.props.exerciseConceptMap}
               />
           </div>
           <div className="exercise-view">
