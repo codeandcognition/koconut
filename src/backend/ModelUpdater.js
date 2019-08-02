@@ -89,8 +89,8 @@ class ModelUpdater {
         // populate itemParams
         Object.keys(this.conceptExerciseMap).forEach((concept) => {
             [READ, WRITE].forEach(readOrWrite => {
-                let exerciseIds = this.conceptExerciseMap[concept][readOrWrite];
-                exerciseIds.forEach((eid) => {
+                let allExerciseIds = this.conceptExerciseMap[concept][readOrWrite];
+                allExerciseIds.forEach((eid) => {
                     let params = this.exerciseParameters[eid];
                     let exerciseComplete = (exercisesCompleted && Object.keys(exercisesCompleted).includes(concept) && exercisesCompleted[concept].includes(eid));
                     if (params) {

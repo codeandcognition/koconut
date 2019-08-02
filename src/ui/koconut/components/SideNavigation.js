@@ -13,6 +13,7 @@ import { formatCamelCasedString } from './../../../utils/formatCamelCasedString'
 import CONDITIONS from './../../../utils/Conditions';
 import Button from '@material-ui/core/Button';
 import Routes from './../../../Routes';
+import _ from 'lodash';
 
 
 const Categories = {
@@ -53,7 +54,8 @@ class SideNavigation extends Component {
 			recExerciseId: null,
 			recIndex: null,
 			recNumEx: null,
-			defaultOpen: props.defaultOpen
+			defaultOpen: props.defaultOpen,
+			selectedIndex: props.selectedIndex
 		}
 		this.generator = new ExerciseGenerator(this.props.getOrderedConcepts);
 		this.getInstructionTitles = this.getInstructionTitles.bind(this);
@@ -69,7 +71,8 @@ class SideNavigation extends Component {
 			title: props.title,
 			conceptCode: props.conceptCode,
 			conceptMapGetter: props.conceptMapGetter,
-			instructionsMap: props.instructionsMap
+			instructionsMap: props.instructionsMap,
+			selectedIndex: props.selectedIndex
 		}, this.getInstructionTitles());
 	}
 
@@ -173,17 +176,24 @@ class SideNavigation extends Component {
 	}
 
 	// go to recommended exercise & update state in sidebar (for C2)
-	goToRecommendedExercise(){
+	goToRecommendedItem(firstUnreadInstruction){
+		let hasUnreadInstruction = !_.isEmpty(firstUnreadInstruction);
 		if(this.state.recExerciseType !== null && this.state.recEx !== null && 
 			this.state.recExerciseId !== null && this.state.recIndex !== null && this.state.recNumEx !== null) {
+			let selectedIndex = hasUnreadInstruction ? `${this.state.recExerciseType}${this.state.recIndex}` : `${this.state.recExerciseType}e${this.state.recIndex}`;
 			this.setState({
-				conceptCode: this.props.exerciseConceptMap[this.state.recExerciseId]
+				conceptCode: this.props.exerciseConceptMap[this.state.recExerciseId],
+				selectedIndex: selectedIndex
 			}, () => {
 				console.log("updated state in side nav");
-			})
-			return this.props.goToExercise(this.props.exerciseConceptMap[this.state.recExerciseId], this.state.recExerciseType, 
-				this.state.recEx, this.state.recExerciseId, this.state.recIndex, this.state.recNumEx);
-		} else console.log("from side nav, can't go to recommended exercise");
+			});
+			if(hasUnreadInstruction){ // go to first unread instruction (if any instruction unread)
+				return this.props.getInstruction(this.state.conceptCode, firstUnreadInstruction.readOrWrite, firstUnreadInstruction.index);
+			} else { // if all instruction read, go to exercise
+				return this.props.goToExercise(this.props.exerciseConceptMap[this.state.recExerciseId], this.state.recExerciseType, 
+					this.state.recEx, this.state.recExerciseId, this.state.recIndex, this.state.recNumEx);
+			}
+		} else console.log("from side nav, can't go to recommended item");
 	}
 
 	constructButtonList(instructions, readOrWrite) {
@@ -191,8 +201,7 @@ class SideNavigation extends Component {
 
 		// add instructions
 		instructions.map((item, index) => {
-			let read = this.props.instructionsRead && this.props.instructionsRead[this.state.conceptCode] && this.props.instructionsRead[this.state.conceptCode][readOrWrite] 
-				? this.props.instructionsRead[this.state.conceptCode][readOrWrite].includes(index) : false;
+			let read = this.isInstructionRead(this.state.conceptCode, readOrWrite, index);
 
 			let text = "";
 			if (this.props.instructionRecommendations[this.state.conceptCode] &&
@@ -212,7 +221,7 @@ class SideNavigation extends Component {
 					onClick={() => this.props.getInstruction(this.state.conceptCode, readOrWrite, index)}
 					to={this.getInstructionRoute(this.state.conceptCode, readOrWrite, index)}
 				>
-					<NavItem name={item} read={read} selectedIndex={this.props.selectedIndex} index={`${readOrWrite}${index}`} isExercise={false}></NavItem>
+					<NavItem name={item} read={read} selectedIndex={this.state.selectedIndex} index={`${readOrWrite}${index}`} isExercise={false}></NavItem>
 				</Link>
 			)
 		});
@@ -244,7 +253,7 @@ class SideNavigation extends Component {
 						onClick={() => this.props.goToExercise(this.state.conceptCode, readOrWrite,
 							ex, exerciseIds[index], index, exerciseIds.length)}>
 								<NavItem read={read} suggestionText={text} recIcon = {recIcon} name={ex.shortPrompt} isExercise={true}
-									selectedIndex={this.props.selectedIndex} 
+									selectedIndex={this.state.selectedIndex} 
 									index={`${readOrWrite}e${index}`}>
 									</NavItem>
 									</Link>
@@ -252,6 +261,38 @@ class SideNavigation extends Component {
 			}
 		});
 		return <List style={{ width: '100%' }}>{buttonsList}</List>;
+	}
+
+	/**
+	 * given a concept code, return object with data on first instruction not read {'readOrWrite': readOrWrite, 'index': index}
+	 * If all instruction has been read, return false
+	 * @param {string} conceptCode 
+	 */
+	findFirstUnreadInstruction(conceptCode){
+		let output = null;
+		let instruction = _.has(this.state.instructionsMap, conceptCode) ? this.state.instructionsMap[conceptCode] : {};
+
+		for(let readOrWrite in Categories) {
+			instruction[readOrWrite].map((item, index) => {
+				let read = this.isInstructionRead(conceptCode, readOrWrite, index);
+				if(!output && !read) { // first instruction not read
+					output = {'readOrWrite': readOrWrite, 'index': index};
+				}
+			});
+		};
+		return output;
+	}
+
+	/**
+	 * returns true if instruction is read. returns false is instruction is not read
+	 * Will also return false if props.instructionsRead is missing
+	 * @param {string} conceptCode 
+	 * @param {string} readOrWrite either "READ" or "WRITE" (case sensitive)
+	 * @param {int} index >= 0
+	 */
+	isInstructionRead(conceptCode, readOrWrite, index){
+		return this.props.instructionsRead && this.props.instructionsRead[conceptCode] && this.props.instructionsRead[conceptCode][readOrWrite] 
+		? this.props.instructionsRead[conceptCode][readOrWrite].includes(index) : false;
 	}
 
 	render() {
@@ -273,6 +314,16 @@ class SideNavigation extends Component {
 
 		let readPercent = conceptHasExercises ? readProgress : DEFAULT_PROGRESS;
 		let writePercent = conceptHasExercises ? writeProgress : DEFAULT_PROGRESS;
+
+		let recConcept = this.props.exerciseConceptMap[this.state.recExerciseId]
+		let firstUnreadInstruction = this.state.recExerciseId ? this.findFirstUnreadInstruction(recConcept) : false;
+		let recRoute = '';
+		if (!_.isEmpty(firstUnreadInstruction)){ // if there's an unread instruction, get route to it
+			recRoute = this.getInstructionRoute(recConcept, firstUnreadInstruction.readOrWrite, firstUnreadInstruction.index);
+			console.log(`route to instruction: ${recRoute}`);
+		} else {
+			recRoute = (this.state.recExerciseId && this.state.recExerciseType) ? this.getExerciseRoute(this.props.exerciseConceptMap[this.state.recExerciseId], this.state.recExerciseType) : '';
+		}
 		
 		return (
 			<div id={"sidenav"} className={"sidebar"}>
@@ -291,14 +342,14 @@ class SideNavigation extends Component {
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Reading"}
-						defaultExpanded={this.state.defaultOpen.includes("READ")}
+						defaultExpanded={this.state.defaultOpen.includes(Categories.READ)}
 						progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={readPercent} /> : null}
 						body={readingSection}>
 					</NavSection>
 					<NavSection
 						getInstructionTitles={this.getInstructionTitles}
 						title={"Writing"}
-						defaultExpanded={this.state.defaultOpen.includes("WRITE")}
+						defaultExpanded={this.state.defaultOpen.includes(Categories.WRITE)}
 						progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
 						body={writingSection}>
 					</NavSection>
@@ -310,8 +361,8 @@ class SideNavigation extends Component {
 							</div>
 						:
 							<div>
-								<Link to={(this.state.recExerciseId && this.state.recExerciseType) ? this.getExerciseRoute(this.props.exerciseConceptMap[this.state.recExerciseId], this.state.recExerciseType) : ''}
-									onClick={() => this.goToRecommendedExercise()}>
+								<Link to={recRoute}
+									onClick={() => this.goToRecommendedItem(firstUnreadInstruction)}>
 										<Button style={style} variant="contained">next <i className="fa fa-chevron-right" aria-hidden="true"></i></Button>
 								</Link>
 							</div>

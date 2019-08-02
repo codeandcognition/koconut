@@ -443,7 +443,8 @@ class App extends Component {
 	// return an object w/ only the top recommended exercise (key is ID, value is info about recommendation). For C2
 	getTopRecommendation = (recommendedExercises) => {
 		let outputC2 = {}
-		return outputC2[Object.keys(recommendedExercises)[0]] = recommendedExercises[Object.keys(recommendedExercises)[0]];
+		outputC2[Object.keys(recommendedExercises)[0]] = recommendedExercises[Object.keys(recommendedExercises)[0]];
+		return outputC2;
 	}
 
 	// update state w/ exercise recommendations and also push answer submission data to firebase
