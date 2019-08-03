@@ -44,6 +44,7 @@
             ".write": "auth != null && auth.uid == $uid"
           },
           "NewPageVisit": {
+            ".indexOn": ["concept"],
             ".write": "auth != null && auth.uid == $uid"
           },
           "SessionEvents": {
