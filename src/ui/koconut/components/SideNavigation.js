@@ -14,6 +14,10 @@ import CONDITIONS from './../../../utils/Conditions';
 import Button from '@material-ui/core/Button';
 import Routes from './../../../Routes';
 import _ from 'lodash';
+import { Select } from '@material-ui/core';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+
 
 
 const Categories = {
@@ -79,13 +83,12 @@ class SideNavigation extends Component {
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		if(!this.state.recExerciseId || !this.props.exerciseRecommendations || (this.state.recExerciseId && this.props.exerciseRecommendations &&
 			Object.keys(this.props.exerciseRecommendations)[0] !== this.state.recExerciseId)) {
-				console.log(`side nav: updating rec exercise`);
 				this.setRecommendedExerciseState(Object.keys(this.props.exerciseRecommendations)[0]);
 			}
 	}
 
 	getInstructionTitles() {
-		if (this.props.instructionsMap) {
+		if (this.state.instructionsMap) {
 			let instructions = this.state.instructionsMap[this.state.conceptCode];
 			let readResults = instructions["READ"];
 			let writeResults = instructions["WRITE"];
@@ -178,14 +181,14 @@ class SideNavigation extends Component {
 	// go to recommended exercise & update state in sidebar (for C2)
 	goToRecommendedItem(firstUnreadInstruction){
 		let hasUnreadInstruction = !_.isEmpty(firstUnreadInstruction);
+
+		// check state is storing info for recommended exercise
 		if(this.state.recExerciseType !== null && this.state.recEx !== null && 
 			this.state.recExerciseId !== null && this.state.recIndex !== null && this.state.recNumEx !== null) {
 			let selectedIndex = hasUnreadInstruction ? `${this.state.recExerciseType}${this.state.recIndex}` : `${this.state.recExerciseType}e${this.state.recIndex}`;
 			this.setState({
 				conceptCode: this.props.exerciseConceptMap[this.state.recExerciseId],
 				selectedIndex: selectedIndex
-			}, () => {
-				console.log("updated state in side nav");
 			});
 			if(hasUnreadInstruction){ // go to first unread instruction (if any instruction unread)
 				return this.props.getInstruction(this.state.conceptCode, firstUnreadInstruction.readOrWrite, firstUnreadInstruction.index);
@@ -221,7 +224,7 @@ class SideNavigation extends Component {
 					onClick={() => this.props.getInstruction(this.state.conceptCode, readOrWrite, index)}
 					to={this.getInstructionRoute(this.state.conceptCode, readOrWrite, index)}
 				>
-					<NavItem name={item} read={read} selectedIndex={this.state.selectedIndex} index={`${readOrWrite}${index}`} isExercise={false}></NavItem>
+					<NavItem name={item} read={read} selectedIndex={this.props.conceptCode == this.state.conceptCode && this.state.selectedIndex} index={`${readOrWrite}${index}`} isExercise={false}></NavItem>
 				</Link>
 			)
 		});
@@ -320,7 +323,6 @@ class SideNavigation extends Component {
 		let recRoute = '';
 		if (!_.isEmpty(firstUnreadInstruction)){ // if there's an unread instruction, get route to it
 			recRoute = this.getInstructionRoute(recConcept, firstUnreadInstruction.readOrWrite, firstUnreadInstruction.index);
-			console.log(`route to instruction: ${recRoute}`);
 		} else {
 			recRoute = (this.state.recExerciseId && this.state.recExerciseType) ? this.getExerciseRoute(this.props.exerciseConceptMap[this.state.recExerciseId], this.state.recExerciseType) : '';
 		}
@@ -329,12 +331,36 @@ class SideNavigation extends Component {
 			<div id={"sidenav"} className={"sidebar"}>
 				<CardContent>
 					<div className={"sidebar-header"}>
-						<h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : conceptName}</h2>
+						<FormControl>
+							<h2>
+								<Select
+									value={this.state.conceptCode}
+									onChange= {(event) => {
+											this.setState({
+												conceptCode: event.target.value,
+												title: formatCamelCasedString(event.target.value)
+											}, () => {
+												this.getInstructionTitles()
+											})
+										}
+									}
+									inputProps={{
+										name: 'age',
+										id: 'age-simple',
+									}}
+								>
+									{Object.keys(this.props.conceptMapGetter).map( (conceptId) => 
+										<MenuItem key={conceptId} value={conceptId}>{this.props.conceptCode==conceptId ? <b>{formatCamelCasedString(conceptId)}</b> : formatCamelCasedString(conceptId)}</MenuItem>
+									)};
+								</Select>
+							</h2>							
+						</FormControl>
+						{/* <h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : conceptName}</h2> */}
 						{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
 					</div>
 					<NavSection
 						getInstructionTitles={null}
-						title={"Overview"}
+						title={"About"}
 						progress={null}
 						defaultExpanded={this.state.defaultOpen.includes("OVERVIEW") && this.determineIfAnythingDone()}
 						body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
