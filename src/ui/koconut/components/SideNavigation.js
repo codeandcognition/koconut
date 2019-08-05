@@ -29,6 +29,7 @@ const Categories = {
 const progressField = "pKnown";
 const DEFAULT_REC = "based on what you've done, you should try this";
 const DEFAULT_PROGRESS = 1.0;
+const HOW_CODE_RUNS = 'howCodeRuns';
 
 type Props = {
 	title: string,
@@ -170,6 +171,27 @@ class SideNavigation extends Component {
 	determineIfAnythingDone(){
 		return !((this.props.instructionsRead && this.props.instructionsRead[this.state.conceptCode]) ||  // check for read instructions
 			(this.props.exercisesCompleted && this.props.exercisesCompleted[this.state.conceptCode] && this.props.exercisesCompleted[this.state.conceptCode].length > 0)); // check for correct exercises
+	}
+
+	/**
+	 * get list of concepts which are available 
+	 * For C2 condition, only available if {instruction viewed, exercise done, recommended}
+	 * For other conditions, all concepts available
+	 * "howCodeRuns" always available
+	 */
+	getConceptsAvailable() {
+		let possibleConcepts = Object.keys(this.props.instructionsMap);
+
+		if(this.props.userCondition === CONDITIONS.C2) {
+			possibleConcepts = possibleConcepts.filter(concept => {
+				if(concept === HOW_CODE_RUNS) return true;
+	
+				return (_.has(this.props.instructionsRead, concept) || // instruction viewed
+				(Array.isArray(this.props.exercisesCompleted[concept]) && this.props.exercisesCompleted[concept].length>0) || // exercise done
+				this.props.exerciseConceptMap[this.state.recExerciseId] === concept); // recommended
+			});
+		}
+		return possibleConcepts;
 	}
 
 	getInstructionRoute(conceptCode, readOrWrite, index){
@@ -352,10 +374,11 @@ class SideNavigation extends Component {
 											id: 'age-simple',
 										}}
 									>
-										{Object.keys(this.props.conceptMapGetter).map( (conceptId) => 
-											<MenuItem key={conceptId} value={conceptId}>{this.props.conceptCode==conceptId ? <b>{formatCamelCasedString(conceptId)}</b> : formatCamelCasedString(conceptId)}</MenuItem>
+										{this.getConceptsAvailable().map( conceptId => 
+											<MenuItem key={conceptId} value={conceptId}>
+												{this.props.conceptCode==conceptId ? <b>{formatCamelCasedString(conceptId)}</b> : formatCamelCasedString(conceptId)}
+											</MenuItem>
 										)};
-										<MenuItem key='howCodeRuns' value='howCodeRuns'>How Code Runs</MenuItem> {/*Had to add in b/c not in concept map */}
 									</Select>
 								</h2>							
 							</FormControl>
