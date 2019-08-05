@@ -11,7 +11,7 @@ import Menu from '@material-ui/core/Menu/Menu';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import BackButton from '@material-ui/icons/ChevronLeft';
 import Routes from './../../../Routes';
-import CONDITIONS from '../../../utils/Conditions';
+import {CONDITIONS} from '../../../utils/Conditions';
 
 /**
  * Navbar adds a navigation bar to the app

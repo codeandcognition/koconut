@@ -10,13 +10,14 @@ import './SideNavigation.css';
 import Progress from './Progress';
 import ConceptInventory from './../../../data/ConceptMap';
 import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
-import CONDITIONS from './../../../utils/Conditions';
+import {CONDITIONS} from './../../../utils/Conditions';
 import Button from '@material-ui/core/Button';
 import Routes from './../../../Routes';
 import _ from 'lodash';
 import { Select } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import LoadingView from './../components/LoadingView';
 
 
 
@@ -90,17 +91,18 @@ class SideNavigation extends Component {
 	getInstructionTitles() {
 		if (this.state.instructionsMap) {
 			let instructions = this.state.instructionsMap[this.state.conceptCode];
-			let readResults = instructions["READ"];
-			let writeResults = instructions["WRITE"];
+			
 			let readTitles = [];
 			let writeTitles = [];
-			if (readResults) {
+			if (_.has(instructions, "READ")) {
+				let readResults = instructions["READ"];
 				readResults.forEach((item) => {
 					readTitles.push(item.title);
 				});
 			}
 
-			if (writeResults) {
+			if (_.has(instructions, "WRITE")) {
+				let writeResults = instructions["WRITE"];
 				writeResults.forEach((item) => {
 					writeTitles.push(item.title);
 				});
@@ -189,13 +191,14 @@ class SideNavigation extends Component {
 			this.setState({
 				conceptCode: this.props.exerciseConceptMap[this.state.recExerciseId],
 				selectedIndex: selectedIndex
+			}, () => {
+				if(hasUnreadInstruction){ // go to first unread instruction (if any instruction unread)
+					return this.props.getInstruction(this.props.exerciseConceptMap[this.state.recExerciseId], firstUnreadInstruction.readOrWrite, firstUnreadInstruction.index);
+				} else { // if all instruction read, go to exercise
+					return this.props.goToExercise(this.props.exerciseConceptMap[this.state.recExerciseId], this.state.recExerciseType, 
+						this.state.recEx, this.state.recExerciseId, this.state.recIndex, this.state.recNumEx);
+				}
 			});
-			if(hasUnreadInstruction){ // go to first unread instruction (if any instruction unread)
-				return this.props.getInstruction(this.state.conceptCode, firstUnreadInstruction.readOrWrite, firstUnreadInstruction.index);
-			} else { // if all instruction read, go to exercise
-				return this.props.goToExercise(this.props.exerciseConceptMap[this.state.recExerciseId], this.state.recExerciseType, 
-					this.state.recEx, this.state.recExerciseId, this.state.recIndex, this.state.recNumEx);
-			}
 		} else console.log("from side nav, can't go to recommended item");
 	}
 
@@ -306,8 +309,6 @@ class SideNavigation extends Component {
 		let conceptHasExercises = Object.keys(this.props.userBKTParams).includes(this.state.conceptCode);
 		let readProgress = conceptHasExercises ? this.props.userBKTParams[this.state.conceptCode][Categories.READ][progressField] : null; 
 		let writeProgress = conceptHasExercises ? this.props.userBKTParams[this.state.conceptCode][Categories.WRITE][progressField]: null;
-		
-		let conceptName = formatCamelCasedString(this.state.title);
 
 		let style = {
 			marginTop: '10px',
@@ -326,74 +327,78 @@ class SideNavigation extends Component {
 		} else {
 			recRoute = (this.state.recExerciseId && this.state.recExerciseType) ? this.getExerciseRoute(this.props.exerciseConceptMap[this.state.recExerciseId], this.state.recExerciseType) : '';
 		}
-		
+
 		return (
 			<div id={"sidenav"} className={"sidebar"}>
-				<CardContent>
-					<div className={"sidebar-header"}>
-						<FormControl>
-							<h2>
-								<Select
-									value={this.state.conceptCode}
-									onChange= {(event) => {
-											this.setState({
-												conceptCode: event.target.value,
-												title: formatCamelCasedString(event.target.value)
-											}, () => {
-												this.getInstructionTitles()
-											})
+				{((Array.isArray(this.state.readInstructions) && this.state.readInstructions.length>0) || 
+				(Array.isArray(this.state.writeInstructions) && this.state.writeInstructions.length>0)) &&
+					<CardContent>
+						<div className={"sidebar-header"}>
+							<FormControl>
+								<h2>
+									<Select
+										value={this.state.conceptCode}
+										onChange= {(event) => {
+												this.setState({
+													conceptCode: event.target.value,
+													title: formatCamelCasedString(event.target.value)	
+												}, () => {
+													this.getInstructionTitles()
+												})
+											}
 										}
-									}
-									inputProps={{
-										name: 'age',
-										id: 'age-simple',
-									}}
-								>
-									{Object.keys(this.props.conceptMapGetter).map( (conceptId) => 
-										<MenuItem key={conceptId} value={conceptId}>{this.props.conceptCode==conceptId ? <b>{formatCamelCasedString(conceptId)}</b> : formatCamelCasedString(conceptId)}</MenuItem>
-									)};
-								</Select>
-							</h2>							
-						</FormControl>
-						{/* <h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : conceptName}</h2> */}
-						{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
-					</div>
-					<NavSection
-						getInstructionTitles={null}
-						title={"About"}
-						progress={null}
-						defaultExpanded={this.state.defaultOpen.includes("OVERVIEW") && this.determineIfAnythingDone()}
-						body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
-					</NavSection>
-					<NavSection
-						getInstructionTitles={this.getInstructionTitles}
-						title={"Reading"}
-						defaultExpanded={this.state.defaultOpen.includes(Categories.READ)}
-						progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={readPercent} /> : null}
-						body={readingSection}>
-					</NavSection>
-					<NavSection
-						getInstructionTitles={this.getInstructionTitles}
-						title={"Writing"}
-						defaultExpanded={this.state.defaultOpen.includes(Categories.WRITE)}
-						progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
-						body={writingSection}>
-					</NavSection>
-					{this.props.userCondition !== CONDITIONS.C2 ?
-							<div>
-								<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
-									<Button style={style} variant="contained"><i className="fa fa-chevron-left" aria-hidden="true"></i> back to world view</Button>
-								</Link>
-							</div>
-						:
-							<div>
-								<Link to={recRoute}
-									onClick={() => this.goToRecommendedItem(firstUnreadInstruction)}>
-										<Button style={style} variant="contained">next <i className="fa fa-chevron-right" aria-hidden="true"></i></Button>
-								</Link>
-							</div>
-					}
-				</CardContent>
+										inputProps={{
+											name: 'age',
+											id: 'age-simple',
+										}}
+									>
+										{Object.keys(this.props.conceptMapGetter).map( (conceptId) => 
+											<MenuItem key={conceptId} value={conceptId}>{this.props.conceptCode==conceptId ? <b>{formatCamelCasedString(conceptId)}</b> : formatCamelCasedString(conceptId)}</MenuItem>
+										)};
+										<MenuItem key='howCodeRuns' value='howCodeRuns'>How Code Runs</MenuItem> {/*Had to add in b/c not in concept map */}
+									</Select>
+								</h2>							
+							</FormControl>
+							{/* <h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : conceptName}</h2> */}
+							{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
+						</div>
+						<NavSection
+							getInstructionTitles={null}
+							title={"About"}
+							progress={null}
+							defaultExpanded={this.state.defaultOpen.includes("OVERVIEW") && this.determineIfAnythingDone()}
+							body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
+						</NavSection>
+						<NavSection
+							getInstructionTitles={this.getInstructionTitles}
+							title={"Reading"}
+							defaultExpanded={this.state.defaultOpen.includes(Categories.READ)}
+							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={readPercent} /> : null}
+							body={readingSection}>
+						</NavSection>
+						<NavSection
+							getInstructionTitles={this.getInstructionTitles}
+							title={"Writing"}
+							defaultExpanded={this.state.defaultOpen.includes(Categories.WRITE)}
+							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
+							body={writingSection}>
+						</NavSection>
+						{this.props.userCondition !== CONDITIONS.C2 ?
+								<div>
+									<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
+										<Button style={style} variant="contained"><i className="fa fa-chevron-left" aria-hidden="true"></i> back to world view</Button>
+									</Link>
+								</div>
+							:
+								<div>
+									<Link to={recRoute}
+										onClick={() => this.goToRecommendedItem(firstUnreadInstruction)}>
+											<Button style={style} variant="contained">next <i className="fa fa-chevron-right" aria-hidden="true"></i></Button>
+									</Link>
+								</div>
+						}
+					</CardContent>
+				}					
 			</div>
 		);
 	}

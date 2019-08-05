@@ -3,6 +3,7 @@
  */
 
 // const BKT_ENDPOINT = `http://127.0.0.1:5000/bkt`; // TODO for prod: change URL
+import {REC_INFO} from './../utils/Conditions';
 const BKT_ENDPOINT = `https://codeitz.herokuapp.com/bkt`;
 
 const BKT_PARAMS = {
@@ -28,23 +29,6 @@ const REC_TYPES = {
     REWIND: "review",
     CONTINUE: "continue",
     JUMP: "jump"
-};
-
-const REC_PREFIX = "Based on how you've been doing on exercises";
-
-const REC_INFO = {
-    "review": {
-        "text": `${REC_PREFIX}, this will help you review concepts you know`,
-        "icon": "fa-undo"
-    },
-    "continue": {
-        "text": `${REC_PREFIX}, this will help you continue what you've been learning`,
-        "icon": "fa-play-circle"
-    },
-    "jump": {
-        "text": `${REC_PREFIX}, this will challenge you; but you're ready!`,
-        "icon": "fa-redo"
-    }
 };
 
 const READ = 'READ';

@@ -12,13 +12,13 @@ import Loadable from 'react-loadable';
 import { ModelUpdater } from './../../../backend/ModelUpdater';
 import { filterCompletedInstructions, filterCompletedExercises } from './../../../utils/queryCompleted';
 import _isEmpty from 'lodash/isEmpty';
+import {REC_INFO, CONDITIONS} from './../../../utils/Conditions';
 
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 // import ResponseEvaluator from '../../../backend/ResponseEvaluator'; // replaced w/ koconut-api /checker endpoint
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 import LoadingView from '../components/LoadingView';
-import CONDITIONS from '../../../utils/Conditions';
 
 const Sk = require('skulpt');
 
@@ -95,6 +95,14 @@ const Fields = {
 	init: "init",
 	pKnown: "pKnown"
 }
+
+// first exercise to recommend (practice reading data types) #coldstart
+const EXERCISE_ID_FIRST_REC = {'-LH_KNtUIv-mnBkZz2-k': {
+		"type": "continue",
+		"text": REC_INFO["continue"]["text"],
+		"icon": REC_INFO["continue"]["icon"]
+	}
+};
 
 // const PYTHON_API = "http://127.0.0.1:5000/checker/"; // TODO for prod: change this route
 const PYTHON_API = "https://codeitz.herokuapp.com/checker/" // prod route
@@ -180,7 +188,7 @@ class App extends Component {
 			author: false,
 			exerciseList: null, // TODO: could remove and replace with Object.keys(this.state.exerciseConceptMap)
 			conceptMapGetter: null,
-			exerciseRecommendations: sessionStorage.getItem('exerciseRecommendations') || {},
+			exerciseRecommendations: sessionStorage.getItem('exerciseRecommendations') || EXERCISE_ID_FIRST_REC,
 			instructionRecommendations: {},
 			codeTheme: '',
 			timesGotQuestionWrong: [], // times the user has gotten question wrong,
@@ -323,12 +331,11 @@ class App extends Component {
 							}
 						}
 
-						if(!_isEmpty(exerciseRecommendations)) {
-							this.setState({
-								// only top recommendation for C2
-								exerciseRecommendations: (this.state.userCondition === CONDITIONS.C2 ? this.getTopRecommendation(exerciseRecommendations) : exerciseRecommendations)
-							});
-						}
+						this.setState({
+							// only top recommendation for C2
+							exerciseRecommendations: (this.state.userCondition === CONDITIONS.C2 ? this.getTopRecommendation(exerciseRecommendations) : exerciseRecommendations)
+						});
+
 					}
 				});
 
@@ -1191,7 +1198,6 @@ class App extends Component {
 					exercisesCompleted={this.state.exercisesCompleted}
 					selectedIndex={this.state.selectedIndex}
 					userCondition={this.state.userCondition}
-					exerciseConceptMap={this.state.exerciseConceptMap}
 					exerciseConceptMap={this.state.exerciseConceptMap}
 				/>
 			</div>

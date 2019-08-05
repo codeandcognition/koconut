@@ -12,7 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Homepage from './Homepage/Homepage';
 import 'firebase/auth';
-import CONDITIONS from '../../../utils/Conditions';
+import {CONDITIONS} from '../../../utils/Conditions';
 
 type Props = {
 	toSignin: Function

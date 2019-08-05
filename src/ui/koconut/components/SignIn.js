@@ -13,6 +13,7 @@ import Routes from './../../../Routes';
 import LoadingView from '../components/LoadingView';
 import Homepage from '../components/Homepage/Homepage';
 import {Grid, Row, Col} from 'react-flexbox-grid';
+import {CONDITIONS} from '../../../utils/Conditions';
 
 class SignIn extends Component {
 
@@ -27,7 +28,8 @@ class SignIn extends Component {
       showPasswordResetView: false,
       forgotPasswordEmail: "",
       passwordResetMessage: "",
-      passwordResetError: false
+      passwordResetError: false,
+      userCondition: null
     }
   }
 
@@ -68,7 +70,17 @@ class SignIn extends Component {
             });
 						this.setState({loading: false, currentUser: user}, () => {
 							this.routeUser();
-						});
+            });
+            
+            // set state for userCondition
+            let userRefCondition = this.props.firebase.database().ref(`/Users/${uid}/condition`);
+            userRefCondition.on("value", (snap) => {
+              if (this.mounted && snap.val()) {
+                this.setState({
+                  userCondition: snap.val()
+                });
+              }
+            });            
           }
           // return user.updateProfile({displayName: this.state.displayName});
         })
