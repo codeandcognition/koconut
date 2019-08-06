@@ -1,9 +1,9 @@
 /*
  * ModelUpdater handles updates (e.g. on exercise on submit) for user/learner model
  */
+import {REC_INFO} from './../utils/Conditions';
 
 // const BKT_ENDPOINT = `http://127.0.0.1:5000/bkt`; // TODO for prod: change URL
-import {REC_INFO} from './../utils/Conditions';
 const BKT_ENDPOINT = `https://codeitz.herokuapp.com/bkt`;
 
 const BKT_PARAMS = {

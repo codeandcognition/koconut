@@ -188,7 +188,7 @@ class App extends Component {
 			author: false,
 			exerciseList: null, // TODO: could remove and replace with Object.keys(this.state.exerciseConceptMap)
 			conceptMapGetter: null,
-			exerciseRecommendations: sessionStorage.getItem('exerciseRecommendations') || EXERCISE_ID_FIRST_REC,
+			exerciseRecommendations: sessionStorage.getItem('exerciseRecommendations') || EXERCISE_ID_FIRST_REC, // TODO: could have this match based on user ID
 			instructionRecommendations: {},
 			codeTheme: '',
 			timesGotQuestionWrong: [], // times the user has gotten question wrong,
@@ -1264,7 +1264,7 @@ class App extends Component {
 	renderDisplay() {
 		return (
 			<Switch>
-				<Route exact path={Routes.home} component={() => this.renderSignin()} />
+				<Route exact path={Routes.home} component={() => this.renderSignup()} />
 				<Route exact path={Routes.signin} component={() => this.renderSignin()} />
 				<Route exact path={Routes.signup} component={() => this.renderSignup()} />
 				<Route exact path={Routes.welcome} component={() => this.renderWelcome()} />
