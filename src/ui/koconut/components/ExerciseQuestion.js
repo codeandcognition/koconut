@@ -5,7 +5,6 @@ import HintButton from './Hint';
 import AceEditor from 'react-ace';
 import 'brace/mode/python';
 import HintContainer from '../containers/HintContainer';
-import { Button } from '@material-ui/core';
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 
 type Props = {

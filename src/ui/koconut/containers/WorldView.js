@@ -10,7 +10,10 @@ import cytoscape from 'cytoscape';
 import firebase from 'firebase';
 import dagre from 'cytoscape-dagre';
 import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
-cytoscape.use( dagre );
+import _ from 'lodash';
+import { CONDITIONS } from '../../../utils/Conditions';
+
+cytoscape.use( dagre ); // layout for directed acyclic graph: https://github.com/cytoscape/cytoscape.js-dagre
 
 type Props = {
 	setFirebaseUser: Function,
@@ -22,7 +25,14 @@ type Props = {
   goToExercise: Function,
   exerciseRecommendations: any,
   instructionReccomendations: any,
+  userCondition: string,
+  exerciseConceptMap: Object
 };
+
+const REC_STYLE = {'border-width': '6px', 'border-color': '#4054B2', 'border-style': 'solid'};
+const CENTER_STYLE = {'textAlign': 'center', 'padding': '100px'};
+
+const HOW_CODE_RUNS = "howCodeRuns";
 
 /**
  * WorldView is the world view for the app, where the user can see all the
@@ -36,11 +46,12 @@ class WorldView extends Component {
 			loading: true,
       didRender: false,
       conceptDescriptions: {},
-      instructionsRead: {}
+      instructionsRead: {},
+      recommendedConcepts: [], // concepts which have recommended content
 		};
     this.hierarchyContainer = React.createRef();
     this.closeConcept = this.closeConcept.bind(this);
-	}
+  }
 
   /**
    * getConceptsByType takes the orderedConcepts and then grabs only the ones with the 
@@ -54,6 +65,24 @@ class WorldView extends Component {
     })
   }
 
+  /**
+   * update state.recommendedConcepts with list of concepts which have recommended exercises
+   */
+  findRecommendedConcepts(callback=null){
+    let recConcepts = [];
+    if(this.props.exerciseConceptMap && Object.keys(this.props.exerciseConceptMap).length>0) {
+      for(let eid in this.props.exerciseRecommendations) {
+        if(Object.keys(this.props.exerciseConceptMap).includes(eid)) {
+          let concept = this.props.exerciseConceptMap[eid];
+          if(!recConcepts.includes(concept)){
+            recConcepts.push(concept);
+          }
+        }
+      }
+    }
+    this.setState({recommendedConcepts: recConcepts}, callback);
+  }
+
   componentWillMount() {
     this.getConceptShortDescriptions();
   }
@@ -63,7 +92,6 @@ class WorldView extends Component {
 	}
 
   componentDidMount() {
-    sessionStorage.removeItem('exerciseId'); // remove exercise id if in world view
   	this.mounted = true;
   	this.authUnsub = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
   		if (this.mounted) {
@@ -74,11 +102,13 @@ class WorldView extends Component {
 					this.checkWaiverStatus(user);
           this.props.firebase.database().ref(`/Users/${user.uid}/Data/InstructionsRead`).on('value', (snap) => {
             this.setState({instructionsRead: snap.val()}); // this may not be correct (should use filterCompletedInstructions() from queryCompleted.js), but also couldn't get this code to trigger...
-          })
+          });
+          this.findRecommendedConcepts(this.setSideNavigationForC2);
 				});
 			}
-		}) : null;
+    }) : null;
     window.scrollTo(0, 0);
+    sessionStorage.removeItem('exerciseId'); // remove exercise id if in world view
 	}
 
   /*
@@ -90,7 +120,7 @@ class WorldView extends Component {
     let edgesArr = [];
 
     conceptList.forEach((concept) => {
-      let conceptName = formatCamelCasedString(concept.name); // TODO: don't do this conversion manually
+      let conceptName = formatCamelCasedString(concept.name);
       let node = {
         data : {
 					id: concept.name,
@@ -139,8 +169,8 @@ class WorldView extends Component {
           'curve-style': 'bezier',
           'width': 4,
           'target-arrow-shape': 'triangle',
-          'line-color': '#9dbaea',
-          'target-arrow-color': '#9dbaea'
+          'line-color': 'lightslategray',
+          'target-arrow-color': 'lightslategray'
         }
       },
       {
@@ -164,6 +194,10 @@ class WorldView extends Component {
       style: cytoStyle,
       layout: cytoLayout
     });
+
+    // styling for recommended concepts
+    this.state.recommendedConcepts.forEach( concept => cy.getElementById(concept).style(REC_STYLE));
+
     cy.panningEnabled(false);
     cy.zoomingEnabled(false);
 
@@ -176,7 +210,6 @@ class WorldView extends Component {
 				this.expandConcept(name, conceptCode);
 			}
 		});
-
 
     cy.on('mouseover', 'node', function(evt) {
       let nodes = cy.nodes();
@@ -259,7 +292,40 @@ class WorldView extends Component {
     });
   }
 
- 
+  /**
+   * For C2 conditions, open side nav by calling expandConcept() for recommended exercise or "howCodeRuns" if nothing has ever been explored
+   * Assumes props.exerciseRecommendations has at least 1 recommendation
+   */
+  setSideNavigationForC2() {
+    let conceptName, conceptCode;
+
+    if(this.determineIfAnythingDone()){
+      // expand concept for recommended exercise
+      if(Object.keys(this.props.exerciseRecommendations).length < 1) throw "No recommendation available in world view";
+
+      conceptCode = this.props.exerciseConceptMap[Object.keys(this.props.exerciseRecommendations)[0]];
+      conceptName = formatCamelCasedString(conceptCode);
+    } else {
+      // expand how code runs
+      conceptCode = HOW_CODE_RUNS;
+      conceptName = formatCamelCasedString(conceptCode);
+    }
+    this.expandConcept(conceptName, conceptCode);
+  }
+
+  /**
+	 * returns true if users has viewed any instruction or gotten any exercise correct, false otherwise
+	 */
+	determineIfAnythingDone() {
+    // props.exercisesCompleted is by default object with concept codes as keys as arrays (with exercise ids of completed exercises) as default
+    let anyExerciseCorrect = (this.props.exercisesCompleted &&
+      Object.keys(this.props.exercisesCompleted).filter(conceptCode => (
+      Array.isArray(this.props.exercisesCompleted[conceptCode]) && this.props.exercisesCompleted[conceptCode].length>0)).length > 0);
+
+    let anyInstructionRead = !_.isEmpty(this.props.instructionsRead);
+    
+		return (anyExerciseCorrect || anyInstructionRead);
+	}
   
   getOrderedConcepts(): ConceptKnowledge[] {
     return MasteryModel.model.filter((concept) => concept.should_teach).sort(
@@ -271,7 +337,7 @@ class WorldView extends Component {
     return (
       <SideNavigation title={this.state.title}
         conceptCode={this.state.conceptCode}
-        defaultOpen={["READ", "WRITE"]}
+        defaultOpen={["OVERVIEW", "READ", "WRITE"]}
         closeMenu={this.closeConcept}
         instructionsMap={this.props.instructionsMap}
         generateExercise={this.props.generateExercise}
@@ -287,20 +353,31 @@ class WorldView extends Component {
         instructionsRead={this.props.instructionsRead} 
         exercisesCompleted={this.props.exercisesCompleted}
         selectedIndex={this.props.selectedIndex}
+        userCondition={this.props.userCondition}
+        switchToWorldView={this.props.switchToWorldView}
+        exerciseConceptMap={this.props.exerciseConceptMap}
         />
     );
   }
 
 	renderWorld() {
-    if (this.hierarchyContainer.current) {
-      this.renderCytoscape();
-    } else {
-      this.forceUpdate();
+    if(this.props.userCondition !== CONDITIONS.C2){
+      if (this.hierarchyContainer.current) {
+        this.renderCytoscape();
+      } else {
+        this.forceUpdate(); // TODO: this rerenders world view multiple times. Need to figure out why this is necessary.
+      }
     }
 		return (
 				<div>
 					{this.state.conceptDialog && this.renderSidebar() }
-          <div ref={this.hierarchyContainer} id={"hierarchy-container"}/>
+          {this.props.userCondition !== CONDITIONS.C2
+            ? <div ref={this.hierarchyContainer} id={"hierarchy-container"} />
+            : 
+            <div style={CENTER_STYLE}>
+              <p><i className="fa fa-chevron-left" aria-hidden="true"></i><i>Use the navigation bar on the left to continue learning!</i></p>
+            </div>
+          }
 				</div>
 		);
 
@@ -310,8 +387,8 @@ class WorldView extends Component {
     return (
 			<div className={"world-container"}>
 				{this.state.loading ?
-						<LoadingView/> :
-						this.renderWorld()
+            <LoadingView/> :
+            this.renderWorld()
 				}
 			</div>
 		);

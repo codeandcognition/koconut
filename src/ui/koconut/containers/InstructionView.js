@@ -24,7 +24,8 @@ type Props = {
 	goToExercise: Function,
 	exerciseRecommendations: any,
 	instructionRecommendations: any,
-	updateInstructionsRead: Function
+	updateInstructionsRead: Function,
+	userCondition: string
 }
 
 /**
@@ -292,6 +293,9 @@ class InstructionView extends Component {
 								instructionsRead={this.props.instructionsRead}
 								exercisesCompleted={this.props.exercisesCompleted}
 								selectedIndex={this.props.selectedIndex}
+								userCondition={this.props.userCondition}
+								switchToWorldView={this.props.switchToWorldView}
+								exerciseConceptMap={this.props.exerciseConceptMap}
 								/> 
 							<div className={"overallView"}>
 								{/* <BreadCrumbs
@@ -326,7 +330,7 @@ class InstructionView extends Component {
 										{/* {hasMultiplePages && <button className={"nav-arrow-btn" +
 											" right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right" /></button>} */}
 										<div style={styleCenterText}>
-											<p><i class="fa fa-chevron-left" aria-hidden="true"></i><i>Use the navigation bar on the left to continue.</i></p>
+											<p><i className="fa fa-chevron-left" aria-hidden="true"></i><i>Use the navigation bar on the left to continue.</i></p>
 										</div>
 									</div>
 								}

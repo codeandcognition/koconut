@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Homepage from './Homepage/Homepage';
 import 'firebase/auth';
+import {CONDITIONS} from '../../../utils/Conditions';
 
 type Props = {
 	toSignin: Function
@@ -24,10 +25,14 @@ class Signup extends Component {
 			loading: true,
 			email: "",
 			password: "",
-			confirmation: "",
-      userExperienceError: false
+      confirmation: "",
+      accessCode: "", // code to specify condition
+      accessCodeVisible: false, // if true, textbox asking for access code appears
+      accessCodeInvalid: false,
+      userExperienceError: false,
+      userExperience: "" // response to "I am..." question
 		}; // need this declaration here, render crashes otherwise
-	}
+  }
 
 	componentDidMount() {
 		this.authUnsub = firebase.auth().onAuthStateChanged(user => {
@@ -56,12 +61,16 @@ class Signup extends Component {
 	handleSubmit(evt) {
 		evt.preventDefault();
 		let mismatch = this.state.password !== this.state.confirmation;
-		this.setState({errorMessage: "", errCode: "", userExperienceError: false});
+    this.setState({errorMessage: "", errCode: "", userExperienceError: false}); // unclear why userExperienceError being set to false here, esp. with it being checked a few lines later. race condition!
+    
+    let condition = this.determineCondition(this.state.accessCode);
 
-    if(mismatch) {
+    if(mismatch) { // ensure passwords match
       this.setState({mismatch});
-    } else if(this.state.userExperience === "") {
-      this.setState({userExperienceError: true})
+    } else if(this.state.userExperience === "") { // ensure experience selected
+      this.setState({userExperienceError: true});
+    } else if(condition == CONDITIONS.INVALID){ // ensure access code is valid
+      this.setState({accessCodeInvalid: true});
     } else {
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(user => {
@@ -72,6 +81,7 @@ class Signup extends Component {
               timestamp: firebase.database.ServerValue.TIMESTAMP
             });
             firebase.database().ref(`/Users/${uid}/userExperience`).set(this.state.userExperience);
+            firebase.database().ref(`/Users/${uid}/condition`).set(condition);
           }
           this.setState({currentUser: user});
           return user.updateProfile({displayName: this.state.displayName});
@@ -86,7 +96,34 @@ class Signup extends Component {
           });
         });
     }
-	}
+  }
+  
+  /**
+   * Given access code which is either string or null, determine the condition
+   * if accessCode is a string which can be cast to an integer, then do the following based on the result % primeNum:
+   * {3: "C1", 5: "E1", 7: "C2", else: "INVALID"}
+   * else: return random condition
+   */
+  determineCondition(accessCode, primeNum=47){
+    if(accessCode) {
+      if(!isNaN(accessCode)) {
+        switch(Number(accessCode) % primeNum) {
+          case 3: 
+            return CONDITIONS.C1;
+          case 5:
+            return CONDITIONS.E1;
+          case 7:
+            return CONDITIONS.C2;
+          default:
+            return CONDITIONS.INVALID;
+        }
+      } else return CONDITIONS.INVALID;
+    }
+
+    // base case: no access code submitted => random option
+    let randInt = Math.floor(Math.random()*Object.keys(CONDITIONS).length); // random int in range of Object.keys(CONDITIONS)
+    return CONDITIONS[Object.keys(CONDITIONS)[randInt]]; // random option
+  }
 
 	/**
 	 * renders the sign up form
@@ -157,6 +194,25 @@ class Signup extends Component {
                         <MenuItem value={"PROGRAMMEROLD"}>programmer that hasn't used python in a while</MenuItem>
                       </Select>
                     </FormControl>
+
+                    {this.state.accessCodeVisible && this.state.accessCodeInvalid ? <p className="alert alert-warning"
+                      style={{marginTop: '3%', marginBottom: '0%'}}>Sorry, your access code is invalid. Please submit another one, or leave it blank.</p> : null}
+                      
+                    {this.state.accessCodeVisible ?
+                      <TextField
+                        id="accessCode"
+                        type="text"
+                        label="access code (optional)"
+                        placeholder="Enter access code"
+                        onInput={evt => this.setState({accessCode: evt.target.value})} 
+                      />
+                    :
+                      <span style={{width:'100%', textAlign: 'left'}}>
+                        <Button onClick={() => {this.setState({accessCodeVisible: true})}}>
+                          <small>I have an access code.</small>
+                        </Button>
+                      </span>
+                    }
                     
                   </FormGroup>
                   <div style={{width: '100%', textAlign: 'right'}}>
