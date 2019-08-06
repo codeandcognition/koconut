@@ -92,6 +92,7 @@ class WorldView extends Component {
 	}
 
   componentDidMount() {
+    sessionStorage.removeItem('exerciseId'); // remove exercise id if in world view
   	this.mounted = true;
   	this.authUnsub = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
   		if (this.mounted) {
