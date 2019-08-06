@@ -11,13 +11,13 @@ import conceptMap from '../../../data/ConceptMap';
 import Loadable from 'react-loadable';
 import { ModelUpdater } from './../../../backend/ModelUpdater';
 import { filterCompletedInstructions, filterCompletedExercises } from './../../../utils/queryCompleted';
-
+import _isEmpty from 'lodash/isEmpty';
+import {REC_INFO, CONDITIONS} from './../../../utils/Conditions';
 
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 // import ResponseEvaluator from '../../../backend/ResponseEvaluator'; // replaced w/ koconut-api /checker endpoint
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
-import { write } from 'fs';
 import LoadingView from '../components/LoadingView';
 
 const Sk = require('skulpt');
@@ -95,6 +95,14 @@ const Fields = {
 	init: "init",
 	pKnown: "pKnown"
 }
+
+// first exercise to recommend (practice reading data types) #coldstart
+const EXERCISE_ID_FIRST_REC = {'-LH_KNtUIv-mnBkZz2-k': {
+		"type": "continue",
+		"text": REC_INFO["continue"]["text"],
+		"icon": REC_INFO["continue"]["icon"]
+	}
+};
 
 // const PYTHON_API = "http://127.0.0.1:5000/checker/"; // TODO for prod: change this route
 const PYTHON_API = "https://codeitz.herokuapp.com/checker/" // prod route
@@ -178,9 +186,9 @@ class App extends Component {
 			error: false,
 			errorMessage: '', // none
 			author: false,
-			exerciseList: null,
+			exerciseList: null, // TODO: could remove and replace with Object.keys(this.state.exerciseConceptMap)
 			conceptMapGetter: null,
-			exerciseRecommendations: {},
+			exerciseRecommendations: sessionStorage.getItem('exerciseRecommendations') || EXERCISE_ID_FIRST_REC, // TODO: could have this match based on user ID
 			instructionRecommendations: {},
 			codeTheme: '',
 			timesGotQuestionWrong: [], // times the user has gotten question wrong,
@@ -192,7 +200,9 @@ class App extends Component {
 			maxNumRecommendations: 6, // change or set elsewhere?,
 			instructionsRead: {},
 			selectedIndex: "", // index of instruction or exercise in focus. e.g. READ0, READe1, WRITE1,
-			prevQuestionAttemptCorrect: null // true if prev question attempt correct, false otherwise
+			prevQuestionAttemptCorrect: null, // true if prev question attempt correct, false otherwise
+			userCondition: null, // experimental condition user is in
+			exerciseConceptMap: {} //mapping for exercise id to concepts
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -286,8 +296,9 @@ class App extends Component {
 			if (user) {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
-				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
 
+				// set state for bkt params
+				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
 				userRef.on("value", (snap) => {
 					if (this._isMounted && snap.val()) {
 						this.setState({
@@ -295,6 +306,40 @@ class App extends Component {
 						});
 					}
 				});
+
+				// set state for userCondition
+				let userRefCondition = this.props.firebase.database().ref(`/Users/${user.uid}/condition`);
+				userRefCondition.on("value", (snap) => {
+					if (this._isMounted && snap.val()) {
+						this.setState({
+							userCondition: snap.val()
+						});
+					}
+				});
+
+				// set state for exerciseRecommendations
+				let exerciseRecommendations = {};
+				let userAnswerSubs = this.props.firebase.database().ref(`/Users/${user.uid}/Data/AnswerSubmission`);
+				userAnswerSubs.on('value', (snap) => {
+					if (this._isMounted && snap.val()) {
+						let oldestTimestamp = -1; // larger is older
+						let data = snap.val();
+						for(let id in data) {
+							if(data[id]["timestamp"] > oldestTimestamp && Object.keys(data[id]).includes("resultingRecommendations")) {
+								oldestTimestamp = data[id]["timestamp"];
+								exerciseRecommendations = Object.assign({}, data[id]["resultingRecommendations"]);
+							}
+						}
+
+						this.setState({
+							// only top recommendation for C2
+							exerciseRecommendations: (this.state.userCondition === CONDITIONS.C2 ? this.getTopRecommendation(exerciseRecommendations) : exerciseRecommendations)
+						});
+
+					}
+				});
+
+
 
 				let completedInstructionsRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/NewPageVisit`);
 				let instructionsRead = await filterCompletedInstructions(this.conceptMapGetter, completedInstructionsRef);
@@ -310,6 +355,7 @@ class App extends Component {
 							exerciseList: snap.val(),
 							firebaseUser: user
 						}, () => {
+							// get bkt params
 							let userBKTParams = {};
 							this.conceptMapGetter.on('value', (snap) => {
 								// for previous users who weren't given bktParams upon creation
@@ -335,10 +381,11 @@ class App extends Component {
 									conceptMapGetter: snap.val(),
 									instructionsRead: instructionsRead,
 									exercisesCompleted: exercisesCompleted,
-									userBKTParams: userBKTParams // TODO: Delete this line laterbktParams
+									userBKTParams: userBKTParams // TODO: Delete this line later? unclear why set twice in componentDidMount()
 								}, () => {
 									this.updateUserState();
 									this.initializeModelUpdater(); // need to wait until exerciseList & conceptMapGetter both set
+									this.createExerciseConceptMap();
 								});
 							});
 
@@ -356,6 +403,31 @@ class App extends Component {
 		});
 	}
 
+	/**
+	 * Update state.exerciseConceptMap w/ object where key is exercise and value is concept (disregarding "read" or "write"). 
+	 * Opposite of concept exercise-map 
+	 */
+	createExerciseConceptMap() {
+		let exerciseConceptMap = {};
+		if(this.state.conceptMapGetter) {
+			for (let conceptName in this.state.conceptMapGetter){
+				let concept = this.state.conceptMapGetter[conceptName];
+
+				for(let key in Categories){
+					let category = Categories[key];
+					if(Object.keys(concept).includes(category)){
+						for(let eid in concept[category]){
+							exerciseConceptMap[concept[category][eid]] = conceptName;
+						}
+					} else console.log(`${Categories[key]} exercises not found for ${conceptName}`);
+				}
+			}
+		}
+		this.setState({
+			exerciseConceptMap: exerciseConceptMap
+		})
+	}
+
 	initializeModelUpdater() {
 		let conceptParams = {};
 		let exerciseParams = {};
@@ -371,12 +443,33 @@ class App extends Component {
 				exerciseParams[exerciseID] = params;
 			});
 		}
-		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter, this.state.maxNumRecommendations, conceptMap);
+		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter, 
+			this.state.maxNumRecommendations, conceptMap, this.state.exercisesCompleted);
 	}
 
-	updateRecommendations = (recommendedExercises) => {
+	// return an object w/ only the top recommended exercise (key is ID, value is info about recommendation). For C2
+	getTopRecommendation = (recommendedExercises) => {
+		let outputC2 = {}
+		outputC2[Object.keys(recommendedExercises)[0]] = recommendedExercises[Object.keys(recommendedExercises)[0]];
+		return outputC2;
+	}
+
+	// update state w/ exercise recommendations and also push answer submission data to firebase
+	updateRecommendations = (recommendedExercises, questionIndex, userAnswer, passed) => {
 		this.setState({
-			exerciseRecommendations: recommendedExercises
+			exerciseRecommendations: (this.state.userCondition === CONDITIONS.C2 ? this.getTopRecommendation(recommendedExercises) : recommendedExercises)
+		}, () => {
+			// not ideal to be doing this here, but need recommendedExercises to be pushed as well
+			let dataToPush = {
+				exerciseId: this.state.exerciseId,
+				questionIndex: questionIndex,
+				timestamp: this.props.firebase.database.ServerValue.TIMESTAMP,
+				answer: userAnswer,
+				correctness: passed,
+				resultingRecommendations: this.state.exerciseRecommendations // TODO: race condition: do not wait for state.exerciseRecommendations to finish update
+			};
+			let userID = this.props.firebase.auth().currentUser.uid;
+			this.props.firebase.database().ref(`/Users/${userID ? userID : 'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
 		});
 	}
 
@@ -699,7 +792,7 @@ class App extends Component {
 	 * @param {*} questionIndex 
 	 * @param {*} fIndex 
 	 */
-	setFeedback(type: string, feedback: any, questionIndex: number, fIndex: number) {
+	setFeedback(type: string, feedback: any, questionIndex: number, fIndex: number, userAnswer: string) {
 		if (type == ExerciseTypes.table) {
 			let question = this.state.exercise.questions[questionIndex];
 			let numberOfColumns = question.colNames.length;
@@ -751,7 +844,8 @@ class App extends Component {
 			let userID = this.props.firebase.auth().currentUser.uid;
 			if (this.modelUpdater) {
 				// given response, get new pknown
-				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, this.state.exerciseType, this.updateRecommendations);
+				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, 
+					this.state.exerciseType, questionIndex, userAnswer, this.state.exercisesCompleted, this.updateRecommendations);
 
 				// update pknown on firebase
 				let databaseRef = this.props.firebase.database().ref(`Users/${userID}/bktParams/${this.state.currentConcept}/${this.state.exerciseType}/pKnown`);
@@ -785,7 +879,8 @@ class App extends Component {
 				body: JSON.stringify(requestBody)
 			})
 			const feedback = await response.json();
-			let passed = this.setFeedback(endpointExtension, feedback, questionIndex, fIndex);
+			let userAnswer = requestBody["userAnswer"] ? requestBody["userAnswer"] : null;
+			let passed = this.setFeedback(endpointExtension, feedback, questionIndex, fIndex, userAnswer);
 
 			// updates checkmarks in NavItem on correctness
 			if (passed) {
@@ -793,17 +888,6 @@ class App extends Component {
 				exercisesCompleted[this.state.currentConcept].push(this.state.exerciseId); // add exercise to complete list
 				this.setState({ exercisesCompleted: exercisesCompleted })
 			}
-
-			// log response to firebase
-			let dataToPush = {
-				exerciseId: this.state.exerciseId,
-				questionIndex: questionIndex,
-				timestamp: this.props.firebase.database.ServerValue.TIMESTAMP,
-				answer: (requestBody["userAnswer"] ? requestBody["userAnswer"] : null),
-				correctness: passed
-			};
-			let userID = this.props.firebase.auth().currentUser.uid;
-			this.props.firebase.database().ref(`/Users/${userID ? userID : 'nullValue'}/Data/AnswerSubmission`).push(dataToPush);
 
 			return feedback;
 		}
@@ -1014,7 +1098,6 @@ class App extends Component {
 		return this.state.counter < this.state.numExercisesInCurrConcept - 1;
 	}
 
-
 	/**
 	 * Renders the welcome view
 	 * @returns {*}
@@ -1069,7 +1152,9 @@ class App extends Component {
 						exercisesCompleted={this.state.exercisesCompleted}
 						selectedIndex={this.state.selectedIndex}
 						prevQuestionAttemptCorrect={this.state.prevQuestionAttemptCorrect}
-
+						userCondition={this.state.userCondition}
+						switchToWorldView={this.switchToWorldView}
+						exerciseConceptMap={this.state.exerciseConceptMap}
 					/>
 				}
 				{!this.state.currentConcept &&
@@ -1112,6 +1197,8 @@ class App extends Component {
 					instructionsRead={this.state.instructionsRead}
 					exercisesCompleted={this.state.exercisesCompleted}
 					selectedIndex={this.state.selectedIndex}
+					userCondition={this.state.userCondition}
+					exerciseConceptMap={this.state.exerciseConceptMap}
 				/>
 			</div>
 		)
@@ -1146,6 +1233,9 @@ class App extends Component {
 						updateInstructionsRead={this.updateInstructionsRead}
 						exercisesCompleted={this.state.exercisesCompleted}
 						selectedIndex={this.state.selectedIndex}
+						userCondition={this.state.userCondition}
+						switchToWorldView={this.switchToWorldView}
+						exerciseConceptMap={this.state.exerciseConceptMap}
 					/>
 				}
 				{!this.state.currentConcept &&
@@ -1174,7 +1264,7 @@ class App extends Component {
 	renderDisplay() {
 		return (
 			<Switch>
-				<Route exact path={Routes.home} component={() => this.renderSignin()} />
+				<Route exact path={Routes.home} component={() => this.renderSignup()} />
 				<Route exact path={Routes.signin} component={() => this.renderSignin()} />
 				<Route exact path={Routes.signup} component={() => this.renderSignup()} />
 				<Route exact path={Routes.welcome} component={() => this.renderWelcome()} />
@@ -1193,7 +1283,7 @@ class App extends Component {
 	 * @returns {*}
 	 */
 	renderNavBar() {
-		return (<Navbar switchToWorldView={this.switchToWorldView} />);
+		return (<Navbar switchToWorldView={this.switchToWorldView} userCondition={this.state.userCondition}/>);
 	}
 
 	render() {

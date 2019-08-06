@@ -35,7 +35,8 @@ type Props = {
   generateExercise: Function,
   exerciseList: any[],
   exerciseRecommendations: any,
-  exerciseId: string
+  exerciseId: string,
+  userCondition: string
 }
 
 const EXERCISE_ID = 'exerciseId'
@@ -224,6 +225,9 @@ class Exercise extends Component {
               instructionsRead={this.props.instructionsRead}
               exercisesCompleted={this.props.exercisesCompleted}
               selectedIndex={this.props.selectedIndex}
+              userCondition={this.props.userCondition}
+              switchToWorldView={this.props.switchToWorldView}
+              exerciseConceptMap={this.props.exerciseConceptMap}
               />
           </div>
           <div className="exercise-view">

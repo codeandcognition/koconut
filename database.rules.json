@@ -31,14 +31,20 @@
         "userExperience": {
           ".write": "auth != null && auth.uid == $uid"
         },
+        "condition": {
+          ".read": "auth != null && auth.uid == $uid",
+          ".write": "auth != null && auth.uid == $uid"
+        },
         "Data": {
           "AnswerSubmission": {
+            ".read": "auth != null && auth.uid == $uid",
             ".write": "auth != null && auth.uid == $uid"
           },
           "InstructionsRead": {
             ".write": "auth != null && auth.uid == $uid"
           },
           "NewPageVisit": {
+            ".indexOn": ["concept"],
             ".write": "auth != null && auth.uid == $uid"
           },
           "SessionEvents": {

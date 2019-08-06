@@ -11,6 +11,7 @@ import Menu from '@material-ui/core/Menu/Menu';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import BackButton from '@material-ui/icons/ChevronLeft';
 import Routes from './../../../Routes';
+import {CONDITIONS} from '../../../utils/Conditions';
 
 /**
  * Navbar adds a navigation bar to the app
@@ -107,9 +108,10 @@ class Navbar extends Component {
         <div>
           <AppBar>
             <Toolbar>
-							{(this.props.history.location.pathname === Routes.author ||
+              {(this.props.userCondition !== CONDITIONS.C2 && // not C2 condition condition
+                  (this.props.history.location.pathname === Routes.author ||
 									this.props.history.location.pathname.includes("instruction") ||
-									this.props.history.location.pathname.includes("practice"))  ?
+									this.props.history.location.pathname.includes("practice")))  ?
 									<div style={{marginRight: 5}}>
 										<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
 											<BackButton
@@ -123,7 +125,7 @@ class Navbar extends Component {
 									</div> : <div></div>
 							}
 							{/* color imported from Material UI */}
-							<Typography style={{flexGrow: 1, color: "#FAFAFA"}} variant={"title"}>
+							<Typography style={{flexGrow: 1, color: "#FAFAFA"}} variant={"inherit"}>
 								Codeitz
 							</Typography>
               {this.state.currentUser &&
