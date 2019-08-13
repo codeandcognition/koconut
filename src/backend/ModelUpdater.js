@@ -1,6 +1,7 @@
 /*
  * ModelUpdater handles updates (e.g. on exercise on submit) for user/learner model
  */
+
 import {REC_RESPONSES} from './../utils/Conditions';
 import _ from 'lodash';
 

@@ -448,7 +448,6 @@ class App extends Component {
 		outputC2[Object.keys(recommendedExercises)[0]] = recommendedExercises[Object.keys(recommendedExercises)[0]];
 		return outputC2;
 	}
-
 	// update state w/ exercise recommendations and also push answer submission data to firebase
 	updateRecommendations = (recommendedExercises, questionIndex, userAnswer, passed) => {
 		this.setState({
