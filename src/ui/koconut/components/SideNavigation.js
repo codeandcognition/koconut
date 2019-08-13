@@ -17,9 +17,6 @@ import _ from 'lodash';
 import { Select } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import LoadingView from './../components/LoadingView';
-
-
 
 const Categories = {
 	READ: "READ",
@@ -406,13 +403,14 @@ class SideNavigation extends Component {
 							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
 							body={writingSection}>
 						</NavSection>
-						{this.props.userCondition !== CONDITIONS.C2 ?
+						{(this.props.userCondition !== CONDITIONS.C2 && typeof(this.state.selectedIndex) === 'string' && this.state.selectedIndex.length > 0)&&
 								<div>
 									<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
 										<Button style={style} variant="contained"><i className="fa fa-chevron-left" aria-hidden="true"></i> back to world view</Button>
 									</Link>
 								</div>
-							:
+						}
+						{this.props.userCondition === CONDITIONS.C2 &&
 								<div>
 									<Link to={recRoute}
 										onClick={() => this.goToRecommendedItem(firstUnreadInstruction)}>
