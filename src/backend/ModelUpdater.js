@@ -1,7 +1,9 @@
 /*
  * ModelUpdater handles updates (e.g. on exercise on submit) for user/learner model
  */
-import {REC_INFO} from './../utils/Conditions';
+
+import {REC_RESPONSES} from './../utils/Conditions';
+import _ from 'lodash';
 
 // const BKT_ENDPOINT = `http://127.0.0.1:5000/bkt`; // TODO for prod: change URL
 const BKT_ENDPOINT = `https://codeitz.herokuapp.com/bkt`;
@@ -18,18 +20,11 @@ const BKT_ITEM_PARAMS = {
     CONCEPT: "concept"
 }
 
-// direct relationships between concepts
-const RELATIONSHIPS = {
-    SAME: "same",
-    PARENT: "parent",
-    CHILD: "child"
-};
-
-const REC_TYPES = {
-    REWIND: "review",
-    CONTINUE: "continue",
-    JUMP: "jump"
-};
+// thresholds for recommendations
+const THRESHOLDS = {
+    MIN_INSTRUCTIONS_READ: 1,
+    PK_THRESHOLD: 0.5
+}
 
 const READ = 'READ';
 const WRITE = 'WRITE';
@@ -43,12 +38,11 @@ class ModelUpdater {
     currentConcept: any;
     conceptMap: any;
 
-    constructor(conceptParameters: any, exerciseParameters: any, priorPKnown: any, conceptExerciseMap, maxNumRecommendations: any, conceptMap: any) {
+    constructor(conceptParameters: any, exerciseParameters: any, priorPKnown: any, conceptExerciseMap, conceptMap: any) {
         this.conceptParameters = conceptParameters;
-        this.exerciseParameters = exerciseParameters;
+        this.exerciseParameters = exerciseParameters; // key: exerciseID, value: object w/ bkt params ('guess', 'slip')
         this.priorPKnown = priorPKnown;
         this.conceptExerciseMap = conceptExerciseMap;
-        this.maxNumRecommendations = maxNumRecommendations;
         this.conceptMap = conceptMap;
     }
 
@@ -60,12 +54,13 @@ class ModelUpdater {
      * readOrWrite: READ if exercise for reading and WRITE if writing exercise
      * questionIndex: n-th question in exercise
      * userAnswer: answer response
+     * instructionsRead: object w/ instructions user has read
      * exercisesCompleted: object with all exercises user has gotten correct
      * callback: function to call after making request
      * recommendComplete: true if recommendations should include previously completed exercises (default is false)
      */
     update = async (isCorrect: boolean, exerciseID: string, conceptKey: string, readOrWrite: string, questionIndex: Number, 
-        userAnswer: string, exercisesCompleted: any, callback: Function, recommendComplete = false) => {
+        userAnswer: string, instructionsRead: any, exercisesCompleted: any, callback: Function, recommendComplete = false) => {
         let exerciseIDs = [];
         let conceptParams = this.conceptParameters[conceptKey];
         let itemParams = [];
@@ -108,7 +103,6 @@ class ModelUpdater {
         if (!response.error) {
             let pkNew = response.pkNew;
 
-            // limit number of recommendations
             let suggestedExercises = response.suggestedExercises;
 
             let recommendedExercises = {};
@@ -117,24 +111,45 @@ class ModelUpdater {
                 recommendedExercises[exerciseID] = {};
 
                 // get diff
-                if (response.exerciseInfo && BKT_ITEM_PARAMS.EID in response.exerciseInfo) {
-                    let index = Object.keys(response.exerciseInfo[BKT_ITEM_PARAMS.EID])
-                        .find(key => response.exerciseInfo[BKT_ITEM_PARAMS.EID][key] === exerciseID); // map eid to concept
-                    let diff = -1;
-                    if (index && index >= 0) {
-                        diff = response.exerciseInfo["diff"][index];
-                    } else {
-                        throw `couldn't find eid ${exerciseID} in response`;
-                    };
+                if (_.has(response.exerciseInfo, BKT_ITEM_PARAMS.EID)) {
+                    // determine concept, readOrWrite
+                    let recInfo = this.getConceptFromExercise(exerciseID);
+                    let recConcept = recInfo.concept;
+                    let recReadOrWrite = recInfo.readOrWrite;
 
-                    let relationship = this.determineConceptRelationship(exerciseID, conceptKey, itemParams);
-                    let recType = this.determineRecType(diff, relationship);
+                    // determine if instructions read
+                    let hasReadMinInstructions = instructionsRead && _.has(instructionsRead, recConcept) 
+                        && _.has(instructionsRead[recConcept], recReadOrWrite) && Array.isArray(instructionsRead[recConcept][recReadOrWrite]) 
+                        && instructionsRead[recConcept][recReadOrWrite].length >= THRESHOLDS.MIN_INSTRUCTIONS_READ;
+                    
+                    // get avg pk of parent/dependency concepts
+                    let colIndex = this.conceptMap.concepts.indexOf(recConcept); // index corresponding to target concept
+                    let parentConcepts = [];
+                    for (let rowIndex in this.conceptMap.adjMat) {
+                        if (this.conceptMap.adjMat[rowIndex][colIndex] > 0) { // (x,y)=1 => x is parent of y
+                            parentConcepts.push(this.conceptMap.concepts[rowIndex]);
+                        }
+                    }
+
+                    let parentBkts = [];
+                    parentConcepts.forEach(parentConcept => {
+                        [READ, WRITE].forEach(exType => {
+                            parentBkts.push(this.priorPKnown[parentConcept][exType][BKT_PARAMS.PKNOWN]);
+                        });
+                    });
+
+                    let avgParentBkt = parentBkts.length > 0 ? parentBkts.reduce((acc, val) => acc + val) / parentBkts.length : 1; // if no parents => "know" parents
+
+                    let recPk = recConcept == conceptKey ? pkNew : this.priorPKnown[recConcept][recReadOrWrite][BKT_PARAMS.PKNOWN];
+
+                    let rec = this.determineRecGoal(recPk, hasReadMinInstructions, avgParentBkt);
 
                     recommendedExercises[exerciseID] = {
-                        "type": recType,
-                        "text": REC_INFO[recType]["text"],
-                        "icon": REC_INFO[recType]["icon"]
+                        type: rec.type,
+                        text: rec.text,
+                        icon: rec.icon
                     };
+
                 } else throw "exerciseInfo not returned in response";
             });
             callback(recommendedExercises, questionIndex, userAnswer, isCorrect); //updates state in App.js
@@ -149,68 +164,41 @@ class ModelUpdater {
     }
 
     /**
-     * Determine relationship between concept of recommended exercise and targetConcept
-     * Returns value in RELATIONSHIPS object
+     * Given exercise id (eid) and item parameters (itemParams), return the conceptKey and readOrWrite for given exercise
      */
-    determineConceptRelationship = (eidOfRec: string, targetConcept: string, itemParams: Array) => {
-        let targetIndex = this.conceptMap["concepts"].indexOf(targetConcept);
-        let recIndex = -1;
+    getConceptFromExercise = (eid) => {
+        // get concept for recommendation from exercide ID
+        let targetConcept = null;
+        let readOrWrite = null;
 
-        if (itemParams) {
-            // get concept for recommendation from exercide ID
-            let recConceptList = itemParams.filter((x) => x[BKT_ITEM_PARAMS.EID] == eidOfRec);
-            if (recConceptList.length > 0) { // if exercise found
-                let recConcept = recConceptList[0][BKT_ITEM_PARAMS.CONCEPT];
-                recIndex = this.conceptMap["concepts"].indexOf(recConcept);
-            } else {
-                throw `No concept found in item params for EID ${eidOfRec}`
-            }
-        } else throw "No item params, so cannot determine concept relationship";
-
-
-        if (targetIndex < 0 || recIndex < 0) throw "Could not find target or recommendation index in concept map";
-
-        // determine relationship
-        if (targetIndex == recIndex) return RELATIONSHIPS.SAME;
-        if (this.conceptMap["adjMat"][targetIndex][recIndex] > 0) return RELATIONSHIPS.CHILD;
-        if (this.conceptMap["adjMat"][recIndex][targetIndex] > 0) return RELATIONSHIPS.PARENT;
-
-        console.log(`No direct relationship between exercise ${eidOfRec} & target concept ${targetConcept}`);
-        return null;
-    }
-
-    /**
-     * determine type of recommendation and returns string of recommendation type
-     * 
-     * diff: difference between goal score and exercise score. >proximalDiff means exercise is more difficult
-     * relationship: relationship of concept for recommended exercise to targetConcept
-     * proximalDiff: |diff| < proximalDist means exercise is "just right" in difficulty
-     */
-    determineRecType = (diff: Number, relationship = RELATIONSHIPS.SAME, proximalDist = 0.05) => {
-        console.log(`determineRecType called`);
-        if (!Object.values(RELATIONSHIPS).includes(relationship)) { // ensure relationship is acceptable value
-            throw `concept relationship type not acceptable. relationship passed in ${relationship}`;
+        for(const [conceptName, properties] of Object.entries(this.conceptExerciseMap)) {
+            [READ, WRITE].forEach(exType => {
+                if(_.has(properties, exType) && properties[exType].includes(eid)) {
+                    targetConcept = conceptName;
+                    readOrWrite = exType;
+                }
+            })
         }
+        return {concept: targetConcept, readOrWrite: readOrWrite};
+    }
+    
+    /**
+     * Given a target concept's probablility of known (pk, float), hasReadMinInstructions (boolean), 
+     * average probability of known for parent concepts (avgParentBkt, float), 
+     * determine type of recommendation and returns string of recommendation type
+     */
+    determineRecGoal = (pk, hasReadMinInstructions, avgParentBkt) => {
+        let isPkHigh = pk > THRESHOLDS.PK_THRESHOLD;
+        let isParentsPkHigh = avgParentBkt > THRESHOLDS.PK_THRESHOLD;
+        
+        let rec = Object.values(REC_RESPONSES).filter(opt => opt.read == hasReadMinInstructions 
+            && opt.know == isPkHigh 
+            && opt.parents_know == isParentsPkHigh);
 
-        if (
-            (diff < -proximalDist && relationship == RELATIONSHIPS.PARENT) ||
-            (diff < -proximalDist && relationship == RELATIONSHIPS.SAME) ||
-            (Math.abs(diff) < proximalDist && relationship == RELATIONSHIPS.SAME)
-        ) return REC_TYPES.REWIND;
-
-        if (
-            (Math.abs(diff) < proximalDist && relationship == RELATIONSHIPS.continue) ||
-            (diff > proximalDist && relationship == RELATIONSHIPS.PARENT)
-        ) return REC_TYPES.CONTINUE;
-
-        if (
-            (Math.abs(diff) < proximalDist && relationship == RELATIONSHIPS.CHILD) ||
-            (diff > proximalDist && RELATIONSHIPS.PARENT)
-        ) return REC_TYPES.JUMP
-
-        console.log(`determineRecType: Hit unaccounted for case where diff if ${diff} and relationship is ${relationship}`);
-        return REC_TYPES.CONTINUE;
-
+        if (rec.length==1) {
+            return rec[0]
+        } else if (rec.length > 1) throw "multiple recommendation types found";
+        else throw "no recommendation types found";
     }
 
 
