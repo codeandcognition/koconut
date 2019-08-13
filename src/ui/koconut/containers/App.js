@@ -12,7 +12,7 @@ import Loadable from 'react-loadable';
 import { ModelUpdater } from './../../../backend/ModelUpdater';
 import { filterCompletedInstructions, filterCompletedExercises } from './../../../utils/queryCompleted';
 import _isEmpty from 'lodash/isEmpty';
-import {REC_INFO, CONDITIONS} from './../../../utils/Conditions';
+import {REC_RESPONSES, CONDITIONS} from './../../../utils/Conditions';
 
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
@@ -97,12 +97,7 @@ const Fields = {
 }
 
 // first exercise to recommend (practice reading data types) #coldstart
-const EXERCISE_ID_FIRST_REC = {'-LH_KNtUIv-mnBkZz2-k': {
-		"type": "continue",
-		"text": REC_INFO["continue"]["text"],
-		"icon": REC_INFO["continue"]["icon"]
-	}
-};
+const EXERCISE_ID_FIRST_REC = {'-LH_KNtUIv-mnBkZz2-k': REC_RESPONSES[0]};
 
 // const PYTHON_API = "http://127.0.0.1:5000/checker/"; // TODO for prod: change this route
 const PYTHON_API = "https://codeitz.herokuapp.com/checker/" // prod route
@@ -444,7 +439,7 @@ class App extends Component {
 			});
 		}
 		this.modelUpdater = new ModelUpdater(conceptParams, exerciseParams, this.state.userBKTParams, this.state.conceptMapGetter, 
-			this.state.maxNumRecommendations, conceptMap, this.state.exercisesCompleted);
+			conceptMap, this.state.exercisesCompleted);
 	}
 
 	// return an object w/ only the top recommended exercise (key is ID, value is info about recommendation). For C2
@@ -845,7 +840,7 @@ class App extends Component {
 			if (this.modelUpdater) {
 				// given response, get new pknown
 				let pkNew = await this.modelUpdater.update(passed, this.state.exerciseId, this.state.currentConcept, 
-					this.state.exerciseType, questionIndex, userAnswer, this.state.exercisesCompleted, this.updateRecommendations);
+					this.state.exerciseType, questionIndex, userAnswer, this.state.instructionsRead, this.state.exercisesCompleted, this.updateRecommendations);
 
 				// update pknown on firebase
 				let databaseRef = this.props.firebase.database().ref(`Users/${userID}/bktParams/${this.state.currentConcept}/${this.state.exerciseType}/pKnown`);
