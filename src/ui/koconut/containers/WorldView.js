@@ -300,13 +300,12 @@ class WorldView extends Component {
   setSideNavigationForC2() {
     let conceptName, conceptCode;
 
-    if(this.determineIfAnythingDone()){
+    if(this.determineIfAnythingDone() && Object.keys(this.props.exerciseRecommendations).length > 0) {
       // expand concept for recommended exercise
-      if(Object.keys(this.props.exerciseRecommendations).length < 1) throw "No recommendation available in world view";
-
       conceptCode = this.props.exerciseConceptMap[Object.keys(this.props.exerciseRecommendations)[0]];
       conceptName = formatCamelCasedString(conceptCode);
     } else {
+      console.log("No recommendation available in world view. Going to default");
       // expand how code runs
       conceptCode = HOW_CODE_RUNS;
       conceptName = formatCamelCasedString(conceptCode);
