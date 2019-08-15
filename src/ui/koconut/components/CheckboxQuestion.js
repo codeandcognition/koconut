@@ -4,6 +4,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import _ from 'lodash';
 
 type Props = {
     choices: string[],
@@ -22,10 +23,31 @@ class CheckboxQuestion extends Component {
   constructor(props: Props) {
     super(props);
 
+    // to ensure checkboxes are controlled input
     this.state = {
-      checkboxItems: {},
+      checkboxItems: this.getDefaultCheckboxObject(),
       selectedItems: []
     }
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // going between checkbox exercises. React still throws error on controlled vs uncontrolled input but doesn't affect performance
+    if(prevProps.choices !== this.props.choices) {
+      this.setState({
+        checkboxItems: this.getDefaultCheckboxObject(),
+        selectedItems: []
+      });
+    }
+  }
+
+  /**
+   * Return object with each checkbox item as key and value as false
+   * For setting state.checkboxItems at beginning
+   */
+  getDefaultCheckboxObject() {
+    let checkboxItems = {};
+    this.props.choices.forEach(item => checkboxItems[item]=false);
+    return checkboxItems;
   }
 
   /**
@@ -34,7 +56,8 @@ class CheckboxQuestion extends Component {
    * @param {string} choice choice from the choices
    */
   handleChange(e: any, choice: string) {
-    let choices = this.state.checkboxItems;
+    console.log(`checkbox change detected`); // TODO remove
+    let choices = Object.assign({}, this.state.checkboxItems); // deep copy
     choices[choice] = e.target.checked;
     let selected = [];
     Object.keys(choices).forEach((item) => {
@@ -65,23 +88,19 @@ class CheckboxQuestion extends Component {
                   <FormControlLabel style={formGroupLabelStyles} key={index} control={
                     <Checkbox
                         checked={this.state.checkboxItems[item]}
-                        disabled={this.props.feedback ? true : false}
                         onChange={(e) => {
-                            if(!this.props.feedback) {
-                              this.handleChange(e, item)
-                            }
+                            this.handleChange(e, item)
                           }}
                         value={item}
                     />
                   } label={<div>{item}
                     {this.props.feedback &&
                       <span style={{marginLeft: 5}}>
-                        <svg height={10} width={10}>
-                          <circle cx={5} cy={5} r={5} fill={
-                            (this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) > -1) ||
-                            (!this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) < 0) ? "green" : "red"
-                          }/>
-                        </svg>
+                        {(this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) > -1) || 
+                        (!this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) < 0) 
+                          ? <i className="fa fa-check" aria-hidden="true" style={{color: "#A6E84B"}}/>
+                          : <i className="fa fa-times" aria-hidden="true" style={{color: "#D92722"}}/>
+                        }
                       </span>
                     }
                   </div>} />
