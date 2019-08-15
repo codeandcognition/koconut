@@ -4,7 +4,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import _ from 'lodash';
 
 type Props = {
     choices: string[],
@@ -31,7 +30,7 @@ class CheckboxQuestion extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    // going between checkbox exercises. React still throws error on controlled vs uncontrolled input but doesn't affect performance
+    // going between checkbox exercises. React still throws error on controlled vs uncontrolled input but doesn't affect behavior
     if(prevProps.choices !== this.props.choices) {
       this.setState({
         checkboxItems: this.getDefaultCheckboxObject(),
@@ -56,7 +55,6 @@ class CheckboxQuestion extends Component {
    * @param {string} choice choice from the choices
    */
   handleChange(e: any, choice: string) {
-    console.log(`checkbox change detected`); // TODO remove
     let choices = Object.assign({}, this.state.checkboxItems); // deep copy
     choices[choice] = e.target.checked;
     let selected = [];
