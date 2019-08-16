@@ -37,6 +37,14 @@ class CodeEditor extends Component {
     this.handleSelect = this.handleSelect.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    // empty code block between questions
+    if(prevProps.prompt !== this.props.prompt) {
+      this.setState({
+        code: this.props.code
+      });
+    }
+  }
 
   /**
    * Handles the dark/light checkbox toggle event.
