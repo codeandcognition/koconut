@@ -35,6 +35,10 @@
           ".read": "auth != null && auth.uid == $uid",
           ".write": "auth != null && auth.uid == $uid"
         },
+        "isAdult": {
+          ".read": "auth != null && auth.uid == $uid",
+          ".write": "auth != null && auth.uid == $uid"
+        },
         "Data": {
           "AnswerSubmission": {
             ".read": "auth != null && auth.uid == $uid",
