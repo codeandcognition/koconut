@@ -12,7 +12,7 @@ import './InstructionContent.css';
 export default class InstructionContent extends Component {
   render() {
     return (
-        <div className={"d-flex totalContent"}>
+        <div className={"d-flex totalContent"} style={{fontSize: 20}}>
           {/*<LargeButton click={this.props.prev}
                        type={largeButtonTypes.prev}
                        types={largeButtonTypes}

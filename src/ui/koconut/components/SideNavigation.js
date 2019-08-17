@@ -8,7 +8,6 @@ import NavSection from './NavSection';
 import NavItem from './NavItem';
 import './SideNavigation.css';
 import Progress from './Progress';
-import ConceptInventory from './../../../data/ConceptMap';
 import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
 import {CONDITIONS} from './../../../utils/Conditions';
 import Button from '@material-ui/core/Button';
@@ -17,6 +16,8 @@ import _ from 'lodash';
 import { Select } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import Card from '@material-ui/core/Card';
+
 
 const Categories = {
 	READ: "READ",
@@ -382,6 +383,7 @@ class SideNavigation extends Component {
 							{/* <h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : conceptName}</h2> */}
 							{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
 						</div>
+						{/* <ConceptOverview conceptCode={this.state.conceptCode} /> */}
 						<NavSection
 							getInstructionTitles={null}
 							title={"About"}
@@ -389,20 +391,40 @@ class SideNavigation extends Component {
 							defaultExpanded={this.state.defaultOpen.includes("OVERVIEW") && this.determineIfAnythingDone()}
 							body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
 						</NavSection>
-						<NavSection
+						
+						<Card style={{marginTop:'3px'}}>
+							<CardContent>
+								<span style={{float:'left'}}>
+								Reading
+								</span>
+								{this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={readPercent} /> : null}
+								{readingSection}
+							</CardContent>
+						</Card>
+						{/* <NavSection
 							getInstructionTitles={this.getInstructionTitles}
 							title={"Reading"}
 							defaultExpanded={this.state.defaultOpen.includes(Categories.READ)}
 							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={readPercent} /> : null}
 							body={readingSection}>
-						</NavSection>
-						<NavSection
+						</NavSection> */}
+						
+						<Card style={{marginTop:'3px'}}>
+							<CardContent>
+								<span style={{float:'left'}}>
+								Writing
+								</span>
+								{this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
+								{writingSection}
+							</CardContent>
+						</Card>
+						{/* <NavSection
 							getInstructionTitles={this.getInstructionTitles}
 							title={"Writing"}
 							defaultExpanded={this.state.defaultOpen.includes(Categories.WRITE)}
 							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
 							body={writingSection}>
-						</NavSection>
+						</NavSection> */}
 						{(this.props.userCondition !== CONDITIONS.C2 && typeof(this.state.selectedIndex) === 'string' && this.state.selectedIndex.length > 0)&&
 								<div>
 									<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>

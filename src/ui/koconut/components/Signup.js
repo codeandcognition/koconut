@@ -10,9 +10,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
 import Homepage from './Homepage/Homepage';
 import 'firebase/auth';
 import {CONDITIONS} from '../../../utils/Conditions';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 
 type Props = {
 	toSignin: Function
@@ -30,7 +33,9 @@ class Signup extends Component {
       accessCodeVisible: false, // if true, textbox asking for access code appears
       accessCodeInvalid: false,
       userExperienceError: false,
-      userExperience: "" // response to "I am..." question
+      userExperience: "", // response to "I am..." question
+      isAdult: false,
+      showAgeWarning: false // when true, warning about age comes up
 		}; // need this declaration here, render crashes otherwise
   }
 
@@ -71,6 +76,8 @@ class Signup extends Component {
       this.setState({userExperienceError: true});
     } else if(condition == CONDITIONS.INVALID){ // ensure access code is valid
       this.setState({accessCodeInvalid: true});
+    } else if(!this.state.isAdult) {
+      this.setState({showAgeWarning: true})
     } else {
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(user => {
@@ -82,6 +89,7 @@ class Signup extends Component {
             });
             firebase.database().ref(`/Users/${uid}/userExperience`).set(this.state.userExperience);
             firebase.database().ref(`/Users/${uid}/condition`).set(condition);
+            firebase.database().ref(`/Users/${uid}/isAdult`).set(this.state.isAdult);
           }
           this.setState({currentUser: user});
           return user.updateProfile({displayName: this.state.displayName});
@@ -195,6 +203,23 @@ class Signup extends Component {
                       </Select>
                     </FormControl>
 
+                    {this.state.showAgeWarning ? <p className="alert alert-danger"
+                      style={{marginTop: '3%', marginBottom: '0%'}}>Sorry, you must be at least 18 years or older to use Codeitz.</p> : null}
+                    <FormControl style={{marginTop: 10, textAlign: 'center'}}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox checked={this.state.isAdult} 
+                          onChange={e => {
+                            this.setState({
+                              isAdult: e.target.checked,
+                              showAgeWarning: false
+                            })
+                          }} />
+                        }
+                        label="I am at least 18 years old."
+                      />
+                    </FormControl>
+
                     {this.state.accessCodeVisible && this.state.accessCodeInvalid ? <p className="alert alert-warning"
                       style={{marginTop: '3%', marginBottom: '0%'}}>Sorry, your access code is invalid. Please submit another one, or leave it blank.</p> : null}
                       
@@ -226,7 +251,7 @@ class Signup extends Component {
               {/* Sign in link is styled to go along with Material UI's styles */}
               <p style={{textAlign: 'left', marginLeft: '2%', marginTop: '2%'}}>Already have an account? <Link to={Routes.signin}>
                 <span>
-                  Sign in instead
+                  <b>Sign in instead.</b>
                 </span>
               </Link></p>
               {this.state.errCode ?

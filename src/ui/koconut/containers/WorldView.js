@@ -126,7 +126,8 @@ class WorldView extends Component {
         data : {
 					id: concept.name,
           name: conceptName,
-          content: conceptName + "\n\n" + this.state.conceptDescriptions[concept.name]
+          content: conceptName.toUpperCase() + "\n\n" + 
+            (typeof(this.state.conceptDescriptions[concept.name]) === 'string' ? this.state.conceptDescriptions[concept.name].toLowerCase() : "")
         },
         grabbable: false
       };
@@ -153,15 +154,15 @@ class WorldView extends Component {
         style: {
           'content': 'data(content)',
           'text-wrap': 'wrap',
-          'text-max-width': '243px',
+          'text-max-width': '350px',
           'shape': 'roundrectangle',
-          'font-size': '20px',
+          'font-size': '32px',
           'text-valign': 'center',
           'color': 'black',
           'text-halign': 'center',
           'background-color': 'lightgray',
-          'width': '250px',
-          'height': "150px"
+          'width': '360px',
+          'height': "200px",
         }
       },
       {
@@ -197,10 +198,15 @@ class WorldView extends Component {
     });
 
     // styling for recommended concepts
-    this.state.recommendedConcepts.forEach( concept => cy.getElementById(concept).style(REC_STYLE));
+    if(this.state.userCondition == CONDITIONS.E1) {
+      this.state.recommendedConcepts.forEach( concept => cy.getElementById(concept).style(REC_STYLE));
+    }
 
-    cy.panningEnabled(false);
-    cy.zoomingEnabled(false);
+    cy.panningEnabled(true);
+    cy.zoomingEnabled(true);
+    cy.minZoom(0.25);
+    cy.maxZoom(5.0);
+
 
     cy.on('mousedown', (evt) => {
     	let node = evt.target["_private"]["data"];
