@@ -126,7 +126,8 @@ class WorldView extends Component {
         data : {
 					id: concept.name,
           name: conceptName,
-          content: conceptName.toUpperCase() + "\n\n" + this.state.conceptDescriptions[concept.name].toLowerCase()
+          content: conceptName.toUpperCase() + "\n\n" + 
+            (typeof(this.state.conceptDescriptions[concept.name]) === 'string' ? this.state.conceptDescriptions[concept.name].toLowerCase() : "")
         },
         grabbable: false
       };
