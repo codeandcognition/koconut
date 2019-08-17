@@ -264,7 +264,7 @@ class InstructionView extends Component {
 
 	render() {
 		let chosenInstruction = null;
-		const styleCenterText = {textAlign: 'center'};
+		const styleCenterText = {marginTop: '10px', textAlign: 'center'};
 		if (this.state.instructionList) {
 			chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
 		}
