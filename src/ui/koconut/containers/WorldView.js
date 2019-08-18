@@ -163,6 +163,7 @@ class WorldView extends Component {
           'background-color': 'lightgray',
           'width': '360px',
           'height': "200px",
+          'font-family': 'Roboto, Helvetica, Arial, sans-serif'
         }
       },
       {
