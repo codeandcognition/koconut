@@ -49,7 +49,8 @@ class Information extends Component {
       gaveUpArr: [],
       mode: 'python',
       theme: 'textmate',
-      code: ''
+      code: '',
+      isScratchPadShowing: false
     };
     this.addGaveUp = this.addGaveUp.bind(this);
     this.renderResponseView = this.renderResponseView.bind(this);
@@ -94,7 +95,8 @@ class Information extends Component {
 			return '';
 		} else {
 			return (
-					<div style={{display: 'flex', justifyContent: 'space-evenly', backgroundColor: '#f7f7f7'}}>
+          // <div style={{display: 'flex', justifyContent: 'space-evenly', backgroundColor: '#f7f7f7'}}>
+          <div style={{minWidth: '50%', backgroundColor: '#f7f7f7'}}>
 						<Code
 								key={"code" + index}
 								type={question.type}
@@ -110,11 +112,19 @@ class Information extends Component {
 								submitTryAgain={this.props.submitTryAgain}
 								fIndex={fIndex}
 						/>
-						<div style={{margin: '2%'}}>
-							<h5>Scratch Pad</h5>
-							{/* <textarea style={{width: '12em', height: '20em', backgroundColor: '#FFF9C4'}}/> */}
-              {renderAce && renderAce()}
-						</div>
+            {this.state.isScratchPadShowing &&
+              <div style={{marginLeft: '2%', marginRight: '2%', textAlign: 'left'}}>
+                <h5 style={{marginBottom:'0%'}}>Scratch Pad</h5>
+                <p style={{marginBottom:'0%'}}>Use this space to write down any notes!</p>
+                {/* <textarea style={{width: '12em', height: '20em', backgroundColor: '#FFF9C4'}}/> */}
+                {renderAce && renderAce()}
+              </div>
+            }
+            <button className={"btn btn-submit click"} onClick={() => {
+              this.setState({isScratchPadShowing: !this.state.isScratchPadShowing})
+            }}>
+						{this.state.isScratchPadShowing ? 'Hide' : 'Show'} scratch pad
+					  </button>
 					</div>
 			);
 		}

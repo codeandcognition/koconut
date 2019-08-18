@@ -65,7 +65,7 @@ class ExerciseQuestion extends Component {
     return <AceEditor
         ref="aceEditor"
         className={"ace-editor"}
-        width="12em"
+        width="auto"
         height="20em"
         value={this.state.code}
         // readOnly={this.props.type !== Types.fillBlank &&
@@ -78,7 +78,7 @@ class ExerciseQuestion extends Component {
         onChange={this.handleChange}
         // onSelectionChange={this.handleSelect}
         setOptions={{
-          showLineNumbers: true,
+          showLineNumbers: false,
           tabSize: 2,
         }}
         minLines={6}
