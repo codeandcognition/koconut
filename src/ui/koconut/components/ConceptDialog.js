@@ -10,7 +10,7 @@ import './ConceptDialog.css';
 import ConceptInventory from './../../../data/ConceptMap';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import ConceptDialogButton from './ConceptDialogButton';
 import ExerciseButton from './ExerciseButton';
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
