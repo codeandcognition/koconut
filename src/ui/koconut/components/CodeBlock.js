@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { vs as style } from 'react-syntax-highlighter/dist/styles/hljs'
+import { vs as style } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import './CodeBlock.css'
 
 // type Props = {
@@ -22,7 +22,7 @@ export default class CodeBlock extends React.PureComponent {
     }
 
     static defaultProps = {
-        language: null,
+        language: null, 
     }
 
     render() {
@@ -32,6 +32,7 @@ export default class CodeBlock extends React.PureComponent {
             <SyntaxHighlighter language={language || 'python'}
                 style={style}
                 showLineNumbers
+                lineNumberStyle={{'opacity':'0.4'}}
                 className="codeblock">
                 {value}
             </SyntaxHighlighter>

@@ -7,7 +7,7 @@ import LoadingView from './../components/LoadingView';
 import SideNavigation from './../components/SideNavigation';
 import './WorldView.css';
 import cytoscape from 'cytoscape';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import dagre from 'cytoscape-dagre';
 import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
 import _ from 'lodash';
@@ -163,6 +163,7 @@ class WorldView extends Component {
           'background-color': 'lightgray',
           'width': '360px',
           'height': "200px",
+          'font-family': 'Roboto, Helvetica, Arial, sans-serif'
         }
       },
       {

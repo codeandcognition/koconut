@@ -59,3 +59,19 @@
   .instruct-content-container {
     margin: auto;
     width: 80%; } }
+
+table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+th {
+  border-bottom: 3px solid black;
+}
+
+th, td {
+  padding: 5px;
+}
