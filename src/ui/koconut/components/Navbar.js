@@ -153,8 +153,8 @@ class Navbar extends Component {
                         getContentAnchorEl={null}
                         style={{paddingRight: 0}}
                       >
-                    {this.state.isAuthor ? <Link to={Routes.author}><MenuItem>Author</MenuItem></Link> : null}
-                    <Link to={Routes.profile}><MenuItem>Profile</MenuItem></Link>
+                    {this.state.isAuthor ? <Link className='subtle' to={Routes.author}><MenuItem>Author</MenuItem></Link> : null}
+                    <Link className='subtle' to={Routes.profile}><MenuItem>Profile</MenuItem></Link>
                     <MenuItem onClick={this.handleMenuClose} disabled={true}>Settings</MenuItem>
                     <MenuItem onClick={() => this.handleLogout()}>Logout</MenuItem>
                   </Menu>

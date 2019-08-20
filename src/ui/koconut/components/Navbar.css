@@ -1,5 +1,5 @@
-a {
+a.subtle {
   color: black; }
 
-a:hover {
+a.subtle:hover {
   text-decoration: none; }
