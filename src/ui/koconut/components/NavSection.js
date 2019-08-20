@@ -24,13 +24,19 @@ class NavSection extends Component {
             flexBasis: '33.33%',
         };
 
+        let styleTight = {
+            marginTop:'0px', 
+            marginBottom:'0px',
+            padding: '0px 12px'
+        }
+
         return(
-            <ExpansionPanel defaultExpanded={this.props.defaultExpanded ? this.props.defaultExpanded : false}>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                    <p>{this.props.title}</p>
+            <ExpansionPanel defaultExpanded={this.props.defaultExpanded ? this.props.defaultExpanded : false} style={{marginTop:'8px', marginBottom:'8px'}} >
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} style={{maxHeight:'40px', minHeight:'auto', paddingTop: '4px'}}>
+                    <span style={{marginTop: '0px', marginBottom:'0px', padding:'4px'}}>{this.props.title}</span>
                     {this.props.progress}
                 </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                <ExpansionPanelDetails style={styleTight}>
                     {this.props.body}
                 </ExpansionPanelDetails>
             </ExpansionPanel>

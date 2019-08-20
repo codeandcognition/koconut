@@ -25,12 +25,12 @@ class NavItem extends Component {
 
 	render() {
 		let complete = this.state.read ? { color: "#80B948" } : { color: "#F5F5F5"}; // checkmark is green if complete
-		let highlight = this.state.suggestionText ? { borderLeft: "5px solid #4054B2"} : {}; // recommendation adds blue accent
+		let recStyle = this.state.suggestionText ? {borderLeft: '5px solid #4054B2'} : {}; // recommendation adds blue accent
+
 		let icon = this.props.isExercise ? FA_ICONS.EXERCISE : FA_ICONS.INSTRUCTION;
-		highlight["color"] = "black"; // poor code style
 		return(
 				<div>
-					<ListItem className={"nav-item"} selected={this.props.index==this.props.selectedIndex} style={highlight}>
+					<ListItem className={"nav-item"} selected={this.props.index==this.props.selectedIndex} style={recStyle}>
 						{this.state.suggestionText && 
 						<p className={"recommendation"}>
 							{this.props.recIcon && <i className={`fa ${this.props.recIcon}`}/>}
