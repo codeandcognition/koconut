@@ -19,6 +19,7 @@ import ExerciseGenerator from '../../../backend/ExerciseGenerator';
 // import ResponseEvaluator from '../../../backend/ResponseEvaluator'; // replaced w/ koconut-api /checker endpoint
 import ExerciseTypes from '../../../data/ExerciseTypes.js';
 import LoadingView from '../components/LoadingView';
+import Profile from './Profile';
 
 const Sk = require('skulpt');
 
@@ -63,6 +64,10 @@ const InstructionView = Loadable({
 	loader: () => import('./InstructionView'),
 	loading: Loading,
 });
+const ProfileView = Loadable({
+	loader: () => import('./Profile'),
+	loading: Loading,
+})
 // TODO: Delete this path later
 const AllExercises = Loadable({
 	loader: () => import('./AllExercises'),
@@ -1252,6 +1257,18 @@ class App extends Component {
 		}
 	}
 
+	renderProfile() {
+		return (
+			<div>
+				{this.renderNavBar()}
+				<Profile
+					firebase={this.props.firebase}
+					userCondition={this.state.userCondition}
+				/>
+			</div>
+		)
+	}
+
 	/**
 	 * predefined routes within koconut
 	 */
@@ -1267,6 +1284,7 @@ class App extends Component {
 				<Route exact path={Routes.instruction} component={() => this.renderInstructionView()} />
 				<Route exact path={Routes.practice} render={() => this.renderExercise()} />
 				<Route exact path={Routes.allexercises} render={() => this.renderAllExercises()} />
+				<Route exact path={Routes.profile} render={() => this.renderProfile()} />
 				<Redirect to={Routes.home} />
 			</Switch>
 		);

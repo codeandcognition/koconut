@@ -12,6 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import BackButton from '@material-ui/icons/ChevronLeft';
 import Routes from './../../../Routes';
 import {CONDITIONS} from '../../../utils/Conditions';
+import './Navbar.css';
 
 /**
  * Navbar adds a navigation bar to the app
@@ -153,7 +154,7 @@ class Navbar extends Component {
                         style={{paddingRight: 0}}
                       >
                     {this.state.isAuthor ? <Link to={Routes.author}><MenuItem>Author</MenuItem></Link> : null}
-                    <MenuItem onClick={this.handleMenuClose} disabled={true}>Profile</MenuItem>
+                    <Link to={Routes.profile}><MenuItem>Profile</MenuItem></Link>
                     <MenuItem onClick={this.handleMenuClose} disabled={true}>Settings</MenuItem>
                     <MenuItem onClick={() => this.handleLogout()}>Logout</MenuItem>
                   </Menu>
