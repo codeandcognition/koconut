@@ -45,7 +45,7 @@ const createAppName = (size) => {
   return <><span style={{
     fontSize: size
   }}>Code</span><span style={{
-    color: "#0088d5",
+    color: "#607d8b",
     fontSize: size
   }}>itz</span></>
 }
