@@ -280,13 +280,15 @@ class SideNavigation extends Component {
 							ex, exerciseIds[index], index, exerciseIds.length)}>
 								<NavItem read={read} suggestionText={text} recIcon = {recIcon} name={ex.shortPrompt} isExercise={true}
 									selectedIndex={this.state.selectedIndex} 
-									index={`${readOrWrite}e${index}`}>
+									index={`${readOrWrite}e${index}`}
+									ref={`${readOrWrite}e${index}`} // TODO: use this to scroll to recommendation
+									>
 									</NavItem>
 									</Link>
 				);
 			}
 		});
-		return <List style={{ width: '100%' }}>{buttonsList}</List>;
+		return <List style={{ width: '100%', paddingTop:'0px', paddingBottom:'0px' }}>{buttonsList}</List>;
 	}
 
 	/**
@@ -392,7 +394,7 @@ class SideNavigation extends Component {
 							body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
 						</NavSection>
 						
-						<Card style={{marginTop:'3px'}}>
+						{/* <Card style={{marginTop:'3px'}}>
 							<CardContent>
 								<span style={{float:'left'}}>
 								Reading
@@ -400,16 +402,16 @@ class SideNavigation extends Component {
 								{this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={readPercent} /> : null}
 								{readingSection}
 							</CardContent>
-						</Card>
-						{/* <NavSection
+						</Card> */}
+						<NavSection
 							getInstructionTitles={this.getInstructionTitles}
 							title={"Reading"}
 							defaultExpanded={this.state.defaultOpen.includes(Categories.READ)}
 							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={readPercent} /> : null}
 							body={readingSection}>
-						</NavSection> */}
+						</NavSection>
 						
-						<Card style={{marginTop:'3px'}}>
+						{/* <Card style={{marginTop:'3px'}}>
 							<CardContent>
 								<span style={{float:'left'}}>
 								Writing
@@ -417,14 +419,14 @@ class SideNavigation extends Component {
 								{this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
 								{writingSection}
 							</CardContent>
-						</Card>
-						{/* <NavSection
+						</Card> */}
+						<NavSection
 							getInstructionTitles={this.getInstructionTitles}
 							title={"Writing"}
 							defaultExpanded={this.state.defaultOpen.includes(Categories.WRITE)}
 							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
 							body={writingSection}>
-						</NavSection> */}
+						</NavSection>
 						{(this.props.userCondition !== CONDITIONS.C2 && typeof(this.state.selectedIndex) === 'string' && this.state.selectedIndex.length > 0)&&
 								<div>
 									<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
