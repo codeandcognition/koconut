@@ -102,7 +102,7 @@ const Fields = {
 }
 
 // first exercise to recommend (practice reading data types) #coldstart
-const EXERCISE_ID_FIRST_REC = {'-LH_KNtUIv-mnBkZz2-k': REC_RESPONSES[0]};
+const EXERCISE_ID_FIRST_REC = {'types-read-rules': REC_RESPONSES[0]};
 
 // const PYTHON_API = "http://127.0.0.1:5000/checker/"; // TODO for prod: change this route
 const PYTHON_API = "https://codeitz.herokuapp.com/checker/" // prod route
