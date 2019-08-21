@@ -338,8 +338,8 @@ class SideNavigation extends Component {
 			// borderLeft: "8px solid #4054B2" // for recommendation
 		}
 
-		let readPercent = conceptHasExercises ? readProgress : DEFAULT_PROGRESS;
-		let writePercent = conceptHasExercises ? writeProgress : DEFAULT_PROGRESS;
+		let readPercent = conceptHasExercises ? readProgress : null;
+		let writePercent = conceptHasExercises ? writeProgress : null;
 
 		let recConcept = this.props.exerciseConceptMap[this.state.recExerciseId]
 		let firstUnreadInstruction = this.state.recExerciseId ? this.findFirstUnreadInstruction(recConcept) : false;
@@ -407,7 +407,7 @@ class SideNavigation extends Component {
 							getInstructionTitles={this.getInstructionTitles}
 							title={"Reading"}
 							defaultExpanded={this.state.defaultOpen.includes(Categories.READ)}
-							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={readPercent} /> : null}
+							progress={this.props.userCondition !== CONDITIONS.C2 && readPercent ? <Progress percent={readPercent} /> : null}
 							body={readingSection}>
 						</NavSection>
 						
@@ -424,7 +424,7 @@ class SideNavigation extends Component {
 							getInstructionTitles={this.getInstructionTitles}
 							title={"Writing"}
 							defaultExpanded={this.state.defaultOpen.includes(Categories.WRITE)}
-							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
+							progress={this.props.userCondition !== CONDITIONS.C2 && writePercent ? <Progress percent={writePercent} /> : null}
 							body={writingSection}>
 						</NavSection>
 						{(this.props.userCondition !== CONDITIONS.C2 && typeof(this.state.selectedIndex) === 'string' && this.state.selectedIndex.length > 0)&&
