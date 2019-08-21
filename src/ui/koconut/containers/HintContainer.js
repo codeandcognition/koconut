@@ -9,7 +9,7 @@ class HintContainer extends Component {
 	renderContent() {
 		return (typeof(this.props.content) === 'string' && !this.PLACEHOLDER_CONTENT.includes(this.props.content.toLowerCase().trim())) 
 		? this.props.content
-		: 'Sorry, no hint is available. Consider reviewing the lessons for concepts!';
+		: 'Sorry, no hint is available. Consider reviewing the lessons for this concept!';
 	}
 	render() {
 		let style = {
