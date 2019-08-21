@@ -388,7 +388,7 @@ class SideNavigation extends Component {
 						{/* <ConceptOverview conceptCode={this.state.conceptCode} /> */}
 						<NavSection
 							getInstructionTitles={null}
-							title={"About"}
+							title={"Overview"}
 							progress={null}
 							defaultExpanded={this.state.defaultOpen.includes("OVERVIEW") && this.determineIfAnythingDone()}
 							body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
