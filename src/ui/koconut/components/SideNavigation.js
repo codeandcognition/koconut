@@ -16,7 +16,6 @@ import _ from 'lodash';
 import { Select } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Card from '@material-ui/core/Card';
 
 
 const Categories = {
@@ -26,7 +25,6 @@ const Categories = {
 
 const progressField = "pKnown";
 const DEFAULT_REC = "based on what you've done, you should try this";
-const DEFAULT_PROGRESS = 1.0;
 const HOW_CODE_RUNS = 'howCodeRuns';
 
 type Props = {
@@ -383,7 +381,7 @@ class SideNavigation extends Component {
 								</h2>							
 							</FormControl>
 							{/* <h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : conceptName}</h2> */}
-							{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
+							{(!this.props.persist || this.props.userCondition !== CONDITIONS.C2) && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
 						</div>
 						{/* <ConceptOverview conceptCode={this.state.conceptCode} /> */}
 						<NavSection
