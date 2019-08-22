@@ -16,6 +16,7 @@ import _ from 'lodash';
 import { Select } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import Signpost from './Signpost';
 
 
 const Categories = {
@@ -391,6 +392,8 @@ class SideNavigation extends Component {
 							defaultExpanded={this.state.defaultOpen.includes("OVERVIEW") && this.determineIfAnythingDone()}
 							body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
 						</NavSection>
+
+						<Signpost direction={'down'} message={'Choose a lesson or exercise below.'} />
 						
 						{/* <Card style={{marginTop:'3px'}}>
 							<CardContent>
