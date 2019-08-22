@@ -9,7 +9,8 @@ const routes = {
 	practice: '/practice/:concept/:type',
 	error: '/404',
 	allexercises: '/worldview/all-exercises',
-	profile: '/profile'
+	profile: '/profile',
+	tutorial: '/tutorial'
 };
 
 export default routes;
