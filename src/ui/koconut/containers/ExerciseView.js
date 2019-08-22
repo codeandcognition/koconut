@@ -9,6 +9,7 @@ import './ExerciseView.css';
 import CodeBlock from '../components/CodeBlock';
 // import ExerciseNavigation from '../components/ExerciseNavigation';
 import SideNavigation from './../components/SideNavigation';
+import Signpost from './../components/Signpost';
 
 type Props = {
   exercise: {
@@ -242,6 +243,9 @@ class Exercise extends Component {
               getOrderedConcepts={this.props.getOrderedConcepts}
             /> */}
             {!this.props.exercise || Object.keys(this.props.exercise).length === 0 ? <LoadingView /> : this.renderExercise()}
+            <span style={{display:'block'}}>
+              <Signpost direction={'left'} message={'Use the side navigation to decide what to learn next'} />
+            </span>
           </div>
         </div>
       </div>

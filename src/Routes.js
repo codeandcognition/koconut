@@ -8,7 +8,9 @@ const routes = {
 	instruction: '/instruction/:concept/:type/page=:pageIndex',
 	practice: '/practice/:concept/:type',
 	error: '/404',
-	allexercises: "/worldview/all-exercises"
+	allexercises: '/worldview/all-exercises',
+	profile: '/profile',
+	tutorial: '/tutorial'
 };
 
 export default routes;

@@ -5,6 +5,12 @@ type Props = {
 };
 
 class HintContainer extends Component {
+	PLACEHOLDER_CONTENT = ['none', 'placeholder', ''];
+	renderContent() {
+		return (typeof(this.props.content) === 'string' && !this.PLACEHOLDER_CONTENT.includes(this.props.content.toLowerCase().trim())) 
+		? this.props.content
+		: 'Sorry, no hint is available. Consider reviewing the lessons for this concept!';
+	}
 	render() {
 		let style = {
 			padding: '0.5em',
@@ -18,7 +24,7 @@ class HintContainer extends Component {
 
 		return(
 				<div style={style}>
-					<p style={{margin: '0'}}>{this.props.content ? this.props.content : "Hints are not available for this question :("}</p>
+					<p style={{margin: '0'}}>{this.renderContent()}</p>
 				</div>
 		)
 	}

@@ -10,6 +10,7 @@ import InstructionContent from '../components/InstructionContent';
 import LoadingView from '../components/LoadingView';
 import './InstructionView.css';
 import SideNavigation from './../components/SideNavigation';
+import Signpost from './../components/Signpost';
 
 import 'firebase/auth';
 import 'firebase/database';
@@ -264,7 +265,6 @@ class InstructionView extends Component {
 
 	render() {
 		let chosenInstruction = null;
-		const styleCenterText = {marginTop: '10px', textAlign: 'center'};
 		if (this.state.instructionList) {
 			chosenInstruction = this.state.instructionList[this.state.currInstructionIndex];
 		}
@@ -329,9 +329,8 @@ class InstructionView extends Component {
 										</div>
 										{/* {hasMultiplePages && <button className={"nav-arrow-btn" +
 											" right-arrow"} onClick={() => this.nextInstruction()}><i className="fas fa-chevron-right" /></button>} */}
-										<div style={styleCenterText}>
-											<p><i className="fa fa-chevron-left" aria-hidden="true"></i><i>Use the navigation bar on the left to continue.</i></p>
-										</div>
+										<br/>
+										<Signpost direction={'left'} message={'Use the side navigation to decide what to learn next'} />
 									</div>
 								}
 							</div>

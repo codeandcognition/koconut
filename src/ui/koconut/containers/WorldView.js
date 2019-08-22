@@ -12,6 +12,7 @@ import dagre from 'cytoscape-dagre';
 import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
 import _ from 'lodash';
 import { CONDITIONS } from '../../../utils/Conditions';
+import Signpost from './../components/Signpost';
 
 cytoscape.use( dagre ); // layout for directed acyclic graph: https://github.com/cytoscape/cytoscape.js-dagre
 
@@ -377,13 +378,16 @@ class WorldView extends Component {
     }
 		return (
 				<div>
-					{this.state.conceptDialog && this.renderSidebar() }
+          {this.state.conceptDialog && this.renderSidebar() }
           {this.props.userCondition !== CONDITIONS.C2
-            ? <div ref={this.hierarchyContainer} id={"hierarchy-container"} />
+            ? <span>
+                <div style={{marginTop:'10%'}}>
+                  <Signpost direction='down' message='Select any concept below to learn more about it!' />
+                </div>
+                <div ref={this.hierarchyContainer} id={"hierarchy-container"} />
+              </span>
             : 
-            <div style={CENTER_STYLE}>
-              <p><i className="fa fa-chevron-left" aria-hidden="true"></i><i>Use the navigation bar on the left to continue learning!</i></p>
-            </div>
+            <Signpost direction='left' message='Use the navigation bar to choose what you want to learn next!' />
           }
 				</div>
 		);

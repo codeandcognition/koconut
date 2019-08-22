@@ -16,7 +16,7 @@ import _ from 'lodash';
 import { Select } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Card from '@material-ui/core/Card';
+import Signpost from './Signpost';
 
 
 const Categories = {
@@ -26,7 +26,6 @@ const Categories = {
 
 const progressField = "pKnown";
 const DEFAULT_REC = "based on what you've done, you should try this";
-const DEFAULT_PROGRESS = 1.0;
 const HOW_CODE_RUNS = 'howCodeRuns';
 
 type Props = {
@@ -338,8 +337,8 @@ class SideNavigation extends Component {
 			// borderLeft: "8px solid #4054B2" // for recommendation
 		}
 
-		let readPercent = conceptHasExercises ? readProgress : DEFAULT_PROGRESS;
-		let writePercent = conceptHasExercises ? writeProgress : DEFAULT_PROGRESS;
+		let readPercent = conceptHasExercises ? readProgress : null;
+		let writePercent = conceptHasExercises ? writeProgress : null;
 
 		let recConcept = this.props.exerciseConceptMap[this.state.recExerciseId]
 		let firstUnreadInstruction = this.state.recExerciseId ? this.findFirstUnreadInstruction(recConcept) : false;
@@ -383,16 +382,18 @@ class SideNavigation extends Component {
 								</h2>							
 							</FormControl>
 							{/* <h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : conceptName}</h2> */}
-							{!this.props.persist && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
+							{(!this.props.persist || this.props.userCondition !== CONDITIONS.C2) && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
 						</div>
 						{/* <ConceptOverview conceptCode={this.state.conceptCode} /> */}
 						<NavSection
 							getInstructionTitles={null}
-							title={"About"}
+							title={"Overview"}
 							progress={null}
 							defaultExpanded={this.state.defaultOpen.includes("OVERVIEW") && this.determineIfAnythingDone()}
 							body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
 						</NavSection>
+
+						<Signpost direction={'down'} message={'Choose a lesson or exercise below.'} />
 						
 						{/* <Card style={{marginTop:'3px'}}>
 							<CardContent>
@@ -407,7 +408,7 @@ class SideNavigation extends Component {
 							getInstructionTitles={this.getInstructionTitles}
 							title={"Reading"}
 							defaultExpanded={this.state.defaultOpen.includes(Categories.READ)}
-							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={readPercent} /> : null}
+							progress={this.props.userCondition !== CONDITIONS.C2 && readPercent ? <Progress percent={readPercent} /> : null}
 							body={readingSection}>
 						</NavSection>
 						
@@ -424,7 +425,7 @@ class SideNavigation extends Component {
 							getInstructionTitles={this.getInstructionTitles}
 							title={"Writing"}
 							defaultExpanded={this.state.defaultOpen.includes(Categories.WRITE)}
-							progress={this.props.userCondition !== CONDITIONS.C2 ? <Progress percent={writePercent} /> : null}
+							progress={this.props.userCondition !== CONDITIONS.C2 && writePercent ? <Progress percent={writePercent} /> : null}
 							body={writingSection}>
 						</NavSection>
 						{(this.props.userCondition !== CONDITIONS.C2 && typeof(this.state.selectedIndex) === 'string' && this.state.selectedIndex.length > 0)&&
