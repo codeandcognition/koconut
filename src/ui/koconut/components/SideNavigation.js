@@ -382,7 +382,7 @@ class SideNavigation extends Component {
 								</h2>							
 							</FormControl>
 							{/* <h2>{ConceptInventory[this.state.title] ? ConceptInventory[this.state.title].explanations.name : conceptName}</h2> */}
-							{(!this.props.persist || this.props.userCondition !== CONDITIONS.C2) && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
+							{(!this.props.persist && this.props.userCondition !== CONDITIONS.C2) && <i className="far fa-times-circle sidebar-close" onClick={() => ref.props.closeMenu()}></i>}
 						</div>
 						{/* <ConceptOverview conceptCode={this.state.conceptCode} /> */}
 						<NavSection
@@ -393,7 +393,7 @@ class SideNavigation extends Component {
 							body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
 						</NavSection>
 
-						<Signpost direction={'down'} message={'Choose a lesson or exercise below.'} />
+						<Signpost direction={'down'} message={'Choose any lesson or exercise.'} />
 						
 						{/* <Card style={{marginTop:'3px'}}>
 							<CardContent>
