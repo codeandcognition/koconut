@@ -105,12 +105,11 @@ class WorldView extends Component {
           this.props.firebase.database().ref(`/Users/${user.uid}/Data/InstructionsRead`).on('value', (snap) => {
             this.setState({instructionsRead: snap.val()}); // this may not be correct (should use filterCompletedInstructions() from queryCompleted.js), but also couldn't get this code to trigger...
           });
-          this.findRecommendedConcepts(this.setSideNavigationForC2);
+          this.findRecommendedConcepts(this.userCondition==CONDITIONS.C2 ? this.setSideNavigationForC2: null); // open side nav if C2 condition
 				});
 			}
     }) : null;
     window.scrollTo(0, 0);
-    sessionStorage.removeItem('exerciseId'); // remove exercise id if in world view
 	}
 
   /*
