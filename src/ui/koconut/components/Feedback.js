@@ -41,7 +41,9 @@ class Feedback extends Component {
     } else if (type === ExerciseTypes.checkboxQuestion)  {
       return <div>{feedback.failMessage}</div>
     } else if (type === ExerciseTypes.writeCode) {
-      return <div>{feedback.failMessage}</div>
+      return <ReactMarkdown className={"flex-grow-1"}
+                         source={feedback.failMessage} />
+      // return <div>{feedback.failMessage}</div>
     } else {
       let feedbackMessages = []
       if (feedback ) { 
