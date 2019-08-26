@@ -43,7 +43,6 @@ class Feedback extends Component {
     } else if (type === ExerciseTypes.writeCode) {
       return <ReactMarkdown className={"flex-grow-1"}
                          source={feedback.failMessage} />
-      // return <div>{feedback.failMessage}</div>
     } else {
       let feedbackMessages = []
       if (feedback ) { 
