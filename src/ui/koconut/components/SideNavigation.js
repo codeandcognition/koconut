@@ -393,7 +393,7 @@ class SideNavigation extends Component {
 							body={<ConceptOverview conceptCode={this.state.conceptCode} />}>
 						</NavSection>
 
-						<Signpost direction={'down'} message={'Choose a lesson or exercise below.'} />
+						<Signpost direction={'down'} message={'Choose any lesson or exercise.'} />
 						
 						{/* <Card style={{marginTop:'3px'}}>
 							<CardContent>
