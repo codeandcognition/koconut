@@ -8,3 +8,9 @@
 
 .response.full {
   width: 100%; }
+
+td p {
+  font-size: 1rem; }
+
+textarea {
+  font-size: 1rem; }
