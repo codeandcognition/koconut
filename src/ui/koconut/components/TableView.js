@@ -99,7 +99,7 @@ class TableView extends Component {
    */
   generateCell(question: any, row: number, col: number) {
     if(question.type === "" && question.prompt) {
-      return question.prompt;
+      return <ReactMarkdown>{question.prompt}</ReactMarkdown>;
     }
 
     if (question.code) {

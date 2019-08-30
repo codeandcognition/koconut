@@ -1,6 +1,7 @@
 // @flow
 import React, {Component} from 'react';
 import ReactTooltip from 'react-tooltip';
+import ReactMarkdown from 'react-markdown';
 import './Choice.css';
 
 /**
@@ -46,7 +47,7 @@ class Choice extends Component {
             data-tip
             style={{width: "60%"}}
             data-for={this.props.content}>
-          {this.props.content}
+          <ReactMarkdown>{this.props.content}</ReactMarkdown>
           <br />
           {this.renderTooltip()}
         </div>
