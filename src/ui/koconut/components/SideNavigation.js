@@ -431,7 +431,7 @@ class SideNavigation extends Component {
 						{(this.props.userCondition !== CONDITIONS.C2 && typeof(this.state.selectedIndex) === 'string' && this.state.selectedIndex.length > 0)&&
 								<div>
 									<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
-										<Button style={style} variant="contained"><i className="fa fa-chevron-left" aria-hidden="true"></i> back to world view</Button>
+										<Button style={style} variant="contained">back to world view</Button>
 									</Link>
 								</div>
 						}
