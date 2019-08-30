@@ -63,7 +63,9 @@ export const conceptInventory =
 				parents: [g.printStatements, g.variables, g.arithmeticOperators, g.relationalOperators],
 				explanations: {
 					name: "Data Types",
-					definition: `Computers reason about different data types so they can be precise about their reasoning. This is the same kind of precision as in Math: adding two apples and three dogs wouldn't make sense. By having different data types, Python can help you avoid mistakes like this!\n\nTypes are different classifications for data. In Python, 3 common types of data are numbers, strings, and boolean.`,
+					definition: `Computers reason about different kinds of data so they can be precise when analyzing it. 
+					These different kinds of types of data help us avoid non-sensical errors: adding "2" and "yes" wouldn't make sense! 
+					\n\nIn Python, 3 common types of data are numbers, strings, and boolean.`,
 					examples: [`integer = 1\nfloat = 1.0\nstring = "hello"\nboolean = True`],
 					future: []
 				},
@@ -102,7 +104,7 @@ export const conceptInventory =
 				parents: [g.digitProcessing, g.floatEquality],
 				explanations: {
 					name: "Arithmetic Operators",
-					definition: "Much of the things we experience on computers (watching movies, using spreadsheets, etc.) involve arithmetic with numbers (integers and floats). Python offers arithmetic operators to help implement these behaviors.",
+					definition: "Much of the things we experience on computers (watching movies, using spreadsheets, etc.) involve arithmetic with numbers (integers and floats). Python offers arithmetic operators to do math!",
 					examples: [`abc = 1 + 2 + 3\nx = abc % 2`],
 					future: []
 				},
@@ -155,7 +157,7 @@ export const conceptInventory =
 				explanations: {
 					name: "Float Equality",
 					definition: "Computers make very precise calculations. This often a good thing, because we want precision if we are calculating things such as a satellite's trajectory around the earth where small changes can result in major differences. This precision can often result in some strange behavior though. ",
-					examples: [`1.0 == 1.000000000000001 # False\n1.0 == 1.000000000000001 # True`],
+					examples: [`1.0 == 1.000000000000001 # False\n1.0 == 1.0000000000000001 # True`],
 					future: []
 				},
 				should_teach: true,
