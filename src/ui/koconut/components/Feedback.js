@@ -20,7 +20,8 @@ class Feedback extends Component {
   constructor() {
     super();
     this.state = {
-      gaveUp: false
+      gaveUp: false,
+      showFullFailMsg: false
     }
   }
 
@@ -41,8 +42,17 @@ class Feedback extends Component {
     } else if (type === ExerciseTypes.checkboxQuestion)  {
       return <div>{feedback.failMessage}</div>
     } else if (type === ExerciseTypes.writeCode) {
-      return <ReactMarkdown className={"flex-grow-1"}
-                         source={feedback.failMessage} />
+      return (
+        <div>
+          <ReactMarkdown className={"flex-grow-1"} source={feedback.failMessage} />
+          {this.state.showFullFailMsg &&
+            <ReactMarkdown className={"flex-grow-1"} source={`Full computer output:\n\n${feedback.failMessageFull}`}/>
+          }
+          {(!this.state.showFullFailMsg && feedback.failMessageFull) &&
+            <Button onClick={() => this.setState({showFullFailMsg: true})}>show more feedback</Button>
+          }
+        </div>
+      )
     } else {
       let feedbackMessages = []
       if (feedback ) { 
