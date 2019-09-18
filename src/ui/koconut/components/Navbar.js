@@ -87,6 +87,10 @@ class Navbar extends Component {
     });
   }
 
+  openTutorial() {
+
+  }
+
 	/**
 	 * handle logging out of koconut
 	 */
@@ -109,10 +113,14 @@ class Navbar extends Component {
         <div>
           <AppBar>
             <Toolbar>
-              {(this.props.userCondition !== CONDITIONS.C2 && // not C2 condition condition
-                  (this.props.history.location.pathname === Routes.author ||
-									this.props.history.location.pathname.includes("instruction") ||
-									this.props.history.location.pathname.includes("practice")))  ?
+              {/* can always access back button from these routes */}
+              {(this.props.history.location.pathname === Routes.author ||
+                  this.props.history.location.pathname === Routes.tutorial ||
+                  this.props.history.location.pathname === Routes.profile) 
+                  ||
+                (this.props.userCondition !== CONDITIONS.C2 && // for C2, can't go back in instruction or practice
+                (this.props.history.location.pathname.includes("instruction") || this.props.history.location.pathname.includes("practice")))  
+                ?
 									<div style={{marginRight: 5}}>
 										<Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
 											<BackButton
@@ -155,7 +163,8 @@ class Navbar extends Component {
                       >
                     {this.state.isAuthor ? <Link className='subtle' to={Routes.author}><MenuItem>Author</MenuItem></Link> : null}
                     <Link className='subtle' to={Routes.profile}><MenuItem>Profile</MenuItem></Link>
-                    <MenuItem onClick={this.handleMenuClose} disabled={true}>Settings</MenuItem>
+                    <Link className='subtle' to={Routes.tutorial}><MenuItem>Help</MenuItem></Link>
+                    {/* <MenuItem onClick={this.handleMenuClose} disabled={true}>Settings</MenuItem> */}
                     <MenuItem onClick={() => this.handleLogout()}>Logout</MenuItem>
                   </Menu>
                 </div>)

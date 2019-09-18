@@ -237,7 +237,8 @@ class Information extends Component {
                   exerciseId={this.props.exerciseId}
                   fIndex={-1}
                 />
-                {question.followupQuestions && question.followupQuestions.map((fQuestion, fIndex) => {
+                {/*Commenting out follow-up questions b/c they don't work #293, #323 */}
+                {/* {question.followupQuestions && question.followupQuestions.map((fQuestion, fIndex) => {
                   var correctTable = true;
                   if (question.type === Types.table && this.state.feedback[index]) {
                     this.state.feedback[index].forEach((row) => {
@@ -268,7 +269,7 @@ class Information extends Component {
                       }
                     </div>
                   );
-                })}
+                })} */}
               </Paper>
             );
             })

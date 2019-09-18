@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from'./CodeBlock';
+import Image from './Image';
 import './InstructionContent.css';
 
 /**
@@ -22,7 +23,7 @@ export default class InstructionContent extends Component {
           <div className={"markdownContent"}>
           <ReactMarkdown className={"flex-grow-1"}
                          source={this.props.instruction.content}
-                         renderers={{code: CodeBlock}}
+                         renderers={{code: CodeBlock, image: Image}}
                          escapeHtml={false}
                          />
           </div>

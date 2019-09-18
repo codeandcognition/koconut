@@ -64,6 +64,9 @@
     "Instructions": {
       ".read": "auth != null",
       ".write": "auth != null && root.child('Users').child(auth.uid).child('permission').val() === 'author'"
+    },
+    "static": {
+      ".read": "auth != null"
     }
   }
 }

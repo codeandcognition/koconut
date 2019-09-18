@@ -54,7 +54,7 @@ class MemoryTableQuestion extends Component {
 	}
 
 	/**
-	 * get 2D array (num rows in answer x 2) where first value is empty string (for var name) and 2nd is empty array (for values) 
+	 * get 2D array (num rows in answer x 2 cols) where first value is empty string (for var name) and 2nd is empty array (for values) 
 	 * each array and value are unique (not references to each other)
 	 */
 	getEmpty2dArray(numRows) {
@@ -126,12 +126,13 @@ class MemoryTableQuestion extends Component {
 							? <TextField fullWidth onChange={this.handleChange('variableName', i)} disabled={disabled} value={OUTPUT}/>
 							: <TextField fullWidth onChange={this.handleChange('variableName', i)} disabled={disabled}/>
 						} */}
-						<TextField fullWidth onChange={this.handleChange('variableName', i)} disabled={disabled} value={this.state.values[i][0]} />
+						<TextField fullWidth onChange={this.handleChange('variableName', i)} disabled={disabled} value={this.state.values[i][0]} placeholder={'my_variable_name'} />
 						</TableCell>
 						<TableCell><TextField fullWidth
 																	onChange={this.handleChange('history', i)}
 																	disabled={disabled}
 																	value={this.state.values[i][1]}
+																	placeholder={`'value1', 'updated value1'`}
 																	/>
 																	</TableCell>
 					</TableRow>
@@ -142,12 +143,12 @@ class MemoryTableQuestion extends Component {
 
 		return(
 				<Paper>
-					<p>Enter the values as a list of comma separated values</p>
+					{/* <p>Enter the values as a list of comma separated values</p> */}
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell>Variable name</TableCell>
-								<TableCell>Value history</TableCell>
+								<TableCell>Variable Name</TableCell>
+								<TableCell>Value History</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>

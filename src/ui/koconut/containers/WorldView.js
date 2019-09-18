@@ -12,6 +12,7 @@ import dagre from 'cytoscape-dagre';
 import { formatCamelCasedString } from './../../../utils/formatCamelCasedString';
 import _ from 'lodash';
 import { CONDITIONS } from '../../../utils/Conditions';
+import Signpost from './../components/Signpost';
 
 cytoscape.use( dagre ); // layout for directed acyclic graph: https://github.com/cytoscape/cytoscape.js-dagre
 
@@ -104,12 +105,11 @@ class WorldView extends Component {
           this.props.firebase.database().ref(`/Users/${user.uid}/Data/InstructionsRead`).on('value', (snap) => {
             this.setState({instructionsRead: snap.val()}); // this may not be correct (should use filterCompletedInstructions() from queryCompleted.js), but also couldn't get this code to trigger...
           });
-          this.findRecommendedConcepts(this.setSideNavigationForC2);
+          this.findRecommendedConcepts(this.userCondition==CONDITIONS.C2 ? this.setSideNavigationForC2: null); // open side nav if C2 condition
 				});
 			}
     }) : null;
     window.scrollTo(0, 0);
-    sessionStorage.removeItem('exerciseId'); // remove exercise id if in world view
 	}
 
   /*
@@ -377,13 +377,16 @@ class WorldView extends Component {
     }
 		return (
 				<div>
-					{this.state.conceptDialog && this.renderSidebar() }
+          {this.state.conceptDialog && this.renderSidebar() }
           {this.props.userCondition !== CONDITIONS.C2
-            ? <div ref={this.hierarchyContainer} id={"hierarchy-container"} />
+            ? <span>
+                <div style={{marginTop:'10%'}}>
+                  <Signpost direction='down' message='Select any concept below to learn more about it!' />
+                </div>
+                <div ref={this.hierarchyContainer} id={"hierarchy-container"} />
+              </span>
             : 
-            <div style={CENTER_STYLE}>
-              <p><i className="fa fa-chevron-left" aria-hidden="true"></i><i>Use the navigation bar on the left to continue learning!</i></p>
-            </div>
+            <Signpost direction='left' message='Use the navigation bar to choose what you want to learn next!' />
           }
 				</div>
 		);

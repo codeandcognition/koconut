@@ -96,8 +96,8 @@ class CheckboxQuestion extends Component {
                       <span style={{marginLeft: 5}}>
                         {(this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) > -1) || 
                         (!this.state.checkboxItems[item] && this.props.question.answer.indexOf(item) < 0) 
-                          ? <i className="fa fa-check" aria-hidden="true" style={{color: "#A6E84B"}}/>
-                          : <i className="fa fa-times" aria-hidden="true" style={{color: "#D92722"}}/>
+                          ? <span style={{color: "#A6E84B"}}>correct</span>
+                          : <span style={{color: "#D92722"}}>not quite</span>
                         }
                       </span>
                     }

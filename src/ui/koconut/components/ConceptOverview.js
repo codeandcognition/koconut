@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from './CodeBlock';
 import ConceptInventory from '../../../data/ConceptInventory';
@@ -19,8 +17,9 @@ class ConceptOverview extends Component {
     render() {
         let conceptInfo = ConceptInventory[this.props.conceptCode].explanations;
         return (
-            <Card style={{marginBottom:'4px'}}>
-                <CardContent style={{marginTop:'0px', marginBottom:'px', paddingTop:'0px', paddingBottom:'0px'}}>
+            <div>
+            {/* <Card style={{marginBottom:'4px'}}> */}
+                {/* <CardContent style={{marginTop:'0px', marginBottom:'px', paddingTop:'0px', paddingBottom:'0px'}}> */}
                     <p>{conceptInfo.definition}</p>
                     {Array.isArray(conceptInfo.examples) && conceptInfo.examples.length > 0 &&
                     <p style={{marginBottom:'0px'}}><b>Example:</b></p>
@@ -28,8 +27,9 @@ class ConceptOverview extends Component {
                     {conceptInfo.examples.map((item, index) => {
                         return this.renderMarkdown(item, index);
                     })}
-                </CardContent>
-            </Card>
+                {/* </CardContent> */}
+            {/* </Card> */}
+            </div>
         );
     }
 }

@@ -12,8 +12,7 @@ const strings = {
 	intro: "This is an intelligent tutoring system for introductory programming. We'll keep track of your knowledge, make recommendations and provide hints. We also ask for honest and consistent feedback in the interest of making this learning experience collaborative.",
 	use_cases: {
 		title: "Use Cases",
-		cases: ["Study for your test", "Review material", "Challenge yourself",
-			"Infinite practice (WIP)"]
+		cases: ["Study for your test", "Review material", "Challenge yourself"]
 	},
 	user_modes: {
 		title: "User Modes",
@@ -89,7 +88,7 @@ class Welcome extends Component {
 			.ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
 		databaseRef.set(true);
 		this.setDefaultPknowns();
-		this.props.history.push(Routes.worldview);
+		this.props.history.push(Routes.tutorial);
 	}
 
 	// intializes user's bktParams using concept params 
