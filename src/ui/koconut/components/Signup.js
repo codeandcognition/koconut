@@ -90,6 +90,7 @@ class Signup extends Component {
             firebase.database().ref(`/Users/${uid}/userExperience`).set(this.state.userExperience);
             firebase.database().ref(`/Users/${uid}/condition`).set(condition);
             firebase.database().ref(`/Users/${uid}/isAdult`).set(this.state.isAdult);
+            firebase.database().ref(`/Users/${uid}/createdAt`).set(firebase.database.ServerValue.TIMESTAMP);
           }
           this.setState({currentUser: user});
           return user.updateProfile({displayName: this.state.displayName});
