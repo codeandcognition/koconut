@@ -37,6 +37,10 @@ class Tutorial extends Component {
         }
       });
     }) : null;
+
+    if(!this.state.tutorialVideo.length===0 && this.props.userCondition) {
+      this.updateVideoState();
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -75,14 +79,14 @@ class Tutorial extends Component {
           }
           <br/>
           
-          <Typography component="p">
+          {/* <Typography component="p">
             Still have a question about using Codeitz?
             Please contact Benjamin Xie (Univ of Washington) at <a href='mailto:bxie@uw.edu'>bxie@uw.edu</a>.
-          </Typography>
+          </Typography> */}
 
-          <Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
+          {/* <Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
 					  <Button variant="contained">Go to world view</Button>
-          </Link>
+          </Link> */}
         </Paper>
       </div>
 

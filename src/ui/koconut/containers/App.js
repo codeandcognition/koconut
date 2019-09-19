@@ -1108,7 +1108,9 @@ class App extends Component {
 	 */
 	renderWelcome() {
 		return (
-			<Welcome app={this} userCondition={this.state.userCondition} />
+			<Welcome app={this} userCondition={this.state.userCondition} firebase={this.props.firebase} 
+				switchToWorldView={this.switchToWorldView}
+			/>
 		);
 	}
 
