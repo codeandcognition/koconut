@@ -1071,7 +1071,15 @@ class App extends Component {
 							// update surveyLinks with user uid to show that link is used
 							if(!this.state.postSurveyLink && availableSurvey && 'key' in availableSurvey) { 
 								let uidRef = this.props.firebase.database().ref(`surveyLinks/${availableSurvey.key}/uid`);
-								uidRef.set(uid); // need state.postSurveyLink in conditional to prevent weird infinite loop w/ uidRef.set()...
+								uidRef.set(uid).catch(err => { // need state.postSurveyLink in conditional to prevent weird infinite loop w/ uidRef.set()...
+									console.log(err);
+								}); 
+	
+								let timeRef = this.props.firebase.database().ref(`surveyLinks/${availableSurvey.key}/whenAssigned`);
+								timeRef.set(this.props.firebase.database.ServerValue.TIMESTAMP).catch(err => {
+									console.log(err);
+								}); 
+
 								this.setState({postSurveyLink: availableSurvey.link});
 							}
 						} else {
