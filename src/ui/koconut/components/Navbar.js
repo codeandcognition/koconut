@@ -1,6 +1,5 @@
 // @flow
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom'
 import { Link, withRouter} from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
@@ -169,8 +168,8 @@ class Navbar extends Component {
                       {this.state.readyForSurvey && 
                         <MLink href={this.props.surveyUrl}>
                           <Button ref={this.btnSurvey} variant="contained" color="secondary">
-                            ️<i className="fas fa-external-link-alt" style={{fontSize: '1.5em'}}></i>
-                            Go to diagnostic/ post-survey.
+                            ️<i className="fas fa-external-link-alt" style={{fontSize: '1.5em', marginRight:'5px'}}></i>
+                            Go to diagnostic/ post-survey
                           </Button>
                         </MLink>
                         // <Button ref={this.btnSurvey} variant="contained" onClick={() => this.setState({showSurveyDialog: true})}>
@@ -182,15 +181,18 @@ class Navbar extends Component {
                         onClose={() => this.setState({dialogAnchor: null})}
                         anchorEl={this.state.dialogAnchor}
                         anchorOrigin={{
-                          vertical: 'center',
-                          horizontal: 'left',
+                          vertical: 'bottom',
+                          horizontal: 'center',
                         }}
                         transformOrigin={{
                           vertical: 'top',
                           horizontal: 'right',
                         }}
                       >
-                        <Typography>Click here to continue to the diagnostic and post-survey!</Typography>
+                        <Typography style={{padding:'16px'}}>
+                          It's time for you to take to the diagnostic/ post-survey!
+                          <i style={{marginLeft: '6px'}} className="fas fa-arrow-up"></i>
+                        </Typography>
                       </Popover>
 
                       <Dialog onClose={() => this.setState({showSurveyDialog: false, needsToConfirm: false})} open={this.state.showSurveyDialog}>
@@ -220,8 +222,8 @@ class Navbar extends Component {
                           {(!this.state.readyForSurvey && !this.state.needsToConfirm )&&
                             <DialogContentText>
                               <small>
-                                **to get compensated, you must have used Codeitz for &#8805 2 hrs & 
-                                gotten at least 1 exercise correct in 80% (8) of the concepts with exercises <i>prior</i> to the post-survey/diagnostic
+                                **To get compensated, you must have used Codeitz for at least 2 hrs & 
+                                got an exercise correct in at least 80% (8) of concepts <i>prior</i> to the diagnostic/post-survey.
                               </small>
                             </DialogContentText>
                           }
