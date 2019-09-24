@@ -62,6 +62,10 @@ const InstructionView = Loadable({
     loader: () => import('./InstructionView'),
     loading: Loading,
 });
+const ResponseViewer = Loadable({
+	loader: () => import('./ResponseViewer'),
+	loading: Loading
+});
 // TODO: Delete this path later
 const AllExercises = Loadable({
 	loader: () => import('./AllExercises'),
@@ -1079,7 +1083,18 @@ class App extends Component {
 										 goToExercise={this.goToExercise}/>
 				</div>
     )
-  }
+	}
+	
+	renderResponseViewer() {
+		return (
+			<div>
+				{this.renderNavBar()}
+				<ResponseViewer 
+					firebase={this.props.firebase}
+				/>
+			</div>
+		)
+	}
 
   ncmeLandingView() {
   	return(
@@ -1141,6 +1156,7 @@ class App extends Component {
 				<Route exact path={Routes.instruction} component={() => this._renderInstructionView()}/>
 				<Route exact path={Routes.ncmeassessment} render={() => this.renderExercise()}/>
 				<Route exact path={Routes.ncmelanding} render={() => this.ncmeLandingView()}/>
+				<Route exact path={Routes.viewer} render={() => this.renderResponseViewer()}/>
 				<Route exact path={Routes.allexercises} render={() => this.renderAllExercises()}/>
 				<Redirect to={Routes.home} />
 			</Switch>

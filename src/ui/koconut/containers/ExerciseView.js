@@ -63,7 +63,7 @@ class Exercise extends Component {
     this.mounted = true;
     window.scrollTo(0, 0);
 		this.dataLogger.bindInformation({
-			userId: this.props.firebaseUser.uid,
+			userId: this.props.firebaseUser ? this.props.firebaseUser.uid : null,
 			exerciseId: this.props.exerciseId,
 			firebase: this.props.firebase
 		});

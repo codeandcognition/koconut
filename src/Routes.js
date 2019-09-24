@@ -10,6 +10,7 @@ const routes = {
 	error: '/404',
 	ncmelanding: '/ncme-study',
 	ncmeassessment: '/assessment',
+	viewer: '/viewer',
 	allexercises: "/worldview/all-exercises"
 };
 
