@@ -11,6 +11,7 @@ import LoadingView from './../components/LoadingView';
 import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 import './Tutorial.css';
+import {CONDITIONS} from './../../../utils/Conditions';
 
 type Props = {
   firebase: any,
@@ -33,23 +34,29 @@ class Tutorial extends Component {
           this.props.history.push(Routes.signin);
         }
         if(this.props.userCondition) {
-          this.updateVideoState();
+          this.updateVideoState(this.props.userCondition);
+        } else {
+          this.updateVideoState(CONDITIONS.E1); // backwards compatibility: older accounts don't have conditions
         }
       });
     }) : null;
+
+    if(!this.state.tutorialVideo.length===0 && this.props.userCondition) {
+      this.updateVideoState(this.props.userCondition);
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
      // get links to all videos
      if(this.props.userCondition !== prevProps.userCondition && this.props.userCondition) {
-      this.updateVideoState();
+      this.updateVideoState(this.props.userCondition);
     }
   }
 
-  updateVideoState() {
+  updateVideoState(condition) {
     this.props.firebase.database().ref(`/static/tutorialLink`).on('value', (snap) => {
-      if(_.includes(Object.keys(snap.val()), this.props.userCondition)){
-        this.setState({tutorialVideo: snap.val()[this.props.userCondition]}); 
+      if(_.includes(Object.keys(snap.val()), condition)){
+        this.setState({tutorialVideo: snap.val()[condition]}); 
       }
     });
   }
@@ -75,14 +82,14 @@ class Tutorial extends Component {
           }
           <br/>
           
-          <Typography component="p">
+          {/* <Typography component="p">
             Still have a question about using Codeitz?
             Please contact Benjamin Xie (Univ of Washington) at <a href='mailto:bxie@uw.edu'>bxie@uw.edu</a>.
-          </Typography>
+          </Typography> */}
 
-          <Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
+          {/* <Link to={Routes.worldview} onClick={() => this.props.switchToWorldView()}>
 					  <Button variant="contained">Go to world view</Button>
-          </Link>
+          </Link> */}
         </Paper>
       </div>
 
