@@ -105,7 +105,7 @@ class WorldView extends Component {
           this.props.firebase.database().ref(`/Users/${user.uid}/Data/InstructionsRead`).on('value', (snap) => {
             this.setState({instructionsRead: snap.val()}); // this may not be correct (should use filterCompletedInstructions() from queryCompleted.js), but also couldn't get this code to trigger...
           });
-          this.findRecommendedConcepts(this.userCondition==CONDITIONS.C2 ? this.setSideNavigationForC2: null); // open side nav if C2 condition
+          this.findRecommendedConcepts(this.props.userCondition==CONDITIONS.C2 ? this.setSideNavigationForC2: null); // open side nav if C2 condition
 				});
 			}
     }) : null;
@@ -199,7 +199,7 @@ class WorldView extends Component {
     });
 
     // styling for recommended concepts
-    if(this.state.userCondition == CONDITIONS.E1) {
+    if(this.props.userCondition == CONDITIONS.E1) {
       this.state.recommendedConcepts.forEach( concept => cy.getElementById(concept).style(REC_STYLE));
     }
 

@@ -72,8 +72,8 @@ class Signup extends Component {
 
     if(mismatch) { // ensure passwords match
       this.setState({mismatch});
-    } else if(this.state.userExperience === "") { // ensure experience selected
-      this.setState({userExperienceError: true});
+    // } else if(this.state.userExperience === "") { // ensure experience selected
+      // this.setState({userExperienceError: true});
     } else if(condition == CONDITIONS.INVALID){ // ensure access code is valid
       this.setState({accessCodeInvalid: true});
     } else if(!this.state.isAdult) {
@@ -90,6 +90,7 @@ class Signup extends Component {
             firebase.database().ref(`/Users/${uid}/userExperience`).set(this.state.userExperience);
             firebase.database().ref(`/Users/${uid}/condition`).set(condition);
             firebase.database().ref(`/Users/${uid}/isAdult`).set(this.state.isAdult);
+            firebase.database().ref(`/Users/${uid}/createdAt`).set(firebase.database.ServerValue.TIMESTAMP);
           }
           this.setState({currentUser: user});
           return user.updateProfile({displayName: this.state.displayName});
@@ -183,7 +184,7 @@ class Signup extends Component {
                     {this.state.userExperienceError ? <p className="alert alert-warning"
                                               style={{marginTop: '3%', marginBottom: '0%'}}>You must select one of the options below</p> : null}
                     
-                    <FormControl style={{marginTop: 10, textAlign: 'center'}}>
+                    {/* <FormControl style={{marginTop: 10, textAlign: 'center'}}>
                       <InputLabel htmlFor="userExperience_">I am...</InputLabel>
                       <Select
                         value={this.state.userExperience}
@@ -201,7 +202,7 @@ class Signup extends Component {
                         <MenuItem value={"STUDENT"}>student reviewing for a midterm or test</MenuItem>
                         <MenuItem value={"PROGRAMMEROLD"}>programmer that hasn't used python in a while</MenuItem>
                       </Select>
-                    </FormControl>
+                    </FormControl> */}
 
                     {this.state.showAgeWarning ? <p className="alert alert-danger"
                       style={{marginTop: '3%', marginBottom: '0%'}}>Sorry, you must be at least 18 years or older to use Codeitz.</p> : null}

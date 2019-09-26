@@ -16,25 +16,38 @@ class Profile extends Component {
     super(props);
 
     this.state = {
+      id: this.props.userCondition,
       name: null,
       email: null,
-      id: this.props.userCondition,
+      createdAt: null,
       loading: false
     }
   }
 
   componentDidMount() {
-    this.authUser = this.props.firebase ? this.props.firebase.auth().onAuthStateChanged(user => {
-      this.setState({loading: true}, () => {
+    if(this.props.firebase) {
+      // get data from auth
+      this.props.firebase.auth().onAuthStateChanged(user => {
         if (!user) {
           this.props.history.push(Routes.signin);
         }
         this.setState({
           name: user.displayName,
-          email: user.email
+          email: user.email,
         });
+
+        // createdAt lives in DB b/c can't get from auth
+        let userCreatedAt = this.props.firebase.database().ref(`/Users/${user.uid}/createdAt`);
+        userCreatedAt.on("value", (snap) => {
+          if (snap.val()) {
+            let createdAt = new Date(snap.val());
+            this.setState({
+              createdAt: createdAt.toString()
+            });
+          }
+        });        
       });
-    }) : null;
+    }
   }
 
   render() {
@@ -48,7 +61,10 @@ class Profile extends Component {
           <Typography component="p">
             Name: {this.state.name ? this.state.name : '(none provided)'}
             <br/>
-            Email: {this.state.email}          
+            Email: {this.state.email}
+            <br />
+            <br />
+            Account created: {this.state.createdAt ? this.state.createdAt : '(unknown)'}
           </Typography>
         </Paper>
 

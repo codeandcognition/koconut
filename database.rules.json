@@ -39,6 +39,10 @@
           ".read": "auth != null && auth.uid == $uid",
           ".write": "auth != null && auth.uid == $uid"
         },
+        "createdAt": {
+          ".read": "auth != null && auth.uid == $uid",
+          ".write": "auth != null && auth.uid == $uid"
+        },  
         "Data": {
           "AnswerSubmission": {
             ".read": "auth != null && auth.uid == $uid",
@@ -67,6 +71,10 @@
     },
     "static": {
       ".read": "auth != null"
+    },
+    "surveyLinks": {
+      ".read": "auth != null",
+      ".write": "auth != null"
     }
   }
 }

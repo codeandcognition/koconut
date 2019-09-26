@@ -13,6 +13,7 @@ import { ModelUpdater } from './../../../backend/ModelUpdater';
 import { filterCompletedInstructions, filterCompletedExercises } from './../../../utils/queryCompleted';
 import _isEmpty from 'lodash/isEmpty';
 import {REC_RESPONSES, CONDITIONS} from './../../../utils/Conditions';
+import _ from 'lodash';
 
 // Fake AJAX
 import ExerciseGenerator from '../../../backend/ExerciseGenerator';
@@ -207,7 +208,9 @@ class App extends Component {
 			selectedIndex: "", // index of instruction or exercise in focus. e.g. READ0, READe1, WRITE1,
 			prevQuestionAttemptCorrect: null, // true if prev question attempt correct, false otherwise
 			userCondition: null, // experimental condition user is in
-			exerciseConceptMap: {} //mapping for exercise id to concepts
+			exerciseConceptMap: {}, //mapping for exercise id to concepts
+			postSurveyLink: null,
+			surveysAvailable: true // could run out of surveys, could expire
 		};
 		// this.updater = new ResponseEvaluator();
 		this.submitResponse = this.submitResponse.bind(this);
@@ -229,6 +232,7 @@ class App extends Component {
 		this.getOrderedConcepts = this.getOrderedConcepts.bind(this);
 		this.goToExercise = this.goToExercise.bind(this);
 		this.updateInstructionsRead = this.updateInstructionsRead.bind(this);
+		this.getSurveyUrl = this.getSurveyUrl.bind(this);
 	}
 
 	sendExerciseViewDataToFirebase(exerciseId: string) {
@@ -302,6 +306,8 @@ class App extends Component {
 				this.exerciseGetter = this.props.firebase.database().ref('Exercises');
 				this.conceptMapGetter = this.props.firebase.database().ref('ConceptExerciseMap');
 
+				this.setState({uid: user.uid});
+
 				// set state for bkt params
 				let userRef = this.props.firebase.database().ref(`/Users/${user.uid}/bktParams`);
 				userRef.on("value", (snap) => {
@@ -344,14 +350,26 @@ class App extends Component {
 					}
 				});
 
+				// set state for survey url if exists
+				let surveyLinks = this.props.firebase.database().ref("surveyLinks/");
+				surveyLinks.orderByChild('uid').equalTo(user.uid).limitToFirst(1).on('value', (snap) => {
+					// survey already assigned to this user
+					if(snap.val() && Object.keys(snap.val()).length > 0) { // filter b/c bug w/ limitToFirst() can create empty first element
+						let url = snap.val()[Object.keys(snap.val())[0]].link;
+						this.setState({postSurveyLink: url});
+					}
+				});
 
+				// log start time
+				this.props.firebase.database().ref(`/Users/${user.uid}/Data/SessionEvents`).push({
+					type: "start",
+					timestamp: this.props.firebase.database.ServerValue.TIMESTAMP
+				});
 
 				let completedInstructionsRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/NewPageVisit`);
 				let instructionsRead = await filterCompletedInstructions(this.conceptMapGetter, completedInstructionsRef);
 
-
 				let completedExercisesRef = this.props.firebase.database().ref(`/Users/${user.uid}/Data/AnswerSubmission`);
-
 				let exercisesCompleted = await filterCompletedExercises(this.conceptMapGetter, completedExercisesRef, this.exerciseGetter);
 
 				this.exerciseGetter.on('value', (snap) => {
@@ -1033,6 +1051,46 @@ class App extends Component {
 		});
 	}
 
+	// update state.postSurveyLink w/ URL to post-survey (from 'surveyLinks' collection). 
+	// update state.surveysAvailable to false if no surveys available
+	getSurveyUrl() {	
+		if(!this.state.postSurveyLink) {
+			let uid = this.props.firebase.auth().currentUser.uid;
+			let surveyLinks = this.props.firebase.database().ref("surveyLinks/");
+			surveyLinks.orderByChild('uid').equalTo(uid).limitToFirst(1).on('value', (snap) => {
+				// survey already assigned to this user. really shouldn't be in this condition b/c handled in componentDidMount()	
+				if(snap.val() && Object.keys(snap.val()).length > 0) { // filter b/c bug w/ limitToFirst() can create empty first element
+					let url = snap.val()[Object.keys(snap.val())[0]].link;
+					this.setState({postSurveyLink: url});
+				}
+				else { // if no survey assigned to user (expected condition), assign one
+					surveyLinks.orderByChild('uid').equalTo(null).limitToFirst(1).on('value', (snapshot) => {
+						if(snapshot.val() && Object.keys(snapshot.val()).length > 0) { // check for available survey
+							var availableSurvey = snapshot.val()[Object.keys(snapshot.val())[0]]; // removing empty elements b/c they sometimes exist...?
+
+							// update surveyLinks with user uid to show that link is used
+							if(!this.state.postSurveyLink && availableSurvey && 'key' in availableSurvey) { 
+								let uidRef = this.props.firebase.database().ref(`surveyLinks/${availableSurvey.key}/uid`);
+								uidRef.set(uid).catch(err => { // need state.postSurveyLink in conditional to prevent weird infinite loop w/ uidRef.set()...
+									console.log(err);
+								}); 
+	
+								let timeRef = this.props.firebase.database().ref(`surveyLinks/${availableSurvey.key}/whenAssigned`);
+								timeRef.set(this.props.firebase.database.ServerValue.TIMESTAMP).catch(err => {
+									console.log(err);
+								}); 
+
+								this.setState({postSurveyLink: availableSurvey.link});
+							}
+						} else {
+							this.setState({surveysAvailable: false});
+						}
+					});
+				}
+			});		
+		}
+	}
+
 	/**
 	 * renders the sign up view
 	 */
@@ -1108,7 +1166,9 @@ class App extends Component {
 	 */
 	renderWelcome() {
 		return (
-			<Welcome app={this} userCondition={this.state.userCondition} />
+			<Welcome app={this} userCondition={this.state.userCondition} firebase={this.props.firebase} 
+				switchToWorldView={this.switchToWorldView}
+			/>
 		);
 	}
 
@@ -1314,7 +1374,15 @@ class App extends Component {
 	 * @returns {*}
 	 */
 	renderNavBar() {
-		return (<Navbar switchToWorldView={this.switchToWorldView} userCondition={this.state.userCondition}/>);
+		return (
+			<Navbar 
+				switchToWorldView={this.switchToWorldView} 
+				userCondition={this.state.userCondition} 
+				surveyUrl={this.state.postSurveyLink}
+				surveysAvailable={this.state.surveysAvailable}
+				getSurveyUrl={this.getSurveyUrl}
+			/>
+		);
 	}
 
 	render() {
