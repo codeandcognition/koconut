@@ -212,7 +212,7 @@ class Exercise extends Component {
             <SideNavigation title={this.props.concept}
               conceptCode={this.props.concept}
               closeMenu={null}
-              defaultOpen={[this.props.readOrWrite]}
+              defaultOpen={["READ", "WRITE"]}
               generateExercise={this.props.generateExercise}
               getInstruction={this.props.getInstruction}
               exercisesList={this.props.exercisesList}
