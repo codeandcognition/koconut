@@ -5,6 +5,7 @@ import 'firebase/database';
 import Routes from './../../../Routes';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import ReactMarkdown from 'react-markdown';
 
 type Props = {
   firebase: any,
@@ -20,7 +21,8 @@ class Profile extends Component {
       name: null,
       email: null,
       createdAt: null,
-      loading: false
+      loading: false,
+      aboutStudyContent: null
     }
   }
 
@@ -45,7 +47,17 @@ class Profile extends Component {
               createdAt: createdAt.toString()
             });
           }
-        });        
+        });
+        
+        // get static content for "about study"
+        let aboutStudy = this.props.firebase.database().ref(`/static/aboutStudy`);
+        aboutStudy.on("value", (snap) => {
+          if (snap.val()) {
+            this.setState({
+              aboutStudyContent: snap.val()
+            });
+          }
+        });		
       });
     }
   }
@@ -66,6 +78,10 @@ class Profile extends Component {
             <br />
             Account created: {this.state.createdAt ? this.state.createdAt : '(unknown)'}
           </Typography>
+        </Paper>
+
+        <Paper className='container' style={{marginTop:'10px'}}>
+          <ReactMarkdown source={this.state.aboutStudyContent}></ReactMarkdown>
         </Paper>
 
         <Paper className='container' style={{marginTop:'10px'}}>
