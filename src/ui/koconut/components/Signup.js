@@ -29,7 +29,7 @@ class Signup extends Component {
 			email: "",
 			password: "",
       confirmation: "",
-      accessCode: "", // code to specify condition
+      accessCode: null, // code to specify condition
       accessCodeVisible: false, // if true, textbox asking for access code appears
       accessCodeInvalid: false,
       userExperienceError: false,
@@ -90,10 +90,21 @@ class Signup extends Component {
             firebase.database().ref(`/Users/${uid}/userExperience`).set(this.state.userExperience);
             firebase.database().ref(`/Users/${uid}/condition`).set(condition);
             firebase.database().ref(`/Users/${uid}/isAdult`).set(this.state.isAdult);
+            
+            if(this.state.accessCode){
+              firebase.database().ref(`/Users/${uid}/accessCode`).set(this.state.accessCode);
+            }
+
+            // redundant as also in auth, but easier to access from console
             firebase.database().ref(`/Users/${uid}/createdAt`).set(firebase.database.ServerValue.TIMESTAMP);
+            firebase.database().ref(`/Users/${uid}/displayName`).set(this.state.displayName); 
           }
           this.setState({currentUser: user});
-          return user.updateProfile({displayName: this.state.displayName});
+
+          let currentUser = firebase.auth().currentUser; // can only update displayName for currentUser 
+          currentUser.updateProfile({
+            displayName: this.state.displayName
+          });
         })
         .then(this.state.currentUser ? () => this.setState({loading: false}, () => {
           this.props.history.push(Routes.signin)
