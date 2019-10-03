@@ -140,7 +140,7 @@ export const conceptInventory =
 		explanations: {
 			name: "Digit Processing",
 			definition: "These days, we have use numeric passwords to secure many things, such as cell phones, debit cards, doorways, and user accounts. Verifying that a numeric password, such as the 4 digit personal identification number (PIN) of a debit card, is correct is critical to ensuring security.",
-			examples: [`input = 123\nlast_digit = input % 10\ninput = input / 10\nsecond_digit = input % 10\ninput = input / 10\nfirst_digit = input % 10`],
+			examples: [`input = 123\nlast_digit = input % 10\ninput = input // 10\nsecond_digit = input % 10\ninput = input // 10\nfirst_digit = input % 10`],
 			future: []
 		},
 		should_teach: true,
