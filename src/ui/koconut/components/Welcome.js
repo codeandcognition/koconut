@@ -77,7 +77,6 @@ class Welcome extends Component {
 		if(nextStep === this.steps.length) { // if on last step, go to world view
 			this.updateWaiverStatus();
 			this.props.switchToWorldView();
-			console.log('switch to world view');
 		} else {
 			let canProgress = nextStep == this.steps.length -1 ? true : false; // can progress if last one
 			this.setState({activeStep: nextStep, canProgress: canProgress});
@@ -135,7 +134,6 @@ class Welcome extends Component {
 		let databaseRef = firebase.database().ref("Users/" + this.state.firebaseUser.uid + "/waiverStatus");
 		databaseRef.set(true);
 		this.setDefaultPknowns();
-		// this.props.history.push(Routes.tutorial);
 	}
 
 	// intializes user's bktParams using concept params 
@@ -179,7 +177,10 @@ class Welcome extends Component {
 			case 1:
 				// return <PaymentForm />;
 				return (<div>
-						<iframe src="https://ischooluw.co1.qualtrics.com/jfe/form/SV_1Ogdyjc9vrPO5OB" height="900px" width="800px"></iframe>
+						<iframe src="https://ischooluw.co1.qualtrics.com/jfe/form/SV_1Ogdyjc9vrPO5OB" 
+							height = {window.screen.height ? window.screen.height*0.8 : "900px"}
+							width = {window.screen.width ? window.screen.width*0.78 : "800px"}>
+						</iframe>
 						<FormControl>
 							<InputLabel>Passphrase</InputLabel>
 							<Input
