@@ -32,11 +32,12 @@ class Profile extends Component {
       this.props.firebase.auth().onAuthStateChanged(user => {
         if (!user) {
           this.props.history.push(Routes.signin);
+        } else {
+          this.setState({
+            name: user.displayName,
+            email: user.email,
+          });
         }
-        this.setState({
-          name: user.displayName,
-          email: user.email,
-        });
 
         // createdAt lives in DB b/c can't get from auth
         let userCreatedAt = this.props.firebase.database().ref(`/Users/${user.uid}/createdAt`);
