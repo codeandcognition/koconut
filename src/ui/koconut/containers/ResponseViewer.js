@@ -11,6 +11,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import _ from 'lodash';
+import ReactMarkdown from 'react-markdown';
+import CodeBlock from './../components/CodeBlock';
+
 
 const STYLE_FORM = {margin: '10px'};
 
@@ -23,9 +26,11 @@ class ResponseViewer extends Component {
       exerciseData: [], // JSON object of data for all exercises for user. could be very heavy
       studyUids: [], //array of user uids for target users
       marks: [{value: 0, label:'0'}, {value: 50, label:'50'}, {value: 100, label:'100'}], // TODO: replace w/ normalized datalog timestamp (minus start time, converted to sec)
+      value: 0, // value in slider
       sliderMax: 100, // max value for slider
       targetUser: null,
       targetExerciseId: null, // selected exercise ID
+      targetExerciseData: ''
     }
 
     this.valueLabelFormat = this.valueLabelFormat.bind(this);
@@ -75,7 +80,8 @@ class ResponseViewer extends Component {
   }
 
   valueLabelFormat(value) {
-    return this.state.marks ? this.state.marks.findIndex(mark => mark.value === value) : -1;
+    return value;
+    // return this.state.marks ? this.state.marks.findIndex(mark => mark.value === value) : -1;
   }
 
   updateTargetUser(updatedUser) {
@@ -105,9 +111,38 @@ class ResponseViewer extends Component {
     });
   };
 
+  handleSliderChange = (event, newValue) => {
+    this.setState({
+      value: newValue
+    }, () => this.updateTargetExerciseData());
+  }
+
+  handleInputChange = event => {
+    this.setState({
+      value: event.target.value === '' ? '' : Number(event.target.value)
+    }, () => this.updateTargetExerciseData())
+  }
+
+  updateTargetExerciseData() {
+    console.log('updateTargetExerciseData');
+    console.log(this.state); // TODO remove
+    if(_.has(this.state.exerciseData, this.state.targetExerciseId)) {
+      console.log(`exerciseData and targetExerciseId found`);
+      let index = (this.state.value && this.state.marks) ? this.state.marks.findIndex(mark => mark.value === this.state.value) : -1;
+      console.log(`index found: ${index}`);
+      if(index > 0 && this.state.exerciseData[this.state.targetExerciseId]['DataLog'][index]) {
+        this.setState({
+          targetExerciseData: this.state.exerciseData[this.state.targetExerciseId]['DataLog'][index]['textContent']
+        })
+      }
+    }
+  }
+
   // update marks
   updateMarks() {
+    console.log('updateMarks');
     if(_.has(this.state.exerciseData, this.state.targetExerciseId)) {
+      console.log('id in exercise data');
       let eventLog = this.state.exerciseData[this.state.targetExerciseId]["DataLog"];
       let startTime = parseInt(eventLog[0]["timestamp"]);
       this.setState({
@@ -116,12 +151,15 @@ class ResponseViewer extends Component {
           value: (parseInt(event.timestamp)-startTime)/1000, 
           label: (parseInt(event.timestamp)-startTime)/1000 // b/c timestamp is in milliseconds
           }
-        }, () => {
-          this.setState({ // TODO: SLIDER MAX NOT CORRECT
-            sliderMax: this.state.marks[this.state.marks.length-1].value // assuming last one is max 
-          })// update slider values
         })
+      }, () => {
+        this.setState({ // TODO: SLIDER MAX NOT CORRECT
+          sliderMax: this.state.marks[this.state.marks.length-1].value // assuming last one is max 
+        })// update slider values
       });
+    } else { // TODO: remove all of else condition
+      console.log('oops');
+      console.log(this.state);
     }
 
     // getValueAndLabel = (event, startTime) => {
@@ -185,7 +223,24 @@ class ResponseViewer extends Component {
           step={null}
           valueLabelDisplay="auto"
           marks={this.state.marks}
+          max = {this.state.sliderMax}
+          value = {typeof this.state.value === 'number' ? this.state.value : 0}
+          onChange = {this.handleSliderChange}
         />
+        <br/>
+        <Input
+            value={this.state.value}
+            margin="dense"
+            onChange={this.handleInputChange}
+            inputProps={{
+              step: 10,
+              min: 0,
+              max: this.state.sliderMax,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          /> <p>(seconds)</p>
+          <ReactMarkdown source={this.state.targetExerciseData} renderers={{CodeBlock: CodeBlock}}/>
       </div>
     )
   }
