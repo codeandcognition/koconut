@@ -408,7 +408,7 @@ class SideNavigation extends Component {
 							getInstructionTitles={this.getInstructionTitles}
 							title={"Reading"}
 							defaultExpanded={this.state.defaultOpen.includes(Categories.READ)}
-							progress={this.props.userCondition !== CONDITIONS.C2 && readPercent ? <Progress percent={readPercent} /> : null}
+							progress={this.props.userCondition !== CONDITIONS.C1 && readPercent ? <Progress percent={readPercent} /> : null}
 							body={readingSection}>
 						</NavSection>
 						
@@ -425,7 +425,7 @@ class SideNavigation extends Component {
 							getInstructionTitles={this.getInstructionTitles}
 							title={"Writing"}
 							defaultExpanded={this.state.defaultOpen.includes(Categories.WRITE)}
-							progress={this.props.userCondition !== CONDITIONS.C2 && writePercent ? <Progress percent={writePercent} /> : null}
+							progress={this.props.userCondition !== CONDITIONS.C1 && writePercent ? <Progress percent={writePercent} /> : null}
 							body={writingSection}>
 						</NavSection>
 						{(this.props.userCondition !== CONDITIONS.C2 && typeof(this.state.selectedIndex) === 'string' && this.state.selectedIndex.length > 0)&&
