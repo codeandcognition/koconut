@@ -10,11 +10,13 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Snackbar from '@material-ui/core/Snackbar';
 import Checkbox from '@material-ui/core/Checkbox';
 import Homepage from './Homepage/Homepage';
 import 'firebase/auth';
 import {CONDITIONS} from '../../../utils/Conditions';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 
 
 type Props = {
@@ -35,7 +37,8 @@ class Signup extends Component {
       userExperienceError: false,
       userExperience: "", // response to "I am..." question
       isAdult: false,
-      showAgeWarning: false // when true, warning about age comes up
+      showAgeWarning: false, // when true, warning about age comes up
+      isSnackbarOpen: true
 		}; // need this declaration here, render crashes otherwise
   }
 
@@ -158,6 +161,27 @@ class Signup extends Component {
 		return (
 				<div>
 					<div style={{textAlign: "center", padding: "10vw", width: '100%'}} className="container">
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            open={this.state.isSnackbarOpen}
+            onClose={() => {this.setState({isSnackbarOpen: false})}}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">
+              <i className="fa fa-info-circle" aria-hidden="true"/>
+              &nbsp;
+              Learn to code and get paid as part of a research study!
+              &nbsp;
+              <a 
+              href="https://drive.google.com/a/uw.edu/file/d/1NOr5C-bKHm_A9cdsaWPYXUbEh2SbkQLR/view?usp=sharing"
+              target="_blank">
+                Click for more info.
+              </a>
+              <br />
+              Or sign up below to get started!
+              </span>}
+          />
             <Homepage>
               <div style={{backgroundColor: 'white',
                 border: "1px solid #4054B2",
