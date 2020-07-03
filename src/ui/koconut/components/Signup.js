@@ -17,8 +17,6 @@ import 'firebase/auth';
 import {CONDITIONS} from '../../../utils/Conditions';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-
-
 type Props = {
 	toSignin: Function
 }
@@ -140,7 +138,7 @@ class Signup extends Component {
           default:
             return CONDITIONS.INVALID;
         }
-      } else return CONDITIONS.INVALID;
+      } else return CONDITIONS.E1; // if not a number, default to E1
     }
 
     // base case: no access code submitted => random option
