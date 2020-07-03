@@ -61,10 +61,12 @@ class Welcome extends Component {
 		this.state = {
 			loading: true,
 			user: {},
-			activeStep: 0,
+			// activeStep: 0,
+			activeStep: 2,
 			aboutStudyContent: null,
 			consentGiven: false,
-			canProgress: false,
+			// canProgress: false,
+			canProgress: true,
 			keyword: ''
 		}
 	}
@@ -216,22 +218,23 @@ class Welcome extends Component {
 						<LoadingView /> :
 						<div style={welcomeStyle} className="welcome-page">
 							
-							<Stepper activeStep={this.state.activeStep}>
+							{/* <Stepper activeStep={this.state.activeStep}>
 								{this.steps.map(label => (
 								<Step key={label}>
                 	<StepLabel>{label}</StepLabel>
               	</Step>
             		))}
-          		</Stepper>
+          		</Stepper> */}
 
 							<>
+							<div>
                 {this.getStepContent(this.state.activeStep)}
-                <div>
-                  {this.state.activeStep !== 0 && (
+                <div style={{marginTop: 20, display: 'flex', justifyContent: 'flex-end'}}>
+                  {/* {this.state.activeStep !== 0 && (
                     <Button onClick={() => this.handleBack(this.state.activeStep)}>
                       Back
                     </Button>
-                  )}
+                  )} */}
                   <Button
                     variant="contained"
                     color="primary"
@@ -241,6 +244,7 @@ class Welcome extends Component {
                     {this.state.activeStep === this.steps.length - 1 ? 'Go to Codeitz' : 'Next'}
                   </Button>
                 </div>
+								</div>
               </>
 
 							{/* <h2>{strings.welcome}</h2>

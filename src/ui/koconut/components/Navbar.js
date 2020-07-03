@@ -160,11 +160,11 @@ class Navbar extends Component {
               (<div>
                   { true &&
                     <span>                  
-                      {!this.state.readyForSurvey &&   
+                      {/* {!this.state.readyForSurvey &&   
                         <Button variant="contained" onClick={() => this.setState({showSurveyDialog: true})}>
                         ️   Ready for the diagnostic?
                         </Button>
-                      }
+                      } */}
                       {this.state.readyForSurvey && 
                         <MLink href={this.props.surveyUrl}>
                           <Button ref={this.btnSurvey} variant="contained" color="secondary">

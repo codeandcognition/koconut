@@ -22,7 +22,8 @@ class Profile extends Component {
       email: null,
       createdAt: null,
       loading: false,
-      aboutStudyContent: null
+      aboutStudyContent: null,
+      privacyContent: null
     }
   }
 
@@ -51,14 +52,25 @@ class Profile extends Component {
         });
         
         // get static content for "about study"
-        let aboutStudy = this.props.firebase.database().ref(`/static/aboutStudy`);
-        aboutStudy.on("value", (snap) => {
+        // let aboutStudy = this.props.firebase.database().ref(`/static/aboutStudy`);
+        // aboutStudy.on("value", (snap) => {
+        //   if (snap.val()) {
+        //     this.setState({
+        //       aboutStudyContent: snap.val()
+        //     });
+        //   }
+        // });		
+
+        // get static content for "privacy"
+        let privacy = this.props.firebase.database().ref(`/static/privacy`);
+        privacy.on("value", (snap) => {
           if (snap.val()) {
             this.setState({
-              aboutStudyContent: snap.val()
+              privacyContent: snap.val()
             });
           }
-        });		
+        });		        
+
       });
     }
   }
@@ -82,16 +94,16 @@ class Profile extends Component {
         </Paper>
 
         <Paper className='container' style={{marginTop:'10px'}}>
-          <ReactMarkdown source={this.state.aboutStudyContent}></ReactMarkdown>
+          <ReactMarkdown source={this.state.privacyContent}></ReactMarkdown>
         </Paper>
 
         <Paper className='container' style={{marginTop:'10px'}}>
           <Typography variant="h5" component="h1">
-            Study contact information
+            Contact information
           </Typography>
 
           <Typography component="p">
-            To learn more about the study and/or opt out, 
+            To learn more about Codeitz and/or opt out, 
             please contact Benjamin Xie (Univ of Washington) at <a href='mailto:bxie@uw.edu'>bxie@uw.edu</a>.
           </Typography>
         </Paper>
