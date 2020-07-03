@@ -161,7 +161,7 @@ class Signup extends Component {
 		return (
 				<div>
 					<div style={{textAlign: "center", padding: "10vw", width: '100%'}} className="container">
-          <Snackbar
+          {/* <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             open={this.state.isSnackbarOpen}
             onClose={() => {this.setState({isSnackbarOpen: false})}}
@@ -181,7 +181,7 @@ class Signup extends Component {
               <br />
               Or sign up below to get started!
               </span>}
-          />
+          /> */}
             <Homepage>
               <div style={{backgroundColor: 'white',
                 border: "1px solid #4054B2",
@@ -252,7 +252,7 @@ class Signup extends Component {
                             })
                           }} />
                         }
-                        label="I am at least 18 years old."
+                        label="I am at least 13 years old."
                       />
                     </FormControl>
 

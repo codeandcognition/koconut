@@ -21,11 +21,11 @@ export default (props) => {
           <ul>
             <li>Are you about to start or starting your first Python course? 👩‍🏫</li>
             <li>Have you never programmed but are curious? 🤔</li>
-            <li>Do you want to get paid to learn Python?** 🤑</li>
+            {/* <li>Do you want to get paid to learn Python?** 🤑</li> */}
           </ul>
           <p>If you answer <strong>yes</strong> to any of these questions, {createAppName(18)} is perfect for you!</p>
           <p>Create an account and start learning now!</p>
-          <small>**see study details after account creation for more information</small>
+          {/* <small>**see study details after account creation for more information</small> */}
         </Col>
         <Col md={6}>
         {props.children}
