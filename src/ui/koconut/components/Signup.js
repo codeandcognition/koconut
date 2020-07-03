@@ -21,6 +21,8 @@ type Props = {
 	toSignin: Function
 }
 
+const MIN_AGE = 13
+
 class Signup extends Component {
 	constructor(props: Props) {
 		super(props);
@@ -238,7 +240,7 @@ class Signup extends Component {
                     </FormControl> */}
 
                     {this.state.showAgeWarning ? <p className="alert alert-danger"
-                      style={{marginTop: '3%', marginBottom: '0%'}}>Sorry, you must be at least 18 years or older to use Codeitz.</p> : null}
+                      style={{marginTop: '3%', marginBottom: '0%'}}>Sorry, you must be at least {MIN_AGE} years or older to use Codeitz.</p> : null}
                     <FormControl style={{marginTop: 10, textAlign: 'center'}}>
                       <FormControlLabel
                         control={
@@ -250,7 +252,7 @@ class Signup extends Component {
                             })
                           }} />
                         }
-                        label="I am at least 13 years old."
+                        label={`I am at least ${MIN_AGE} years old.`}
                       />
                     </FormControl>
 
