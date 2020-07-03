@@ -256,8 +256,8 @@ class Signup extends Component {
                       />
                     </FormControl>
 
-                    {this.state.accessCodeVisible && this.state.accessCodeInvalid ? <p className="alert alert-warning"
-                      style={{marginTop: '3%', marginBottom: '0%'}}>Sorry, your access code is invalid. Please submit another one, or leave it blank.</p> : null}
+                    {/* {this.state.accessCodeVisible && this.state.accessCodeInvalid ? <p className="alert alert-warning"
+                      style={{marginTop: '3%', marginBottom: '0%'}}>Sorry, your access code is invalid. Please submit another one, or leave it blank.</p> : null} */}
                       
                     {this.state.accessCodeVisible ?
                       <TextField
